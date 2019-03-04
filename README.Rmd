@@ -1,0 +1,118 @@
+---
+output: 
+  github_document:
+    toc: false
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, prediction, estimation, marginal]
+vignette: >
+  %\VignetteIndexEntry{README}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+# estimate <img src='man/figures/logo.png' align="right" height="139" />
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.path = "README-"
+)
+```
+
+
+[![Build Status](https://travis-ci.org/easystats/estimate.svg?branch=master)](https://travis-ci.org/easystats/estimate)
+[![codecov](https://codecov.io/gh/easystats/estimate/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/estimate)
+[![HitCount](http://hits.dwyl.io/easystats/estimate.svg)](http://hits.dwyl.io/easystats/estimate) [![Documentation](https://img.shields.io/badge/documentation-estimate-orange.svg?colorB=E91E63)](https://easystats.github.io/estimate/)
+
+
+
+`estimate` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis, predictions and such.
+
+
+## Installation
+
+
+Run the following:
+
+```{r eval=FALSE, message=FALSE, warning=FALSE}
+install.packages("devtools")
+devtools::install_github("easystats/estimate")
+```
+```{r message=FALSE, warning=FALSE}
+library("estimate")
+```
+
+## Documentation
+
+The package documentation can be found [**here**](https://easystats.github.io/estimate/).
+
+# Features
+
+The package is built around 5 main functions:
+
+- `estimate_means()`: Estimates the average values at each factor levels
+- `estimate_contrasts()`: Estimates and tests contrasts between different factor levels
+- `estimate_slopes()`: Estimates the slopes of numeric predictors at different factor levels
+- `estimate_response()`: Estimates the slopes of numeric predictors at different factor levels
+- `data_grid()`: Creates a reference grid of provided data or model
+
+## Examples
+
+#### Estimate marginal means
+```{r message=FALSE, warning=FALSE, results='hide'}
+library(rstanarm)
+model <- stan_glm(Sepal.Width ~ Species, data=iris)
+
+estimate_means(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(estimate_means(model), digits=2)
+```
+
+#### Contrast analysis
+```{r message=FALSE, warning=FALSE, results='hide'}
+estimate_contrasts(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(estimate_contrasts(model), digits=2)
+```
+
+#### Find a predictor's slopes at each factor level
+
+```{r message=FALSE, warning=FALSE, results='hide'}
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
+
+estimate_slopes(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(estimate_slopes(model), digits=2)
+```
+
+#### Make predictions based on your model to compare it with original data
+```{r message=FALSE, warning=FALSE, results='hide'}
+model %>% 
+  estimate_response()
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(
+  model %>% 
+    estimate_response() %>% 
+    head(), digits=2)
+```
+
+#### Make predictions on a reference grid to help visualising the effects
+```{r message=FALSE, warning=FALSE, results='hide'}
+model %>% 
+  estimate_response(data="grid", length=3, predict="link")
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(
+  model %>% 
+    estimate_response(data="grid", length=3, predict="link"), digits=2)
+```
