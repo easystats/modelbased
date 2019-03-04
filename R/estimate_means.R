@@ -88,7 +88,7 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
 #' @keywords internal
 .remove_name_level <- function(x){
   name <- .find_name_level(x)
-  x <- gsub(name, "", x)
+  x <- sub(name, "", x)
   x <- trimws(x)
   return(x)
 }
