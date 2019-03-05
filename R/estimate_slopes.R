@@ -52,10 +52,10 @@ estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="r
 
   if(is.null(trend)){
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
-    warning("No numeric variable was selected for slope estimation. Selecting ", trend, ".")
+    message("No numeric variable was selected for slope estimation. Selecting ", trend, ".")
   }
   if(length(trend) > 1){
-    warning("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
+    message("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
     trend <- trend[1]
   }
 
@@ -67,11 +67,15 @@ estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="r
 
   # Basis
   trends <- model %>%
-    emmeans::emtrends(levels, var=trend, transform=transform)
+    emmeans::emtrends(levels, var=trend, transform=transform, ...)
 
   params <- as.data.frame(trends)
-  params <- params[, 1:(ncol(params)-3)] # Remove the posterior summary
   rownames(params) <- NULL
+
+  # Remove the posterior summary
+  params <- params[names(params) %in% names(data)]
+  # params <- params[, 1:(ncol(params)-3)]
+
 
   # Posteriors
   posteriors <- trends %>%
@@ -84,6 +88,9 @@ estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="r
 
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
+
+  # Restore factor levels
+  slopes <- .restore_factor_levels(slopes, insight::get_data(model))
 
   return(slopes)
 

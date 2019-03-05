@@ -67,7 +67,7 @@ estimate_response.stanreg <- function(model, data=NULL, predict="response", ci =
     re.form <- NA
   }
 
-  # Generate draws -------------------------------------------------------
+  # Generate draws
   if (predict == "link") {
     if(transform == "response"){
       transform <- TRUE
@@ -92,8 +92,12 @@ estimate_response.stanreg <- function(model, data=NULL, predict="response", ci =
     prediction <- cbind(prediction, posteriors)
   }
 
-  # Add predictors ----------------------------------------------------------
+  # Add predictors
   prediction <- cbind(data, prediction)
+
+
+  # Restore factor levels
+  prediction <- .restore_factor_levels(prediction, insight::get_data(model))
 
   return(prediction)
 

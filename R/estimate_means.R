@@ -60,11 +60,6 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
     as.matrix() %>%
     as.data.frame()
 
-  # Transform
-  # if(transform=="response" & insight::model_info(model)$is_logit){
-  #   posteriors <- parameters::odds_to_probs(posteriors, log=TRUE)
-  # }
-
   # Summary
   means <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = NULL, rope_bounds = NULL, rope_full = NULL)
 
@@ -78,6 +73,9 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
   means$Parameter <- NULL
   means <- cbind(levelcols, means)
 
+  # Restore factor levels
+  means <- .restore_factor_levels(means, insight::get_data(model))
+
   return(means)
 
 }
@@ -85,35 +83,3 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
 
 
 
-#' @keywords internal
-.remove_name_level <- function(x){
-  name <- .find_name_level(x)
-  x <- sub(name, "", x)
-  x <- trimws(x)
-  return(x)
-}
-
-
-
-
-
-
-
-#' @keywords internal
-.find_name_level <- function(x){
-  splitted <- strsplit(as.character(x), " ")
-  splitted <- data.frame(do.call(rbind, splitted), stringsAsFactors = FALSE)
-  uniques <- sapply(splitted, unique)
-
-  lengths <-  sapply(uniques, length)
-  if(lengths[1] == 1){
-    return(as.character(uniques[[1]]))
-  } else{
-    warning("Couldn't find consistent level name.")
-    if(is.null(names(x))){
-      return("X")
-    } else{
-      return(names(x))
-    }
-  }
-}
