@@ -11,5 +11,4 @@ test_that("estimate_means", {
 
   estim <- estimate_means(circus::download_model("stanreg_lm_4"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(1, 6))
-
 })

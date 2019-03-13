@@ -27,10 +27,12 @@ Estimate marginal means
 \dontrun{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * fac2,
-    data=mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B")))
+  data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
+)
 estimate_means(model)
 model <- stan_glm(binary ~ Species,
-    data=mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family="binomial")
+  data = mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family = "binomial"
+)
 estimate_means(model)
 }
 }

@@ -15,8 +15,8 @@ Reshape Estimations with Draws to long format
 \examples{
 \dontrun{
 library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
-estimates <- estimate_response(model, keep_draws=TRUE, draws=200)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
 reshape_draws(estimates)
 }
 }

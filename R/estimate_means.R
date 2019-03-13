@@ -9,7 +9,7 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @export
-estimate_means <- function(model, ...){
+estimate_means <- function(model, ...) {
   UseMethod("estimate_means")
 }
 
@@ -35,10 +35,12 @@ estimate_means <- function(model, ...){
 #' \dontrun{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * fac2,
-#'     data=mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B")))
+#'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
+#' )
 #' estimate_means(model)
 #' model <- stan_glm(binary ~ Species,
-#'     data=mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family="binomial")
+#'   data = mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family = "binomial"
+#' )
 #' estimate_means(model)
 #' }
 #' @import dplyr
@@ -46,16 +48,15 @@ estimate_means <- function(model, ...){
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci = .90, estimate = "median", ...){
-
-  if(is.null(levels)){
+estimate_means.stanreg <- function(model, levels = NULL, transform = "response", ci = .90, estimate = "median", ...) {
+  if (is.null(levels)) {
     levels <- insight::find_predictors(model)$conditional
   }
 
 
   # Posteriors
   posteriors <- model %>%
-    emmeans::emmeans(levels, transform=transform, ...) %>%
+    emmeans::emmeans(levels, transform = transform, ...) %>%
     emmeans::as.mcmc.emmGrid() %>%
     as.matrix() %>%
     as.data.frame()
@@ -68,10 +69,10 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
   levelcols <- strsplit(as.character(means$Parameter), ", ")
   levelcols <- data.frame(do.call(rbind, levelcols))
   names(levelcols) <- unlist(sapply(levelcols, .find_name_level))
-  if(nrow(levelcols) > 1){
+  if (nrow(levelcols) > 1) {
     levelcols <- as.data.frame(sapply(levelcols, .remove_name_level), stringsAsFactors = FALSE)
     levelcols <- as.data.frame(sapply(levelcols, as.numeric_ifnumeric), stringsAsFactors = FALSE)
-  } else{
+  } else {
     levelcols <- as.data.frame(t(sapply(levelcols, .remove_name_level)), stringsAsFactors = FALSE)
     levelcols <- as.data.frame(t(sapply(levelcols, as.numeric_ifnumeric)), stringsAsFactors = FALSE)
   }
@@ -84,9 +85,4 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
   means <- .restore_factor_levels(means, insight::get_data(model))
 
   return(means)
-
 }
-
-
-
-

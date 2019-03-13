@@ -13,7 +13,7 @@ zero_crossings(x)
 Find zero crossings of a vector
 }
 \examples{
-x <- sin(seq(0, 4*pi, length.out=100))
+x <- sin(seq(0, 4 * pi, length.out = 100))
 plot(x)
 zero_crossings(x)
 }

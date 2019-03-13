@@ -17,7 +17,7 @@
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
 #' @importFrom stats na.omit
 #' @export
-data_grid <- function(x, target = "all", length = 100,  factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
+data_grid <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
   UseMethod("data_grid")
 }
 
@@ -32,12 +32,12 @@ data_grid <- function(x, target = "all", length = 100,  factors = "reference", n
 
 
 #' @export
-data_grid.stanreg <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random=TRUE, ...) {
+data_grid.stanreg <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random = TRUE, ...) {
   data <- insight::get_data(x)
-  if(random==FALSE){
-    data <- data[insight::find_predictors(x, effects="fixed", flatten=TRUE)]
+  if (random == FALSE) {
+    data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
-  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, na.rm = na.rm, random=TRUE, ...)
+  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, na.rm = na.rm, random = TRUE, ...)
   return(data)
 }
 
@@ -87,7 +87,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
   if (factors == "reference") {
-    facs <- as.data.frame(sapply(facs, .smart_summary, na.rm=na.rm, simplify = FALSE))
+    facs <- as.data.frame(sapply(facs, .smart_summary, na.rm = na.rm, simplify = FALSE))
   } else {
     facs <- .data_grid_target(facs)
   }
@@ -98,7 +98,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
   } else if (numerics == "combination") {
     nums <- .data_grid_target(nums, length = length)
   } else {
-    nums <- as.data.frame(sapply(nums, .smart_summary, numerics=numerics, na.rm=na.rm, simplify = FALSE))
+    nums <- as.data.frame(sapply(nums, .smart_summary, numerics = numerics, na.rm = na.rm, simplify = FALSE))
   }
 
 
@@ -116,12 +116,12 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
   # Remove non-existing values in factor levels
   # TODO: this code is very ugly
   factors <- names(grid)[sapply(grid, is.factor)]
-  if(length(factors) > 0  & preserve_range == TRUE){
+  if (length(factors) > 0 & preserve_range == TRUE) {
     rows_to_keep <- row.names(grid)
-    for(fac in factors){
-      if(length(unique(grid[[fac]])) > 1){
-        for(var in target[target != fac]){
-          for(level in unique(grid[[fac]])){
+    for (fac in factors) {
+      if (length(unique(grid[[fac]])) > 1) {
+        for (var in target[target != fac]) {
+          for (level in unique(grid[[fac]])) {
             max_value <- max(x[x[[fac]] == level, var])
             min_value <- min(x[x[[fac]] == level, var])
             rows_to_remove <- c()
@@ -146,7 +146,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
 #' @keywords internal
-.smart_summary <- function(x, numerics = "mean", na.rm=TRUE) {
+.smart_summary <- function(x, numerics = "mean", na.rm = TRUE) {
   if (na.rm == TRUE) x <- na.omit(x)
 
   if (is.numeric(x)) {
@@ -170,10 +170,10 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 #' @keywords internal
 .data_grid_target <- function(x, length = 10) {
-  vars <- sapply(x, data_grid, length = length, simplify=FALSE)
+  vars <- sapply(x, data_grid, length = length, simplify = FALSE)
   varnames <- names(x)
   grid <- data.frame()
-  for (i in varnames){
+  for (i in varnames) {
     var <- data.frame(vars[[i]])
     names(var) <- i
     if (nrow(grid) == 0) {
@@ -214,8 +214,8 @@ data_grid.vector <- function(x, target = "all", length = 10, ...) {
     out <- as.factor(levels(x))
   } else if (is.numeric(x)) {
     out <- seq(min(x, na.rm = TRUE),
-                          max(x, na.rm = TRUE),
-                          length = length
+      max(x, na.rm = TRUE),
+      length = length
     )
   } else {
     warning("Argument is not numeric nor factor: returning NA.")

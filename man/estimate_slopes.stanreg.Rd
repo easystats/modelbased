@@ -36,7 +36,7 @@ Estimate the slopes of a numeric predictor (over different factor levels)
 \examples{
 \dontrun{
 library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length * Petal.Width, data=iris)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length * Petal.Width, data = iris)
 estimate_slopes(model)
 }
 }

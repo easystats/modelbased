@@ -13,5 +13,4 @@ test_that("estimate_slopes", {
 
   estim <- estimate_slopes(circus::download_model("stanreg_lm_6"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
-
 })

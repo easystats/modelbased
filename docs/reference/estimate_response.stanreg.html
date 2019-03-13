@@ -123,11 +123,13 @@
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)
 
-<span class='fu'>estimate_fit.stanreg</span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
-  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='co'># S3 method for stanreg</span>
+<span class='fu'><a href='estimate_response.html'>estimate_fit</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -135,10 +137,11 @@
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='fu'>estimate_fit.data.frame</span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
-  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)</pre>
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'><a href='estimate_response.html'>estimate_fit</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
+  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -153,7 +156,7 @@
     </tr>
     <tr>
       <th>predict</th>
-      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code>estimate_fit(model)</code>.</p></td>
+      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code><a href='estimate_response.html'>estimate_fit(model)</a></code>.</p></td>
     </tr>
     <tr>
       <th>ci</th>
@@ -182,6 +185,10 @@
     <tr>
       <th>random</th>
       <td><p>Should it take the random effects into account? Can be <code>TRUE</code>, <code>FALSE</code> or a formula indicating which group-level parameters to condition on when making predictions. See <code>posterior_predict.stanreg</code>. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see <code>posterior_predict.stanreg</code>).</p></td>
+    </tr>
+    <tr>
+      <th>length</th>
+      <td><p>Length of numeric target variables that applies to <a href='data_grid.html'>data_grid</a>.</p></td>
     </tr>
     <tr>
       <th>...</th>

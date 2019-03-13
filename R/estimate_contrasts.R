@@ -9,7 +9,7 @@
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @export
-estimate_contrasts <- function(model, ...){
+estimate_contrasts <- function(model, ...) {
   UseMethod("estimate_contrasts")
 }
 
@@ -39,54 +39,54 @@ estimate_contrasts <- function(model, ...){
 #' \dontrun{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * fac2,
-#'     data=mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B")))
+#'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
+#' )
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed="fac2")
-#'
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data=iris)
+#' estimate_contrasts(model, fixed = "fac2")
+#' 
+#' model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed="Petal.Width")
-#' estimate_contrasts(model, modulate="Petal.Width", length=4)
+#' estimate_contrasts(model, fixed = "Petal.Width")
+#' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 #' }
 #' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_contrasts.stanreg <- function(model, levels=NULL, fixed=NULL, modulate=NULL, transform="none", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, length=10, ...){
-
-  if(is.null(levels)){
+estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, length = 10, ...) {
+  if (is.null(levels)) {
     levels <- insight::find_predictors(model)$conditional
     numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
     levels <- levels[!levels %in% numeric]
-  } else{
+  } else {
     numeric <- NULL
   }
 
-  if(!is.null(fixed)){
+  if (!is.null(fixed)) {
     fixed <- unique(c(fixed, numeric))
     levels <- levels[!levels %in% fixed]
   }
 
-  if(length(levels) == 0){
+  if (length(levels) == 0) {
     stop("No suitable factor levels detected.")
   }
 
 
   # Posteriors
-  if(is.null(modulate)){
+  if (is.null(modulate)) {
     posteriors <- model %>%
-      emmeans::emmeans(levels, by=fixed, transform=transform, ...) %>%
+      emmeans::emmeans(levels, by = fixed, transform = transform, ...) %>%
       emmeans::contrast(method = "pairwise") %>%
       emmeans::as.mcmc.emmGrid() %>%
       as.matrix() %>%
       as.data.frame()
-  } else{
+  } else {
     at <- insight::get_data(model)[c(levels, modulate)]
-    at <- sapply(at, data_grid, length=length)
+    at <- sapply(at, data_grid, length = length)
     posteriors <- model %>%
       emmeans::ref_grid(at = at) %>%
-      emmeans::emmeans(levels, by=modulate, transform=transform) %>%
+      emmeans::emmeans(levels, by = modulate, transform = transform) %>%
       emmeans::contrast(method = "pairwise") %>%
       emmeans::as.mcmc.emmGrid() %>%
       as.matrix() %>%
@@ -106,7 +106,7 @@ estimate_contrasts.stanreg <- function(model, levels=NULL, fixed=NULL, modulate=
   names <- gsub("contrast ", "", contrasts$Parameter)
 
   # Separate Contrasts from Others
-  if(!is.null(fixed) | !is.null(modulate)){
+  if (!is.null(fixed) | !is.null(modulate)) {
     others <- strsplit(as.character(names), ", ")
     others <- data.frame(do.call(rbind, others))
     names(others) <- unlist(sapply(others, .find_name_level))
@@ -114,7 +114,7 @@ estimate_contrasts.stanreg <- function(model, levels=NULL, fixed=NULL, modulate=
     levelcols <- data.frame("Contrast" = others$Contrast)
     others$Contrast <- NULL
     others <- as.data.frame(sapply(others, as.numeric_ifnumeric), stringsAsFactors = FALSE)
-  } else{
+  } else {
     others <- data.frame()
     levelcols <- data.frame("Contrast" = names)
   }
@@ -126,9 +126,9 @@ estimate_contrasts.stanreg <- function(model, levels=NULL, fixed=NULL, modulate=
   names(levelcols) <- c("Level1", "Level2")
 
   contrasts$Parameter <- NULL
-  if(nrow(others) != nrow(levelcols)){
+  if (nrow(others) != nrow(levelcols)) {
     contrasts <- cbind(levelcols, contrasts)
-  } else{
+  } else {
     contrasts <- cbind(levelcols, others, contrasts)
   }
 
@@ -136,5 +136,4 @@ estimate_contrasts.stanreg <- function(model, levels=NULL, fixed=NULL, modulate=
 
 
   return(contrasts)
-
 }

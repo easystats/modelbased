@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate marginal means — estimate_slopes.stanreg • estimate</title>
+<title>Estimate the slopes of a numeric predictor (over different factor levels) — estimate_slopes.stanreg • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,9 +37,9 @@
 
 
 
-<meta property="og:title" content="Estimate marginal means — estimate_slopes.stanreg" />
+<meta property="og:title" content="Estimate the slopes of a numeric predictor (over different factor levels) — estimate_slopes.stanreg" />
 
-<meta property="og:description" content="Estimate marginal means" />
+<meta property="og:description" content="Estimate the slopes of a numeric predictor (over different factor levels)" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -108,21 +108,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate marginal means</h1>
+    <h1>Estimate the slopes of a numeric predictor (over different factor levels)</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_slopes.R'><code>R/estimate_slopes.R</code></a></small>
     <div class="hidden name"><code>estimate_slopes.stanreg.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Estimate marginal means</p>
+    <p>Estimate the slopes of a numeric predictor (over different factor levels)</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(<span class='no'>model</span>, <span class='kw'>trend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>), <span class='kw'>rope_bounds</span> <span class='kw'>=</span> <span class='st'>"default"</span>, <span class='kw'>rope_full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>), <span class='kw'>rope_range</span> <span class='kw'>=</span> <span class='st'>"default"</span>, <span class='kw'>rope_full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -157,7 +157,7 @@
       <td><p>What <a href='https://easystats.github.io/bayestestR/articles/3_IndicesExistenceComparison.html'>indices of effect existence</a> to compute. Can be a character or a list with "p_direction", "rope" or "p_map".</p></td>
     </tr>
     <tr>
-      <th>rope_bounds</th>
+      <th>rope_range</th>
       <td><p><a href='https://easystats.github.io/bayestestR/articles/1_IndicesDescription.html#rope'>ROPE's</a> lower and higher bounds. Should be a list of two values (e.g., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(-0.1, 0.1)</a></code>) or <code>"default"</code>. If <code>"default"</code>, the bounds are set to <code>x +- 0.1*SD(response)</code>.</p></td>
     </tr>
     <tr>
