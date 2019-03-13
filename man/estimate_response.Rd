@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimate_response.R
 \name{estimate_response}
 \alias{estimate_response}
+\alias{estimate_fit}
 \title{Generates predictions}
 \usage{
 estimate_response(model, ...)
+
+estimate_fit(model, ...)
 }
 \arguments{
 \item{model}{Object.}

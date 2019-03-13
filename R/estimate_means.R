@@ -61,14 +61,21 @@ estimate_means.stanreg <- function(model, levels=NULL, transform="response", ci 
     as.data.frame()
 
   # Summary
-  means <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = NULL, rope_bounds = NULL, rope_full = NULL)
+  means <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
 
 
   # Format means
   levelcols <- strsplit(as.character(means$Parameter), ", ")
   levelcols <- data.frame(do.call(rbind, levelcols))
   names(levelcols) <- unlist(sapply(levelcols, .find_name_level))
-  levelcols <- as.data.frame(sapply(levelcols, .remove_name_level), stringsAsFactors = FALSE)
+  if(nrow(levelcols) > 1){
+    levelcols <- as.data.frame(sapply(levelcols, .remove_name_level), stringsAsFactors = FALSE)
+    levelcols <- as.data.frame(sapply(levelcols, as.numeric_ifnumeric), stringsAsFactors = FALSE)
+  } else{
+    levelcols <- as.data.frame(t(sapply(levelcols, .remove_name_level)), stringsAsFactors = FALSE)
+    levelcols <- as.data.frame(t(sapply(levelcols, as.numeric_ifnumeric)), stringsAsFactors = FALSE)
+  }
+
 
   means$Parameter <- NULL
   means <- cbind(levelcols, means)

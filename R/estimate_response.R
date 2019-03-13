@@ -35,8 +35,9 @@ estimate_response <- function(model, ...) {
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
 #' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. See \code{posterior_predict.stanreg}. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
+#' @param length Length of numeric target variables that applies to \link{data_grid}.
 #' @export
-estimate_response.stanreg <- function(model, data=NULL, predict="response", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
+estimate_response.stanreg <- function(model, data=NULL, predict="response", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, length = 10, ...) {
 
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
@@ -48,7 +49,7 @@ estimate_response.stanreg <- function(model, data=NULL, predict="response", ci =
     data <- insight::get_data(model)
   } else if(!is.data.frame(data)){
     if(data=="grid"){
-      data <- data_grid(model, random=random, ...)
+      data <- data_grid(model, random=random, length = length, ...)
     }
   }
 
@@ -81,7 +82,7 @@ estimate_response.stanreg <- function(model, data=NULL, predict="response", ci =
 
   # Summary
   prediction <- as.data.frame(posteriors)
-  prediction <- parameters::summarise_posteriors(prediction, ci = ci, estimate = estimate, test = NULL, rope_bounds = NULL, rope_full = NULL)
+  prediction <- parameters::summarise_posteriors(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
   prediction$Parameter <- NULL
   # names(prediction) <- paste0(insight::find_response(model), "_", names(prediction))
 
@@ -109,15 +110,19 @@ estimate_response.stanreg <- function(model, data=NULL, predict="response", ci =
 
 
 
-
-
+#' @rdname estimate_response
+#' @export
+#' @export
+estimate_fit <- function(model, ...) {
+  UseMethod("estimate_fit")
+}
 
 
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_fit.stanreg <- function(model, data=NULL, predict="link", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
+estimate_fit.stanreg <- function(model, data="grid", predict="link", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
   estimate_response(model, data=data, predict=predict, ci = ci, estimate = estimate, transform=transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
 }
 
@@ -131,7 +136,7 @@ estimate_response.data.frame <- function(model, data=NULL, predict="response", c
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_fit.data.frame <- function(model, data=NULL, predict="link", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
+estimate_fit.data.frame <- function(model, data="grid", predict="link", ci = 0.90, estimate = "median", transform="response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
   estimate_response(data, data=model, predict=predict, ci = ci, estimate = estimate, transform=transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
 }
 

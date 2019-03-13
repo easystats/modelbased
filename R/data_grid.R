@@ -6,6 +6,7 @@
 #' @param length Length of numeric target variables.
 #' @param factors Type of summary for factors. Can be "combination" or "reference".
 #' @param numerics Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.
+#' @param preserve_range This removes the originally non-existing target numeric values of each factor levels.
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -16,11 +17,9 @@
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
 #' @importFrom stats na.omit
 #' @export
-data_grid <- function(x, target = "all", length = 10,  factors = "reference", numerics = "mean", na.rm = TRUE, ...) {
+data_grid <- function(x, target = "all", length = 100,  factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
   UseMethod("data_grid")
 }
-
-
 
 
 
@@ -33,12 +32,12 @@ data_grid <- function(x, target = "all", length = 10,  factors = "reference", nu
 
 
 #' @export
-data_grid.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", na.rm = TRUE, random=TRUE, ...) {
+data_grid.stanreg <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random=TRUE, ...) {
   data <- insight::get_data(x)
   if(random==FALSE){
     data <- data[insight::find_predictors(x, effects="fixed", flatten=TRUE)]
   }
-  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, na.rm = na.rm, random=TRUE, ...)
+  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, na.rm = na.rm, random=TRUE, ...)
   return(data)
 }
 
@@ -65,13 +64,14 @@ data_grid.lmerMod <- data_grid.stanreg
 
 # dataframes ---------------------------------------------------------------
 
-
-
-
+#' @rdname data_grid
+#' @examples
+#' x <- iris
+#' target <- c("Sepal.Length", "Species")
 #' @export
-data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", na.rm = TRUE, ...) {
+data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
   # Target
-  if (all(target == "all") | ncol(x) == 1) {
+  if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
     return(.data_grid_target(x, length = length))
   }
 
@@ -112,6 +112,33 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
   refrest <- refrest[var_order]
   grid <- merge(target_df, refrest)
+
+  # Remove non-existing values in factor levels
+  # TODO: this code is very ugly
+  factors <- names(grid)[sapply(grid, is.factor)]
+  if(length(factors) > 0  & preserve_range == TRUE){
+    rows_to_keep <- row.names(grid)
+    for(fac in factors){
+      if(length(unique(grid[[fac]])) > 1){
+        for(var in target[target != fac]){
+          for(level in unique(grid[[fac]])){
+            max_value <- max(x[x[[fac]] == level, var])
+            min_value <- min(x[x[[fac]] == level, var])
+            rows_to_remove <- c()
+            rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] <= min_value, ]))
+            rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] >= max_value, ]))
+            print(rows_to_keep)
+            rows_to_keep <- rows_to_keep[!rows_to_keep %in% rows_to_remove]
+          }
+        }
+      }
+    }
+    grid <- grid[rows_to_keep, ]
+  }
+
+
+
+
 
   return(grid)
 }

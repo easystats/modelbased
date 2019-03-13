@@ -26,7 +26,7 @@ estimate_slopes <- function(model, ...){
 
 
 
-#' Estimate marginal means
+#' Estimate the slopes of a numeric predictor (over different factor levels)
 #'
 #'
 #' @inheritParams estimate_contrasts.stanreg
@@ -44,7 +44,7 @@ estimate_slopes <- function(model, ...){
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="response", ci = .90, estimate = "median", test = c("pd", "rope"), rope_bounds = "default", rope_full = TRUE, ...){
+estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="response", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, ...){
 
 
   predictors <- insight::find_predictors(model)$conditional
@@ -63,6 +63,9 @@ estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="r
     levels <- predictors[!predictors %in% trend]
   }
 
+  if(length(levels) == 0){
+    stop("No suitable factor levels detected over which to estimate slopes.")
+  }
 
 
   # Basis
@@ -84,7 +87,7 @@ estimate_slopes.stanreg <- function(model, trend=NULL, levels=NULL, transform="r
     as.data.frame()
 
   # Summary
-  slopes <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_bounds = rope_bounds, rope_full = rope_full)
+  slopes <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
 
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
