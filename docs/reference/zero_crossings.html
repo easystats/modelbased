@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • estimate</title>
+<title>Find zero crossings of a vector — zero_crossings • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -37,7 +37,9 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Find zero crossings of a vector — zero_crossings" />
+
+<meta property="og:description" content="Find zero crossings of a vector" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -57,7 +59,7 @@
   </head>
 
   <body>
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -104,126 +106,49 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Find zero crossings of a vector</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <div class="hidden name"><code>zero_crossings.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    
+    <p>Find zero crossings of a vector</p>
+    
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
-
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="as.numeric_ifnumeric.html">as.numeric_ifnumeric()</a></code> </p>
-        </td>
-        <td><p>Convert to Numeric if Possible</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="data_grid.html">data_grid()</a></code> </p>
-        </td>
-        <td><p>Create a reference grid.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="data_grid.vector.html">data_grid(<i>&lt;vector&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Create a reference grid.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts between factor levels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.stanreg.html">estimate_contrasts(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.html">estimate_means()</a></code> </p>
-        </td>
-        <td><p>Estimate average value of response at each factor levels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.stanreg.html">estimate_means(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate marginal means</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.html">estimate_response()</a></code> <code><a href="estimate_response.html">estimate_fit()</a></code> </p>
-        </td>
-        <td><p>Generates predictions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_fit(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_fit(<i>&lt;data.frame&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generates predictions for Bayesian models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.html">estimate_slopes()</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.stanreg.html">estimate_slopes(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_smooth.html">estimate_smooth()</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_smooth.stanreg.html">estimate_smooth(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reshape_draws.html">reshape_draws()</a></code> </p>
-        </td>
-        <td><p>Reshape Estimations with Draws to long format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zero_crossings.html">zero_crossings()</a></code> </p>
-        </td>
-        <td><p>Find zero crossings of a vector</p></td>
-      </tr>
-    </tbody>
+    <pre class="usage"><span class='fu'>zero_crossings</span>(<span class='no'>x</span>)</pre>
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>x</th>
+      <td><p>A numeric vector.</p></td>
+    </tr>
     </table>
-  </div>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
+    <div class='dont-index'><p>Based on the <code>uniroot.all</code> function from the rootSolve package.</p></div>
+    
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Trig'>sin</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span>*<span class='no'>pi</span>, <span class='kw'>length.out</span><span class='kw'>=</span><span class='fl'>100</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='zero_crossings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>zero_crossings</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 12.87478 37.62484 62.37516 87.12522</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#section-all-functions">All functions</a></li>
+      <li><a href="#arguments">Arguments</a></li>
+      
+      <li><a href="#see-also">See also</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
     </ul>
+
   </div>
 </div>
 

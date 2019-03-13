@@ -10,21 +10,22 @@
 \method{estimate_response}{stanreg}(model, data = NULL,
   predict = "response", ci = 0.9, estimate = "median",
   transform = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, random = FALSE, ...)
+  seed = NULL, random = FALSE, length = 10, ...)
 
-estimate_fit.stanreg(model, data = NULL, predict = "link", ci = 0.9,
-  estimate = "median", transform = "response", keep_draws = FALSE,
-  draws = NULL, seed = NULL, random = FALSE, ...)
+\method{estimate_fit}{stanreg}(model, data = "grid", predict = "link",
+  ci = 0.9, estimate = "median", transform = "response",
+  keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE,
+  ...)
 
 \method{estimate_response}{data.frame}(model, data = NULL,
   predict = "response", ci = 0.9, estimate = "median",
   transform = "response", keep_draws = FALSE, draws = NULL,
   seed = NULL, random = FALSE, ...)
 
-estimate_fit.data.frame(model, data = NULL, predict = "link",
-  ci = 0.9, estimate = "median", transform = "response",
-  keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE,
-  ...)
+\method{estimate_fit}{data.frame}(model, data = "grid",
+  predict = "link", ci = 0.9, estimate = "median",
+  transform = "response", keep_draws = FALSE, draws = NULL,
+  seed = NULL, random = FALSE, ...)
 }
 \arguments{
 \item{model}{Bayesian model.}
@@ -46,6 +47,8 @@ estimate_fit.data.frame(model, data = NULL, predict = "link",
 \item{seed}{An optional seed to use.}
 
 \item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. See \code{posterior_predict.stanreg}. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
+
+\item{length}{Length of numeric target variables that applies to \link{data_grid}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

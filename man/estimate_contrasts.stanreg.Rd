@@ -5,13 +5,18 @@
 \title{Estimate contrasts}
 \usage{
 \method{estimate_contrasts}{stanreg}(model, levels = NULL,
-  transform = "none", ci = 0.9, estimate = "median", test = c("pd",
-  "rope"), rope_bounds = "default", rope_full = TRUE, ...)
+  fixed = NULL, modulate = NULL, transform = "none", ci = 0.9,
+  estimate = "median", test = c("pd", "rope"),
+  rope_range = "default", rope_full = TRUE, length = 10, ...)
 }
 \arguments{
 \item{model}{Bayesian model.}
 
 \item{levels}{A character vector or formula specifying the names of the predictors over which contrasts are desired.}
+
+\item{fixed}{A character vector indicating the names of the predictors to be "fixed" (i.e., maintained), so that the estimation is made at these values.}
+
+\item{modulate}{A character vector indicating the names of a numeric variable along which the contrasts will be tested. Adjust its length using \code{length}.}
 
 \item{transform}{Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.}
 
@@ -21,9 +26,11 @@
 
 \item{test}{What \href{https://easystats.github.io/bayestestR/articles/3_IndicesExistenceComparison.html}{indices of effect existence} to compute. Can be a character or a list with "p_direction", "rope" or "p_map".}
 
-\item{rope_bounds}{\href{https://easystats.github.io/bayestestR/articles/1_IndicesDescription.html#rope}{ROPE's} lower and higher bounds. Should be a list of two values (e.g., \code{c(-0.1, 0.1)}) or \code{"default"}. If \code{"default"}, the bounds are set to \code{x +- 0.1*SD(response)}.}
+\item{rope_range}{\href{https://easystats.github.io/bayestestR/articles/1_IndicesDescription.html#rope}{ROPE's} lower and higher bounds. Should be a list of two values (e.g., \code{c(-0.1, 0.1)}) or \code{"default"}. If \code{"default"}, the bounds are set to \code{x +- 0.1*SD(response)}.}
 
 \item{rope_full}{If TRUE, use the proportion of the entire posterior distribution for the equivalence test. Otherwise, use the proportion of HDI as indicated by the \code{ci} argument.}
+
+\item{length}{Length of the spread of the \code{modulate} variable}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -34,7 +41,14 @@ Estimate contrasts
 \dontrun{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * fac2,
-    data=mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B")))
+  data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
+)
 estimate_contrasts(model)
+estimate_contrasts(model, fixed = "fac2")
+
+model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
+estimate_contrasts(model)
+estimate_contrasts(model, fixed = "Petal.Width")
+estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 }
 }

@@ -54,12 +54,14 @@ The package documentation can be found [**here**](https://easystats.github.io/es
 
 # Features
 
-The package is built around 5 main functions:
+The package is built around 7 main functions:
 
 - `estimate_means()`: Estimates the average values at each factor levels
 - `estimate_contrasts()`: Estimates and tests contrasts between different factor levels
 - `estimate_slopes()`: Estimates the slopes of numeric predictors at different factor levels
-- `estimate_response()`: Estimates the slopes of numeric predictors at different factor levels
+- `estimate_response()`: Predict the response variable based on the model
+- `estimate_fit()`: Estimates the link between variables of the model and the response
+- `estimate_smooth()`: Describes a non-linear term (*e.g.* in GAMs) through its linear parts
 - `data_grid()`: Creates a reference grid of provided data or model
 
 ## Examples
@@ -83,21 +85,30 @@ estimate_contrasts(model)
 knitr::kable(estimate_contrasts(model), digits=2)
 ```
 
-#### Find a predictor's slopes at each factor level
+
+#### check the contrasts at different points of another linear predictor
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
 
+estimate_contrasts(model, modulate="Petal.Length", length=3)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(estimate_contrasts(model, modulate="Petal.Length", length=3), digits=2)
+```
+
+#### Find a predictor's slopes at each factor level
+
+```{r message=FALSE, warning=FALSE, results='hide'}
 estimate_slopes(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(estimate_slopes(model), digits=2)
 ```
 
-#### Make predictions based on your model to compare it with original data
+#### Generate predictions from your model to compare it with original data
 ```{r message=FALSE, warning=FALSE, results='hide'}
-model %>% 
-  estimate_response()
+estimate_response(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(
@@ -106,13 +117,23 @@ knitr::kable(
     head(), digits=2)
 ```
 
-#### Make predictions on a reference grid to help visualising the effects
+#### Estimate the link between the response and a predictor
 ```{r message=FALSE, warning=FALSE, results='hide'}
-model %>% 
-  estimate_response(data="grid", length=3, predict="link")
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+
+estimate_fit(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(
   model %>% 
-    estimate_response(data="grid", length=3, predict="link"), digits=2)
+    estimate_fit(length=7),
+    digits=2)
+```
+
+#### Describe the smooth term
+```{r message=FALSE, warning=FALSE, results='hide'}
+estimate_smooth(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+knitr::kable(estimate_smooth(model))
 ```

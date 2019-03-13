@@ -2,10 +2,16 @@
 % Please edit documentation in R/data_grid.R
 \name{data_grid}
 \alias{data_grid}
+\alias{data_grid.data.frame}
 \title{Create a reference grid.}
 \usage{
-data_grid(x, target = "all", length = 10, factors = "reference",
-  numerics = "mean", na.rm = TRUE, ...)
+data_grid(x, target = "all", length = 100, factors = "reference",
+  numerics = "mean", preserve_range = preserve_range, na.rm = TRUE,
+  ...)
+
+\method{data_grid}{data.frame}(x, target = "all", length = 10,
+  factors = "reference", numerics = "mean", preserve_range = FALSE,
+  na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{An object from which to contruct the reference grid.}
@@ -17,6 +23,8 @@ data_grid(x, target = "all", length = 10, factors = "reference",
 \item{factors}{Type of summary for factors. Can be "combination" or "reference".}
 
 \item{numerics}{Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.}
+
+\item{preserve_range}{This removes the originally non-existing target numeric values of each factor levels.}
 
 \item{na.rm}{Remove NaNs.}
 
@@ -30,4 +38,6 @@ newdata <- data_grid(iris, target = "Sepal.Length")
 newdata <- data_grid(iris, target = "Sepal.Length", factors = "combinations")
 newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 3)
 newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+x <- iris
+target <- c("Sepal.Length", "Species")
 }

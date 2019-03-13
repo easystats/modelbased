@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimate_response.R
 \name{estimate_response}
 \alias{estimate_response}
+\alias{estimate_fit}
 \title{Generates predictions}
 \usage{
 estimate_response(model, ...)
+
+estimate_fit(model, ...)
 }
 \arguments{
 \item{model}{Object.}
@@ -20,12 +23,11 @@ See the documentation for your object's class:
 \examples{
 \dontrun{
 library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_response(model)
 
-model <- stan_glmer(Sepal.Width ~ Petal.Length + (1|Species), data=iris)
+model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 estimate_response(model)
 }
-
 
 }
