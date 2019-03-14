@@ -43,7 +43,7 @@ estimate_contrasts <- function(model, ...) {
 #' )
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "fac2")
-#' 
+#'
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "Petal.Width")
@@ -83,7 +83,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
       as.data.frame()
   } else {
     at <- insight::get_data(model)[c(levels, modulate)]
-    at <- sapply(at, data_grid, length = length)
+    at <- sapply(at, data_grid, length = length, simplify=FALSE)
     posteriors <- model %>%
       emmeans::ref_grid(at = at) %>%
       emmeans::emmeans(levels, by = modulate, transform = transform) %>%

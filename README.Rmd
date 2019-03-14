@@ -56,19 +56,20 @@ The package documentation can be found [**here**](https://easystats.github.io/es
 
 The package is built around 7 main functions:
 
-- `estimate_means()`: Estimates the average values at each factor levels
-- `estimate_contrasts()`: Estimates and tests contrasts between different factor levels
-- `estimate_slopes()`: Estimates the slopes of numeric predictors at different factor levels
-- `estimate_response()`: Predict the response variable based on the model
-- `estimate_fit()`: Estimates the link between variables of the model and the response
-- `estimate_smooth()`: Describes a non-linear term (*e.g.* in GAMs) through its linear parts
-- `data_grid()`: Creates a reference grid of provided data or model
+- [`estimate_means()`](https://easystats.github.io/estimate/reference/estimate_means.html): Estimates the average values at each factor levels
+- [`estimate_contrasts()`](https://easystats.github.io/estimate/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
+- [`estimate_slopes()`](https://easystats.github.io/estimate/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels
+- [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable based on the model
+- [`estimate_fit()`](https://easystats.github.io/estimate/reference/estimate_response.html): Estimates the link between variables of the model and the response
+- [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
+- [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html): Creates a reference grid of provided data or model
 
 ## Examples
 
-#### Estimate marginal means
+### Estimate marginal means
 ```{r message=FALSE, warning=FALSE, results='hide'}
 library(rstanarm)
+
 model <- stan_glm(Sepal.Width ~ Species, data=iris)
 
 estimate_means(model)
@@ -77,7 +78,7 @@ estimate_means(model)
 knitr::kable(estimate_means(model), digits=2)
 ```
 
-#### Contrast analysis
+### Contrast analysis
 ```{r message=FALSE, warning=FALSE, results='hide'}
 estimate_contrasts(model)
 ```
@@ -86,7 +87,7 @@ knitr::kable(estimate_contrasts(model), digits=2)
 ```
 
 
-#### check the contrasts at different points of another linear predictor
+### check the contrasts at different points of another linear predictor
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
@@ -97,7 +98,7 @@ estimate_contrasts(model, modulate="Petal.Length", length=3)
 knitr::kable(estimate_contrasts(model, modulate="Petal.Length", length=3), digits=2)
 ```
 
-#### Find a predictor's slopes at each factor level
+### Find a predictor's slopes at each factor level
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
 estimate_slopes(model)
@@ -106,7 +107,7 @@ estimate_slopes(model)
 knitr::kable(estimate_slopes(model), digits=2)
 ```
 
-#### Generate predictions from your model to compare it with original data
+### Generate predictions from your model to compare it with original data
 ```{r message=FALSE, warning=FALSE, results='hide'}
 estimate_response(model)
 ```
@@ -117,7 +118,7 @@ knitr::kable(
     head(), digits=2)
 ```
 
-#### Estimate the link between the response and a predictor
+### Estimate the link between the response and a predictor
 ```{r message=FALSE, warning=FALSE, results='hide'}
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
 
@@ -130,7 +131,7 @@ knitr::kable(
     digits=2)
 ```
 
-#### Describe the smooth term
+### Describe the smooth term
 ```{r message=FALSE, warning=FALSE, results='hide'}
 estimate_smooth(model)
 ```

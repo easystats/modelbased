@@ -12,7 +12,10 @@ estimate_smooth(model, ...)
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
-This function summarise the smooth term trend in terms of linear segments. See the documentation for your object's class:
+This function summarise the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterised by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
+}
+\details{
+See the documentation for your object's class:
 \itemize{
  \item{\link[=estimate_smooth.stanreg]{Bayesian models (stanreg and brms)}}
  }

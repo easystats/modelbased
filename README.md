@@ -31,28 +31,37 @@ The package documentation can be found
 
 # Features
 
-The package is built around 7 main functions:
+The package is built around 7 main
+    functions:
 
-  - `estimate_means()`: Estimates the average values at each factor
+  - [`estimate_means()`](https://easystats.github.io/estimate/reference/estimate_means.html):
+    Estimates the average values at each factor
     levels
-  - `estimate_contrasts()`: Estimates and tests contrasts between
-    different factor levels
-  - `estimate_slopes()`: Estimates the slopes of numeric predictors at
-    different factor levels
-  - `estimate_response()`: Predict the response variable based on the
+  - [`estimate_contrasts()`](https://easystats.github.io/estimate/reference/estimate_contrasts.html):
+    Estimates and tests contrasts between different factor
+    levels
+  - [`estimate_slopes()`](https://easystats.github.io/estimate/reference/estimate_slopes.html):
+    Estimates the slopes of numeric predictors at different factor
+    levels
+  - [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html):
+    Predict the response variable based on the
     model
-  - `estimate_fit()`: Estimates the link between variables of the model
-    and the response
-  - `estimate_smooth()`: Describes a non-linear term (*e.g.* in GAMs)
-    through its linear parts
-  - `data_grid()`: Creates a reference grid of provided data or model
+  - [`estimate_fit()`](https://easystats.github.io/estimate/reference/estimate_response.html):
+    Estimates the link between variables of the model and the
+    response
+  - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html):
+    Describes a non-linear term (*e.g.* in GAMs) by its linear
+    parts
+  - [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html):
+    Creates a reference grid of provided data or model
 
 ## Examples
 
-#### Estimate marginal means
+### Estimate marginal means
 
 ``` r
 library(rstanarm)
+
 model <- stan_glm(Sepal.Width ~ Species, data=iris)
 
 estimate_means(model)
@@ -64,7 +73,7 @@ estimate_means(model)
 | versicolor |   2.77 | 0.05 |    2.69 |     2.85 |
 | virginica  |   2.97 | 0.05 |    2.90 |     3.06 |
 
-#### Contrast analysis
+### Contrast analysis
 
 ``` r
 estimate_contrasts(model)
@@ -72,11 +81,11 @@ estimate_contrasts(model)
 
 | Level1     | Level2     | Median |  MAD | CI\_low | CI\_high |     pd | ROPE\_Percentage | ROPE\_Equivalence |
 | :--------- | :--------- | -----: | ---: | ------: | -------: | -----: | ---------------: | :---------------- |
-| setosa     | versicolor |   0.65 | 0.07 |    0.55 |     0.77 | 100.00 |             0.00 | rejected          |
-| setosa     | virginica  |   0.45 | 0.07 |    0.34 |     0.56 | 100.00 |             0.00 | rejected          |
-| versicolor | virginica  | \-0.20 | 0.07 |  \-0.32 |   \-0.09 |  99.83 |             6.25 | undecided         |
+| setosa     | versicolor |   0.66 | 0.07 |    0.54 |     0.77 | 100.00 |             0.00 | rejected          |
+| setosa     | virginica  |   0.45 | 0.07 |    0.33 |     0.56 | 100.00 |             0.00 | rejected          |
+| versicolor | virginica  | \-0.21 | 0.07 |  \-0.32 |   \-0.09 |  99.85 |             6.25 | undecided         |
 
-#### check the contrasts at different points of another linear predictor
+### check the contrasts at different points of another linear predictor
 
 ``` r
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
@@ -84,13 +93,19 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
 estimate_contrasts(model, modulate="Petal.Length", length=3)
 ```
 
-| Level1     | Level2     | Petal.Length | Median |  MAD | CI\_low | CI\_high |    pd | ROPE\_Percentage | ROPE\_Equivalence |
-| :--------- | :--------- | -----------: | -----: | ---: | ------: | -------: | ----: | ---------------: | :---------------- |
-| setosa     | versicolor |         3.76 |   1.76 | 0.44 |    0.96 |     2.44 | 100.0 |              0.0 | rejected          |
-| setosa     | virginica  |         3.76 |   1.77 | 0.49 |    1.03 |     2.60 | 100.0 |              0.0 | rejected          |
-| versicolor | virginica  |         3.76 |   0.01 | 0.16 |  \-0.25 |     0.27 |  52.7 |             47.9 | undecided         |
+| Level1     | Level2     | Petal.Length | Median |  MAD | CI\_low | CI\_high |     pd | ROPE\_Percentage | ROPE\_Equivalence |
+| :--------- | :--------- | -----------: | -----: | ---: | ------: | -------: | -----: | ---------------: | :---------------- |
+| setosa     | versicolor |         1.00 |   1.53 | 0.31 |    1.05 |     2.04 | 100.00 |             0.00 | rejected          |
+| setosa     | virginica  |         1.00 |   1.22 | 0.35 |    0.65 |     1.80 | 100.00 |             0.05 | rejected          |
+| versicolor | virginica  |         1.00 | \-0.32 | 0.46 |  \-1.05 |     0.46 |  75.98 |            12.62 | undecided         |
+| setosa     | versicolor |         3.95 |   1.78 | 0.48 |    1.01 |     2.58 | 100.00 |             0.00 | rejected          |
+| setosa     | virginica  |         3.95 |   1.81 | 0.52 |    0.96 |     2.62 |  99.98 |             0.05 | rejected          |
+| versicolor | virginica  |         3.95 |   0.03 | 0.14 |  \-0.19 |     0.27 |  59.05 |            51.62 | undecided         |
+| setosa     | versicolor |         6.90 |   2.00 | 1.02 |    0.43 |     3.77 |  97.58 |             1.15 | undecided         |
+| setosa     | virginica  |         6.90 |   2.39 | 1.01 |    0.84 |     4.18 |  99.02 |             0.45 | rejected          |
+| versicolor | virginica  |         6.90 |   0.39 | 0.28 |  \-0.03 |     0.83 |  93.17 |            10.53 | undecided         |
 
-#### Find a predictor’s slopes at each factor level
+### Find a predictor’s slopes at each factor level
 
 ``` r
 estimate_slopes(model)
@@ -98,11 +113,11 @@ estimate_slopes(model)
 
 | Species    | Median |  MAD | CI\_low | CI\_high |    pd | ROPE\_Percentage | ROPE\_Equivalence |
 | :--------- | -----: | ---: | ------: | -------: | ----: | ---------------: | :---------------- |
-| setosa     |   0.41 | 0.19 |    0.10 |     0.71 | 98.67 |             4.65 | undecided         |
-| versicolor |   0.33 | 0.09 |    0.18 |     0.47 | 99.98 |             0.60 | rejected          |
-| virginica  |   0.21 | 0.08 |    0.08 |     0.34 | 99.88 |             7.20 | undecided         |
+| setosa     |   0.41 | 0.19 |    0.12 |     0.75 | 98.72 |             4.47 | undecided         |
+| versicolor |   0.33 | 0.10 |    0.18 |     0.48 | 99.95 |             0.45 | rejected          |
+| virginica  |   0.21 | 0.08 |    0.08 |     0.33 | 99.72 |             7.32 | undecided         |
 
-#### Generate predictions from your model to compare it with original data
+### Generate predictions from your model to compare it with original data
 
 ``` r
 estimate_response(model)
@@ -110,14 +125,14 @@ estimate_response(model)
 
 | Species | Petal.Length | Median |  MAD | CI\_low | CI\_high |
 | :------ | -----------: | -----: | ---: | ------: | -------: |
-| setosa  |          1.4 |   3.41 | 0.33 |    2.87 |     3.91 |
-| setosa  |          1.4 |   3.40 | 0.32 |    2.90 |     3.96 |
-| setosa  |          1.3 |   3.36 | 0.32 |    2.86 |     3.91 |
-| setosa  |          1.5 |   3.44 | 0.32 |    2.95 |     4.00 |
-| setosa  |          1.4 |   3.40 | 0.31 |    2.89 |     3.94 |
-| setosa  |          1.7 |   3.53 | 0.32 |    2.95 |     4.01 |
+| setosa  |          1.4 |   3.39 | 0.32 |    2.86 |     3.92 |
+| setosa  |          1.4 |   3.41 | 0.32 |    2.85 |     3.88 |
+| setosa  |          1.3 |   3.36 | 0.31 |    2.86 |     3.87 |
+| setosa  |          1.5 |   3.43 | 0.32 |    2.93 |     3.99 |
+| setosa  |          1.4 |   3.39 | 0.32 |    2.89 |     3.93 |
+| setosa  |          1.7 |   3.52 | 0.31 |    3.00 |     4.04 |
 
-#### Estimate the link between the response and a predictor
+### Estimate the link between the response and a predictor
 
 ``` r
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
@@ -127,21 +142,21 @@ estimate_fit(model)
 
 | Petal.Length | Median |  MAD | CI\_low | CI\_high |
 | -----------: | -----: | ---: | ------: | -------: |
-|         1.00 |   3.62 | 0.07 |    3.53 |     3.74 |
-|         1.98 |   3.18 | 0.04 |    3.11 |     3.25 |
+|         1.00 |   3.62 | 0.07 |    3.51 |     3.73 |
+|         1.98 |   3.18 | 0.04 |    3.11 |     3.24 |
 |         2.97 |   2.90 | 0.05 |    2.82 |     2.98 |
 |         3.95 |   2.78 | 0.05 |    2.71 |     2.86 |
-|         4.93 |   2.83 | 0.04 |    2.77 |     2.90 |
-|         5.92 |   3.05 | 0.06 |    2.97 |     3.15 |
+|         4.93 |   2.83 | 0.04 |    2.77 |     2.89 |
+|         5.92 |   3.05 | 0.05 |    2.96 |     3.14 |
 |         6.90 |   3.44 | 0.12 |    3.24 |     3.63 |
 
-#### Describe the smooth term
+### Describe the smooth term
 
 ``` r
 estimate_smooth(model)
 ```
 
-| Part |    Start |      End | Size |       Trend | Smoothness |
-| ---: | -------: | -------: | ---: | ----------: | ---------: |
-|    1 | 1.000000 | 4.113065 | 0.53 | \-0.0080029 |  0.9989059 |
-|    2 | 4.113065 | 6.900000 | 0.47 |   0.0068667 |  0.9989540 |
+| Part |    Start |      End |  Size |       Trend | Linearity |
+| ---: | -------: | -------: | ----: | ----------: | --------: |
+|    1 | 1.000000 | 4.083417 | 0.525 | \-0.0080528 | 0.9404634 |
+|    2 | 4.083417 | 6.900000 | 0.475 |   0.0068805 | 0.9318788 |
