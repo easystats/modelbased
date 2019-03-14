@@ -1,6 +1,8 @@
 #' Describe the smooth term (for GAMs) or non-linear predictors
 #'
-#' This function summarise the smooth term trend in terms of linear segments. See the documentation for your object's class:
+#' This function summarise the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterised by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
+#'
+#' See the documentation for your object's class:
 #' \itemize{
 #'  \item{\link[=estimate_smooth.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
@@ -36,18 +38,18 @@ estimate_smooth <- function(model, ...) {
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#' # model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
-#' # estimate_smooth(model)
-#' #
-#' # model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
-#' # estimate_smooth(model)
-#' #
-#' # model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
-#' # estimate_smooth(model)
-#' #
-#' # model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
-#' # estimate_smooth(model)
-#' # estimate_smooth(model, levels="Species")
+#' model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
+#' estimate_smooth(model)
+#'
+#' model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+#' estimate_smooth(model)
+#'
+#' model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
+#' estimate_smooth(model)
+#'
+#' model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
+#' estimate_smooth(model)
+#' estimate_smooth(model, levels="Species")
 #' }
 #' @import dplyr
 #' @import emmeans
@@ -175,28 +177,44 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 }
 
 
+
+
+
+
+#' @importFrom performance r2
 #' @keywords internal
-.describe_segment <- function(segment, range) {
+.describe_segment <- function(segment, range, smoothness=FALSE) {
   # Smoothness
-  if (length(segment) < 10) {
-    smoothness <- NA
-  } else {
-    smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+  if(smoothness){
+    if (length(segment) < 10) {
+      smoothness <- NA
+    } else {
+      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+    }
   }
+
 
   if (length(segment) < 3) {
     trend <- NA
+    linearity <- NA
   } else {
-    trend <- as.numeric(coef(lm(y ~ x,
-      data = data.frame(
-        "y" = segment,
-        "x" = seq(range[1], range[2], length.out = length(segment))
-      )
-    ))[2])
+    model <- lm(y ~ x,
+                data = data.frame(
+                  "y" = segment,
+                  "x" = seq(range[1], range[2], length.out = length(segment))
+                ))
+
+    trend <- as.numeric(coef(model)[2])
+    linearity <- as.numeric(performance::r2(model)$R2)
   }
 
-  return(data.frame(
+  out <- data.frame(
     "Trend" = trend,
-    "Smoothness" = smoothness
-  ))
+    "Linearity" = linearity
+  )
+  if(smoothness != FALSE){
+    out$Smoothness <- smoothness
+  }
+
+  return(out)
 }
