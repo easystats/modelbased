@@ -40,6 +40,8 @@ Estimate contrasts
 \examples{
 \dontrun{
 library(rstanarm)
+library(dplyr)
+
 model <- stan_glm(Sepal.Width ~ Species * fac2,
   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
 )

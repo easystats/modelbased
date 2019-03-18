@@ -25,6 +25,7 @@ Estimate marginal means
 }
 \examples{
 \dontrun{
+library(dplyr)
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * fac2,
   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))

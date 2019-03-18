@@ -13,11 +13,11 @@
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_response(model)
-#' 
+#'
 #' model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 #' estimate_response(model)
 #' }
-#' 
+#'
 #' @export
 estimate_response <- function(model, ...) {
   UseMethod("estimate_response")
@@ -33,7 +33,7 @@ estimate_response <- function(model, ...) {
 #' @param keep_draws If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
-#' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. See \code{posterior_predict.stanreg}. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
+#' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
 #' @param length Length of numeric target variables that applies to \link{data_grid}.
 #' @export
 estimate_response.stanreg <- function(model, data = NULL, predict = "response", ci = 0.90, estimate = "median", transform = "response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, length = 10, ...) {
@@ -60,7 +60,7 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
       random <- FALSE
     }
   }
-  if (random) {
+  if (random == TRUE) {
     re.form <- NULL
   } else if (random == FALSE) {
     re.form <- NA
@@ -98,6 +98,16 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
   # Restore factor levels
   prediction <- .restore_factor_levels(prediction, insight::get_data(model))
 
+  attributes(prediction) <- c(attributes(prediction),
+                         list(predict = predict,
+                              ci = ci,
+                              transform = transform,
+                              keep_draws = keep_draws,
+                              draws = draws,
+                              seed = seed,
+                              random = random))
+
+  class(prediction) <- c("estimateResponse", class(prediction))
   return(prediction)
 }
 

@@ -38,6 +38,8 @@ estimate_contrasts <- function(model, ...) {
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
+#' library(dplyr)
+#'
 #' model <- stan_glm(Sepal.Width ~ Species * fac2,
 #'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
 #' )
@@ -94,10 +96,6 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   }
 
 
-
-
-
-
   # Summary
   contrasts <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
 
@@ -124,6 +122,8 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
   levelcols <- data.frame(do.call(rbind, levelcols))
   names(levelcols) <- c("Level1", "Level2")
+  levelcols$Level1 <- gsub(",", " - ", levelcols$Level1)
+  levelcols$Level2 <- gsub(",", " - ", levelcols$Level2)
 
   contrasts$Parameter <- NULL
   if (nrow(others) != nrow(levelcols)) {
@@ -132,8 +132,15 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
     contrasts <- cbind(levelcols, others, contrasts)
   }
 
+  attributes(contrasts) <- c(attributes(contrasts),
+                       list(levels = levels,
+                            fixed = fixed,
+                            modulate = modulate,
+                            transform = transform,
+                            ci = ci,
+                            rope_range = rope_range,
+                            rope_full = rope_full))
 
-
-
+  class(contrasts) <- c("estimateContrasts", class(contrasts))
   return(contrasts)
 }

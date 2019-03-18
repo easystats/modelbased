@@ -28,17 +28,17 @@ Describe the smooth term (for GAMs) or non-linear predictors
 \examples{
 \dontrun{
 library(rstanarm)
-# model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
-# estimate_smooth(model)
-#
-# model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
-# estimate_smooth(model)
-#
-# model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
-# estimate_smooth(model)
-#
-# model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
-# estimate_smooth(model)
-# estimate_smooth(model, levels="Species")
+model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
+estimate_smooth(model)
+
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+estimate_smooth(model)
+
+model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
+estimate_smooth(model)
+
+model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
+estimate_smooth(model)
+estimate_smooth(model, levels="Species")
 }
 }

@@ -46,7 +46,7 @@
 
 \item{seed}{An optional seed to use.}
 
-\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. See \code{posterior_predict.stanreg}. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
+\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
 \item{length}{Length of numeric target variables that applies to \link{data_grid}.}
 

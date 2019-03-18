@@ -33,6 +33,7 @@ estimate_means <- function(model, ...) {
 #'
 #' @examples
 #' \dontrun{
+#' library(dplyr)
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * fac2,
 #'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
@@ -84,5 +85,9 @@ estimate_means.stanreg <- function(model, levels = NULL, transform = "response",
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))
 
+  attributes(means) <- c(attributes(means),
+                               list(ci = ci, levels = levels, transform = transform))
+
+  class(means) <- c("estimateMeans", class(means))
   return(means)
 }
