@@ -44,7 +44,6 @@ estimate_means <- function(model, ...) {
 #' )
 #' estimate_means(model)
 #' }
-#' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
@@ -56,11 +55,9 @@ estimate_means.stanreg <- function(model, levels = NULL, transform = "response",
 
 
   # Posteriors
-  posteriors <- model %>%
-    emmeans::emmeans(levels, transform = transform, ...) %>%
-    emmeans::as.mcmc.emmGrid() %>%
-    as.matrix() %>%
-    as.data.frame()
+  posteriors <- emmeans::emmeans(model, levels, transform = transform, ...)
+  posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
+  posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
   means <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)

@@ -51,7 +51,6 @@ estimate_smooth <- function(model, ...) {
 #' estimate_smooth(model)
 #' estimate_smooth(model, levels="Species")
 #' }
-#' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess

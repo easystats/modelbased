@@ -51,7 +51,6 @@ estimate_contrasts <- function(model, ...) {
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 #' }
-#' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
@@ -77,23 +76,17 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
   # Posteriors
   if (is.null(modulate)) {
-    posteriors <- model %>%
-      emmeans::emmeans(levels, by = fixed, transform = transform, ...) %>%
-      emmeans::contrast(method = "pairwise") %>%
-      emmeans::as.mcmc.emmGrid() %>%
-      as.matrix() %>%
-      as.data.frame()
+    posteriors <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
+    posteriors <- emmeans::contrast(posteriors, method = "pairwise")
   } else {
     at <- insight::get_data(model)[c(levels, modulate)]
     at <- sapply(at, data_grid, length = length, simplify=FALSE)
-    posteriors <- model %>%
-      emmeans::ref_grid(at = at) %>%
-      emmeans::emmeans(levels, by = modulate, transform = transform) %>%
-      emmeans::contrast(method = "pairwise") %>%
-      emmeans::as.mcmc.emmGrid() %>%
-      as.matrix() %>%
-      as.data.frame()
+    posteriors <- emmeans::ref_grid(model, at = at)
+    posteriors <- emmeans::emmeans(posteriors, levels, by = modulate, transform = transform)
+    posteriors <- emmeans::contrast(posteriors, method = "pairwise")
   }
+  posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
+  posteriors <- as.data.frame(as.matrix(posteriors))
 
 
   # Summary

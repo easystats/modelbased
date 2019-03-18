@@ -39,7 +39,6 @@ estimate_slopes <- function(model, ...) {
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length * Petal.Width, data = iris)
 #' estimate_slopes(model)
 #' }
-#' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
@@ -67,8 +66,7 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
 
   # Basis
-  trends <- model %>%
-    emmeans::emtrends(levels, var = trend, transform = transform, ...)
+  trends <- emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
 
   params <- as.data.frame(trends)
   rownames(params) <- NULL
@@ -79,10 +77,8 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
 
   # Posteriors
-  posteriors <- trends %>%
-    emmeans::as.mcmc.emmGrid() %>%
-    as.matrix() %>%
-    as.data.frame()
+  posteriors <- emmeans::as.mcmc.emmGrid(trends)
+  posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
   slopes <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
