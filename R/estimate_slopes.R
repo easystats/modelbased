@@ -89,5 +89,15 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   # Restore factor levels
   slopes <- .restore_factor_levels(slopes, insight::get_data(model))
 
+  attributes(slopes) <- c(attributes(slopes),
+                          list(levels = levels,
+                               trend = trend,
+                               transform = transform,
+                               ci = ci,
+                               rope_range = rope_range,
+                               rope_full = rope_full))
+
+  class(slopes) <- c("estimateSlopes", class(slopes))
+
   return(slopes)
 }

@@ -83,7 +83,10 @@ estimate_means.stanreg <- function(model, levels = NULL, transform = "response",
   means <- .restore_factor_levels(means, insight::get_data(model))
 
   attributes(means) <- c(attributes(means),
-                               list(ci = ci, levels = levels, transform = transform))
+                               list(ci = ci,
+                                    levels = levels,
+                                    fixed = levels[sapply(insight::get_data(model)[, levels], is.numeric)],
+                                    transform = transform))
 
   class(means) <- c("estimateMeans", class(means))
   return(means)
