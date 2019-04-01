@@ -90,7 +90,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
 
   # Summary
-  contrasts <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
+  contrasts <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
 
 
   # Format contrasts

@@ -80,7 +80,7 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
 
   # Summary
   prediction <- as.data.frame(posteriors)
-  prediction <- parameters::summarise_posteriors(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  prediction <- parameters::describe_posterior(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
   prediction$Parameter <- NULL
   # names(prediction) <- paste0(insight::find_response(model), "_", names(prediction))
 

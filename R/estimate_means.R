@@ -60,7 +60,7 @@ estimate_means.stanreg <- function(model, levels = NULL, transform = "response",
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  means <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  means <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
 
 
   # Format means

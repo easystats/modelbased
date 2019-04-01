@@ -81,7 +81,7 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  slopes <- parameters::summarise_posteriors(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
+  slopes <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
 
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
