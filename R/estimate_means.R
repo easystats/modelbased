@@ -43,21 +43,37 @@ estimate_means <- function(model, ...) {
 #'   data = mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family = "binomial"
 #' )
 #' estimate_means(model)
+#'
+#' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)
+#' estimate_means(model)
+#' estimate_means(model, modulate="Sepal.Width")
 #' }
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_means.stanreg <- function(model, levels = NULL, transform = "response", ci = .90, estimate = "median", ...) {
-  if (is.null(levels)) {
-    levels <- insight::find_predictors(model)$conditional
-  }
-
-
-  # Posteriors
-  posteriors <- emmeans::emmeans(model, levels, transform = transform, ...)
-  posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
+estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = NULL, transform = "response", ci = .90, estimate = "median", length = 10, ...) {
+  # if (is.null(levels)) {
+  #   levels <- insight::find_predictors(model)$conditional
+  #   numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
+  #   levels <- levels[!levels %in% numeric]
+  # }
+  #
+  # # Posteriors
+  # if(!is.null(modulate)){
+  #   at <- insight::get_data(model)[unique(c(levels, modulate))]
+  #   at <- sapply(at, data_grid, length = length, simplify=FALSE)
+  #   posteriors <- emmeans::ref_grid(model, at = at)
+  #   posteriors <- emmeans::emmeans(posteriors, levels, transform = transform, ...)
+  # } else{
+  #   posteriors <- emmeans::emmeans(model, levels, transform = transform, ...)
+  # }
+  means <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform, length=length, type="mean", ...)
+  posteriors <- emmeans::as.mcmc.emmGrid(means)
   posteriors <- as.data.frame(as.matrix(posteriors))
+
+
+
 
   # Summary
   means <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
@@ -89,5 +105,49 @@ estimate_means.stanreg <- function(model, levels = NULL, transform = "response",
                                     transform = transform))
 
   class(means) <- c("estimateMeans", class(means))
+  return(means)
+}
+
+
+
+
+
+
+
+
+
+#' @keywords internal
+.emmeans_wrapper <- function(model, levels=NULL, fixed=NULL, modulate=NULL, transform = "response", length=10, type="mean", ...){
+  if (is.null(levels)) {
+    levels <- insight::find_predictors(model)$conditional
+    numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
+    levels <- levels[!levels %in% numeric]
+  } else {
+    numeric <- NULL
+  }
+
+  if (!is.null(fixed)) {
+    fixed <- unique(c(fixed, numeric))
+    levels <- levels[!levels %in% fixed]
+  }
+
+  if (length(levels) == 0) {
+    stop("No suitable factor levels detected.")
+  }
+
+
+  # Posteriors
+  if (is.null(modulate)) {
+    means <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
+  } else {
+    at <- insight::get_data(model)[c(levels, modulate)]
+    at <- sapply(at, data_grid, length = length, simplify=FALSE)
+    means <- emmeans::ref_grid(model, at = at)
+    if(type == "mean"){
+      means <- emmeans::emmeans(means, c(levels, modulate), transform = transform)
+    } else{
+      means <- emmeans::emmeans(means, levels, by = modulate, transform = transform, ...)
+    }
+  }
   return(means)
 }

@@ -7,8 +7,6 @@ test_that("estimate_means", {
   library(rstanarm)
 
   estim <- estimate_means(insight::download_model("stanreg_lm_6"))
-  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
 
-  estim <- estimate_means(insight::download_model("stanreg_lm_4"))
-  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(1, 6))
 })

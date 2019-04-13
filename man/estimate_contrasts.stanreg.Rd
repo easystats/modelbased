@@ -12,7 +12,7 @@
 \arguments{
 \item{model}{Bayesian model.}
 
-\item{levels}{A character vector or formula specifying the names of the predictors over which contrasts are desired.}
+\item{levels}{A character vector or formula specifying the names of the predictors over which to average or to contrast.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
@@ -30,7 +30,7 @@
 
 \item{rope_full}{If TRUE, use the proportion of the entire posterior distribution for the equivalence test. Otherwise, use the proportion of HDI as indicated by the \code{ci} argument.}
 
-\item{length}{Length of the spread of the \code{modulate} variable}
+\item{length}{Length of the spreaded numeric variables.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

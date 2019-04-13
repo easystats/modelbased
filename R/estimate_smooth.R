@@ -72,7 +72,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   if (is.null(levels)) {
     target <- smooth
   } else {
-    target <- c(predictors[!predictors %in% smooth], smooth)
+    target <- c(levels[!levels %in% smooth], smooth)
   }
 
 
