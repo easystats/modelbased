@@ -53,23 +53,11 @@ estimate_means <- function(model, ...) {
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = NULL, transform = "response", ci = .90, estimate = "median", length = 10, ...) {
-  # if (is.null(levels)) {
-  #   levels <- insight::find_predictors(model)$conditional
-  #   numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
-  #   levels <- levels[!levels %in% numeric]
-  # }
-  #
-  # # Posteriors
-  # if(!is.null(modulate)){
-  #   at <- insight::get_data(model)[unique(c(levels, modulate))]
-  #   at <- sapply(at, data_grid, length = length, simplify=FALSE)
-  #   posteriors <- emmeans::ref_grid(model, at = at)
-  #   posteriors <- emmeans::emmeans(posteriors, levels, transform = transform, ...)
-  # } else{
-  #   posteriors <- emmeans::emmeans(model, levels, transform = transform, ...)
-  # }
-  means <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform, length=length, type="mean", ...)
-  posteriors <- emmeans::as.mcmc.emmGrid(means)
+
+
+
+  estimated <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform, length=length, type="mean", ...)
+  posteriors <- emmeans::as.mcmc.emmGrid(estimated$means)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
 
@@ -100,8 +88,9 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
 
   attributes(means) <- c(attributes(means),
                                list(ci = ci,
-                                    levels = levels,
-                                    fixed = levels[sapply(insight::get_data(model)[, levels], is.numeric)],
+                                    levels = estimated$levels,
+                                    fixed = estimated$fixed,
+                                    modulate = estimated$modulate,
                                     transform = transform))
 
   class(means) <- c("estimateMeans", class(means))
@@ -149,5 +138,8 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
       means <- emmeans::emmeans(means, levels, by = modulate, transform = transform, ...)
     }
   }
-  return(means)
+  return(list("means"=means,
+              "levels"=levels,
+              "fixed"=fixed,
+              "modulate"=modulate))
 }

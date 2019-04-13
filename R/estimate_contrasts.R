@@ -56,37 +56,9 @@ estimate_contrasts <- function(model, ...) {
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, length = 10, ...) {
-  # if (is.null(levels)) {
-  #   levels <- insight::find_predictors(model)$conditional
-  #   numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
-  #   levels <- levels[!levels %in% numeric]
-  # } else {
-  #   numeric <- NULL
-  # }
-  #
-  # if (!is.null(fixed)) {
-  #   fixed <- unique(c(fixed, numeric))
-  #   levels <- levels[!levels %in% fixed]
-  # }
-  #
-  # if (length(levels) == 0) {
-  #   stop("No suitable factor levels detected.")
-  # }
-  #
-  #
-  # # Posteriors
-  # if (is.null(modulate)) {
-  #   posteriors <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
-  #   posteriors <- emmeans::contrast(posteriors, method = "pairwise")
-  # } else {
-  #   at <- insight::get_data(model)[c(levels, modulate)]
-  #   at <- sapply(at, data_grid, length = length, simplify=FALSE)
-  #   posteriors <- emmeans::ref_grid(model, at = at)
-  #   posteriors <- emmeans::emmeans(posteriors, levels, by = modulate, transform = transform)
-  #   posteriors <- emmeans::contrast(posteriors, method = "pairwise")
-  # }
-  means <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform = transform, length=length, type="contrasts", ...)
-  posteriors <- emmeans::contrast(means, method = "pairwise")
+
+  estimated <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform = transform, length=length, type="contrasts", ...)
+  posteriors <- emmeans::contrast(estimated$means, method = "pairwise")
   posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
@@ -128,9 +100,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   }
 
   attributes(contrasts) <- c(attributes(contrasts),
-                       list(levels = levels,
-                            fixed = fixed,
-                            modulate = modulate,
+                       list(levels = estimated$levels,
+                            fixed = estimated$fixed,
+                            modulate = estimated$modulate,
                             transform = transform,
                             ci = ci,
                             rope_range = rope_range,
