@@ -51,7 +51,6 @@ estimate_smooth <- function(model, ...) {
 #' estimate_smooth(model)
 #' estimate_smooth(model, levels="Species")
 #' }
-#' @import dplyr
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess
@@ -73,7 +72,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   if (is.null(levels)) {
     target <- smooth
   } else {
-    target <- c(predictors[!predictors %in% smooth], smooth)
+    target <- c(levels[!levels %in% smooth], smooth)
   }
 
 
@@ -124,7 +123,9 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     description$End <- smooth_data[description$End, smooth]
   }
 
-
+  attributes(description) <- c(attributes(description),
+                             list(smooth = smooth, levels = levels, transform = transform))
+  class(description) <- c("estimateSmooth", class(description))
   return(description)
 }
 

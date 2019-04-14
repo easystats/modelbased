@@ -17,7 +17,7 @@
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
 #' @importFrom stats na.omit
 #' @export
-data_grid <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
+data_grid <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
   UseMethod("data_grid")
 }
 
@@ -32,7 +32,7 @@ data_grid <- function(x, target = "all", length = 100, factors = "reference", nu
 
 
 #' @export
-data_grid.stanreg <- function(x, target = "all", length = 100, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random = TRUE, ...) {
+data_grid.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random = TRUE, ...) {
   data <- insight::get_data(x)
   if (random == FALSE) {
     data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
@@ -202,16 +202,16 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 #' @export
 data_grid.vector <- function(x, target = "all", length = 10, ...) {
   if (is.factor(x)) {
-    out <- as.factor(levels(x))
+    out <- as.factor(levels(droplevels(x)))
   } else if (is.character(x)) {
     x <- as.factor(x)
-    out <- as.factor(levels(x))
+    out <- as.factor(levels(droplevels(x)))
   } else if (is.logical(x)) {
     x <- as.factor(x)
-    out <- as.factor(levels(x))
+    out <- as.factor(levels(droplevels(x)))
   } else if (length(unique(x)) < 3) {
     x <- as.factor(x)
-    out <- as.factor(levels(x))
+    out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
     out <- seq(min(x, na.rm = TRUE),
       max(x, na.rm = TRUE),

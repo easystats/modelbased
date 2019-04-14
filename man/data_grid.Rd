@@ -5,7 +5,7 @@
 \alias{data_grid.data.frame}
 \title{Create a reference grid.}
 \usage{
-data_grid(x, target = "all", length = 100, factors = "reference",
+data_grid(x, target = "all", length = 10, factors = "reference",
   numerics = "mean", preserve_range = preserve_range, na.rm = TRUE,
   ...)
 
