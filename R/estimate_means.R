@@ -64,7 +64,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
 
 
   # Summary
-  means <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  means <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
 
 
   # Format means

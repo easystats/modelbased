@@ -181,7 +181,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
 
 
-
+#' @importFrom parameters smoothness
 #' @importFrom performance r2
 #' @keywords internal
 .describe_segment <- function(segment, range, smoothness=FALSE) {
