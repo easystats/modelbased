@@ -80,7 +80,7 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
 
   # Summary
   prediction <- as.data.frame(posteriors)
-  prediction <- parameters::describe_posterior(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  prediction <- bayestestR::describe_posterior(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
   prediction$Parameter <- NULL
   # names(prediction) <- paste0(insight::find_response(model), "_", names(prediction))
 
@@ -146,36 +146,3 @@ estimate_fit.data.frame <- function(model, data = "grid", predict = "link", ci =
   estimate_response(data, data = model, predict = predict, ci = ci, estimate = estimate, transform = transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
 }
 
-
-
-
-
-
-
-
-#' Reshape Estimations with Draws to long format
-#'
-#' @param estimates Estimates with posterior draws.
-#'
-#' @examples
-#' \dontrun{
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
-#' reshape_draws(estimates)
-#' }
-#' @importFrom stats reshape
-#' @export
-reshape_draws <- function(estimates) {
-  estimates$Index <- 1:nrow(estimates)
-  long <- reshape(estimates,
-    varying = names(estimates)[grepl("Draw_", names(estimates))],
-    idvar = "Index",
-    v.names = "Draw",
-    timevar = "Draw_Index",
-    direction = "long"
-  )
-  row.names(long) <- NULL
-
-  return(long)
-}

@@ -64,7 +64,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
 
   # Summary
-  contrasts <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
+  contrasts <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
 
 
   # Format contrasts

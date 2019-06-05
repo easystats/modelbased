@@ -56,7 +56,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
 
 
 
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed=fixed, modulate = modulate, transform, length=length, type="mean", ...)
+  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length=length, type="mean", ...)
   posteriors <- emmeans::as.mcmc.emmGrid(estimated$means)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
@@ -64,7 +64,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
 
 
   # Summary
-  means <- parameters::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  means <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
 
 
   # Format means
