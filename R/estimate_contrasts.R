@@ -56,6 +56,7 @@ estimate_contrasts <- function(model, ...) {
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
+#' @importFrom bayestestR describe_posterior
 #' @export
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, length = 10, ...) {
 
