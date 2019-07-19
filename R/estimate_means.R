@@ -2,7 +2,7 @@
 #'
 #' See the documentation for your object's class:
 #' \itemize{
-#'  \item{\link[=estimate_means.stanreg]{Bayesian models (stanreg and brms)}}
+#'  \item{\link[=estimate_means.stanreg]{Bayesian models (rstanarm and brms)}}
 #'  }
 #'
 #' @param model Object.
@@ -28,20 +28,19 @@ estimate_means <- function(model, ...) {
 
 #' Estimate marginal means
 #'
-#'
+#' @inheritParams bayestestR::describe_posterior
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
 #' \dontrun{
-#' library(dplyr)
+#' data <- iris
+#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
 #' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * fac2,
-#'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
-#' )
+#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
 #' estimate_means(model)
-#' model <- stan_glm(binary ~ Species,
-#'   data = mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family = "binomial"
-#' )
+#'
+#' model <- stan_glm(vs ~ mpg, data = mtcars)
 #' estimate_means(model)
 #'
 #' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)
@@ -52,7 +51,7 @@ estimate_means <- function(model, ...) {
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = NULL, transform = "response", ci = .90, estimate = "median", length = 10, ...) {
+estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = NULL, transform = "response", length = 10, estimate = "median", ci = 0.89, ci_method = "hdi", ...) {
 
 
 
@@ -60,11 +59,9 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
   posteriors <- emmeans::as.mcmc.emmGrid(estimated$means)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
-
-
-
   # Summary
-  means <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  means <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
+  if(length(unique(means$CI)) == 1) means$CI <- NULL
 
 
   # Format means
@@ -78,28 +75,34 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
     levelcols <- as.data.frame(t(sapply(levelcols, .remove_name_level)), stringsAsFactors = FALSE)
     levelcols <- as.data.frame(t(sapply(levelcols, as.numeric_ifnumeric)), stringsAsFactors = FALSE)
   }
-
-
   means$Parameter <- NULL
   means <- cbind(levelcols, means)
+
 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))
 
+  # Add attributes
   attributes(means) <- c(attributes(means),
                                list(ci = ci,
+                                    ci_method = ci_method,
                                     levels = estimated$levels,
                                     fixed = estimated$fixed,
                                     modulate = estimated$modulate,
                                     transform = transform))
 
-  class(means) <- c("estimateMeans", class(means))
+  class(means) <- c("estimate_means", class(means))
   return(means)
 }
 
 
 
 
+#' @export
+print.estimate_means <- function(x, ...) {
+  formatted_table <- parameters::parameters_table(x, ...)
+  cat(parameters::format_table(formatted_table))
+}
 
 
 

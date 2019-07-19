@@ -14,6 +14,6 @@ estimate_means(model, ...)
 \description{
 See the documentation for your object's class:
 \itemize{
- \item{\link[=estimate_means.stanreg]{Bayesian models (stanreg and brms)}}
+ \item{\link[=estimate_means.stanreg]{Bayesian models (rstanarm and brms)}}
  }
 }

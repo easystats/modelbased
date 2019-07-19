@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 
 
-`estimate` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis, predictions and such.
+`estimate` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and predictions.
 
 
 ## Installation
@@ -53,15 +53,15 @@ The package documentation can be found [**here**](https://easystats.github.io/es
 
 # Features
 
-The package is built around 7 main functions:
+The package is built around 5 main functions:
 
 - [`estimate_means()`](https://easystats.github.io/estimate/reference/estimate_means.html): Estimates the average values at each factor levels
 - [`estimate_contrasts()`](https://easystats.github.io/estimate/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/estimate/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels
 - [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable based on the model
-- [`estimate_fit()`](https://easystats.github.io/estimate/reference/estimate_response.html): Estimates the link between variables of the model and the response
 - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
-- [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html): Creates a reference grid of provided data or model
+
+The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 
 ## Examples
 

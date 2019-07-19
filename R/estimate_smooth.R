@@ -182,7 +182,6 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
 
 
-#' @importFrom performance r2
 #' @keywords internal
 .describe_segment <- function(segment, range, smoothness=FALSE) {
   # Smoothness
@@ -206,7 +205,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
                 ))
 
     trend <- as.numeric(coef(model)[2])
-    linearity <- as.numeric(performance::r2(model)$R2)
+    linearity <- as.numeric(summary(model)$r.squared)
   }
 
   out <- data.frame(

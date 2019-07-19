@@ -5,8 +5,8 @@
 \title{Estimate marginal means}
 \usage{
 \method{estimate_means}{stanreg}(model, levels = NULL, fixed = NULL,
-  modulate = NULL, transform = "response", ci = 0.9,
-  estimate = "median", length = 10, ...)
+  modulate = NULL, transform = "response", length = 10,
+  estimate = "median", ci = 0.89, ci_method = "hdi", ...)
 }
 \arguments{
 \item{model}{Bayesian model.}
@@ -19,28 +19,32 @@
 
 \item{transform}{Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.}
 
-\item{ci}{Credible Interval (CI) level. Default to 0.90 (90\%).}
+\item{length}{Length of the spreaded numeric variables.}
 
 \item{estimate}{The \href{https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html}{point-estimate(s)} to compute. Can be a character or a list with "median", "mean" or "MAP".}
 
-\item{length}{Length of the spreaded numeric variables.}
+\item{ci}{Value or vector of probability of the CI (between 0 and 1)
+to be estimated. Default to \code{.89} (89\%) for Bayesian models and \code{.95} (95\%) for frequentist models.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{ci_method}{The type of index used for Credible Interval. Can be
+\code{"hdi"} (default, see \code{\link{hdi}}) or \code{"quantile"}
+(see \code{\link{ci}}).}
+
+\item{...}{Additional arguments to be passed to or from methods.}
 }
 \description{
 Estimate marginal means
 }
 \examples{
 \dontrun{
-library(dplyr)
+data <- iris
+data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+
 library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * fac2,
-  data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
-)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
 estimate_means(model)
-model <- stan_glm(binary ~ Species,
-  data = mutate(iris, binary = ifelse(Petal.Length < 4.2, 0, 1)), family = "binomial"
-)
+
+model <- stan_glm(vs ~ mpg, data = mtcars)
 estimate_means(model)
 
 model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)

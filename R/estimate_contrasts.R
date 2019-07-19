@@ -38,13 +38,15 @@ estimate_contrasts <- function(model, ...) {
 #' @examples
 #' \dontrun{
 #' library(rstanarm)
-#' library(dplyr)
+#' library(estimate)
 #'
-#' model <- stan_glm(Sepal.Width ~ Species * fac2,
-#'   data = mutate(iris, fac2 = ifelse(Petal.Length < 4.2, "A", "B"))
-#' )
+#' data <- iris
+#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
+#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed = "fac2")
+#' estimate_contrasts(model, fixed = "Petal.Length_factor")
 #'
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' estimate_contrasts(model)
