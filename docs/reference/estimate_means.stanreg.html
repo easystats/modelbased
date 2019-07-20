@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate marginal means — estimate_means.stanreg • estimate</title>
+<title>Estimate marginal means (Bayesian models) — estimate_means.stanreg • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +39,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Estimate marginal means — estimate_means.stanreg" />
+<meta property="og:title" content="Estimate marginal means (Bayesian models) — estimate_means.stanreg" />
 
-<meta property="og:description" content="Estimate marginal means" />
+<meta property="og:description" content="Estimate marginal means (Bayesian models)" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -87,7 +87,22 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/marginal_means.html">Marginal means</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -110,14 +125,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate marginal means</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_means.R'><code>R/estimate_means.R</code></a></small>
+    <h1>Estimate marginal means (Bayesian models)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_means.bayesian.R'><code>R/estimate_means.bayesian.R</code></a></small>
     <div class="hidden name"><code>estimate_means.stanreg.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Estimate marginal means</p>
+    <p>Estimate marginal means (Bayesian models)</p>
     
     </div>
 
@@ -181,9 +196,6 @@
 
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length_factor</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)
-
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>vs</span> ~ <span class='no'>mpg</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>mtcars</span>)
 <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)
 
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)

@@ -87,7 +87,22 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/marginal_means.html">Marginal means</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -124,6 +139,7 @@
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
   <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>), <span class='kw'>rope_range</span> <span class='kw'>=</span> <span class='st'>"default"</span>, <span class='kw'>rope_ci</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)</pre>
     
@@ -153,6 +169,14 @@
     <tr>
       <th>length</th>
       <td><p>Length of the spread numeric variables.</p></td>
+    </tr>
+    <tr>
+      <th>standardize</th>
+      <td><p>If <code>TRUE</code>, add standardized differences (Cohen's d) or coefficients.</p></td>
+    </tr>
+    <tr>
+      <th>standardize_robust</th>
+      <td><p>Robust standardization through <code>MAD</code> (Median Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
     </tr>
     <tr>
       <th>centrality</th>

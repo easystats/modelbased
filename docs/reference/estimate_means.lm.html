@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate average value of response variable at each factor levels — estimate_means • estimate</title>
+<title>Estimate marginal means (Frequentist models) — estimate_means.lm • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,12 +39,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Estimate average value of response variable at each factor levels — estimate_means" />
+<meta property="og:title" content="Estimate marginal means (Frequentist models) — estimate_means.lm" />
 
-<meta property="og:description" content="See the documentation for your object's class:
-Frequentist models
-Bayesian models (rstanarm and brms)
-" />
+<meta property="og:description" content="Estimate marginal means (Frequentist models)" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -128,29 +125,28 @@ Bayesian models (rstanarm and brms)
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate average value of response variable at each factor levels</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_means.bayesian.R'><code>R/estimate_means.bayesian.R</code></a></small>
-    <div class="hidden name"><code>estimate_means.Rd</code></div>
+    <h1>Estimate marginal means (Frequentist models)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_means.frequentist.R'><code>R/estimate_means.frequentist.R</code></a></small>
+    <div class="hidden name"><code>estimate_means.lm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='estimate_means.lm.html'>Frequentist models</a></p></li>
-<li><p><a href='estimate_means.stanreg.html'>Bayesian models (rstanarm and brms)</a></p></li>
-</ul>
+    <p>Estimate marginal means (Frequentist models)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>estimate_means</span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='co'># S3 method for lm</span>
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>A statistical model.</p></td>
+      <td><p>A Bayesian model.</p></td>
     </tr>
     <tr>
       <th>levels</th>
@@ -173,18 +169,75 @@ Bayesian models (rstanarm and brms)
       <td><p>Length of the spread numeric variables.</p></td>
     </tr>
     <tr>
+      <th>ci</th>
+      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>estimate</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Species    | Mean |   SE |       95% CI
+#&gt; ---------------------------------------
+#&gt; setosa     | 1.28 | 0.07 | [1.15, 1.42]
+#&gt; versicolor | 4.40 | 0.06 | [4.27, 4.52]
+#&gt; virginica  | 5.59 | 0.06 | [5.48, 5.70]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Sepal.Width"</span>)</div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
+#&gt; -----------------------------------------------------
+#&gt; setosa     |        2.00 | 0.78 | 0.15 | [0.48, 1.07]
+#&gt; versicolor |        2.00 | 3.89 | 0.09 | [3.71, 4.08]
+#&gt; virginica  |        2.00 | 5.09 | 0.11 | [4.87, 5.30]
+#&gt; setosa     |        2.27 | 0.91 | 0.13 | [0.66, 1.16]
+#&gt; versicolor |        2.27 | 4.02 | 0.07 | [3.87, 4.17]
+#&gt; virginica  |        2.27 | 5.21 | 0.09 | [5.04, 5.39]
+#&gt; setosa     |        2.53 | 1.03 | 0.10 | [0.83, 1.24]
+#&gt; versicolor |        2.53 | 4.15 | 0.06 | [4.03, 4.27]
+#&gt; virginica  |        2.53 | 5.34 | 0.07 | [5.20, 5.48]
+#&gt; setosa     |        2.80 | 1.16 | 0.08 | [1.00, 1.33]
+#&gt; versicolor |        2.80 | 4.27 | 0.06 | [4.16, 4.39]
+#&gt; virginica  |        2.80 | 5.47 | 0.06 | [5.35, 5.59]
+#&gt; setosa     |        3.07 | 1.29 | 0.07 | [1.16, 1.42]
+#&gt; versicolor |        3.07 | 4.40 | 0.06 | [4.28, 4.53]
+#&gt; virginica  |        3.07 | 5.60 | 0.06 | [5.48, 5.71]
+#&gt; setosa     |        3.33 | 1.42 | 0.06 | [1.30, 1.53]
+#&gt; versicolor |        3.33 | 4.53 | 0.08 | [4.37, 4.69]
+#&gt; virginica  |        3.33 | 5.72 | 0.07 | [5.59, 5.86]
+#&gt; setosa     |        3.60 | 1.54 | 0.06 | [1.43, 1.66]
+#&gt; versicolor |        3.60 | 4.66 | 0.10 | [4.46, 4.85]
+#&gt; virginica  |        3.60 | 5.85 | 0.08 | [5.69, 6.02]
+#&gt; setosa     |        3.87 | 1.67 | 0.07 | [1.53, 1.81]
+#&gt; versicolor |        3.87 | 4.79 | 0.12 | [4.55, 5.02]
+#&gt; virginica  |        3.87 | 5.98 | 0.10 | [5.77, 6.18]
+#&gt; setosa     |        4.13 | 1.80 | 0.09 | [1.62, 1.98]
+#&gt; versicolor |        4.13 | 4.91 | 0.14 | [4.63, 5.20]
+#&gt; virginica  |        4.13 | 6.11 | 0.13 | [5.86, 6.36]
+#&gt; setosa     |        4.40 | 1.93 | 0.11 | [1.71, 2.14]
+#&gt; versicolor |        4.40 | 5.04 | 0.17 | [4.71, 5.37]
+#&gt; virginica  |        4.40 | 6.23 | 0.15 | [5.94, 6.53]</div><div class='input'>
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
+<span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Sepal.Width"</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

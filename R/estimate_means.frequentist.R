@@ -18,7 +18,7 @@
 #'
 #' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1|Petal.Length_factor), data = data)
 #' estimate_means(model)
-#'
+#' estimate_means(model, modulate = "Sepal.Width")
 #' }
 #'
 #' @import emmeans
@@ -35,22 +35,6 @@ estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NUL
   names(means)[names(means) == "emmean"] <- "Mean"
   names(means)[names(means) == "lower.CL"] <- "CI_low"
   names(means)[names(means) == "upper.CL"] <- "CI_high"
-
-
-  # Format means
-  # levelcols <- strsplit(as.character(means$Parameter), ", ")
-  # levelcols <- data.frame(do.call(rbind, levelcols))
-  # names(levelcols) <- unlist(sapply(levelcols, .find_name_level))
-  # if (nrow(levelcols) > 1) {
-  #   levelcols <- as.data.frame(sapply(levelcols, .remove_name_level), stringsAsFactors = FALSE)
-  #   levelcols <- as.data.frame(sapply(levelcols, as.numeric_ifnumeric), stringsAsFactors = FALSE)
-  # } else {
-  #   levelcols <- as.data.frame(t(sapply(levelcols, .remove_name_level)), stringsAsFactors = FALSE)
-  #   levelcols <- as.data.frame(t(sapply(levelcols, as.numeric_ifnumeric)), stringsAsFactors = FALSE)
-  # }
-  # means$Parameter <- NULL
-  # means <- cbind(levelcols, means)
-
 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))
