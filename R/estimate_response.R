@@ -5,21 +5,15 @@
 #'  \item{\link[=estimate_response.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
 #'
-#' @param model Object.
-#' @param ... Arguments passed to or from other methods.
+#' @inheritParams estimate_contrasts
+#' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{data_grid}}).
+#' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
+#' @param length Length of numeric target variables that applies to \code{\link{data_grid}}.
 #'
-#' @examples
-#' \dontrun{
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimate_response(model)
-#'
-#' model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
-#' estimate_response(model)
-#' }
+
 #'
 #' @export
-estimate_response <- function(model, ...) {
+estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, ...) {
   UseMethod("estimate_response")
 }
 
@@ -27,16 +21,29 @@ estimate_response <- function(model, ...) {
 
 #' Generates predictions for Bayesian models
 #'
+#' @inheritParams estimate_response
 #' @inheritParams estimate_contrasts.stanreg
-#' @param data A data frame with model's predictors to estimate the response. If NULL, the model matrix is used. If "grid", the model's data is re-used.
-#' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_fit(model)}.
+#'
+#' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.
 #' @param keep_draws If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
-#' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
-#' @param length Length of numeric target variables that applies to \link{data_grid}.
+#'
+#' @examples
+#' library(estimate)
+#' \dontrun{
+#' library(rstanarm)
+#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' estimate_response(model)
+#' estimate_link(model)
+#'
+#' model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+#' estimate_response(model)
+#' estimate_link(model)
+#' }
+#'
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, predict = "response", ci = 0.90, estimate = "median", transform = "response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, length = 10, ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
@@ -80,9 +87,9 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
 
   # Summary
   prediction <- as.data.frame(posteriors)
-  prediction <- bayestestR::describe_posterior(prediction, ci = ci, estimate = estimate, test = NULL, rope_range = NULL, rope_full = NULL)
+  prediction <- bayestestR::describe_posterior(prediction, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
+  if ("CI" %in% names(prediction) & length(unique(prediction$CI)) == 1) prediction$CI <- NULL
   prediction$Parameter <- NULL
-  # names(prediction) <- paste0(insight::find_response(model), "_", names(prediction))
 
   # Draws
   if (keep_draws == TRUE) {
@@ -98,16 +105,21 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
   # Restore factor levels
   prediction <- .restore_factor_levels(prediction, insight::get_data(model))
 
-  attributes(prediction) <- c(attributes(prediction),
-                         list(predict = predict,
-                              ci = ci,
-                              transform = transform,
-                              keep_draws = keep_draws,
-                              draws = draws,
-                              seed = seed,
-                              random = random))
+  attributes(prediction) <- c(
+    attributes(prediction),
+    list(
+      predict = predict,
+      ci = ci,
+      ci_method = ci_method,
+      transform = transform,
+      keep_draws = keep_draws,
+      draws = draws,
+      seed = seed,
+      random = random
+    )
+  )
 
-  class(prediction) <- c("estimateResponse", class(prediction))
+  class(prediction) <- c("estimate_response", class(prediction))
   return(prediction)
 }
 
@@ -119,8 +131,8 @@ estimate_response.stanreg <- function(model, data = NULL, predict = "response", 
 #' @rdname estimate_response
 #' @export
 #' @export
-estimate_fit <- function(model, ...) {
-  UseMethod("estimate_fit")
+estimate_link <- function(model, ...) {
+  UseMethod("estimate_link")
 }
 
 
@@ -128,21 +140,20 @@ estimate_fit <- function(model, ...) {
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_fit.stanreg <- function(model, data = "grid", predict = "link", ci = 0.90, estimate = "median", transform = "response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
-  estimate_response(model, data = data, predict = predict, ci = ci, estimate = estimate, transform = transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
+estimate_link.stanreg <- function(model, data = "grid", transform = "response", random = FALSE, length = 10, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(model, data = data, predict = predict, transform = transform, random = random, length = length, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_response.data.frame <- function(model, data = NULL, predict = "response", ci = 0.90, estimate = "median", transform = "response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
-  estimate_response(data, data = model, predict = predict, ci = ci, estimate = estimate, transform = transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
+estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_fit.data.frame <- function(model, data = "grid", predict = "link", ci = 0.90, estimate = "median", transform = "response", keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE, ...) {
-  estimate_response(data, data = model, predict = predict, ci = ci, estimate = estimate, transform = transform, keep_draws = keep_draws, draws = draws, seed = seed, random = random, ...)
+estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 10, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
-

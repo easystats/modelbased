@@ -26,8 +26,10 @@ knitr::opts_chunk$set(
 ```
 
 
+[![CRAN](http://www.r-pkg.org/badges/version/estimate)](https://cran.r-project.org/package=estimate)
+[![downloads](http://cranlogs.r-pkg.org/badges/estimate)](https://cran.r-project.org/package=estimate)
 [![Build Status](https://travis-ci.org/easystats/estimate.svg?branch=master)](https://travis-ci.org/easystats/estimate)
-[![codecov](https://codecov.io/gh/easystats/estimate/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/estimate) [![Documentation](https://img.shields.io/badge/documentation-estimate-orange.svg?colorB=E91E63)](https://easystats.github.io/estimate/)
+[![codecov](https://codecov.io/gh/easystats/estimate/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/estimate)
 
 
 
@@ -49,7 +51,13 @@ library("estimate")
 
 ## Documentation
 
-The package documentation can be found [**here**](https://easystats.github.io/estimate/).
+[![Documentation](https://img.shields.io/badge/documentation-estimate-orange.svg?colorB=E91E63)](https://easystats.github.io/estimate/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-estimate-orange.svg?colorB=2196F3)](https://easystats.github.io/estimate/reference/index.html)
+
+Click on the buttons above to access the package [**documentation**](https://easystats.github.io/estimate/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
+
+- **TO BE DONE**.
 
 # Features
 
@@ -61,6 +69,8 @@ The package is built around 5 main functions:
 - [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable based on the model
 - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
+These functions are powered by the `data_grid` function, a smart tool for guessing the appropriate reference grid.
+
 The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 
 ## Examples
@@ -69,12 +79,12 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 ```{r message=FALSE, warning=FALSE, results='hide'}
 library(rstanarm)
 
-model <- stan_glm(Sepal.Width ~ Species, data=iris)
+model <- stan_glm(Sepal.Width ~ Species, data = iris)
 
 estimate_means(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(estimate_means(model), digits=2)
+knitr::kable(parameters::parameters_table(estimate_means(model)))
 ```
 
 ### Contrast analysis
@@ -82,19 +92,19 @@ knitr::kable(estimate_means(model), digits=2)
 estimate_contrasts(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(estimate_contrasts(model), digits=2)
+knitr::kable(parameters::parameters_table(estimate_contrasts(model)))
 ```
 
 
-### check the contrasts at different points of another linear predictor
+### Check the contrasts at different points of another linear predictor
 
 ```{r message=FALSE, warning=FALSE, results='hide'}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data=iris)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-estimate_contrasts(model, modulate="Petal.Length", length=3)
+estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(estimate_contrasts(model, modulate="Petal.Length", length=3), digits=2)
+knitr::kable(parameters::parameters_table(estimate_contrasts(model, modulate="Petal.Length", length=3)))
 ```
 
 ### Find a predictor's slopes at each factor level
@@ -103,7 +113,7 @@ knitr::kable(estimate_contrasts(model, modulate="Petal.Length", length=3), digit
 estimate_slopes(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(estimate_slopes(model), digits=2)
+knitr::kable(parameters::parameters_table(estimate_slopes(model)))
 ```
 
 ### Generate predictions from your model to compare it with original data
@@ -121,19 +131,16 @@ knitr::kable(
 ```{r message=FALSE, warning=FALSE, results='hide'}
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
 
-estimate_fit(model)
+estimate_link(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(
   model %>% 
-    estimate_fit(length=7),
+    estimate_link(length=7),
     digits=2)
 ```
 
-### Describe the smooth term
-```{r message=FALSE, warning=FALSE, results='hide'}
+### Describe the smooth term by its linear parts
+```{r message=FALSE, warning=FALSE}
 estimate_smooth(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(estimate_smooth(model))
 ```

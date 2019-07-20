@@ -108,8 +108,9 @@ as.numeric_ifnumeric <- function(x) {
   ss <- mod[1:n] * mod[2:(n + 1)] # interval where functionvalues change sign
   ii <- which(ss < 0)
 
-  for (i in ii)
+  for (i in ii) {
     Equi <- c(Equi, uniroot(f, lower = xseq[i], upper = xseq[i + 1], ...)$root)
+  }
 
   return(Equi)
 }

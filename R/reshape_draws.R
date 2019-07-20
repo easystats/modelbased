@@ -14,11 +14,11 @@
 reshape_draws <- function(estimates) {
   estimates$Index <- 1:nrow(estimates)
   long <- reshape(estimates,
-                  varying = names(estimates)[grepl("Draw_", names(estimates))],
-                  idvar = "Index",
-                  v.names = "Draw",
-                  timevar = "Draw_Index",
-                  direction = "long"
+    varying = names(estimates)[grepl("Draw_", names(estimates))],
+    idvar = "Index",
+    v.names = "Draw",
+    timevar = "Draw_Index",
+    direction = "long"
   )
   row.names(long) <- NULL
 

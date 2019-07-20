@@ -6,36 +6,36 @@
 \usage{
 \method{estimate_means}{stanreg}(model, levels = NULL, fixed = NULL,
   modulate = NULL, transform = "response", length = 10,
-  estimate = "median", ci = 0.89, ci_method = "hdi", ...)
+  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 }
 \arguments{
-\item{model}{Bayesian model.}
+\item{model}{A Bayesian model.}
 
-\item{levels}{A character vector or formula specifying the names of the predictors over which to average or to contrast.}
+\item{levels}{A character vector or formula specifying the names of the predictors over which to estimate means or contrasts.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
-\item{modulate}{A character vector indicating the names of a numeric variable along which the contrasts will be tested. Adjust its length using \code{length}.}
+\item{modulate}{A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using \code{length}.}
 
-\item{transform}{Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.}
+\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
-\item{length}{Length of the spreaded numeric variables.}
+\item{length}{Length of the spread numeric variables.}
 
-\item{estimate}{The \href{https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html}{point-estimate(s)} to compute. Can be a character or a list with "median", "mean" or "MAP".}
+\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{ci}{Value or vector of probability of the CI (between 0 and 1)
-to be estimated. Default to \code{.89} (89\%) for Bayesian models and \code{.95} (95\%) for frequentist models.}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"hdi"} (default, see \code{\link{hdi}}) or \code{"quantile"}
 (see \code{\link{ci}}).}
 
-\item{...}{Additional arguments to be passed to or from methods.}
+\item{...}{Arguments passed to or from other methods.}
 }
 \description{
 Estimate marginal means
 }
 \examples{
+library(estimate)
 \dontrun{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -47,8 +47,8 @@ estimate_means(model)
 model <- stan_glm(vs ~ mpg, data = mtcars)
 estimate_means(model)
 
-model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)
+model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
 estimate_means(model)
-estimate_means(model, modulate="Sepal.Width")
+estimate_means(model, modulate = "Sepal.Width")
 }
 }

@@ -5,11 +5,10 @@
 #'  \item{\link[=estimate_means.stanreg]{Bayesian models (rstanarm and brms)}}
 #'  }
 #'
-#' @param model Object.
-#' @param ... Arguments passed to or from other methods.
+#' @inheritParams estimate_contrasts
 #'
 #' @export
-estimate_means <- function(model, ...) {
+estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ...) {
   UseMethod("estimate_means")
 }
 
@@ -28,10 +27,10 @@ estimate_means <- function(model, ...) {
 
 #' Estimate marginal means
 #'
-#' @inheritParams bayestestR::describe_posterior
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
+#' library(estimate)
 #' \dontrun{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -43,25 +42,22 @@ estimate_means <- function(model, ...) {
 #' model <- stan_glm(vs ~ mpg, data = mtcars)
 #' estimate_means(model)
 #'
-#' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)
+#' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
 #' estimate_means(model)
-#' estimate_means(model, modulate="Sepal.Width")
+#' estimate_means(model, modulate = "Sepal.Width")
 #' }
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = NULL, transform = "response", length = 10, estimate = "median", ci = 0.89, ci_method = "hdi", ...) {
-
-
-
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length=length, type="mean", ...)
+estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
   posteriors <- emmeans::as.mcmc.emmGrid(estimated$means)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  means <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
-  if(length(unique(means$CI)) == 1) means$CI <- NULL
+  means <- bayestestR::describe_posterior(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
+  if ("CI" %in% names(means) & length(unique(means$CI)) == 1) means$CI <- NULL
 
 
   # Format means
@@ -83,13 +79,17 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
   means <- .restore_factor_levels(means, insight::get_data(model))
 
   # Add attributes
-  attributes(means) <- c(attributes(means),
-                               list(ci = ci,
-                                    ci_method = ci_method,
-                                    levels = estimated$levels,
-                                    fixed = estimated$fixed,
-                                    modulate = estimated$modulate,
-                                    transform = transform))
+  attributes(means) <- c(
+    attributes(means),
+    list(
+      ci = ci,
+      ci_method = ci_method,
+      levels = estimated$levels,
+      fixed = estimated$fixed,
+      modulate = estimated$modulate,
+      transform = transform
+    )
+  )
 
   class(means) <- c("estimate_means", class(means))
   return(means)
@@ -98,18 +98,18 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed=NULL, modulate = 
 
 
 
+
 #' @export
-print.estimate_means <- function(x, ...) {
-  formatted_table <- parameters::parameters_table(x, ...)
-  cat(parameters::format_table(formatted_table))
-}
+print.estimate_means <- .print_estimate
+
+
 
 
 
 
 
 #' @keywords internal
-.emmeans_wrapper <- function(model, levels=NULL, fixed=NULL, modulate=NULL, transform = "response", length=10, type="mean", ...){
+.emmeans_wrapper <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, type = "mean", ...) {
   if (is.null(levels)) {
     levels <- insight::find_predictors(model)$conditional
     numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
@@ -133,16 +133,18 @@ print.estimate_means <- function(x, ...) {
     means <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
   } else {
     at <- insight::get_data(model)[c(levels, modulate)]
-    at <- sapply(at, data_grid, length = length, simplify=FALSE)
+    at <- sapply(at, data_grid, length = length, simplify = FALSE)
     means <- emmeans::ref_grid(model, at = at)
-    if(type == "mean"){
+    if (type == "mean") {
       means <- emmeans::emmeans(means, c(levels, modulate), transform = transform)
-    } else{
+    } else {
       means <- emmeans::emmeans(means, levels, by = modulate, transform = transform, ...)
     }
   }
-  return(list("means"=means,
-              "levels"=levels,
-              "fixed"=fixed,
-              "modulate"=modulate))
+  return(list(
+    "means" = means,
+    "levels" = levels,
+    "fixed" = fixed,
+    "modulate" = modulate
+  ))
 }

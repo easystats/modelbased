@@ -20,10 +20,10 @@ test_that("estimate_means", {
   estim <- estimate_means(model)
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
-  model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data=iris)
+  model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
   estim <- estimate_means(model)
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
-  estim <- estimate_means(model, modulate="Sepal.Width")
+  estim <- estimate_means(model, modulate = "Sepal.Width")
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 5))
 })

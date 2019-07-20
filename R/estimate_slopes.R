@@ -5,11 +5,12 @@
 #'  \item{\link[=estimate_slopes.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
 #'
-#' @param model Object.
-#' @param ... Arguments passed to or from other methods.
+#' @inheritParams estimate_contrasts
+#' @param trend A character indicating the name of the numeric variable for which to compute the slopes.
+#' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
 #'
 #' @export
-estimate_slopes <- function(model, ...) {
+estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", ...) {
   UseMethod("estimate_slopes")
 }
 
@@ -28,28 +29,28 @@ estimate_slopes <- function(model, ...) {
 
 #' Estimate the slopes of a numeric predictor (over different factor levels)
 #'
-#'
+#' @inheritParams estimate_slopes
 #' @inheritParams estimate_contrasts.stanreg
-#' @param trend A character indicating the name of the numeric variable for which to compute the slopes.
-#' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
 #'
 #' @examples
+#' library(estimate)
 #' \dontrun{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length * Petal.Width, data = iris)
 #' estimate_slopes(model)
 #' }
+#'
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", ci = .90, estimate = "median", test = c("pd", "rope"), rope_range = "default", rope_full = TRUE, ...) {
+estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
-    message("No numeric variable was selected for slope estimation. Selecting ", trend, ".")
+    message("No numeric variable was specified for slope estimation. Selecting 'trend = ", trend, "'.")
   }
   if (length(trend) > 1) {
     message("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
@@ -75,13 +76,15 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   params <- params[names(params) %in% names(data)]
   # params <- params[, 1:(ncol(params)-3)]
 
-
   # Posteriors
   posteriors <- emmeans::as.mcmc.emmGrid(trends)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  slopes <- bayestestR::describe_posterior(posteriors, ci = ci, estimate = estimate, test = test, rope_range = rope_range, rope_full = rope_full)
+  slopes <- bayestestR::describe_posterior(posteriors, ci = ci, ci_method = ci_method, centrality = centrality, test = test, rope_range = rope_range, rope_ci = rope_ci)
+  if ("CI" %in% names(slopes) & length(unique(slopes$CI)) == 1) slopes$CI <- NULL
+  if ("ROPE_CI" %in% names(slopes) & length(unique(slopes$ROPE_CI)) == 1) slopes$ROPE_CI <- NULL
+  slopes$ROPE_low <- slopes$ROPE_high <- NULL
 
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
@@ -89,15 +92,23 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   # Restore factor levels
   slopes <- .restore_factor_levels(slopes, insight::get_data(model))
 
-  attributes(slopes) <- c(attributes(slopes),
-                          list(levels = levels,
-                               trend = trend,
-                               transform = transform,
-                               ci = ci,
-                               rope_range = rope_range,
-                               rope_full = rope_full))
+  attributes(slopes) <- c(
+    attributes(slopes),
+    list(
+      levels = levels,
+      trend = trend,
+      transform = transform,
+      ci = ci,
+      ci_method = ci_method,
+      rope_range = rope_range,
+      rope_ci = rope_ci
+    )
+  )
 
-  class(slopes) <- c("estimateSlopes", class(slopes))
+  class(slopes) <- c("estimate_slopes", class(slopes))
 
   return(slopes)
 }
+
+#' @export
+print.estimate_slopes <- .print_estimate
