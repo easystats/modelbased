@@ -26,4 +26,13 @@ test_that("estimate_means", {
 
   estim <- estimate_means(model, modulate = "Sepal.Width")
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 5))
+
+
+
+  model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
+  estim <- estimate_means(model)
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+
+  estim <- estimate_means(model, modulate = "Sepal.Width")
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 6))
 })

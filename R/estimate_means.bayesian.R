@@ -1,9 +1,10 @@
-#' Estimate average value of response at each factor levels
+#' Estimate average value of response variable at each factor levels
 #'
-#' See the documentation for your object's class:
+#' @description See the documentation for your object's class:
 #' \itemize{
+#'  \item{\link[=estimate_means.lm]{Frequentist models}}
 #'  \item{\link[=estimate_means.stanreg]{Bayesian models (rstanarm and brms)}}
-#'  }
+#' }
 #'
 #' @inheritParams estimate_contrasts
 #'
@@ -23,9 +24,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 
 
 
-
-
-#' Estimate marginal means
+#' Estimate marginal means (Bayesian models)
 #'
 #' @inheritParams estimate_contrasts.stanreg
 #'
@@ -37,9 +36,6 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #'
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
-#' estimate_means(model)
-#'
-#' model <- stan_glm(vs ~ mpg, data = mtcars)
 #' estimate_means(model)
 #'
 #' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
@@ -92,7 +88,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   )
 
   class(means) <- c("estimate_means", class(means))
-  return(means)
+  means
 }
 
 
