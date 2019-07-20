@@ -2,8 +2,9 @@
 #'
 #' Contrast analysis. See the documentation for your object's class:
 #' \itemize{
-#'  \item{\link[=estimate_contrasts.stanreg]{Bayesian models (stanreg and brms)}}
-#'  }
+#'  \item{\link[=estimate_contrasts.lm]{Frequentist models}}
+#'  \item{\link[=estimate_contrasts.stanreg]{Bayesian models}}
+#' }
 #'
 #' @param model A statistical model.
 #' @param levels A character vector or formula specifying the names of the predictors over which to estimate means or contrasts.
@@ -143,7 +144,7 @@ print.estimate_contrasts <- .print_estimate
 
 #' @keywords internal
 .standardize_contrasts <- function(contrasts, model, robust = FALSE){
-  vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient")]
+  vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient", "Difference")]
   if(insight::model_info(model)$is_linear){
     response <- insight::get_response(model)
     if(robust){

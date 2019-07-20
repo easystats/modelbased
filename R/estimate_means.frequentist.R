@@ -1,4 +1,4 @@
-#' Estimate marginal means (Frequentist models)
+#' Estimate marginal means
 #'
 #' @inheritParams estimate_means.stanreg
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%).

@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_means.frequentist.R
 \name{estimate_means.lm}
 \alias{estimate_means.lm}
-\title{Estimate marginal means (Frequentist models)}
+\title{Estimate marginal means}
 \usage{
 \method{estimate_means}{lm}(model, levels = NULL, fixed = NULL,
   modulate = NULL, transform = "response", length = 10, ci = 0.95,
@@ -26,7 +26,7 @@
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
-Estimate marginal means (Frequentist models)
+Estimate marginal means
 }
 \examples{
 library(estimate)

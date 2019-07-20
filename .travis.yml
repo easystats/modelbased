@@ -6,7 +6,7 @@ os:
   - osx
 
 r:
-  - oldrel
+  #- oldrel
   - release
   #- devel
 

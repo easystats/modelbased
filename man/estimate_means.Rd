@@ -26,6 +26,6 @@ estimate_means(model, levels = NULL, fixed = NULL, modulate = NULL,
 See the documentation for your object's class:
 \itemize{
  \item{\link[=estimate_means.lm]{Frequentist models}}
- \item{\link[=estimate_means.stanreg]{Bayesian models (rstanarm and brms)}}
+ \item{\link[=estimate_means.stanreg]{Bayesian models}}
 }
 }
