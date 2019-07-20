@@ -63,7 +63,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
   if (is.null(smooth)) {
     smooth <- predictors[sapply(data[predictors], is.numeric)][1]
-    message("No numeric variable was selected for smooth analysis. Selecting 'smooth = ", smooth, "'.")
+    message('No numeric variable was specified for smooth analysis. Selecting `smooth = "', smooth, '"`.')
   }
   if (length(smooth) > 1) {
     message("More than one numeric variable was selected for smooth analysis. Keeping only ", smooth[1], ".")
@@ -129,7 +129,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     list(smooth = smooth, levels = levels, transform = transform)
   )
   class(description) <- c("estimate_smooth", class(description))
-  return(description)
+  description
 }
 
 
@@ -181,7 +181,7 @@ print.estimate_smooth <- .print_estimate
     df <- rbind(df, segment_df)
   }
 
-  return(df)
+  df
 }
 
 
@@ -223,5 +223,5 @@ print.estimate_smooth <- .print_estimate
     out$Smoothness <- smoothness
   }
 
-  return(out)
+  out
 }

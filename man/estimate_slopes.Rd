@@ -5,7 +5,8 @@
 \title{Estimate the slopes of a numeric predictor (over different factor levels)}
 \usage{
 estimate_slopes(model, trend = NULL, levels = NULL,
-  transform = "response", ...)
+  transform = "response", standardize = TRUE,
+  standardize_robust = FALSE, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -15,6 +16,10 @@ estimate_slopes(model, trend = NULL, levels = NULL,
 \item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
 \item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+
+\item{standardize}{If \code{TRUE}, add standardized differences (Cohen's d) or coefficients.}
+
+\item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

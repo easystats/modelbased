@@ -11,10 +11,12 @@
 #' @param modulate A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using \code{length}.
 #' @param transform Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.
 #' @param length Length of the spread numeric variables.
+#' @param standardize If \code{TRUE}, add standardized differences (Cohen's d) or coefficients.
+#' @param standardize_robust Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.
 #' @param ... Arguments passed to or from other methods.
 #'
 #' @export
-estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, ...) {
+estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ...) {
   UseMethod("estimate_contrasts")
 }
 
@@ -53,7 +55,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @importFrom stats mad median sd setNames
 #' @importFrom bayestestR describe_posterior
 #' @export
-estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
   posteriors <- emmeans::contrast(estimated$means, method = "pairwise")
   posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
@@ -67,6 +69,12 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   if ("CI" %in% names(contrasts) & length(unique(contrasts$CI)) == 1) contrasts$CI <- NULL
   if ("ROPE_CI" %in% names(contrasts) & length(unique(contrasts$ROPE_CI)) == 1) contrasts$ROPE_CI <- NULL
   contrasts$ROPE_low <- contrasts$ROPE_high <- NULL
+
+  # Standardized differences
+  if(standardize){
+    contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
+  }
+
 
 
   # Format contrasts
@@ -116,7 +124,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   )
 
   class(contrasts) <- c("estimate_contrasts", class(contrasts))
-  return(contrasts)
+  contrasts
 }
 
 
@@ -130,3 +138,22 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
 #' @export
 print.estimate_contrasts <- .print_estimate
+
+
+
+#' @keywords internal
+.standardize_contrasts <- function(contrasts, model, robust = FALSE){
+  vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient")]
+  if(insight::model_info(model)$is_linear){
+    response <- insight::get_response(model)
+    if(robust){
+      std <- contrasts[vars] / mad(response, na.rm = TRUE)
+    } else{
+      std <- contrasts[vars] / sd(response, na.rm = TRUE)
+    }
+  } else{
+    std <- contrasts[vars]
+  }
+  names(std) <- paste0("Std_", names(std))
+  as.data.frame(std)
+}

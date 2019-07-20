@@ -120,7 +120,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   )
 
   class(prediction) <- c("estimate_response", class(prediction))
-  return(prediction)
+  prediction
 }
 
 

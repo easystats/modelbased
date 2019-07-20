@@ -10,7 +10,7 @@
 #' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
 #'
 #' @export
-estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", ...) {
+estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ...) {
   UseMethod("estimate_slopes")
 }
 
@@ -36,7 +36,7 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' library(estimate)
 #' \dontrun{
 #' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length * Petal.Width, data = iris)
+#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)
 #' }
 #'
@@ -44,13 +44,13 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
-    message("No numeric variable was specified for slope estimation. Selecting 'trend = ", trend, "'.")
+    message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }
   if (length(trend) > 1) {
     message("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
@@ -89,6 +89,11 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
 
+  # Standardized slopes
+  if(standardize){
+    slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
+  }
+
   # Restore factor levels
   slopes <- .restore_factor_levels(slopes, insight::get_data(model))
 
@@ -107,8 +112,32 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
   class(slopes) <- c("estimate_slopes", class(slopes))
 
-  return(slopes)
+  slopes
 }
 
 #' @export
 print.estimate_slopes <- .print_estimate
+
+
+
+#' @keywords internal
+.standardize_slopes <- function(slopes, model, trend, robust = FALSE){
+  vars <- names(slopes)[names(slopes) %in% c("Median", "Mean", "MAP", "Coefficient")]
+  x <- insight::get_predictors(model)[[trend]]
+  if(insight::model_info(model)$is_linear){
+    response <- insight::get_response(model)
+    if(robust){
+      std <- slopes[vars] * mad(x, na.rm = TRUE) / mad(response, na.rm = TRUE)
+    } else{
+      std <- slopes[vars] * sd(x, na.rm = TRUE) / sd(response, na.rm = TRUE)
+    }
+  } else{
+    if(robust){
+      std <- slopes[vars] * mad(x, na.rm = TRUE)
+    } else{
+      std <- slopes[vars] * sd(x, na.rm = TRUE)
+    }
+  }
+  names(std) <- paste0("Std_", names(std))
+  as.data.frame(std)
+}
