@@ -37,10 +37,12 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 <meta property="og:title" content="Estimate average value of response at each factor levels — estimate_means" />
 
 <meta property="og:description" content="See the documentation for your object's class:
-Bayesian models (stanreg and brms)
+Bayesian models (rstanarm and brms)
 " />
 
 <meta property="og:image" content="/logo.png" />
@@ -118,19 +120,40 @@ Bayesian models (stanreg and brms)
     <div class="ref-description">
     
     <p>See the documentation for your object's class:</p><ul>
-<li><p><a href='estimate_means.stanreg.html'>Bayesian models (stanreg and brms)</a></p></li>
+<li><p><a href='estimate_means.stanreg.html'>Bayesian models (rstanarm and brms)</a></p></li>
 </ul>
     
     </div>
 
-    <pre class="usage"><span class='fu'>estimate_means</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>estimate_means</span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object.</p></td>
+      <td><p>A statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>levels</th>
+      <td><p>A character vector or formula specifying the names of the predictors over which to estimate means or contrasts.</p></td>
+    </tr>
+    <tr>
+      <th>fixed</th>
+      <td><p>A character vector indicating the names of the predictors to be "fixed" (i.e., maintained), so that the estimation is made at these values.</p></td>
+    </tr>
+    <tr>
+      <th>modulate</th>
+      <td><p>A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using <code>length</code>.</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
+    </tr>
+    <tr>
+      <th>length</th>
+      <td><p>Length of the spread numeric variables.</p></td>
     </tr>
     <tr>
       <th>...</th>

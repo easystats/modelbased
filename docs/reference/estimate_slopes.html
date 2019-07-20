@@ -37,6 +37,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 <meta property="og:title" content="Estimate the slopes of a numeric predictor (over different factor levels) — estimate_slopes" />
 
 <meta property="og:description" content="See the documentation for your object's class:
@@ -123,14 +125,27 @@ Bayesian models (stanreg and brms)
     
     </div>
 
-    <pre class="usage"><span class='fu'>estimate_slopes</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>estimate_slopes</span>(<span class='no'>model</span>, <span class='kw'>trend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Object.</p></td>
+      <td><p>A statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>trend</th>
+      <td><p>A character indicating the name of the numeric variable for which to compute the slopes.</p></td>
+    </tr>
+    <tr>
+      <th>levels</th>
+      <td><p>A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
     </tr>
     <tr>
       <th>...</th>
