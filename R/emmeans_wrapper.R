@@ -11,6 +11,9 @@
   if (!is.null(fixed)) {
     fixed <- unique(c(fixed, numeric))
     levels <- levels[!levels %in% fixed]
+    if (!is.null(modulate)) {
+      fixed <- fixed[!fixed %in% c(modulate)]
+    }
   }
 
   if (length(levels) == 0) {
@@ -24,11 +27,11 @@
   } else {
     at <- insight::get_data(model)[c(levels, modulate)]
     at <- sapply(at, data_grid, length = length, simplify = FALSE)
-    means <- emmeans::ref_grid(model, at = at)
+    means <- emmeans::ref_grid(model, at = at, by = c(fixed, modulate))
     if (type == "mean") {
       means <- emmeans::emmeans(means, c(levels, modulate), transform = transform)
     } else {
-      means <- emmeans::emmeans(means, levels, by = modulate, transform = transform, ...)
+      means <- emmeans::emmeans(means, levels, by = c(fixed, modulate), transform = transform, ...)
     }
   }
 

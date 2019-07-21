@@ -51,8 +51,8 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 #'
-#' model <- stan_glm(Sepal.Width ~ Species, data = iris)
-#' estimate_contrasts(model, test = "bf")
+#' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
+#' estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 #' }
 #' @import emmeans
 #' @importFrom graphics pairs
@@ -87,8 +87,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   if (!is.null(fixed) | !is.null(modulate)) {
     others <- strsplit(as.character(names), ", ")
     others <- data.frame(do.call(rbind, others))
-    names(others) <- unlist(sapply(others, .find_name_level))
-    others <- as.data.frame(sapply(others, .remove_name_level), stringsAsFactors = FALSE)
+    # names(others) <- unlist(sapply(others, .find_name_level))
+    names(others) <- c("Contrast", fixed, modulate)
+    # others <- as.data.frame(sapply(others, .remove_name_level), stringsAsFactors = FALSE)
     levelcols <- data.frame("Contrast" = others$Contrast)
     others$Contrast <- NULL
     others <- as.data.frame(sapply(others, as.numeric_ifnumeric), stringsAsFactors = FALSE)

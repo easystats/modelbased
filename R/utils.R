@@ -51,7 +51,7 @@ as.numeric_ifnumeric <- function(x) {
 
 
 #' @keywords internal
-.find_name_level <- function(x) {
+.find_name_level <- function(x, data, fixed, modulate) {
   splitted <- strsplit(as.character(x), " ")
   splitted <- data.frame(do.call(rbind, splitted), stringsAsFactors = FALSE)
   uniques <- sapply(splitted, unique)

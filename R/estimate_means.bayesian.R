@@ -38,9 +38,10 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
 #' estimate_means(model)
 #'
-#' model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
+#' model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #' estimate_means(model)
 #' estimate_means(model, modulate = "Sepal.Width")
+#' estimate_means(model, fixed = "Sepal.Width")
 #' }
 #' @import emmeans
 #' @importFrom graphics pairs
@@ -75,7 +76,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   means <- .restore_factor_levels(means, insight::get_data(model))
 
   # Restore type
-  means[modulate] <- sapply(means[modulate], as.numeric_ifnumeric)
+  means[c(fixed, modulate)] <- sapply(means[c(fixed, modulate)], as.numeric_ifnumeric)
 
   # Add attributes
   attributes(means) <- c(
