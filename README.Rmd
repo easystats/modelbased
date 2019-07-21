@@ -57,7 +57,8 @@ library("estimate")
 
 Click on the buttons above to access the package [**documentation**](https://easystats.github.io/estimate/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
 
-- **TO BE DONE**.
+- [**Marginal means**](https://easystats.github.io/estimate/articles/marginal_means.html)
+- [**Contrast analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html)
 
 # Features
 
@@ -69,7 +70,7 @@ The package is built around 5 main functions:
 - [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable based on the model
 - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
-These functions are powered by the `data_grid` function, a smart tool for guessing the appropriate reference grid.
+These functions are powered by the [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html) function, a smart tool for guessing the appropriate reference grid.
 
 The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 

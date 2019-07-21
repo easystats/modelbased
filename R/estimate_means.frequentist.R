@@ -9,14 +9,13 @@
 #' model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 #' estimate_means(model)
 #' estimate_means(model, modulate = "Sepal.Width")
-#'
 #' \dontrun{
 #' library(lme4)
 #'
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1|Petal.Length_factor), data = data)
+#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #' estimate_means(model)
 #' estimate_means(model, modulate = "Sepal.Width")
 #' }
@@ -26,12 +25,11 @@
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
-
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
 
   # Summary
   means <- as.data.frame(confint(estimated$means, level = ci))
-  if("df" %in% names(means)) means$df <- NULL
+  if ("df" %in% names(means)) means$df <- NULL
   names(means)[names(means) == "emmean"] <- "Mean"
   names(means)[names(means) == "lower.CL"] <- "CI_low"
   names(means)[names(means) == "upper.CL"] <- "CI_high"

@@ -22,7 +22,7 @@ navbar:
   - text: Tutorials
     menu:
       - text: 'Marginal means'
-        href: articles/marginal_means.html,
+        href: articles/marginal_means.html
       - text: 'Contrast analysis'
         href: articles/contrast_analysis.html
 

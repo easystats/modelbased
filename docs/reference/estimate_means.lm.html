@@ -100,7 +100,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/marginal_means.html,">Marginal means</a>
+      <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
@@ -221,14 +221,13 @@
 #&gt; virginica  |        4.13 | 6.11 | 0.13 | [5.86, 6.36]
 #&gt; setosa     |        4.40 | 1.93 | 0.11 | [1.71, 2.14]
 #&gt; versicolor |        4.40 | 5.04 | 0.17 | [4.71, 5.37]
-#&gt; virginica  |        4.40 | 6.23 | 0.15 | [5.94, 6.53]</div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
+#&gt; virginica  |        4.40 | 6.23 | 0.15 | [5.94, 6.53]</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
 
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)
 <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Sepal.Width"</span>)
 <span class='co'># }</span><div class='input'>

@@ -90,7 +90,7 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   slopes <- cbind(params, slopes)
 
   # Standardized slopes
-  if(standardize){
+  if (standardize) {
     slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
   }
 
@@ -121,20 +121,20 @@ print.estimate_slopes <- .print_estimate
 
 
 #' @keywords internal
-.standardize_slopes <- function(slopes, model, trend, robust = FALSE){
+.standardize_slopes <- function(slopes, model, trend, robust = FALSE) {
   vars <- names(slopes)[names(slopes) %in% c("Median", "Mean", "MAP", "Coefficient")]
   x <- insight::get_predictors(model)[[trend]]
-  if(insight::model_info(model)$is_linear){
+  if (insight::model_info(model)$is_linear) {
     response <- insight::get_response(model)
-    if(robust){
+    if (robust) {
       std <- slopes[vars] * mad(x, na.rm = TRUE) / mad(response, na.rm = TRUE)
-    } else{
+    } else {
       std <- slopes[vars] * sd(x, na.rm = TRUE) / sd(response, na.rm = TRUE)
     }
-  } else{
-    if(robust){
+  } else {
+    if (robust) {
       std <- slopes[vars] * mad(x, na.rm = TRUE)
-    } else{
+    } else {
       std <- slopes[vars] * sd(x, na.rm = TRUE)
     }
   }
