@@ -100,7 +100,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/marginal_means.html,">Marginal means</a>
+      <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
@@ -226,16 +226,14 @@
 #&gt; versicolor |  virginica |        0.10 |      -0.28 | 0.41 | [-1.26, 0.70] | -0.69 | 144.00 |   .492 |             -0.64
 #&gt; versicolor |  virginica |        0.90 |       0.06 | 0.21 | [-0.44, 0.56] |  0.28 | 144.00 |   .780 |              0.13
 #&gt; versicolor |  virginica |        1.70 |       0.40 | 0.11 |  [0.12, 0.67] |  3.50 | 144.00 |   .002 |              0.91
-#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 |  [0.08, 1.39] |  2.70 | 144.00 |   .023 |              1.68</div><div class='input'>
-</div><span class='co'># NOT RUN {</span>
+#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 |  [0.08, 1.39] |  2.70 | 144.00 |   .023 |              1.68</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
 
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)
-
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

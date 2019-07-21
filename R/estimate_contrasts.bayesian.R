@@ -72,7 +72,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   contrasts$ROPE_low <- contrasts$ROPE_high <- NULL
 
   # Standardized differences
-  if(standardize){
+  if (standardize) {
     contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
   }
 
@@ -143,16 +143,16 @@ print.estimate_contrasts <- .print_estimate
 
 
 #' @keywords internal
-.standardize_contrasts <- function(contrasts, model, robust = FALSE){
+.standardize_contrasts <- function(contrasts, model, robust = FALSE) {
   vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient", "Difference")]
-  if(insight::model_info(model)$is_linear){
+  if (insight::model_info(model)$is_linear) {
     response <- insight::get_response(model)
-    if(robust){
+    if (robust) {
       std <- contrasts[vars] / mad(response, na.rm = TRUE)
-    } else{
+    } else {
       std <- contrasts[vars] / sd(response, na.rm = TRUE)
     }
-  } else{
+  } else {
     std <- contrasts[vars]
   }
   names(std) <- paste0("Std_", names(std))

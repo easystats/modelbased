@@ -64,7 +64,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/marginal_means.html,">Marginal means</a>
+      <a href="articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="articles/contrast_analysis.html">Contrast analysis</a>
@@ -114,8 +114,8 @@
 <p><a href="https://easystats.github.io/estimate/"><img src="https://img.shields.io/badge/documentation-estimate-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/estimate/reference/index.html"><img src="https://img.shields.io/badge/features-estimate-orange.svg?colorB=2196F3" alt="Features"></a></p>
 <p>Click on the buttons above to access the package <a href="https://easystats.github.io/estimate/"><strong>documentation</strong></a> and the <a href="https://easystats.github.io/blog/posts/"><strong>easystats blog</strong></a>, and check-out these vignettes:</p>
 <ul>
-<li>
-<strong>TO BE DONE</strong>.</li>
+<li><a href="https://easystats.github.io/estimate/articles/marginal_means.html"><strong>Marginal means</strong></a></li>
+<li><a href="https://easystats.github.io/estimate/articles/contrast_analysis.html"><strong>Contrast analysis</strong></a></li>
 </ul>
 </div>
 </div>
@@ -135,7 +135,7 @@
 <li>
 <a href="https://easystats.github.io/estimate/reference/estimate_smooth.html"><code><a href="reference/estimate_smooth.html">estimate_smooth()</a></code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
-<p>These functions are powered by the <code>data_grid</code> function, a smart tool for guessing the appropriate reference grid.</p>
+<p>These functions are powered by the <a href="https://easystats.github.io/estimate/reference/data_grid.html"><code><a href="reference/data_grid.html">data_grid()</a></code></a> function, a smart tool for guessing the appropriate reference grid.</p>
 <p>The package currently only supports <code>rstanarm</code> models, but will be expanded to cover a large variety of frequentist and Bayesian models.</p>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -157,8 +157,8 @@
 <tbody>
 <tr class="odd">
 <td align="left">setosa</td>
-<td align="left">3.43</td>
-<td align="left">[3.34, 3.50]</td>
+<td align="left">3.42</td>
+<td align="left">[3.35, 3.51]</td>
 </tr>
 <tr class="even">
 <td align="left">versicolor</td>
@@ -167,8 +167,8 @@
 </tr>
 <tr class="odd">
 <td align="left">virginica</td>
-<td align="left">2.97</td>
-<td align="left">[2.90, 3.06]</td>
+<td align="left">2.98</td>
+<td align="left">[2.90, 3.05]</td>
 </tr>
 </tbody>
 </table>
@@ -192,7 +192,7 @@
 <td align="left">setosa</td>
 <td align="left">versicolor</td>
 <td align="left">0.65</td>
-<td align="left">[0.54, 0.76]</td>
+<td align="left">[0.55, 0.76]</td>
 <td align="left">100%</td>
 <td align="left">0%</td>
 <td align="left">1.50</td>
@@ -201,7 +201,7 @@
 <td align="left">setosa</td>
 <td align="left">virginica</td>
 <td align="left">0.45</td>
-<td align="left">[0.34, 0.56]</td>
+<td align="left">[0.35, 0.56]</td>
 <td align="left">100%</td>
 <td align="left">0%</td>
 <td align="left">1.03</td>
@@ -210,10 +210,10 @@
 <td align="left">versicolor</td>
 <td align="left">virginica</td>
 <td align="left">-0.20</td>
-<td align="left">[-0.32, -0.09]</td>
-<td align="left">99.80%</td>
-<td align="left">1.38%</td>
-<td align="left">-0.46</td>
+<td align="left">[-0.31, -0.09]</td>
+<td align="left">99.95%</td>
+<td align="left">0.85%</td>
+<td align="left">-0.47</td>
 </tr>
 </tbody>
 </table>
@@ -242,11 +242,11 @@
 <td align="left">setosa</td>
 <td align="left">versicolor</td>
 <td align="left">1.00</td>
-<td align="left">1.54</td>
-<td align="left">[1.07, 2.02]</td>
+<td align="left">1.53</td>
+<td align="left">[1.08, 2.04]</td>
 <td align="left">100%</td>
 <td align="left">0%</td>
-<td align="left">3.53</td>
+<td align="left">3.52</td>
 </tr>
 <tr class="even">
 <td>4</td>
@@ -254,7 +254,7 @@
 <td align="left">virginica</td>
 <td align="left">1.00</td>
 <td align="left">1.22</td>
-<td align="left">[0.67, 1.77]</td>
+<td align="left">[0.69, 1.76]</td>
 <td align="left">100%</td>
 <td align="left">0%</td>
 <td align="left">2.79</td>
@@ -264,33 +264,33 @@
 <td align="left">versicolor</td>
 <td align="left">virginica</td>
 <td align="left">1.00</td>
-<td align="left">-0.31</td>
-<td align="left">[-1.05, 0.38]</td>
-<td align="left">74.90%</td>
-<td align="left">6.12%</td>
-<td align="left">-0.70</td>
+<td align="left">-0.32</td>
+<td align="left">[-1.04, 0.37]</td>
+<td align="left">75.83%</td>
+<td align="left">5.88%</td>
+<td align="left">-0.73</td>
 </tr>
 <tr class="even">
 <td>2</td>
 <td align="left">setosa</td>
 <td align="left">versicolor</td>
 <td align="left">3.95</td>
-<td align="left">1.80</td>
-<td align="left">[1.08, 2.58]</td>
+<td align="left">1.77</td>
+<td align="left">[1.05, 2.51]</td>
 <td align="left">100%</td>
 <td align="left">0%</td>
-<td align="left">4.13</td>
+<td align="left">4.05</td>
 </tr>
 <tr class="odd">
 <td>5</td>
 <td align="left">setosa</td>
 <td align="left">virginica</td>
 <td align="left">3.95</td>
-<td align="left">1.82</td>
-<td align="left">[0.99, 2.60]</td>
+<td align="left">1.80</td>
+<td align="left">[1.02, 2.61]</td>
 <td align="left">99.98%</td>
-<td align="left">0.02%</td>
-<td align="left">4.18</td>
+<td align="left">0%</td>
+<td align="left">4.14</td>
 </tr>
 <tr class="even">
 <td>8</td>
@@ -298,9 +298,9 @@
 <td align="left">virginica</td>
 <td align="left">3.95</td>
 <td align="left">0.03</td>
-<td align="left">[-0.19, 0.26]</td>
-<td align="left">58.38%</td>
-<td align="left">23.40%</td>
+<td align="left">[-0.19, 0.24]</td>
+<td align="left">59.23%</td>
+<td align="left">22.45%</td>
 <td align="left">0.08</td>
 </tr>
 <tr class="odd">
@@ -308,22 +308,22 @@
 <td align="left">setosa</td>
 <td align="left">versicolor</td>
 <td align="left">6.90</td>
-<td align="left">2.05</td>
-<td align="left">[0.50, 3.66]</td>
-<td align="left">97.90%</td>
-<td align="left">0.45%</td>
-<td align="left">4.71</td>
+<td align="left">2.01</td>
+<td align="left">[0.43, 3.54]</td>
+<td align="left">98.00%</td>
+<td align="left">0.30%</td>
+<td align="left">4.61</td>
 </tr>
 <tr class="even">
 <td>6</td>
 <td align="left">setosa</td>
 <td align="left">virginica</td>
 <td align="left">6.90</td>
-<td align="left">2.43</td>
-<td align="left">[0.93, 4.08]</td>
-<td align="left">99.15%</td>
-<td align="left">0.27%</td>
-<td align="left">5.58</td>
+<td align="left">2.40</td>
+<td align="left">[0.89, 3.99]</td>
+<td align="left">99.10%</td>
+<td align="left">0.20%</td>
+<td align="left">5.50</td>
 </tr>
 <tr class="odd">
 <td>9</td>
@@ -331,10 +331,10 @@
 <td align="left">virginica</td>
 <td align="left">6.90</td>
 <td align="left">0.38</td>
-<td align="left">[-0.00, 0.83]</td>
-<td align="left">92.40%</td>
-<td align="left">5.08%</td>
-<td align="left">0.88</td>
+<td align="left">[-0.05, 0.79]</td>
+<td align="left">92.62%</td>
+<td align="left">4.88%</td>
+<td align="left">0.87</td>
 </tr>
 </tbody>
 </table>
@@ -355,27 +355,27 @@
 <tbody>
 <tr class="odd">
 <td align="left">setosa</td>
-<td align="left">0.42</td>
-<td align="left">[0.13, 0.72]</td>
-<td align="left">98.70%</td>
+<td align="left">0.41</td>
+<td align="left">[0.13, 0.70]</td>
+<td align="left">98.67%</td>
 <td align="left">4.28%</td>
-<td align="left">1.69</td>
+<td align="left">1.66</td>
 </tr>
 <tr class="even">
 <td align="left">versicolor</td>
 <td align="left">0.33</td>
-<td align="left">[0.18, 0.46]</td>
+<td align="left">[0.18, 0.47]</td>
 <td align="left">99.98%</td>
-<td align="left">0.55%</td>
-<td align="left">1.34</td>
+<td align="left">0.47%</td>
+<td align="left">1.32</td>
 </tr>
 <tr class="odd">
 <td align="left">virginica</td>
 <td align="left">0.21</td>
-<td align="left">[0.08, 0.33]</td>
-<td align="left">99.78%</td>
-<td align="left">7.67%</td>
-<td align="left">0.86</td>
+<td align="left">[0.09, 0.33]</td>
+<td align="left">99.70%</td>
+<td align="left">7.27%</td>
+<td align="left">0.85</td>
 </tr>
 </tbody>
 </table>
@@ -396,44 +396,44 @@
 <tr class="odd">
 <td align="left">setosa</td>
 <td align="right">1.4</td>
-<td align="right">3.41</td>
-<td align="right">2.90</td>
+<td align="right">3.40</td>
+<td align="right">2.89</td>
 <td align="right">3.91</td>
 </tr>
 <tr class="even">
 <td align="left">setosa</td>
 <td align="right">1.4</td>
-<td align="right">3.40</td>
-<td align="right">2.92</td>
-<td align="right">3.96</td>
+<td align="right">3.39</td>
+<td align="right">2.88</td>
+<td align="right">3.90</td>
 </tr>
 <tr class="odd">
 <td align="left">setosa</td>
 <td align="right">1.3</td>
-<td align="right">3.36</td>
-<td align="right">2.82</td>
-<td align="right">3.85</td>
+<td align="right">3.37</td>
+<td align="right">2.86</td>
+<td align="right">3.89</td>
 </tr>
 <tr class="even">
 <td align="left">setosa</td>
 <td align="right">1.5</td>
 <td align="right">3.44</td>
-<td align="right">2.94</td>
-<td align="right">3.96</td>
+<td align="right">2.95</td>
+<td align="right">3.97</td>
 </tr>
 <tr class="odd">
 <td align="left">setosa</td>
 <td align="right">1.4</td>
-<td align="right">3.40</td>
-<td align="right">2.90</td>
-<td align="right">3.92</td>
+<td align="right">3.39</td>
+<td align="right">2.82</td>
+<td align="right">3.85</td>
 </tr>
 <tr class="even">
 <td align="left">setosa</td>
 <td align="right">1.7</td>
-<td align="right">3.53</td>
-<td align="right">3.05</td>
-<td align="right">4.08</td>
+<td align="right">3.50</td>
+<td align="right">3.00</td>
+<td align="right">4.05</td>
 </tr>
 </tbody>
 </table>
@@ -474,7 +474,7 @@
 <td align="right">3.95</td>
 <td align="right">2.78</td>
 <td align="right">2.71</td>
-<td align="right">2.85</td>
+<td align="right">2.86</td>
 </tr>
 <tr class="odd">
 <td align="right">4.93</td>
@@ -485,14 +485,14 @@
 <tr class="even">
 <td align="right">5.92</td>
 <td align="right">3.05</td>
-<td align="right">2.96</td>
+<td align="right">2.97</td>
 <td align="right">3.14</td>
 </tr>
 <tr class="odd">
 <td align="right">6.90</td>
 <td align="right">3.44</td>
-<td align="right">3.25</td>
-<td align="right">3.63</td>
+<td align="right">3.26</td>
+<td align="right">3.64</td>
 </tr>
 </tbody>
 </table>
