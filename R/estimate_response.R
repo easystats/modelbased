@@ -115,7 +115,8 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
       keep_draws = keep_draws,
       draws = draws,
       seed = seed,
-      random = random
+      random = random,
+      response = insight::find_response(model)
     )
   )
 

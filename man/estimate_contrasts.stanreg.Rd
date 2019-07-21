@@ -71,5 +71,8 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "Petal.Width")
 estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris)
+estimate_contrasts(model, test = "bf")
 }
 }

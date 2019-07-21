@@ -92,7 +92,8 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
       modulate = estimated$modulate,
       transform = transform,
       ci = ci,
-      adjust = adjust
+      adjust = adjust,
+      response = insight::find_response(model)
     )
   )
 

@@ -126,7 +126,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
   attributes(description) <- c(
     attributes(description),
-    list(smooth = smooth, levels = levels, transform = transform)
+    list(smooth = smooth, levels = levels, transform = transform, response = insight::find_response(model))
   )
   class(description) <- c("estimate_smooth", class(description))
   description

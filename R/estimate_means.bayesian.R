@@ -86,7 +86,8 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
       levels = estimated$levels,
       fixed = estimated$fixed,
       modulate = estimated$modulate,
-      transform = transform
+      transform = transform,
+      response = insight::find_response(model)
     )
   )
 

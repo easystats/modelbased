@@ -106,7 +106,8 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
       ci = ci,
       ci_method = ci_method,
       rope_range = rope_range,
-      rope_ci = rope_ci
+      rope_ci = rope_ci,
+      response = insight::find_response(model)
     )
   )
 
