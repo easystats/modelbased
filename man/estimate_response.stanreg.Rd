@@ -2,43 +2,45 @@
 % Please edit documentation in R/estimate_response.R
 \name{estimate_response.stanreg}
 \alias{estimate_response.stanreg}
-\alias{estimate_fit.stanreg}
+\alias{estimate_link.stanreg}
 \alias{estimate_response.data.frame}
-\alias{estimate_fit.data.frame}
+\alias{estimate_link.data.frame}
 \title{Generates predictions for Bayesian models}
 \usage{
 \method{estimate_response}{stanreg}(model, data = NULL,
-  predict = "response", ci = 0.9, estimate = "median",
-  transform = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, random = FALSE, length = 10, ...)
-
-\method{estimate_fit}{stanreg}(model, data = "grid", predict = "link",
-  ci = 0.9, estimate = "median", transform = "response",
-  keep_draws = FALSE, draws = NULL, seed = NULL, random = FALSE,
+  transform = "response", random = FALSE, length = 10,
+  predict = "response", keep_draws = FALSE, draws = NULL,
+  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
   ...)
 
-\method{estimate_response}{data.frame}(model, data = NULL,
-  predict = "response", ci = 0.9, estimate = "median",
-  transform = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, random = FALSE, ...)
+\method{estimate_link}{stanreg}(model, data = "grid",
+  transform = "response", random = FALSE, length = 10,
+  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
+  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 
-\method{estimate_fit}{data.frame}(model, data = "grid",
-  predict = "link", ci = 0.9, estimate = "median",
-  transform = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, random = FALSE, ...)
+\method{estimate_response}{data.frame}(model, data = NULL,
+  transform = "response", random = FALSE, length = 10,
+  predict = "response", keep_draws = FALSE, draws = NULL,
+  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
+  ...)
+
+\method{estimate_link}{data.frame}(model, data = "grid",
+  transform = "response", random = FALSE, length = 10,
+  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
+  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 }
 \arguments{
-\item{model}{Bayesian model.}
+\item{model}{A statistical model.}
 
-\item{data}{A data frame with model's predictors to estimate the response. If NULL, the model matrix is used. If "grid", the model's data is re-used.}
+\item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{data_grid}}).}
 
-\item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_fit(model)}.}
+\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
-\item{ci}{Credible Interval (CI) level. Default to 0.90 (90\%).}
+\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
-\item{estimate}{The \href{https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html}{point-estimate(s)} to compute. Can be a character or a list with "median", "mean" or "MAP".}
+\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
 
-\item{transform}{Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.}
+\item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 
 \item{keep_draws}{If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).}
 
@@ -46,12 +48,30 @@
 
 \item{seed}{An optional seed to use.}
 
-\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
+\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{length}{Length of numeric target variables that applies to \link{data_grid}.}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+
+\item{ci_method}{The type of index used for Credible Interval. Can be
+\code{"hdi"} (default, see \code{\link{hdi}}) or \code{"quantile"}
+(see \code{\link{ci}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
 \description{
 Generates predictions for Bayesian models
+}
+\examples{
+library(estimate)
+\dontrun{
+library(rstanarm)
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+estimate_response(model)
+estimate_link(model)
+
+model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+estimate_response(model)
+estimate_link(model)
+}
+
 }

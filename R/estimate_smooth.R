@@ -7,11 +7,13 @@
 #'  \item{\link[=estimate_smooth.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
 #'
-#' @param model Object.
-#' @param ... Arguments passed to or from other methods.
+#' @param smooth A character indicating the name of the "smooth" term.
+#' @inheritParams estimate_slopes
+#' @inheritParams estimate_response
+#'
 #'
 #' @export
-estimate_smooth <- function(model, ...) {
+estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", ...) {
   UseMethod("estimate_smooth")
 }
 
@@ -30,39 +32,38 @@ estimate_smooth <- function(model, ...) {
 
 #' Describe the smooth term (for GAMs) or non-linear predictors
 #'
-#'
-#' @inheritParams estimate_response.stanreg
-#' @param smooth A character indicating the name of the "smooth" term.
-#' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
+#' @inheritParams estimate_smooth
+#' @inheritParams estimate_slopes.stanreg
 #'
 #' @examples
+#' library(estimate)
 #' \dontrun{
 #' library(rstanarm)
-#' model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
+#' model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)
 #' estimate_smooth(model)
 #'
-#' model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+#' model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 #' estimate_smooth(model)
 #'
-#' model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
+#' model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data = iris)
 #' estimate_smooth(model)
 #'
-#' model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
+#' model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data = iris)
 #' estimate_smooth(model)
-#' estimate_smooth(model, levels="Species")
+#' estimate_smooth(model, levels = "Species")
 #' }
 #' @import emmeans
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", estimate = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
 
   if (is.null(smooth)) {
     smooth <- predictors[sapply(data[predictors], is.numeric)][1]
-    message("No numeric variable was selected for smooth analysis. Selecting ", smooth, ".")
+    message('No numeric variable was specified for smooth analysis. Selecting `smooth = "', smooth, '"`.')
   }
   if (length(smooth) > 1) {
     message("More than one numeric variable was selected for smooth analysis. Keeping only ", smooth[1], ".")
@@ -80,9 +81,9 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   # Basis
   newdata <- data_grid(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
-  smooth_data <- estimate_fit(model, newdata,
+  smooth_data <- estimate_link(model, newdata,
     predict = "link",
-    estimate = estimate, transform = transform,
+    centrality = centrality, transform = transform,
     keep_draws = FALSE, draws = NULL,
     seed = NULL, random = FALSE, ...
   )
@@ -123,14 +124,20 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     description$End <- smooth_data[description$End, smooth]
   }
 
-  attributes(description) <- c(attributes(description),
-                             list(smooth = smooth, levels = levels, transform = transform))
-  class(description) <- c("estimateSmooth", class(description))
-  return(description)
+  attributes(description) <- c(
+    attributes(description),
+    list(smooth = smooth, levels = levels, transform = transform)
+  )
+  class(description) <- c("estimate_smooth", class(description))
+  description
 }
 
 
 
+
+
+#' @export
+print.estimate_smooth <- .print_estimate
 
 
 
@@ -174,19 +181,17 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     df <- rbind(df, segment_df)
   }
 
-  return(df)
+  df
 }
 
 
 
 
-
 #' @importFrom parameters smoothness
-#' @importFrom performance r2
 #' @keywords internal
-.describe_segment <- function(segment, range, smoothness=FALSE) {
+.describe_segment <- function(segment, range, smoothness = FALSE) {
   # Smoothness
-  if(smoothness){
+  if (smoothness) {
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
@@ -200,22 +205,23 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     linearity <- NA
   } else {
     model <- lm(y ~ x,
-                data = data.frame(
-                  "y" = segment,
-                  "x" = seq(range[1], range[2], length.out = length(segment))
-                ))
+      data = data.frame(
+        "y" = segment,
+        "x" = seq(range[1], range[2], length.out = length(segment))
+      )
+    )
 
     trend <- as.numeric(coef(model)[2])
-    linearity <- as.numeric(performance::r2(model)$R2)
+    linearity <- as.numeric(summary(model)$r.squared)
   }
 
   out <- data.frame(
     "Trend" = trend,
     "Linearity" = linearity
   )
-  if(smoothness != FALSE){
+  if (smoothness != FALSE) {
     out$Smoothness <- smoothness
   }
 
-  return(out)
+  out
 }

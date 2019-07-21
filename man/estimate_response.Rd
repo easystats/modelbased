@@ -2,15 +2,24 @@
 % Please edit documentation in R/estimate_response.R
 \name{estimate_response}
 \alias{estimate_response}
-\alias{estimate_fit}
+\alias{estimate_link}
 \title{Generates predictions}
 \usage{
-estimate_response(model, ...)
+estimate_response(model, data = NULL, transform = "response",
+  random = FALSE, length = 10, ...)
 
-estimate_fit(model, ...)
+estimate_link(model, ...)
 }
 \arguments{
-\item{model}{Object.}
+\item{model}{A statistical model.}
+
+\item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{data_grid}}).}
+
+\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+
+\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
+
+\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -19,15 +28,4 @@ See the documentation for your object's class:
 \itemize{
  \item{\link[=estimate_response.stanreg]{Bayesian models (stanreg and brms)}}
  }
-}
-\examples{
-\dontrun{
-library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-estimate_response(model)
-
-model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
-estimate_response(model)
-}
-
 }

@@ -5,20 +5,20 @@
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
 \method{estimate_smooth}{stanreg}(model, smooth = NULL, levels = NULL,
-  length = 200, transform = "response", estimate = "median", ...)
+  length = 200, transform = "response", centrality = "median", ...)
 }
 \arguments{
-\item{model}{Bayesian model.}
+\item{model}{A statistical model.}
 
 \item{smooth}{A character indicating the name of the "smooth" term.}
 
 \item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
-\item{length}{Length of numeric target variables that applies to \link{data_grid}.}
+\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
 
-\item{transform}{Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.}
+\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
-\item{estimate}{The \href{https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html}{point-estimate(s)} to compute. Can be a character or a list with "median", "mean" or "MAP".}
+\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -26,19 +26,20 @@
 Describe the smooth term (for GAMs) or non-linear predictors
 }
 \examples{
+library(estimate)
 \dontrun{
 library(rstanarm)
-model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data=iris)
+model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)
 estimate_smooth(model)
 
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 estimate_smooth(model)
 
-model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data=iris)
+model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data = iris)
 estimate_smooth(model)
 
-model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data=iris)
+model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data = iris)
 estimate_smooth(model)
-estimate_smooth(model, levels="Species")
+estimate_smooth(model, levels = "Species")
 }
 }

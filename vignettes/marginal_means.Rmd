@@ -1,0 +1,139 @@
+---
+title: "What are, why use and how to get marginal means"
+output: 
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, marginal means, emmeans]
+vignette: >
+  %\VignetteIndexEntry{Marginal means}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">",
+  dpi=450)
+options(digits=2)
+
+set.seed(333)
+```
+
+
+This vignette will introduce the concept of marginal means. Warning: we will go **full Bayesian**. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+
+# Raw Means
+
+
+The [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset, available in base R, contains observations of 3 types of iris flowers (the `Species` variable); *Setosa*, *Versicolor* and *Virginica*, for which different features were measured, such as the length and width of the sepals and petals.
+
+A traditional starting point, when reporting such data, is to start by descriptive statistics. For instance, **what is the mean `Sepal.Width` for each of the 3 species**.
+
+We can compute the means very easily by grouping the observations by species, and then computing the mean and the SD:
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+iris %>% 
+  group_by(Species) %>% 
+  summarise(Mean_Sepal.Width = mean(Sepal.Width),
+            SD_Sepal.Width = sd(Sepal.Width))
+```
+
+We can also provide a plot:
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(see)
+
+ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+  geom_violin() +
+  geom_jitter2(width = 0.05) +
+  theme_modern()
+```
+
+
+However, these **raw means** might be biased, as the number of observations in each group might be different. Moreover, there might some hidden covariance or mediation with other variables in the dataset, creating a "spurious" influence on the means. **How to take these things into account?**
+
+# Marginal Means
+
+Another way of analyzing the means is to actually statistically **model them**, rather than simply describe them as they appear in the data. For instance, we could fit a simple Bayesian linear regression modelling the relationship between `Species` and `Sepal.Width`.
+
+Marginal means are basically means extracted from a statistical model. Note that as we are in a Bayesian framework, we will report the **median** of the posterior distribution of the marginal means.
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(rstanarm)
+library(estimate)
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris)
+means <- estimate_means(model)
+means
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(rstanarm)
+library(estimate)
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
+means <- estimate_means(model)
+means
+```
+
+
+We can now add these means, as well as the [**credible interval (CI)**](https://easystats.github.io/bayestestR/articles/credible_interval.html) representing the uncertainty of the estimation, as an overlay on the previous plot:
+
+```{r message=FALSE, warning=FALSE}
+ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+  geom_violin() +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  geom_line(data = means, aes(y = Median, group = 1), size = 1) +
+  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  theme_modern()
+```
+
+
+# Complex Models
+
+The power of marginal means resides in the fact that they can be estimated from much more complex models. For instance, we could fit a model that takes into account the interaction with the other variables, `Petal.Length` and  `Petal.Width`. The estimated means will be "adjusted" (or will take into account) for variations of these other components.
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model <- stan_glm(Sepal.Width ~ Species * Sepal.Length * Petal.Width, data = iris)
+means_complex <- estimate_means(model)
+means_complex
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+model <- stan_glm(Sepal.Width ~ Species * Sepal.Length * Petal.Width, data = iris, refresh = 0, iter = 1000, chains = 2)
+means_complex <- estimate_means(model)
+means_complex
+```
+
+
+```{r message=FALSE, warning=FALSE}
+ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+  geom_violin() +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  geom_line(data = means, aes(y = Median, group = 1), size = 1, alpha = 0.25) +
+  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  
+  geom_line(data = means_complex, aes(y = Median, group = 1), size = 1) +
+  geom_pointrange(data = means_complex, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "orange") +
+  theme_modern()
+```
+
+That's interesting: it seems that when adjusting the model for petal characteristics, the differences between Species seems to be even bigger!
+
+**But are these differences "significant"?** Click here to read the tutorial on **contrast analysis**.
+
+
+# References

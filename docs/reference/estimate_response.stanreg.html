@@ -37,6 +37,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 <meta property="og:title" content="Generates predictions for Bayesian models — estimate_response.stanreg" />
 
 <meta property="og:description" content="Generates predictions for Bayesian models" />
@@ -85,7 +87,25 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/marginal_means.html,">Marginal means</a>
+    </li>
+    <li>
+      <a href="../articles/contrast_analysis.html">Contrast analysis</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -121,54 +141,56 @@
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='estimate_response.html'>estimate_fit</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
-  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)
+<span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
-<span class='fu'><a href='estimate_response.html'>estimate_fit</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
-  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>, <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Bayesian model.</p></td>
+      <td><p>A statistical model.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>A data frame with model's predictors to estimate the response. If NULL, the model matrix is used. If "grid", the model's data is re-used.</p></td>
-    </tr>
-    <tr>
-      <th>predict</th>
-      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code><a href='estimate_response.html'>estimate_fit(model)</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>ci</th>
-      <td><p>Credible Interval (CI) level. Default to 0.90 (90%).</p></td>
-    </tr>
-    <tr>
-      <th>estimate</th>
-      <td><p>The <a href='https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html'>point-estimate(s)</a> to compute. Can be a character or a list with "median", "mean" or "MAP".</p></td>
+      <td><p>A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through <code><a href='data_grid.html'>data_grid</a></code>).</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.</p></td>
+      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
+    </tr>
+    <tr>
+      <th>random</th>
+      <td><p>Should it take the random effects into account? Can be <code>TRUE</code>, <code>FALSE</code> or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see <code>posterior_predict.stanreg</code>).</p></td>
+    </tr>
+    <tr>
+      <th>length</th>
+      <td><p>Length of numeric target variables that applies to <code><a href='data_grid.html'>data_grid</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>predict</th>
+      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code><a href='estimate_response.html'>estimate_link(model)</a></code>.</p></td>
     </tr>
     <tr>
       <th>keep_draws</th>
@@ -183,12 +205,18 @@
       <td><p>An optional seed to use.</p></td>
     </tr>
     <tr>
-      <th>random</th>
-      <td><p>Should it take the random effects into account? Can be <code>TRUE</code>, <code>FALSE</code> or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see <code>posterior_predict.stanreg</code>).</p></td>
+      <th>centrality</th>
+      <td><p>The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: <code>"median"</code>, <code>"mean"</code>, <code>"MAP"</code> or <code>"all"</code>.</p></td>
     </tr>
     <tr>
-      <th>length</th>
-      <td><p>Length of numeric target variables that applies to <a href='data_grid.html'>data_grid</a>.</p></td>
+      <th>ci</th>
+      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
+    </tr>
+    <tr>
+      <th>ci_method</th>
+      <td><p>The type of index used for Credible Interval. Can be
+<code>"hdi"</code> (default, see <code>hdi</code>) or <code>"quantile"</code>
+(see <code>ci</code>).</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -197,12 +225,26 @@
     </table>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>estimate</span>)</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>)
+<span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glmer'>stan_glmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Petal.Length</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Species</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>)
+<span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>)
+<span class='co'># }</span><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+            
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

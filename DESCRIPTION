@@ -17,12 +17,11 @@ Authors@R: c(
 Maintainer: Dominique Makowski <dom.makowski@gmail.com>
 URL: https://github.com/easystats/estimate
 BugReports: https://github.com/easystats/estimate/issues
-Description: Estimate marginal effects, contrasts and means of models.
+Description: Implements model-based estimations, used in the computation of marginal means, contrast analysis and predictions.
 Imports:
-	insight,
-	bayestestR,
+	insight (>= 0.4.0),
+	bayestestR (>= 0.2.2),
 	parameters,
-	performance,
 	emmeans,
 	coda
 Suggests:
@@ -30,7 +29,10 @@ Suggests:
 	rmarkdown,
 	testthat,
 	covr,
-	rstanarm
+	rstanarm,
+	lme4
+Remotes: 
+	easystats/parameters
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

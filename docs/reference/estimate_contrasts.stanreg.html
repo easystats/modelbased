@@ -37,6 +37,8 @@
 
 
 
+  <link href="../extra.css" rel="stylesheet">
+  
 <meta property="og:title" content="Estimate contrasts — estimate_contrasts.stanreg" />
 
 <meta property="og:description" content="Estimate contrasts" />
@@ -85,7 +87,25 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../news/index.html">News</a>
+</li>
+<li>
+  <a href="../reference/index.html">Features</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/marginal_means.html,">Marginal means</a>
+    </li>
+    <li>
+      <a href="../articles/contrast_analysis.html">Contrast analysis</a>
+    </li>
+  </ul>
 </li>
       </ul>
       
@@ -109,7 +129,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Estimate contrasts</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_contrasts.R'><code>R/estimate_contrasts.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_contrasts.bayesian.R'><code>R/estimate_contrasts.bayesian.R</code></a></small>
     <div class="hidden name"><code>estimate_contrasts.stanreg.Rd</code></div>
     </div>
 
@@ -121,20 +141,21 @@
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.9</span>,
-  <span class='kw'>estimate</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>),
-  <span class='kw'>rope_range</span> <span class='kw'>=</span> <span class='st'>"default"</span>, <span class='kw'>rope_full</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='kw'>test</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>), <span class='kw'>rope_range</span> <span class='kw'>=</span> <span class='st'>"default"</span>, <span class='kw'>rope_ci</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>Bayesian model.</p></td>
+      <td><p>A Bayesian model.</p></td>
     </tr>
     <tr>
       <th>levels</th>
-      <td><p>A character vector or formula specifying the names of the predictors over which contrasts are desired.</p></td>
+      <td><p>A character vector or formula specifying the names of the predictors over which to estimate means or contrasts.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
@@ -142,35 +163,58 @@
     </tr>
     <tr>
       <th>modulate</th>
-      <td><p>A character vector indicating the names of a numeric variable along which the contrasts will be tested. Adjust its length using <code>length</code>.</p></td>
+      <td><p>A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using <code>length</code>.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Can be "none", "response", "mu", "unlink", "log". "none" (default for contrasts) will leave the values on scale of the linear predictors. "response" (default for means) will transform them on scale of the response variable. Thus for a logistic model the default predictions are of log-odds (probabilities on logit scale) and type = "response" gives the predicted probabilities.</p></td>
-    </tr>
-    <tr>
-      <th>ci</th>
-      <td><p>Credible Interval (CI) level. Default to 0.90 (90%).</p></td>
-    </tr>
-    <tr>
-      <th>estimate</th>
-      <td><p>The <a href='https://easystats.github.io/bayestestR/articles/2_IndicesEstimationComparison.html'>point-estimate(s)</a> to compute. Can be a character or a list with "median", "mean" or "MAP".</p></td>
-    </tr>
-    <tr>
-      <th>test</th>
-      <td><p>What <a href='https://easystats.github.io/bayestestR/articles/3_IndicesExistenceComparison.html'>indices of effect existence</a> to compute. Can be a character or a list with "p_direction", "rope" or "p_map".</p></td>
-    </tr>
-    <tr>
-      <th>rope_range</th>
-      <td><p><a href='https://easystats.github.io/bayestestR/articles/1_IndicesDescription.html#rope'>ROPE's</a> lower and higher bounds. Should be a list of two values (e.g., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(-0.1, 0.1)</a></code>) or <code>"default"</code>. If <code>"default"</code>, the bounds are set to <code>x +- 0.1*SD(response)</code>.</p></td>
-    </tr>
-    <tr>
-      <th>rope_full</th>
-      <td><p>If TRUE, use the proportion of the entire posterior distribution for the equivalence test. Otherwise, use the proportion of HDI as indicated by the <code>ci</code> argument.</p></td>
+      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
     </tr>
     <tr>
       <th>length</th>
-      <td><p>Length of the spread of the <code>modulate</code> variable</p></td>
+      <td><p>Length of the spread numeric variables.</p></td>
+    </tr>
+    <tr>
+      <th>standardize</th>
+      <td><p>If <code>TRUE</code>, add standardized differences (Cohen's d) or coefficients.</p></td>
+    </tr>
+    <tr>
+      <th>standardize_robust</th>
+      <td><p>Robust standardization through <code>MAD</code> (Median Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
+    </tr>
+    <tr>
+      <th>centrality</th>
+      <td><p>The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: <code>"median"</code>, <code>"mean"</code>, <code>"MAP"</code> or <code>"all"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
+    </tr>
+    <tr>
+      <th>ci_method</th>
+      <td><p>The type of index used for Credible Interval. Can be
+<code>"hdi"</code> (default, see <code>hdi</code>) or <code>"quantile"</code>
+(see <code>ci</code>).</p></td>
+    </tr>
+    <tr>
+      <th>test</th>
+      <td><p>The indices of effect existence to compute. Character (vector) or
+list with one or more of these options: <code>"p_direction"</code> (or <code>"pd"</code>),
+<code>"rope"</code>, <code>"p_map"</code>, <code>"equivalence_test"</code> (or <code>"equitest"</code>),
+<code>"bayesfactor"</code> (or <code>"bf"</code>) or <code>"all"</code> to compute all tests.#'
+For each "test", the corresponding <span class="pkg">bayestestR</span> function is called
+(e.g. <code>rope</code> or <code>p_direction</code>) and its results
+included in the summary output.</p></td>
+    </tr>
+    <tr>
+      <th>rope_range</th>
+      <td><p>ROPE's lower and higher bounds. Should be a list of two
+values (e.g., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(-0.1, 0.1)</a></code>) or <code>"default"</code>. If <code>"default"</code>,
+the bounds are set to <code>x +- 0.1*SD(response)</code>.</p></td>
+    </tr>
+    <tr>
+      <th>rope_ci</th>
+      <td><p>The Credible Interval (CI) probability, corresponding to the
+proportion of HDI, to use for the percentage in ROPE.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -180,15 +224,15 @@
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>estimate</span>)</div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>rstanarm</span>)
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>dplyr</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>fac2</span>,
-  <span class='kw'>data</span> <span class='kw'>=</span> <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='no'>iris</span>, <span class='kw'>fac2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>))
-)
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
+<span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length_factor</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)
-<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='st'>"fac2"</span>)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='st'>"Petal.Length_factor"</span>)
 
 <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/rstanarm/topics/stan_glm'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)

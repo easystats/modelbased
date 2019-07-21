@@ -1,0 +1,118 @@
+---
+title: "Contrast analysis"
+output: 
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, marginal means, emmeans, contrast analysis, post hoc, pairwise t tests]
+vignette: >
+  %\VignetteIndexEntry{Contrast analysis}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">",
+  dpi=450)
+options(digits=2)
+
+set.seed(333)
+```
+
+
+Warning: we will go **full Bayesian** in this vignette. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+
+# Testing pairwise differences
+
+In the **previous tutorial** (ADD LINK), we computed marginal at the 3 different `Species` levels from the  [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However, one might also want to **statistically test** the differences between each levels, which can be achieved through **contrast analysis**. Although the procedure is much more powerful, its aim is somehow analog to the ***post hoc*** analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.
+
+Let's do that based on the simple model from the previous tutorial:
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(ggplot2)
+library(see)
+library(rstanarm)
+library(estimate)
+
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris)
+means <- estimate_means(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(see)
+library(rstanarm)
+library(estimate)
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
+means <- estimate_means(model)
+```
+```{r message=FALSE, warning=FALSE}
+ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+  geom_violin() +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  geom_line(data = means, aes(y = Median, group = 1), size = 1) +
+  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  theme_modern()
+```
+
+**Contrast analysis** can be achieved through the `estimate_contrasts` function:
+
+```{r message=FALSE, warning=FALSE}
+estimate_contrasts(model)
+```
+
+As we can see here, all pairwise differences can be considered as significant.
+
+# Complex model
+
+
+Again, as contrast analysis is based on marginal means, it can be applied to more complex models:
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
+estimate_contrasts(model)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0, iter = 1000, chains = 2)
+estimate_contrasts(model)
+```
+
+For instance, if we add `Petal.Width` in the model, we can see that the difference between *versicolor* and *virginica* becomes not significant (and even changes sign).   
+
+
+# Changes in difference
+
+Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with `Petal.Width`), we will compute the contrasts at 100 equally-spaced points of `Petal.Width`, that we will then visualise.
+
+```{r message=FALSE, warning=FALSE, fig}
+contrasts <- estimate_contrasts(model, modulate = "Petal.Width", length = 100)
+
+# Create a variable with the two levels concatenated 
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2) 
+
+# Visualise the changes in the differences
+ggplot(contrasts, aes(x = Petal.Width, y = Median)) +
+  geom_ribbon(aes(fill = Contrast, ymin = CI_low, ymax = CI_high), alpha = 0.2) +
+  geom_line(aes(colour = Contrast), size = 1) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_modern() +
+  ylab("Difference")
+```
+
+
+As we can see, the difference between *versicolor* and *virginica* increases as `Petal.Width` increases. In conclusion, contrast analysis is a powerful tool to interpret and understand statistical models.
+
+
+# References

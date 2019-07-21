@@ -4,10 +4,19 @@
 \alias{estimate_smooth}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-estimate_smooth(model, ...)
+estimate_smooth(model, smooth = NULL, levels = NULL, length = 200,
+  transform = "response", ...)
 }
 \arguments{
-\item{model}{Object.}
+\item{model}{A statistical model.}
+
+\item{smooth}{A character indicating the name of the "smooth" term.}
+
+\item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+
+\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
+
+\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

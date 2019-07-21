@@ -7,3 +7,22 @@ authors:
 template:
   params:
     bootswatch: cosmo
+
+ 
+  
+navbar:
+  type: default
+  left:
+  - icon: fa-home fa-lg
+    href: index.html
+  - text: News
+    href: news/index.html
+  - text: Features
+    href: reference/index.html
+  - text: Tutorials
+    menu:
+      - text: 'Marginal means'
+        href: articles/marginal_means.html,
+      - text: 'Contrast analysis'
+        href: articles/contrast_analysis.html
+
