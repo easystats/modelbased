@@ -59,14 +59,13 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
   posteriors <- emmeans::contrast(estimated$means, method = "pairwise")
-  posteriors <- emmeans::as.mcmc.emmGrid(posteriors)
-  posteriors <- as.data.frame(as.matrix(posteriors))
-
 
   # Summary
-  if (rope_range == "default") rope_range <- bayestestR::rope_range(model)
-
-  contrasts <- bayestestR::describe_posterior(posteriors, ci = ci, ci_method = ci_method, centrality = centrality, test = test, rope_range = rope_range, rope_ci = rope_ci)
+  contrasts <-
+    bayestestR::describe_posterior(posteriors,
+                                   ci = ci, ci_method = ci_method,
+                                   centrality = centrality,
+                                   test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model)
   if ("CI" %in% names(contrasts) & length(unique(contrasts$CI)) == 1) contrasts$CI <- NULL
   if ("ROPE_CI" %in% names(contrasts) & length(unique(contrasts$ROPE_CI)) == 1) contrasts$ROPE_CI <- NULL
   contrasts$ROPE_low <- contrasts$ROPE_high <- NULL
