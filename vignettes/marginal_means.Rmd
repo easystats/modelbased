@@ -11,7 +11,7 @@ output:
     fig_height: 6
 tags: [r, estimate, marginal means, emmeans]
 vignette: >
-  %\VignetteIndexEntry{Marginal Means}
+  %\VignetteIndexEntry{Marginal means}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -22,7 +22,8 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = '')
-knitr::opts_chunk$set(comment=">")
+knitr::opts_chunk$set(comment=">",
+  dpi=450)
 options(digits=2)
 
 set.seed(333)
@@ -78,7 +79,7 @@ model <- stan_glm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model)
 means
 ```
-```{r error=FALSE, warning=FALSE, echo=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(rstanarm)
 library(estimate)
 
@@ -130,7 +131,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   theme_modern()
 ```
 
-That's interesting: it seems that when adjusting the model for petal charactertistics, the differences between Species seems to be even bigger!
+That's interesting: it seems that when adjusting the model for petal characteristics, the differences between Species seems to be even bigger!
 
 **But are these differences "significant"?** Click here to read the tutorial on **contrast analysis**.
 

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate marginal means — estimate_means.lm • estimate</title>
+<title>Estimate contrasts — estimate_contrasts.lm • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +39,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Estimate marginal means — estimate_means.lm" />
+<meta property="og:title" content="Estimate contrasts — estimate_contrasts.lm" />
 
-<meta property="og:description" content="Estimate marginal means" />
+<meta property="og:description" content="Estimate contrasts" />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -128,21 +128,22 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate marginal means</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_means.frequentist.R'><code>R/estimate_means.frequentist.R</code></a></small>
-    <div class="hidden name"><code>estimate_means.lm.Rd</code></div>
+    <h1>Estimate contrasts</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_contrasts.frequentist.R'><code>R/estimate_contrasts.frequentist.R</code></a></small>
+    <div class="hidden name"><code>estimate_contrasts.lm.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Estimate marginal means</p>
+    <p>Estimate contrasts</p>
     
     </div>
 
     <pre class="usage"><span class='co'># S3 method for lm</span>
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='no'>...</span>)</pre>
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"holm"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,8 +173,20 @@
       <td><p>Length of the spread numeric variables.</p></td>
     </tr>
     <tr>
+      <th>standardize</th>
+      <td><p>If <code>TRUE</code>, add standardized differences (Cohen's d) or coefficients.</p></td>
+    </tr>
+    <tr>
+      <th>standardize_robust</th>
+      <td><p>Robust standardization through <code>MAD</code> (Median Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
+    </tr>
+    <tr>
       <th>ci</th>
       <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
+    </tr>
+    <tr>
+      <th>adjust</th>
+      <td><p>The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the <code><a href='https://www.rdocumentation.org/packages/emmeans/topics/summary.emmGrid'>emmeans::test</a></code> documentation.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -185,52 +198,44 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>estimate</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Species    | Mean |   SE |       95% CI
-#&gt; ---------------------------------------
-#&gt; setosa     | 1.28 | 0.07 | [1.15, 1.42]
-#&gt; versicolor | 4.40 | 0.06 | [4.27, 4.52]
-#&gt; virginica  | 5.59 | 0.06 | [5.48, 5.70]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Sepal.Width"</span>)</div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
-#&gt; -----------------------------------------------------
-#&gt; setosa     |        2.00 | 0.78 | 0.15 | [0.48, 1.07]
-#&gt; versicolor |        2.00 | 3.89 | 0.09 | [3.71, 4.08]
-#&gt; virginica  |        2.00 | 5.09 | 0.11 | [4.87, 5.30]
-#&gt; setosa     |        2.27 | 0.91 | 0.13 | [0.66, 1.16]
-#&gt; versicolor |        2.27 | 4.02 | 0.07 | [3.87, 4.17]
-#&gt; virginica  |        2.27 | 5.21 | 0.09 | [5.04, 5.39]
-#&gt; setosa     |        2.53 | 1.03 | 0.10 | [0.83, 1.24]
-#&gt; versicolor |        2.53 | 4.15 | 0.06 | [4.03, 4.27]
-#&gt; virginica  |        2.53 | 5.34 | 0.07 | [5.20, 5.48]
-#&gt; setosa     |        2.80 | 1.16 | 0.08 | [1.00, 1.33]
-#&gt; versicolor |        2.80 | 4.27 | 0.06 | [4.16, 4.39]
-#&gt; virginica  |        2.80 | 5.47 | 0.06 | [5.35, 5.59]
-#&gt; setosa     |        3.07 | 1.29 | 0.07 | [1.16, 1.42]
-#&gt; versicolor |        3.07 | 4.40 | 0.06 | [4.28, 4.53]
-#&gt; virginica  |        3.07 | 5.60 | 0.06 | [5.48, 5.71]
-#&gt; setosa     |        3.33 | 1.42 | 0.06 | [1.30, 1.53]
-#&gt; versicolor |        3.33 | 4.53 | 0.08 | [4.37, 4.69]
-#&gt; virginica  |        3.33 | 5.72 | 0.07 | [5.59, 5.86]
-#&gt; setosa     |        3.60 | 1.54 | 0.06 | [1.43, 1.66]
-#&gt; versicolor |        3.60 | 4.66 | 0.10 | [4.46, 4.85]
-#&gt; virginica  |        3.60 | 5.85 | 0.08 | [5.69, 6.02]
-#&gt; setosa     |        3.87 | 1.67 | 0.07 | [1.53, 1.81]
-#&gt; versicolor |        3.87 | 4.79 | 0.12 | [4.55, 5.02]
-#&gt; virginica  |        3.87 | 5.98 | 0.10 | [5.77, 6.18]
-#&gt; setosa     |        4.13 | 1.80 | 0.09 | [1.62, 1.98]
-#&gt; versicolor |        4.13 | 4.91 | 0.14 | [4.63, 5.20]
-#&gt; virginica  |        4.13 | 6.11 | 0.13 | [5.86, 6.36]
-#&gt; setosa     |        4.40 | 1.93 | 0.11 | [1.71, 2.14]
-#&gt; versicolor |        4.40 | 5.04 | 0.17 | [4.71, 5.37]
-#&gt; virginica  |        4.40 | 6.23 | 0.15 | [5.94, 6.53]</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |         95% CI |     t |     df |      p | Difference (std.)
+#&gt; ----------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       0.66 | 0.07 |   [0.49, 0.82] |  9.69 | 147.00 | &lt; .001 |              1.51
+#&gt; setosa     |  virginica |       0.45 | 0.07 |   [0.29, 0.62] |  6.68 | 147.00 | &lt; .001 |              1.04
+#&gt; versicolor |  virginica |      -0.20 | 0.07 | [-0.37, -0.04] | -3.00 | 147.00 |   .003 |             -0.47</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |    t |     df |      p | Difference (std.)
+#&gt; --------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       1.59 | 0.39 |  [0.64, 2.54] | 4.04 | 144.00 | &lt; .001 |              3.65
+#&gt; setosa     |  virginica |       1.77 | 0.41 |  [0.77, 2.78] | 4.29 | 144.00 | &lt; .001 |              4.07
+#&gt; versicolor |  virginica |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144.00 |   .205 |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |    t |     df |      p | Difference (std.)
+#&gt; ----------------------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |        1.20 |       1.59 | 0.39 |  [0.64, 2.54] | 4.04 | 144.00 | &lt; .001 |              3.65
+#&gt; setosa     |  virginica |        1.20 |       1.77 | 0.41 |  [0.77, 2.78] | 4.29 | 144.00 | &lt; .001 |              4.07
+#&gt; versicolor |  virginica |        1.20 |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144.00 |   .205 |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |     t |     df |      p | Difference (std.)
+#&gt; -----------------------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |        0.10 |       1.83 | 0.28 |  [1.15, 2.50] |  6.55 | 144.00 | &lt; .001 |              4.19
+#&gt; setosa     | versicolor |        0.90 |       1.65 | 0.29 |  [0.96, 2.35] |  5.74 | 144.00 | &lt; .001 |              3.80
+#&gt; setosa     | versicolor |        1.70 |       1.48 | 0.60 |  [0.03, 2.94] |  2.47 | 144.00 |   .015 |              3.40
+#&gt; setosa     | versicolor |        2.50 |       1.31 | 0.95 | [-1.00, 3.62] |  1.37 | 144.00 |   .172 |              3.00
+#&gt; setosa     |  virginica |        0.10 |       1.55 | 0.31 |  [0.79, 2.30] |  4.95 | 144.00 | &lt; .001 |              3.55
+#&gt; setosa     |  virginica |        0.90 |       1.71 | 0.32 |  [0.93, 2.50] |  5.28 | 144.00 | &lt; .001 |              3.93
+#&gt; setosa     |  virginica |        1.70 |       1.88 | 0.60 |  [0.43, 3.32] |  3.14 | 144.00 |   .004 |              4.31
+#&gt; setosa     |  virginica |        2.50 |       2.04 | 0.92 | [-0.19, 4.28] |  2.21 | 144.00 |   .057 |              4.68
+#&gt; versicolor |  virginica |        0.10 |      -0.28 | 0.41 | [-1.26, 0.70] | -0.69 | 144.00 |   .492 |             -0.64
+#&gt; versicolor |  virginica |        0.90 |       0.06 | 0.21 | [-0.44, 0.56] |  0.28 | 144.00 |   .780 |              0.13
+#&gt; versicolor |  virginica |        1.70 |       0.40 | 0.11 |  [0.12, 0.67] |  3.50 | 144.00 |   .002 |              0.91
+#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 |  [0.08, 1.39] |  2.70 | 144.00 |   .023 |              1.68</div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
 
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
 <span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Petal.Length</span> ~ <span class='no'>Sepal.Width</span> + <span class='no'>Species</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>)
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Sepal.Width"</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + (<span class='fl'>1</span><span class='kw'>|</span><span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)
+
 <span class='co'># }</span><div class='input'>
 </div></pre>
   </div>

@@ -40,16 +40,14 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   # Summary
   contrasts <- as.data.frame(merge(as.data.frame(contrasts), confint(contrasts, level = ci, adjust = adjust)))
   names(contrasts)[names(contrasts) == "estimate"] <- "Difference"
-  names(contrasts)[names(contrasts) == "df"] <- "DoF" # To be changed depending on parameters
   names(contrasts)[names(contrasts) == "t.ratio"] <- "t"
   names(contrasts)[names(contrasts) == "p.value"] <- "p"
   names(contrasts)[names(contrasts) == "lower.CL"] <- "CI_low"
   names(contrasts)[names(contrasts) == "upper.CL"] <- "CI_high"
 
   # Reorder columns
-  cols <- names(contrasts)
-  order_SE <- grep("SE", cols)
-  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[c("CI_low", "CI_high", "t", "DoF", "p")])
+  order_SE <- grep("SE", names(contrasts))
+  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[c("CI_low", "CI_high", "t", "df", "p")])
 
   # Standardized differences
   if(standardize){
