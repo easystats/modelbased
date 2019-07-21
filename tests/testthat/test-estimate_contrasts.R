@@ -49,6 +49,6 @@ test_that("estimate_contrasts", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
   model <- lmer(Sepal.Width ~ Species + (1|Petal.Length_factor), data = data)
-  estim <- estimate_contrasts(model)
-  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
+  # estim <- estimate_contrasts(model)
+  # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
 })
