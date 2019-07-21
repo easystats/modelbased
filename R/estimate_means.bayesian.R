@@ -74,6 +74,9 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))
 
+  # Restore type
+  means[modulate] <- sapply(means[modulate], as.numeric_ifnumeric)
+
   # Add attributes
   attributes(means) <- c(
     attributes(means),

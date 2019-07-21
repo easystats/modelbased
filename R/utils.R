@@ -8,7 +8,7 @@
     }
   }
 
-  return(predictions)
+  predictions
 }
 
 
@@ -26,7 +26,7 @@
 #' @export
 as.numeric_ifnumeric <- function(x) {
   x <- tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
-  return(x)
+  x
 }
 
 
@@ -41,7 +41,7 @@ as.numeric_ifnumeric <- function(x) {
   name <- .find_name_level(x)
   x <- sub(name, "", x)
   x <- trimws(x)
-  return(x)
+  x
 }
 
 

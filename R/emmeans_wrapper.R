@@ -31,10 +31,11 @@
       means <- emmeans::emmeans(means, levels, by = modulate, transform = transform, ...)
     }
   }
-  return(list(
+
+  list(
     "means" = means,
     "levels" = levels,
     "fixed" = fixed,
     "modulate" = modulate
-  ))
+  )
 }
