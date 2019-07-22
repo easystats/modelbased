@@ -8,26 +8,28 @@
 \title{Generates predictions for Bayesian models}
 \usage{
 \method{estimate_response}{stanreg}(model, data = NULL,
-  transform = "response", random = FALSE, length = 10,
-  predict = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "response", keep_draws = FALSE,
+  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
+  ci_method = "hdi", ...)
 
 \method{estimate_link}{stanreg}(model, data = "grid",
-  transform = "response", random = FALSE, length = 10,
-  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
-  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "link", keep_draws = FALSE,
+  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
+  ci_method = "hdi", ...)
 
 \method{estimate_response}{data.frame}(model, data = NULL,
-  transform = "response", random = FALSE, length = 10,
-  predict = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "response", keep_draws = FALSE,
+  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
+  ci_method = "hdi", ...)
 
 \method{estimate_link}{data.frame}(model, data = "grid",
-  transform = "response", random = FALSE, length = 10,
-  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
-  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "link", keep_draws = FALSE,
+  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
+  ci_method = "hdi", ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -38,7 +40,9 @@
 
 \item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
-\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
+\item{length}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
+
+\item{preserve_range}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 

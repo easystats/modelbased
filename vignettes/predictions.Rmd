@@ -1,0 +1,123 @@
+---
+title: "Use a model to make predictions"
+output: 
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, estimate response, predictions]
+vignette: >
+  %\VignetteIndexEntry{Use a model to make predictions}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">",
+  dpi=450)
+options(digits=2)
+
+set.seed(333)
+```
+
+
+This vignette will present how to generate predictions using `estimate`. Warning: we will go **full Bayesian**. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+
+# Prediction against original data
+
+Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the `estimate_response()` function and its spinoff, `estimate_link()`.
+
+Let's start by fitting a Bayesian linear regression.
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+library(rstanarm)
+
+data <- iris
+model <- stan_glm(Petal.Length ~ Sepal.Length, data = data)
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(rstanarm)
+
+data <- iris
+model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
+```
+
+We might be interested in comparing the values predicted by the model to the actual "true" values. This can be done by generating predictions:
+
+```{r message=FALSE, warning=FALSE,}
+library(estimate)
+
+predicted <- estimate_response(model)
+head(predicted)
+```
+
+The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for **each of the value of the original dataframe** (used for fitting the model). Hence, we can simply add the prediction column (`Median`) to the original dataset and plot the original against the predicted data.
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+library(see)
+
+data$Predicted <- predicted$Median
+
+data %>% 
+  ggplot(aes(x = Petal.Length, y = Predicted)) +
+  geom_point() +
+  theme_modern()
+```
+
+It seems like our model does not perform too bad. What if we added information about the `Species` in the model?
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data)
+data$Predicted_2 <- estimate_response(model)$Median
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
+data$Predicted_2 <- estimate_response(model)$Median
+```
+
+We could now plot the second observations, based on a more complex model, as a red overlay to the previous points:
+
+```{r message=FALSE, warning=FALSE}
+data %>% 
+  ggplot() +
+  geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
+  geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
+  theme_modern()
+```
+
+The new model generated much more accurate predictions (closer from the underlying regression line).
+
+# Response *vs.* link
+
+Rather than visualising the predictions made by a model, we are often interested in visualising the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/data_grid.html) of the model's data instead of the original dataset.
+
+We will do that to visualise the relationship between the response (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
+
+```{r message=FALSE, warning=FALSE}
+predicted <- estimate_response(model, data = "grid")
+
+iris %>% 
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
+  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  theme_modern()
+```
+
+
+
+
+
+# References

@@ -26,8 +26,6 @@ data_grid <- function(x, target = "all", length = 10, factors = "reference", num
 
 
 
-
-
 # Models ------------------------------------------------------------------
 
 
@@ -38,7 +36,7 @@ data_grid.stanreg <- function(x, target = "all", length = 10, factors = "referen
     data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
   data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, na.rm = na.rm, random = TRUE, ...)
-  return(data)
+  data
 }
 
 
@@ -135,7 +133,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
 
-  return(grid)
+  grid
 }
 
 
@@ -157,7 +155,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
     warning("Argument is not numeric nor factor: returning NA.")
     out <- NA
   }
-  return(out)
+  out
 }
 
 
@@ -177,7 +175,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
       grid <- merge(grid, var)
     }
   }
-  return(grid)
+  grid
 }
 
 

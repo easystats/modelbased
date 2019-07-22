@@ -6,9 +6,10 @@
 \title{Generates predictions}
 \usage{
 estimate_response(model, data = NULL, transform = "response",
-  random = FALSE, length = 10, ...)
+  random = FALSE, length = 25, preserve_range = TRUE, ...)
 
-estimate_link(model, ...)
+estimate_link(model, data = "grid", transform = "response",
+  random = FALSE, length = 25, preserve_range = TRUE, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -19,7 +20,9 @@ estimate_link(model, ...)
 
 \item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
-\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
+\item{length}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
+
+\item{preserve_range}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -28,4 +31,5 @@ See the documentation for your object's class:
 \itemize{
  \item{\link[=estimate_response.stanreg]{Bayesian models (stanreg and brms)}}
  }
+\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"} and, for Bayesian models, \code{predict = "link"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting.
 }
