@@ -64,9 +64,11 @@ data_grid.lmerMod <- data_grid.stanreg
 
 #' @export
 data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
+
   # Target
   if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
-    return(.data_grid_target(x, length = length))
+    grid <- .data_grid_target(x, length = length)
+    return(.preserve_range(grid, x, preserve_range))
   }
 
   target_df <- .data_grid_target(x[c(target)], length = length)
@@ -107,34 +109,48 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
   refrest <- refrest[var_order]
   grid <- merge(target_df, refrest)
 
-  # Remove non-existing values in factor levels
-  # TODO: this code is very ugly
-  factors <- names(grid)[sapply(grid, is.factor)]
-  if (length(factors) > 0 & preserve_range == TRUE) {
-    rows_to_keep <- row.names(grid)
-    for (fac in factors) {
-      if (length(unique(grid[[fac]])) > 1) {
-        for (var in target[target != fac]) {
-          for (level in unique(grid[[fac]])) {
-            max_value <- max(x[x[[fac]] == level, var])
-            min_value <- min(x[x[[fac]] == level, var])
-            rows_to_remove <- c()
-            rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] <= min_value, ]))
-            rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] >= max_value, ]))
-            rows_to_keep <- rows_to_keep[!rows_to_keep %in% rows_to_remove]
-          }
-        }
-      }
-    }
-    grid <- grid[rows_to_keep, ]
+  # Preserve range
+  grid <- .preserve_range(grid, x, preserve_range)
+
+}
+
+
+
+
+
+#' @keywords internal
+.preserve_range <- function(grid, x, preserve_range = TRUE){
+  if(preserve_range == FALSE){
+    return(grid)
   }
 
+  cols <- names(grid)[sapply(grid, function(x) length(unique(x)) > 1)]
 
+  nums <- names(grid[cols])[sapply(grid[cols], is.numeric)]
+  facs <- names(grid[cols])[!names(grid[cols]) %in% nums]
 
+  if(length(facs) == 0 | length(nums) == 0){
+    return(grid)
+  }
 
-
+  rows_to_keep <- row.names(grid)
+  for(fac in facs){
+    for(num in nums){
+      for (level in unique(grid[[fac]])) {
+        max_value <- max(x[x[[fac]] == level, num])
+        min_value <- min(x[x[[fac]] == level, num])
+        rows_to_remove <- c(row.names(grid[grid[[fac]] == level & grid[[num]] <= min_value, ]))
+        rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[num]] >= max_value, ]))
+        rows_to_keep <- rows_to_keep[!rows_to_keep %in% rows_to_remove]
+      }
+    }
+  }
+  grid <- grid[rows_to_keep, ]
+  row.names(grid) <- NULL
   grid
 }
+
+
 
 
 
@@ -217,7 +233,7 @@ data_grid.vector <- function(x, target = "all", length = 10, ...) {
   }
 
   names(out) <- NULL
-  return(out)
+  out
 }
 
 #' @export

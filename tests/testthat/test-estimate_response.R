@@ -10,7 +10,7 @@ test_that("estimate_response", {
   testthat::expect_equal(nrow(estim), nrow(mtcars))
 
   estim <- estimate_response(insight::download_model("stanreg_lm_6"), data = "grid")
-  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(75, 5))
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(41, 5))
 
   estim <- estimate_response(insight::download_model("stanreg_lm_7"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
