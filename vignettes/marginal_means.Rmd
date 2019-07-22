@@ -127,13 +127,13 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
   
   geom_line(data = means_complex, aes(y = Median, group = 1), size = 1) +
-  geom_pointrange(data = means_complex, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "orange") +
+  geom_pointrange(data = means_complex, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "yellow") +
   theme_modern()
 ```
 
 That's interesting: it seems that when adjusting the model for petal characteristics, the differences between Species seems to be even bigger!
 
-**But are these differences "significant"?** Click here to read the tutorial on **contrast analysis**.
+**But are these differences "significant"?** Click [here to read the tutorial on **contrast analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html).
 
 
 # References

@@ -25,4 +25,6 @@ navbar:
         href: articles/marginal_means.html
       - text: 'Contrast analysis'
         href: articles/contrast_analysis.html
+      - text: 'Data grids'
+        href: articles/data_grid.html
 

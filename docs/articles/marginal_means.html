@@ -69,6 +69,9 @@
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
+    <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
   </ul>
 </li>
       </ul>
@@ -177,11 +180,11 @@
 <a class="sourceLine" id="cb9-6" title="6"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">data =</span> means, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"white"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb9-7" title="7"><span class="st">  </span></a>
 <a class="sourceLine" id="cb9-8" title="8"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> means_complex, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">group =</span> <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">data =</span> means_complex, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"orange"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-9" title="9"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">data =</span> means_complex, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"yellow"</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb9-10" title="10"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="marginal_means_files/figure-html/unnamed-chunk-9-1.png" width="3281.25"></p>
 <p>That’s interesting: it seems that when adjusting the model for petal characteristics, the differences between Species seems to be even bigger!</p>
-<p><strong>But are these differences “significant”?</strong> Click here to read the tutorial on <strong>contrast analysis</strong>.</p>
+<p><strong>But are these differences “significant”?</strong> Click <a href="https://easystats.github.io/estimate/articles/contrast_analysis.html">here to read the tutorial on <strong>contrast analysis</strong></a>.</p>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
