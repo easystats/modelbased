@@ -10,7 +10,7 @@ test_that("data_grid", {
 
 
   x1 <- data_grid(iris, target = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)
-  testthat::expect_equal(c(nrow(x1), ncol(x1)), c(53, 5))
+  testthat::expect_equal(c(nrow(x1), ncol(x1)), c(55, 5))
   x2 <- data_grid(iris[c("Species", "Sepal.Length")], length = 30, preserve_range = TRUE)
-  testthat::expect_equal(c(nrow(x2), ncol(x2)), c(53, 2))
+  testthat::expect_equal(c(nrow(x2), ncol(x2)), c(55, 2))
 })

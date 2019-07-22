@@ -139,8 +139,8 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
       for (level in unique(grid[[fac]])) {
         max_value <- max(x[x[[fac]] == level, num])
         min_value <- min(x[x[[fac]] == level, num])
-        rows_to_remove <- c(row.names(grid[grid[[fac]] == level & grid[[num]] <= min_value, ]))
-        rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[num]] >= max_value, ]))
+        rows_to_remove <- c(row.names(grid[grid[[fac]] == level & grid[[num]] < min_value, ]))
+        rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[num]] > max_value, ]))
         rows_to_keep <- rows_to_keep[!rows_to_keep %in% rows_to_remove]
       }
     }

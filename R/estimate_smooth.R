@@ -97,9 +97,10 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       for (col in names(groups)) {
         data <- data[data[[col]] == groups[row, col], ]
         # Smooth the curve a bit
-        smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
+        # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
         # Extract features
-        current_description <- .describe_smooth(smooth_values)
+        # current_description <- .describe_smooth(smooth_values)
+        current_description <- .describe_smooth(smoothing(smooth_data$Median))
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -116,9 +117,9 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     }
   } else {
     # Smooth the curve a bit
-    smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
+    # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
     # Extract features
-    description <- .describe_smooth(smooth_values)
+    description <- .describe_smooth(smoothing(smooth_data$Median))
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]
@@ -146,18 +147,18 @@ print.estimate_smooth <- .print_estimate
 #' @importFrom stats coef lm
 #' @keywords internal
 .describe_smooth <- function(smooth_values) {
-  zerocrossings <- zero_crossings(smooth_values)
+  inversions <- find_inversions(smooth_values)
 
   # Add beginning and end
-  if (all(is.na(zerocrossings))) {
+  if (all(is.na(inversions))) {
     parts <- c(1, length(smooth_values))
   } else {
-    if (zerocrossings[1] != 1) {
-      parts <- c(1, zerocrossings)
+    if (inversions[1] != 1) {
+      parts <- c(1, inversions)
     } else {
-      parts <- zerocrossings
+      parts <- inversions
     }
-    if (tail(zerocrossings, 1) < length(smooth_values)) {
+    if (tail(inversions, 1) < length(smooth_values)) {
       parts <- c(parts, length(smooth_values))
     }
   }
