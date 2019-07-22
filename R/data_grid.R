@@ -6,7 +6,7 @@
 #' @param length Length of numeric target variables.
 #' @param factors Type of summary for factors. Can be "combination" or "reference".
 #' @param numerics Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.
-#' @param preserve_range This removes the originally non-existing target numeric values of each factor levels.
+#' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observerations where the value of the numeric variable is originally not present in the range of its factor level.
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -17,7 +17,7 @@
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
 #' @importFrom stats na.omit
 #' @export
-data_grid <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = preserve_range, na.rm = TRUE, ...) {
+data_grid <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
   UseMethod("data_grid")
 }
 
@@ -64,10 +64,6 @@ data_grid.lmerMod <- data_grid.stanreg
 
 # dataframes ---------------------------------------------------------------
 
-#' @rdname data_grid
-#' @examples
-#' x <- iris
-#' target <- c("Sepal.Length", "Species")
 #' @export
 data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
   # Target
@@ -127,7 +123,6 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
             rows_to_remove <- c()
             rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] <= min_value, ]))
             rows_to_remove <- c(rows_to_remove, row.names(grid[grid[[fac]] == level & grid[[var]] >= max_value, ]))
-            print(rows_to_keep)
             rows_to_keep <- rows_to_keep[!rows_to_keep %in% rows_to_remove]
           }
         }

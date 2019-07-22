@@ -59,6 +59,7 @@ Click on the buttons above to access the package [**documentation**](https://eas
 
 - [**Marginal means**](https://easystats.github.io/estimate/articles/marginal_means.html)
 - [**Contrast analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html)
+- [**Data grids**](https://easystats.github.io/estimate/articles/data_grid.html)
 
 # Features
 

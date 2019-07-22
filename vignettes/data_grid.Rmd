@@ -1,0 +1,221 @@
+---
+title: "Data grids"
+output: 
+  github_document:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, data grid, reference grid, matrix grid]
+vignette: >
+  %\VignetteIndexEntry{Data grids}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = '')
+knitr::opts_chunk$set(comment=">",
+  dpi=450)
+options(digits=2)
+
+set.seed(333)
+```
+
+
+Sometimes, for instance for **visualization** purposes, we want to extract a **reference grid** (or *data grid*) of our dataset. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, **balanced**, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.
+
+## Simple linear regression
+
+
+For instance, let's fit a simple linear model that models the relationship between `Sepal.Width` and `Sepal.Length`.
+
+```{r message=FALSE, warning=FALSE}
+library(parameters)
+
+model <- lm(Sepal.Width ~ Sepal.Length, data = iris)
+model_parameters(model)
+```
+
+The most obvious way of representing this model is to plot the data points and add the regression line using the `geom_smooth` function from `ggplot2`:
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(see)
+
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  theme_modern()
+```
+
+But how to "access" the data of this regression line? One option is to select some values of of the predictor (`Sepal.Length`), and **predict** the response (`Sepal.Width`) using the model. Using these *x* and *y* points, we can then create the regression line.
+
+Let's try the `data_grid` function from the `estimate` package.
+
+```{r message=FALSE, warning=FALSE}
+library(estimate)
+
+data_grid(iris["Sepal.Length"])
+```
+
+If we pass a numeric variable to the function, it will return a vector of **equally spread points** (having the same range (*i.e.*, minimum and maximum) than the original data). The default **length** is 10, but we can adjust that through the `length` argument. Let's generate predictions using this reference grid of the predictor.
+
+```{r message=FALSE, warning=FALSE}
+newdata <- data_grid(iris["Sepal.Length"], length = 5)
+newdata$Predicted_Sepal.Width <- predict(model, newdata)
+newdata
+```
+
+Now that we have our *x* and *y* values, we can plot the line as an overlay to the actual data points:
+
+```{r message=FALSE, warning=FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point() +
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1, color = "red") +
+  theme_modern()
+```
+
+As we can see, it is quite similar to the previous plot. So, when can this be useful?
+
+## Mixed models
+
+Data grids are useful to represent more complex models. For instance, in the models above, the negative relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a **random effect** in a **mixed model**. In the model below, the "fixed" effects (the parameters of interest) will be adjusted ("averaged over") the random effects.
+
+
+```{r message=FALSE, warning=FALSE}
+library(lme4)
+
+model <- lmer(Sepal.Width ~ Sepal.Length + (1|Species), data = iris)
+model_parameters(model)
+```
+
+As we can see, when adjusting for the species, the relationship between the two variables **has become positive**! We can represent it using the same procedure as above (note the `re.form = NA` in the `predict` function to say that the random variable is not present in the new dataset).
+
+
+```{r message=FALSE, warning=FALSE}
+newdata <- data_grid(iris["Sepal.Length"], length = 5)
+newdata$Predicted_Sepal.Width <- predict(model, newdata, re.form = NA)
+
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
+  geom_point(aes(color = Species)) +
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  theme_modern()
+```
+
+## Fixed variables
+
+The above way of constructing the reference grid is almost equivalent to the following:
+
+```{r message=FALSE, warning=FALSE}
+newdata <- data_grid(iris, target = "Sepal.Length", length = 5)
+newdata
+```
+
+However, the other variables (present in the dataframe but not selected as `target`) have been "fixed", *i.e.*, maintained at some values. This is useful when we have other variables in the model which effect we are not interested in.
+
+By default, **factors** are fixed by their **"reference" level** and **numeric variables** are fixed at their **mean**. However, this can be easily changed:
+
+
+```{r message=FALSE, warning=FALSE}
+newdata <- data_grid(iris, target = "Sepal.Length", numerics = "min")
+newdata
+```
+
+
+## Target variables
+
+
+If more than one target variable is selected, `data_grid` will return the **combination** of them (*i.e.*, all unique values crossed together). This can be useful in the case of an **interaction** between a numeric variable and a factor.
+
+Let's visualise the regression line for each of the levels of `Species`:
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
+```
+```{r message=FALSE, warning=FALSE, eval=FALSE}
+newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 5)
+newdata$Predicted_Sepal.Width <- predict(model, newdata)
+newdata
+```
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 5)
+newdata$Predicted_Sepal.Width <- predict(model, newdata)
+newdata$Petal.Length <- NULL
+newdata
+```
+```{r message=FALSE, warning=FALSE}
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  theme_modern()
+```
+
+
+
+
+## Preserve range
+
+
+However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the **red line**. The `preserve_range` option allows to remove observations that are "outside" the original dataset (however, the length should be increased to improve the precision toward the edges):
+
+```{r message=FALSE, warning=FALSE}
+newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 100, preserve_range = TRUE)
+newdata$Predicted_Sepal.Width <- predict(model, newdata)
+
+ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
+  geom_point() +
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  theme_modern()
+```
+
+
+
+## Visualising an interaction between two numeric variables
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
+model_parameters(model)
+```
+
+
+This idea can also be used to visualise interactions between two numeric variables, **aka the nightmare of every psychologist**. One possibility is to basically represent the relationship between the response and one predictor **at a few representative values of the second predictor**.
+
+In this case, we will represent the regression line between `Sepal.Length` and `Petal.Length` and a 5 equally spaced values of `Petal.Length`, to get a feel of the interaction.
+
+We can obtain the right reference grid quite easily by chaining two `data_grid` together as follows:
+
+
+```{r message=FALSE, warning=FALSE}
+library(dplyr)
+
+newdata <- iris %>% 
+  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  data_grid("Petal.Width", length=5, numerics = "combination")
+```
+
+What did we do her? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating `10 * 10 = 100` rows. The next step was to reduce `Petal.Length` to a set of 5 values, but without touching the other variables (*i.e.*, keeping the 10 values created for `Petal.Length`). This was achieved using  `numerics = "combination"`.
+
+We can then visualise it as follows:
+
+```{r message=FALSE, warning=FALSE}
+newdata$Predicted_Sepal.Length <- predict(model, newdata)
+
+iris %>% 
+  ggplot(aes(x = Petal.Length, y = Sepal.Length, color = Petal.Width)) +
+  geom_point() +
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, group = Petal.Width), size = 1) + 
+  scale_color_viridis_c() +
+  theme_modern()
+```
+
+As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
+
+<!-- equally spaced values of a "target" variable, and all other variables “fixed” by their mean, median or reference level. The refdata of the psycho package was built to do just that. -->

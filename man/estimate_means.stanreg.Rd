@@ -44,8 +44,9 @@ library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
 estimate_means(model)
 
-model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
+model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
 estimate_means(model)
 estimate_means(model, modulate = "Sepal.Width")
+estimate_means(model, fixed = "Sepal.Width")
 }
 }
