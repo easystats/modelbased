@@ -4,12 +4,12 @@
 \alias{smoothing}
 \title{Smoothing a vector or a time series}
 \usage{
-smoothing(x, method = "loess", strength = 0.25)
+smoothing(x, method = "loess", strength = 0.2)
 }
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{method}{Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}.}
+\item{method}{Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}. A loess smoothing can be slow.}
 
 \item{strength}{Degree of smoothing. Either passed to \code{span} when \code{method = "loess"}.}
 }
@@ -19,6 +19,11 @@ Smoothing a vector or a time series.
 \examples{
 x <- sin(seq(0, 4 * pi, length.out = 100)) + rnorm(100, 0, 0.2)
 plot(x, type = "l")
-lines(smoothing(x, method = "loess"), type = "l", col = "red")
 lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+lines(smoothing(x, method = "loess"), type = "l", col = "red")
+
+x <- sin(seq(0, 4 * pi, length.out = 10000)) + rnorm(10000, 0, 0.2)
+plot(x, type = "l")
+lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+lines(smoothing(x, method = "loess"), type = "l", col = "red")
 }

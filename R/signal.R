@@ -93,18 +93,23 @@ find_inversions <- function(x) {
 #' Smoothing a vector or a time series.
 #'
 #' @param x A numeric vector.
-#' @param method Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}.
+#' @param method Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}. A loess smoothing can be slow.
 #' @param strength Degree of smoothing. Either passed to \code{span} when \code{method = "loess"}.
 #'
 #' @examples
 #' x <- sin(seq(0, 4 * pi, length.out = 100)) + rnorm(100, 0, 0.2)
 #' plot(x, type = "l")
-#' lines(smoothing(x, method = "loess"), type = "l", col = "red")
 #' lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+#' lines(smoothing(x, method = "loess"), type = "l", col = "red")
+#'
+#' x <- sin(seq(0, 4 * pi, length.out = 10000)) + rnorm(10000, 0, 0.2)
+#' plot(x, type = "l")
+#' lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
+#' lines(smoothing(x, method = "loess"), type = "l", col = "red")
 #' @importFrom stats predict loess smooth
 #' @export
-smoothing <- function(x, method = "loess", strength = 0.25){
-  if(strength == 0){
+smoothing <- function(x, method = "loess", strength = 0.2){
+  if(strength == 0 | strength == FALSE | is.null(method)){
     return(x)
   }
 

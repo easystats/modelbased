@@ -34,6 +34,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #'
 #' @inheritParams estimate_smooth
 #' @inheritParams estimate_slopes.stanreg
+#' @inheritParams estimate_response.stanreg
 #'
 #' @examples
 #' library(estimate)
@@ -56,10 +57,9 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "loess", smooth_strength = 0.2, centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
-
 
   if (is.null(smooth)) {
     smooth <- predictors[sapply(data[predictors], is.numeric)][1]
@@ -100,7 +100,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
         # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
         # Extract features
         # current_description <- .describe_smooth(smooth_values)
-        current_description <- .describe_smooth(smoothing(smooth_data$Median))
+        current_description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -119,7 +119,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     # Smooth the curve a bit
     # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
     # Extract features
-    description <- .describe_smooth(smoothing(smooth_data$Median))
+    description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]
