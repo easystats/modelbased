@@ -2,15 +2,15 @@
 % Please edit documentation in R/reshape_draws.R
 \name{reshape_draws}
 \alias{reshape_draws}
-\title{Reshape Estimations with Draws to long format}
+\title{Reshape estimations with Bayesian posterior draws to long format}
 \usage{
-reshape_draws(estimates)
+reshape_draws(draws)
 }
 \arguments{
-\item{estimates}{Estimates with posterior draws.}
+\item{draws}{data.frame containing posterior draws obtained from \code{estimate_response} or \code{estimate_link}.}
 }
 \description{
-Reshape Estimations with Draws to long format
+Reshape data.frame of estimations with Bayesian posterior draws to long format.
 }
 \examples{
 \dontrun{

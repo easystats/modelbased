@@ -21,12 +21,13 @@ navbar:
     href: reference/index.html
   - text: Tutorials
     menu:
+      - text: 'Data grids'
+        href: articles/data_grid.html
       - text: 'Marginal means'
         href: articles/marginal_means.html
       - text: 'Contrast analysis'
         href: articles/contrast_analysis.html
       - text: 'Use a model to make predictions'
         href: articles/predictions.html
-      - text: 'Data grids'
-        href: articles/data_grid.html
+      
 

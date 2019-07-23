@@ -34,7 +34,7 @@ This vignette will present how to generate predictions using `estimate`. Warning
 
 # Prediction against original data
 
-Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the `estimate_response()` function and its spinoff, `estimate_link()`.
+Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the `estimate_response()` function and its visualisation spinoff, `estimate_link()`.
 
 Let's start by fitting a Bayesian linear regression.
 
@@ -99,7 +99,7 @@ data %>%
 
 The new model generated much more accurate predictions (closer from the underlying regression line).
 
-# Response *vs.* link
+# Estimating response *vs.* link
 
 Rather than visualising the predictions made by a model, we are often interested in visualising the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/data_grid.html) of the model's data instead of the original dataset.
 
@@ -116,6 +116,41 @@ iris %>%
   theme_modern()
 ```
 
+
+However, you might notice that the **Credible Interval (CI) bands are quite big**. This is where `estimate_link()` is comming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting **the link** (*i.e.*, the regression line and the uncertainty interval associated *with this line*).
+
+In order to facililate visualisation of links, we added `estimate_link()` as a shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models, `predict = "link"` and some smoothing by default. `estimate_response()` would be used in the context of generating actual predictions for the existing or new data, whereas `estimate_link()` is more relevant in the context of visualisation and plotting.
+
+```{r message=FALSE, warning=FALSE}
+predicted <- estimate_link(model)
+
+iris %>% 
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
+  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  theme_modern()
+```
+
+# Adding individual draws
+
+Instead (or in addition to) representing credible/confidence intervals, the Bayesian framework also allow to represent every individual **posterior draw**. In this case, they correspond to all possible links estimated by the model. In it a nice insight into the "true" underlying probabilities in addition to summaries like the median or the CI.
+
+```{r message=FALSE, warning=FALSE}
+# Keep only 100 draws (keeping all the draws might be slower)
+predicted <- estimate_link(model, keep_draws = TRUE, draws = 100)
+
+# Format draws for plotting
+draws <- reshape_draws(predicted)
+draws$group <- paste0(draws$Draw_Group, draws$Species)
+
+iris %>% 
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_line(data = draws, aes(y = Draw, color = Species, group = group), alpha = 0.05) +
+  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  theme_modern()
+```
 
 
 
