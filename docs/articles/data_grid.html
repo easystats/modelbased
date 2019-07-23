@@ -64,13 +64,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -105,9 +108,9 @@
     
     
 <p>Sometimes, for instance for <strong>visualization</strong> purposes, we want to extract a <strong>reference grid</strong> (or <em>data grid</em>) of our dataset. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, <strong>balanced</strong>, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.</p>
-<div id="simple-linear-regression" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simple-linear-regression" class="anchor"></a>Simple linear regression</h2>
+<div id="simple-linear-regression" class="section level1">
+<h1 class="hasAnchor">
+<a href="#simple-linear-regression" class="anchor"></a>Simple linear regression</h1>
 <p>For instance, let’s fit a simple linear model that models the relationship between <code>Sepal.Width</code> and <code>Sepal.Length</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(parameters)</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
@@ -160,9 +163,9 @@
 <p><img src="data_grid_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
 <p>As we can see, it is quite similar to the previous plot. So, when can this be useful?</p>
 </div>
-<div id="mixed-models" class="section level2">
-<h2 class="hasAnchor">
-<a href="#mixed-models" class="anchor"></a>Mixed models</h2>
+<div id="mixed-models" class="section level1">
+<h1 class="hasAnchor">
+<a href="#mixed-models" class="anchor"></a>Mixed models</h1>
 <p>Data grids are useful to represent more complex models. For instance, in the models above, the negative relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a <strong>random effect</strong> in a <strong>mixed model</strong>. In the model below, the “fixed” effects (the parameters of interest) will be adjusted (“averaged over”) the random effects.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(lme4)</a>
 <a class="sourceLine" id="cb9-2" title="2"></a>
@@ -182,9 +185,9 @@
 <a class="sourceLine" id="cb11-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="data_grid_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 </div>
-<div id="fixed-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#fixed-variables" class="anchor"></a>Fixed variables</h2>
+<div id="fixed-variables" class="section level1">
+<h1 class="hasAnchor">
+<a href="#fixed-variables" class="anchor"></a>Fixed variables</h1>
 <p>The above way of constructing the reference grid is almost equivalent to the following:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/data_grid.html">data_grid</a></span>(iris, <span class="dt">target =</span> <span class="st">"Sepal.Length"</span>, <span class="dt">length =</span> <span class="dv">5</span>)</a>
 <a class="sourceLine" id="cb12-2" title="2">newdata</a></code></pre></div>
@@ -210,9 +213,9 @@
 &gt; 9           7.5           2            1         0.1  setosa
 &gt; 10          7.9           2            1         0.1  setosa</code></pre>
 </div>
-<div id="target-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#target-variables" class="anchor"></a>Target variables</h2>
+<div id="target-variables" class="section level1">
+<h1 class="hasAnchor">
+<a href="#target-variables" class="anchor"></a>Target variables</h1>
 <p>If more than one target variable is selected, <code>data_grid</code> will return the <strong>combination</strong> of them (<em>i.e.</em>, all unique values crossed together). This can be useful in the case of an <strong>interaction</strong> between a numeric variable and a factor.</p>
 <p>Let’s visualise the regression line for each of the levels of <code>Species</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a></code></pre></div>
@@ -241,9 +244,9 @@
 <a class="sourceLine" id="cb19-4" title="4"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="data_grid_files/figure-html/unnamed-chunk-14-1.png" width="3281.25"></p>
 </div>
-<div id="preserve-range" class="section level2">
-<h2 class="hasAnchor">
-<a href="#preserve-range" class="anchor"></a>Preserve range</h2>
+<div id="preserve-range" class="section level1">
+<h1 class="hasAnchor">
+<a href="#preserve-range" class="anchor"></a>Preserve range</h1>
 <p>However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the <strong>red line</strong>. The <code>preserve_range</code> option allows to remove observations that are “outside” the original dataset (however, the length should be increased to improve the precision toward the edges):</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/data_grid.html">data_grid</a></span>(iris, <span class="dt">target =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span>), <span class="dt">length =</span> <span class="dv">100</span>, <span class="dt">preserve_range =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb20-2" title="2">newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/predict">predict</a></span>(model, newdata)</a>
@@ -254,9 +257,9 @@
 <a class="sourceLine" id="cb20-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="data_grid_files/figure-html/unnamed-chunk-15-1.png" width="3281.25"></p>
 </div>
-<div id="visualising-an-interaction-between-two-numeric-variables" class="section level2">
-<h2 class="hasAnchor">
-<a href="#visualising-an-interaction-between-two-numeric-variables" class="anchor"></a>Visualising an interaction between two numeric variables</h2>
+<div id="visualising-an-interaction-between-two-numeric-variables" class="section level1">
+<h1 class="hasAnchor">
+<a href="#visualising-an-interaction-between-two-numeric-variables" class="anchor"></a>Visualising an interaction between two numeric variables</h1>
 <div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/lm">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Length <span class="op">*</span><span class="st"> </span>Petal.Width , <span class="dt">data =</span> iris)</a>
 <a class="sourceLine" id="cb21-2" title="2"><span class="kw">model_parameters</span>(model)</a></code></pre></div>
 <pre><code>&gt; Parameter                  | Coefficient |   SE |         95% CI |     t |  df |      p | Coefficient (std.)

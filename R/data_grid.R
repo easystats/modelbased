@@ -111,7 +111,6 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
   # Preserve range
   grid <- .preserve_range(grid, x, preserve_range)
-
 }
 
 
@@ -119,8 +118,8 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
 #' @keywords internal
-.preserve_range <- function(grid, x, preserve_range = TRUE){
-  if(preserve_range == FALSE){
+.preserve_range <- function(grid, x, preserve_range = TRUE) {
+  if (preserve_range == FALSE) {
     return(grid)
   }
 
@@ -129,13 +128,13 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
   nums <- names(grid[cols])[sapply(grid[cols], is.numeric)]
   facs <- names(grid[cols])[!names(grid[cols]) %in% nums]
 
-  if(length(facs) == 0 | length(nums) == 0){
+  if (length(facs) == 0 | length(nums) == 0) {
     return(grid)
   }
 
   rows_to_keep <- row.names(grid)
-  for(fac in facs){
-    for(num in nums){
+  for (fac in facs) {
+    for (num in nums) {
       for (level in unique(grid[[fac]])) {
         max_value <- max(x[x[[fac]] == level, num])
         min_value <- min(x[x[[fac]] == level, num])

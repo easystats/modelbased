@@ -100,13 +100,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -144,7 +147,8 @@
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>, <span class='kw'>smooth</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>200</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>,
+  <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0.2</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,11 +167,19 @@
     </tr>
     <tr>
       <th>length</th>
-      <td><p>Length of numeric target variables that applies to <code><a href='data_grid.html'>data_grid</a></code>.</p></td>
+      <td><p>Passed to <code><a href='data_grid.html'>data_grid</a></code> if <code>data = "grid"</code>.</p></td>
     </tr>
     <tr>
       <th>transform</th>
       <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
+    </tr>
+    <tr>
+      <th>smooth_method</th>
+      <td><p>As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for <code><a href='smoothing.html'>smoothing</a></code>. <code>smooth_strength = 0</code> corresponds to no smoothing.</p></td>
+    </tr>
+    <tr>
+      <th>smooth_strength</th>
+      <td><p>See above the description for <code>smooth_method</code> and see arguments for <code><a href='smoothing.html'>smoothing</a></code>.</p></td>
     </tr>
     <tr>
       <th>centrality</th>

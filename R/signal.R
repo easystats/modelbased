@@ -10,7 +10,7 @@
     stop("'interval' must be a vector of length 2")
   }
   if (!is.numeric(lower) || !is.numeric(upper) || lower >=
-      upper) {
+    upper) {
     stop("lower < upper  is not fulfilled")
   }
 
@@ -108,17 +108,17 @@ find_inversions <- function(x) {
 #' lines(smoothing(x, method = "loess"), type = "l", col = "red")
 #' @importFrom stats predict loess smooth
 #' @export
-smoothing <- function(x, method = "loess", strength = 0.2){
-  if(strength == 0 | strength == FALSE | is.null(method)){
+smoothing <- function(x, method = "loess", strength = 0.2) {
+  if (strength == 0 | strength == FALSE | is.null(method)) {
     return(x)
   }
 
   method <- match.arg(method, c("loess", "smooth"))
-  if(method == "loess"){
+  if (method == "loess") {
     predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
-  } else if(method == "smooth"){
+  } else if (method == "smooth") {
     smooth(x)
-  } else{
+  } else {
     stop('method must be one of c("loess")')
   }
 }

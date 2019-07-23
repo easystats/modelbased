@@ -60,7 +60,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
       data <- data_grid(model, random = random, length = length, preserve_range = preserve_range, ...)
-    } else{
+    } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }

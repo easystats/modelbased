@@ -70,5 +70,3 @@ as.numeric_ifnumeric <- function(x) {
     }
   }
 }
-
-

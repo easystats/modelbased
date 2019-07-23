@@ -34,7 +34,7 @@ Warning: we will go **full Bayesian** in this vignette. If you're not familiar w
 
 # Testing pairwise differences
 
-In the **previous tutorial** (ADD LINK), we computed marginal at the 3 different `Species` levels from the  [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However, one might also want to **statistically test** the differences between each levels, which can be achieved through **contrast analysis**. Although the procedure is much more powerful, its aim is somehow analog to the ***post hoc*** analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.
+In the [**previous tutorial**](https://easystats.github.io/estimate/articles/marginal_means.html), we computed marginal at the 3 different `Species` levels from the  [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However, one might also want to **statistically test** the differences between each levels, which can be achieved through **contrast analysis**. Although the procedure is much more powerful, its aim is somehow analog to the ***post hoc*** analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.
 
 Let's do that based on the simple model from the previous tutorial:
 
