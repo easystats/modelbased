@@ -196,7 +196,7 @@ print.estimate_smooth <- .print_estimate
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
-      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+      smoothness <- parameters::check_smoothness(segment, method = "cor", lag = 0.1)
     }
   }
 
