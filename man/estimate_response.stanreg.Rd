@@ -8,25 +8,28 @@
 \title{Generates predictions for Bayesian models}
 \usage{
 \method{estimate_response}{stanreg}(model, data = NULL,
-  transform = "response", random = FALSE, length = 10,
-  predict = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "response",
+  smooth_method = "loess", smooth_strength = 0, keep_draws = FALSE,
+  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
+  ci_method = "hdi", ...)
 
 \method{estimate_link}{stanreg}(model, data = "grid",
-  transform = "response", random = FALSE, length = 10,
-  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "link", smooth_strength = 0.2,
+  keep_draws = FALSE, draws = NULL, seed = NULL,
   centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 
 \method{estimate_response}{data.frame}(model, data = NULL,
-  transform = "response", random = FALSE, length = 10,
-  predict = "response", keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "response", smooth_strength = 0,
+  keep_draws = FALSE, draws = NULL, seed = NULL,
+  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 
 \method{estimate_link}{data.frame}(model, data = "grid",
-  transform = "response", random = FALSE, length = 10,
-  predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL,
+  transform = "response", random = FALSE, length = 25,
+  preserve_range = TRUE, predict = "link", smooth_strength = 0.2,
+  keep_draws = FALSE, draws = NULL, seed = NULL,
   centrality = "median", ci = 0.89, ci_method = "hdi", ...)
 }
 \arguments{
@@ -38,9 +41,15 @@
 
 \item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
-\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
+\item{length}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
+
+\item{preserve_range}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
+
+\item{smooth_method}{As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_strength = 0} corresponds to no smoothing.}
+
+\item{smooth_strength}{See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.}
 
 \item{keep_draws}{If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).}
 
@@ -53,8 +62,8 @@
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"hdi"} (default, see \code{\link{hdi}}) or \code{"quantile"}
-(see \code{\link{ci}}).}
+\code{"HDI"} (default, see \code{\link{hdi}}) or \code{"ETI"}
+(see \code{\link{eti}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }

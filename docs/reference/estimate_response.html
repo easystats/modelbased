@@ -43,7 +43,7 @@
 
 <meta property="og:description" content="See the documentation for your object's class:
 Bayesian models (stanreg and brms)
-" />
+estimate_link is a shortcut to estimate_response with data = &quot;grid&quot; and, for Bayesian models, predict = &quot;link&quot; and smooth_strength = 0.2. estimate_response would be used in the context of generating actual predictions for the existing or new data, whereas estimate_link is more relevant in the context of visualisation and plotting." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -102,13 +102,16 @@ Bayesian models (stanreg and brms)
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -142,14 +145,15 @@ Bayesian models (stanreg and brms)
     
     <p>See the documentation for your object's class:</p><ul>
 <li><p><a href='estimate_response.stanreg.html'>Bayesian models (stanreg and brms)</a></p></li>
-</ul>
+</ul><p><code>estimate_link</code> is a shortcut to <code>estimate_response</code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and <code>smooth_strength = 0.2</code>. <code>estimate_response</code> would be used in the context of generating actual predictions for the existing or new data, whereas <code>estimate_link</code> is more relevant in the context of visualisation and plotting.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>estimate_response</span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
-  <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='no'>...</span>)
+  <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
-<span class='fu'>estimate_link</span>(<span class='no'>model</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>estimate_link</span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>, <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -172,7 +176,11 @@ Bayesian models (stanreg and brms)
     </tr>
     <tr>
       <th>length</th>
-      <td><p>Length of numeric target variables that applies to <code><a href='data_grid.html'>data_grid</a></code>.</p></td>
+      <td><p>Passed to <code><a href='data_grid.html'>data_grid</a></code> if <code>data = "grid"</code>.</p></td>
+    </tr>
+    <tr>
+      <th>preserve_range</th>
+      <td><p>Passed to <code><a href='data_grid.html'>data_grid</a></code> if <code>data = "grid"</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>

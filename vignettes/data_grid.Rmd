@@ -32,7 +32,7 @@ set.seed(333)
 
 Sometimes, for instance for **visualization** purposes, we want to extract a **reference grid** (or *data grid*) of our dataset. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, **balanced**, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.
 
-## Simple linear regression
+# Simple linear regression
 
 
 For instance, let's fit a simple linear model that models the relationship between `Sepal.Width` and `Sepal.Length`.
@@ -85,7 +85,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 
 As we can see, it is quite similar to the previous plot. So, when can this be useful?
 
-## Mixed models
+# Mixed models
 
 Data grids are useful to represent more complex models. For instance, in the models above, the negative relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a **random effect** in a **mixed model**. In the model below, the "fixed" effects (the parameters of interest) will be adjusted ("averaged over") the random effects.
 
@@ -110,7 +110,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   theme_modern()
 ```
 
-## Fixed variables
+# Fixed variables
 
 The above way of constructing the reference grid is almost equivalent to the following:
 
@@ -130,7 +130,7 @@ newdata
 ```
 
 
-## Target variables
+# Target variables
 
 
 If more than one target variable is selected, `data_grid` will return the **combination** of them (*i.e.*, all unique values crossed together). This can be useful in the case of an **interaction** between a numeric variable and a factor.
@@ -161,7 +161,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 
 
-## Preserve range
+# Preserve range
 
 
 However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the **red line**. The `preserve_range` option allows to remove observations that are "outside" the original dataset (however, the length should be increased to improve the precision toward the edges):
@@ -178,7 +178,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 
 
-## Visualising an interaction between two numeric variables
+# Visualising an interaction between two numeric variables
 
 ```{r message=FALSE, warning=FALSE}
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)

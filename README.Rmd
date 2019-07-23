@@ -57,9 +57,10 @@ library("estimate")
 
 Click on the buttons above to access the package [**documentation**](https://easystats.github.io/estimate/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
 
+- [**Data grids**](https://easystats.github.io/estimate/articles/data_grid.html)
 - [**Marginal means**](https://easystats.github.io/estimate/articles/marginal_means.html)
 - [**Contrast analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html)
-- [**Data grids**](https://easystats.github.io/estimate/articles/data_grid.html)
+- [**Use a model to make predictions**](https://easystats.github.io/estimate/articles/predictions.html)
 
 # Features
 
@@ -68,7 +69,7 @@ The package is built around 5 main functions:
 - [`estimate_means()`](https://easystats.github.io/estimate/reference/estimate_means.html): Estimates the average values at each factor levels
 - [`estimate_contrasts()`](https://easystats.github.io/estimate/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/estimate/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels
-- [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable based on the model
+- [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable using the model
 - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
 These functions are powered by the [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html) function, a smart tool for guessing the appropriate reference grid.

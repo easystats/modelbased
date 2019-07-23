@@ -5,7 +5,8 @@
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
 \method{estimate_smooth}{stanreg}(model, smooth = NULL, levels = NULL,
-  length = 200, transform = "response", centrality = "median", ...)
+  length = 200, transform = "response", smooth_method = "loess",
+  smooth_strength = 0.2, centrality = "median", ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -14,9 +15,13 @@
 
 \item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
-\item{length}{Length of numeric target variables that applies to \code{\link{data_grid}}.}
+\item{length}{Passed to \code{\link{data_grid}} if \code{data = "grid"}.}
 
 \item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+
+\item{smooth_method}{As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_strength = 0} corresponds to no smoothing.}
+
+\item{smooth_strength}{See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.}
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 

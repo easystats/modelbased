@@ -1,6 +1,8 @@
-#' Reshape Estimations with Draws to long format
+#' Reshape estimations with Bayesian posterior draws to long format
 #'
-#' @param estimates Estimates with posterior draws.
+#' Reshape data.frame of estimations with Bayesian posterior draws to long format.
+#'
+#' @param draws data.frame containing posterior draws obtained from \code{estimate_response} or \code{estimate_link}.
 #'
 #' @examples
 #' \dontrun{
@@ -11,16 +13,16 @@
 #' }
 #' @importFrom stats reshape
 #' @export
-reshape_draws <- function(estimates) {
-  estimates$Index <- 1:nrow(estimates)
-  long <- reshape(estimates,
-    varying = names(estimates)[grepl("Draw_", names(estimates))],
+reshape_draws <- function(draws) {
+  draws$Index <- 1:nrow(draws)
+  long <- reshape(draws,
+    varying = names(draws)[grepl("Draw_", names(draws))],
     idvar = "Index",
     v.names = "Draw",
-    timevar = "Draw_Index",
+    timevar = "Draw_Group",
     direction = "long"
   )
   row.names(long) <- NULL
 
-  return(long)
+  long
 }

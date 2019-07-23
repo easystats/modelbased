@@ -66,9 +66,10 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   # Summary
   contrasts <-
     bayestestR::describe_posterior(posteriors,
-                                   ci = ci, ci_method = ci_method,
-                                   centrality = centrality,
-                                   test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model)
+      ci = ci, ci_method = ci_method,
+      centrality = centrality,
+      test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
+    )
   if ("CI" %in% names(contrasts) & length(unique(contrasts$CI)) == 1) contrasts$CI <- NULL
   if ("ROPE_CI" %in% names(contrasts) & length(unique(contrasts$ROPE_CI)) == 1) contrasts$ROPE_CI <- NULL
   contrasts$ROPE_low <- contrasts$ROPE_high <- NULL

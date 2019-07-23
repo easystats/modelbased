@@ -41,7 +41,7 @@
   
 <meta property="og:title" content="Find zero crossings of a vector — zero_crossings" />
 
-<meta property="og:description" content="Find zero crossings of a vector" />
+<meta property="og:description" content="Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -100,13 +100,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -132,13 +135,13 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find zero crossings of a vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/utils.R'><code>R/utils.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/signal.R'><code>R/signal.R</code></a></small>
     <div class="hidden name"><code>zero_crossings.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Find zero crossings of a vector</p>
+    <p>Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.</p>
     
     </div>
 
@@ -160,7 +163,7 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/Trig'>sin</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/seq'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span> * <span class='no'>pi</span>, <span class='kw'>length.out</span> <span class='kw'>=</span> <span class='fl'>100</span>))
-<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='zero_crossings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>zero_crossings</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1] 12.87478 37.62484 62.37516 87.12522</div></pre>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/graphics/topics/plot'>plot</a></span>(<span class='no'>x</span>)</div><div class='img'><img src='zero_crossings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>zero_crossings</span>(<span class='no'>x</span>)</div><div class='output co'>#&gt; [1]  1.00000 25.74975 50.50000 75.25025</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

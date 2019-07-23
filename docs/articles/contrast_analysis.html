@@ -64,13 +64,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -108,7 +111,7 @@
 <div id="testing-pairwise-differences" class="section level1">
 <h1 class="hasAnchor">
 <a href="#testing-pairwise-differences" class="anchor"></a>Testing pairwise differences</h1>
-<p>In the <strong>previous tutorial</strong> (ADD LINK), we computed marginal at the 3 different <code>Species</code> levels from the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set"><code>iris</code></a> dataset. However, one might also want to <strong>statistically test</strong> the differences between each levels, which can be achieved through <strong>contrast analysis</strong>. Although the procedure is much more powerful, its aim is somehow analog to the <strong><em>post hoc</em></strong> analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.</p>
+<p>In the <a href="https://easystats.github.io/estimate/articles/marginal_means.html"><strong>previous tutorial</strong></a>, we computed marginal at the 3 different <code>Species</code> levels from the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set"><code>iris</code></a> dataset. However, one might also want to <strong>statistically test</strong> the differences between each levels, which can be achieved through <strong>contrast analysis</strong>. Although the procedure is much more powerful, its aim is somehow analog to the <strong><em>post hoc</em></strong> analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.</p>
 <p>Let’s do that based on the simple model from the previous tutorial:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(see)</a>

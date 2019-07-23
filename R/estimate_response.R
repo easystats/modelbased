@@ -4,16 +4,19 @@
 #' \itemize{
 #'  \item{\link[=estimate_response.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
+#' \code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"} and, for Bayesian models, \code{predict = "link"} and \code{smooth_strength = 0.2}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting.
+#'
 #'
 #' @inheritParams estimate_contrasts
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{data_grid}}).
 #' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
-#' @param length Length of numeric target variables that applies to \code{\link{data_grid}}.
+#' @param length Passed to \code{\link{data_grid}} if \code{data = "grid"}.
+#' @param preserve_range Passed to \code{\link{data_grid}} if \code{data = "grid"}.
 #'
 
 #'
 #' @export
-estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, ...) {
+estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
 }
 
@@ -25,6 +28,8 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.
+#' @param smooth_method As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_strength = 0} corresponds to no smoothing.
+#' @param smooth_strength See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.
 #' @param keep_draws If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
@@ -43,7 +48,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' }
 #'
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", smooth_method = "loess", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
@@ -54,7 +59,9 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
-      data <- data_grid(model, random = random, length = length, ...)
+      data <- data_grid(model, random = random, length = length, preserve_range = preserve_range, ...)
+    } else {
+      stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }
 
@@ -98,6 +105,9 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     prediction <- cbind(prediction, posteriors)
   }
 
+  # Smoothing
+  prediction <- as.data.frame(sapply(prediction, method = smooth_method, smoothing, strength = smooth_strength))
+
   # Add predictors
   prediction <- cbind(data, prediction)
 
@@ -132,7 +142,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 #' @rdname estimate_response
 #' @export
 #' @export
-estimate_link <- function(model, ...) {
+estimate_link <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_link")
 }
 
@@ -141,20 +151,20 @@ estimate_link <- function(model, ...) {
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.stanreg <- function(model, data = "grid", transform = "response", random = FALSE, length = 10, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_link.stanreg <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_strength = 0.2, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   estimate_response(model, data = data, predict = predict, transform = transform, random = random, length = length, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 10, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 10, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_strength = 0.2, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }

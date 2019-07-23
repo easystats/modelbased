@@ -3,7 +3,9 @@ authors:
     href: https://dominiquemakowski.github.io/
   Daniel Lüdecke:
     href: https://github.com/strengejacke
-
+  Mattan S. Ben-Shachar:
+    href: https://github.com/mattansb
+    
 template:
   params:
     bootswatch: cosmo
@@ -21,10 +23,13 @@ navbar:
     href: reference/index.html
   - text: Tutorials
     menu:
+      - text: 'Data grids'
+        href: articles/data_grid.html
       - text: 'Marginal means'
         href: articles/marginal_means.html
       - text: 'Contrast analysis'
         href: articles/contrast_analysis.html
-      - text: 'Data grids'
-        href: articles/data_grid.html
+      - text: 'Use a model to make predictions'
+        href: articles/predictions.html
+      
 

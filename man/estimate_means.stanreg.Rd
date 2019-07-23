@@ -26,8 +26,8 @@
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"hdi"} (default, see \code{\link{hdi}}) or \code{"quantile"}
-(see \code{\link{ci}}).}
+\code{"HDI"} (default, see \code{\link{hdi}}) or \code{"ETI"}
+(see \code{\link{eti}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }

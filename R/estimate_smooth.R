@@ -34,6 +34,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #'
 #' @inheritParams estimate_smooth
 #' @inheritParams estimate_slopes.stanreg
+#' @inheritParams estimate_response.stanreg
 #'
 #' @examples
 #' library(estimate)
@@ -56,10 +57,9 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "loess", smooth_strength = 0.2, centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
-
 
   if (is.null(smooth)) {
     smooth <- predictors[sapply(data[predictors], is.numeric)][1]
@@ -97,9 +97,10 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       for (col in names(groups)) {
         data <- data[data[[col]] == groups[row, col], ]
         # Smooth the curve a bit
-        smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
+        # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
         # Extract features
-        current_description <- .describe_smooth(smooth_values)
+        # current_description <- .describe_smooth(smooth_values)
+        current_description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -116,9 +117,9 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     }
   } else {
     # Smooth the curve a bit
-    smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
+    # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
     # Extract features
-    description <- .describe_smooth(smooth_values)
+    description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]
@@ -146,18 +147,18 @@ print.estimate_smooth <- .print_estimate
 #' @importFrom stats coef lm
 #' @keywords internal
 .describe_smooth <- function(smooth_values) {
-  zerocrossings <- zero_crossings(smooth_values)
+  inversions <- find_inversions(smooth_values)
 
   # Add beginning and end
-  if (all(is.na(zerocrossings))) {
+  if (all(is.na(inversions))) {
     parts <- c(1, length(smooth_values))
   } else {
-    if (zerocrossings[1] != 1) {
-      parts <- c(1, zerocrossings)
+    if (inversions[1] != 1) {
+      parts <- c(1, inversions)
     } else {
-      parts <- zerocrossings
+      parts <- inversions
     }
-    if (tail(zerocrossings, 1) < length(smooth_values)) {
+    if (tail(inversions, 1) < length(smooth_values)) {
       parts <- c(parts, length(smooth_values))
     }
   }
@@ -195,7 +196,7 @@ print.estimate_smooth <- .print_estimate
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
-      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+      smoothness <- parameters::check_smoothness(segment, method = "cor", lag = 0.1)
     }
   }
 

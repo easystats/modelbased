@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Reshape Estimations with Draws to long format — reshape_draws • estimate</title>
+<title>Reshape estimations with Bayesian posterior draws to long format — reshape_draws • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -39,9 +39,9 @@
 
   <link href="../extra.css" rel="stylesheet">
   
-<meta property="og:title" content="Reshape Estimations with Draws to long format — reshape_draws" />
+<meta property="og:title" content="Reshape estimations with Bayesian posterior draws to long format — reshape_draws" />
 
-<meta property="og:description" content="Reshape Estimations with Draws to long format" />
+<meta property="og:description" content="Reshape data.frame of estimations with Bayesian posterior draws to long format." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -100,13 +100,16 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/data_grid.html">Data grids</a>
+    </li>
+    <li>
       <a href="../articles/marginal_means.html">Marginal means</a>
     </li>
     <li>
       <a href="../articles/contrast_analysis.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/predictions.html">Use a model to make predictions</a>
     </li>
   </ul>
 </li>
@@ -131,25 +134,25 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Reshape Estimations with Draws to long format</h1>
+    <h1>Reshape estimations with Bayesian posterior draws to long format</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/reshape_draws.R'><code>R/reshape_draws.R</code></a></small>
     <div class="hidden name"><code>reshape_draws.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Reshape Estimations with Draws to long format</p>
+    <p>Reshape data.frame of estimations with Bayesian posterior draws to long format.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>reshape_draws</span>(<span class='no'>estimates</span>)</pre>
+    <pre class="usage"><span class='fu'>reshape_draws</span>(<span class='no'>draws</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>estimates</th>
-      <td><p>Estimates with posterior draws.</p></td>
+      <th>draws</th>
+      <td><p>data.frame containing posterior draws obtained from <code>estimate_response</code> or <code>estimate_link</code>.</p></td>
     </tr>
     </table>
     
