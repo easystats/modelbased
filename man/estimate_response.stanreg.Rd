@@ -63,7 +63,7 @@
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link{hdi}}) or \code{"ETI"}
-(see \code{\link{eti}}).}
+(see \code{eti}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }

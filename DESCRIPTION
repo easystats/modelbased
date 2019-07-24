@@ -30,12 +30,16 @@ Imports:
 	emmeans,
 	coda
 Suggests:
-	knitr,
-	rmarkdown,
-	testthat,
 	covr,
+	dplyr,
+	gganimate,
+	ggplot2,
+	knitr,
+	lme4,
+	rmarkdown,
 	rstanarm,
-	lme4
+	see,
+	testthat
 Remotes: 
 	easystats/parameters
 License: GPL-3

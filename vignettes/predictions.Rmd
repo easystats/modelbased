@@ -132,6 +132,10 @@ iris %>%
   theme_modern()
 ```
 
+
+# Adding individual draws
+
+
 # Adding individual draws
 
 Instead (or in addition to) representing credible/confidence intervals, the Bayesian framework also allow to represent every individual **posterior draw**. In this case, they correspond to all possible links estimated by the model. In it a nice insight into the "true" underlying probabilities in addition to summaries like the median or the CI.
@@ -152,7 +156,25 @@ iris %>%
   theme_modern()
 ```
 
+Animated hypothetical outcome plots can also be easily created with `gganimate`:
 
+```{r message=FALSE, warning=FALSE, eval = FALSE}
+library(gganimate)
+
+p <- iris %>% 
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_line(data = draws, aes(y = Draw, color = Species, group = group)) +
+  theme_modern() + 
+  transition_states(Draw_Group, 0, 1) +
+  shadow_mark(past = TRUE, future = TRUE, alpha = 1/20, color = "grey")
+
+gganimate::animate(p)
+```
+```{r echo=FALSE, fig.align='center', out.width="80%"}
+# anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
+knitr::include_graphics("https://github.com/easystats/easystats/raw/master/man/figures/estimate/gganimate_figure.gif")
+```
 
 
 # References
