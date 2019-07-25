@@ -53,9 +53,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  means <- bayestestR::describe_posterior(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
-  if ("CI" %in% names(means) & length(unique(means$CI)) == 1) means$CI <- NULL
-
+  means <- .summarize_posteriors(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
 
   # Format means
   levelcols <- strsplit(as.character(means$Parameter), ", ")

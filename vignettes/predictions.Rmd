@@ -61,7 +61,7 @@ predicted <- estimate_response(model)
 head(predicted)
 ```
 
-The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for **each of the value of the original dataframe** (used for fitting the model). Hence, we can simply add the prediction column (`Median`) to the original dataset and plot the original against the predicted data.
+The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for **each of the value of the original dataframe** (used for fitting the model). Hence, we can simply add the prediction column (`Median`) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -72,6 +72,7 @@ data$Predicted <- predicted$Median
 
 data %>% 
   ggplot(aes(x = Petal.Length, y = Predicted)) +
+  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point() +
   theme_modern()
 ```
@@ -92,6 +93,7 @@ We could now plot the second observations, based on a more complex model, as a r
 ```{r message=FALSE, warning=FALSE}
 data %>% 
   ggplot() +
+  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
   geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
   theme_modern()
@@ -133,7 +135,23 @@ iris %>%
 ```
 
 
-# Adding individual draws
+# Different CI levels
+
+The purpose of CI bands is to provide information about the uncertainty related to the estimation. In the Bayesian framework, the credible intervals are directly related to the shape of the posterior distribution. Thus, showing different CI levels (for instance, 69\%, 89\% and 99\%).
+
+```{r message=FALSE, warning=FALSE}
+predicted <- estimate_link(model, ci = c(0.69, .89, 0.99))
+
+iris %>%
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_99, ymax = CI_high_99, fill = Species), alpha = 0.2) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_89, ymax = CI_high_89, fill = Species), alpha = 0.3) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_69, ymax = CI_high_69, fill = Species), alpha = 0.3) +
+  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  theme_modern()
+```
+
 
 
 # Adding individual draws
@@ -173,7 +191,16 @@ gganimate::animate(p)
 ```
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 # anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
-knitr::include_graphics("https://github.com/easystats/easystats/raw/master/man/figures/estimate/gganimate_figure.gif")
+
+if (knitr::is_html_output()) {
+    knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
+} else {
+    iris %>% 
+      ggplot(aes(x = Sepal.Length)) +
+      geom_point(aes(y = Petal.Length, color = Species)) +
+      geom_line(data = draws, aes(y = Draw, color = Species, group = group)) +
+      theme_modern()
+}
 ```
 
 

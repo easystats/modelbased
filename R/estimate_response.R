@@ -93,9 +93,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   }
 
   # Summary
-  prediction <- as.data.frame(posteriors)
-  prediction <- bayestestR::describe_posterior(prediction, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
-  if ("CI" %in% names(prediction) & length(unique(prediction$CI)) == 1) prediction$CI <- NULL
+  prediction <- .summarize_posteriors(as.data.frame(posteriors), ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
   prediction$Parameter <- NULL
 
   # Draws

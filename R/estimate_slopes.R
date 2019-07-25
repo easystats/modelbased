@@ -74,22 +74,13 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
   # Remove the posterior summary
   params <- params[names(params) %in% names(data)]
-  # params <- params[, 1:(ncol(params)-3)]
-
-  # Posteriors
-  # posteriors <- emmeans::as.mcmc.emmGrid(trends)
-  # posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  slopes <- bayestestR::describe_posterior(trends,
+  slopes <- .summarize_posteriors(trends,
     ci = ci, ci_method = ci_method,
     centrality = centrality,
     test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
   )
-  if ("CI" %in% names(slopes) & length(unique(slopes$CI)) == 1) slopes$CI <- NULL
-  if ("ROPE_CI" %in% names(slopes) & length(unique(slopes$ROPE_CI)) == 1) slopes$ROPE_CI <- NULL
-  slopes$ROPE_low <- slopes$ROPE_high <- NULL
-
   slopes$Parameter <- NULL
   slopes <- cbind(params, slopes)
 

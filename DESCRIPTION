@@ -25,7 +25,7 @@ BugReports: https://github.com/easystats/estimate/issues
 Description: Implements model-based estimations, used in the computation of marginal means, contrast analysis and predictions.
 Imports:
 	insight (>= 0.4.0),
-	bayestestR (>= 0.2.2),
+	bayestestR (>= 0.2.4),
 	parameters,
 	emmeans,
 	coda
@@ -41,6 +41,7 @@ Suggests:
 	see,
 	testthat
 Remotes: 
+	easystats/bayestestR
 	easystats/parameters
 License: GPL-3
 Encoding: UTF-8
