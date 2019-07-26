@@ -4,7 +4,7 @@
 \alias{smoothing}
 \title{Smoothing a vector or a time series}
 \usage{
-smoothing(x, method = "loess", strength = 0.2)
+smoothing(x, method = "loess", strength = 0.25)
 }
 \arguments{
 \item{x}{A numeric vector.}

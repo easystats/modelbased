@@ -26,10 +26,12 @@ navbar:
       - text: 'Data grids'
         href: articles/data_grid.html
       - text: 'Marginal means'
-        href: articles/marginal_means.html
+        href: articles/estimate_means.html
       - text: 'Contrast analysis'
-        href: articles/contrast_analysis.html
+        href: articles/estimtae_contrasts.html
       - text: 'Use a model to make predictions'
-        href: articles/predictions.html
+        href: articles/estimate_response.html
+      - text: 'Describe non-linear curves'
+        href: articles/estimate_smooth.html
       
 

@@ -58,9 +58,10 @@ library("estimate")
 Click on the buttons above to access the package [**documentation**](https://easystats.github.io/estimate/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
 
 - [**Data grids**](https://easystats.github.io/estimate/articles/data_grid.html)
-- [**Marginal means**](https://easystats.github.io/estimate/articles/marginal_means.html)
-- [**Contrast analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html)
-- [**Use a model to make predictions**](https://easystats.github.io/estimate/articles/predictions.html)
+- [**Marginal means**](https://easystats.github.io/estimate/articles/estimate_means.html)
+- [**Contrast analysis**](https://easystats.github.io/estimate/articles/estimate_contrasts.html)
+- [**Use a model to make predictions**](https://easystats.github.io/estimate/articles/estimate_response.html)
+- [**Describe non-linear curves**](https://easystats.github.io/estimate/articles/estimate_smooth.html)
 
 # Features
 
@@ -139,7 +140,7 @@ estimate_link(model)
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(
   model %>% 
-    estimate_link(length=7),
+    estimate_link(length=7, smooth_strength = 0.3),
     digits=2)
 ```
 

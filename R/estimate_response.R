@@ -93,9 +93,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   }
 
   # Summary
-  prediction <- as.data.frame(posteriors)
-  prediction <- bayestestR::describe_posterior(prediction, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL, rope_full = NULL)
-  if ("CI" %in% names(prediction) & length(unique(prediction$CI)) == 1) prediction$CI <- NULL
+  prediction <- .summarize_posteriors(as.data.frame(posteriors), ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
   prediction$Parameter <- NULL
 
   # Draws
@@ -151,20 +149,20 @@ estimate_link <- function(model, data = "grid", transform = "response", random =
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.stanreg <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_strength = 0.2, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  estimate_response(model, data = data, predict = predict, transform = transform, random = random, length = length, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_link.stanreg <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0.25, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(model, data = data, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, smooth_method = smooth_method, smooth_strength = smooth_strength, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(data, data = model, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, smooth_method = smooth_method, smooth_strength = smooth_strength, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_strength = 0.2, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  estimate_response(data, data = model, transform = transform, random = random, length = length, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0.25, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+  estimate_response(data, data = model, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, smooth_method = smooth_method, smooth_strength = smooth_strength, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
