@@ -103,13 +103,16 @@
       <a href="../articles/data_grid.html">Data grids</a>
     </li>
     <li>
-      <a href="../articles/marginal_means.html">Marginal means</a>
+      <a href="../articles/estimate_means.html">Marginal means</a>
     </li>
     <li>
-      <a href="../articles/contrast_analysis.html">Contrast analysis</a>
+      <a href="../articles/estimtae_contrasts.html">Contrast analysis</a>
     </li>
     <li>
-      <a href="../articles/predictions.html">Use a model to make predictions</a>
+      <a href="../articles/estimate_response.html">Use a model to make predictions</a>
+    </li>
+    <li>
+      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
     </li>
   </ul>
 </li>
@@ -156,23 +159,26 @@
 <span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)
+  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>,
+  <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)
+  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>,
+  <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='st'>"grid"</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>,
-  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0.2</span>,
-  <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"link"</span>, <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>,
+  <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>, <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
+  <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">

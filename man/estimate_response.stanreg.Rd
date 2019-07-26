@@ -16,21 +16,24 @@
 
 \method{estimate_link}{stanreg}(model, data = "grid",
   transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_strength = 0.2,
-  keep_draws = FALSE, draws = NULL, seed = NULL,
-  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
+  preserve_range = TRUE, predict = "link", smooth_method = "loess",
+  smooth_strength = 0.25, keep_draws = FALSE, draws = NULL,
+  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
+  ...)
 
 \method{estimate_response}{data.frame}(model, data = NULL,
   transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "response", smooth_strength = 0,
-  keep_draws = FALSE, draws = NULL, seed = NULL,
-  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
+  preserve_range = TRUE, predict = "link", smooth_method = "loess",
+  smooth_strength = 0, keep_draws = FALSE, draws = NULL,
+  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
+  ...)
 
 \method{estimate_link}{data.frame}(model, data = "grid",
   transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_strength = 0.2,
-  keep_draws = FALSE, draws = NULL, seed = NULL,
-  centrality = "median", ci = 0.89, ci_method = "hdi", ...)
+  preserve_range = TRUE, predict = "link", smooth_method = "loess",
+  smooth_strength = 0.25, keep_draws = FALSE, draws = NULL,
+  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
+  ...)
 }
 \arguments{
 \item{model}{A statistical model.}

@@ -108,17 +108,23 @@ find_inversions <- function(x) {
 #' lines(smoothing(x, method = "loess"), type = "l", col = "red")
 #' @importFrom stats predict loess smooth
 #' @export
-smoothing <- function(x, method = "loess", strength = 0.2) {
+smoothing <- function(x, method = "loess", strength = 0.25) {
   if (strength == 0 | strength == FALSE | is.null(method)) {
     return(x)
   }
 
   method <- match.arg(method, c("loess", "smooth"))
   if (method == "loess") {
-    predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+    smoothed <- tryCatch({
+      predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+      }, warning = function(w) {
+        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
+        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+      })
   } else if (method == "smooth") {
-    smooth(x)
+    smoothed <- smooth(x)
   } else {
-    stop('method must be one of c("loess")')
+    stop('method must be one of c("loess", "smooth")')
   }
+  smoothed
 }
