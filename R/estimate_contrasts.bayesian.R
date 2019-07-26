@@ -124,7 +124,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
     )
   )
 
-  class(contrasts) <- c("estimate_contrasts", class(contrasts))
+  class(contrasts) <- unique(c("estimate_contrasts", "see_estimate_contrasts", class(contrasts)))
   contrasts
 }
 
