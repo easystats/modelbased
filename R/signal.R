@@ -125,10 +125,10 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (method == "loess") {
     smoothed <- tryCatch({
       predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
-      }, warning = function(w) {
-        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
-        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
-      })
+    }, warning = function(w) {
+      warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
+      predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+    })
   } else if (method == "smooth") {
     smoothed <- smooth(x)
   } else {
@@ -141,24 +141,23 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
 
 #' @export
 smoothing.data.frame <- function(x, method = "loess", strength = 0.25, ...) {
-
   nums <- names(x)[sapply(x, is.numeric)]
 
   # Stratify by factor levels
   factors <- names(x)[sapply(x, is.factor)]
 
-  if(length(factors) > 0){
+  if (length(factors) > 0) {
     combinations <- unique(x[factors])
     row.names(combinations) <- NULL
-    x$temp <- apply(x[names(combinations)], 1, paste, collapse="_")
+    x$temp <- apply(x[names(combinations)], 1, paste, collapse = "_")
 
-    for(i in 1:nrow(combinations)){
+    for (i in 1:nrow(combinations)) {
       current_row <- paste0(t(combinations[i, ]), collapse = "_")
       x[x$temp == current_row, nums] <- sapply(x[x$temp == current_row, nums], smoothing, method = method, strength = strength, ...)
     }
 
     x$temp <- NULL
-  } else{
+  } else {
     x[nums] <- sapply(x[nums], smoothing, method = method, strength = strength, ...)
   }
 
