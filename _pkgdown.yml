@@ -28,7 +28,7 @@ navbar:
       - text: 'Marginal means'
         href: articles/estimate_means.html
       - text: 'Contrast analysis'
-        href: articles/estimtae_contrasts.html
+        href: articles/estimate_contrasts.html
       - text: 'Use a model to make predictions'
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'

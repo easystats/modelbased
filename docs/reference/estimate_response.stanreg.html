@@ -106,7 +106,7 @@
       <a href="../articles/estimate_means.html">Marginal means</a>
     </li>
     <li>
-      <a href="../articles/estimtae_contrasts.html">Contrast analysis</a>
+      <a href="../articles/estimate_contrasts.html">Contrast analysis</a>
     </li>
     <li>
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
@@ -152,7 +152,7 @@
 <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>, <span class='kw'>random</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>25</span>,
   <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>predict</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
-  <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>, <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>smooth_method</span> <span class='kw'>=</span> <span class='st'>"smooth"</span>, <span class='kw'>smooth_strength</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>keep_draws</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
   <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>, <span class='no'>...</span>)
 
@@ -213,11 +213,11 @@
     </tr>
     <tr>
       <th>smooth_method</th>
-      <td><p>As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for <code><a href='smoothing.html'>smoothing</a></code>. <code>smooth_strength = 0</code> corresponds to no smoothing.</p></td>
+      <td><p>As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for <code><a href='smoothing.html'>smoothing</a></code>. <code>smooth_method = NULL</code> or <code>smooth_strength = 0</code> corresponds to no smoothing.</p></td>
     </tr>
     <tr>
       <th>smooth_strength</th>
-      <td><p>See above the description for <code>smooth_method</code> and see arguments for <code><a href='smoothing.html'>smoothing</a></code>.</p></td>
+      <td><p>This argument only applies to <code>smooth_method = "loess"</code>. See above the description for <code>smooth_method</code> and see arguments for <code><a href='smoothing.html'>smoothing</a></code>.</p></td>
     </tr>
     <tr>
       <th>keep_draws</th>

@@ -73,6 +73,8 @@ expanded to cover a large variety of frequentist and Bayesian models.
 
 ### Estimate marginal means
 
+![](man/figures/unnamed-chunk-4-1.png)<!-- -->
+
 ``` r
 library(rstanarm)
 
@@ -81,23 +83,30 @@ model <- stan_glm(Sepal.Width ~ Species, data = iris)
 estimate_means(model)
 ```
 
-| Species    | Median | 89% CI         |
-| :--------- | :----- | :------------- |
-| setosa     | 3.43   | \[3.34, 3.50\] |
-| versicolor | 2.77   | \[2.69, 2.84\] |
-| virginica  | 2.97   | \[2.90, 3.05\] |
+    ## Species    | Median |       89% CI
+    ## ----------------------------------
+    ## setosa     |   3.43 | [3.34, 3.50]
+    ## versicolor |   2.77 | [2.69, 2.85]
+    ## virginica  |   2.97 | [2.90, 3.05]
 
 ### Contrast analysis
 
 ``` r
 estimate_contrasts(model)
+## Level1     |     Level2 | Median |         89% CI |     pd | % in ROPE | Median (std.)
+## --------------------------------------------------------------------------------------
+## setosa     | versicolor |   0.65 |   [0.55, 0.76] |   100% |        0% |          1.50
+## setosa     |  virginica |   0.45 |   [0.34, 0.56] |   100% |        0% |          1.04
+## versicolor |  virginica |  -0.20 | [-0.31, -0.09] | 99.83% |     7.00% |         -0.46
 ```
 
-| Level1     | Level2     | Median | 89% CI           | pd     | % in ROPE | Median (std.) |
-| :--------- | :--------- | :----- | :--------------- | :----- | :-------- | :------------ |
-| setosa     | versicolor | 0.66   | \[0.54, 0.76\]   | 100%   | 0%        | 1.51          |
-| setosa     | virginica  | 0.45   | \[0.34, 0.56\]   | 100%   | 0%        | 1.04          |
-| versicolor | virginica  | \-0.20 | \[-0.31, -0.10\] | 99.88% | 6.02%     | \-0.46        |
+``` r
+library(see)
+
+plot(estimate_contrasts(model), estimate_means(model))
+```
+
+![](man/figures/unnamed-chunk-8-1.png)<!-- -->
 
 ### Check the contrasts at different points of another linear predictor
 
@@ -107,29 +116,28 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 
-| Level1     | Level2     | Petal.Length | Median | 89% CI          | pd     | % in ROPE | Median (std.) |
-| :--------- | :--------- | :----------- | :----- | :-------------- | :----- | :-------- | :------------ |
-| setosa     | versicolor | 1.00         | 1.53   | \[1.06, 2.02\]  | 100%   | 0%        | 3.51          |
-| setosa     | virginica  | 1.00         | 1.22   | \[0.64, 1.74\]  | 99.92% | 0.20%     | 2.79          |
-| versicolor | virginica  | 1.00         | \-0.32 | \[-1.05, 0.39\] | 75.72% | 13.58%    | \-0.73        |
-| setosa     | versicolor | 3.95         | 1.78   | \[1.04, 2.54\]  | 100%   | 0%        | 4.09          |
-| setosa     | virginica  | 3.95         | 1.82   | \[0.95, 2.58\]  | 100%   | 0.02%     | 4.17          |
-| versicolor | virginica  | 3.95         | 0.03   | \[-0.20, 0.24\] | 58.93% | 51.25%    | 0.07          |
-| setosa     | versicolor | 6.90         | 2.04   | \[0.45, 3.66\]  | 97.50% | 0.95%     | 4.69          |
-| setosa     | virginica  | 6.90         | 2.43   | \[0.81, 3.98\]  | 99.05% | 0.52%     | 5.58          |
-| versicolor | virginica  | 6.90         | 0.38   | \[-0.04, 0.81\] | 92.17% | 11.60%    | 0.87          |
+    ## Level1     |     Level2 | Petal.Length | Median |        89% CI |     pd | % in ROPE | Median (std.)
+    ## ----------------------------------------------------------------------------------------------------
+    ## setosa     | versicolor |         1.00 |   1.55 |  [1.01, 1.99] |   100% |        0% |          3.55
+    ## setosa     |  virginica |         1.00 |   1.21 |  [0.64, 1.74] | 99.95% |     0.07% |          2.78
+    ## versicolor |  virginica |         1.00 |  -0.33 | [-1.05, 0.42] | 75.60% |    13.95% |         -0.76
+    ## setosa     | versicolor |         3.95 |   1.80 |  [1.08, 2.57] |   100% |        0% |          4.13
+    ## setosa     |  virginica |         3.95 |   1.83 |  [1.00, 2.60] |   100% |        0% |          4.20
+    ## versicolor |  virginica |         3.95 |   0.03 | [-0.19, 0.26] | 58.70% |    51.85% |          0.08
+    ## setosa     | versicolor |         6.90 |   2.08 |  [0.54, 3.71] | 98.12% |     1.07% |          4.78
+    ## setosa     |  virginica |         6.90 |   2.46 |  [0.85, 3.98] | 99.35% |     0.38% |          5.64
+    ## versicolor |  virginica |         6.90 |   0.39 | [-0.03, 0.84] | 92.07% |    11.47% |          0.89
 
 ### Find a predictor’s slopes at each factor level
 
 ``` r
 estimate_slopes(model)
+## Species    | Median |       89% CI |     pd | % in ROPE | Median (std.)
+## -----------------------------------------------------------------------
+## setosa     |   0.42 | [0.12, 0.70] | 98.88% |     3.82% |          1.72
+## versicolor |   0.33 | [0.19, 0.48] |   100% |     0.73% |          1.35
+## virginica  |   0.21 | [0.09, 0.34] | 99.65% |     7.40% |          0.85
 ```
-
-| Species    | Median | 89% CI         | pd     | % in ROPE | Median (std.) |
-| :--------- | :----- | :------------- | :----- | :-------- | :------------ |
-| setosa     | 0.41   | \[0.12, 0.71\] | 98.47% | 4.70%     | 1.68          |
-| versicolor | 0.33   | \[0.19, 0.48\] | 100%   | 0.42%     | 1.32          |
-| virginica  | 0.21   | \[0.09, 0.33\] | 99.52% | 7.80%     | 0.85          |
 
 ### Generate predictions from your model to compare it with original data
 
@@ -139,14 +147,16 @@ estimate_response(model)
 
 | Species | Petal.Length | Median | CI\_low | CI\_high |
 | :------ | -----------: | -----: | ------: | -------: |
-| setosa  |          1.4 |   3.40 |    2.91 |     3.93 |
-| setosa  |          1.4 |   3.41 |    2.93 |     3.96 |
-| setosa  |          1.3 |   3.36 |    2.87 |     3.89 |
-| setosa  |          1.5 |   3.43 |    2.94 |     3.95 |
-| setosa  |          1.4 |   3.40 |    2.90 |     3.91 |
-| setosa  |          1.7 |   3.51 |    2.99 |     4.03 |
+| setosa  |          1.4 |   3.40 |    2.85 |     3.90 |
+| setosa  |          1.4 |   3.41 |    2.90 |     3.94 |
+| setosa  |          1.3 |   3.35 |    2.86 |     3.88 |
+| setosa  |          1.5 |   3.45 |    2.91 |     3.94 |
+| setosa  |          1.4 |   3.40 |    2.86 |     3.90 |
+| setosa  |          1.7 |   3.52 |    3.01 |     4.05 |
 
 ### Estimate the link between the response and a predictor
+
+<img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
 
 ``` r
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
@@ -156,13 +166,13 @@ estimate_link(model)
 
 | Petal.Length | Median | CI\_low | CI\_high |
 | -----------: | -----: | ------: | -------: |
-|         1.00 |   3.62 |    3.52 |     3.73 |
+|         1.00 |   3.62 |    3.51 |     3.72 |
 |         1.98 |   3.18 |    3.11 |     3.24 |
 |         2.97 |   2.90 |    2.82 |     2.97 |
 |         3.95 |   2.78 |    2.70 |     2.85 |
-|         4.93 |   2.83 |    2.77 |     2.89 |
+|         4.93 |   2.84 |    2.78 |     2.89 |
 |         5.92 |   3.05 |    2.96 |     3.14 |
-|         6.90 |   3.44 |    3.26 |     3.64 |
+|         6.90 |   3.44 |    3.25 |     3.63 |
 
 ### Describe the smooth term by its linear parts
 
@@ -170,6 +180,6 @@ estimate_link(model)
 estimate_smooth(model)
 ## Part | Start |  End |   Size | Trend | Linearity
 ## ------------------------------------------------
-## 1    |  1.00 | 4.11 | 53.00% | -0.01 |      0.94
-## 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.93
+## 1    |  1.00 | 4.08 | 52.50% | -0.01 |      0.94
+## 2    |  4.08 | 6.90 | 47.50% |  0.01 |      0.93
 ```

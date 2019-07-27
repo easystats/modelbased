@@ -28,8 +28,8 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.
-#' @param smooth_method As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_strength = 0} corresponds to no smoothing.
-#' @param smooth_strength See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.
+#' @param smooth_method As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_method = NULL} or \code{smooth_strength = 0} corresponds to no smoothing.
+#' @param smooth_strength This argument only applies to \code{smooth_method = "loess"}. See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.
 #' @param keep_draws If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
@@ -48,7 +48,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' }
 #'
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", smooth_method = "loess", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", smooth_method = "smooth", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
@@ -103,18 +103,18 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     prediction <- cbind(prediction, posteriors)
   }
 
-  # Smoothing
-  prediction <- as.data.frame(sapply(prediction, method = smooth_method, smoothing, strength = smooth_strength))
-
   # Add predictors
-  prediction <- cbind(data, prediction)
-
+  out <- cbind(data, prediction)
 
   # Restore factor levels
-  prediction <- .restore_factor_levels(prediction, insight::get_data(model))
+  out <- .restore_factor_levels(out, insight::get_data(model))
 
-  attributes(prediction) <- c(
-    attributes(prediction),
+  # Smoothing
+  out[c(names(prediction), names(data[sapply(data, is.factor)]))] <- smoothing(out[c(names(prediction), names(data[sapply(data, is.factor)]))], method = smooth_method, strength = smooth_strength)
+
+
+  attributes(out) <- c(
+    attributes(out),
     list(
       predict = predict,
       ci = ci,
@@ -128,8 +128,8 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     )
   )
 
-  class(prediction) <- c("estimate_response", class(prediction))
-  prediction
+  class(out) <- c("estimate_response", "see_estimate_response", class(out))
+  out
 }
 
 

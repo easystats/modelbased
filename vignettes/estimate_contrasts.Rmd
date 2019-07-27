@@ -89,8 +89,19 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0,
 estimate_contrasts(model)
 ```
 
-For instance, if we add `Petal.Width` in the model, we can see that the difference between *versicolor* and *virginica* becomes not significant (and even changes sign).   
+For instance, if we add `Petal.Width` in the model, we can see that the difference between *versicolor* and *virginica* becomes not significant (and even changes sign). 
 
+Note that we can plot simple contrast analysis through **lighthouse plots** with the help of the `see` package:
+
+```{r message=FALSE, warning=FALSE}
+library(see)
+
+plot(estimate_contrasts(model), estimate_means(model)) +
+  theme_modern()
+```
+
+
+These represent the estimated means and their CI range (in black), while the gray areas show the CI range of the difference (as compared to the point estimate).
 
 # Changes in difference
 

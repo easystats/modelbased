@@ -70,7 +70,7 @@
       <a href="../articles/estimate_means.html">Marginal means</a>
     </li>
     <li>
-      <a href="../articles/estimtae_contrasts.html">Contrast analysis</a>
+      <a href="../articles/estimate_contrasts.html">Contrast analysis</a>
     </li>
     <li>
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
@@ -153,23 +153,30 @@
 &gt; setosa     |  virginica |   1.73 |  [1.18, 2.31] |   100% |        0% |          3.98
 &gt; versicolor |  virginica |   0.16 | [-0.08, 0.39] | 85.60% |    31.20% |          0.36</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can see that the difference between <em>versicolor</em> and <em>virginica</em> becomes not significant (and even changes sign).</p>
+<p>Note that we can plot simple contrast analysis through <strong>lighthouse plots</strong> with the help of the <code>see</code> package:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(see)</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(<span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model), <span class="kw"><a href="../reference/estimate_means.html">estimate_means</a></span>(model)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
+<p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
+<p>These represent the estimated means and their CI range (in black), while the gray areas show the CI range of the difference (as compared to the point estimate).</p>
 </div>
 <div id="changes-in-difference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#changes-in-difference" class="anchor"></a>Changes in difference</h1>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">contrasts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Width"</span>, <span class="dt">length =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co"># Create a variable with the two levels concatenated </span></a>
-<a class="sourceLine" id="cb7-4" title="4">contrasts<span class="op">$</span>Contrast &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(contrasts<span class="op">$</span>Level1, <span class="st">"-"</span>, contrasts<span class="op">$</span>Level2) </a>
-<a class="sourceLine" id="cb7-5" title="5"></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co"># Visualise the changes in the differences</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="kw">ggplot</span>(contrasts, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Width, <span class="dt">y =</span> Median)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Contrast, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Contrast), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Difference"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">contrasts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Width"</span>, <span class="dt">length =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2"></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="co"># Create a variable with the two levels concatenated </span></a>
+<a class="sourceLine" id="cb8-4" title="4">contrasts<span class="op">$</span>Contrast &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste</a></span>(contrasts<span class="op">$</span>Level1, <span class="st">"-"</span>, contrasts<span class="op">$</span>Level2) </a>
+<a class="sourceLine" id="cb8-5" title="5"></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co"># Visualise the changes in the differences</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="kw">ggplot</span>(contrasts, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Width, <span class="dt">y =</span> Median)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Contrast, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Contrast), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Difference"</span>)</a></code></pre></div>
 <p><img src="estimate_contrasts_files/figure-html/fig-1.png" width="3281.25"></p>
 <p>As we can see, the difference between <em>versicolor</em> and <em>virginica</em> increases as <code>Petal.Width</code> increases. In conclusion, contrast analysis is a powerful tool to interpret and understand statistical models.</p>
 </div>
