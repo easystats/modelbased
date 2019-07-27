@@ -18,5 +18,5 @@ test_that("estimate_smooth", {
   estim <- estimate_smooth(model)
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(2, 6))
   estim <- estimate_smooth(model, levels = "Species", smooth_strength = 0.75)
-  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
+  testthat::expect_equal(ncol(estim), 7)
 })
