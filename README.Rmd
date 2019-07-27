@@ -21,7 +21,7 @@ library(dplyr)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  fig.path = "README-"
+  fig.path = "man/figures/"
 )
 ```
 
@@ -80,7 +80,25 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 ## Examples
 
 ### Estimate marginal means
-```{r message=FALSE, warning=FALSE, results='hide'}
+
+```{r message=FALSE, warning=FALSE, echo = FALSE}
+library(rstanarm)
+library(ggplot2)
+library(see)
+library(estimate)
+
+means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0))
+
+ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+  geom_violin() +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+  geom_line(data = means, aes(y = Median, group = 1), size = 1) +
+  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  theme_modern()
+```
+
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(rstanarm)
 
 model <- stan_glm(Sepal.Width ~ Species, data = iris)
@@ -88,40 +106,48 @@ model <- stan_glm(Sepal.Width ~ Species, data = iris)
 estimate_means(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(parameters::parameters_table(estimate_means(model)))
+library(rstanarm)
+
+model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
+
+estimate_means(model)
 ```
 
 ### Contrast analysis
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE}
 estimate_contrasts(model)
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(parameters::parameters_table(estimate_contrasts(model)))
-```
 
+```{r message=FALSE, warning=FALSE}
+library(see)
+
+plot(estimate_contrasts(model), estimate_means(model))
+```
 
 ### Check the contrasts at different points of another linear predictor
 
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(parameters::parameters_table(estimate_contrasts(model, modulate="Petal.Length", length=3)))
+model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
+
+estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
+
+
 
 ### Find a predictor's slopes at each factor level
 
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE}
 estimate_slopes(model)
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(parameters::parameters_table(estimate_slopes(model)))
-```
+
 
 ### Generate predictions from your model to compare it with original data
-```{r message=FALSE, warning=FALSE, results='hide'}
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 estimate_response(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
@@ -132,12 +158,18 @@ knitr::kable(
 ```
 
 ### Estimate the link between the response and a predictor
-```{r message=FALSE, warning=FALSE, results='hide'}
+
+```{r echo=FALSE, fig.align='center', out.width="80%"}
+knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
+```
+
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
 
 estimate_link(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris, refresh = 0)
 knitr::kable(
   model %>% 
     estimate_link(length=7, smooth_strength = 0.3),

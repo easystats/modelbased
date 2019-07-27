@@ -41,7 +41,7 @@
   
 <meta property="og:title" content="Smoothing a vector or a time series — smoothing" />
 
-<meta property="og:description" content="Smoothing a vector or a time series." />
+<meta property="og:description" content="Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination)." />
 
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
@@ -106,7 +106,7 @@
       <a href="../articles/estimate_means.html">Marginal means</a>
     </li>
     <li>
-      <a href="../articles/estimtae_contrasts.html">Contrast analysis</a>
+      <a href="../articles/estimate_contrasts.html">Contrast analysis</a>
     </li>
     <li>
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
@@ -144,11 +144,11 @@
 
     <div class="ref-description">
     
-    <p>Smoothing a vector or a time series.</p>
+    <p>Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination).</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>smoothing</span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>, <span class='kw'>strength</span> <span class='kw'>=</span> <span class='fl'>0.25</span>)</pre>
+    <pre class="usage"><span class='fu'>smoothing</span>(<span class='no'>x</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"loess"</span>, <span class='kw'>strength</span> <span class='kw'>=</span> <span class='fl'>0.25</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,7 +163,11 @@
     </tr>
     <tr>
       <th>strength</th>
-      <td><p>Degree of smoothing. Either passed to <code>span</code> when <code>method = "loess"</code>.</p></td>
+      <td><p>This argument only applies to <code>smooth_method = "loess"</code>. Degree of smoothing passed to <code>span</code> (see <code><a href='https://www.rdocumentation.org/packages/stats/topics/loess'>loess</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
     

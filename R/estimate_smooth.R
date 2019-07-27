@@ -57,7 +57,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "loess", smooth_strength = 0.2, centrality = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "smooth", smooth_strength = 0.2, centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -76,8 +76,6 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     target <- c(levels[!levels %in% smooth], smooth)
   }
 
-
-
   # Basis
   newdata <- data_grid(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
@@ -85,7 +83,8 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     predict = "link",
     centrality = centrality, transform = transform,
     keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, ...
+    seed = NULL, random = FALSE, smooth_method = smooth_method,
+    smooth_strength = smooth_strength, ...
   )
   # smooth_data <- smooth_data[grepl("Draw_", names(smooth_data))]
 
@@ -96,11 +95,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       data <- smooth_data
       for (col in names(groups)) {
         data <- data[data[[col]] == groups[row, col], ]
-        # Smooth the curve a bit
-        # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = data, span = 0.25))
-        # Extract features
-        # current_description <- .describe_smooth(smooth_values)
-        current_description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
+        current_description <- .describe_smooth(data$Median)
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -119,7 +114,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     # Smooth the curve a bit
     # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
     # Extract features
-    description <- .describe_smooth(smoothing(smooth_data$Median, method = smooth_method, strength = smooth_strength))
+    description <- .describe_smooth(smooth_data$Median)
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]

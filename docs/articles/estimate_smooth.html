@@ -70,7 +70,7 @@
       <a href="../articles/estimate_means.html">Marginal means</a>
     </li>
     <li>
-      <a href="../articles/estimtae_contrasts.html">Contrast analysis</a>
+      <a href="../articles/estimate_contrasts.html">Contrast analysis</a>
     </li>
     <li>
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
@@ -167,8 +167,10 @@
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(model, <span class="dt">smooth =</span> <span class="st">"Delay"</span>)</a></code></pre></div>
 <pre><code>&gt; Part | Start |   End |   Size | Trend | Linearity
 &gt; -------------------------------------------------
-&gt; 1    |  0.00 |  8.58 | 61.50% | -0.12 |      0.95
-&gt; 2    |  8.58 | 14.00 | 38.50% |  0.06 |      0.93</code></pre>
+&gt; 1    |  0.00 |  8.23 | 59.00% | -0.13 |      0.95
+&gt; 2    |  8.23 |  8.51 |  2.00% |  0.01 |      0.80
+&gt; 3    |  8.51 |  8.93 |  3.50% | -0.00 |      0.93
+&gt; 4    |  8.93 | 14.00 | 36.00% |  0.07 |      0.94</code></pre>
 <p><code>estimate_smooth</code> will decompose this curve into linear parts, returning their size (the percentage of the curve of the segment), and the trend (positive or negative). We can now say</p>
 </div>
 <div id="references" class="section level1 unnumbered">
