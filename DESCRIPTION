@@ -27,8 +27,7 @@ Imports:
 	insight (>= 0.4.0),
 	bayestestR (>= 0.2.4),
 	parameters,
-	emmeans,
-	coda
+	emmeans
 Suggests:
 	covr,
 	dplyr,
