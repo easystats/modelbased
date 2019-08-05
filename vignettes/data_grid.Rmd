@@ -216,6 +216,28 @@ iris %>%
   theme_modern()
 ```
 
-As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
 
-<!-- equally spaced values of a "target" variable, and all other variables “fixed” by their mean, median or reference level. The refdata of the psycho package was built to do just that. -->
+
+Such plot can be more clear by expressing the interaction variable in terms of deviations from the mean (as a standardized variable).
+
+```{r message=FALSE, warning=FALSE}
+newdata <- iris %>% 
+  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
+newdata$Predicted_Sepal.Length <- predict(model, newdata)
+
+
+# Express values in an abstract way
+newdata$Petal.Width <- parameters::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
+
+iris %>% 
+  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
+  geom_point2(aes(fill = Petal.Width), color = "white", shape=21, size = 5) +  # Only shapes from 21 to 25 have a fill aesthetic
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) + 
+  scale_color_viridis_d() +
+  scale_fill_viridis_c(guide = FALSE) +
+  theme_modern()
+```
+
+
+As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
