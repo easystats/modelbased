@@ -6,7 +6,7 @@
 \usage{
 data_grid(x, target = "all", length = 10, factors = "reference",
   numerics = "mean", preserve_range = FALSE, standardize = FALSE,
-  standardize_robust = FALSE, na.rm = TRUE, ...)
+  standardize_robust = FALSE, reference = x, na.rm = TRUE, ...)
 }
 \arguments{
 \item{x}{An object from which to contruct the reference grid.}
@@ -25,6 +25,8 @@ data_grid(x, target = "all", length = 10, factors = "reference",
 
 \item{standardize_robust}{Standardization based on median and MAD (a robust equivalent of the SD).}
 
+\item{reference}{The reference vector from which to compute the mean and SD.}
+
 \item{na.rm}{Remove NaNs.}
 
 \item{...}{Arguments passed to or from other methods.}
@@ -37,5 +39,5 @@ newdata <- data_grid(iris, target = "Sepal.Length")
 newdata <- data_grid(iris, target = "Sepal.Length", factors = "combinations")
 newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 3)
 newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
-newdata <- data_grid(iris, target = "Sepal.Length", standardize = TRUE)
+newdata <- data_grid(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 }

@@ -82,7 +82,7 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 
 ### Create smart grids to represent complex interactions
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
 library(ggplot2)
 library(see)
@@ -109,6 +109,9 @@ iris %>%
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
 ```
+
+See [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html).
+
 
 ### Estimate marginal means
 
