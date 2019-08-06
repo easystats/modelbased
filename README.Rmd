@@ -82,11 +82,14 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 
 ### Create smart grids to represent complex interactions
 
+Check-out [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html) to see how to create this plot:
+
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
 library(ggplot2)
 library(see)
 library(estimate)
+
 
 # Fit model
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
@@ -105,12 +108,12 @@ iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
   geom_point2(aes(fill = Petal.Width), color = "white", shape=21, size = 5) +  # Only shapes from 21 to 25 have a fill aesthetic
   geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) + 
-  scale_color_viridis_d() +
+  scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
 ```
 
-See [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html).
+
 
 
 ### Estimate marginal means
@@ -172,7 +175,14 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 
 ### Find a predictor's slopes at each factor level
 
+```{r message=FALSE, warning=FALSE}
+estimate_slopes(model)
+```
 
+
+### Generate predictions from your model to compare it with original data
+
+See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 data <- iris
@@ -191,12 +201,6 @@ data %>%
 
 
 
-```{r message=FALSE, warning=FALSE}
-estimate_slopes(model)
-```
-
-
-### Generate predictions from your model to compare it with original data
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 estimate_response(model)
 ```
@@ -209,9 +213,12 @@ knitr::kable(
 
 ### Estimate the link between the response and a predictor
 
+See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
 ```
+
+
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)

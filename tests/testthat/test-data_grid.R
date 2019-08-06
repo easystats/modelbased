@@ -7,6 +7,9 @@ test_that("data_grid", {
   testthat::expect_equal(nrow(data_grid(iris, target = "Sepal.Length", length = 2, factors = "combinations")), 6)
   testthat::expect_equal(nrow(data_grid(iris, target = "Species", length = 2, factors = "combinations")), 3)
   testthat::expect_equal(nrow(data_grid(iris, target = "Species", length = 2, numerics = 0)), 3)
+  testthat::expect_equal(nrow(data_grid(iris, target = "Sepal.Length", length = 3, standardize = TRUE)), 3)
+  testthat::expect_equal(nrow(data_grid(iris, target = "Sepal.Length", length = 3, standardize = TRUE, standardize_robust = TRUE)), 3)
+  testthat::expect_warning(nrow(data_grid(iris, target = "Sepal.Length", length = 4, standardize = TRUE)), 5)
 
 
   x1 <- data_grid(iris, target = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)

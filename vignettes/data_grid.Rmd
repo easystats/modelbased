@@ -223,7 +223,7 @@ Such plot can be more clear by expressing the interaction variable in terms of d
 ```{r message=FALSE, warning=FALSE}
 newdata <- iris %>% 
   data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
-  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
+  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE, reference = iris)
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 
@@ -234,7 +234,7 @@ iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
   geom_point2(aes(fill = Petal.Width), color = "white", shape=21, size = 5) +  # Only shapes from 21 to 25 have a fill aesthetic
   geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) + 
-  scale_color_viridis_d() +
+  scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
 ```

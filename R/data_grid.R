@@ -94,7 +94,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
     nums[1, ] <- numerics
     nums <- nums[1, ]
   } else if (numerics == "combination") {
-    nums <- .data_grid_target(nums, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
+    nums <- .data_grid_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
   } else {
     nums <- as.data.frame(sapply(nums, .smart_summary, numerics = numerics, na.rm = na.rm, simplify = FALSE))
   }
@@ -181,11 +181,10 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 #' @keywords internal
 .data_grid_target <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
-
   varnames <- names(x)
   vars <- list()
-  for(i in varnames){
-    vars[[i]] <- data_grid(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[names(x)]])
+  for (i in varnames) {
+    vars[[i]] <- data_grid(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
   }
 
   grid <- data.frame()
@@ -223,39 +222,39 @@ data_grid.vector <- function(x, target = "all", length = 10, factors = "referenc
     x <- as.factor(x)
     out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
-    if(is.numeric(length)){
+    if (is.numeric(length)) {
 
       # Regular spread
-      if(standardize == FALSE){
+      if (standardize == FALSE) {
         out <- seq(
           min(x, na.rm = TRUE),
           max(x, na.rm = TRUE),
           length = length
         )
-      # Standardize spread
-      } else{
-        if((length %% 2) == 0) {
-          warning(paste0("`length` argument should be an odd number when `standardize` is TRUE (so that the mid-value is the centre). Selecting  `length = ", length + 1, "`."))
+        # Standardize spread
+      } else {
+        if ((length %% 2) == 0) {
+          warning(paste0("`length` argument should be an odd number when `standardize` is TRUE (so that the mid-value is the centre). Selecting `length = ", length + 1, "`."))
           length <- length + 1
         }
         # Standardized vector
         out <- seq(
-          -(length-1) / 2,
-          (length-1) / 2,
+          -(length - 1) / 2,
+          (length - 1) / 2,
           by = 1
         )
         # Check reference
-        if(!is.numeric(reference)){
+        if (!is.numeric(reference)) {
           stop("`reference` argument must be a numeric vector or dataframe.")
         }
         # Reverse standardization
-        if(standardize_robust){
+        if (standardize_robust) {
           out <- out * mad(reference, na.rm = TRUE) + median(reference, na.rm = TRUE)
-        } else{
+        } else {
           out <- out * sd(reference, na.rm = TRUE) + mean(reference, na.rm = TRUE)
         }
       }
-    } else{
+    } else {
       warning("`length` argument should be an integer or 'SD' or 'MAD'.")
       return(NA)
     }

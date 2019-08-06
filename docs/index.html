@@ -152,10 +152,16 @@
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
+<div id="create-smart-grids-to-represent-complex-interactions" class="section level3">
+<h3 class="hasAnchor">
+<a href="#create-smart-grids-to-represent-complex-interactions" class="anchor"></a>Create smart grids to represent complex interactions</h3>
+<p>Check-out <a href="https://easystats.github.io/estimate/articles/data_grid.html"><strong>this vignette</strong></a> to see how to create this plot:</p>
+<p><img src="reference/figures/unnamed-chunk-4-1.png" width="3281.25"></p>
+</div>
 <div id="estimate-marginal-means" class="section level3">
 <h3 class="hasAnchor">
 <a href="#estimate-marginal-means" class="anchor"></a>Estimate marginal means</h3>
-<p><img src="reference/figures/unnamed-chunk-4-1.png" width="700"></p>
+<p><img src="reference/figures/unnamed-chunk-5-1.png" width="3281.25"></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
 <a class="sourceLine" id="cb3-2" title="2"></a>
 <a class="sourceLine" id="cb3-3" title="3">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a>
@@ -163,9 +169,9 @@
 <a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="reference/estimate_means.html">estimate_means</a></span>(model)</a></code></pre></div>
 <pre><code>## Species    | Median |       89% CI
 ## ----------------------------------
-## setosa     |   3.43 | [3.35, 3.50]
+## setosa     |   3.42 | [3.35, 3.50]
 ## versicolor |   2.77 | [2.69, 2.85]
-## virginica  |   2.98 | [2.90, 3.05]</code></pre>
+## virginica  |   2.97 | [2.90, 3.06]</code></pre>
 </div>
 <div id="contrast-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -175,11 +181,11 @@
 <a class="sourceLine" id="cb5-3" title="3"><span class="co">## --------------------------------------------------------------------------------------</span></a>
 <a class="sourceLine" id="cb5-4" title="4"><span class="co">## setosa     | versicolor |   0.65 |   [0.54, 0.76] |   100% |        0% |          1.50</span></a>
 <a class="sourceLine" id="cb5-5" title="5"><span class="co">## setosa     |  virginica |   0.45 |   [0.34, 0.56] |   100% |        0% |          1.03</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.21 | [-0.32, -0.10] | 99.72% |     6.53% |         -0.47</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.21 | [-0.31, -0.09] | 99.88% |     6.55% |         -0.47</span></a></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(see)</a>
 <a class="sourceLine" id="cb6-2" title="2"></a>
 <a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/plot">plot</a></span>(<span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model), <span class="kw"><a href="reference/estimate_means.html">estimate_means</a></span>(model))</a></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-8-1.png" width="700"></p>
+<p><img src="reference/figures/unnamed-chunk-9-1.png" width="3281.25"></p>
 </div>
 <div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
 <h3 class="hasAnchor">
@@ -189,15 +195,15 @@
 <a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Length"</span>, <span class="dt">length =</span> <span class="dv">3</span>)</a></code></pre></div>
 <pre><code>## Level1     |     Level2 | Petal.Length | Median |        89% CI |     pd | % in ROPE | Median (std.)
 ## ----------------------------------------------------------------------------------------------------
-## setosa     | versicolor |         1.00 |   1.54 |  [1.03, 2.00] |   100% |        0% |          3.53
-## setosa     |  virginica |         1.00 |   1.22 |  [0.66, 1.74] | 99.95% |     0.07% |          2.80
-## versicolor |  virginica |         1.00 |  -0.32 | [-1.04, 0.39] | 76.42% |    14.17% |         -0.73
-## setosa     | versicolor |         3.95 |   1.79 |  [1.03, 2.55] |   100% |     0.02% |          4.10
-## setosa     |  virginica |         3.95 |   1.82 |  [1.00, 2.60] | 99.98% |     0.02% |          4.18
-## versicolor |  virginica |         3.95 |   0.03 | [-0.19, 0.25] | 59.40% |    53.47% |          0.07
-## setosa     | versicolor |         6.90 |   2.04 |  [0.20, 3.46] | 97.85% |     0.92% |          4.68
-## setosa     |  virginica |         6.90 |   2.40 |  [0.66, 3.91] | 99.20% |     0.55% |          5.52
-## versicolor |  virginica |         6.90 |   0.39 | [-0.04, 0.80] | 92.50% |    11.05% |          0.89</code></pre>
+## setosa     | versicolor |         1.00 |   1.52 |  [1.04, 2.01] |   100% |        0% |          3.50
+## setosa     |  virginica |         1.00 |   1.22 |  [0.68, 1.77] |   100% |        0% |          2.80
+## versicolor |  virginica |         1.00 |  -0.32 | [-0.99, 0.45] | 74.75% |    13.12% |         -0.72
+## setosa     | versicolor |         3.95 |   1.79 |  [1.02, 2.48] |   100% |        0% |          4.10
+## setosa     |  virginica |         3.95 |   1.82 |  [1.04, 2.59] |   100% |     0.02% |          4.17
+## versicolor |  virginica |         3.95 |   0.03 | [-0.17, 0.27] | 59.17% |    51.18% |          0.08
+## setosa     | versicolor |         6.90 |   2.05 |  [0.39, 3.55] | 97.88% |     1.00% |          4.71
+## setosa     |  virginica |         6.90 |   2.43 |  [0.89, 3.98] | 99.10% |     0.40% |          5.57
+## versicolor |  virginica |         6.90 |   0.38 | [-0.05, 0.80] | 91.67% |    11.33% |          0.87</code></pre>
 </div>
 <div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
 <h3 class="hasAnchor">
@@ -205,64 +211,66 @@
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="reference/estimate_slopes.html">estimate_slopes</a></span>(model)</a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="co">## Species    | Median |       89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb9-3" title="3"><span class="co">## -----------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="co">## setosa     |   0.41 | [0.09, 0.69] | 98.58% |     4.20% |          1.68</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="co">## versicolor |   0.33 | [0.18, 0.47] | 99.98% |     0.60% |          1.34</span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="co">## virginica  |   0.21 | [0.09, 0.33] | 99.85% |     6.58% |          0.86</span></a></code></pre></div>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co">## setosa     |   0.42 | [0.12, 0.69] | 98.62% |     4.03% |          1.69</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">## versicolor |   0.33 | [0.19, 0.48] |   100% |     0.83% |          1.33</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="co">## virginica  |   0.21 | [0.09, 0.33] | 99.85% |     6.83% |          0.86</span></a></code></pre></div>
 </div>
 <div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-predictions-from-your-model-to-compare-it-with-original-data" class="anchor"></a>Generate predictions from your model to compare it with original data</h3>
+<p>See <a href="https://easystats.github.io/estimate/reference/estimate_response.html"><strong>this vignette</strong></a> to see how to create this plot:</p>
+<p><img src="reference/figures/unnamed-chunk-13-1.png" width="3281.25"></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="reference/estimate_response.html">estimate_response</a></span>(model)</a></code></pre></div>
 <table class="table table">
 <thead><tr class="header">
+<th align="right">Sepal.Length</th>
 <th align="left">Species</th>
-<th align="right">Petal.Length</th>
 <th align="right">Median</th>
 <th align="right">CI_low</th>
 <th align="right">CI_high</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
+<td align="right">5.1</td>
 <td align="left">setosa</td>
-<td align="right">1.4</td>
-<td align="right">3.41</td>
-<td align="right">2.89</td>
-<td align="right">3.94</td>
+<td align="right">1.47</td>
+<td align="right">1.07</td>
+<td align="right">1.92</td>
 </tr>
 <tr class="even">
+<td align="right">4.9</td>
 <td align="left">setosa</td>
-<td align="right">1.4</td>
-<td align="right">3.40</td>
-<td align="right">2.90</td>
-<td align="right">3.91</td>
+<td align="right">1.45</td>
+<td align="right">0.98</td>
+<td align="right">1.85</td>
 </tr>
 <tr class="odd">
+<td align="right">4.7</td>
 <td align="left">setosa</td>
-<td align="right">1.3</td>
-<td align="right">3.36</td>
-<td align="right">2.84</td>
-<td align="right">3.86</td>
+<td align="right">1.42</td>
+<td align="right">0.99</td>
+<td align="right">1.84</td>
 </tr>
 <tr class="even">
+<td align="right">4.6</td>
 <td align="left">setosa</td>
-<td align="right">1.5</td>
-<td align="right">3.44</td>
-<td align="right">2.92</td>
-<td align="right">3.94</td>
+<td align="right">1.40</td>
+<td align="right">0.97</td>
+<td align="right">1.79</td>
 </tr>
 <tr class="odd">
+<td align="right">5.0</td>
 <td align="left">setosa</td>
-<td align="right">1.4</td>
-<td align="right">3.40</td>
-<td align="right">2.90</td>
-<td align="right">3.90</td>
+<td align="right">1.47</td>
+<td align="right">1.02</td>
+<td align="right">1.84</td>
 </tr>
 <tr class="even">
+<td align="right">5.4</td>
 <td align="left">setosa</td>
-<td align="right">1.7</td>
-<td align="right">3.52</td>
-<td align="right">3.02</td>
-<td align="right">4.02</td>
+<td align="right">1.53</td>
+<td align="right">1.12</td>
+<td align="right">1.97</td>
 </tr>
 </tbody>
 </table>
@@ -270,7 +278,7 @@
 <div id="estimate-the-link-between-the-response-and-a-predictor" class="section level3">
 <h3 class="hasAnchor">
 <a href="#estimate-the-link-between-the-response-and-a-predictor" class="anchor"></a>Estimate the link between the response and a predictor</h3>
-<p><img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
+<p>See <a href="https://easystats.github.io/estimate/reference/estimate_response.html"><strong>this vignette</strong></a> to see how to create this plot: <img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/stats/topics/poly">poly</a></span>(Petal.Length, <span class="dv">2</span>), <span class="dt">data=</span>iris)</a>
 <a class="sourceLine" id="cb11-2" title="2"></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="kw"><a href="reference/estimate_response.html">estimate_link</a></span>(model)</a></code></pre></div>
@@ -286,7 +294,7 @@
 <td align="right">1.00</td>
 <td align="right">3.62</td>
 <td align="right">3.52</td>
-<td align="right">3.73</td>
+<td align="right">3.72</td>
 </tr>
 <tr class="even">
 <td align="right">1.98</td>
@@ -304,13 +312,13 @@
 <td align="right">3.95</td>
 <td align="right">2.78</td>
 <td align="right">2.71</td>
-<td align="right">2.86</td>
+<td align="right">2.85</td>
 </tr>
 <tr class="odd">
 <td align="right">4.93</td>
 <td align="right">2.83</td>
-<td align="right">2.78</td>
-<td align="right">2.90</td>
+<td align="right">2.77</td>
+<td align="right">2.89</td>
 </tr>
 <tr class="even">
 <td align="right">5.92</td>
@@ -321,7 +329,7 @@
 <tr class="odd">
 <td align="right">6.90</td>
 <td align="right">3.44</td>
-<td align="right">3.26</td>
+<td align="right">3.25</td>
 <td align="right">3.63</td>
 </tr>
 </tbody>
