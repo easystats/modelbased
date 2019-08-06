@@ -149,7 +149,8 @@
     </div>
 
     <pre class="usage"><span class='fu'>data_grid</span>(<span class='no'>x</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"all"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>, <span class='kw'>factors</span> <span class='kw'>=</span> <span class='st'>"reference"</span>,
-  <span class='kw'>numerics</span> <span class='kw'>=</span> <span class='st'>"mean"</span>, <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>numerics</span> <span class='kw'>=</span> <span class='st'>"mean"</span>, <span class='kw'>preserve_range</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>reference</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,6 +180,18 @@
       <td><p>In the case of combinations between numeric variables and factors, setting <code>preserve_range = TRUE</code> removes observerations where the value of the numeric variable is originally not present in the range of its factor level.</p></td>
     </tr>
     <tr>
+      <th>standardize</th>
+      <td><p>The numeric target value is spread as deviations from the mean, with the central value being the mean (or the median if <code>standardize_robust</code> is TRUE). For instance, if <code>x</code> is a vector of mean 1 and SD 2.5, and a standardized grid is required of length 3, the result will be <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(Mean-1*SD, Mean, Mean+1*SD)</a></code>, i.e., <code><a href='https://www.rdocumentation.org/packages/base/topics/c'>c(-1.5, 1, 3.5)</a></code>. Each value represents deviations (in terms of SD or MAD) from the central value. This needs the <code>length</code> argument to be an even integer, so that the central value represent the mean.</p></td>
+    </tr>
+    <tr>
+      <th>standardize_robust</th>
+      <td><p>Standardization based on median and MAD (a robust equivalent of the SD).</p></td>
+    </tr>
+    <tr>
+      <th>reference</th>
+      <td><p>The reference vector from which to compute the mean and SD.</p></td>
+    </tr>
+    <tr>
       <th>na.rm</th>
       <td><p>Remove NaNs.</p></td>
     </tr>
@@ -193,7 +206,8 @@
     <pre class="examples"><div class='input'><span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Sepal.Length"</span>)
 <span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Sepal.Length"</span>, <span class='kw'>factors</span> <span class='kw'>=</span> <span class='st'>"combinations"</span>)
 <span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='st'>"Species"</span>), <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3</span>)
-<span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='st'>"Species"</span>), <span class='kw'>numerics</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div></pre>
+<span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Sepal.Length"</span>, <span class='st'>"Species"</span>), <span class='kw'>numerics</span> <span class='kw'>=</span> <span class='fl'>0</span>)
+<span class='no'>newdata</span> <span class='kw'>&lt;-</span> <span class='fu'>data_grid</span>(<span class='no'>iris</span>, <span class='kw'>target</span> <span class='kw'>=</span> <span class='st'>"Sepal.Length"</span>, <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

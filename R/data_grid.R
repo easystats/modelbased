@@ -7,22 +7,24 @@
 #' @param factors Type of summary for factors. Can be "combination" or "reference".
 #' @param numerics Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observerations where the value of the numeric variable is originally not present in the range of its factor level.
+#' @param standardize The numeric target value is spread as deviations from the mean, with the central value being the mean (or the median if \code{standardize_robust} is TRUE). For instance, if \code{x} is a vector of mean 1 and SD 2.5, and a standardized grid is required of length 3, the result will be \code{c(Mean-1*SD, Mean, Mean+1*SD)}, i.e., \code{c(-1.5, 1, 3.5)}. Each value represents deviations (in terms of SD or MAD) from the central value. This needs the \code{length} argument to be an even integer, so that the central value represent the mean.
+#' @param standardize_robust Standardization based on median and MAD (a robust equivalent of the SD).
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
+#' @inheritParams parameters::format_standardize
+#'
 #'
 #' @examples
 #' newdata <- data_grid(iris, target = "Sepal.Length")
 #' newdata <- data_grid(iris, target = "Sepal.Length", factors = "combinations")
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 3)
 #' newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+#' newdata <- data_grid(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 #' @importFrom stats na.omit
 #' @export
-data_grid <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
+data_grid <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
   UseMethod("data_grid")
 }
-
-
-
 
 
 
@@ -30,12 +32,12 @@ data_grid <- function(x, target = "all", length = 10, factors = "reference", num
 
 
 #' @export
-data_grid.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, random = TRUE, ...) {
+data_grid.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, ...) {
   data <- insight::get_data(x)
   if (random == FALSE) {
     data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
-  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, na.rm = na.rm, random = TRUE, ...)
+  data <- data_grid(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, random = TRUE, ...)
   data
 }
 
@@ -63,15 +65,15 @@ data_grid.lmerMod <- data_grid.stanreg
 # dataframes ---------------------------------------------------------------
 
 #' @export
-data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, na.rm = TRUE, ...) {
+data_grid.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
 
   # Target
   if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
-    grid <- .data_grid_target(x, length = length)
+    grid <- .data_grid_target(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
     return(.preserve_range(grid, x, preserve_range))
   }
 
-  target_df <- .data_grid_target(x[c(target)], length = length)
+  target_df <- .data_grid_target(x[c(target)], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
 
   # Rest
   df_rest <- x[!names(x) %in% c(target)]
@@ -92,7 +94,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
     nums[1, ] <- numerics
     nums <- nums[1, ]
   } else if (numerics == "combination") {
-    nums <- .data_grid_target(nums, length = length)
+    nums <- .data_grid_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
   } else {
     nums <- as.data.frame(sapply(nums, .smart_summary, numerics = numerics, na.rm = na.rm, simplify = FALSE))
   }
@@ -111,6 +113,7 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
   # Preserve range
   grid <- .preserve_range(grid, x, preserve_range)
+  grid
 }
 
 
@@ -177,9 +180,13 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
 #' @keywords internal
-.data_grid_target <- function(x, length = 10) {
-  vars <- sapply(x, data_grid, length = length, simplify = FALSE)
+.data_grid_target <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
   varnames <- names(x)
+  vars <- list()
+  for (i in varnames) {
+    vars[[i]] <- data_grid(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
+  }
+
   grid <- data.frame()
   for (i in varnames) {
     var <- data.frame(vars[[i]])
@@ -201,14 +208,8 @@ data_grid.data.frame <- function(x, target = "all", length = 10, factors = "refe
 
 
 
-
-
-
-#' Create a reference grid.
-#'
-#' @inheritParams data_grid
 #' @export
-data_grid.vector <- function(x, target = "all", length = 10, ...) {
+data_grid.vector <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
   if (is.factor(x)) {
     out <- as.factor(levels(droplevels(x)))
   } else if (is.character(x)) {
@@ -221,14 +222,45 @@ data_grid.vector <- function(x, target = "all", length = 10, ...) {
     x <- as.factor(x)
     out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
-    out <- seq(min(x, na.rm = TRUE),
-      max(x, na.rm = TRUE),
-      length = length
-    )
+    if (is.numeric(length)) {
+
+      # Regular spread
+      if (standardize == FALSE) {
+        out <- seq(
+          min(x, na.rm = TRUE),
+          max(x, na.rm = TRUE),
+          length = length
+        )
+        # Standardize spread
+      } else {
+        if ((length %% 2) == 0) {
+          warning(paste0("`length` argument should be an odd number when `standardize` is TRUE (so that the mid-value is the centre). Selecting `length = ", length + 1, "`."))
+          length <- length + 1
+        }
+        # Standardized vector
+        out <- seq(
+          -(length - 1) / 2,
+          (length - 1) / 2,
+          by = 1
+        )
+        # Check reference
+        if (!is.numeric(reference)) {
+          stop("`reference` argument must be a numeric vector or dataframe.")
+        }
+        # Reverse standardization
+        if (standardize_robust) {
+          out <- out * mad(reference, na.rm = TRUE) + median(reference, na.rm = TRUE)
+        } else {
+          out <- out * sd(reference, na.rm = TRUE) + mean(reference, na.rm = TRUE)
+        }
+      }
+    } else {
+      warning("`length` argument should be an integer or 'SD' or 'MAD'.")
+      return(NA)
+    }
   } else {
-    warning("Argument is not numeric nor factor: returning NA.")
-    out <- NA
-    return(out)
+    warning("Vector is neither numeric nor factor: returning NA.")
+    return(NA)
   }
 
   names(out) <- NULL

@@ -13,7 +13,6 @@
 #' @param length Passed to \code{\link{data_grid}} if \code{data = "grid"}.
 #' @param preserve_range Passed to \code{\link{data_grid}} if \code{data = "grid"}.
 #'
-
 #'
 #' @export
 estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
@@ -59,7 +58,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
-      data <- data_grid(model, random = random, length = length, preserve_range = preserve_range, ...)
+      data <- data_grid(model, random = random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }

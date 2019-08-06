@@ -21,6 +21,7 @@ library(dplyr)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
+  dpi=450,
   fig.path = "man/figures/"
 )
 ```
@@ -79,7 +80,9 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 
 ## Examples
 
-### Estimate marginal means
+### Create smart grids to represent complex interactions
+
+Check-out [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html) to see how to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
@@ -87,13 +90,44 @@ library(ggplot2)
 library(see)
 library(estimate)
 
+
+# Fit model
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
+
+# Create dataframe
+newdata <- iris %>% 
+  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
+newdata$Predicted_Sepal.Length <- predict(model, newdata)
+
+# Express values in an abstract way
+newdata$Petal.Width <- parameters::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
+
+# Plot
+iris %>% 
+  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
+  geom_point2(aes(fill = Petal.Width), color = "white", shape=21, size = 5) +  # Only shapes from 21 to 25 have a fill aesthetic
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) + 
+  scale_color_viridis_d(direction = -1) +
+  scale_fill_viridis_c(guide = FALSE) +
+  theme_modern()
+```
+
+
+
+
+### Estimate marginal means
+
+```{r message=FALSE, warning=FALSE, echo = FALSE}
 means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0))
 
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin() +
+  geom_violin(aes(color = Species)) +
   geom_jitter2(width = 0.05, alpha = 0.5) +
   geom_line(data = means, aes(y = Median, group = 1), size = 1) +
   geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  scale_fill_material() +
+  scale_colour_material() +
   theme_modern()
 ```
 
@@ -147,6 +181,26 @@ estimate_slopes(model)
 
 
 ### Generate predictions from your model to compare it with original data
+
+See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
+
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+data <- iris
+model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
+predicted <- estimate_response(model)
+data$Predicted <- predicted$Median
+model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
+data$Predicted_2 <- estimate_response(model)$Median
+data %>% 
+  ggplot() +
+  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
+  geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
+  geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
+  theme_modern()
+```
+
+
+
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 estimate_response(model)
 ```
@@ -159,9 +213,12 @@ knitr::kable(
 
 ### Estimate the link between the response and a predictor
 
+See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
 ```
+
+
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
