@@ -74,6 +74,7 @@ data %>%
   ggplot(aes(x = Petal.Length, y = Predicted)) +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point() +
+  ylab("Petal.Length (predicted)") +
   theme_modern()
 ```
 
@@ -96,6 +97,7 @@ data %>%
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
   geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
+  ylab("Petal.Length (predicted)") +
   theme_modern()
 ```
 
