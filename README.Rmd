@@ -82,7 +82,7 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 
 ### Create smart grids to represent complex interactions
 
-Check-out [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html) to see how to create this plot:
+Check-out [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html) to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
@@ -118,6 +118,8 @@ iris %>%
 
 ### Estimate marginal means
 
+Check-out [**this vignette**](https://easystats.github.io/estimate/reference/estimate_means.html) to create this plot:
+ 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0))
 
@@ -148,15 +150,21 @@ estimate_means(model)
 ```
 
 ### Contrast analysis
+
+Check-out [**this vignette**](https://easystats.github.io/estimate/reference/estimate_contrasts.html) to create this plot:
+
+```{r message=FALSE, warning=FALSE, echo = FALSE}
+library(see)
+
+plot(estimate_contrasts(model), estimate_means(model)) +
+  theme_modern()
+```
+
+
 ```{r message=FALSE, warning=FALSE}
 estimate_contrasts(model)
 ```
 
-```{r message=FALSE, warning=FALSE}
-library(see)
-
-plot(estimate_contrasts(model), estimate_means(model))
-```
 
 ### Check the contrasts at different points of another linear predictor
 
@@ -182,7 +190,7 @@ estimate_slopes(model)
 
 ### Generate predictions from your model to compare it with original data
 
-See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
+Check-out [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 data <- iris
@@ -196,7 +204,9 @@ data %>%
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
   geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
+  ylab("Petal.Length (predicted)") +
   theme_modern()
+  
 ```
 
 
@@ -213,7 +223,7 @@ knitr::kable(
 
 ### Estimate the link between the response and a predictor
 
-See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to see how to create this plot:
+See [**this vignette**](https://easystats.github.io/estimate/reference/estimate_response.html) to create this plot:
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
 ```
