@@ -4,8 +4,8 @@
 #' @param x An object from which to contruct the reference grid.
 #' @param target Can be "all" or list of characters indicating columns of interest. The remaining variables will be fixed.
 #' @param length Length of numeric target variables.
-#' @param factors Type of summary for factors. Can be "combination" or "reference".
-#' @param numerics Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.
+#' @param factors Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).
+#' @param numerics Type of summary for numerics Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observerations where the value of the numeric variable is originally not present in the range of its factor level.
 #' @param standardize The numeric target value is spread as deviations from the mean, with the central value being the mean (or the median if \code{standardize_robust} is TRUE). For instance, if \code{x} is a vector of mean 1 and SD 2.5, and a standardized grid is required of length 3, the result will be \code{c(Mean-1*SD, Mean, Mean+1*SD)}, i.e., \code{c(-1.5, 1, 3.5)}. Each value represents deviations (in terms of SD or MAD) from the central value. This needs the \code{length} argument to be an even integer, so that the central value represent the mean.
 #' @param standardize_robust Standardization based on median and MAD (a robust equivalent of the SD).
@@ -15,11 +15,13 @@
 #'
 #'
 #' @examples
-#' newdata <- visualisation_matrix(iris, target = "Sepal.Length")
-#' newdata <- visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
-#' newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
-#' newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
-#' newdata <- visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
+#' library(estimate)
+#'
+#' visualisation_matrix(iris, target = "Sepal.Length")
+#' visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
+#' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
+#' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+#' visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 #' @importFrom stats na.omit
 #' @export
 visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
@@ -84,8 +86,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   nums <- df_rest[sapply(df_rest, is.numeric)]
 
 
-  if (factors == "reference") {
-    facs <- as.data.frame(sapply(facs, .smart_summary, na.rm = na.rm, simplify = FALSE))
+  if (factors %in% c("reference", "mode")) {
+    facs <- as.data.frame(sapply(facs, .smart_summary, factors = factors, na.rm = na.rm, simplify = FALSE))
   } else {
     facs <- .visualisation_matrix_target(facs)
   }
@@ -157,21 +159,32 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 
 #' @keywords internal
-.smart_summary <- function(x, numerics = "mean", na.rm = TRUE) {
+.smart_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE) {
   if (na.rm == TRUE) x <- na.omit(x)
 
   if (is.numeric(x)) {
+
     fun <- paste0(numerics, "(x)")
     out <- eval(parse(text = fun))
-  } else if (is.factor(x)) {
-    out <- levels(x)[1]
-  } else if (is.character(x)) {
-    out <- unique(x)[1]
-  } else if (is.logical(x)) {
-    out <- unique(x)[1]
-  } else {
-    warning("Argument is not numeric nor factor: returning NA.")
-    out <- NA
+
+  } else{
+
+    if(factors == "mode"){
+      # Get mode
+      out <- names(sort(table(x),decreasing=TRUE)[1])
+    } else{
+      # Get reference
+      if (is.factor(x)) {
+        out <- levels(x)[1]
+      } else if (is.character(x)) {
+        out <- unique(x)[1]
+      } else if (is.logical(x)) {
+        out <- unique(x)[1]
+      } else {
+        warning("Argument is not numeric nor factor: returning NA.")
+        out <- NA
+      }
+    }
   }
   out
 }

@@ -16,9 +16,9 @@ visualisation_matrix(x, target = "all", length = 10,
 
 \item{length}{Length of numeric target variables.}
 
-\item{factors}{Type of summary for factors. Can be "combination" or "reference".}
+\item{factors}{Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).}
 
-\item{numerics}{Type of summary for numerics Can be "combination", any function ("mean", "median", ...) or a value.}
+\item{numerics}{Type of summary for numerics Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).}
 
 \item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observerations where the value of the numeric variable is originally not present in the range of its factor level.}
 
@@ -36,9 +36,11 @@ visualisation_matrix(x, target = "all", length = 10,
 Create a reference grid.
 }
 \examples{
-newdata <- visualisation_matrix(iris, target = "Sepal.Length")
-newdata <- visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
-newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
-newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
-newdata <- visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
+library(estimate)
+
+visualisation_matrix(iris, target = "Sepal.Length")
+visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
+visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
+visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 }
