@@ -30,7 +30,7 @@ set.seed(333)
 ```
 
 
-Sometimes, for instance for **visualization** purposes, we want to extract a **reference grid** (or *data grid*) of our dataset. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, **balanced**, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.
+Sometimes, for instance for **visualization** purposes, we want to extract a **reference grid** (or *data grid*) of our dataset, that we will call a **visualisation matrix**. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, **balanced**, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.
 
 # Simple linear regression
 
@@ -58,18 +58,18 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 
 But how to "access" the data of this regression line? One option is to select some values of of the predictor (`Sepal.Length`), and **predict** the response (`Sepal.Width`) using the model. Using these *x* and *y* points, we can then create the regression line.
 
-Let's try the `data_grid` function from the `estimate` package.
+Let's try the `visualisation_matrix` function from the `estimate` package.
 
 ```{r message=FALSE, warning=FALSE}
 library(estimate)
 
-data_grid(iris["Sepal.Length"])
+visualisation_matrix(iris["Sepal.Length"])
 ```
 
 If we pass a numeric variable to the function, it will return a vector of **equally spread points** (having the same range (*i.e.*, minimum and maximum) than the original data). The default **length** is 10, but we can adjust that through the `length` argument. Let's generate predictions using this reference grid of the predictor.
 
 ```{r message=FALSE, warning=FALSE}
-newdata <- data_grid(iris["Sepal.Length"], length = 5)
+newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata
 ```
@@ -101,7 +101,7 @@ As we can see, when adjusting for the species, the relationship between the two 
 
 
 ```{r message=FALSE, warning=FALSE}
-newdata <- data_grid(iris["Sepal.Length"], length = 5)
+newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata, re.form = NA)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
@@ -115,7 +115,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 The above way of constructing the reference grid is almost equivalent to the following:
 
 ```{r message=FALSE, warning=FALSE}
-newdata <- data_grid(iris, target = "Sepal.Length", length = 5)
+newdata <- visualisation_matrix(iris, target = "Sepal.Length", length = 5)
 newdata
 ```
 
@@ -125,7 +125,7 @@ By default, **factors** are fixed by their **"reference" level** and **numeric v
 
 
 ```{r message=FALSE, warning=FALSE}
-newdata <- data_grid(iris, target = "Sepal.Length", numerics = "min")
+newdata <- visualisation_matrix(iris, target = "Sepal.Length", numerics = "min")
 newdata
 ```
 
@@ -133,7 +133,7 @@ newdata
 # Target variables
 
 
-If more than one target variable is selected, `data_grid` will return the **combination** of them (*i.e.*, all unique values crossed together). This can be useful in the case of an **interaction** between a numeric variable and a factor.
+If more than one target variable is selected, `visualisation_matrix` will return the **combination** of them (*i.e.*, all unique values crossed together). This can be useful in the case of an **interaction** between a numeric variable and a factor.
 
 Let's visualise the regression line for each of the levels of `Species`:
 
@@ -141,12 +141,12 @@ Let's visualise the regression line for each of the levels of `Species`:
 model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
 ```
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 5)
+newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 5)
+newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata$Petal.Length <- NULL
 newdata
@@ -167,7 +167,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the **red line**. The `preserve_range` option allows to remove observations that are "outside" the original dataset (however, the length should be increased to improve the precision toward the edges):
 
 ```{r message=FALSE, warning=FALSE}
-newdata <- data_grid(iris, target = c("Sepal.Length", "Species"), length = 100, preserve_range = TRUE)
+newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 100, preserve_range = TRUE)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
@@ -190,15 +190,15 @@ This idea can also be used to visualise interactions between two numeric variabl
 
 In this case, we will represent the regression line between `Sepal.Length` and `Petal.Length` and a 5 equally spaced values of `Petal.Length`, to get a feel of the interaction.
 
-We can obtain the right reference grid quite easily by chaining two `data_grid` together as follows:
+We can obtain the right reference grid quite easily by chaining two `visualisation_matrix` together as follows:
 
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr)
 
 newdata <- iris %>% 
-  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
-  data_grid("Petal.Width", length=5, numerics = "combination")
+  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  visualisation_matrix("Petal.Width", length=5, numerics = "combination")
 ```
 
 What did we do her? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating `10 * 10 = 100` rows. The next step was to reduce `Petal.Length` to a set of 5 values, but without touching the other variables (*i.e.*, keeping the 10 values created for `Petal.Length`). This was achieved using  `numerics = "combination"`.
@@ -222,8 +222,8 @@ Such plot can be more clear by expressing the interaction variable in terms of d
 
 ```{r message=FALSE, warning=FALSE}
 newdata <- iris %>% 
-  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
-  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE, reference = iris)
+  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  visualisation_matrix("Petal.Width", length=3, numerics = "combination", standardize = TRUE, reference = iris)
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 

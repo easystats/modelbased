@@ -26,7 +26,7 @@
     means <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
   } else {
     at <- insight::get_data(model)[c(levels, modulate)]
-    at <- sapply(at, data_grid, length = length, simplify = FALSE)
+    at <- sapply(at, visualisation_matrix, length = length, simplify = FALSE)
     means <- emmeans::ref_grid(model, at = at, by = c(fixed, modulate))
     if (type == "mean") {
       means <- emmeans::emmeans(means, c(levels, modulate), transform = transform)

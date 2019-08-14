@@ -105,7 +105,7 @@ The new model generated much more accurate predictions (closer from the underlyi
 
 # Estimating response *vs.* link
 
-Rather than visualising the predictions made by a model, we are often interested in visualising the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/data_grid.html) of the model's data instead of the original dataset.
+Rather than visualising the predictions made by a model, we are often interested in visualising the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/visualisation_matrix.html) of the model's data instead of the original dataset.
 
 We will do that to visualise the relationship between the response (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
 
