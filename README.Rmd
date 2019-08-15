@@ -58,7 +58,7 @@ library("estimate")
 
 Click on the buttons above to access the package [**documentation**](https://easystats.github.io/estimate/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
 
-- [**Data grids**](https://easystats.github.io/estimate/articles/data_grid.html)
+- [**Visualisation matrix**](https://easystats.github.io/estimate/articles/visualisation_matrix.html)
 - [**Marginal means**](https://easystats.github.io/estimate/articles/estimate_means.html)
 - [**Contrast analysis**](https://easystats.github.io/estimate/articles/estimate_contrasts.html)
 - [**Use a model to make predictions**](https://easystats.github.io/estimate/articles/estimate_response.html)
@@ -74,7 +74,7 @@ The package is built around 5 main functions:
 - [`estimate_response()`](https://easystats.github.io/estimate/reference/estimate_response.html): Predict the response variable using the model
 - [`estimate_smooth()`](https://easystats.github.io/estimate/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
-These functions are powered by the [`data_grid()`](https://easystats.github.io/estimate/reference/data_grid.html) function, a smart tool for guessing the appropriate reference grid.
+These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/estimate/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
 
 The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 
@@ -82,7 +82,7 @@ The package currently only supports `rstanarm` models, but will be expanded to c
 
 ### Create smart grids to represent complex interactions
 
-Check-out [**this vignette**](https://easystats.github.io/estimate/articles/data_grid.html) to create this plot:
+Check-out [**this vignette**](https://easystats.github.io/estimate/articles/visualisation_matrix.html) to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
@@ -96,8 +96,8 @@ model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
 
 # Create dataframe
 newdata <- iris %>% 
-  data_grid(c("Petal.Length", "Petal.Width"), length = 10) %>% 
-  data_grid("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
+  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+  visualisation_matrix("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 # Express values in an abstract way

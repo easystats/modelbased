@@ -8,10 +8,10 @@
 #'
 #'
 #' @inheritParams estimate_contrasts
-#' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{data_grid}}).
+#' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
 #' @param random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
-#' @param length Passed to \code{\link{data_grid}} if \code{data = "grid"}.
-#' @param preserve_range Passed to \code{\link{data_grid}} if \code{data = "grid"}.
+#' @param length Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
+#' @param preserve_range Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #'
 #'
 #' @export
@@ -58,7 +58,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
-      data <- data_grid(model, random = random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
+      data <- visualisation_matrix(model, random = random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }

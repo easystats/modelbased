@@ -163,7 +163,7 @@
 <div id="estimating-response-vs--link" class="section level1">
 <h1 class="hasAnchor">
 <a href="#estimating-response-vs--link" class="anchor"></a>Estimating response <em>vs.</em> link</h1>
-<p>Rather than visualising the predictions made by a model, we are often interested in visualising the <em>links</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/data_grid.html"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
+<p>Rather than visualising the predictions made by a model, we are often interested in visualising the <em>links</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model, <span class="dt">data =</span> <span class="st">"grid"</span>)</a>
 <a class="sourceLine" id="cb7-2" title="2"></a>

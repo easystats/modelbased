@@ -77,7 +77,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   }
 
   # Basis
-  newdata <- data_grid(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
+  newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
   smooth_data <- estimate_link(model, newdata,
     predict = "link",
@@ -90,7 +90,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
   if (!is.null(levels)) {
     description <- data.frame()
-    groups <- data_grid(smooth_data[levels])
+    groups <- visualisation_matrix(smooth_data[levels])
     for (row in 1:nrow(groups)) {
       data <- smooth_data
       for (col in names(groups)) {
