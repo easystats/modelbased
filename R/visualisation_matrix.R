@@ -197,16 +197,13 @@ visualisation_matrix.character <- visualisation_matrix.vector
   if (na.rm == TRUE) x <- na.omit(x)
 
   if (is.numeric(x)) {
-
     fun <- paste0(numerics, "(x)")
     out <- eval(parse(text = fun))
-
-  } else{
-
-    if(factors == "mode"){
+  } else {
+    if (factors == "mode") {
       # Get mode
-      out <- names(sort(table(x),decreasing=TRUE)[1])
-    } else{
+      out <- names(sort(table(x), decreasing = TRUE)[1])
+    } else {
       # Get reference
       if (is.factor(x)) {
         out <- levels(x)[1]
@@ -228,16 +225,16 @@ visualisation_matrix.character <- visualisation_matrix.vector
 
 #' @keywords internal
 .visualisation_matrix_target <- function(x, varnames = NULL, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
-  if(is.null(varnames)){
+  if (is.null(varnames)) {
     varnames <- names(x)
   }
   vars <- list()
   for (i in varnames) {
-    if(grepl("=", i)){
+    if (grepl("=", i)) {
       parts <- strsplit(i, "=", fixed = TRUE)
-      parts <- unlist(sapply(parts, trimws, simplify = FALSE))  # trim whitespaces
+      parts <- unlist(sapply(parts, trimws, simplify = FALSE)) # trim whitespaces
       vars[[parts[1]]] <- eval(parse(text = parts[2]))
-    } else{
+    } else {
       vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
     }
   }
