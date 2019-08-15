@@ -12,7 +12,7 @@ visualisation_matrix(x, target = "all", length = 10,
 \arguments{
 \item{x}{An object from which to contruct the reference grid.}
 
-\item{target}{Can be "all" or list of characters indicating columns of interest. The remaining variables will be fixed.}
+\item{target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignements (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
 
 \item{length}{Length of numeric target variables.}
 
@@ -42,5 +42,7 @@ visualisation_matrix(iris, target = "Sepal.Length")
 visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
 visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
 visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+visualisation_matrix(iris, target = c("Sepal.Length = 3", "Species"))
+visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 }

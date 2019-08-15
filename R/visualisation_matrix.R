@@ -2,7 +2,7 @@
 #'
 #'
 #' @param x An object from which to contruct the reference grid.
-#' @param target Can be "all" or list of characters indicating columns of interest. The remaining variables will be fixed.
+#' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignements (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
 #' @param length Length of numeric target variables.
 #' @param factors Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).
 #' @param numerics Type of summary for numerics Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
@@ -21,6 +21,8 @@
 #' visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
 #' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
 #' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+#' visualisation_matrix(iris, target = c("Sepal.Length = 3", "Species"))
+#' visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #' visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 #' @importFrom stats na.omit
 #' @export
@@ -75,7 +77,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
     return(.preserve_range(grid, x, preserve_range))
   }
 
-  target_df <- .visualisation_matrix_target(x[c(target)], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
+  target_df <- .visualisation_matrix_target(x, varnames = target, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
+  target <- names(target_df)
 
   # Rest
   df_rest <- x[!names(x) %in% c(target)]
@@ -119,6 +122,37 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 }
 
 
+
+# Vectors -----------------------------------------------------------------
+
+
+#' @export
+visualisation_matrix.vector <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
+  .visualisation_matrix_vector(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference, ...)
+}
+
+#' @export
+visualisation_matrix.numeric <- visualisation_matrix.vector
+
+#' @export
+visualisation_matrix.double <- visualisation_matrix.vector
+
+#' @export
+visualisation_matrix.factor <- visualisation_matrix.vector
+
+#' @export
+visualisation_matrix.logical <- visualisation_matrix.vector
+
+#' @export
+visualisation_matrix.character <- visualisation_matrix.vector
+
+
+
+
+
+
+
+# Utils -------------------------------------------------------------------
 
 
 
@@ -193,15 +227,23 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 
 #' @keywords internal
-.visualisation_matrix_target <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
-  varnames <- names(x)
+.visualisation_matrix_target <- function(x, varnames = NULL, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
+  if(is.null(varnames)){
+    varnames <- names(x)
+  }
   vars <- list()
   for (i in varnames) {
-    vars[[i]] <- visualisation_matrix(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
+    if(grepl("=", i)){
+      parts <- strsplit(i, "=", fixed = TRUE)
+      parts <- unlist(sapply(parts, trimws, simplify = FALSE))  # trim whitespaces
+      vars[[parts[1]]] <- eval(parse(text = parts[2]))
+    } else{
+      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
+    }
   }
 
   grid <- data.frame()
-  for (i in varnames) {
+  for (i in names(vars)) {
     var <- data.frame(vars[[i]])
     names(var) <- i
     if (nrow(grid) == 0) {
@@ -221,8 +263,12 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 
 
-#' @export
-visualisation_matrix.vector <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
+
+
+
+
+#' @keywords internal
+.visualisation_matrix_vector <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x, ...) {
   if (is.factor(x)) {
     out <- as.factor(levels(droplevels(x)))
   } else if (is.character(x)) {
@@ -279,18 +325,3 @@ visualisation_matrix.vector <- function(x, target = "all", length = 10, factors 
   names(out) <- NULL
   out
 }
-
-#' @export
-visualisation_matrix.numeric <- visualisation_matrix.vector
-
-#' @export
-visualisation_matrix.double <- visualisation_matrix.vector
-
-#' @export
-visualisation_matrix.factor <- visualisation_matrix.vector
-
-#' @export
-visualisation_matrix.logical <- visualisation_matrix.vector
-
-#' @export
-visualisation_matrix.character <- visualisation_matrix.vector
