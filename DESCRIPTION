@@ -29,6 +29,7 @@ Imports:
 	parameters,
 	emmeans
 Suggests:
+	coda,
 	covr,
 	dplyr,
 	gganimate,
