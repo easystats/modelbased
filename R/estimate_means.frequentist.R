@@ -27,12 +27,10 @@
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
 
-  # Summary
+  # Clean and rename
   means <- as.data.frame(confint(estimated$means, level = ci))
   if ("df" %in% names(means)) means$df <- NULL
-  names(means)[names(means) == "emmean"] <- "Mean"
-  names(means)[names(means) == "lower.CL"] <- "CI_low"
-  names(means)[names(means) == "upper.CL"] <- "CI_high"
+  means <- .clean_emmeans_frequentist(means)
 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))
