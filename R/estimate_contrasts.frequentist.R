@@ -40,7 +40,8 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
   # Reorder columns
   order_SE <- grep("SE", names(contrasts))
-  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[c("CI_low", "CI_high", "t", "df", "p")])
+  col_order <- c("CI_low", "CI_high", "t", "z", "df", "p")
+  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[col_order[col_order %in% names(contrasts)]])
 
   # Standardized differences
   if (standardize) {
