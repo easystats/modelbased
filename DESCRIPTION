@@ -41,8 +41,7 @@ Suggests:
 	see,
 	testthat
 Remotes: 
-	easystats/bayestestR,
-	easystats/parameters
+	easystats/bayestestR
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

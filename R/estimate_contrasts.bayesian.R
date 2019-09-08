@@ -129,16 +129,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 }
 
 
-#' @keywords internal
-.print_estimate <- function(x, ...) {
-  if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(parameters::format_value(x$Size * 100), "%"), "100%")
-  if ("Part" %in% names(x)) x$Part <- parameters::format_value(x$Part, protect_integers = TRUE)
-  formatted_table <- parameters::parameters_table(x, ...)
-  cat(parameters::format_table(formatted_table))
-}
 
-#' @export
-print.estimate_contrasts <- .print_estimate
 
 
 
