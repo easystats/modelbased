@@ -15,7 +15,8 @@
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-#' \dontrun{
+#'
+#'
 #' library(lme4)
 #'
 #' data <- iris
@@ -23,7 +24,6 @@
 #'
 #' model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
-#' }
 #'
 #' @import emmeans
 #' @importFrom graphics pairs
@@ -36,15 +36,12 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
   # Summary
   contrasts <- as.data.frame(merge(as.data.frame(contrasts), confint(contrasts, level = ci, adjust = adjust)))
-  names(contrasts)[names(contrasts) == "estimate"] <- "Difference"
-  names(contrasts)[names(contrasts) == "t.ratio"] <- "t"
-  names(contrasts)[names(contrasts) == "p.value"] <- "p"
-  names(contrasts)[names(contrasts) == "lower.CL"] <- "CI_low"
-  names(contrasts)[names(contrasts) == "upper.CL"] <- "CI_high"
+  contrasts <- .clean_emmeans_frequentist(contrasts)
 
   # Reorder columns
   order_SE <- grep("SE", names(contrasts))
-  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[c("CI_low", "CI_high", "t", "df", "p")])
+  col_order <- c("CI_low", "CI_high", "t", "z", "df", "p")
+  contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[col_order[col_order %in% names(contrasts)]])
 
   # Standardized differences
   if (standardize) {

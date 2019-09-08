@@ -98,5 +98,4 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
 
 
 
-#' @export
-print.estimate_means <- .print_estimate
+

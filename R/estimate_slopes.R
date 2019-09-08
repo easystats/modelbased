@@ -111,8 +111,6 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   slopes
 }
 
-#' @export
-print.estimate_slopes <- .print_estimate
 
 
 

@@ -129,32 +129,8 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 }
 
 
-#' @keywords internal
-.print_estimate <- function(x, ...) {
-  if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(parameters::format_value(x$Size * 100), "%"), "100%")
-  if ("Part" %in% names(x)) x$Part <- parameters::format_value(x$Part, protect_integers = TRUE)
-  formatted_table <- parameters::parameters_table(x, ...)
-  cat(parameters::format_table(formatted_table))
-}
-
-#' @export
-print.estimate_contrasts <- .print_estimate
 
 
 
-#' @keywords internal
-.standardize_contrasts <- function(contrasts, model, robust = FALSE) {
-  vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient", "Difference")]
-  if (insight::model_info(model)$is_linear) {
-    response <- insight::get_response(model)
-    if (robust) {
-      std <- contrasts[vars] / mad(response, na.rm = TRUE)
-    } else {
-      std <- contrasts[vars] / sd(response, na.rm = TRUE)
-    }
-  } else {
-    std <- contrasts[vars]
-  }
-  names(std) <- paste0("Std_", names(std))
-  as.data.frame(std)
-}
+
+

@@ -132,9 +132,6 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
 
 
-#' @export
-print.estimate_smooth <- .print_estimate
-
 
 
 
