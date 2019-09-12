@@ -19,4 +19,7 @@ test_that("estimate_response", {
   estim <- estimate_link(model, keep_draws = TRUE, smooth_strength = 0.25)
   draws <- reshape_draws(estim)
   testthat::expect_equal(c(nrow(draws), ncol(draws)), c(12500, 7))
+
+  estim <- estimate_response(insight::download_model("lm_2"))
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 })

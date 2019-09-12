@@ -42,6 +42,8 @@ visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors
     data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
   data <- visualisation_matrix(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, random = TRUE, ...)
+
+  attr(data, "model") <- x
   data
 }
 
