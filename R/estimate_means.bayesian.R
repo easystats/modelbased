@@ -44,7 +44,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' estimate_means(model, fixed = "Sepal.Width")
 #' }
 #' @import emmeans
-#' @importFrom graphics pairs
+#' @importFrom insight find_response
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {

@@ -26,7 +26,6 @@
 #' estimate_contrasts(model)
 #'
 #' @import emmeans
-#' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @importFrom bayestestR describe_posterior
 #' @export

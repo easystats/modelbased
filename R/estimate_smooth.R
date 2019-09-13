@@ -54,7 +54,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' estimate_smooth(model, levels = "Species")
 #' }
 #' @import emmeans
-#' @importFrom graphics pairs
+#' @importFrom insight find_predictors get_data
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
 estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "smooth", smooth_strength = 0.2, centrality = "median", ...) {
@@ -150,7 +150,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     } else {
       parts <- inversions
     }
-    if (tail(inversions, 1) < length(smooth_values)) {
+    if (utils::tail(inversions, 1) < length(smooth_values)) {
       parts <- c(parts, length(smooth_values))
     }
   }
@@ -179,8 +179,8 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 
 
 
-
-#' @importFrom parameters smoothness
+#' @importFrom stats lm
+#' @importFrom parameters check_smoothness
 #' @keywords internal
 .describe_segment <- function(segment, range, smoothness = FALSE) {
   # Smoothness
@@ -197,7 +197,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     trend <- NA
     linearity <- NA
   } else {
-    model <- lm(y ~ x,
+    model <- stats::lm(y ~ x,
       data = data.frame(
         "y" = segment,
         "x" = seq(range[1], range[2], length.out = length(segment))
