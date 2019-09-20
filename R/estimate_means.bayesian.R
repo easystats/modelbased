@@ -43,7 +43,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' estimate_means(model, modulate = "Sepal.Width")
 #' estimate_means(model, fixed = "Sepal.Width")
 #' }
-#' @import emmeans
+#' @importFrom emmeans as.mcmc.emmGrid
 #' @importFrom insight find_response
 #' @importFrom stats mad median sd setNames
 #' @export

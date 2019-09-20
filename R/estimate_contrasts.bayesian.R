@@ -54,10 +54,11 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
 #' estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 #' }
-#' @import emmeans
+#' @importFrom emmeans contrast
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @importFrom bayestestR describe_posterior
+#' @importFrom insight find_response
 #' @export
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)

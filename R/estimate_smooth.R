@@ -53,7 +53,6 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' estimate_smooth(model)
 #' estimate_smooth(model, levels = "Species")
 #' }
-#' @import emmeans
 #' @importFrom insight find_predictors get_data
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
