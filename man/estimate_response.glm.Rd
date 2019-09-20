@@ -48,8 +48,8 @@
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"HDI"} (default, see \code{\link{hdi}}) or \code{"ETI"}
-(see \code{\link{eti}}).}
+\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}) or \code{"ETI"}
+(see \code{\link[bayestestR:eti]{eti}}).}
 }
 \description{
 Generates predictions for Frequentist models

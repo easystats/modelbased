@@ -2,6 +2,7 @@
 #'
 #' See the documentation for your object's class:
 #' \itemize{
+#'  \item{\link[=estimate_slopes.lm]{Frequentist models}}
 #'  \item{\link[=estimate_slopes.stanreg]{Bayesian models (stanreg and brms)}}
 #'  }
 #'
@@ -44,6 +45,40 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, centrality = centrality, ci = ci, ci_method = ci_method, test = test, rope_range = rope_range, rope_ci = rope_ci)
+
+}
+
+
+#' Estimate the slopes of a numeric predictor (over different factor levels)
+#'
+#' @inheritParams estimate_slopes
+#' @inheritParams estimate_contrasts.stanreg
+#'
+#' @examples
+#' library(estimate)
+#'
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' estimate_slopes(model)
+#'
+#' @export
+estimate_slopes.lm <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, ...) {
+  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust)
+}
+
+
+#' @export
+estimate_slopes.merMod <- estimate_slopes.lm
+
+
+
+
+
+
+
+
+#' @keywords internal
+.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...){
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -68,20 +103,29 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   # Basis
   trends <- emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
 
-  params <- as.data.frame(trends)
-  rownames(params) <- NULL
 
-  # Remove the posterior summary
-  params <- params[names(params) %in% names(data)]
+  if(insight::model_info(model)$is_bayesian){
+    params <- as.data.frame(trends)
+    rownames(params) <- NULL
 
-  # Summary
-  slopes <- .summarize_posteriors(trends,
-    ci = ci, ci_method = ci_method,
-    centrality = centrality,
-    test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
-  )
-  slopes$Parameter <- NULL
-  slopes <- cbind(params, slopes)
+    # Remove the posterior summary
+    params <- params[names(params) %in% names(data)]
+
+    # Summary
+    slopes <- .summarize_posteriors(trends,
+                                    ci = ci, ci_method = ci_method,
+                                    centrality = centrality,
+                                    test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
+    )
+    slopes$Parameter <- NULL
+    slopes <- cbind(params, slopes)
+
+  } else{
+    params <- as.data.frame(confint(trends, levels = ci, ...))
+    slopes <- .clean_emmeans_frequentist(params)
+    names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
+  }
+
 
   # Standardized slopes
   if (standardize) {
@@ -90,6 +134,7 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
   # Restore factor levels
   slopes <- .restore_factor_levels(slopes, insight::get_data(model))
+
 
   attributes(slopes) <- c(
     attributes(slopes),
@@ -109,6 +154,12 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 
   slopes
 }
+
+
+
+
+
+
 
 
 

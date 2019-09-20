@@ -86,7 +86,6 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     seed = NULL, random = FALSE, smooth_method = smooth_method,
     smooth_strength = smooth_strength, ...
   )
-  # smooth_data <- smooth_data[grepl("Draw_", names(smooth_data))]
 
   if (!is.null(levels)) {
     description <- data.frame()
@@ -111,9 +110,6 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       }
     }
   } else {
-    # Smooth the curve a bit
-    # smooth_values <- predict(loess(paste0("Median ~ ", smooth), data = smooth_data, span = 0.25))
-    # Extract features
     description <- .describe_smooth(smooth_data$Median)
 
     description$Start <- smooth_data[description$Start, smooth]
