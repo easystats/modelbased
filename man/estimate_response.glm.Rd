@@ -11,10 +11,7 @@
 
 \method{estimate_link}{glm}(model, data = "grid",
   transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_method = "loess",
-  smooth_strength = 0.25, keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+  preserve_range = TRUE, predict = "link", ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -34,22 +31,6 @@
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{...}{Arguments passed to or from other methods.}
-
-\item{smooth_method}{As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_method = NULL} or \code{smooth_strength = 0} corresponds to no smoothing.}
-
-\item{smooth_strength}{This argument only applies to \code{smooth_method = "loess"}. See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.}
-
-\item{keep_draws}{If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).}
-
-\item{draws}{An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.}
-
-\item{seed}{An optional seed to use.}
-
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
-
-\item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}) or \code{"ETI"}
-(see \code{\link[bayestestR:eti]{eti}}).}
 }
 \description{
 Generates predictions for Frequentist models

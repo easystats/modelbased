@@ -21,14 +21,58 @@ estimate_response.glm <- function(model, data = NULL, transform = "response", ra
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
   data <- args$data
 
-  # Summary
-  prediction <- as.data.frame(predict(model,
-                                      newdata = args$data,
-                                      re.form = args$re.form,
-                                      transfom = args$transfom,
-                                      interval = args$interval,
-                                      level = ci,
-                                      ...))
+  # Miwed Models
+  if(any(class(model) %in% c("merMod", "lmerMod"))){
+
+    if(is.na(args$re.form)){
+      if(!is.null(ci)){
+        warning("CI cannot be computed for mixed models when no random effects present in data. Provide some data with random effects, or set `ci = NULL`.")
+        ci <- NULL
+      }
+    }
+
+    if(is.null(ci)){
+      prediction <- data.frame(Predicted = predict(model,
+                                                   newdata = args$data,
+                                                   re.form = args$re.form,
+                                                   type = transform,
+                                                   ...),
+                               CI_low = NA,
+                               CI_high = NA)
+    } else{
+
+      if (!requireNamespace("merTools", quietly = TRUE)) {
+        stop("This function needs `merTools` to be installed. Please install it by running `install.packages('merTools')`.")
+      }
+
+      if(args$transfom == "response" && !insight::model_info(model)$is_linear){
+        args$tranform <- "probability"
+      } else{
+        args$transform <- "linear.prediction"
+      }
+
+      prediction <- as.data.frame(
+        merTools::predictInterval(model,
+                                  which = "fixed",
+                                  newdata = args$data,
+                                  type = args$transform,
+                                  stat = "median",
+                                  level = ci))
+
+    }
+
+  # Regular models
+  } else{
+    prediction <- as.data.frame(
+      predict(model,
+              newdata = args$data,
+              re.form = args$re.form,
+              transfom = args$transfom,
+              interval = args$interval,
+              level = ci,
+              ...))
+  }
+
 
   # Rename
   names(prediction)[names(prediction) == "fit"] <- "Predicted"
@@ -37,7 +81,7 @@ estimate_response.glm <- function(model, data = NULL, transform = "response", ra
 
 
   # Add predictors
-  out <- cbind(data, prediction)
+  out <- cbind(args$data, prediction)
 
   # Restore factor levels
   out <- .restore_factor_levels(out, insight::get_data(model))
@@ -63,8 +107,8 @@ estimate_response.glm <- function(model, data = NULL, transform = "response", ra
 
 #' @rdname estimate_response.glm
 #' @export
-estimate_link.glm <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0.25, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  estimate_response(model, data = data, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, smooth_method = smooth_method, smooth_strength = smooth_strength, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_link.glm <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", ci = 0.95, ...) {
+  estimate_response(model, data = data, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, ci = ci, ...)
 }
 
 
