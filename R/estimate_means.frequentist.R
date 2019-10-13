@@ -20,15 +20,13 @@
 #' estimate_means(model, modulate = "Sepal.Width")
 #' }
 #'
-#' @import emmeans
-#' @importFrom graphics pairs
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
   estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
 
   # Clean and rename
-  means <- as.data.frame(confint(estimated$means, level = ci))
+  means <- as.data.frame(stats::confint(estimated$means, level = ci))
   if ("df" %in% names(means)) means$df <- NULL
   means <- .clean_emmeans_frequentist(means)
 

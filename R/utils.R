@@ -74,7 +74,7 @@ as.numeric_ifnumeric <- function(x) {
 
 
 
-
+#' @importFrom bayestestR describe_posterior reshape_ci
 #' @keywords internal
 .summarize_posteriors <- function(posteriors, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, bf_prior = NULL) {
   x <-

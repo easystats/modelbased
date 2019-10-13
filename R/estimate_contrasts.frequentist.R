@@ -25,9 +25,8 @@
 #' model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
 #'
-#' @import emmeans
-#' @importFrom graphics pairs
-#' @importFrom stats mad median sd setNames
+#' @importFrom emmeans contrast
+#' @importFrom stats mad median sd setNames confint
 #' @importFrom bayestestR describe_posterior
 #' @export
 estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ci = 0.95, adjust = "holm", ...) {
@@ -35,7 +34,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   contrasts <- emmeans::contrast(estimated$means, method = "pairwise", adjust = adjust)
 
   # Summary
-  contrasts <- as.data.frame(merge(as.data.frame(contrasts), confint(contrasts, level = ci, adjust = adjust)))
+  contrasts <- as.data.frame(merge(as.data.frame(contrasts), stats::confint(contrasts, level = ci, adjust = adjust)))
   contrasts <- .clean_emmeans_frequentist(contrasts)
 
   # Reorder columns

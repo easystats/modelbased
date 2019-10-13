@@ -1,3 +1,5 @@
+#' @importFrom emmeans emmeans ref_grid
+#' @importFrom insight find_predictors get_data
 #' @keywords internal
 .emmeans_wrapper <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, type = "mean", ...) {
   if (is.null(levels)) {

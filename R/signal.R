@@ -25,7 +25,7 @@
   ii <- which(ss < 0)
 
   for (i in ii) {
-    Equi <- c(Equi, uniroot(f, lower = xseq[i], upper = xseq[i + 1], ...)$root)
+    Equi <- c(Equi, stats::uniroot(f, lower = xseq[i], upper = xseq[i + 1], ...)$root)
   }
 
   return(Equi)
@@ -54,7 +54,7 @@
 zero_crossings <- function(x) {
 
   # Estimate gradient
-  zerocrossings <- .uniroot.all(approxfun(1:length(x), x), interval = range(1:length(x)))
+  zerocrossings <- .uniroot.all(stats::approxfun(1:length(x), x), interval = range(1:length(x)))
   if (length(zerocrossings) == 0) {
     return(NA)
   }

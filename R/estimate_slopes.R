@@ -41,8 +41,6 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' estimate_slopes(model)
 #' }
 #'
-#' @import emmeans
-#' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
@@ -78,6 +76,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 
 
+#' @importFrom emmeans emtrends
 #' @keywords internal
 .estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...){
   predictors <- insight::find_predictors(model)$conditional
@@ -105,7 +104,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
   trends <- emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
 
 
-  if(insight::model_info(model)$is_bayesian){
+  if (insight::model_info(model)$is_bayesian) {
     params <- as.data.frame(trends)
     rownames(params) <- NULL
 
@@ -121,7 +120,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
     slopes$Parameter <- NULL
     slopes <- cbind(params, slopes)
 
-  } else{
+  } else {
     params <- as.data.frame(confint(trends, levels = ci, ...))
     slopes <- .clean_emmeans_frequentist(params)
     names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
@@ -164,7 +163,8 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 
 
-
+#' @importFrom insight get_response model_info get_predictors
+#' @importFrom stats sd mad
 #' @keywords internal
 .standardize_slopes <- function(slopes, model, trend, robust = FALSE) {
   vars <- names(slopes)[names(slopes) %in% c("Median", "Mean", "MAP", "Coefficient")]
@@ -172,15 +172,15 @@ estimate_slopes.merMod <- estimate_slopes.lm
   if (insight::model_info(model)$is_linear) {
     response <- insight::get_response(model)
     if (robust) {
-      std <- slopes[vars] * mad(x, na.rm = TRUE) / mad(response, na.rm = TRUE)
+      std <- slopes[vars] * stats::mad(x, na.rm = TRUE) / mad(response, na.rm = TRUE)
     } else {
-      std <- slopes[vars] * sd(x, na.rm = TRUE) / sd(response, na.rm = TRUE)
+      std <- slopes[vars] * stats::sd(x, na.rm = TRUE) / sd(response, na.rm = TRUE)
     }
   } else {
     if (robust) {
-      std <- slopes[vars] * mad(x, na.rm = TRUE)
+      std <- slopes[vars] * stats::mad(x, na.rm = TRUE)
     } else {
-      std <- slopes[vars] * sd(x, na.rm = TRUE)
+      std <- slopes[vars] * stats::sd(x, na.rm = TRUE)
     }
   }
   names(std) <- paste0("Std_", names(std))
