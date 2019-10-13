@@ -1,7 +1,6 @@
 context("signal")
 
 
-
 test_that("signal", {
   library(parameters)
   set.seed(333)
@@ -10,5 +9,5 @@ test_that("signal", {
   s1 <- smoothing(x, method = "loess")
   s2 <- smoothing(x, method = "smooth")
 
-  testthat::expect_true(parameters::check_smoothness(s1) > parameters::check_smoothness(s2))
+  testthat::expect_true(parameters::smoothness(s1) > parameters::smoothness(s2))
 })

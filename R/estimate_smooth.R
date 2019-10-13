@@ -184,7 +184,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
-      smoothness <- parameters::check_smoothness(segment, method = "cor", lag = 0.1)
+      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
     }
   }
 

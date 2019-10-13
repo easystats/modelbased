@@ -11,7 +11,7 @@
 #' @param standardize_robust Standardization based on median and MAD (a robust equivalent of the SD).
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams parameters::format_standardize
+#' @inheritParams effectsize::format_standardize
 #'
 #'
 #' @examples
@@ -61,7 +61,14 @@ visualisation_matrix.lmerMod <- visualisation_matrix.stanreg
 
 
 
-
+#' @export
+visualisation_matrix.visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = attributes(x)$reference, na.rm = TRUE, ...) {
+  grid <- visualisation_matrix(as.data.frame(x), ...)
+  if("model" %in% names(attributes(x))){
+    attr(grid, "model") <- attributes(x)$model
+  }
+  grid
+}
 
 
 
@@ -76,8 +83,12 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   # Target
   if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
     grid <- .visualisation_matrix_target(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
-    return(.preserve_range(grid, x, preserve_range))
+    grid <- .preserve_range(grid, x, preserve_range)
+    class(grid) <- c("visualisation_matrix", class(grid))
+    attr(grid, "reference") <- reference
+    return(grid)
   }
+
 
   target_df <- .visualisation_matrix_target(x, varnames = target, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
   target <- names(target_df)
@@ -120,6 +131,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
   # Preserve range
   grid <- .preserve_range(grid, x, preserve_range)
+  class(grid) <- c("visualisation_matrix", class(grid))
+  attr(grid, "reference") <- reference
   grid
 }
 
@@ -237,7 +250,7 @@ visualisation_matrix.character <- visualisation_matrix.vector
       parts <- unlist(sapply(parts, trimws, simplify = FALSE)) # trim whitespaces
       vars[[parts[1]]] <- eval(parse(text = parts[2]))
     } else {
-      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
+      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference, stringsAsFactors = FALSE)[[i]])
     }
   }
 
@@ -276,9 +289,9 @@ visualisation_matrix.character <- visualisation_matrix.vector
   } else if (is.logical(x)) {
     x <- as.factor(x)
     out <- as.factor(levels(droplevels(x)))
-  } else if (length(unique(x)) < 3) {
-    x <- as.factor(x)
-    out <- as.factor(levels(droplevels(x)))
+  # } else if (length(unique(x)) < 3) {
+  #   x <- as.factor(x)
+  #   out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
     if (is.numeric(length)) {
 
