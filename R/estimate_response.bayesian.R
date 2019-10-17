@@ -99,6 +99,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   )
 
   class(out) <- c("estimate_response", "see_estimate_response", class(out))
+  row.names(out) <- NULL
   out
 }
 
@@ -180,7 +181,7 @@ estimate_link.stanreg <- function(model, data = "grid", transform = "response", 
 estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if(is.null(data) & !is.null(attributes(model)$model)){
+  if((is.null(data) | data == "grid") & !is.null(attributes(model)$model)){
     data <- attributes(model)$model
   }
 
@@ -193,7 +194,7 @@ estimate_response.data.frame <- function(model, data = NULL, transform = "respon
 estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", smooth_method = "loess", smooth_strength = 0.25, keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if(is.null(data) & !is.null(attributes(model)$model)){
+  if((is.null(data) | data == "grid") & !is.null(attributes(model)$model)){
     data <- attributes(model)$model
   }
 

@@ -11,7 +11,7 @@
 #' @param standardize_robust Standardization based on median and MAD (a robust equivalent of the SD).
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
-#' @inheritParams parameters::format_standardize
+#' @inheritParams effectsize::format_standardize
 #'
 #'
 #' @examples
@@ -61,7 +61,14 @@ visualisation_matrix.lmerMod <- visualisation_matrix.stanreg
 
 
 
-
+#' @export
+visualisation_matrix.visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = attributes(x)$reference, na.rm = TRUE, ...) {
+  grid <- visualisation_matrix(as.data.frame(x), target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = reference, na.rm = na.rm, ...)
+  if("model" %in% names(attributes(x))){
+    attr(grid, "model") <- attributes(x)$model
+  }
+  grid
+}
 
 
 
@@ -76,14 +83,19 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   # Target
   if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
     grid <- .visualisation_matrix_target(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
-    return(.preserve_range(grid, x, preserve_range))
+    grid <- .preserve_range(grid, x, preserve_range)
+    class(grid) <- c("visualisation_matrix", class(grid))
+    attr(grid, "reference") <- reference
+    return(grid)
   }
+
 
   target_df <- .visualisation_matrix_target(x, varnames = target, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
   target <- names(target_df)
 
   # Rest
   df_rest <- x[!names(x) %in% c(target)]
+  df_rest <- unique(df_rest)
   var_order <- names(df_rest)
 
   facs <- df_rest[!sapply(df_rest, is.numeric)]
@@ -94,14 +106,16 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   if (factors %in% c("reference", "mode")) {
     facs <- as.data.frame(sapply(facs, .smart_summary, factors = factors, na.rm = na.rm, simplify = FALSE))
   } else {
-    facs <- .visualisation_matrix_target(facs)
+    facs <- expand.grid(lapply(as.list(facs), unique), stringsAsFactors = FALSE)
+    # facs <- .visualisation_matrix_target(facs)
   }
 
   if (is.numeric(numerics)) {
     nums[1, ] <- numerics
     nums <- nums[1, ]
   } else if (numerics == "combination") {
-    nums <- .visualisation_matrix_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
+    nums <- expand.grid(lapply(as.list(nums), unique), stringsAsFactors = FALSE)
+    # nums <- .visualisation_matrix_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
   } else {
     nums <- as.data.frame(sapply(nums, .smart_summary, numerics = numerics, na.rm = na.rm, simplify = FALSE))
   }
@@ -120,6 +134,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
   # Preserve range
   grid <- .preserve_range(grid, x, preserve_range)
+  class(grid) <- c("visualisation_matrix", class(grid))
+  attr(grid, "reference") <- reference
   grid
 }
 
@@ -237,7 +253,7 @@ visualisation_matrix.character <- visualisation_matrix.vector
       parts <- unlist(sapply(parts, trimws, simplify = FALSE)) # trim whitespaces
       vars[[parts[1]]] <- eval(parse(text = parts[2]))
     } else {
-      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference)[[i]])
+      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference, stringsAsFactors = FALSE)[[i]])
     }
   }
 
@@ -248,7 +264,7 @@ visualisation_matrix.character <- visualisation_matrix.vector
     if (nrow(grid) == 0) {
       grid <- var
     } else {
-      grid <- merge(grid, var)
+      grid <- merge(grid, unique(var))
     }
   }
   grid
@@ -276,9 +292,9 @@ visualisation_matrix.character <- visualisation_matrix.vector
   } else if (is.logical(x)) {
     x <- as.factor(x)
     out <- as.factor(levels(droplevels(x)))
-  } else if (length(unique(x)) < 3) {
-    x <- as.factor(x)
-    out <- as.factor(levels(droplevels(x)))
+  # } else if (length(unique(x)) < 3) {
+  #   x <- as.factor(x)
+  #   out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
     if (is.numeric(length)) {
 
@@ -324,3 +340,4 @@ visualisation_matrix.character <- visualisation_matrix.vector
   names(out) <- NULL
   out
 }
+
