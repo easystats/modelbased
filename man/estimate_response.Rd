@@ -32,5 +32,5 @@ See the documentation for your object's class:
  \item{\link[=estimate_response.stanreg]{Bayesian models (stanreg and brms)}}
  \item{\link[=estimate_response.glm]{Frequentist models}}
  }
-\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"} and, for Bayesian models, \code{predict = "link"} and \code{smooth_strength = 0.2}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting.
+\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting.
 }

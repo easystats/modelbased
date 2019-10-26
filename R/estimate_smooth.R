@@ -56,7 +56,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @importFrom insight find_predictors get_data
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "smooth", smooth_strength = 0.2, centrality = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -82,8 +82,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     predict = "link",
     centrality = centrality, transform = transform,
     keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, smooth_method = smooth_method,
-    smooth_strength = smooth_strength, ...
+    seed = NULL, random = FALSE, ...
   )
 
   if (!is.null(levels)) {
