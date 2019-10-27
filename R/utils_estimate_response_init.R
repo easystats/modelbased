@@ -30,21 +30,14 @@
 
   # Deal with transform
   if (predict == "link") {
-    transform <- ifelse(transform == "response", TRUE, FALSE)
-    interval <- "prediction"
-  } else {
-    interval <- "confidence"
-  }
-
-  if (predict == "link") {
-    transform <- ifelse(transform == "response", TRUE, FALSE)
+    if (insight::model_info(model)$is_bayesian) transform <- ifelse(transform == "response", TRUE, FALSE)
     interval <- "prediction"
   } else{
     interval <- "confidence"
   }
 
 
-  list(data = data, re.form = re.form, transfom = transform, interval = interval)
+  list(data = data, re.form = re.form, transform = transform, interval = interval)
 }
 
 

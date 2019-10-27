@@ -55,7 +55,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   data <- args$data
 
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
-    posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transfom)
+    posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
   } else {
     posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
   }

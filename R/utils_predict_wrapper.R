@@ -17,6 +17,7 @@ predict_wrapper.lm <- function(model, newdata = NULL, ci = 0.95, transform = "re
     predict(model,
             newdata = newdata,
             interval = interval,
+            type = transform,
             level = ci,
             ...))
   if(ncol(prediction) == 1){
@@ -27,7 +28,24 @@ predict_wrapper.lm <- function(model, newdata = NULL, ci = 0.95, transform = "re
 
 
 
+#' @importFrom stats qnorm
+#' @keywords internal
+predict_wrapper.glm <- function(model, newdata = NULL, ci = 0.95, transform = "response", ...){
+  transform <- ifelse(transform == FALSE, "link", "response")
+  prediction <- as.data.frame(
+    predict(model,
+            se.fit = TRUE,
+            newdata = newdata,
+            type = transform,
+            level = ci,
+            ...))
 
+  critval <- qnorm(1 - ((1-ci) / 2))
+  prediction$upr <- prediction$fit + (critval * prediction$se.fit)
+  prediction$lwr <- prediction$fit - (critval * prediction$se.fit)
+
+  prediction[c("fit", "lwr", "upr")]
+}
 
 
 
@@ -62,12 +80,14 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
   }
 
 
+
   if(is.null(ci)){
+    # type <- ifelse(transform == "response", TRUE, FALSE)
+
     prediction <- data.frame(Predicted = predict(model,
                                                  newdata = newdata,
                                                  re.form = re.form,
-                                                 type = transform,
-                                                 ...),
+                                                 type = transform),
                              CI_low = NA,
                              CI_high = NA)
   } else{
@@ -77,16 +97,16 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
     }
 
     if(transform == "response" && !insight::model_info(model)$is_linear){
-      tranform <- "probability"
+      type <- "probability"
     } else{
-      transform <- "linear.prediction"
+      type <- "linear.prediction"
     }
 
     prediction <- as.data.frame(
       merTools::predictInterval(model,
                                 which = "fixed",
                                 newdata = newdata,
-                                type = transform,
+                                type = type,
                                 stat = "median",
                                 level = ci))
   }

@@ -33,6 +33,15 @@ test_that("estimate_response - Frequentist", {
   estim <- estimate_response(insight::download_model("lm_2"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
+  estim <- estimate_link(insight::download_model("glm_2"), target = "wt")
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
+
+  estim <- estimate_link(insight::download_model("lmerMod_1"))
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 4))
+
+  estim <- estimate_link(insight::download_model("merMod_1"))
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 4))
+
   model <- MASS::polr(Species ~ Sepal.Width, data = iris)
   estim <- estimate_link(model)
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 4))

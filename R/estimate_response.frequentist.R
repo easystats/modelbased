@@ -24,7 +24,7 @@ estimate_response.glm <- function(model, data = NULL, transform = "response", ra
                                 newdata = args$data,
                                 ci = ci,
                                 re.form = args$re.form,
-                                transfom = args$transfom,
+                                transform = args$transform,
                                 interval = args$interval,
                                 ...)
 
