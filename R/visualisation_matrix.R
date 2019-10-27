@@ -36,11 +36,17 @@ visualisation_matrix <- function(x, target = "all", length = 10, factors = "refe
 
 
 #' @export
-visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, ...) {
+visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, include_response = FALSE, ...) {
+
   data <- insight::get_data(x)
-  if (random == FALSE) {
-    data <- data[insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
+  if(include_response == FALSE){
+    data <- data[names(data) != insight::find_response(x)]
   }
+
+  if (random == FALSE) {
+    data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
+  }
+
   data <- visualisation_matrix(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, random = TRUE, ...)
 
   attr(data, "model") <- x
@@ -54,6 +60,8 @@ visualisation_matrix.brmsfit <- visualisation_matrix.stanreg
 visualisation_matrix.lm <- visualisation_matrix.stanreg
 #' @export
 visualisation_matrix.glm <- visualisation_matrix.stanreg
+#' @export
+visualisation_matrix.polr <- visualisation_matrix.stanreg
 #' @export
 visualisation_matrix.merMod <- visualisation_matrix.stanreg
 #' @export

@@ -54,14 +54,14 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
   data <- args$data
 
-  if (predict == "link") {
+  if (predict == "link" && !insight::model_info(model)$is_ordinal) {
     posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transfom)
   } else {
     posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
   }
 
   # Summary
-  prediction <- .summarize_posteriors(as.data.frame(posteriors), ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
+  prediction <- .summarize_posteriors(as.data.frame(posteriors, stringsAsFactors = FALSE), ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
   prediction$Parameter <- NULL
 
   # Draws
@@ -104,55 +104,6 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
 
 
-#' @keywords internal
-.estimate_response_init <- function(model, data, transform, random, length, preserve_range, predict, ...){
-  # Data
-  if (is.null(data)) {
-    data <- insight::get_data(model)
-  } else if (!is.data.frame(data)) {
-    if (data == "grid") {
-      data <- visualisation_matrix(model, random = random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
-    } else {
-      stop('The `data` argument must either NULL, "grid" or another data.frame.')
-    }
-  }
-
-  data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
-
-  # Deal with random
-  if (insight::model_info(model)$is_mixed & random) {
-    if (!insight::find_random(model, flatten = TRUE) %in% names(data)) {
-      warning("Could not find random effects in data. Will turn `random` to FALSE.")
-      random <- FALSE
-    }
-  }
-  if (random == TRUE) {
-    re.form <- NULL
-  } else if (random == FALSE) {
-    re.form <- NA
-  }
-
-  # Generate draws
-  if (predict == "link") {
-    if (transform == "response") {
-      transform <- TRUE
-    } else {
-      transform <- FALSE
-    }
-    interval <- "prediction"
-  } else{
-    interval <- "confidence"
-  }
-
-  list(data = data, re.form = re.form, transfom = transform, interval = interval)
-}
-
-
-
-
-
-
-
 
 #' @rdname estimate_response
 #' @export
@@ -176,7 +127,7 @@ estimate_link.stanreg <- function(model, data = "grid", transform = "response", 
 estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if((is.null(data) | data == "grid") & !is.null(attributes(model)$model)){
+  if((is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model)){
     data <- attributes(model)$model
   }
 
@@ -189,9 +140,12 @@ estimate_response.data.frame <- function(model, data = NULL, transform = "respon
 estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if((is.null(data) | data == "grid") & !is.null(attributes(model)$model)){
+  if((is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model)){
     data <- attributes(model)$model
   }
 
   estimate_response(data, data = model, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
+
+
+

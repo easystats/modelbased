@@ -37,6 +37,7 @@ Suggests:
 	ggplot2,
 	knitr,
 	lme4,
+	MASS,
 	merTools,
 	rmarkdown,
 	rstanarm,

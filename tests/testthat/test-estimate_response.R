@@ -2,7 +2,7 @@ context("estimate_response")
 
 
 
-test_that("estimate_response", {
+test_that("estimate_response - Bayesian", {
   library(insight)
   library(rstanarm)
 
@@ -16,10 +16,24 @@ test_that("estimate_response", {
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
   model <- stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 500, chains = 2)
-  estim <- estimate_link(model, keep_draws = TRUE, smooth_strength = 0.25)
+  estim <- estimate_link(model, keep_draws = TRUE)
   draws <- reshape_draws(estim)
   testthat::expect_equal(c(nrow(draws), ncol(draws)), c(12500, 7))
 
+  # Polr
+  model <- stan_polr(Species ~ Petal.Width + Petal.Length, data = iris, refresh = 0, iter = 500, chains = 2, prior = R2(0.2, "mean"))
+  estim <- estimate_link(model, length = 5)
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
+})
+
+
+
+test_that("estimate_response - Frequentist", {
+
   estim <- estimate_response(insight::download_model("lm_2"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
+
+  model <- MASS::polr(Species ~ Sepal.Width, data = iris)
+  estim <- estimate_link(model)
+  testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 4))
 })
