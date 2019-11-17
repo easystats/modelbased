@@ -101,7 +101,10 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 
   # Basis
-  trends <- emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
+  # Sometimes (when exactly?) fails when transform argument is passed
+  trends <- tryCatch(emmeans::emtrends(model, levels, var = trend, transform = transform, ...),
+                     error = function(e) emmeans::emtrends(model, levels, var = trend, ...))
+
 
 
   if (insight::model_info(model)$is_bayesian) {
