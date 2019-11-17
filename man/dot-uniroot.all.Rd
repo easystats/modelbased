@@ -4,8 +4,16 @@
 \alias{.uniroot.all}
 \title{Copied from rootSolve package}
 \usage{
-.uniroot.all(f, interval, lower = min(interval), upper = max(interval),
-  tol = .Machine$double.eps^0.2, maxiter = 1000, n = 100, ...)
+.uniroot.all(
+  f,
+  interval,
+  lower = min(interval),
+  upper = max(interval),
+  tol = .Machine$double.eps^0.2,
+  maxiter = 1000,
+  n = 100,
+  ...
+)
 }
 \description{
 Copied from rootSolve package

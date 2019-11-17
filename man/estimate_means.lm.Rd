@@ -4,9 +4,16 @@
 \alias{estimate_means.lm}
 \title{Estimate marginal means}
 \usage{
-\method{estimate_means}{lm}(model, levels = NULL, fixed = NULL,
-  modulate = NULL, transform = "response", length = 10, ci = 0.95,
-  ...)
+\method{estimate_means}{lm}(
+  model,
+  levels = NULL,
+  fixed = NULL,
+  modulate = NULL,
+  transform = "response",
+  length = 10,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{model}{A Bayesian model.}

@@ -4,10 +4,19 @@
 \alias{estimate_contrasts.lm}
 \title{Estimate contrasts}
 \usage{
-\method{estimate_contrasts}{lm}(model, levels = NULL, fixed = NULL,
-  modulate = NULL, transform = "none", length = 10,
-  standardize = TRUE, standardize_robust = FALSE, ci = 0.95,
-  adjust = "holm", ...)
+\method{estimate_contrasts}{lm}(
+  model,
+  levels = NULL,
+  fixed = NULL,
+  modulate = NULL,
+  transform = "none",
+  length = 10,
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  ci = 0.95,
+  adjust = "holm",
+  ...
+)
 }
 \arguments{
 \item{model}{A Bayesian model.}

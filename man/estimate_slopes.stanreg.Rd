@@ -4,11 +4,21 @@
 \alias{estimate_slopes.stanreg}
 \title{Estimate the slopes of a numeric predictor (over different factor levels)}
 \usage{
-\method{estimate_slopes}{stanreg}(model, trend = NULL, levels = NULL,
-  transform = "response", standardize = TRUE,
-  standardize_robust = FALSE, centrality = "median", ci = 0.89,
-  ci_method = "hdi", test = c("pd", "rope"), rope_range = "default",
-  rope_ci = 1, ...)
+\method{estimate_slopes}{stanreg}(
+  model,
+  trend = NULL,
+  levels = NULL,
+  transform = "response",
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  test = c("pd", "rope"),
+  rope_range = "default",
+  rope_ci = 1,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

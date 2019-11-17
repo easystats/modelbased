@@ -4,9 +4,15 @@
 \alias{estimate_slopes}
 \title{Estimate the slopes of a numeric predictor (over different factor levels)}
 \usage{
-estimate_slopes(model, trend = NULL, levels = NULL,
-  transform = "response", standardize = TRUE,
-  standardize_robust = FALSE, ...)
+estimate_slopes(
+  model,
+  trend = NULL,
+  levels = NULL,
+  transform = "response",
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

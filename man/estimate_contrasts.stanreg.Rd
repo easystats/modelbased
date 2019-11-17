@@ -4,11 +4,23 @@
 \alias{estimate_contrasts.stanreg}
 \title{Estimate contrasts}
 \usage{
-\method{estimate_contrasts}{stanreg}(model, levels = NULL,
-  fixed = NULL, modulate = NULL, transform = "none", length = 10,
-  standardize = TRUE, standardize_robust = FALSE,
-  centrality = "median", ci = 0.89, ci_method = "hdi",
-  test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...)
+\method{estimate_contrasts}{stanreg}(
+  model,
+  levels = NULL,
+  fixed = NULL,
+  modulate = NULL,
+  transform = "none",
+  length = 10,
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  test = c("pd", "rope"),
+  rope_range = "default",
+  rope_ci = 1,
+  ...
+)
 }
 \arguments{
 \item{model}{A Bayesian model.}

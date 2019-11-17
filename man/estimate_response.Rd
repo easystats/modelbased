@@ -5,11 +5,25 @@
 \alias{estimate_link}
 \title{Generates predictions}
 \usage{
-estimate_response(model, data = NULL, transform = "response",
-  random = FALSE, length = 25, preserve_range = TRUE, ...)
+estimate_response(
+  model,
+  data = NULL,
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  ...
+)
 
-estimate_link(model, data = "grid", transform = "response",
-  random = FALSE, length = 25, preserve_range = TRUE, ...)
+estimate_link(
+  model,
+  data = "grid",
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

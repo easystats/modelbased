@@ -4,8 +4,15 @@
 \alias{estimate_smooth.stanreg}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-\method{estimate_smooth}{stanreg}(model, smooth = NULL, levels = NULL,
-  length = 200, transform = "response", centrality = "median", ...)
+\method{estimate_smooth}{stanreg}(
+  model,
+  smooth = NULL,
+  levels = NULL,
+  length = 200,
+  transform = "response",
+  centrality = "median",
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

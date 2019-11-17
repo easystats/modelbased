@@ -5,13 +5,29 @@
 \alias{estimate_link.glm}
 \title{Generates predictions for Frequentist models}
 \usage{
-\method{estimate_response}{glm}(model, data = NULL,
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "response", ci = 0.95, ...)
+\method{estimate_response}{glm}(
+  model,
+  data = NULL,
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "response",
+  ci = 0.95,
+  ...
+)
 
-\method{estimate_link}{glm}(model, data = "grid",
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", ci = 0.95, ...)
+\method{estimate_link}{glm}(
+  model,
+  data = "grid",
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "link",
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

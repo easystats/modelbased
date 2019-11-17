@@ -4,8 +4,14 @@
 \alias{estimate_smooth}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-estimate_smooth(model, smooth = NULL, levels = NULL, length = 200,
-  transform = "response", ...)
+estimate_smooth(
+  model,
+  smooth = NULL,
+  levels = NULL,
+  length = 200,
+  transform = "response",
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
