@@ -1,5 +1,5 @@
 ---
-title: "Describe non-linear curves"
+title: "Model and describe non-linear relationships"
 output: 
   github_document:
     toc: true
@@ -9,9 +9,9 @@ output:
     toc: true
     fig_width: 10.08
     fig_height: 6
-tags: [r, estimate, estimate response, predictions]
+tags: [r, estimate, estimate response, predictions, non linear, polynomial]
 vignette: >
-  %\VignetteIndexEntry{Describe non-linear curves}
+  %\VignetteIndexEntry{Model and describe non-linear relationships}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -30,7 +30,7 @@ set.seed(333)
 ```
 
 
-This vignette will present how to describe non-linear curvess using `estimate`. Warning: we will go **full Bayesian**. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+This vignette will present how to model and describe non-linear relationships using `estimate`. Warning: we will go **full Bayesian**. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
 -----------
 
@@ -40,7 +40,53 @@ However, advances in software makes modelling of non-linear relationship very st
 
 The `estimate` package aims at easing this step by **summarising non-linear curves in terms of linear segments**.
 
-# The data: Effect of time on memory
+# estimate_smooth
+
+Let's start by creating a very simple dataset:
+
+```{r message=FALSE, warning=FALSE}
+data <- data.frame(x = -50:50)  # Generate dataframe with one variable x
+data$y <- data$x^2  # Add a variable y
+data$y <- data$y + rnorm(nrow(data), mean = 0, sd = 100)  # Add some gaussian noise
+```
+
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)  # For plotting
+library(see)  # For nice themes
+
+ggplot(data, aes(x = x, y = y)) +
+  geom_point() +
+  see::theme_modern()
+```
+
+Looking nice! Now let's model this non-linear relationship using a **polynomial** term:
+
+```{r message=FALSE, warning=FALSE}
+model <- glm(y ~ poly(x, 2), data = data)
+```
+
+Let's continue with **visualising the fitted model**:
+
+```{r message=FALSE, warning=FALSE}
+estimate_link(model) %>% 
+  ggplot(aes(x = x, y = Predicted)) +
+  geom_line(color = "purple") +
+  geom_point(data = data, aes(x = x, y = y)) +  # Add original data points
+  see::theme_modern()
+```
+
+Altough a visual representation is usually recommended, how can we **verbally describe this relationship**?
+
+```{r message=FALSE, warning=FALSE}
+estimate_smooth(model)
+```
+
+`estimate_smooth` will decompose this curve into linear parts, returning their size (the percentage of the curve of the segment), and the trend (positive or negative). We can now say that that the relationship can be summarised as one negative link and positive link, with a **changing point** located roughly around 0.
+
+
+
+
+# Real application: Effect of time on memory
 
 We will download and use a dataset where participants had to answer questions about the movie **Avengers: Age of ultron** (combined into a **memory score**) a few days after watching it at the theater (the **delay** variable). Let's visualise how the `Delay`, in days, influences the `Memory` score, by plotting the data points and a raw *loess* fit on this raw data.
 
@@ -66,19 +112,20 @@ ggplot(df, aes(x=Delay, y=Memory)) +
 Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the litterature suggestiong a 2nd order polynomial curve [@Averell_2011].
 
 
+
 # Modelling non-linear curves
 
-We can fit a Bayesian linear mixed regression to model such relationship, adding it a few other variables that could influence this curve, such as the **familiarity with the characters of the movie**, the **language of the movie**, the **immersion** (2D/3D) and the **Sex**.
+We can fit a Bayesian linear mixed regression to model such relationship, adding it a few other variables that could influence this curve, such as the **familiarity with the characters of the movie**, the **language of the movie**, the **immersion** (2D/3D).
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(rstanarm)
 
-model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_Language) + (1|Immersion) + (1|Sex), data = df)
+model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_Language) + (1|Immersion), data = df)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(rstanarm)
 
-model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_Language) + (1|Immersion) + (1|Sex), data = df, chains = 1, iter = 1000, refresh = 0)
+model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_Language) + (1|Immersion), data = df, chains = 1, iter = 1000, refresh = 0)
 ```
 
 We can visualise the link between the Delay and the Memory score by using the `estimate_link`.
@@ -106,9 +153,6 @@ It seems that the memory score starts by decreasing, up to a point where it stab
 ```{r message=FALSE, warning=FALSE}
 estimate_smooth(model, smooth = "Delay")
 ```
-
-`estimate_smooth` will decompose this curve into linear parts, returning their size (the percentage of the curve of the segment), and the trend (positive or negative). We can now say 
-
 
 
 # References
