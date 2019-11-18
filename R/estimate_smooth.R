@@ -56,7 +56,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @importFrom insight find_predictors get_data
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", smooth_method = "smooth", smooth_strength = 0.2, centrality = "median", ...) {
+estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -82,9 +82,12 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
     predict = "link",
     centrality = centrality, transform = transform,
     keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, smooth_method = smooth_method,
-    smooth_strength = smooth_strength, ...
+    seed = NULL, random = FALSE, ...
   )
+
+  # Predicted name
+  pred_name <- c("Median", "Mean", "MAP", "Predicted")
+  pred_name <- pred_name[pred_name %in% names(smooth_data)]
 
   if (!is.null(levels)) {
     description <- data.frame()
@@ -93,7 +96,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       data <- smooth_data
       for (col in names(groups)) {
         data <- data[data[[col]] == groups[row, col], ]
-        current_description <- .describe_smooth(data$Median)
+        current_description <- .describe_smooth(data[[pred_name]])
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -109,7 +112,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       }
     }
   } else {
-    description <- .describe_smooth(smooth_data$Median)
+    description <- .describe_smooth(smooth_data[[pred_name]])
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]
@@ -124,9 +127,11 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
 }
 
 
+#' @export
+estimate_smooth.glm <- estimate_smooth.stanreg
 
-
-
+#' @export
+estimate_smooth.merMod <- estimate_smooth.stanreg
 
 
 

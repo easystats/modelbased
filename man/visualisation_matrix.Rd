@@ -4,10 +4,19 @@
 \alias{visualisation_matrix}
 \title{Create a reference grid.}
 \usage{
-visualisation_matrix(x, target = "all", length = 10,
-  factors = "reference", numerics = "mean", preserve_range = FALSE,
-  standardize = FALSE, standardize_robust = FALSE, reference = x,
-  na.rm = TRUE, ...)
+visualisation_matrix(
+  x,
+  target = "all",
+  length = 10,
+  factors = "reference",
+  numerics = "mean",
+  preserve_range = FALSE,
+  standardize = FALSE,
+  standardize_robust = FALSE,
+  reference = x,
+  na.rm = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{An object from which to contruct the reference grid.}

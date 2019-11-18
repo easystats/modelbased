@@ -15,21 +15,25 @@
 <link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png" />
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png" />
+
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,12 +43,12 @@
 
   <link href="../extra.css" rel="stylesheet">
   
+
 <meta property="og:title" content="Estimate contrasts — estimate_contrasts.lm" />
-
 <meta property="og:description" content="Estimate contrasts" />
-
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
+
 
 
 
@@ -56,6 +60,7 @@
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
+
 
 
   </head>
@@ -117,11 +122,10 @@
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/easystats/estimate">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -132,6 +136,7 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -143,17 +148,24 @@
     </div>
 
     <div class="ref-description">
-    
     <p>Estimate contrasts</p>
-    
     </div>
 
     <pre class="usage"><span class='co'># S3 method for lm</span>
-<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
-  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"holm"</span>, <span class='no'>...</span>)</pre>
-    
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(
+  <span class='no'>model</span>,
+  <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
+  <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='kw'>adjust</span> <span class='kw'>=</span> <span class='st'>"holm"</span>,
+  <span class='no'>...</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -195,67 +207,69 @@
     </tr>
     <tr>
       <th>adjust</th>
-      <td><p>The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the <code><a href='https://www.rdocumentation.org/packages/emmeans/topics/summary.emmGrid'>emmeans::test</a></code> documentation.</p></td>
+      <td><p>The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the <code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>emmeans::test</a></code> documentation.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Arguments passed to or from other methods.</p></td>
     </tr>
     </table>
-    
+
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>estimate</span>)
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>estimate</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |         95% CI |     t |  df |      p | Difference (std.)
 #&gt; -------------------------------------------------------------------------------------------------------
-#&gt; setosa     | versicolor |       0.66 | 0.07 |   [0.49, 0.82] |  9.69 | 147 | &lt; .001 |              1.51
-#&gt; setosa     |  virginica |       0.45 | 0.07 |   [0.29, 0.62] |  6.68 | 147 | &lt; .001 |              1.04
-#&gt; versicolor |  virginica |      -0.20 | 0.07 | [-0.37, -0.04] | -3.00 | 147 |  &lt; .01 |             -0.47</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/stats/topics/lm'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+#&gt; setosa     | versicolor |       0.66 | 0.07 | [ 0.49,  0.82] |  9.69 | 147 | &lt; .001 |              1.51
+#&gt; setosa     |  virginica |       0.45 | 0.07 | [ 0.29,  0.62] |  6.68 | 147 | &lt; .001 |              1.04
+#&gt; versicolor |  virginica |      -0.20 | 0.07 | [-0.37, -0.04] | -3.00 | 147 | 0.003  |             -0.47</div><div class='input'>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Width</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
 <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
 #&gt; -----------------------------------------------------------------------------------------------------
-#&gt; setosa     | versicolor |       1.59 | 0.39 |  [0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
-#&gt; setosa     |  virginica |       1.77 | 0.41 |  [0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
-#&gt; versicolor |  virginica |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 |   &gt; .1 |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
+#&gt; setosa     | versicolor |       1.59 | 0.39 | [ 0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
+#&gt; setosa     |  virginica |       1.77 | 0.41 | [ 0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
+#&gt; versicolor |  virginica |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
 #&gt; -------------------------------------------------------------------------------------------------------------------
-#&gt; setosa     | versicolor |        1.20 |       1.59 | 0.39 |  [0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
-#&gt; setosa     |  virginica |        1.20 |       1.77 | 0.41 |  [0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
-#&gt; versicolor |  virginica |        1.20 |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 |   &gt; .1 |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |     t |  df |      p | Difference (std.)
+#&gt; setosa     | versicolor |        1.20 |       1.59 | 0.39 | [ 0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
+#&gt; setosa     |  virginica |        1.20 |       1.77 | 0.41 | [ 0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
+#&gt; versicolor |  virginica |        1.20 |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>, <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='st'>"Petal.Width"</span>, <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>4</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |     t |  df |      p | Difference (std.)
 #&gt; --------------------------------------------------------------------------------------------------------------------
-#&gt; setosa     | versicolor |        0.10 |       1.83 | 0.28 |  [1.15, 2.50] |  6.55 | 144 | &lt; .001 |              4.19
-#&gt; setosa     | versicolor |        0.90 |       1.65 | 0.29 |  [0.96, 2.35] |  5.74 | 144 | &lt; .001 |              3.80
-#&gt; setosa     | versicolor |        1.70 |       1.48 | 0.60 |  [0.03, 2.94] |  2.47 | 144 |  &lt; .05 |              3.40
-#&gt; setosa     | versicolor |        2.50 |       1.31 | 0.95 | [-1.00, 3.62] |  1.37 | 144 |   &gt; .1 |              3.00
-#&gt; setosa     |  virginica |        0.10 |       1.55 | 0.31 |  [0.79, 2.30] |  4.95 | 144 | &lt; .001 |              3.55
-#&gt; setosa     |  virginica |        0.90 |       1.71 | 0.32 |  [0.93, 2.50] |  5.28 | 144 | &lt; .001 |              3.93
-#&gt; setosa     |  virginica |        1.70 |       1.88 | 0.60 |  [0.43, 3.32] |  3.14 | 144 |  &lt; .01 |              4.31
-#&gt; setosa     |  virginica |        2.50 |       2.04 | 0.92 | [-0.19, 4.28] |  2.21 | 144 |   0.06 |              4.68
-#&gt; versicolor |  virginica |        0.10 |      -0.28 | 0.41 | [-1.26, 0.70] | -0.69 | 144 |   &gt; .1 |             -0.64
-#&gt; versicolor |  virginica |        0.90 |       0.06 | 0.21 | [-0.44, 0.56] |  0.28 | 144 |   &gt; .1 |              0.13
-#&gt; versicolor |  virginica |        1.70 |       0.40 | 0.11 |  [0.12, 0.67] |  3.50 | 144 |  &lt; .01 |              0.91
-#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 |  [0.08, 1.39] |  2.70 | 144 |  &lt; .05 |              1.68</div><span class='co'># NOT RUN {</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>lme4</span>)
+#&gt; setosa     | versicolor |        0.10 |       1.83 | 0.28 | [ 1.15, 2.50] |  6.55 | 144 | &lt; .001 |              4.19
+#&gt; setosa     | versicolor |        0.90 |       1.65 | 0.29 | [ 0.96, 2.35] |  5.74 | 144 | &lt; .001 |              3.80
+#&gt; setosa     | versicolor |        1.70 |       1.48 | 0.60 | [ 0.03, 2.94] |  2.47 | 144 | 0.015  |              3.40
+#&gt; setosa     | versicolor |        2.50 |       1.31 | 0.95 | [-1.00, 3.62] |  1.37 | 144 | 0.172  |              3.00
+#&gt; setosa     |  virginica |        0.10 |       1.55 | 0.31 | [ 0.79, 2.30] |  4.95 | 144 | &lt; .001 |              3.55
+#&gt; setosa     |  virginica |        0.90 |       1.71 | 0.32 | [ 0.93, 2.50] |  5.28 | 144 | &lt; .001 |              3.93
+#&gt; setosa     |  virginica |        1.70 |       1.88 | 0.60 | [ 0.43, 3.32] |  3.14 | 144 | 0.004  |              4.31
+#&gt; setosa     |  virginica |        2.50 |       2.04 | 0.92 | [-0.19, 4.28] |  2.21 | 144 | 0.057  |              4.68
+#&gt; versicolor |  virginica |        0.10 |      -0.28 | 0.41 | [-1.26, 0.70] | -0.69 | 144 | 0.492  |             -0.64
+#&gt; versicolor |  virginica |        0.90 |       0.06 | 0.21 | [-0.44, 0.56] |  0.28 | 144 | 0.780  |              0.13
+#&gt; versicolor |  virginica |        1.70 |       0.40 | 0.11 | [ 0.12, 0.67] |  3.50 | 144 | 0.002  |              0.91
+#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 | [ 0.08, 1.39] |  2.70 | 144 | 0.023  |              1.68</div><div class='input'>
 
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>lme4</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='input'>
 <span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>iris</span>
-<span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ifelse'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
+<span class='no'>data</span>$<span class='no'>Petal.Length_factor</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='no'>data</span>$<span class='no'>Petal.Length</span> <span class='kw'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
 
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/lme4/topics/lmer'>lmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
-<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)
-<span class='co'># }</span><div class='input'>
-</div></pre>
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + (<span class='fl'>1</span> <span class='kw'>|</span> <span class='no'>Petal.Length_factor</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>data</span>)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |     z |  df |      p | Difference (std.)
+#&gt; ------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       0.87 | 0.09 | [ 0.66, 1.08] | 10.11 | Inf | &lt; .001 |              2.00
+#&gt; setosa     |  virginica |       0.80 | 0.11 | [ 0.53, 1.07] |  7.11 | Inf | &lt; .001 |              1.83
+#&gt; versicolor |  virginica |      -0.07 | 0.07 | [-0.25, 0.10] | -1.00 | Inf | 0.318  |             -0.17</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -263,13 +277,16 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

@@ -24,10 +24,10 @@ URL: https://github.com/easystats/estimate
 BugReports: https://github.com/easystats/estimate/issues
 Description: Implements model-based estimations, used in the computation of marginal means, contrast analysis and predictions.
 Imports:
-	insight (>= 0.5.0),
-	bayestestR (>= 0.3.0),
+	insight (>= 0.7.0),
+	bayestestR (>= 0.4.0),
 	parameters (>= 0.2.0),
-	effectsize,
+	effectsize (>= 0.0.1),
 	emmeans
 Suggests:
 	coda,
@@ -37,14 +37,13 @@ Suggests:
 	ggplot2,
 	knitr,
 	lme4,
+	MASS,
 	merTools,
 	rmarkdown,
 	rstanarm,
 	see,
 	testthat
-Remotes: 
-	easystats/effectsize
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.0

@@ -4,9 +4,17 @@
 \alias{estimate_contrasts}
 \title{Estimate contrasts between factor levels}
 \usage{
-estimate_contrasts(model, levels = NULL, fixed = NULL,
-  modulate = NULL, transform = "none", length = 10,
-  standardize = TRUE, standardize_robust = FALSE, ...)
+estimate_contrasts(
+  model,
+  levels = NULL,
+  fixed = NULL,
+  modulate = NULL,
+  transform = "none",
+  length = 10,
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

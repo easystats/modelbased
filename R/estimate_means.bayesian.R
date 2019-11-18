@@ -93,9 +93,3 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   class(means) <- c("estimate_means", class(means))
   means
 }
-
-
-
-
-
-

@@ -46,8 +46,7 @@
 }
 
 #' @keywords internal
-.clean_emmeans_frequentist <- function(means){
-
+.clean_emmeans_frequentist <- function(means) {
   names(means)[names(means) == "emmean"] <- "Mean"
   names(means)[names(means) == "prob"] <- "Probability"
   names(means)[names(means) == "estimate"] <- "Difference"

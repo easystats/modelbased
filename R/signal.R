@@ -123,12 +123,15 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
 
   method <- match.arg(method, c("loess", "smooth"))
   if (method == "loess") {
-    smoothed <- tryCatch({
-      predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
-    }, warning = function(w) {
-      warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
-      predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
-    })
+    smoothed <- tryCatch(
+      {
+        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+      },
+      warning = function(w) {
+        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
+        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+      }
+    )
   } else if (method == "smooth") {
     smoothed <- smooth(x)
   } else {

@@ -4,8 +4,15 @@
 \alias{estimate_means}
 \title{Estimate average value of response variable at each factor levels}
 \usage{
-estimate_means(model, levels = NULL, fixed = NULL, modulate = NULL,
-  transform = "response", length = 10, ...)
+estimate_means(
+  model,
+  levels = NULL,
+  fixed = NULL,
+  modulate = NULL,
+  transform = "response",
+  length = 10,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

@@ -45,7 +45,6 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' @export
 estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, centrality = centrality, ci = ci, ci_method = ci_method, test = test, rope_range = rope_range, rope_ci = rope_ci)
-
 }
 
 
@@ -59,7 +58,6 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 #'
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)
-#'
 #' @export
 estimate_slopes.lm <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, ...) {
   .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust)
@@ -78,7 +76,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 #' @importFrom emmeans emtrends
 #' @keywords internal
-.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...){
+.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -101,7 +99,11 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 
   # Basis
-  trends <- emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
+  # Sometimes (when exactly?) fails when transform argument is passed
+  trends <- tryCatch(emmeans::emtrends(model, levels, var = trend, transform = transform, ...),
+    error = function(e) emmeans::emtrends(model, levels, var = trend, ...)
+  )
+
 
 
   if (insight::model_info(model)$is_bayesian) {
@@ -113,13 +115,12 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
     # Summary
     slopes <- .summarize_posteriors(trends,
-                                    ci = ci, ci_method = ci_method,
-                                    centrality = centrality,
-                                    test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
+      ci = ci, ci_method = ci_method,
+      centrality = centrality,
+      test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
     )
     slopes$Parameter <- NULL
     slopes <- cbind(params, slopes)
-
   } else {
     params <- as.data.frame(confint(trends, levels = ci, ...))
     slopes <- .clean_emmeans_frequentist(params)

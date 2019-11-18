@@ -7,33 +7,73 @@
 \alias{estimate_link.data.frame}
 \title{Generates predictions for Bayesian models}
 \usage{
-\method{estimate_response}{stanreg}(model, data = NULL,
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "response",
-  smooth_method = "smooth", smooth_strength = 0, keep_draws = FALSE,
-  draws = NULL, seed = NULL, centrality = "median", ci = 0.89,
-  ci_method = "hdi", ...)
+\method{estimate_response}{stanreg}(
+  model,
+  data = NULL,
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "response",
+  keep_draws = FALSE,
+  draws = NULL,
+  seed = NULL,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  ...
+)
 
-\method{estimate_link}{stanreg}(model, data = "grid",
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_method = "loess",
-  smooth_strength = 0.25, keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+\method{estimate_link}{stanreg}(
+  model,
+  data = "grid",
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "link",
+  keep_draws = FALSE,
+  draws = NULL,
+  seed = NULL,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  ...
+)
 
-\method{estimate_response}{data.frame}(model, data = NULL,
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_method = "loess",
-  smooth_strength = 0, keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+\method{estimate_response}{data.frame}(
+  model,
+  data = NULL,
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "link",
+  keep_draws = FALSE,
+  draws = NULL,
+  seed = NULL,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  ...
+)
 
-\method{estimate_link}{data.frame}(model, data = "grid",
-  transform = "response", random = FALSE, length = 25,
-  preserve_range = TRUE, predict = "link", smooth_method = "loess",
-  smooth_strength = 0.25, keep_draws = FALSE, draws = NULL,
-  seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi",
-  ...)
+\method{estimate_link}{data.frame}(
+  model,
+  data = "grid",
+  transform = "response",
+  random = FALSE,
+  length = 25,
+  preserve_range = TRUE,
+  predict = "link",
+  keep_draws = FALSE,
+  draws = NULL,
+  seed = NULL,
+  centrality = "median",
+  ci = 0.89,
+  ci_method = "hdi",
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -49,10 +89,6 @@
 \item{preserve_range}{Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.}
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
-
-\item{smooth_method}{As Bayesian predictions might create jittery-looking lines, smoothing can be an option when predictions are used for visualisation purposes. See arguments for \code{\link{smoothing}}. \code{smooth_method = NULL} or \code{smooth_strength = 0} corresponds to no smoothing.}
-
-\item{smooth_strength}{This argument only applies to \code{smooth_method = "loess"}. See above the description for \code{smooth_method} and see arguments for \code{\link{smoothing}}.}
 
 \item{keep_draws}{If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).}
 

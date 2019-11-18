@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • estimate</title>
+<title>Estimate the slopes of a numeric predictor (over different factor levels) — estimate_slopes.lm • estimate</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -44,7 +44,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Estimate the slopes of a numeric predictor (over different factor levels) — estimate_slopes.lm" />
+<meta property="og:description" content="Estimate the slopes of a numeric predictor (over different factor levels)" />
 <meta property="og:image" content="/logo.png" />
 <meta name="twitter:card" content="summary" />
 
@@ -65,7 +66,7 @@
   </head>
 
   <body>
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -141,21 +142,78 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Estimate the slopes of a numeric predictor (over different factor levels)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/estimate/blob/master/R/estimate_slopes.R'><code>R/estimate_slopes.R</code></a></small>
+    <div class="hidden name"><code>estimate_slopes.lm.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <ul>
-        <li><a href="estimate_contrasts.html">Contrast analysis</a></li>
-        <li><a href="estimate_means.html">What are, why use and how to get marginal means</a></li>
-        <li><a href="estimate_response.html">Use a model to make predictions</a></li>
-        <li><a href="estimate_smooth.html">Model and describe non-linear relationships</a></li>
-        <li><a href="visualisation_matrix.html">Data grids</a></li>
-      </ul>
+    <div class="ref-description">
+    <p>Estimate the slopes of a numeric predictor (over different factor levels)</p>
     </div>
+
+    <pre class="usage"><span class='co'># S3 method for lm</span>
+<span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(
+  <span class='no'>model</span>,
+  <span class='kw'>trend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"response"</span>,
+  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
+  <span class='no'>...</span>
+)</pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>model</th>
+      <td><p>A statistical model.</p></td>
+    </tr>
+    <tr>
+      <th>trend</th>
+      <td><p>A character indicating the name of the numeric variable for which to compute the slopes.</p></td>
+    </tr>
+    <tr>
+      <th>levels</th>
+      <td><p>A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.</p></td>
+    </tr>
+    <tr>
+      <th>transform</th>
+      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
+    </tr>
+    <tr>
+      <th>standardize</th>
+      <td><p>If <code>TRUE</code>, add standardized differences (Cohen's d) or coefficients.</p></td>
+    </tr>
+    <tr>
+      <th>standardize_robust</th>
+      <td><p>Robust standardization through <code>MAD</code> (Median Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
+    </tr>
+    <tr>
+      <th>ci</th>
+      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Arguments passed to or from other methods.</p></td>
+    </tr>
+    </table>
+
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>estimate</span>)
+
+<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+<span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: restarting interrupted promise evaluation</span></div><div class='output co'>#&gt; Error in as.vector(x) : object 'model' not found</div><div class='output co'>#&gt; <span class='error'>Error in ref_grid(object = model, options = list(just.data = TRUE)): Perhaps a 'data' or 'params' argument is needed</span></div></pre>
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2>Contents</h2>
+    <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#examples">Examples</a></li>
+    </ul>
+
   </div>
 </div>
 

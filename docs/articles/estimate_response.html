@@ -13,8 +13,9 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Use a model to make predictions">
 <meta property="og:description" content="">
@@ -84,7 +85,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/easystats/estimate">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -97,6 +98,7 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
@@ -116,15 +118,15 @@
 <a href="#prediction-against-original-data" class="anchor"></a>Prediction against original data</h1>
 <p>Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the <code><a href="../reference/estimate_response.html">estimate_response()</a></code> function and its visualisation spinoff, <code><a href="../reference/estimate_response.html">estimate_link()</a></code>.</p>
 <p>Let’s start by fitting a Bayesian linear regression.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(rstanarm)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
 <a class="sourceLine" id="cb1-2" title="2"></a>
 <a class="sourceLine" id="cb1-3" title="3">data &lt;-<span class="st"> </span>iris</a>
 <a class="sourceLine" id="cb1-4" title="4">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Sepal.Length, <span class="dt">data =</span> data)</a></code></pre></div>
 <p>We might be interested in comparing the values predicted by the model to the actual “true” values. This can be done by generating predictions:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(estimate)</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(estimate)</a>
 <a class="sourceLine" id="cb2-2" title="2"></a>
 <a class="sourceLine" id="cb2-3" title="3">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model)</a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(predicted)</a></code></pre></div>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(predicted)</a></code></pre></div>
 <pre><code>&gt;   Sepal.Length Median CI_low CI_high
 &gt; 1          5.1    2.4  0.987     3.8
 &gt; 2          4.9    2.0  0.589     3.4
@@ -133,9 +135,9 @@
 &gt; 5          5.0    2.2  0.815     3.6
 &gt; 6          5.4    2.9  1.478     4.3</code></pre>
 <p>The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original dataframe</strong> (used for fitting the model). Hence, we can simply add the prediction column (<code>Median</code>) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(see)</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
 <a class="sourceLine" id="cb4-4" title="4"></a>
 <a class="sourceLine" id="cb4-5" title="5">data<span class="op">$</span>Predicted &lt;-<span class="st"> </span>predicted<span class="op">$</span>Median</a>
 <a class="sourceLine" id="cb4-6" title="6"></a>
@@ -190,7 +192,7 @@
 <h1 class="hasAnchor">
 <a href="#different-ci-levels" class="anchor"></a>Different CI levels</h1>
 <p>The purpose of CI bands is to provide information about the uncertainty related to the estimation. In the Bayesian framework, the credible intervals are directly related to the shape of the posterior distribution. Thus, showing different CI levels (for instance, 69%, 89% and 99%).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">ci =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span>))</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span>))</a>
 <a class="sourceLine" id="cb9-2" title="2"></a>
 <a class="sourceLine" id="cb9-3" title="3">iris <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb9-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
@@ -211,7 +213,7 @@
 <a class="sourceLine" id="cb10-3" title="3"></a>
 <a class="sourceLine" id="cb10-4" title="4"><span class="co"># Format draws for plotting</span></a>
 <a class="sourceLine" id="cb10-5" title="5">draws &lt;-<span class="st"> </span><span class="kw"><a href="../reference/reshape_draws.html">reshape_draws</a></span>(predicted)</a>
-<a class="sourceLine" id="cb10-6" title="6">draws<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(draws<span class="op">$</span>Draw_Group, draws<span class="op">$</span>Species)</a>
+<a class="sourceLine" id="cb10-6" title="6">draws<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(draws<span class="op">$</span>Draw_Group, draws<span class="op">$</span>Species)</a>
 <a class="sourceLine" id="cb10-7" title="7"></a>
 <a class="sourceLine" id="cb10-8" title="8">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb10-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
@@ -221,7 +223,7 @@
 <a class="sourceLine" id="cb10-13" title="13"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-12-1.png" width="3281.25"></p>
 <p>Animated hypothetical outcome plots can also be easily created with <code>gganimate</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(gganimate)</a>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gganimate)</a>
 <a class="sourceLine" id="cb11-2" title="2"></a>
 <a class="sourceLine" id="cb11-3" title="3">p &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb11-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
@@ -231,7 +233,7 @@
 <a class="sourceLine" id="cb11-8" title="8"><span class="st">  </span><span class="kw">transition_states</span>(Draw_Group, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb11-9" title="9"><span class="st">  </span><span class="kw">shadow_mark</span>(<span class="dt">past =</span> <span class="ot">TRUE</span>, <span class="dt">future =</span> <span class="ot">TRUE</span>, <span class="dt">alpha =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">20</span>, <span class="dt">color =</span> <span class="st">"grey"</span>)</a>
 <a class="sourceLine" id="cb11-10" title="10"></a>
-<a class="sourceLine" id="cb11-11" title="11">gganimate<span class="op">::</span><span class="kw"><a href="https://www.rdocumentation.org/packages/gganimate/topics/animate">animate</a></span>(p)</a></code></pre></div>
+<a class="sourceLine" id="cb11-11" title="11">gganimate<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/gganimate/man/animate.html">animate</a></span>(p)</a></code></pre></div>
 <p><img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1">
@@ -241,6 +243,7 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+
         <div id="tocnav">
       <h2 class="hasAnchor">
 <a href="#tocnav" class="anchor"></a>Contents</h2>
@@ -257,17 +260,20 @@
 </div>
 
 
+
       <footer><div class="copyright">
   <p>Developed by <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, <a href="https://github.com/strengejacke">Daniel Lüdecke</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
 </div>
+
       </footer>
 </div>
 
   
+
 
   </body>
 </html>
