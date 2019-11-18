@@ -17,4 +17,3 @@ print.estimate_slopes <- .print_estimate
 
 #' @export
 print.estimate_smooth <- .print_estimate
-

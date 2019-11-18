@@ -68,6 +68,8 @@ model <- glm(y ~ poly(x, 2), data = data)
 Let's continue with **visualising the fitted model**:
 
 ```{r message=FALSE, warning=FALSE}
+library(estimate)
+
 estimate_link(model) %>% 
   ggplot(aes(x = x, y = Predicted)) +
   geom_line(color = "purple") +

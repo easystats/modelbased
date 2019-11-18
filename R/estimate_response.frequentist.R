@@ -14,19 +14,18 @@
 #' model <- lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 #' estimate_response(model)
 #' estimate_link(model)
-#'
 #' @export
 estimate_response.glm <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {
-
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
 
   prediction <- predict_wrapper(model,
-                                newdata = args$data,
-                                ci = ci,
-                                re.form = args$re.form,
-                                transform = args$transform,
-                                interval = args$interval,
-                                ...)
+    newdata = args$data,
+    ci = ci,
+    re.form = args$re.form,
+    transform = args$transform,
+    interval = args$interval,
+    ...
+  )
 
 
   # Rename
@@ -81,15 +80,3 @@ estimate_link.merMod <- estimate_link.glm
 estimate_response.polr <- estimate_response.glm
 #' @export
 estimate_link.polr <- estimate_link.glm
-
-
-
-
-
-
-
-
-
-
-
-

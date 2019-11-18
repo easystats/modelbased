@@ -29,7 +29,6 @@ test_that("estimate_response - Bayesian", {
 
 
 test_that("estimate_response - Frequentist", {
-
   estim <- estimate_response(insight::download_model("lm_2"))
   testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 

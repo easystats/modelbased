@@ -37,9 +37,8 @@ visualisation_matrix <- function(x, target = "all", length = 10, factors = "refe
 
 #' @export
 visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, include_response = FALSE, ...) {
-
   data <- insight::get_data(x)
-  if(include_response == FALSE){
+  if (include_response == FALSE) {
     data <- data[names(data) != insight::find_response(x)]
   }
 
@@ -72,7 +71,7 @@ visualisation_matrix.lmerMod <- visualisation_matrix.stanreg
 #' @export
 visualisation_matrix.visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = attributes(x)$reference, na.rm = TRUE, ...) {
   grid <- visualisation_matrix(as.data.frame(x), target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = reference, na.rm = na.rm, ...)
-  if("model" %in% names(attributes(x))){
+  if ("model" %in% names(attributes(x))) {
     attr(grid, "model") <- attributes(x)$model
   }
   grid
@@ -300,9 +299,9 @@ visualisation_matrix.character <- visualisation_matrix.vector
   } else if (is.logical(x)) {
     x <- as.factor(x)
     out <- as.factor(levels(droplevels(x)))
-  # } else if (length(unique(x)) < 3) {
-  #   x <- as.factor(x)
-  #   out <- as.factor(levels(droplevels(x)))
+    # } else if (length(unique(x)) < 3) {
+    #   x <- as.factor(x)
+    #   out <- as.factor(levels(droplevels(x)))
   } else if (is.numeric(x)) {
     if (is.numeric(length)) {
 
@@ -348,4 +347,3 @@ visualisation_matrix.character <- visualisation_matrix.vector
   names(out) <- NULL
   out
 }
-

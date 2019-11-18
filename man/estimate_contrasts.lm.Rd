@@ -63,5 +63,4 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
 model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
-
 }

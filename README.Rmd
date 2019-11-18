@@ -101,7 +101,7 @@ newdata <- iris %>%
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 # Express values in an abstract way
-newdata$Petal.Width <- parameters::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
+newdata$Petal.Width <- effectsize::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
 
 # Plot
 iris %>% 

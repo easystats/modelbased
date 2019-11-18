@@ -40,5 +40,4 @@ library(estimate)
 
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_slopes(model)
-
 }

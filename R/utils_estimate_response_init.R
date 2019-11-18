@@ -1,7 +1,7 @@
 
 
 #' @keywords internal
-.estimate_response_init <- function(model, data, transform, random, length, preserve_range, predict, ...){
+.estimate_response_init <- function(model, data, transform, random, length, preserve_range, predict, ...) {
   # Data
   if (is.null(data)) {
     data <- insight::get_data(model)
@@ -32,15 +32,10 @@
   if (predict == "link") {
     if (insight::model_info(model)$is_bayesian) transform <- ifelse(transform == "response", TRUE, FALSE)
     interval <- "prediction"
-  } else{
+  } else {
     interval <- "confidence"
   }
 
 
   list(data = data, re.form = re.form, transform = transform, interval = interval)
 }
-
-
-
-
-

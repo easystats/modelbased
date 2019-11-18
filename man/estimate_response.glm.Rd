@@ -63,5 +63,4 @@ library(lme4)
 model <- lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 estimate_response(model)
 estimate_link(model)
-
 }
