@@ -1,14 +1,5 @@
 language: r
 
-os:
-  #- windows
-  - linux
-  - osx
-
-r:
-  - oldrel
-  - release
-  - devel
   
 matrix:
   include:
