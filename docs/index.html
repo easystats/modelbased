@@ -169,9 +169,9 @@
 <a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="reference/estimate_means.html">estimate_means</a></span>(model)</a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">## Species    | Median |       89% CI</span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">## ----------------------------------</span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">## setosa     |   3.42 | [3.35, 3.49]</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">## versicolor |   2.77 | [2.70, 2.85]</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">## virginica  |   2.97 | [2.90, 3.05]</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">## setosa     |   3.43 | [3.34, 3.50]</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">## versicolor |   2.77 | [2.69, 2.84]</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">## virginica  |   2.97 | [2.89, 3.05]</span></a></code></pre></div>
 </div>
 <div id="contrast-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -181,9 +181,9 @@
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="co">## Level1     |     Level2 | Median |         89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb5-3" title="3"><span class="co">## --------------------------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">## setosa     | versicolor |   0.65 | [ 0.54,  0.76] |   100% |        0% |          1.50</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">## setosa     |  virginica |   0.45 | [ 0.34,  0.55] |   100% |        0% |          1.03</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.20 | [-0.31, -0.10] | 99.90% |     6.38% |         -0.47</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">## setosa     | versicolor |   0.65 | [ 0.55,  0.76] |   100% |        0% |          1.50</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">## setosa     |  virginica |   0.45 | [ 0.34,  0.56] |   100% |        0% |          1.04</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.20 | [-0.31, -0.10] | 99.92% |     6.75% |         -0.46</span></a></code></pre></div>
 </div>
 <div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
 <h3 class="hasAnchor">
@@ -193,15 +193,15 @@
 <a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Length"</span>, <span class="dt">length =</span> <span class="dv">3</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">## Level1     |     Level2 | Petal.Length | Median |        89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb7-2" title="2"><span class="co">## ----------------------------------------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co">## setosa     | versicolor |         1.00 |   1.53 | [ 1.09, 2.03] |   100% |        0% |          3.51</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">## setosa     |  virginica |         1.00 |   1.22 | [ 0.68, 1.78] |   100% |     0.02% |          2.79</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">## versicolor |  virginica |         1.00 |  -0.31 | [-1.06, 0.37] | 76.72% |    13.73% |         -0.72</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">## setosa     | versicolor |         3.95 |   1.77 | [ 1.09, 2.58] |   100% |        0% |          4.06</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">## setosa     |  virginica |         3.95 |   1.80 | [ 0.95, 2.55] |   100% |     0.02% |          4.14</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="co">## versicolor |  virginica |         3.95 |   0.03 | [-0.18, 0.26] | 59.17% |    51.38% |          0.08</span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co">## setosa     | versicolor |         6.90 |   2.02 | [ 0.52, 3.76] | 98.10% |     1.30% |          4.64</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">## setosa     |  virginica |         6.90 |   2.38 | [ 0.93, 4.08] | 99.40% |     0.45% |          5.46</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">## versicolor |  virginica |         6.90 |   0.38 | [-0.05, 0.79] | 92.38% |    10.93% |          0.88</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">## setosa     | versicolor |         1.00 |   1.54 | [ 1.07, 2.03] |   100% |        0% |          3.53</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">## setosa     |  virginica |         1.00 |   1.21 | [ 0.67, 1.78] | 99.95% |     0.12% |          2.77</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">## versicolor |  virginica |         1.00 |  -0.32 | [-1.03, 0.40] | 76.58% |    14.40% |         -0.73</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">## setosa     | versicolor |         3.95 |   1.80 | [ 1.04, 2.56] |   100% |     0.02% |          4.14</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">## setosa     |  virginica |         3.95 |   1.84 | [ 1.05, 2.66] |   100% |     0.05% |          4.22</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">## versicolor |  virginica |         3.95 |   0.03 | [-0.19, 0.25] | 59.52% |    51.20% |          0.08</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">## setosa     | versicolor |         6.90 |   2.07 | [ 0.61, 3.83] | 97.82% |     0.90% |          4.75</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">## setosa     |  virginica |         6.90 |   2.45 | [ 0.89, 4.09] | 99.15% |     0.50% |          5.62</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">## versicolor |  virginica |         6.90 |   0.39 | [-0.05, 0.80] | 92.53% |    10.90% |          0.90</span></a></code></pre></div>
 </div>
 <div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
 <h3 class="hasAnchor">
@@ -209,9 +209,9 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="reference/estimate_slopes.html">estimate_slopes</a></span>(model)</a>
 <a class="sourceLine" id="cb8-2" title="2"><span class="co">## Species    | Median |       89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb8-3" title="3"><span class="co">## -----------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co">## setosa     |   0.41 | [0.13, 0.71] | 98.92% |     3.85% |          1.65</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">## versicolor |   0.33 | [0.19, 0.48] | 99.98% |     0.60% |          1.33</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">## virginica  |   0.21 | [0.09, 0.33] | 99.75% |     6.85% |          0.85</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">## setosa     |   0.42 | [0.12, 0.71] | 98.58% |     3.85% |          1.71</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">## versicolor |   0.33 | [0.18, 0.47] |   100% |     0.57% |          1.35</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">## virginica  |   0.21 | [0.08, 0.33] | 99.67% |     7.83% |          0.85</span></a></code></pre></div>
 </div>
 <div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
 <h3 class="hasAnchor">
@@ -232,42 +232,42 @@
 <td align="right">5.1</td>
 <td align="left">setosa</td>
 <td align="right">1.48</td>
-<td align="right">1.02</td>
-<td align="right">1.85</td>
+<td align="right">1.04</td>
+<td align="right">1.93</td>
 </tr>
 <tr class="even">
 <td align="right">4.9</td>
 <td align="left">setosa</td>
-<td align="right">1.45</td>
-<td align="right">1.06</td>
-<td align="right">1.91</td>
+<td align="right">1.46</td>
+<td align="right">1.05</td>
+<td align="right">1.88</td>
 </tr>
 <tr class="odd">
 <td align="right">4.7</td>
 <td align="left">setosa</td>
-<td align="right">1.41</td>
-<td align="right">1.00</td>
-<td align="right">1.82</td>
+<td align="right">1.43</td>
+<td align="right">1.04</td>
+<td align="right">1.90</td>
 </tr>
 <tr class="even">
 <td align="right">4.6</td>
 <td align="left">setosa</td>
-<td align="right">1.41</td>
+<td align="right">1.40</td>
 <td align="right">0.95</td>
 <td align="right">1.80</td>
 </tr>
 <tr class="odd">
 <td align="right">5.0</td>
 <td align="left">setosa</td>
-<td align="right">1.47</td>
-<td align="right">1.06</td>
+<td align="right">1.45</td>
+<td align="right">1.08</td>
 <td align="right">1.89</td>
 </tr>
 <tr class="even">
 <td align="right">5.4</td>
 <td align="left">setosa</td>
-<td align="right">1.52</td>
-<td align="right">1.05</td>
+<td align="right">1.51</td>
+<td align="right">1.10</td>
 <td align="right">1.93</td>
 </tr>
 </tbody>
@@ -304,31 +304,31 @@
 <td align="right">2.97</td>
 <td align="right">2.90</td>
 <td align="right">2.82</td>
-<td align="right">2.97</td>
+<td align="right">2.98</td>
 </tr>
 <tr class="even">
 <td align="right">3.95</td>
 <td align="right">2.78</td>
-<td align="right">2.70</td>
-<td align="right">2.85</td>
+<td align="right">2.71</td>
+<td align="right">2.86</td>
 </tr>
 <tr class="odd">
 <td align="right">4.93</td>
 <td align="right">2.83</td>
-<td align="right">2.78</td>
+<td align="right">2.77</td>
 <td align="right">2.89</td>
 </tr>
 <tr class="even">
 <td align="right">5.92</td>
 <td align="right">3.05</td>
 <td align="right">2.97</td>
-<td align="right">3.15</td>
+<td align="right">3.14</td>
 </tr>
 <tr class="odd">
 <td align="right">6.90</td>
 <td align="right">3.44</td>
 <td align="right">3.25</td>
-<td align="right">3.64</td>
+<td align="right">3.63</td>
 </tr>
 </tbody>
 </table>
@@ -339,8 +339,8 @@
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="reference/estimate_smooth.html">estimate_smooth</a></span>(model)</a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="co">## Part | Start |  End |   Size | Trend | Linearity</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="co">## ------------------------------------------------</span></a>
-<a class="sourceLine" id="cb11-4" title="4"><span class="co">## 1    |  1.00 | 4.14 | 53.50% | -0.01 |      0.94</span></a>
-<a class="sourceLine" id="cb11-5" title="5"><span class="co">## 2    |  4.14 | 6.90 | 46.50% |  0.01 |      0.94</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">## 1    |  1.00 | 4.11 | 53.00% | -0.01 |      0.94</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">## 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.94</span></a></code></pre></div>
 </div>
 </div>
 </div>
