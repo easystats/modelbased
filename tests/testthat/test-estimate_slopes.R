@@ -1,8 +1,7 @@
 context("estimate_slopes")
 
 
-
-# test_that("estimate_slopes", {
+# testthat::test_that("estimate_slopes", {
 #   library(insight)
 #   library(rstanarm)
 #
