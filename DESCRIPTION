@@ -24,9 +24,9 @@ URL: https://github.com/easystats/estimate
 BugReports: https://github.com/easystats/estimate/issues
 Description: Implements a general interface for model-based estimations for a wide variety of models (see support list of insight; Lüdecke, Waggoner & Makowski (2019) <doi:10.21105/joss.01412>), used in the computation of marginal means, contrast analysis and predictions.
 Imports:
-	insight (>= 0.7.0),
+	insight (>= 0.7.1),
 	bayestestR (>= 0.4.0),
-	parameters (>= 0.2.0),
+	parameters (>= 0.3.0),
 	effectsize (>= 0.0.1),
 	emmeans
 Suggests:
@@ -46,4 +46,4 @@ Suggests:
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.0
+RoxygenNote: 7.0.1
