@@ -9,6 +9,9 @@ reshape_draws(draws)
 \arguments{
 \item{draws}{data.frame containing posterior draws obtained from \code{estimate_response} or \code{estimate_link}.}
 }
+\value{
+Dataframe of reshaped draws in long format.
+}
 \description{
 Reshape data.frame of estimations with Bayesian posterior draws to long format.
 }

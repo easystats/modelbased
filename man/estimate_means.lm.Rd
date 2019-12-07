@@ -32,6 +32,9 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated marginal means.
+}
 \description{
 Estimate marginal means
 }

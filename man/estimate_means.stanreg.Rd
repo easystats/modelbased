@@ -40,6 +40,9 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated marginal means.
+}
 \description{
 Estimate marginal means
 }
@@ -58,4 +61,5 @@ estimate_means(model)
 estimate_means(model, modulate = "Sepal.Width")
 estimate_means(model, fixed = "Sepal.Width")
 }
+
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualisation_matrix.R
 \name{visualisation_matrix}
 \alias{visualisation_matrix}
-\title{Create a reference grid.}
+\title{Create a reference grid}
 \usage{
 visualisation_matrix(
   x,
@@ -41,8 +41,11 @@ visualisation_matrix(
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+Reference grid dataframe.
+}
 \description{
-Create a reference grid.
+Create a reference matrix, useful for visualisation, with evenly spread and combined values.
 }
 \examples{
 library(estimate)

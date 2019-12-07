@@ -48,6 +48,9 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of predicted values.
+}
 \description{
 Generates predictions for Frequentist models
 }

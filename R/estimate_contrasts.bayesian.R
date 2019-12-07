@@ -16,6 +16,7 @@
 #' @param standardize_robust Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.
 #' @param ... Arguments passed to or from other methods.
 #'
+#' @return A dataframe of estimated contrasts.
 #' @export
 estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ...) {
   UseMethod("estimate_contrasts")
@@ -54,6 +55,9 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
 #' estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 #' }
+#'
+#' @return A dataframe of estimated contrasts.
+#'
 #' @importFrom emmeans contrast
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames

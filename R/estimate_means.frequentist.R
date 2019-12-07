@@ -20,6 +20,7 @@
 #' estimate_means(model, modulate = "Sepal.Width")
 #' }
 #'
+#' @return A dataframe of estimated marginal means.
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {

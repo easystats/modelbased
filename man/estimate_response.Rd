@@ -40,6 +40,9 @@ estimate_link(
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of predicted values.
+}
 \description{
 See the documentation for your object's class:
 \itemize{

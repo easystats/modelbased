@@ -64,6 +64,9 @@ proportion of HDI, to use for the percentage in ROPE.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated contrasts.
+}
 \description{
 Estimate contrasts
 }
@@ -87,4 +90,5 @@ estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
 estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 }
+
 }

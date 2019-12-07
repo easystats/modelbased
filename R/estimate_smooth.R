@@ -11,6 +11,7 @@
 #' @inheritParams estimate_slopes
 #' @inheritParams estimate_response
 #'
+#' @return A dataframe of linear description of non-linear terms.
 #'
 #' @export
 estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", ...) {

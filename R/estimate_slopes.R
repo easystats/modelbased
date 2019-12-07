@@ -10,6 +10,7 @@
 #' @param trend A character indicating the name of the numeric variable for which to compute the slopes.
 #' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
 #'
+#' @return A dataframe of slopes.
 #' @export
 estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ...) {
   UseMethod("estimate_slopes")

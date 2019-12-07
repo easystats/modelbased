@@ -26,6 +26,9 @@ estimate_smooth(
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of linear description of non-linear terms.
+}
 \description{
 This function summarise the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterised by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
 }

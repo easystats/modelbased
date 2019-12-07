@@ -1,6 +1,6 @@
 Package: estimate
 Type: Package
-Title: General Interface for Model-Based Estimation of Effects, Contrasts and Means
+Title: Estimation of Model-Based Predictions, Contrasts and Means
 Version: 0.1.0
 Authors@R: c(
 	person("Dominique", 

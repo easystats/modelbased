@@ -106,6 +106,9 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of predicted values.
+}
 \description{
 Generates predictions for Bayesian models
 }
@@ -121,5 +124,4 @@ model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 estimate_response(model)
 estimate_link(model)
 }
-
 }

@@ -24,6 +24,9 @@
 #'
 #' model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
+#'
+#' @return A dataframe of estimated contrasts.
+#'
 #' @importFrom emmeans contrast
 #' @importFrom stats mad median sd setNames confint
 #' @importFrom bayestestR describe_posterior
