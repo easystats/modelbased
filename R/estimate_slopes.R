@@ -36,7 +36,7 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #'
 #' @examples
 #' library(estimate)
-#' \dontrun{
+#' \donttest{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)
@@ -47,6 +47,8 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, centrality = centrality, ci = ci, ci_method = ci_method, test = test, rope_range = rope_range, rope_ci = rope_ci)
 }
+
+
 
 
 #' Estimate the slopes of a numeric predictor (over different factor levels)
