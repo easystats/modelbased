@@ -47,7 +47,7 @@ A dataframe of estimated marginal means.
 Estimate marginal means
 }
 \examples{
-library(estimate)
+library(modelbased)
 \dontrun{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")

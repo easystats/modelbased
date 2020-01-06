@@ -36,7 +36,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @inheritParams parameters::model_parameters.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \dontrun{
 #' library(rstanarm)
 #'

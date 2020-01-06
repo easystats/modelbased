@@ -62,7 +62,7 @@ proportion of HDI, to use for the percentage in ROPE.}
 Estimate the slopes of a numeric predictor (over different factor levels)
 }
 \examples{
-library(estimate)
+library(modelbased)
 \donttest{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)

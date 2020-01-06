@@ -48,7 +48,7 @@ Reference grid dataframe.
 Create a reference matrix, useful for visualisation, with evenly spread and combined values.
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 visualisation_matrix(iris, target = "Sepal.Length")
 visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")

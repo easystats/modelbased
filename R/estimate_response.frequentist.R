@@ -3,7 +3,7 @@
 #' @inheritParams estimate_response.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_response(model)

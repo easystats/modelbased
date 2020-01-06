@@ -113,7 +113,7 @@ A dataframe of predicted values.
 Generates predictions for Bayesian models
 }
 \examples{
-library(estimate)
+library(modelbased)
 \dontrun{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)

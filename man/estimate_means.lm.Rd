@@ -39,7 +39,7 @@ A dataframe of estimated marginal means.
 Estimate marginal means
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 estimate_means(model)

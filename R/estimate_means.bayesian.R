@@ -30,7 +30,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \dontrun{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")

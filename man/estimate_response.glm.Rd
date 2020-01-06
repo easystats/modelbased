@@ -55,7 +55,7 @@ A dataframe of predicted values.
 Generates predictions for Frequentist models
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_response(model)

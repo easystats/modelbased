@@ -33,7 +33,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @param seed An optional seed to use.
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \dontrun{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)

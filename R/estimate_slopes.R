@@ -35,7 +35,7 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \donttest{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -57,7 +57,7 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)

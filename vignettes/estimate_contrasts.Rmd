@@ -42,7 +42,7 @@ Let's do that based on the simple model from the previous tutorial:
 library(ggplot2)
 library(see)
 library(rstanarm)
-library(estimate)
+library(modelbased)
 
 
 model <- stan_glm(Sepal.Width ~ Species, data = iris)
@@ -52,7 +52,7 @@ means <- estimate_means(model)
 library(ggplot2)
 library(see)
 library(rstanarm)
-library(estimate)
+library(modelbased)
 
 model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
 means <- estimate_means(model)

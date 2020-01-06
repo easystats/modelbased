@@ -6,7 +6,7 @@
 #' @param adjust The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the \code{emmeans::test} documentation.
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)

@@ -4,7 +4,7 @@
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%).
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 #' estimate_means(model)

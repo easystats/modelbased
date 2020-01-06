@@ -68,7 +68,7 @@ model <- glm(y ~ poly(x, 2), data = data)
 Let's continue with **visualising the fitted model**:
 
 ```{r message=FALSE, warning=FALSE}
-library(estimate)
+library(modelbased)
 
 estimate_link(model) %>% 
   ggplot(aes(x = x, y = Predicted)) +
@@ -133,7 +133,7 @@ model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_L
 We can visualise the link between the Delay and the Memory score by using the `estimate_link`.
 
 ```{r message=FALSE, warning=FALSE}
-library(estimate)
+library(modelbased)
 
 estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97)) %>% 
   ggplot(aes(x=Delay, y=Median)) +

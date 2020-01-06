@@ -38,7 +38,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @inheritParams estimate_response.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \donttest{
 #' library(rstanarm)
 #' model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)

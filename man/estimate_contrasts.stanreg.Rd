@@ -71,7 +71,7 @@ A dataframe of estimated contrasts.
 Estimate contrasts
 }
 \examples{
-library(estimate)
+library(modelbased)
 \dontrun{
 library(rstanarm)
 

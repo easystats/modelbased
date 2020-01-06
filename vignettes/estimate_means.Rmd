@@ -73,7 +73,7 @@ Marginal means are basically means extracted from a statistical model. Note that
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(rstanarm)
-library(estimate)
+library(modelbased)
 
 model <- stan_glm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model)
@@ -81,7 +81,7 @@ means
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 library(rstanarm)
-library(estimate)
+library(modelbased)
 
 model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
 means <- estimate_means(model)

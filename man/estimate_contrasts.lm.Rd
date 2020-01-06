@@ -48,7 +48,7 @@ A dataframe of estimated contrasts.
 Estimate contrasts
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)

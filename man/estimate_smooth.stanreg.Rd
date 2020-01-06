@@ -33,7 +33,7 @@
 Describe the smooth term (for GAMs) or non-linear predictors
 }
 \examples{
-library(estimate)
+library(modelbased)
 \donttest{
 library(rstanarm)
 model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)

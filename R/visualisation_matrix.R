@@ -18,7 +18,7 @@
 #' @return Reference grid dataframe.
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' visualisation_matrix(iris, target = "Sepal.Length")
 #' visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
