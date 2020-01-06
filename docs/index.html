@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Estimate Effects, Contrasts and Means • estimate</title>
+<title>Estimation of Model-Based Predictions, Contrasts and Means • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
 <script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
-<meta property="og:title" content="Estimate Effects, Contrasts and Means">
+<meta property="og:title" content="Estimation of Model-Based Predictions, Contrasts and Means">
 <meta property="og:description" content="Implements a general interface for model-based estimations for a wide variety of models (see support list of insight; Lüdecke, Waggoner &amp; Makowski (2019) &lt;doi:10.21105/joss.01412&gt;), used in the computation of marginal means, contrast analysis and predictions.">
 <meta property="og:image" content="/logo.png">
 <meta name="twitter:card" content="summary">
@@ -38,7 +38,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">estimate</a>
+        <a class="navbar-link" href="index.html">modelbased</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -84,7 +84,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/estimate">
+  <a href="https://github.com/easystats/modelbased">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -102,31 +102,31 @@
       </header><div class="row">
   <div class="contents col-md-9">
 
-<div id="estimate-" class="section level1">
+<div id="modelbased-" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#estimate-" class="anchor"></a>estimate <img src="reference/figures/logo.png" align="right" height="139">
+<a href="#modelbased-" class="anchor"></a>modelbased <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
-<p><code>estimate</code> is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and predictions.</p>
+<p><code>modelbased</code> is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and predictions.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/estimate"</span>)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"estimate"</span>)</a></code></pre></div>
+<a class="sourceLine" id="cb1-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"easystats/modelbased"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"modelbased"</span>)</a></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h2>
-<p><a href="https://easystats.github.io/estimate/"><img src="https://img.shields.io/badge/documentation-estimate-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/estimate/reference/index.html"><img src="https://img.shields.io/badge/features-estimate-orange.svg?colorB=2196F3" alt="Features"></a></p>
-<p>Click on the buttons above to access the package <a href="https://easystats.github.io/estimate/"><strong>documentation</strong></a> and the <a href="https://easystats.github.io/blog/posts/"><strong>easystats blog</strong></a>, and check-out these vignettes:</p>
+<p><a href="https://easystats.github.io/modelbased/"><img src="https://img.shields.io/badge/documentation-modelbased-orange.svg?colorB=E91E63" alt="Documentation"></a> <a href="https://easystats.github.io/blog/posts/"><img src="https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800" alt="Blog"></a> <a href="https://easystats.github.io/modelbased/reference/index.html"><img src="https://img.shields.io/badge/features-modelbased-orange.svg?colorB=2196F3" alt="Features"></a></p>
+<p>Click on the buttons above to access the package <a href="https://easystats.github.io/modelbased/"><strong>documentation</strong></a> and the <a href="https://easystats.github.io/blog/posts/"><strong>easystats blog</strong></a>, and check-out these vignettes:</p>
 <ul>
-<li><a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>Visualisation matrix</strong></a></li>
-<li><a href="https://easystats.github.io/estimate/articles/estimate_means.html"><strong>Marginal means</strong></a></li>
-<li><a href="https://easystats.github.io/estimate/articles/estimate_contrasts.html"><strong>Contrast analysis</strong></a></li>
-<li><a href="https://easystats.github.io/estimate/articles/estimate_response.html"><strong>Use a model to make predictions</strong></a></li>
-<li><a href="https://easystats.github.io/estimate/articles/estimate_smooth.html"><strong>Describe non-linear curves</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>Visualisation matrix</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>Marginal means</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>Contrast analysis</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>Use a model to make predictions</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_smooth.html"><strong>Describe non-linear curves</strong></a></li>
 </ul>
 </div>
 </div>
@@ -136,17 +136,17 @@
 <p>The package is built around 5 main functions:</p>
 <ul>
 <li>
-<a href="https://easystats.github.io/estimate/reference/estimate_means.html"><code><a href="reference/estimate_means.html">estimate_means()</a></code></a>: Estimates the average values at each factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_means.html"><code><a href="reference/estimate_means.html">estimate_means()</a></code></a>: Estimates the average values at each factor levels</li>
 <li>
-<a href="https://easystats.github.io/estimate/reference/estimate_contrasts.html"><code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code></a>: Estimates and tests contrasts between different factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html"><code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code></a>: Estimates and tests contrasts between different factor levels</li>
 <li>
-<a href="https://easystats.github.io/estimate/reference/estimate_slopes.html"><code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html"><code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
 <li>
-<a href="https://easystats.github.io/estimate/reference/estimate_response.html"><code><a href="reference/estimate_response.html">estimate_response()</a></code></a>: Predict the response variable using the model</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_response.html"><code><a href="reference/estimate_response.html">estimate_response()</a></code></a>: Predict the response variable using the model</li>
 <li>
-<a href="https://easystats.github.io/estimate/reference/estimate_smooth.html"><code><a href="reference/estimate_smooth.html">estimate_smooth()</a></code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_smooth.html"><code><a href="reference/estimate_smooth.html">estimate_smooth()</a></code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
-<p>These functions are powered by the <a href="https://easystats.github.io/estimate/reference/visualisation_matrix.html"><code><a href="reference/visualisation_matrix.html">visualisation_matrix()</a></code></a> function, a smart tool for guessing the appropriate reference grid.</p>
+<p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html"><code><a href="reference/visualisation_matrix.html">visualisation_matrix()</a></code></a> function, a smart tool for guessing the appropriate reference grid.</p>
 <p>The package currently only supports <code>rstanarm</code> models, but will be expanded to cover a large variety of frequentist and Bayesian models.</p>
 <div id="examples" class="section level2">
 <h2 class="hasAnchor">
@@ -154,13 +154,13 @@
 <div id="create-smart-grids-to-represent-complex-interactions" class="section level3">
 <h3 class="hasAnchor">
 <a href="#create-smart-grids-to-represent-complex-interactions" class="anchor"></a>Create smart grids to represent complex interactions</h3>
-<p>Check-out <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>this vignette</strong></a> to create this plot:</p>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-4-1.png"><!-- --></p>
 </div>
 <div id="estimate-marginal-means" class="section level3">
 <h3 class="hasAnchor">
 <a href="#estimate-marginal-means" class="anchor"></a>Estimate marginal means</h3>
-<p>Check-out <a href="https://easystats.github.io/estimate/reference/estimate_means.html"><strong>this vignette</strong></a> to create this plot:</p>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
 <a class="sourceLine" id="cb3-2" title="2"></a>
@@ -169,21 +169,21 @@
 <a class="sourceLine" id="cb3-5" title="5"><span class="kw"><a href="reference/estimate_means.html">estimate_means</a></span>(model)</a></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co">## Species    | Median |       89% CI</span></a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">## ----------------------------------</span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">## setosa     |   3.43 | [3.34, 3.50]</span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="co">## versicolor |   2.77 | [2.69, 2.84]</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">## virginica  |   2.97 | [2.89, 3.05]</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">## setosa     |   3.42 | [3.35, 3.50]</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">## versicolor |   2.77 | [2.69, 2.85]</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">## virginica  |   2.97 | [2.90, 3.05]</span></a></code></pre></div>
 </div>
 <div id="contrast-analysis" class="section level3">
 <h3 class="hasAnchor">
 <a href="#contrast-analysis" class="anchor"></a>Contrast analysis</h3>
-<p>Check-out <a href="https://easystats.github.io/estimate/reference/estimate_contrasts.html"><strong>this vignette</strong></a> to create this plot:</p>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-8-1.png"><!-- --></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="co">## Level1     |     Level2 | Median |         89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb5-3" title="3"><span class="co">## --------------------------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb5-4" title="4"><span class="co">## setosa     | versicolor |   0.65 | [ 0.55,  0.76] |   100% |        0% |          1.50</span></a>
-<a class="sourceLine" id="cb5-5" title="5"><span class="co">## setosa     |  virginica |   0.45 | [ 0.34,  0.56] |   100% |        0% |          1.04</span></a>
-<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.20 | [-0.31, -0.10] | 99.92% |     6.75% |         -0.46</span></a></code></pre></div>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co">## setosa     | versicolor |   0.66 | [ 0.54,  0.76] |   100% |        0% |          1.50</span></a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">## setosa     |  virginica |   0.45 | [ 0.35,  0.56] |   100% |        0% |          1.03</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co">## versicolor |  virginica |  -0.20 | [-0.32, -0.10] | 99.88% |     6.35% |         -0.47</span></a></code></pre></div>
 </div>
 <div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
 <h3 class="hasAnchor">
@@ -193,15 +193,15 @@
 <a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Length"</span>, <span class="dt">length =</span> <span class="dv">3</span>)</a></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">## Level1     |     Level2 | Petal.Length | Median |        89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb7-2" title="2"><span class="co">## ----------------------------------------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="co">## setosa     | versicolor |         1.00 |   1.54 | [ 1.07, 2.03] |   100% |        0% |          3.53</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="co">## setosa     |  virginica |         1.00 |   1.21 | [ 0.67, 1.78] | 99.95% |     0.12% |          2.77</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co">## versicolor |  virginica |         1.00 |  -0.32 | [-1.03, 0.40] | 76.58% |    14.40% |         -0.73</span></a>
-<a class="sourceLine" id="cb7-6" title="6"><span class="co">## setosa     | versicolor |         3.95 |   1.80 | [ 1.04, 2.56] |   100% |     0.02% |          4.14</span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="co">## setosa     |  virginica |         3.95 |   1.84 | [ 1.05, 2.66] |   100% |     0.05% |          4.22</span></a>
-<a class="sourceLine" id="cb7-8" title="8"><span class="co">## versicolor |  virginica |         3.95 |   0.03 | [-0.19, 0.25] | 59.52% |    51.20% |          0.08</span></a>
-<a class="sourceLine" id="cb7-9" title="9"><span class="co">## setosa     | versicolor |         6.90 |   2.07 | [ 0.61, 3.83] | 97.82% |     0.90% |          4.75</span></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co">## setosa     |  virginica |         6.90 |   2.45 | [ 0.89, 4.09] | 99.15% |     0.50% |          5.62</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="co">## versicolor |  virginica |         6.90 |   0.39 | [-0.05, 0.80] | 92.53% |    10.90% |          0.90</span></a></code></pre></div>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">## setosa     | versicolor |         1.00 |   1.53 | [ 1.03, 1.98] |   100% |        0% |          3.52</span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">## setosa     |  virginica |         1.00 |   1.22 | [ 0.68, 1.78] | 99.95% |     0.05% |          2.81</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="co">## versicolor |  virginica |         1.00 |  -0.30 | [-1.06, 0.37] | 75.65% |    15.40% |         -0.69</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">## setosa     | versicolor |         3.95 |   1.81 | [ 1.03, 2.53] | 99.98% |     0.02% |          4.15</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">## setosa     |  virginica |         3.95 |   1.83 | [ 1.00, 2.58] | 99.98% |     0.02% |          4.20</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="co">## versicolor |  virginica |         3.95 |   0.03 | [-0.18, 0.25] | 59.75% |    51.28% |          0.08</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">## setosa     | versicolor |         6.90 |   2.08 | [ 0.33, 3.57] | 97.85% |     1.12% |          4.77</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">## setosa     |  virginica |         6.90 |   2.46 | [ 0.80, 4.01] | 99.12% |     0.45% |          5.65</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">## versicolor |  virginica |         6.90 |   0.38 | [-0.02, 0.82] | 92.77% |    11.50% |          0.87</span></a></code></pre></div>
 </div>
 <div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
 <h3 class="hasAnchor">
@@ -209,14 +209,14 @@
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="reference/estimate_slopes.html">estimate_slopes</a></span>(model)</a>
 <a class="sourceLine" id="cb8-2" title="2"><span class="co">## Species    | Median |       89% CI |     pd | % in ROPE | Median (std.)</span></a>
 <a class="sourceLine" id="cb8-3" title="3"><span class="co">## -----------------------------------------------------------------------</span></a>
-<a class="sourceLine" id="cb8-4" title="4"><span class="co">## setosa     |   0.42 | [0.12, 0.71] | 98.58% |     3.85% |          1.71</span></a>
-<a class="sourceLine" id="cb8-5" title="5"><span class="co">## versicolor |   0.33 | [0.18, 0.47] |   100% |     0.57% |          1.35</span></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co">## virginica  |   0.21 | [0.08, 0.33] | 99.67% |     7.83% |          0.85</span></a></code></pre></div>
+<a class="sourceLine" id="cb8-4" title="4"><span class="co">## setosa     |   0.42 | [0.12, 0.71] | 98.47% |     4.47% |          1.71</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="co">## versicolor |   0.33 | [0.19, 0.47] |   100% |     0.40% |          1.33</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="co">## virginica  |   0.21 | [0.10, 0.33] | 99.75% |     6.93% |          0.87</span></a></code></pre></div>
 </div>
 <div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-predictions-from-your-model-to-compare-it-with-original-data" class="anchor"></a>Generate predictions from your model to compare it with original data</h3>
-<p>Check-out <a href="https://easystats.github.io/estimate/reference/estimate_response.html"><strong>this vignette</strong></a> to create this plot:</p>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="reference/estimate_response.html">estimate_response</a></span>(model)</a></code></pre></div>
 <table class="table">
@@ -231,43 +231,43 @@
 <tr class="odd">
 <td align="right">5.1</td>
 <td align="left">setosa</td>
-<td align="right">1.48</td>
-<td align="right">1.04</td>
-<td align="right">1.93</td>
+<td align="right">1.47</td>
+<td align="right">1.03</td>
+<td align="right">1.92</td>
 </tr>
 <tr class="even">
 <td align="right">4.9</td>
 <td align="left">setosa</td>
-<td align="right">1.46</td>
-<td align="right">1.05</td>
-<td align="right">1.88</td>
+<td align="right">1.45</td>
+<td align="right">1.06</td>
+<td align="right">1.89</td>
 </tr>
 <tr class="odd">
 <td align="right">4.7</td>
 <td align="left">setosa</td>
-<td align="right">1.43</td>
-<td align="right">1.04</td>
-<td align="right">1.90</td>
+<td align="right">1.41</td>
+<td align="right">1.02</td>
+<td align="right">1.84</td>
 </tr>
 <tr class="even">
 <td align="right">4.6</td>
 <td align="left">setosa</td>
-<td align="right">1.40</td>
-<td align="right">0.95</td>
-<td align="right">1.80</td>
+<td align="right">1.41</td>
+<td align="right">1.01</td>
+<td align="right">1.81</td>
 </tr>
 <tr class="odd">
 <td align="right">5.0</td>
 <td align="left">setosa</td>
-<td align="right">1.45</td>
-<td align="right">1.08</td>
-<td align="right">1.89</td>
+<td align="right">1.46</td>
+<td align="right">1.06</td>
+<td align="right">1.91</td>
 </tr>
 <tr class="even">
 <td align="right">5.4</td>
 <td align="left">setosa</td>
-<td align="right">1.51</td>
-<td align="right">1.10</td>
+<td align="right">1.50</td>
+<td align="right">1.08</td>
 <td align="right">1.93</td>
 </tr>
 </tbody>
@@ -276,7 +276,7 @@
 <div id="estimate-the-link-between-the-response-and-a-predictor" class="section level3">
 <h3 class="hasAnchor">
 <a href="#estimate-the-link-between-the-response-and-a-predictor" class="anchor"></a>Estimate the link between the response and a predictor</h3>
-<p>See <a href="https://easystats.github.io/estimate/reference/estimate_response.html"><strong>this vignette</strong></a> to create this plot: <img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
+<p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot: <img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(Petal.Length, <span class="dv">2</span>), <span class="dt">data=</span>iris)</a>
 <a class="sourceLine" id="cb10-2" title="2"></a>
 <a class="sourceLine" id="cb10-3" title="3"><span class="kw"><a href="reference/estimate_response.html">estimate_link</a></span>(model)</a></code></pre></div>
@@ -304,24 +304,24 @@
 <td align="right">2.97</td>
 <td align="right">2.90</td>
 <td align="right">2.82</td>
-<td align="right">2.98</td>
+<td align="right">2.97</td>
 </tr>
 <tr class="even">
 <td align="right">3.95</td>
 <td align="right">2.78</td>
-<td align="right">2.71</td>
-<td align="right">2.86</td>
+<td align="right">2.70</td>
+<td align="right">2.85</td>
 </tr>
 <tr class="odd">
 <td align="right">4.93</td>
 <td align="right">2.83</td>
-<td align="right">2.77</td>
+<td align="right">2.78</td>
 <td align="right">2.89</td>
 </tr>
 <tr class="even">
 <td align="right">5.92</td>
 <td align="right">3.05</td>
-<td align="right">2.97</td>
+<td align="right">2.96</td>
 <td align="right">3.14</td>
 </tr>
 <tr class="odd">
@@ -340,7 +340,7 @@
 <a class="sourceLine" id="cb11-2" title="2"><span class="co">## Part | Start |  End |   Size | Trend | Linearity</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="co">## ------------------------------------------------</span></a>
 <a class="sourceLine" id="cb11-4" title="4"><span class="co">## 1    |  1.00 | 4.11 | 53.00% | -0.01 |      0.94</span></a>
-<a class="sourceLine" id="cb11-5" title="5"><span class="co">## 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.94</span></a></code></pre></div>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">## 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.93</span></a></code></pre></div>
 </div>
 </div>
 </div>
@@ -351,9 +351,9 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
-<li>Browse source code at <br><a href="https://github.com/easystats/estimate">https://​github.com/​easystats/​estimate</a>
+<li>Browse source code at <br><a href="https://github.com/easystats/modelbased">https://​github.com/​easystats/​modelbased</a>
 </li>
-<li>Report a bug at <br><a href="https://github.com/easystats/estimate/issues">https://​github.com/​easystats/​estimate/​issues</a>
+<li>Report a bug at <br><a href="https://github.com/easystats/modelbased/issues">https://​github.com/​easystats/​modelbased/​issues</a>
 </li>
 </ul>
 </div>
@@ -378,10 +378,10 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://cran.r-project.org/package=estimate"><img src="http://www.r-pkg.org/badges/version/estimate" alt="CRAN"></a></li>
-<li><a href="https://cran.r-project.org/package=estimate"><img src="http://cranlogs.r-pkg.org/badges/estimate" alt="downloads"></a></li>
-<li><a href="https://travis-ci.org/easystats/estimate"><img src="https://travis-ci.org/easystats/estimate.svg?branch=master" alt="Build Status"></a></li>
-<li><a href="https://codecov.io/gh/easystats/estimate"><img src="https://codecov.io/gh/easystats/estimate/branch/master/graph/badge.svg" alt="codecov"></a></li>
+<li><a href="https://cran.r-project.org/package=modelbased"><img src="http://www.r-pkg.org/badges/version/modelbased" alt="CRAN"></a></li>
+<li><a href="https://cran.r-project.org/package=modelbased"><img src="http://cranlogs.r-pkg.org/badges/modelbased" alt="downloads"></a></li>
+<li><a href="https://travis-ci.org/easystats/modelbased"><img src="https://travis-ci.org/easystats/modelbased.svg?branch=master" alt="Build Status"></a></li>
+<li><a href="https://codecov.io/gh/easystats/modelbased"><img src="https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg" alt="codecov"></a></li>
 </ul>
 </div>
 </div>

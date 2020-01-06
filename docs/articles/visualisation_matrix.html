@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Data grids • estimate</title>
+<title>Data grids • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -38,7 +38,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">estimate</a>
+        <a class="navbar-link" href="../index.html">modelbased</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -84,7 +84,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/estimate">
+  <a href="https://github.com/easystats/modelbased">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -105,7 +105,7 @@
       <h1>Data grids</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/estimate/blob/master/vignettes/visualisation_matrix.Rmd"><code>vignettes/visualisation_matrix.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/visualisation_matrix.Rmd"><code>vignettes/visualisation_matrix.Rmd</code></a></small>
       <div class="hidden name"><code>visualisation_matrix.Rmd</code></div>
 
     </div>
@@ -136,7 +136,7 @@
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-3-1.png" width="3281.25"></p>
 <p>But how to “access” the data of this regression line? One option is to select some values of of the predictor (<code>Sepal.Length</code>), and <strong>predict</strong> the response (<code>Sepal.Width</code>) using the model. Using these <em>x</em> and <em>y</em> points, we can then create the regression line.</p>
 <p>Let’s try the <code>visualisation_matrix</code> function from the <code>estimate</code> package.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(estimate)</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>])</a></code></pre></div>
 <pre><code>&gt;    Sepal.Length

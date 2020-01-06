@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Model and describe non-linear relationships • estimate</title>
+<title>Model and describe non-linear relationships • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png">
@@ -38,7 +38,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">estimate</a>
+        <a class="navbar-link" href="../index.html">modelbased</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
       </span>
     </div>
@@ -84,7 +84,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/estimate">
+  <a href="https://github.com/easystats/modelbased">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -105,7 +105,7 @@
       <h1>Model and describe non-linear relationships</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/estimate/blob/master/vignettes/estimate_smooth.Rmd"><code>vignettes/estimate_smooth.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/estimate_smooth.Rmd"><code>vignettes/estimate_smooth.Rmd</code></a></small>
       <div class="hidden name"><code>estimate_smooth.Rmd</code></div>
 
     </div>
@@ -134,7 +134,7 @@
 <p>Looking nice! Now let’s model this non-linear relationship using a <strong>polynomial</strong> term:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(x, <span class="dv">2</span>), <span class="dt">data =</span> data)</a></code></pre></div>
 <p>Let’s continue with <strong>visualising the fitted model</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(estimate)</a>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
 <a class="sourceLine" id="cb4-2" title="2"></a>
 <a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> Predicted)) <span class="op">+</span></a>
@@ -181,7 +181,7 @@
 <a class="sourceLine" id="cb8-2" title="2"></a>
 <a class="sourceLine" id="cb8-3" title="3">model &lt;-<span class="st"> </span><span class="kw">stan_lmer</span>(Memory <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(Delay, <span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>Characters_Familiarity <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Movie_Language) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Immersion), <span class="dt">data =</span> df)</a></code></pre></div>
 <p>We can visualise the link between the Delay and the Memory score by using the <code>estimate_link</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(estimate)</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
 <a class="sourceLine" id="cb9-2" title="2"></a>
 <a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">target =</span> <span class="st">"Delay"</span>, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.50</span>, <span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.97</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb9-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Delay, <span class="dt">y=</span>Median)) <span class="op">+</span></a>
