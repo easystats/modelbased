@@ -32,11 +32,14 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated marginal means.
+}
 \description{
 Estimate marginal means
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 estimate_means(model)

@@ -29,6 +29,9 @@ estimate_means(
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated marginal means.
+}
 \description{
 See the documentation for your object's class:
 \itemize{

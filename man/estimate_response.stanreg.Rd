@@ -106,11 +106,14 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of predicted values.
+}
 \description{
 Generates predictions for Bayesian models
 }
 \examples{
-library(estimate)
+library(modelbased)
 \dontrun{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -121,5 +124,4 @@ model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 estimate_response(model)
 estimate_link(model)
 }
-
 }

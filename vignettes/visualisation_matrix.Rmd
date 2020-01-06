@@ -61,7 +61,7 @@ But how to "access" the data of this regression line? One option is to select so
 Let's try the `visualisation_matrix` function from the `estimate` package.
 
 ```{r message=FALSE, warning=FALSE}
-library(estimate)
+library(modelbased)
 
 visualisation_matrix(iris["Sepal.Length"])
 ```

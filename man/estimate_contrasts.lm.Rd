@@ -41,11 +41,14 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated contrasts.
+}
 \description{
 Estimate contrasts
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
@@ -63,4 +66,5 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
 model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
+
 }

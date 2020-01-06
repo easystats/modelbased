@@ -4,7 +4,7 @@
 #' @param ci Confidence Interval (CI) level. Default to 0.95 (95\%).
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 #' estimate_means(model)
@@ -20,6 +20,7 @@
 #' estimate_means(model, modulate = "Sepal.Width")
 #' }
 #'
+#' @return A dataframe of estimated marginal means.
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {

@@ -8,6 +8,7 @@
 #'
 #' @inheritParams estimate_contrasts
 #'
+#' @return A dataframe of estimated marginal means.
 #' @export
 estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ...) {
   UseMethod("estimate_means")
@@ -29,7 +30,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \dontrun{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -43,6 +44,9 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' estimate_means(model, modulate = "Sepal.Width")
 #' estimate_means(model, fixed = "Sepal.Width")
 #' }
+#'
+#' @return A dataframe of estimated marginal means.
+#'
 #' @importFrom emmeans as.mcmc.emmGrid
 #' @importFrom insight find_response
 #' @importFrom stats mad median sd setNames

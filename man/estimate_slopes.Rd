@@ -29,6 +29,9 @@ estimate_slopes(
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of slopes.
+}
 \description{
 See the documentation for your object's class:
 \itemize{

@@ -40,11 +40,14 @@
 
 \item{...}{Arguments passed to or from other methods.}
 }
+\value{
+A dataframe of estimated marginal means.
+}
 \description{
 Estimate marginal means
 }
 \examples{
-library(estimate)
+library(modelbased)
 \dontrun{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -58,4 +61,5 @@ estimate_means(model)
 estimate_means(model, modulate = "Sepal.Width")
 estimate_means(model, fixed = "Sepal.Width")
 }
+
 }

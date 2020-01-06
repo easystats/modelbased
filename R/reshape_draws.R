@@ -11,6 +11,7 @@
 #' estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
 #' reshape_draws(estimates)
 #' }
+#' @return Dataframe of reshaped draws in long format.
 #' @importFrom stats reshape
 #' @export
 reshape_draws <- function(draws) {

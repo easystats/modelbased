@@ -14,7 +14,7 @@
 #' @param length Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #' @param preserve_range Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #'
-#'
+#' @return A dataframe of predicted values.
 #' @export
 estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
@@ -33,7 +33,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @param seed An optional seed to use.
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #' \dontrun{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -44,7 +44,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' estimate_response(model)
 #' estimate_link(model)
 #' }
-#'
+#' @return A dataframe of predicted values.
 #' @export
 estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   if (!requireNamespace("rstanarm", quietly = TRUE)) {

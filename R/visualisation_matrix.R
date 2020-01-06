@@ -1,5 +1,6 @@
-#' Create a reference grid.
+#' Create a reference grid
 #'
+#' Create a reference matrix, useful for visualisation, with evenly spread and combined values.
 #'
 #' @param x An object from which to contruct the reference grid.
 #' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignements (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
@@ -14,8 +15,10 @@
 #' @inheritParams effectsize::format_standardize
 #'
 #'
+#' @return Reference grid dataframe.
+#'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' visualisation_matrix(iris, target = "Sepal.Length")
 #' visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")

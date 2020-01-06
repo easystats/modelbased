@@ -55,7 +55,7 @@ model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
 We might be interested in comparing the values predicted by the model to the actual "true" values. This can be done by generating predictions:
 
 ```{r message=FALSE, warning=FALSE,}
-library(estimate)
+library(modelbased)
 
 predicted <- estimate_response(model)
 head(predicted)

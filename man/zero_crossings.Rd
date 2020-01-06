@@ -9,6 +9,9 @@ zero_crossings(x)
 \arguments{
 \item{x}{A numeric vector.}
 }
+\value{
+Vector of zero crossings.
+}
 \description{
 Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.
 }

@@ -23,6 +23,8 @@
 #' @examples
 #' as.numeric_ifnumeric(c("1", "2"))
 #' as.numeric_ifnumeric(c("1", "2", "A"))
+#'
+#' @return Numeric
 #' @export
 as.numeric_ifnumeric <- function(x) {
   x <- tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)

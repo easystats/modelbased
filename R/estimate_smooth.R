@@ -11,6 +11,7 @@
 #' @inheritParams estimate_slopes
 #' @inheritParams estimate_response
 #'
+#' @return A dataframe of linear description of non-linear terms.
 #'
 #' @export
 estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", ...) {
@@ -37,8 +38,8 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #' @inheritParams estimate_response.stanreg
 #'
 #' @examples
-#' library(estimate)
-#' \dontrun{
+#' library(modelbased)
+#' \donttest{
 #' library(rstanarm)
 #' model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)
 #' estimate_smooth(model)

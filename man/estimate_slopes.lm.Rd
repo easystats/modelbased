@@ -36,7 +36,7 @@
 Estimate the slopes of a numeric predictor (over different factor levels)
 }
 \examples{
-library(estimate)
+library(modelbased)
 
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_slopes(model)

@@ -9,6 +9,9 @@ find_inversions(x)
 \arguments{
 \item{x}{A numeric vector.}
 }
+\value{
+Vector of inversion points.
+}
 \description{
 Find points of inversion of a curve.
 }
@@ -16,4 +19,5 @@ Find points of inversion of a curve.
 x <- sin(seq(0, 4 * pi, length.out = 100))
 plot(x, type = "b")
 find_inversions(x)
+
 }

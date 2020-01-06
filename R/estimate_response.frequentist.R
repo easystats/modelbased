@@ -3,7 +3,7 @@
 #' @inheritParams estimate_response.stanreg
 #'
 #' @examples
-#' library(estimate)
+#' library(modelbased)
 #'
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_response(model)
@@ -14,6 +14,7 @@
 #' model <- lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 #' estimate_response(model)
 #' estimate_link(model)
+#' @return A dataframe of predicted values.
 #' @export
 estimate_response.glm <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
