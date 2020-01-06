@@ -1,4 +1,4 @@
 library(testthat)
-library(estimate)
+library(modelbased)
 
-test_check("estimate")
+test_check("modelbased")
