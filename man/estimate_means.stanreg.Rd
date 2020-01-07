@@ -35,9 +35,8 @@
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
-(see \code{\link[bayestestR:eti]{eti}}) or \code{"SI"}
-(see \code{\link[bayestestR:si]{si}}).}
+\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}) or \code{"ETI"}
+(see \code{\link[bayestestR:eti]{eti}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }

@@ -22,6 +22,14 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 
 
 
+
+
+
+
+
+
+
+
 #' Generates predictions for Bayesian models
 #'
 #' @inheritParams estimate_response
@@ -43,21 +51,42 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
 #' estimate_response(model)
 #' estimate_link(model)
+#'
+#' library(brms)
+#' model <- brms::brm(Sepal.Width ~ Petal.Length, data = iris)
+#' estimate_response(model)
+#' estimate_link(model)
 #' }
 #' @return A dataframe of predicted values.
 #' @export
 estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  if (!requireNamespace("rstanarm", quietly = TRUE)) {
+
+  # Checks
+  if (any(class(model) == "stanreg") & !requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
+  if (any(class(model) == "brmsfit") & !requireNamespace("brms", quietly = TRUE)) {
+    stop("This function needs `brms` to be installed.")
+  }
 
+  # Initialize
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
   data <- args$data
 
+  # Predict link or response
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
-    posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
+    if(any(class(model) == "brmsfit")){
+      posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, scale = args$transform)
+    } else{
+      posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
+    }
   } else {
-    posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
+    if (any(class(model) == "brmsfit")){
+      posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = NULL)
+    } else{
+      posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
+    }
+
   }
 
   # Summary
@@ -105,6 +134,13 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
 
 
+
+
+# Other - rstanarm -------------------------------------------------------------------
+
+
+
+
 #' @rdname estimate_response
 #' @export
 #' @export
@@ -146,3 +182,14 @@ estimate_link.data.frame <- function(model, data = "grid", transform = "response
 
   estimate_response(data, data = model, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
+
+
+
+# brms --------------------------------------------------------------------
+
+#' @export
+estimate_response.brmsfit <- estimate_response.stanreg
+
+#' @export
+estimate_link.brmsfit <- estimate_link.stanreg
+

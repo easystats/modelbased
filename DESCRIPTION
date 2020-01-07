@@ -41,6 +41,7 @@ Suggests:
 	merTools,
 	rmarkdown,
 	rstanarm,
+	brms,
 	see,
 	testthat
 License: GPL-3
