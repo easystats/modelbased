@@ -16,7 +16,7 @@ Dataframe of reshaped draws in long format.
 Reshape data.frame of estimations with Bayesian posterior draws to long format.
 }
 \examples{
-\dontrun{
+\donttest{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)

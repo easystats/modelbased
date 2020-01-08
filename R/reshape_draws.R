@@ -5,7 +5,7 @@
 #' @param draws data.frame containing posterior draws obtained from \code{estimate_response} or \code{estimate_link}.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(rstanarm)
 #' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)

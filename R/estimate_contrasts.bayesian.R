@@ -37,7 +37,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #'
 #' @examples
 #' library(modelbased)
-#' \dontrun{
+#' \donttest{
 #' library(rstanarm)
 #'
 #' data <- iris

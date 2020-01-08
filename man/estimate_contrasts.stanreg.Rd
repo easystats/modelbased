@@ -72,7 +72,7 @@ Estimate contrasts
 }
 \examples{
 library(modelbased)
-\dontrun{
+\donttest{
 library(rstanarm)
 
 data <- iris
