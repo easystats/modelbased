@@ -12,7 +12,7 @@
 #' @param modulate A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using \code{length}.
 #' @param transform Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.
 #' @param length Length of the spread numeric variables.
-#' @param standardize If \code{TRUE}, add standardized differences (Cohen's d) or coefficients.
+#' @param standardize If \code{TRUE}, adds standardized differences or coefficients.
 #' @param standardize_robust Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.
 #' @param ... Arguments passed to or from other methods.
 #'

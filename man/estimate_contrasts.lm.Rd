@@ -31,7 +31,7 @@
 
 \item{length}{Length of the spread numeric variables.}
 
-\item{standardize}{If \code{TRUE}, add standardized differences (Cohen's d) or coefficients.}
+\item{standardize}{If \code{TRUE}, adds standardized differences or coefficients.}
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
