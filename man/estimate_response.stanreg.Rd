@@ -115,13 +115,18 @@ Generates predictions for Bayesian models
 }
 \examples{
 library(modelbased)
-\dontrun{
+\donttest{
 library(rstanarm)
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
 estimate_response(model)
 estimate_link(model)
 
 model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+estimate_response(model)
+estimate_link(model)
+
+library(brms)
+model <- brms::brm(Sepal.Width ~ Petal.Length, data = iris)
 estimate_response(model)
 estimate_link(model)
 }

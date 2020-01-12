@@ -31,7 +31,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #'
 #' @examples
 #' library(modelbased)
-#' \dontrun{
+#' \donttest{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'

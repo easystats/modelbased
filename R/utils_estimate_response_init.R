@@ -31,9 +31,9 @@
   # Deal with transform
   if (predict == "link") {
     if (insight::model_info(model)$is_bayesian) transform <- ifelse(transform == "response", TRUE, FALSE)
-    interval <- "prediction"
-  } else {
     interval <- "confidence"
+  } else {
+    interval <- "prediction"
   }
 
 

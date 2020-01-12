@@ -44,7 +44,7 @@ library(modelbased)
 model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
 estimate_means(model)
 estimate_means(model, modulate = "Sepal.Width")
-\dontrun{
+\donttest{
 library(lme4)
 
 data <- iris
