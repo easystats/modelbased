@@ -1,3 +1,5 @@
+#' @importFrom insight format_value format_table
+#' @importFrom parameters parameters_table
 #' @keywords internal
 .print_estimate <- function(x, ...) {
   if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
