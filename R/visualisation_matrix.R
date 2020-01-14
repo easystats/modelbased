@@ -219,10 +219,10 @@ visualisation_matrix.character <- visualisation_matrix.vector
 
 
 
-
+#' @importFrom stats na.omit
 #' @keywords internal
 .smart_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE) {
-  if (na.rm == TRUE) x <- na.omit(x)
+  if (na.rm == TRUE) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
     fun <- paste0(numerics, "(x)")
@@ -291,7 +291,7 @@ visualisation_matrix.character <- visualisation_matrix.vector
 
 
 
-
+#' @importFrom stats median sd mad
 #' @keywords internal
 .visualisation_matrix_vector <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x, ...) {
   if (is.factor(x)) {
@@ -333,9 +333,9 @@ visualisation_matrix.character <- visualisation_matrix.vector
         }
         # Reverse standardization
         if (standardize_robust) {
-          out <- out * mad(reference, na.rm = TRUE) + median(reference, na.rm = TRUE)
+          out <- out * stats::mad(reference, na.rm = TRUE) + stats::median(reference, na.rm = TRUE)
         } else {
-          out <- out * sd(reference, na.rm = TRUE) + mean(reference, na.rm = TRUE)
+          out <- out * stats::sd(reference, na.rm = TRUE) + mean(reference, na.rm = TRUE)
         }
       }
     } else {

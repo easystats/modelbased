@@ -27,12 +27,14 @@ Imports:
 	insight (>= 0.7.1),
 	bayestestR (>= 0.4.0),
 	parameters (>= 0.3.0),
-	effectsize (>= 0.0.1),
-	emmeans
+	emmeans,
+	stats,
+	utils
 Suggests:
 	coda,
 	covr,
 	dplyr,
+	effectsize,
 	gganimate,
 	ggplot2,
 	knitr,
