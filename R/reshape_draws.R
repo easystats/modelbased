@@ -6,10 +6,11 @@
 #'
 #' @examples
 #' \donttest{
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
-#' reshape_draws(estimates)
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#'   estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
+#'   reshape_draws(estimates)
+#' }
 #' }
 #' @return Dataframe of reshaped draws in long format.
 #' @importFrom stats reshape

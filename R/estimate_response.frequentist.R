@@ -9,11 +9,11 @@
 #' estimate_response(model)
 #' estimate_link(model)
 #'
-#' library(lme4)
-#'
-#' model <- lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
-#' estimate_response(model)
-#' estimate_link(model)
+#' if (require("lme4")) {
+#'   model <- lmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+#'   estimate_response(model)
+#'   estimate_link(model)
+#' }
 #' @return A dataframe of predicted values.
 #' @export
 estimate_response.glm <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {

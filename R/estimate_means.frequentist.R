@@ -10,16 +10,15 @@
 #' estimate_means(model)
 #' estimate_means(model, modulate = "Sepal.Width")
 #' \donttest{
-#' library(lme4)
+#' if (require("lme4")) {
+#'   data <- iris
+#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' data <- iris
-#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-#'
-#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
-#' estimate_means(model)
-#' estimate_means(model, modulate = "Sepal.Width")
+#'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+#'   estimate_means(model)
+#'   estimate_means(model, modulate = "Sepal.Width")
 #' }
-#'
+#' }
 #' @return A dataframe of estimated marginal means.
 #' @importFrom stats confint
 #' @export

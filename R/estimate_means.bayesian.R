@@ -35,16 +35,16 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
-#' estimate_means(model)
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   estimate_means(model)
 #'
-#' model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
-#' estimate_means(model)
-#' estimate_means(model, modulate = "Sepal.Width")
-#' estimate_means(model, fixed = "Sepal.Width")
+#'   model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
+#'   estimate_means(model)
+#'   estimate_means(model, modulate = "Sepal.Width")
+#'   estimate_means(model, fixed = "Sepal.Width")
 #' }
-#'
+#' }
 #' @return A dataframe of estimated marginal means.
 #'
 #' @importFrom emmeans as.mcmc.emmGrid

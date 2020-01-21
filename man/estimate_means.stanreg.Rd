@@ -35,8 +35,9 @@
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}) or \code{"ETI"}
-(see \code{\link[bayestestR:eti]{eti}}).}
+\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
+(see \code{\link[bayestestR:eti]{eti}}) or \code{"SI"}
+(see \code{\link[bayestestR:si]{si}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -52,14 +53,14 @@ library(modelbased)
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
-estimate_means(model)
+if (require("rstanarm")) {
+  model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  estimate_means(model)
 
-model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
-estimate_means(model)
-estimate_means(model, modulate = "Sepal.Width")
-estimate_means(model, fixed = "Sepal.Width")
+  model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
+  estimate_means(model)
+  estimate_means(model, modulate = "Sepal.Width")
+  estimate_means(model, fixed = "Sepal.Width")
 }
-
+}
 }
