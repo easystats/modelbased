@@ -38,6 +38,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @examples
 #' library(modelbased)
 #' \donttest{
+#' if (requireNamespace("rstanarm", quietly = TRUE)) {
 #' library(rstanarm)
 #'
 #' data <- iris
@@ -54,7 +55,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #'
 #' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
 #' estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
-#' }
+#' }}
 #'
 #' @return A dataframe of estimated contrasts.
 #'
