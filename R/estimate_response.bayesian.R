@@ -43,19 +43,20 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @examples
 #' library(modelbased)
 #' \donttest{
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimate_response(model)
-#' estimate_link(model)
+#' if (require("rstanarm") && require("brms")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#'   estimate_response(model)
+#'   estimate_link(model)
 #'
-#' model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
-#' estimate_response(model)
-#' estimate_link(model)
+#'   model <- stan_glmer(Sepal.Width ~ Petal.Length + (1 | Species), data = iris)
+#'   estimate_response(model)
+#'   estimate_link(model)
 #'
-#' library(brms)
-#' model <- brms::brm(Sepal.Width ~ Petal.Length, data = iris)
-#' estimate_response(model)
-#' estimate_link(model)
+#'   library(brms)
+#'   model <- brms::brm(Sepal.Width ~ Petal.Length, data = iris)
+#'   estimate_response(model)
+#'   estimate_link(model)
+#' }
 #' }
 #' @return A dataframe of predicted values.
 #' @export

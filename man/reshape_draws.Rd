@@ -17,9 +17,10 @@ Reshape data.frame of estimations with Bayesian posterior draws to long format.
 }
 \examples{
 \donttest{
-library(rstanarm)
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
-reshape_draws(estimates)
+if (require("rstanarm")) {
+  model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  estimates <- estimate_response(model, keep_draws = TRUE, draws = 200)
+  reshape_draws(estimates)
+}
 }
 }

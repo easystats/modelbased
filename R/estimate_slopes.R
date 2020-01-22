@@ -37,11 +37,11 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' @examples
 #' library(modelbased)
 #' \donttest{
-#' library(rstanarm)
-#' model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimate_slopes(model)
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#'   estimate_slopes(model)
 #' }
-#'
+#' }
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {

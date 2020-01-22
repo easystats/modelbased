@@ -22,9 +22,16 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = '')
-knitr::opts_chunk$set(comment=">",
-  dpi=450)
-options(digits=2)
+knitr::opts_chunk$set(comment = ">", dpi = 450)
+options(digits = 2)
+
+if (!requireNamespace("ggplot2", quietly = TRUE) ||
+    !requireNamespace("see", quietly = TRUE) ||
+    !requireNamespace("gganimate", quietly = TRUE) ||
+    !requireNamespace("rstanarm", quietly = TRUE) ||
+    !requireNamespace("dplyr", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
 
 set.seed(333)
 ```
