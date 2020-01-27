@@ -55,6 +55,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #'   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 #' }
 #' }
+#'
 #' @return A dataframe of estimated contrasts.
 #'
 #' @importFrom emmeans contrast

@@ -91,4 +91,5 @@ if (require("rstanarm")) {
   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 }
 }
+
 }
