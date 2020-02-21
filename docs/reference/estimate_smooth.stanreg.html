@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -199,8 +199,20 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelbased</span>)
 <span class='co'># \donttest{</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>rstanarm</span>)
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_gamm4.html'>stan_gamm4</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'>s</span>(<span class='no'>Petal.Length</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)</div><div class='output co'>#&gt; 
+<span class='kw'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'>"rstanarm"</span>)) {
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_gamm4.html'>stan_gamm4</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'>s</span>(<span class='no'>Petal.Length</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+  <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)
+
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Petal.Length</span>, <span class='fl'>2</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+  <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)
+
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_gamm4.html'>stan_gamm4</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + <span class='fu'>s</span>(<span class='no'>Petal.Length</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+  <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)
+
+  <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Petal.Length</span>, <span class='fl'>2</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
+  <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)
+  <span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)
+}</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
@@ -221,9 +233,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.511 seconds (Warm-up)
-#&gt; Chain 1:                0.738 seconds (Sampling)
-#&gt; Chain 1:                1.249 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.441 seconds (Warm-up)
+#&gt; Chain 1:                0.338 seconds (Sampling)
+#&gt; Chain 1:                0.779 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -246,9 +258,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.681 seconds (Warm-up)
-#&gt; Chain 2:                0.422 seconds (Sampling)
-#&gt; Chain 2:                1.103 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.41 seconds (Warm-up)
+#&gt; Chain 2:                0.348 seconds (Sampling)
+#&gt; Chain 2:                0.758 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -271,9 +283,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.476 seconds (Warm-up)
-#&gt; Chain 3:                0.598 seconds (Sampling)
-#&gt; Chain 3:                1.074 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.398 seconds (Warm-up)
+#&gt; Chain 3:                0.289 seconds (Sampling)
+#&gt; Chain 3:                0.687 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -296,14 +308,11 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.505 seconds (Warm-up)
-#&gt; Chain 4:                0.369 seconds (Sampling)
-#&gt; Chain 4:                0.874 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Part | Start |  End |   Size | Trend | Linearity
-#&gt; ------------------------------------------------
-#&gt; 1    |  1.00 | 3.52 | 43.00% | -0.01 |      0.97
-#&gt; 2    |  3.52 | 6.90 | 57.00% |  0.01 |      0.99</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Petal.Length</span>, <span class='fl'>2</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)</div><div class='output co'>#&gt; 
+#&gt; Chain 4:  Elapsed Time: 0.424 seconds (Warm-up)
+#&gt; Chain 4:                0.339 seconds (Sampling)
+#&gt; Chain 4:                0.763 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='warning'>Warning: There were 3 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Examine the pairs() plot to diagnose sampling problems</span></div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
@@ -324,9 +333,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.036 seconds (Warm-up)
-#&gt; Chain 1:                0.044 seconds (Sampling)
-#&gt; Chain 1:                0.08 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.032 seconds (Warm-up)
+#&gt; Chain 1:                0.041 seconds (Sampling)
+#&gt; Chain 1:                0.073 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -350,8 +359,8 @@
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
 #&gt; Chain 2:  Elapsed Time: 0.032 seconds (Warm-up)
-#&gt; Chain 2:                0.047 seconds (Sampling)
-#&gt; Chain 2:                0.079 seconds (Total)
+#&gt; Chain 2:                0.04 seconds (Sampling)
+#&gt; Chain 2:                0.072 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -374,9 +383,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.035 seconds (Warm-up)
-#&gt; Chain 3:                0.046 seconds (Sampling)
-#&gt; Chain 3:                0.081 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.032 seconds (Warm-up)
+#&gt; Chain 3:                0.041 seconds (Sampling)
+#&gt; Chain 3:                0.073 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -399,120 +408,10 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.037 seconds (Warm-up)
-#&gt; Chain 4:                0.047 seconds (Sampling)
-#&gt; Chain 4:                0.084 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Part | Start |  End |   Size | Trend | Linearity
-#&gt; ------------------------------------------------
-#&gt; 1    |  1.00 | 4.11 | 53.00% | -0.01 |      0.94
-#&gt; 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.93</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_gamm4.html'>stan_gamm4</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> + <span class='fu'>s</span>(<span class='no'>Petal.Length</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)</div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
-#&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 0.001 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
-#&gt; Chain 1: Adjust your expectations accordingly!
-#&gt; Chain 1: 
-#&gt; Chain 1: 
-#&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.741 seconds (Warm-up)
-#&gt; Chain 1:                0.814 seconds (Sampling)
-#&gt; Chain 1:                1.555 seconds (Total)
-#&gt; Chain 1: 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
-#&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 0 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 2: Adjust your expectations accordingly!
-#&gt; Chain 2: 
-#&gt; Chain 2: 
-#&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.665 seconds (Warm-up)
-#&gt; Chain 2:                0.706 seconds (Sampling)
-#&gt; Chain 2:                1.371 seconds (Total)
-#&gt; Chain 2: 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
-#&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 0 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 3: Adjust your expectations accordingly!
-#&gt; Chain 3: 
-#&gt; Chain 3: 
-#&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.59 seconds (Warm-up)
-#&gt; Chain 3:                0.44 seconds (Sampling)
-#&gt; Chain 3:                1.03 seconds (Total)
-#&gt; Chain 3: 
-#&gt; 
-#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
-#&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 0 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
-#&gt; Chain 4: Adjust your expectations accordingly!
-#&gt; Chain 4: 
-#&gt; Chain 4: 
-#&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
-#&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
-#&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
-#&gt; Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
-#&gt; Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
-#&gt; Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
-#&gt; Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
-#&gt; Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
-#&gt; Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
-#&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
-#&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
-#&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
-#&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.621 seconds (Warm-up)
-#&gt; Chain 4:                0.399 seconds (Sampling)
-#&gt; Chain 4:                1.02 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Part | Start |  End |   Size | Trend | Linearity
-#&gt; ------------------------------------------------
-#&gt; 1    |  1.00 | 6.54 | 94.00% |  0.01 |      0.98
-#&gt; 2    |  6.54 | 6.60 |  1.00% |       |          
-#&gt; 3    |  6.60 | 6.72 |  2.50% |  0.00 |      0.82
-#&gt; 4    |  6.72 | 6.75 |  0.50% |       |          
-#&gt; 5    |  6.75 | 6.90 |  2.50% |  0.00 |      0.73</div><div class='input'>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Species</span> * <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span>(<span class='no'>Petal.Length</span>, <span class='fl'>2</span>), <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)</div><div class='output co'>#&gt; 
+#&gt; Chain 4:  Elapsed Time: 0.03 seconds (Warm-up)
+#&gt; Chain 4:                0.04 seconds (Sampling)
+#&gt; Chain 4:                0.07 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
@@ -533,9 +432,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.801 seconds (Warm-up)
-#&gt; Chain 1:                0.798 seconds (Sampling)
-#&gt; Chain 1:                1.599 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.649 seconds (Warm-up)
+#&gt; Chain 1:                0.578 seconds (Sampling)
+#&gt; Chain 1:                1.227 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -558,9 +457,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.78 seconds (Warm-up)
-#&gt; Chain 2:                0.653 seconds (Sampling)
-#&gt; Chain 2:                1.433 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.572 seconds (Warm-up)
+#&gt; Chain 2:                0.43 seconds (Sampling)
+#&gt; Chain 2:                1.002 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -583,9 +482,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.753 seconds (Warm-up)
-#&gt; Chain 3:                0.707 seconds (Sampling)
-#&gt; Chain 3:                1.46 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.586 seconds (Warm-up)
+#&gt; Chain 3:                0.617 seconds (Sampling)
+#&gt; Chain 3:                1.203 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -608,19 +507,114 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.717 seconds (Warm-up)
-#&gt; Chain 4:                0.728 seconds (Sampling)
-#&gt; Chain 4:                1.445 seconds (Total)
-#&gt; Chain 4: </div><div class='input'><span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Part | Start |  End |   Size | Trend | Linearity
-#&gt; ------------------------------------------------
-#&gt; 1    |  1.00 | 2.42 | 24.50% |  0.01 |      0.94
-#&gt; 2    |  2.42 | 6.90 | 75.50% | -0.02 |      0.93</div><div class='input'><span class='fu'><a href='estimate_smooth.html'>estimate_smooth</a></span>(<span class='no'>model</span>, <span class='kw'>levels</span> <span class='kw'>=</span> <span class='st'>"Species"</span>)</div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Species    | Part | Start |  End |   Size | Trend | Linearity
+#&gt; Chain 4:  Elapsed Time: 0.627 seconds (Warm-up)
+#&gt; Chain 4:                0.707 seconds (Sampling)
+#&gt; Chain 4:                1.334 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
+#&gt; Chain 1: 
+#&gt; Chain 1: Gradient evaluation took 0 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 1: Adjust your expectations accordingly!
+#&gt; Chain 1: 
+#&gt; Chain 1: 
+#&gt; Chain 1: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 1: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 1: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 1: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 1: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 1: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 1: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 1: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 1: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 1: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 1: 
+#&gt; Chain 1:  Elapsed Time: 0.721 seconds (Warm-up)
+#&gt; Chain 1:                0.632 seconds (Sampling)
+#&gt; Chain 1:                1.353 seconds (Total)
+#&gt; Chain 1: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
+#&gt; Chain 2: 
+#&gt; Chain 2: Gradient evaluation took 0 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 2: Adjust your expectations accordingly!
+#&gt; Chain 2: 
+#&gt; Chain 2: 
+#&gt; Chain 2: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 2: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 2: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 2: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 2: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 2: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 2: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 2: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 2: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 2: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 2: 
+#&gt; Chain 2:  Elapsed Time: 0.775 seconds (Warm-up)
+#&gt; Chain 2:                0.626 seconds (Sampling)
+#&gt; Chain 2:                1.401 seconds (Total)
+#&gt; Chain 2: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
+#&gt; Chain 3: 
+#&gt; Chain 3: Gradient evaluation took 0 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 3: Adjust your expectations accordingly!
+#&gt; Chain 3: 
+#&gt; Chain 3: 
+#&gt; Chain 3: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 3: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 3: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 3: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 3: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 3: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 3: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 3: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 3: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 3: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 3: 
+#&gt; Chain 3:  Elapsed Time: 0.692 seconds (Warm-up)
+#&gt; Chain 3:                0.747 seconds (Sampling)
+#&gt; Chain 3:                1.439 seconds (Total)
+#&gt; Chain 3: 
+#&gt; 
+#&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
+#&gt; Chain 4: 
+#&gt; Chain 4: Gradient evaluation took 0 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
+#&gt; Chain 4: Adjust your expectations accordingly!
+#&gt; Chain 4: 
+#&gt; Chain 4: 
+#&gt; Chain 4: Iteration:    1 / 2000 [  0%]  (Warmup)
+#&gt; Chain 4: Iteration:  200 / 2000 [ 10%]  (Warmup)
+#&gt; Chain 4: Iteration:  400 / 2000 [ 20%]  (Warmup)
+#&gt; Chain 4: Iteration:  600 / 2000 [ 30%]  (Warmup)
+#&gt; Chain 4: Iteration:  800 / 2000 [ 40%]  (Warmup)
+#&gt; Chain 4: Iteration: 1000 / 2000 [ 50%]  (Warmup)
+#&gt; Chain 4: Iteration: 1001 / 2000 [ 50%]  (Sampling)
+#&gt; Chain 4: Iteration: 1200 / 2000 [ 60%]  (Sampling)
+#&gt; Chain 4: Iteration: 1400 / 2000 [ 70%]  (Sampling)
+#&gt; Chain 4: Iteration: 1600 / 2000 [ 80%]  (Sampling)
+#&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
+#&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
+#&gt; Chain 4: 
+#&gt; Chain 4:  Elapsed Time: 0.666 seconds (Warm-up)
+#&gt; Chain 4:                0.84 seconds (Sampling)
+#&gt; Chain 4:                1.506 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for smooth analysis. Selecting `smooth = "Petal.Length"`.</span></div><div class='output co'>#&gt; Species    | Part | Start |  End |   Size | Trend | Linearity
 #&gt; -------------------------------------------------------------
 #&gt; setosa     |    1 |  1.00 | 2.42 | 24.50% |  0.01 |      0.94
 #&gt; setosa     |    2 |  2.42 | 6.90 | 75.50% | -0.02 |      0.93
-#&gt; versicolor |    1 |  1.00 | 6.90 |   100% |  0.01 |      0.96
-#&gt; virginica  |    1 |  1.00 | 6.84 | 99.00% |  0.02 |      0.94
-#&gt; virginica  |    2 |  6.84 | 6.90 |  1.00% |       |          </div><div class='input'># }
+#&gt; versicolor |    1 |  1.00 | 6.90 |   100% |  0.01 |      0.95
+#&gt; virginica  |    1 |  1.00 | 6.90 |   100% |  0.02 |      0.93</div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

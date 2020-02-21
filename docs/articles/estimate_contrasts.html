@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 
       
 
-      </header><div class="row">
+      </header><script src="estimate_contrasts_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Contrast analysis</h1>
@@ -118,48 +118,48 @@
 <a href="#testing-pairwise-differences" class="anchor"></a>Testing pairwise differences</h1>
 <p>In the <a href="https://easystats.github.io/estimate/articles/estimate_means.html"><strong>previous tutorial</strong></a>, we computed marginal at the 3 different <code>Species</code> levels from the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set"><code>iris</code></a> dataset. However, one might also want to <strong>statistically test</strong> the differences between each levels, which can be achieved through <strong>contrast analysis</strong>. Although the procedure is much more powerful, its aim is somehow analog to the <strong><em>post hoc</em></strong> analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.</p>
 <p>Let’s do that based on the simple model from the previous tutorial:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
-<a class="sourceLine" id="cb1-5" title="5"></a>
-<a class="sourceLine" id="cb1-6" title="6"></a>
-<a class="sourceLine" id="cb1-7" title="7">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb1-8" title="8">means &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_means.html">estimate_means</a></span>(model)</a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Species, <span class="dt">y =</span> Sepal.Width, <span class="dt">fill =</span> Species)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-3" title="3"><span class="st">  </span><span class="kw">geom_jitter2</span>(<span class="dt">width =</span> <span class="fl">0.05</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="st">  </span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> means, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">group =</span> <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">data =</span> means, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"white"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</span>
+<span id="cb1-8"><a href="#cb1-8"></a>means &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_means.html">estimate_means</a></span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Species, <span class="dt">y =</span> Sepal.Width, <span class="dt">fill =</span> Species)) <span class="op">+</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="st">  </span><span class="kw">geom_violin</span>() <span class="op">+</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="st">  </span><span class="kw">geom_jitter2</span>(<span class="dt">width =</span> <span class="fl">0.05</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) <span class="op">+</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="st">  </span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> means, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">group =</span> <span class="dv">1</span>), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span><span class="kw">geom_pointrange</span>(<span class="dt">data =</span> means, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"white"</span>) <span class="op">+</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
 <p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-4-1.png" width="3281.25"></p>
 <p><strong>Contrast analysis</strong> can be achieved through the <code>estimate_contrasts</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</span></code></pre></div>
 <pre><code>&gt; Level1     |     Level2 | Median |         89% CI |     pd | % in ROPE | Median (std.)
 &gt; --------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |   0.66 | [ 0.54,  0.76] |   100% |        0% |          1.50
-&gt; setosa     |  virginica |   0.45 | [ 0.34,  0.56] |   100% |        0% |          1.04
-&gt; versicolor |  virginica |  -0.20 | [-0.31, -0.09] | 99.88% |     6.55% |         -0.47</code></pre>
+&gt; setosa     | versicolor |   0.65 | [ 0.54,  0.76] |   100% |        0% |          1.50
+&gt; setosa     |  virginica |   0.45 | [ 0.35,  0.57] |   100% |        0% |          1.03
+&gt; versicolor |  virginica |  -0.21 | [-0.31, -0.09] | 99.80% |     6.58% |         -0.47</code></pre>
 <p>As we can see here, all pairwise differences can be considered as significant.</p>
 </div>
 <div id="complex-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#complex-model" class="anchor"></a>Complex model</h1>
 <p>Again, as contrast analysis is based on marginal means, it can be applied to more complex models:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Species <span class="op">*</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Species <span class="op">*</span><span class="st"> </span>Petal.Width, <span class="dt">data =</span> iris)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model)</span></code></pre></div>
 <pre><code>&gt; Level1     |     Level2 | Median |        89% CI |     pd | % in ROPE | Median (std.)
 &gt; -------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |   1.56 | [ 1.02, 2.12] |   100% |        0% |          3.58
-&gt; setosa     |  virginica |   1.72 | [ 1.14, 2.35] |   100% |        0% |          3.94
-&gt; versicolor |  virginica |   0.16 | [-0.05, 0.38] | 85.70% |    31.70% |          0.36</code></pre>
+&gt; setosa     | versicolor |   1.57 | [ 0.99, 2.14] |   100% |        0% |          3.61
+&gt; setosa     |  virginica |   1.74 | [ 1.15, 2.35] |   100% |        0% |          3.98
+&gt; versicolor |  virginica |   0.16 | [-0.05, 0.39] | 86.90% |    31.60% |          0.36</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can see that the difference between <em>versicolor</em> and <em>virginica</em> becomes not significant (and even changes sign).</p>
 <p>Note that we can plot simple contrast analysis through <strong>lighthouse plots</strong> with the help of the <code>see</code> package:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
-<a class="sourceLine" id="cb7-2" title="2"></a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model), <span class="kw"><a href="../reference/estimate_means.html">estimate_means</a></span>(model)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw"><a href="https://rdrr.io/r/graphics/plot.html">plot</a></span>(<span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model), <span class="kw"><a href="../reference/estimate_means.html">estimate_means</a></span>(model)) <span class="op">+</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
 <p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 <p>These represent the estimated means and their CI range (in black), while the gray areas show the CI range of the difference (as compared to the point estimate).</p>
 </div>
@@ -167,18 +167,18 @@
 <h1 class="hasAnchor">
 <a href="#changes-in-difference" class="anchor"></a>Changes in difference</h1>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">contrasts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Width"</span>, <span class="dt">length =</span> <span class="dv">100</span>)</a>
-<a class="sourceLine" id="cb8-2" title="2"></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="co"># Create a variable with the two levels concatenated </span></a>
-<a class="sourceLine" id="cb8-4" title="4">contrasts<span class="op">$</span>Contrast &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(contrasts<span class="op">$</span>Level1, <span class="st">"-"</span>, contrasts<span class="op">$</span>Level2) </a>
-<a class="sourceLine" id="cb8-5" title="5"></a>
-<a class="sourceLine" id="cb8-6" title="6"><span class="co"># Visualise the changes in the differences</span></a>
-<a class="sourceLine" id="cb8-7" title="7"><span class="kw">ggplot</span>(contrasts, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Width, <span class="dt">y =</span> Median)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-8" title="8"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Contrast, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Contrast), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-10" title="10"><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-11" title="11"><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-12" title="12"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Difference"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>contrasts &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span>(model, <span class="dt">modulate =</span> <span class="st">"Petal.Width"</span>, <span class="dt">length =</span> <span class="dv">100</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># Create a variable with the two levels concatenated </span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>contrasts<span class="op">$</span>Contrast &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste</a></span>(contrasts<span class="op">$</span>Level1, <span class="st">"-"</span>, contrasts<span class="op">$</span>Level2) </span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co"># Visualise the changes in the differences</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">ggplot</span>(contrasts, <span class="kw">aes</span>(<span class="dt">x =</span> Petal.Width, <span class="dt">y =</span> Median)) <span class="op">+</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Contrast, <span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> Contrast), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Difference"</span>)</span></code></pre></div>
 <p><img src="estimate_contrasts_files/figure-html/fig-1.png" width="3281.25"></p>
 <p>As we can see, the difference between <em>versicolor</em> and <em>virginica</em> increases as <code>Petal.Width</code> increases. In conclusion, contrast analysis is a powerful tool to interpret and understand statistical models.</p>
 </div>

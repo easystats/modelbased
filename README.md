@@ -97,9 +97,9 @@ estimate_means(model)
 
     ## Species    | Median |       89% CI
     ## ----------------------------------
-    ## setosa     |   3.42 | [3.35, 3.50]
-    ## versicolor |   2.77 | [2.69, 2.85]
-    ## virginica  |   2.97 | [2.90, 3.05]
+    ## setosa     |   3.43 | [3.34, 3.50]
+    ## versicolor |   2.77 | [2.70, 2.85]
+    ## virginica  |   2.98 | [2.90, 3.05]
 
 ### Contrast analysis
 
@@ -113,9 +113,9 @@ to create this plot:
 estimate_contrasts(model)
 ## Level1     |     Level2 | Median |         89% CI |     pd | % in ROPE | Median (std.)
 ## --------------------------------------------------------------------------------------
-## setosa     | versicolor |   0.66 | [ 0.54,  0.76] |   100% |        0% |          1.50
-## setosa     |  virginica |   0.45 | [ 0.35,  0.56] |   100% |        0% |          1.03
-## versicolor |  virginica |  -0.20 | [-0.32, -0.10] | 99.88% |     6.35% |         -0.47
+## setosa     | versicolor |   0.65 | [ 0.55,  0.77] |   100% |        0% |          1.50
+## setosa     |  virginica |   0.45 | [ 0.34,  0.56] |   100% |        0% |          1.03
+## versicolor |  virginica |  -0.21 | [-0.32, -0.10] | 99.83% |     6.93% |         -0.47
 ```
 
 ### Check the contrasts at different points of another linear predictor
@@ -128,15 +128,15 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 
     ## Level1     |     Level2 | Petal.Length | Median |        89% CI |     pd | % in ROPE | Median (std.)
     ## ----------------------------------------------------------------------------------------------------
-    ## setosa     | versicolor |         1.00 |   1.53 | [ 1.03, 1.98] |   100% |        0% |          3.52
-    ## setosa     |  virginica |         1.00 |   1.22 | [ 0.68, 1.78] | 99.95% |     0.05% |          2.81
-    ## versicolor |  virginica |         1.00 |  -0.30 | [-1.06, 0.37] | 75.65% |    15.40% |         -0.69
-    ## setosa     | versicolor |         3.95 |   1.81 | [ 1.03, 2.53] | 99.98% |     0.02% |          4.15
-    ## setosa     |  virginica |         3.95 |   1.83 | [ 1.00, 2.58] | 99.98% |     0.02% |          4.20
-    ## versicolor |  virginica |         3.95 |   0.03 | [-0.18, 0.25] | 59.75% |    51.28% |          0.08
-    ## setosa     | versicolor |         6.90 |   2.08 | [ 0.33, 3.57] | 97.85% |     1.12% |          4.77
-    ## setosa     |  virginica |         6.90 |   2.46 | [ 0.80, 4.01] | 99.12% |     0.45% |          5.65
-    ## versicolor |  virginica |         6.90 |   0.38 | [-0.02, 0.82] | 92.77% |    11.50% |          0.87
+    ## setosa     | versicolor |         1.00 |   1.52 | [ 1.05, 2.00] |   100% |        0% |          3.48
+    ## setosa     |  virginica |         1.00 |   1.23 | [ 0.69, 1.76] |   100% |     0.02% |          2.82
+    ## versicolor |  virginica |         1.00 |  -0.30 | [-1.03, 0.39] | 74.30% |    13.90% |         -0.68
+    ## setosa     | versicolor |         3.95 |   1.79 | [ 1.04, 2.53] |   100% |        0% |          4.11
+    ## setosa     |  virginica |         3.95 |   1.83 | [ 1.03, 2.60] |   100% |        0% |          4.21
+    ## versicolor |  virginica |         3.95 |   0.04 | [-0.18, 0.26] | 61.40% |    51.00% |          0.09
+    ## setosa     | versicolor |         6.90 |   2.08 | [ 0.50, 3.73] | 98.10% |     1.18% |          4.77
+    ## setosa     |  virginica |         6.90 |   2.45 | [ 0.80, 3.95] | 99.25% |     0.42% |          5.61
+    ## versicolor |  virginica |         6.90 |   0.37 | [-0.06, 0.78] | 91.25% |    11.97% |          0.85
 
 ### Find a predictor’s slopes at each factor level
 
@@ -144,9 +144,9 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 estimate_slopes(model)
 ## Species    | Median |       89% CI |     pd | % in ROPE | Median (std.)
 ## -----------------------------------------------------------------------
-## setosa     |   0.42 | [0.12, 0.71] | 98.47% |     4.47% |          1.71
-## versicolor |   0.33 | [0.19, 0.47] |   100% |     0.40% |          1.33
-## virginica  |   0.21 | [0.10, 0.33] | 99.75% |     6.93% |          0.87
+## setosa     |   0.42 | [0.10, 0.69] | 98.85% |     4.10% |          1.70
+## versicolor |   0.33 | [0.19, 0.47] | 99.95% |     0.57% |          1.32
+## virginica  |   0.21 | [0.09, 0.33] | 99.83% |     6.95% |          0.87
 ```
 
 ### Generate predictions from your model to compare it with original data
@@ -163,12 +163,12 @@ estimate_response(model)
 
 | Sepal.Length | Species | Median | CI\_low | CI\_high |
 | -----------: | :------ | -----: | ------: | -------: |
-|          5.1 | setosa  |   1.47 |    1.03 |     1.92 |
-|          4.9 | setosa  |   1.45 |    1.06 |     1.89 |
-|          4.7 | setosa  |   1.41 |    1.02 |     1.84 |
-|          4.6 | setosa  |   1.41 |    1.01 |     1.81 |
-|          5.0 | setosa  |   1.46 |    1.06 |     1.91 |
-|          5.4 | setosa  |   1.50 |    1.08 |     1.93 |
+|          5.1 | setosa  |   1.47 |    1.10 |     1.91 |
+|          4.9 | setosa  |   1.44 |    1.05 |     1.85 |
+|          4.7 | setosa  |   1.39 |    0.96 |     1.79 |
+|          4.6 | setosa  |   1.41 |    0.99 |     1.83 |
+|          5.0 | setosa  |   1.47 |    1.01 |     1.88 |
+|          5.4 | setosa  |   1.52 |    1.15 |     1.95 |
 
 ### Estimate the link between the response and a predictor
 
@@ -185,11 +185,11 @@ estimate_link(model)
 
 | Petal.Length | Median | CI\_low | CI\_high |
 | -----------: | -----: | ------: | -------: |
-|         1.00 |   3.62 |    3.52 |     3.73 |
+|         1.00 |   3.62 |    3.51 |     3.73 |
 |         1.98 |   3.18 |    3.11 |     3.24 |
 |         2.97 |   2.90 |    2.82 |     2.97 |
-|         3.95 |   2.78 |    2.70 |     2.85 |
-|         4.93 |   2.83 |    2.78 |     2.89 |
+|         3.95 |   2.78 |    2.71 |     2.86 |
+|         4.93 |   2.83 |    2.77 |     2.89 |
 |         5.92 |   3.05 |    2.96 |     3.14 |
 |         6.90 |   3.44 |    3.25 |     3.63 |
 
@@ -199,6 +199,6 @@ estimate_link(model)
 estimate_smooth(model)
 ## Part | Start |  End |   Size | Trend | Linearity
 ## ------------------------------------------------
-## 1    |  1.00 | 4.11 | 53.00% | -0.01 |      0.94
-## 2    |  4.11 | 6.90 | 47.00% |  0.01 |      0.93
+## 1    |  1.00 | 4.14 | 53.50% | -0.01 |      0.94
+## 2    |  4.14 | 6.90 | 46.50% |  0.01 |      0.94
 ```
