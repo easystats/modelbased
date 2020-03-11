@@ -42,7 +42,7 @@ This vignette will present how to model and describe non-linear relationships us
 
 **Most of relationships present in nature are non-linear**, consisting of quadratic curves or more complex shapes. In spite of that, scientists tend to model data through linear links. Reasons for that include **technical and interpretation complexity**. 
 
-However, advances in software makes modelling of non-linear relationship very straightforward (*insert link to future blogpost*). Nevertheless, the added cost in terms of **intepretation, report and communication** often remain a barrier, as the human brain more easily understands linear relationhips (*e.g.*, as this variable increases, that variable increases).
+However, advances in software makes modeling of non-linear relationship very straightforward (*insert link to future blogpost*). Nevertheless, the added cost in terms of **interpretation, report and communication** often remain a barrier, as the human brain more easily understands linear relationships (*e.g.*, as this variable increases, that variable increases).
 
 The `estimate` package aims at easing this step by **summarising non-linear curves in terms of linear segments**.
 

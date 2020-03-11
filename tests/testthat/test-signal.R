@@ -3,9 +3,9 @@ if (require("testthat") && require("modelbased") && require("parameters")) {
     set.seed(333)
 
     x <- sin(seq(0, 4 * pi, length.out = 100)) + rnorm(100, 0, 0.2)
-    s1 <- smoothing(x, method = "loess")
-    s2 <- smoothing(x, method = "smooth")
+    s1 <- as.vector(smoothing(x, method = "loess"))
+    s2 <- as.vector(smoothing(x, method = "smooth"))
 
-    testthat::expect_true(parameters::smoothness(s1) > parameters::smoothness(s2))
+    testthat::expect_true(as.numeric(parameters::smoothness(s1)) > as.numeric(parameters::smoothness(s2)))
   })
 }

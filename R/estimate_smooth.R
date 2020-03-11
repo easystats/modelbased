@@ -190,7 +190,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
-      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+      smoothness <- as.numeric(parameters::smoothness(segment, method = "cor", lag = 0.1))
     }
   }
 

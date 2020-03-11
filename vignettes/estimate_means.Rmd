@@ -73,7 +73,7 @@ However, these **raw means** might be biased, as the number of observations in e
 
 # Marginal Means
 
-Another way of analyzing the means is to actually statistically **model them**, rather than simply describe them as they appear in the data. For instance, we could fit a simple Bayesian linear regression modelling the relationship between `Species` and `Sepal.Width`.
+Another way of analyzing the means is to actually statistically **model them**, rather than simply describe them as they appear in the data. For instance, we could fit a simple Bayesian linear regression modeling the relationship between `Species` and `Sepal.Width`.
 
 Marginal means are basically means extracted from a statistical model. Note that as we are in a Bayesian framework, we will report the **median** of the posterior distribution of the marginal means.
 

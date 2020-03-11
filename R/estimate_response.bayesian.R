@@ -14,7 +14,7 @@
 #' @param length Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #' @param preserve_range Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #'
-#' @return A dataframe of predicted values.
+#' @return A data frame of predicted values.
 #' @export
 estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
