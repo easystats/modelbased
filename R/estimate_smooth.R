@@ -181,7 +181,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
 
 
 
-#' @importFrom stats lm
+#' @importFrom stats lm coef
 #' @importFrom parameters smoothness
 #' @keywords internal
 .describe_segment <- function(segment, range, smoothness = FALSE) {
@@ -206,7 +206,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
       )
     )
 
-    trend <- as.numeric(coef(model)[2])
+    trend <- as.numeric(stats::coef(model)[2])
     linearity <- as.numeric(summary(model)$r.squared)
   }
 
