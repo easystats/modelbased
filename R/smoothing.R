@@ -19,14 +19,14 @@
 #' lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
 #' lines(smoothing(x, method = "loess"), type = "l", col = "red")
 #' @importFrom stats predict loess smooth
-#'
-#' @return A smoothed vector or dataframe.
+#' @return A smoothed vector or data frame.
 #' @export
 smoothing <- function(x, method = "loess", strength = 0.25, ...) {
   UseMethod("smoothing")
 }
 
 
+#' @importFrom stats predict loess smooth
 #' @export
 smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (strength == 0 | strength == FALSE | is.null(method)) {
@@ -37,15 +37,15 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (method == "loess") {
     smoothed <- tryCatch(
       {
-        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
       },
       warning = function(w) {
         warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
-        predict(loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
       }
     )
   } else if (method == "smooth") {
-    smoothed <- smooth(x)
+    smoothed <- stats::smooth(x)
   } else {
     stop('method must be one of c("loess", "smooth")')
   }

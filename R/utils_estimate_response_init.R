@@ -1,5 +1,5 @@
 
-
+#' @importFrom insight get_data find_predictors model_info find_random
 #' @keywords internal
 .estimate_response_init <- function(model, data, transform, random, length, preserve_range, predict, ...) {
   # Data
@@ -22,9 +22,9 @@
       random <- FALSE
     }
   }
-  if (random == TRUE) {
+  if (isTRUE(random)) {
     re.form <- NULL
-  } else if (random == FALSE) {
+  } else {
     re.form <- NA
   }
 

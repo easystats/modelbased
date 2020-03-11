@@ -19,17 +19,17 @@ visualisation_matrix(
 )
 }
 \arguments{
-\item{x}{An object from which to contruct the reference grid.}
+\item{x}{An object from which to construct the reference grid.}
 
-\item{target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignements (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
+\item{target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
 
 \item{length}{Length of numeric target variables.}
 
 \item{factors}{Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).}
 
-\item{numerics}{Type of summary for numerics Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).}
+\item{numerics}{Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).}
 
-\item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observerations where the value of the numeric variable is originally not present in the range of its factor level.}
+\item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} removes observations where the value of the numeric variable is originally not present in the range of its factor level.}
 
 \item{standardize}{The numeric target value is spread as deviations from the mean, with the central value being the mean (or the median if \code{standardize_robust} is TRUE). For instance, if \code{x} is a vector of mean 1 and SD 2.5, and a standardized grid is required of length 3, the result will be \code{c(Mean-1*SD, Mean, Mean+1*SD)}, i.e., \code{c(-1.5, 1, 3.5)}. Each value represents deviations (in terms of SD or MAD) from the central value. This needs the \code{length} argument to be an even integer, so that the central value represent the mean.}
 
@@ -42,7 +42,7 @@ visualisation_matrix(
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-Reference grid dataframe.
+Reference grid data frame.
 }
 \description{
 Create a reference matrix, useful for visualisation, with evenly spread and combined values.

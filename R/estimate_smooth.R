@@ -138,7 +138,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
 
 
 #' @importFrom utils tail
-#' @importFrom stats coef lm
+#' @importFrom stats lm
 #' @keywords internal
 .describe_smooth <- function(smooth_values) {
   inversions <- find_inversions(smooth_values)
@@ -181,7 +181,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
 
 
 
-#' @importFrom stats lm
+#' @importFrom stats lm coef
 #' @importFrom parameters smoothness
 #' @keywords internal
 .describe_segment <- function(segment, range, smoothness = FALSE) {
@@ -190,7 +190,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
     if (length(segment) < 10) {
       smoothness <- NA
     } else {
-      smoothness <- parameters::smoothness(segment, method = "cor", lag = 0.1)
+      smoothness <- as.numeric(parameters::smoothness(segment, method = "cor", lag = 0.1))
     }
   }
 
@@ -206,7 +206,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
       )
     )
 
-    trend <- as.numeric(coef(model)[2])
+    trend <- as.numeric(stats::coef(model)[2])
     linearity <- as.numeric(summary(model)$r.squared)
   }
 

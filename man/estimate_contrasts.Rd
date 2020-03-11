@@ -36,7 +36,7 @@ estimate_contrasts(
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A dataframe of estimated contrasts.
+A data frame of estimated contrasts.
 }
 \description{
 Contrast analysis. See the documentation for your object's class:

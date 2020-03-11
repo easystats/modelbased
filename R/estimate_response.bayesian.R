@@ -14,7 +14,7 @@
 #' @param length Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #' @param preserve_range Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #'
-#' @return A dataframe of predicted values.
+#' @return A data frame of predicted values.
 #' @export
 estimate_response <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
@@ -36,7 +36,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' @inheritParams estimate_contrasts.stanreg
 #'
 #' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.
-#' @param keep_draws If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).
+#' @param keep_draws If \code{FALSE}, will summarise the posterior the obtained distributions. If \code{TRUE}, will keep all prediction iterations (draws).
 #' @param draws An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.
 #' @param seed An optional seed to use.
 #'
@@ -76,13 +76,13 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
   # Predict link or response
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
-    if(any(class(model) == "brmsfit")){
+    if (any(class(model) == "brmsfit")) {
       posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, scale = args$transform)
     } else{
       posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
     }
   } else {
-    if (any(class(model) == "brmsfit")){
+    if (any(class(model) == "brmsfit")) {
       posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = NULL)
     } else{
       posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")

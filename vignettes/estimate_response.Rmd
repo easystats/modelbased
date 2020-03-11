@@ -130,7 +130,7 @@ iris %>%
 
 However, you might notice that the **Credible Interval (CI) bands are quite big**. This is where `estimate_link()` is comming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting **the link** (*i.e.*, the regression line and the uncertainty interval associated *with this line*).
 
-In order to facililate visualisation of links, we added `estimate_link()` as a shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models, `predict = "link"` and some smoothing by default. `estimate_response()` would be used in the context of generating actual predictions for the existing or new data, whereas `estimate_link()` is more relevant in the context of visualisation and plotting.
+In order to facilitate visualisation of links, we added `estimate_link()` as a shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models, `predict = "link"` and some smoothing by default. `estimate_response()` would be used in the context of generating actual predictions for the existing or new data, whereas `estimate_link()` is more relevant in the context of visualisation and plotting.
 
 ```{r message=FALSE, warning=FALSE}
 predicted <- estimate_link(model)

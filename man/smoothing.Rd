@@ -16,7 +16,7 @@ smoothing(x, method = "loess", strength = 0.25, ...)
 \item{...}{Arguments passed to or from other methods.}
 }
 \value{
-A smoothed vector or dataframe.
+A smoothed vector or data frame.
 }
 \description{
 Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination).
