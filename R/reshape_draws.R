@@ -12,12 +12,12 @@
 #'   reshape_draws(estimates)
 #' }
 #' }
-#' @return Dataframe of reshaped draws in long format.
+#' @return Data frame of reshaped draws in long format.
 #' @importFrom stats reshape
 #' @export
 reshape_draws <- function(draws) {
   draws$Index <- 1:nrow(draws)
-  long <- reshape(draws,
+  long <- stats::reshape(draws,
     varying = names(draws)[grepl("Draw_", names(draws))],
     idvar = "Index",
     v.names = "Draw",

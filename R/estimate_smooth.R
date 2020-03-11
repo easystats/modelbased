@@ -138,7 +138,7 @@ estimate_smooth.merMod <- estimate_smooth.stanreg
 
 
 #' @importFrom utils tail
-#' @importFrom stats coef lm
+#' @importFrom stats lm
 #' @keywords internal
 .describe_smooth <- function(smooth_values) {
   inversions <- find_inversions(smooth_values)

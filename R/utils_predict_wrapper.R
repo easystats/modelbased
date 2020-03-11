@@ -10,11 +10,11 @@ predict_wrapper <- function(model, ...) {
 
 
 
-
+#' @importFrom stats predict
 #' @keywords internal
 predict_wrapper.lm <- function(model, newdata = NULL, ci = 0.95, transform = "response", interval = "confidence", ...) {
   prediction <- as.data.frame(
-    predict(model,
+    stats::predict(model,
       newdata = newdata,
       interval = interval,
       type = transform,
@@ -30,12 +30,12 @@ predict_wrapper.lm <- function(model, newdata = NULL, ci = 0.95, transform = "re
 
 
 
-#' @importFrom stats qnorm
+#' @importFrom stats qnorm predict
 #' @keywords internal
 predict_wrapper.glm <- function(model, newdata = NULL, ci = 0.95, transform = "response", ...) {
   transform <- ifelse(transform == FALSE, "link", "response")
   prediction <- as.data.frame(
-    predict(model,
+    stats::predict(model,
       se.fit = TRUE,
       newdata = newdata,
       type = transform,
@@ -44,7 +44,7 @@ predict_wrapper.glm <- function(model, newdata = NULL, ci = 0.95, transform = "r
     )
   )
 
-  critval <- qnorm(1 - ((1 - ci) / 2))
+  critval <- stats::qnorm(1 - ((1 - ci) / 2))
   prediction$upr <- prediction$fit + (critval * prediction$se.fit)
   prediction$lwr <- prediction$fit - (critval * prediction$se.fit)
 
@@ -59,7 +59,7 @@ predict_wrapper.glm <- function(model, newdata = NULL, ci = 0.95, transform = "r
 
 #' @keywords internal
 predict_wrapper.polr <- function(model, newdata = NULL, ...) {
-  as.data.frame(predict(model, newdata, "probs"))
+  as.data.frame(stats::predict(model, newdata, "probs"))
 }
 
 
@@ -88,7 +88,7 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
     # type <- ifelse(transform == "response", TRUE, FALSE)
 
     prediction <- data.frame(
-      Predicted = predict(model,
+      Predicted = stats::predict(model,
         newdata = newdata,
         re.form = re.form,
         type = transform

@@ -90,7 +90,7 @@
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 
-\item{keep_draws}{If FALSE, will summarise the posterior the obtained distributions. If TRUE, will keep all prediction iterations (draws).}
+\item{keep_draws}{If \code{FALSE}, will summarise the posterior the obtained distributions. If \code{TRUE}, will keep all prediction iterations (draws).}
 
 \item{draws}{An integer indicating the number of draws to return. The default and maximum number of draws is the size of the posterior sample contained in the model.}
 
