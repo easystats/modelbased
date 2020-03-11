@@ -95,7 +95,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   prediction$Parameter <- NULL
 
   # Draws
-  if (keep_draws == TRUE) {
+  if (keep_draws == TRUE | !is.null(draws)) {
     posteriors <- as.data.frame(t(posteriors))
     names(posteriors) <- paste0("Draw_", seq_len(length(names(posteriors))))
     prediction <- cbind(prediction, posteriors)
