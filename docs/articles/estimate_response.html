@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 
       
 
-      </header><script src="estimate_response_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Use a model to make predictions</h1>
@@ -118,47 +118,47 @@
 <a href="#prediction-against-original-data" class="anchor"></a>Prediction against original data</h1>
 <p>Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the <code><a href="../reference/estimate_response.html">estimate_response()</a></code> function and its visualisation spinoff, <code><a href="../reference/estimate_response.html">estimate_link()</a></code>.</p>
 <p>Let’s start by fitting a Bayesian linear regression.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>data &lt;-<span class="st"> </span>iris</span>
-<span id="cb1-4"><a href="#cb1-4"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Sepal.Length, <span class="dt">data =</span> data)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">data &lt;-<span class="st"> </span>iris</a>
+<a class="sourceLine" id="cb1-4" title="4">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Sepal.Length, <span class="dt">data =</span> data)</a></code></pre></div>
 <p>We might be interested in comparing the values predicted by the model to the actual “true” values. This can be done by generating predictions:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</span>
-<span id="cb2-2"><a href="#cb2-2"></a></span>
-<span id="cb2-3"><a href="#cb2-3"></a>predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model)</span>
-<span id="cb2-4"><a href="#cb2-4"></a><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(predicted)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
+<a class="sourceLine" id="cb2-2" title="2"></a>
+<a class="sourceLine" id="cb2-3" title="3">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(predicted)</a></code></pre></div>
 <pre><code>&gt;   Sepal.Length Median CI_low CI_high
-&gt; 1          5.1    2.4  0.909     3.7
-&gt; 2          4.9    2.0  0.546     3.3
-&gt; 3          4.7    1.6  0.210     3.0
-&gt; 4          4.6    1.5 -0.028     2.8
-&gt; 5          5.0    2.2  0.835     3.6
-&gt; 6          5.4    2.9  1.443     4.2</code></pre>
+&gt; 1          5.1    2.4  0.987     3.8
+&gt; 2          4.9    2.0  0.589     3.4
+&gt; 3          4.7    1.7  0.233     3.1
+&gt; 4          4.6    1.5  0.052     2.9
+&gt; 5          5.0    2.2  0.815     3.6
+&gt; 6          5.4    2.9  1.478     4.3</code></pre>
 <p>The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original dataframe</strong> (used for fitting the model). Hence, we can simply add the prediction column (<code>Median</code>) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</span>
-<span id="cb4-4"><a href="#cb4-4"></a></span>
-<span id="cb4-5"><a href="#cb4-5"></a>data<span class="op">$</span>Predicted &lt;-<span class="st"> </span>predicted<span class="op">$</span>Median</span>
-<span id="cb4-6"><a href="#cb4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7"></a>data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb4-8"><a href="#cb4-8"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted)) <span class="op">+</span></span>
-<span id="cb4-9"><a href="#cb4-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Length), <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></span>
-<span id="cb4-10"><a href="#cb4-10"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb4-11"><a href="#cb4-11"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Petal.Length (predicted)"</span>) <span class="op">+</span></span>
-<span id="cb4-12"><a href="#cb4-12"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
+<a class="sourceLine" id="cb4-4" title="4"></a>
+<a class="sourceLine" id="cb4-5" title="5">data<span class="op">$</span>Predicted &lt;-<span class="st"> </span>predicted<span class="op">$</span>Median</a>
+<a class="sourceLine" id="cb4-6" title="6"></a>
+<a class="sourceLine" id="cb4-7" title="7">data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Length), <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Petal.Length (predicted)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-5-1.png" width="3281.25"></p>
 <p>It seems like our model does not perform too bad. What if we added information about the <code>Species</code> in the model?</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> data)</span>
-<span id="cb5-2"><a href="#cb5-2"></a>data<span class="op">$</span>Predicted_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model)<span class="op">$</span>Median</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">model &lt;-<span class="st"> </span><span class="kw">stan_glm</span>(Petal.Length <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> data)</a>
+<a class="sourceLine" id="cb5-2" title="2">data<span class="op">$</span>Predicted_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model)<span class="op">$</span>Median</a></code></pre></div>
 <p>We could now plot the second observations, based on a more complex model, as a red overlay to the previous points:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>data <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb6-2"><a href="#cb6-2"></a><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></span>
-<span id="cb6-3"><a href="#cb6-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Length), <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></span>
-<span id="cb6-4"><a href="#cb6-4"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted), <span class="dt">color =</span> <span class="st">"grey"</span>) <span class="op">+</span></span>
-<span id="cb6-5"><a href="#cb6-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted_<span class="dv">2</span>), <span class="dt">color =</span> <span class="st">"red"</span>) <span class="op">+</span></span>
-<span id="cb6-6"><a href="#cb6-6"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Petal.Length (predicted)"</span>) <span class="op">+</span></span>
-<span id="cb6-7"><a href="#cb6-7"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">data <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span><span class="kw">ggplot</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Petal.Length), <span class="dt">linetype =</span> <span class="st">"dashed"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted), <span class="dt">color =</span> <span class="st">"grey"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Predicted_<span class="dv">2</span>), <span class="dt">color =</span> <span class="st">"red"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Petal.Length (predicted)"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 <p>The new model generated much more accurate predictions (closer from the underlying regression line).</p>
 </div>
@@ -167,73 +167,73 @@
 <a href="#estimating-response-vs--link" class="anchor"></a>Estimating response <em>vs.</em> link</h1>
 <p>Rather than visualising the predictions made by a model, we are often interested in visualising the <em>links</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model, <span class="dt">data =</span> <span class="st">"grid"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2"></a></span>
-<span id="cb7-3"><a href="#cb7-3"></a>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_response</a></span>(model, <span class="dt">data =</span> <span class="st">"grid"</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"></a>
+<a class="sourceLine" id="cb7-3" title="3">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-9-1.png" width="3281.25"></p>
 <p>However, you might notice that the <strong>Credible Interval (CI) bands are quite big</strong>. This is where <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is comming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting <strong>the link</strong> (<em>i.e.</em>, the regression line and the uncertainty interval associated <em>with this line</em>).</p>
-<p>In order to facililate visualisation of links, we added <code><a href="../reference/estimate_response.html">estimate_link()</a></code> as a shortcut to <code><a href="../reference/estimate_response.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_response.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is more relevant in the context of visualisation and plotting.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model)</span>
-<span id="cb8-2"><a href="#cb8-2"></a></span>
-<span id="cb8-3"><a href="#cb8-3"></a>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb8-6"><a href="#cb8-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb8-7"><a href="#cb8-7"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb8-8"><a href="#cb8-8"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<p>In order to facilitate visualisation of links, we added <code><a href="../reference/estimate_response.html">estimate_link()</a></code> as a shortcut to <code><a href="../reference/estimate_response.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_response.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is more relevant in the context of visualisation and plotting.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model)</a>
+<a class="sourceLine" id="cb8-2" title="2"></a>
+<a class="sourceLine" id="cb8-3" title="3">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low, <span class="dt">ymax =</span> CI_high, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
 </div>
 <div id="different-ci-levels" class="section level1">
 <h1 class="hasAnchor">
 <a href="#different-ci-levels" class="anchor"></a>Different CI levels</h1>
 <p>The purpose of CI bands is to provide information about the uncertainty related to the estimation. In the Bayesian framework, the credible intervals are directly related to the shape of the posterior distribution. Thus, showing different CI levels (for instance, 69%, 89% and 99%).</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span>))</span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>iris <span class="op">%&gt;%</span></span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb9-6"><a href="#cb9-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">99</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">99</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></span>
-<span id="cb9-7"><a href="#cb9-7"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">89</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">89</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb9-8"><a href="#cb9-8"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">69</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">69</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></span>
-<span id="cb9-9"><a href="#cb9-9"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb9-10"><a href="#cb9-10"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span>))</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3">iris <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">99</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">99</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-7" title="7"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">89</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">89</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">69</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">69</span>, <span class="dt">fill =</span> Species), <span class="dt">alpha =</span> <span class="fl">0.3</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-9" title="9"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb9-10" title="10"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-11-1.png" width="3281.25"></p>
 </div>
 <div id="adding-individual-draws" class="section level1">
 <h1 class="hasAnchor">
 <a href="#adding-individual-draws" class="anchor"></a>Adding individual draws</h1>
 <p>Instead (or in addition to) representing credible/confidence intervals, the Bayesian framework also allow to represent every individual <strong>posterior draw</strong>. In this case, they correspond to all possible links estimated by the model. In it a nice insight into the “true” underlying probabilities in addition to summaries like the median or the CI.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># Keep only 100 draws (keeping all the draws might be slower)</span></span>
-<span id="cb10-2"><a href="#cb10-2"></a>predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">keep_draws =</span> <span class="ot">TRUE</span>, <span class="dt">draws =</span> <span class="dv">100</span>)</span>
-<span id="cb10-3"><a href="#cb10-3"></a></span>
-<span id="cb10-4"><a href="#cb10-4"></a><span class="co"># Format draws for plotting</span></span>
-<span id="cb10-5"><a href="#cb10-5"></a>draws &lt;-<span class="st"> </span><span class="kw"><a href="../reference/reshape_draws.html">reshape_draws</a></span>(predicted)</span>
-<span id="cb10-6"><a href="#cb10-6"></a>draws<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(draws<span class="op">$</span>Draw_Group, draws<span class="op">$</span>Species)</span>
-<span id="cb10-7"><a href="#cb10-7"></a></span>
-<span id="cb10-8"><a href="#cb10-8"></a>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb10-9"><a href="#cb10-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb10-10"><a href="#cb10-10"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb10-11"><a href="#cb10-11"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> draws, <span class="kw">aes</span>(<span class="dt">y =</span> Draw, <span class="dt">color =</span> Species, <span class="dt">group =</span> group), <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></span>
-<span id="cb10-12"><a href="#cb10-12"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb10-13"><a href="#cb10-13"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># Keep only 100 draws (keeping all the draws might be slower)</span></a>
+<a class="sourceLine" id="cb10-2" title="2">predicted &lt;-<span class="st"> </span><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">keep_draws =</span> <span class="ot">TRUE</span>, <span class="dt">draws =</span> <span class="dv">100</span>)</a>
+<a class="sourceLine" id="cb10-3" title="3"></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co"># Format draws for plotting</span></a>
+<a class="sourceLine" id="cb10-5" title="5">draws &lt;-<span class="st"> </span><span class="kw"><a href="../reference/reshape_draws.html">reshape_draws</a></span>(predicted)</a>
+<a class="sourceLine" id="cb10-6" title="6">draws<span class="op">$</span>group &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(draws<span class="op">$</span>Draw_Group, draws<span class="op">$</span>Species)</a>
+<a class="sourceLine" id="cb10-7" title="7"></a>
+<a class="sourceLine" id="cb10-8" title="8">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb10-9" title="9"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-10" title="10"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-11" title="11"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> draws, <span class="kw">aes</span>(<span class="dt">y =</span> Draw, <span class="dt">color =</span> Species, <span class="dt">group =</span> group), <span class="dt">alpha =</span> <span class="fl">0.05</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-12" title="12"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> predicted, <span class="kw">aes</span>(<span class="dt">y =</span> Median, <span class="dt">color =</span> Species), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb10-13" title="13"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-12-1.png" width="3281.25"></p>
 <p>Animated hypothetical outcome plots can also be easily created with <code>gganimate</code>:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gganimate)</span>
-<span id="cb11-2"><a href="#cb11-2"></a></span>
-<span id="cb11-3"><a href="#cb11-3"></a>p &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> draws, <span class="kw">aes</span>(<span class="dt">y =</span> Draw, <span class="dt">color =</span> Species, <span class="dt">group =</span> group)) <span class="op">+</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb11-8"><a href="#cb11-8"></a><span class="st">  </span><span class="kw">transition_states</span>(Draw_Group, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb11-9"><a href="#cb11-9"></a><span class="st">  </span><span class="kw">shadow_mark</span>(<span class="dt">past =</span> <span class="ot">TRUE</span>, <span class="dt">future =</span> <span class="ot">TRUE</span>, <span class="dt">alpha =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">20</span>, <span class="dt">color =</span> <span class="st">"grey"</span>)</span>
-<span id="cb11-10"><a href="#cb11-10"></a></span>
-<span id="cb11-11"><a href="#cb11-11"></a>gganimate<span class="op">::</span><span class="kw"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(p)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(gganimate)</a>
+<a class="sourceLine" id="cb11-2" title="2"></a>
+<a class="sourceLine" id="cb11-3" title="3">p &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> Petal.Length, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> draws, <span class="kw">aes</span>(<span class="dt">y =</span> Draw, <span class="dt">color =</span> Species, <span class="dt">group =</span> group)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>() <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="st">  </span><span class="kw">transition_states</span>(Draw_Group, <span class="dv">0</span>, <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="st">  </span><span class="kw">shadow_mark</span>(<span class="dt">past =</span> <span class="ot">TRUE</span>, <span class="dt">future =</span> <span class="ot">TRUE</span>, <span class="dt">alpha =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">20</span>, <span class="dt">color =</span> <span class="st">"grey"</span>)</a>
+<a class="sourceLine" id="cb11-10" title="10"></a>
+<a class="sourceLine" id="cb11-11" title="11">gganimate<span class="op">::</span><span class="kw"><a href="https://gganimate.com/reference/animate.html">animate</a></span>(p)</a></code></pre></div>
 <p><img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div id="references" class="section level1">

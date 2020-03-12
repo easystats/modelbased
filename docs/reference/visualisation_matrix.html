@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -170,11 +170,11 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object from which to contruct the reference grid.</p></td>
+      <td><p>An object from which to construct the reference grid.</p></td>
     </tr>
     <tr>
       <th>target</th>
-      <td><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignements (e.g., <code>target = "Sepal.Length = 2"</code> or <code>target = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.</p></td>
+      <td><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., <code>target = "Sepal.Length = 2"</code> or <code>target = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.</p></td>
     </tr>
     <tr>
       <th>length</th>
@@ -186,11 +186,11 @@
     </tr>
     <tr>
       <th>numerics</th>
-      <td><p>Type of summary for numerics Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., <code>numerics = 0</code>).</p></td>
+      <td><p>Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., <code>numerics = 0</code>).</p></td>
     </tr>
     <tr>
       <th>preserve_range</th>
-      <td><p>In the case of combinations between numeric variables and factors, setting <code>preserve_range = TRUE</code> removes observerations where the value of the numeric variable is originally not present in the range of its factor level.</p></td>
+      <td><p>In the case of combinations between numeric variables and factors, setting <code>preserve_range = TRUE</code> removes observations where the value of the numeric variable is originally not present in the range of its factor level.</p></td>
     </tr>
     <tr>
       <th>standardize</th>
@@ -216,7 +216,7 @@
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>Reference grid dataframe.</p>
+    <p>Reference grid data frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>modelbased</span>)

@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
       </span>
     </div>
 
@@ -99,7 +99,7 @@
 
       
 
-      </header><script src="visualisation_matrix_files/header-attrs-2.1/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1>Data grids</h1>
@@ -117,28 +117,28 @@
 <h1 class="hasAnchor">
 <a href="#simple-linear-regression" class="anchor"></a>Simple linear regression</h1>
 <p>For instance, let’s fit a simple linear model that models the relationship between <code>Sepal.Width</code> and <code>Sepal.Length</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(parameters)</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length, <span class="dt">data =</span> iris)</span>
-<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">model_parameters</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(parameters)</a>
+<a class="sourceLine" id="cb1-2" title="2"></a>
+<a class="sourceLine" id="cb1-3" title="3">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length, <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">model_parameters</span>(model)</a></code></pre></div>
 <pre><code>&gt; Parameter    | Coefficient |   SE |        95% CI |     t |  df |      p
 &gt; ------------------------------------------------------------------------
 &gt; (Intercept)  |        3.42 | 0.25 | [ 2.92, 3.92] | 13.48 | 148 | &lt; .001
 &gt; Sepal.Length |       -0.06 | 0.04 | [-0.15, 0.02] | -1.44 | 148 | 0.152</code></pre>
 <p>The most obvious way of representing this model is to plot the data points and add the regression line using the <code>geom_smooth</code> function from <code>ggplot2</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
-<span id="cb3-2"><a href="#cb3-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</span>
-<span id="cb3-3"><a href="#cb3-3"></a></span>
-<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb3-6"><a href="#cb3-6"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">"lm"</span>) <span class="op">+</span></span>
-<span id="cb3-7"><a href="#cb3-7"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">"lm"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-3-1.png" width="3281.25"></p>
 <p>But how to “access” the data of this regression line? One option is to select some values of of the predictor (<code>Sepal.Length</code>), and <strong>predict</strong> the response (<code>Sepal.Width</code>) using the model. Using these <em>x</em> and <em>y</em> points, we can then create the regression line.</p>
 <p>Let’s try the <code>visualisation_matrix</code> function from the <code>estimate</code> package.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</span>
-<span id="cb4-2"><a href="#cb4-2"></a></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>])</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
+<a class="sourceLine" id="cb4-2" title="2"></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>])</a></code></pre></div>
 <pre><code>&gt;    Sepal.Length
 &gt; 1           4.3
 &gt; 2           4.7
@@ -151,9 +151,9 @@
 &gt; 9           7.5
 &gt; 10          7.9</code></pre>
 <p>If we pass a numeric variable to the function, it will return a vector of <strong>equally spread points</strong> (having the same range (<em>i.e.</em>, minimum and maximum) than the original data). The default <strong>length</strong> is 10, but we can adjust that through the <code>length</code> argument. Let’s generate predictions using this reference grid of the predictor.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>], <span class="dt">length =</span> <span class="dv">5</span>)</span>
-<span id="cb6-2"><a href="#cb6-2"></a>newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</span>
-<span id="cb6-3"><a href="#cb6-3"></a>newdata</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>], <span class="dt">length =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2">newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</a>
+<a class="sourceLine" id="cb6-3" title="3">newdata</a></code></pre></div>
 <pre><code>&gt;   Sepal.Length Predicted_Sepal.Width
 &gt; 1          4.3                   3.2
 &gt; 2          5.2                   3.1
@@ -161,10 +161,10 @@
 &gt; 4          7.0                   3.0
 &gt; 5          7.9                   2.9</code></pre>
 <p>Now that we have our <em>x</em> and <em>y</em> values, we can plot the line as an overlay to the actual data points:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb8-3"><a href="#cb8-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"red"</span>) <span class="op">+</span></span>
-<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">"red"</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
 <p>As we can see, it is quite similar to the previous plot. So, when can this be useful?</p>
 </div>
@@ -172,30 +172,30 @@
 <h1 class="hasAnchor">
 <a href="#mixed-models" class="anchor"></a>Mixed models</h1>
 <p>Data grids are useful to represent more complex models. For instance, in the models above, the negative relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a <strong>random effect</strong> in a <strong>mixed model</strong>. In the model below, the “fixed” effects (the parameters of interest) will be adjusted (“averaged over”) the random effects.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</span>
-<span id="cb9-2"><a href="#cb9-2"></a></span>
-<span id="cb9-3"><a href="#cb9-3"></a>model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Species), <span class="dt">data =</span> iris)</span>
-<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">model_parameters</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(lme4)</a>
+<a class="sourceLine" id="cb9-2" title="2"></a>
+<a class="sourceLine" id="cb9-3" title="3">model &lt;-<span class="st"> </span><span class="kw">lmer</span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Species), <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="kw">model_parameters</span>(model)</a></code></pre></div>
 <pre><code>&gt; Parameter    | Coefficient |   SE |       95% CI |    t |  df |      p
 &gt; ----------------------------------------------------------------------
 &gt; (Intercept)  |        1.04 | 0.43 | [0.21, 1.88] | 2.45 | 146 | 0.014 
 &gt; Sepal.Length |        0.34 | 0.05 | [0.25, 0.43] | 7.47 | 146 | &lt; .001</code></pre>
 <p>As we can see, when adjusting for the species, the relationship between the two variables <strong>has become positive</strong>! We can represent it using the same procedure as above (note the <code>re.form = NA</code> in the <code>predict</code> function to say that the random variable is not present in the new dataset).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>], <span class="dt">length =</span> <span class="dv">5</span>)</span>
-<span id="cb11-2"><a href="#cb11-2"></a>newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata, <span class="dt">re.form =</span> <span class="ot">NA</span>)</span>
-<span id="cb11-3"><a href="#cb11-3"></a></span>
-<span id="cb11-4"><a href="#cb11-4"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></span>
-<span id="cb11-5"><a href="#cb11-5"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb11-6"><a href="#cb11-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb11-7"><a href="#cb11-7"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris[<span class="st">"Sepal.Length"</span>], <span class="dt">length =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb11-2" title="2">newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata, <span class="dt">re.form =</span> <span class="ot">NA</span>)</a>
+<a class="sourceLine" id="cb11-3" title="3"></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 </div>
 <div id="fixed-variables" class="section level1">
 <h1 class="hasAnchor">
 <a href="#fixed-variables" class="anchor"></a>Fixed variables</h1>
 <p>The above way of constructing the reference grid is almost equivalent to the following:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="st">"Sepal.Length"</span>, <span class="dt">length =</span> <span class="dv">5</span>)</span>
-<span id="cb12-2"><a href="#cb12-2"></a>newdata</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="st">"Sepal.Length"</span>, <span class="dt">length =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb12-2" title="2">newdata</a></code></pre></div>
 <pre><code>&gt;   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 &gt; 1          4.3         3.1          3.8         1.2  setosa
 &gt; 2          5.2         3.1          3.8         1.2  setosa
@@ -204,8 +204,8 @@
 &gt; 5          7.9         3.1          3.8         1.2  setosa</code></pre>
 <p>However, the other variables (present in the dataframe but not selected as <code>target</code>) have been “fixed”, <em>i.e.</em>, maintained at some values. This is useful when we have other variables in the model which effect we are not interested in.</p>
 <p>By default, <strong>factors</strong> are fixed by their <strong>“reference” level</strong> and <strong>numeric variables</strong> are fixed at their <strong>mean</strong>. However, this can be easily changed:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="st">"Sepal.Length"</span>, <span class="dt">numerics =</span> <span class="st">"min"</span>)</span>
-<span id="cb14-2"><a href="#cb14-2"></a>newdata</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="st">"Sepal.Length"</span>, <span class="dt">numerics =</span> <span class="st">"min"</span>)</a>
+<a class="sourceLine" id="cb14-2" title="2">newdata</a></code></pre></div>
 <pre><code>&gt;    Sepal.Length Sepal.Width Petal.Length Petal.Width Species
 &gt; 1           4.3           2            1         0.1  setosa
 &gt; 2           4.7           2            1         0.1  setosa
@@ -223,10 +223,10 @@
 <a href="#target-variables" class="anchor"></a>Target variables</h1>
 <p>If more than one target variable is selected, <code>visualisation_matrix</code> will return the <strong>combination</strong> of them (<em>i.e.</em>, all unique values crossed together). This can be useful in the case of an <strong>interaction</strong> between a numeric variable and a factor.</p>
 <p>Let’s visualise the regression line for each of the levels of <code>Species</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</span></code></pre></div>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span>), <span class="dt">length =</span> <span class="dv">5</span>)</span>
-<span id="cb17-2"><a href="#cb17-2"></a>newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</span>
-<span id="cb17-3"><a href="#cb17-3"></a>newdata</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Width <span class="op">~</span><span class="st"> </span>Sepal.Length <span class="op">*</span><span class="st"> </span>Species, <span class="dt">data =</span> iris)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span>), <span class="dt">length =</span> <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb17-2" title="2">newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</a>
+<a class="sourceLine" id="cb17-3" title="3">newdata</a></code></pre></div>
 <pre><code>&gt;    Sepal.Length    Species Sepal.Width Petal.Width Predicted_Sepal.Width
 &gt; 1           4.3     setosa         3.1         1.2                   2.9
 &gt; 2           5.2     setosa         3.1         1.2                   3.6
@@ -243,30 +243,30 @@
 &gt; 13          6.1  virginica         3.1         1.2                   2.9
 &gt; 14          7.0  virginica         3.1         1.2                   3.1
 &gt; 15          7.9  virginica         3.1         1.2                   3.3</code></pre>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb19-2"><a href="#cb19-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb19-3"><a href="#cb19-3"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb19-4"><a href="#cb19-4"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-3" title="3"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-14-1.png" width="3281.25"></p>
 </div>
 <div id="preserve-range" class="section level1">
 <h1 class="hasAnchor">
 <a href="#preserve-range" class="anchor"></a>Preserve range</h1>
 <p>However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the <strong>red line</strong>. The <code>preserve_range</code> option allows to remove observations that are “outside” the original dataset (however, the length should be increased to improve the precision toward the edges):</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a>newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span>), <span class="dt">length =</span> <span class="dv">100</span>, <span class="dt">preserve_range =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb20-2"><a href="#cb20-2"></a>newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</span>
-<span id="cb20-3"><a href="#cb20-3"></a></span>
-<span id="cb20-4"><a href="#cb20-4"></a><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width, <span class="dt">color =</span> Species)) <span class="op">+</span></span>
-<span id="cb20-5"><a href="#cb20-5"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb20-6"><a href="#cb20-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></span>
-<span id="cb20-7"><a href="#cb20-7"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">newdata &lt;-<span class="st"> </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(iris, <span class="dt">target =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span>), <span class="dt">length =</span> <span class="dv">100</span>, <span class="dt">preserve_range =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb20-2" title="2">newdata<span class="op">$</span>Predicted_Sepal.Width &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</a>
+<a class="sourceLine" id="cb20-3" title="3"></a>
+<a class="sourceLine" id="cb20-4" title="4"><span class="kw">ggplot</span>(iris, <span class="kw">aes</span>(<span class="dt">x =</span> Sepal.Length, <span class="dt">y =</span> Sepal.Width, <span class="dt">color =</span> Species)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb20-7" title="7"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-15-1.png" width="3281.25"></p>
 </div>
 <div id="visualising-an-interaction-between-two-numeric-variables" class="section level1">
 <h1 class="hasAnchor">
 <a href="#visualising-an-interaction-between-two-numeric-variables" class="anchor"></a>Visualising an interaction between two numeric variables</h1>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Length <span class="op">*</span><span class="st"> </span>Petal.Width , <span class="dt">data =</span> iris)</span>
-<span id="cb21-2"><a href="#cb21-2"></a><span class="kw">model_parameters</span>(model)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(Sepal.Length <span class="op">~</span><span class="st"> </span>Petal.Length <span class="op">*</span><span class="st"> </span>Petal.Width , <span class="dt">data =</span> iris)</a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="kw">model_parameters</span>(model)</a></code></pre></div>
 <pre><code>&gt; Parameter                  | Coefficient |   SE |         95% CI |     t |  df |      p
 &gt; ---------------------------------------------------------------------------------------
 &gt; (Intercept)                |        4.58 | 0.11 | [ 4.36,  4.80] | 40.89 | 146 | &lt; .001
@@ -276,39 +276,39 @@
 <p>This idea can also be used to visualise interactions between two numeric variables, <strong>aka the nightmare of every psychologist</strong>. One possibility is to basically represent the relationship between the response and one predictor <strong>at a few representative values of the second predictor</strong>.</p>
 <p>In this case, we will represent the regression line between <code>Sepal.Length</code> and <code>Petal.Length</code> and a 5 equally spaced values of <code>Petal.Length</code>, to get a feel of the interaction.</p>
 <p>We can obtain the right reference grid quite easily by chaining two <code>visualisation_matrix</code> together as follows:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</span>
-<span id="cb23-2"><a href="#cb23-2"></a></span>
-<span id="cb23-3"><a href="#cb23-3"></a>newdata &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-4"><a href="#cb23-4"></a><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>), <span class="dt">length =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb23-5"><a href="#cb23-5"></a><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="st">"Petal.Width"</span>, <span class="dt">length=</span><span class="dv">5</span>, <span class="dt">numerics =</span> <span class="st">"combination"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
+<a class="sourceLine" id="cb23-2" title="2"></a>
+<a class="sourceLine" id="cb23-3" title="3">newdata &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>), <span class="dt">length =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb23-5" title="5"><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="st">"Petal.Width"</span>, <span class="dt">length=</span><span class="dv">5</span>, <span class="dt">numerics =</span> <span class="st">"combination"</span>)</a></code></pre></div>
 <p>What did we do her? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating <code>10 * 10 = 100</code> rows. The next step was to reduce <code>Petal.Length</code> to a set of 5 values, but without touching the other variables (<em>i.e.</em>, keeping the 10 values created for <code>Petal.Length</code>). This was achieved using <code>numerics = "combination"</code>.</p>
 <p>We can then visualise it as follows:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a>newdata<span class="op">$</span>Predicted_Sepal.Length &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</span>
-<span id="cb24-2"><a href="#cb24-2"></a></span>
-<span id="cb24-3"><a href="#cb24-3"></a>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb24-4"><a href="#cb24-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Sepal.Length, <span class="dt">color =</span> Petal.Width)) <span class="op">+</span></span>
-<span id="cb24-5"><a href="#cb24-5"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
-<span id="cb24-6"><a href="#cb24-6"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Length, <span class="dt">group =</span> Petal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb24-7"><a href="#cb24-7"></a><span class="st">  </span><span class="kw">scale_color_viridis_c</span>() <span class="op">+</span></span>
-<span id="cb24-8"><a href="#cb24-8"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" title="1">newdata<span class="op">$</span>Predicted_Sepal.Length &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</a>
+<a class="sourceLine" id="cb24-2" title="2"></a>
+<a class="sourceLine" id="cb24-3" title="3">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Sepal.Length, <span class="dt">color =</span> Petal.Width)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-6" title="6"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Length, <span class="dt">group =</span> Petal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb24-7" title="7"><span class="st">  </span><span class="kw">scale_color_viridis_c</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb24-8" title="8"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-18-1.png" width="3281.25"></p>
 <p>Such plot can be more clear by expressing the interaction variable in terms of deviations from the mean (as a standardized variable).</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1"></a>newdata &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-2"><a href="#cb25-2"></a><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>), <span class="dt">length =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-3"><a href="#cb25-3"></a><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="st">"Petal.Width"</span>, <span class="dt">length=</span><span class="dv">3</span>, <span class="dt">numerics =</span> <span class="st">"combination"</span>, <span class="dt">standardize =</span> <span class="ot">TRUE</span>, <span class="dt">reference =</span> iris)</span>
-<span id="cb25-4"><a href="#cb25-4"></a>newdata<span class="op">$</span>Predicted_Sepal.Length &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</span>
-<span id="cb25-5"><a href="#cb25-5"></a></span>
-<span id="cb25-6"><a href="#cb25-6"></a></span>
-<span id="cb25-7"><a href="#cb25-7"></a><span class="co"># Express values in an abstract way</span></span>
-<span id="cb25-8"><a href="#cb25-8"></a>newdata<span class="op">$</span>Petal.Width &lt;-<span class="st"> </span>effectsize<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/effectsize/man/format_standardize.html">format_standardize</a></span>(newdata<span class="op">$</span>Petal.Width, <span class="dt">reference =</span> iris<span class="op">$</span>Petal.Width)</span>
-<span id="cb25-9"><a href="#cb25-9"></a></span>
-<span id="cb25-10"><a href="#cb25-10"></a>iris <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb25-11"><a href="#cb25-11"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Sepal.Length)) <span class="op">+</span></span>
-<span id="cb25-12"><a href="#cb25-12"></a><span class="st">  </span><span class="kw">geom_point2</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Petal.Width), <span class="dt">color =</span> <span class="st">"white"</span>, <span class="dt">shape=</span><span class="dv">21</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">+</span><span class="st">  </span><span class="co"># Only shapes from 21 to 25 have a fill aesthetic</span></span>
-<span id="cb25-13"><a href="#cb25-13"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Length, <span class="dt">color =</span> Petal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb25-14"><a href="#cb25-14"></a><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">direction =</span> <span class="dv">-1</span>) <span class="op">+</span></span>
-<span id="cb25-15"><a href="#cb25-15"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
-<span id="cb25-16"><a href="#cb25-16"></a><span class="st">  </span><span class="kw">theme_modern</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">newdata &lt;-<span class="st"> </span>iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span>), <span class="dt">length =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span>(<span class="st">"Petal.Width"</span>, <span class="dt">length=</span><span class="dv">3</span>, <span class="dt">numerics =</span> <span class="st">"combination"</span>, <span class="dt">standardize =</span> <span class="ot">TRUE</span>, <span class="dt">reference =</span> iris)</a>
+<a class="sourceLine" id="cb25-4" title="4">newdata<span class="op">$</span>Predicted_Sepal.Length &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(model, newdata)</a>
+<a class="sourceLine" id="cb25-5" title="5"></a>
+<a class="sourceLine" id="cb25-6" title="6"></a>
+<a class="sourceLine" id="cb25-7" title="7"><span class="co"># Express values in an abstract way</span></a>
+<a class="sourceLine" id="cb25-8" title="8">newdata<span class="op">$</span>Petal.Width &lt;-<span class="st"> </span>effectsize<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/effectsize/man/format_standardize.html">format_standardize</a></span>(newdata<span class="op">$</span>Petal.Width, <span class="dt">reference =</span> iris<span class="op">$</span>Petal.Width)</a>
+<a class="sourceLine" id="cb25-9" title="9"></a>
+<a class="sourceLine" id="cb25-10" title="10">iris <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-11" title="11"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> Petal.Length, <span class="dt">y =</span> Sepal.Length)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-12" title="12"><span class="st">  </span><span class="kw">geom_point2</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Petal.Width), <span class="dt">color =</span> <span class="st">"white"</span>, <span class="dt">shape=</span><span class="dv">21</span>, <span class="dt">size =</span> <span class="dv">5</span>) <span class="op">+</span><span class="st">  </span><span class="co"># Only shapes from 21 to 25 have a fill aesthetic</span></a>
+<a class="sourceLine" id="cb25-13" title="13"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> newdata, <span class="kw">aes</span>(<span class="dt">y =</span> Predicted_Sepal.Length, <span class="dt">color =</span> Petal.Width), <span class="dt">size =</span> <span class="dv">1</span>) <span class="op">+</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb25-14" title="14"><span class="st">  </span><span class="kw">scale_color_viridis_d</span>(<span class="dt">direction =</span> <span class="dv">-1</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-15" title="15"><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>(<span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb25-16" title="16"><span class="st">  </span><span class="kw">theme_modern</span>()</a></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-19-1.png" width="3281.25"></p>
 <p>As the <code>Petal.Width</code> increases (becomes yellow), the coefficient between <code>Petal.Length</code> and <code>Sepal.Length</code> increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species… <strong>but we’ll leave discussing the meaningfulness of your models to you :)</strong></p>
 </div>
