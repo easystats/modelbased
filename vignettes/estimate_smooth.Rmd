@@ -104,7 +104,7 @@ library(dplyr)
 library(see)
 
 # Load the data and filter out outliers
-df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/publications/master/makowski_2017_being/data/data.csv") %>% 
+df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/2017being/data/data.csv") %>% 
   filter(Delay <= 14,
          Memory >= 20) 
 
