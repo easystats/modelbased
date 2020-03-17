@@ -1,3 +1,7 @@
+# modelbased 0.1.3
+
+- Fix CRAN check issues.
+
 # modelbased 0.1.2
 
 - Minor code changes to address changes from the forthcoming `parameters` package update.
