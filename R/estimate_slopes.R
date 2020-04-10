@@ -77,6 +77,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 
 
+#' @importFrom stats confint
 #' @importFrom emmeans emtrends
 #' @keywords internal
 .estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
@@ -125,7 +126,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
     slopes$Parameter <- NULL
     slopes <- cbind(params, slopes)
   } else {
-    params <- as.data.frame(confint(trends, levels = ci, ...))
+    params <- as.data.frame(stats::confint(trends, levels = ci, ...))
     slopes <- .clean_emmeans_frequentist(params)
     names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
   }
