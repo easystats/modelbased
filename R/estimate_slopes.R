@@ -177,9 +177,9 @@ estimate_slopes.merMod <- estimate_slopes.lm
   if (insight::model_info(model)$is_linear) {
     response <- insight::get_response(model)
     if (robust) {
-      std <- slopes[vars] * stats::mad(x, na.rm = TRUE) / mad(response, na.rm = TRUE)
+      std <- slopes[vars] * stats::mad(x, na.rm = TRUE) / stats::mad(response, na.rm = TRUE)
     } else {
-      std <- slopes[vars] * stats::sd(x, na.rm = TRUE) / sd(response, na.rm = TRUE)
+      std <- slopes[vars] * stats::sd(x, na.rm = TRUE) / stats::sd(response, na.rm = TRUE)
     }
   } else {
     if (robust) {
