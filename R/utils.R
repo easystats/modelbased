@@ -39,8 +39,8 @@ as.numeric_ifnumeric <- function(x) {
 
 
 #' @keywords internal
-.remove_name_level <- function(x) {
-  name <- .find_name_level(x)
+.remove_name_level <- function(x, ...) {
+  name <- .find_name_level(x, ...)
   x <- sub(name, "", x)
   x <- trimws(x)
   x
@@ -53,7 +53,7 @@ as.numeric_ifnumeric <- function(x) {
 
 
 #' @keywords internal
-.find_name_level <- function(x, data, fixed, modulate) {
+.find_name_level <- function(x) {
   splitted <- strsplit(as.character(x), " ")
   splitted <- data.frame(do.call(rbind, splitted), stringsAsFactors = FALSE)
   uniques <- sapply(splitted, unique)
