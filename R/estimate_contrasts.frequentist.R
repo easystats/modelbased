@@ -53,7 +53,8 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   names <- contrasts$contrast
 
   # Separate Contrasts from Others
-  if (!is.null(fixed) | !is.null(modulate)) {
+  # if (!is.null(fixed) | !is.null(modulate)) {
+  if (!is.null(modulate)) {
     others <- strsplit(as.character(names), ", ")
     others <- data.frame(do.call(rbind, others))
     names(others) <- unlist(sapply(others, .find_name_level))
