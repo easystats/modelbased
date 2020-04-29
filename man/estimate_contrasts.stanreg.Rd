@@ -90,5 +90,13 @@ if (require("rstanarm")) {
   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 }
+
+if (require("brms")) {
+  data <- iris
+  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+
+  model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  estimate_contrasts(model)
+}
 }
 }

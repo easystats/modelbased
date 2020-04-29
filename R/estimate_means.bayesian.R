@@ -44,6 +44,11 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #'   estimate_means(model, modulate = "Sepal.Width")
 #'   estimate_means(model, fixed = "Sepal.Width")
 #' }
+#'
+#' if (require("brms")) {
+#'   model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   estimate_means(model)
+#' }
 #' }
 #' @return A dataframe of estimated marginal means.
 #'
@@ -97,3 +102,8 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   class(means) <- c("estimate_means", class(means))
   means
 }
+
+
+#' @export
+estimate_means.brmsfit <- estimate_means.stanreg
+

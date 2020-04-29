@@ -128,6 +128,8 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   description
 }
 
+#' @export
+estimate_smooth.brmsfit <- estimate_smooth.stanreg
 
 #' @export
 estimate_smooth.glm <- estimate_smooth.stanreg

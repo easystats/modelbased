@@ -159,6 +159,7 @@ estimate_link.stanreg <- function(model, data = "grid", transform = "response", 
 }
 
 
+
 #' @rdname estimate_response.stanreg
 #' @export
 estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
