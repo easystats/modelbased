@@ -31,7 +31,7 @@
 #' @importFrom bayestestR describe_posterior
 #' @export
 estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ci = 0.95, adjust = "holm", ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts")
+  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
   contrasts <- emmeans::contrast(estimated$means, method = "pairwise", adjust = adjust)
 
   # Summary
