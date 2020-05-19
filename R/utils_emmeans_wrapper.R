@@ -74,6 +74,14 @@
   at <- insight::get_data(model)[levels]
   at <- sapply(at, visualisation_matrix, length = length, simplify = FALSE)
 
+  # Fix for some edgecases (https://github.com/easystats/modelbased/issues/60)
+  formula <- paste0(as.character(insight::find_formula(model)$conditional), collapse = " ")
+  for(name in names(at)){
+    if(grepl(paste0("as.factor(", name), formula, fixed = TRUE)){
+      at[[name]] <- as.numeric(levels(at[[name]]))
+    }
+  }
+
   suppressMessages(refgrid <- emmeans::ref_grid(model, at = at))
 
   # Run emmeans
@@ -81,7 +89,6 @@
 
   means
 }
-
 
 
 
