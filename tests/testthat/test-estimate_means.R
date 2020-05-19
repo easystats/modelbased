@@ -10,6 +10,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
+
       # model <- stan_glm(vs ~ as.factor(cyl), data = mtcars, refresh = 0, iter = 200, chains = 2)
       data$cyl <- as.factor(data$cyl)
       model <- stan_glm(vs ~ cyl, data = data, refresh = 0, iter = 200, chains = 2)
@@ -41,5 +42,10 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_means(model, modulate = "Sepal.Width")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 6))
+
+    # In formula modification
+    model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
   })
 }
