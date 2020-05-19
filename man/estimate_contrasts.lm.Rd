@@ -35,7 +35,7 @@
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
 
 \item{adjust}{The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the \code{emmeans::test} documentation.}
 
@@ -57,7 +57,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "Petal.Width")
 estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-
+estimate_contrasts(model, levels = "Petal.Width", length = 4)
 
 if (require("lme4")) {
   data <- iris

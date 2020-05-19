@@ -23,10 +23,13 @@
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
+
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, type = "mean", ...)
 
   # Clean and rename
-  means <- as.data.frame(stats::confint(estimated$means, level = ci))
+  means <- as.data.frame(stats::confint(estimated, level = ci))
   if ("df" %in% names(means)) means$df <- NULL
   means <- .clean_emmeans_frequentist(means)
 
@@ -38,9 +41,9 @@ estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NUL
     attributes(means),
     list(
       ci = ci,
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       response = insight::find_response(model)
     )

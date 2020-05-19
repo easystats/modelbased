@@ -19,6 +19,16 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     model <- stan_polr(Species ~ Petal.Width + Petal.Length, data = iris, refresh = 0, iter = 500, chains = 2, prior = R2(0.2, "mean"))
     estim <- estimate_link(model, length = 5)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
+
+    # Non-sampling algorithms
+    library(rstanarm)
+    model <- stan_glm(mpg ~ drat, data = mtcars, algorithm="meanfield")
+    estim <- estimate_link(model, keep_draws = TRUE)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
+    library(brms)
+    model <- brms::brm(mpg ~ drat, data = mtcars, algorithm="meanfield")
+    estim <- estimate_link(model, keep_draws = TRUE)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
   })
 
 

@@ -1,4 +1,3 @@
-
 #' @importFrom insight get_data find_predictors model_info find_random
 #' @keywords internal
 .estimate_response_init <- function(model, data, transform, random, length, preserve_range, predict, ...) {

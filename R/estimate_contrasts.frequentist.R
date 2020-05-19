@@ -15,7 +15,7 @@
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-#'
+#' estimate_contrasts(model, levels = "Petal.Width", length = 4)
 #'
 #' if (require("lme4")) {
 #'   data <- iris
@@ -31,8 +31,11 @@
 #' @importFrom bayestestR describe_posterior
 #' @export
 estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ci = 0.95, adjust = "holm", ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
-  contrasts <- emmeans::contrast(estimated$means, method = "pairwise", adjust = adjust)
+
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, type = "contrasts", ...)
+  contrasts <- emmeans::contrast(estimated, method = "pairwise", adjust = adjust)
 
   # Summary
   contrasts <- as.data.frame(merge(as.data.frame(contrasts), stats::confint(contrasts, level = ci, adjust = adjust)))
@@ -54,7 +57,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
   # Separate Contrasts from Others
   # if (!is.null(fixed) | !is.null(modulate)) {
-  if (!is.null(modulate)) {
+  if (!is.null(args$modulate)) {
     others <- strsplit(as.character(names), ", ")
     others <- data.frame(do.call(rbind, others))
     names(others) <- unlist(sapply(others, .find_name_level))
@@ -85,9 +88,9 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   attributes(contrasts) <- c(
     attributes(contrasts),
     list(
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       ci = ci,
       adjust = adjust,

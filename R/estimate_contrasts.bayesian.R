@@ -72,8 +72,10 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @importFrom insight find_response
 #' @export
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
-  posteriors <- emmeans::contrast(estimated$means, method = "pairwise")
+
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, type = "contrasts", ...)
+  posteriors <- emmeans::contrast(estimated, method = "pairwise")
 
   # Summary
   contrasts <- .summarize_posteriors(posteriors,
@@ -124,9 +126,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   attributes(contrasts) <- c(
     attributes(contrasts),
     list(
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       ci = ci,
       ci_method = ci_method,
