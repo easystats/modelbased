@@ -11,14 +11,6 @@
   }
 
 
-
-  # If NULL: Get all the other variables
-  # if (is.null(fixed)){
-  #   predictors <- insight::find_predictors(model)$conditional
-  #   predictors <- predictors[!predictors %in% .clean_argument(levels)]
-  #   fixed <- unique(c(fixed, predictors))
-  # }
-
   # Prevent repetitions
   if (!is.null(modulate)) {
     if(!is.null(fixed)) {

@@ -32,7 +32,6 @@
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
 
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
 
   # Clean and rename

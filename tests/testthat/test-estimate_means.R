@@ -51,7 +51,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
 
     # One continuous and one factor
-    model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
+    model <- lm(Petal.Length ~ Species * Sepal.Width, data = iris)
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))

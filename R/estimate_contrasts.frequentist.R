@@ -35,7 +35,12 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
 
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
-  contrasts <- emmeans::contrast(estimated, method = "pairwise", adjust = adjust)
+  contrasts <- emmeans::contrast(estimated,
+                                 by= c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
+                                 method = "pairwise",
+                                 adjust = adjust,
+                                 ...)
+
 
   # Summary
   contrasts <- as.data.frame(merge(as.data.frame(contrasts), stats::confint(contrasts, level = ci, adjust = adjust)))
