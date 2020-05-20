@@ -10,17 +10,25 @@
 
   # Remove factors from fixed
   fixed_factors <- NULL
+  fixed_factors_vars <- NULL
   if(!is.null(fixed)){
-    fixed_factors <- fixed_vars[!sapply(data[fixed_vars], is.numeric)]
-    fixed_vars <- fixed_vars[!fixed_vars %in% fixed_factors]
+    isfactor <- !sapply(data[fixed_vars], is.numeric)
+    fixed_factors <- fixed[isfactor]
+    fixed_factors_vars <- fixed_vars[isfactor]
+    fixed_vars <- fixed_vars[!fixed_vars %in% fixed_factors_vars]
+    if(length(fixed_vars) == 0) fixed_vars <- NULL
+    if(length(fixed_factors_vars) == 0) fixed_factors_vars <- NULL
   }
 
-  if(!is.null(fixed_factors)){
-    fixed_factors <- sapply(fixed_factors, function(i){
-      paste0(i, "='", unique(data[[i]])[1], "'")
-    }, simplify = TRUE)
-    fixed_factors <- as.character(fixed_factors)
-    # levels <- c(levels, fixed_factors)
+  if(!is.null(fixed_factors_vars)){
+    for(i in 1:length(fixed_factors_vars)){
+      if(fixed_factors[i] != fixed_factors_vars[i]){
+        fixed_factors_vars[i] <- fixed_factors[i]
+      } else{
+        fixed_factors_vars[i] <- paste0(fixed_factors_vars[i], "='", unique(data[[fixed_factors_vars[i]]])[1], "'")
+      }
+    }
+    levels <- c(levels, fixed_factors_vars)
   }
 
 
