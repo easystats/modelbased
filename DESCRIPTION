@@ -27,7 +27,7 @@ Imports:
 	insight (>= 0.7.1),
 	bayestestR (>= 0.4.0),
 	parameters (>= 0.3.0),
-	emmeans,
+	emmeans (>= 1.4.4),
 	graphics,
 	stats,
 	utils
