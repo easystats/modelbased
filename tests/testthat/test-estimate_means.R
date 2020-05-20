@@ -77,7 +77,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
-    # estim <- estimate_means(model, fixed="Petal.Length_factor")
-    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
+    estim <- estimate_means(model, fixed="Petal.Length_factor")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
+    estim <- estimate_means(model, fixed="Petal.Length_factor='B'")
+    testthat::expect_true(as.character(unique(estim$Petal.Length_factor)) == "B")
   })
 }
