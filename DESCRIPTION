@@ -1,7 +1,7 @@
 Package: modelbased
 Type: Package
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: c(
 	person("Dominique", 
 		"Makowski", 

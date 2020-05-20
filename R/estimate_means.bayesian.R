@@ -58,7 +58,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @export
 estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, type = "mean", ...)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
   posteriors <- emmeans::as.mcmc.emmGrid(estimated)
   posteriors <- as.data.frame(as.matrix(posteriors))
 

@@ -47,5 +47,37 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+
+
+
+    # One continuous and one factor
+    model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
+
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+    estim <- estimate_means(model, fixed="Sepal.Width")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
+    estim <- estimate_means(model, levels = c("Species", "Sepal.Width"), length=2)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
+    estim <- estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(2, 5))
+    estim <- estimate_means(model, levels = "Sepal.Width=c(2, 4)")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(2, 5))
+    estim <- estimate_means(model, levels = c("Species", "Sepal.Width=0"))
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
+    estim <- estimate_means(model, modulate = "Sepal.Width", length=5)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(15, 6))
+    estim <- estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
+
+    # Two factors
+    data <- iris
+    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+    model <- lm(Petal.Length ~ Species * Petal.Length_factor, data = data)
+
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
+    # estim <- estimate_means(model, fixed="Petal.Length_factor")
+    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
   })
 }

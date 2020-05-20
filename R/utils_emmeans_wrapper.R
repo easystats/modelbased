@@ -1,78 +1,40 @@
-#' @importFrom insight find_predictors get_data
-#' @keywords internal
-.guess_arguments <- function(model, levels = NULL, fixed = NULL, modulate = NULL) {
-
-
-  # Try to find factors if none is specified
-  if (is.null(levels)) {
-    levels <- insight::find_predictors(model)$conditional
-    numeric <- levels[sapply(insight::get_data(model)[levels], is.numeric)]
-    levels <- levels[!levels %in% numeric]
-  } else {
-    numeric <- NULL
-  }
-
-  # Fix all the other variables
-  if (!is.null(fixed)) {
-    fixed <- unique(c(fixed, numeric))
-    levels <- levels[!levels %in% fixed]
-    if (!is.null(modulate)) {
-      fixed <- fixed[!fixed %in% c(modulate)]
-    }
-  }
-
-  if (length(levels) == 0) {
-    stop("No suitable factor levels detected.")
-  }
-
-  list(
-    "levels" = levels,
-    "fixed" = fixed,
-    "modulate" = modulate
-  )
-}
-
-
-
-
-
-# Emmeans wrapper ---------------------------------------------------------
-
-
-
-#' @importFrom emmeans emmeans ref_grid
-#' @keywords internal
-# .emmeans_wrapper <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, type = "mean", ...) {
-#
-#   if (is.null(modulate)) {
-#     means <- emmeans::emmeans(model, levels, by = fixed, transform = transform, ...)
-#
-#   } else {
-#     at <- insight::get_data(model)[c(levels, modulate)]
-#     at <- sapply(at, visualisation_matrix, length = length, simplify = FALSE)
-#     means <- emmeans::ref_grid(model, at = at, by = c(fixed, modulate))
-#
-#     if (type == "mean") {
-#       means <- emmeans::emmeans(means, c(levels, modulate), transform = transform, ...)
-#     } else {
-#       means <- emmeans::emmeans(means, levels, by = c(fixed, modulate), transform = transform, ...)
-#     }
-#   }
-#
-#   means
-# }
-
-
 #' @importFrom emmeans emmeans ref_grid
 #' @keywords internal
 .emmeans_wrapper <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ...) {
 
-  levels <- c(levels, modulate)
-  fixed <- c(fixed, modulate)
+  data <- insight::get_data(model)
 
-  # Get emmeans refgrid
-  at <- insight::get_data(model)[levels]
-  at <- sapply(at, visualisation_matrix, length = length, simplify = FALSE)
+  # Sanitize fixed
+  fixed <- c(fixed, modulate)
+  fixed_vars <- .clean_argument(fixed)
+
+  # Remove factors from fixed
+  fixed_factors <- NULL
+  if(!is.null(fixed)){
+    fixed_factors <- fixed_vars[!sapply(data[fixed_vars], is.numeric)]
+    fixed_vars <- fixed_vars[!fixed_vars %in% fixed_factors]
+  }
+
+  if(!is.null(fixed_factors)){
+    fixed_factors <- sapply(fixed_factors, function(i){
+      paste0(i, "='", unique(data[[i]])[1], "'")
+    }, simplify = TRUE)
+    fixed_factors <- as.character(fixed_factors)
+    # levels <- c(levels, fixed_factors)
+  }
+
+
+  # Sanitize levels
+  levels <- c(levels, modulate)
+  levels_vars <- .clean_argument(levels)
+
+
+  # Get refgrid for each variable separately
+  at <- list()
+  for(i in 1:length(levels)){
+    at[[levels_vars[i]]] <- visualisation_matrix(data, levels[[i]], length = length)[[levels_vars[i]]]
+  }
+
 
   # Fix for some edgecases (https://github.com/easystats/modelbased/issues/60)
   formula <- insight::find_terms(model, flatten = TRUE)
@@ -82,11 +44,11 @@
     }
   }
 
-  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at))
+  # Get emmeans refgrid
+  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data=data, ...))
 
   # Run emmeans
-  means <- emmeans::emmeans(refgrid, levels, by = fixed, transform = transform, ...)
-
+  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, transform = transform, ...)
   means
 }
 
