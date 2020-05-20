@@ -31,15 +31,15 @@
 #' @importFrom bayestestR describe_posterior
 #' @export
 estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, ci = 0.95, adjust = "holm", ...) {
-
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
 
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
   contrasts <- emmeans::contrast(estimated,
-                                 by= c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
-                                 method = "pairwise",
-                                 adjust = adjust,
-                                 ...)
+    by = c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
+    method = "pairwise",
+    adjust = adjust,
+    ...
+  )
 
 
   # Summary

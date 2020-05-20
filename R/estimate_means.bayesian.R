@@ -107,4 +107,3 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
 
 #' @export
 estimate_means.brmsfit <- estimate_means.stanreg
-

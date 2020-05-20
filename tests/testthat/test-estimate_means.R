@@ -1,8 +1,6 @@
 if (require("testthat") && require("modelbased") && require("rstanarm") && require("insight")) {
-
   test_that("estimate_means", {
-
-    if(require("rstanarm")){
+    if (require("rstanarm")) {
       data <- mtcars
       data$gear <- as.factor(data$gear)
 
@@ -32,7 +30,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
       estim <- estimate_means(model, modulate = "Sepal.Width")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 5))
-
     }
 
 
@@ -55,9 +52,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
-    estim <- estimate_means(model, fixed="Sepal.Width")
+    estim <- estimate_means(model, fixed = "Sepal.Width")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
-    estim <- estimate_means(model, levels = c("Species", "Sepal.Width"), length=2)
+    estim <- estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
     estim <- estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(2, 5))
@@ -65,7 +62,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(2, 5))
     estim <- estimate_means(model, levels = c("Species", "Sepal.Width=0"))
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
-    estim <- estimate_means(model, modulate = "Sepal.Width", length=5)
+    estim <- estimate_means(model, modulate = "Sepal.Width", length = 5)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(15, 6))
     estim <- estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
@@ -77,9 +74,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 6))
-    estim <- estimate_means(model, fixed="Petal.Length_factor")
+    estim <- estimate_means(model, fixed = "Petal.Length_factor")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
-    estim <- estimate_means(model, fixed="Petal.Length_factor='B'")
+    estim <- estimate_means(model, fixed = "Petal.Length_factor='B'")
     testthat::expect_true(as.character(unique(estim$Petal.Length_factor)) == "B")
   })
 }

@@ -1,5 +1,4 @@
 if (require("testthat") && require("modelbased") && require("rstanarm") && require("insight")) {
-
   test_that("estimate_response - Bayesian", {
     estim <- estimate_response(insight::download_model("stanreg_lm_5"), seed = 333)
     testthat::expect_equal(nrow(estim), nrow(mtcars))
@@ -22,11 +21,11 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     # Non-sampling algorithms
     library(rstanarm)
-    model <- stan_glm(mpg ~ drat, data = mtcars, algorithm="meanfield")
+    model <- stan_glm(mpg ~ drat, data = mtcars, algorithm = "meanfield")
     estim <- estimate_link(model, keep_draws = TRUE)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
     library(brms)
-    model <- brms::brm(mpg ~ drat, data = mtcars, algorithm="meanfield")
+    model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield")
     estim <- estimate_link(model, keep_draws = TRUE)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
   })

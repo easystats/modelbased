@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
       </span>
     </div>
 
@@ -307,16 +307,7 @@
   <span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brms</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='no'>Sepal.Width</span> ~ <span class='no'>Petal.Length</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>iris</span>)
   <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='no'>model</span>)
   <span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='no'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Loading required package: brms</span></div><div class='output co'>#&gt; <span class='message'>Loading 'brms' package (version 2.12.0). Useful instructions</span>
-#&gt; <span class='message'>can be found by typing help('brms'). A more detailed introduction</span>
-#&gt; <span class='message'>to the package is available through vignette('brms_overview').</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: 'brms'</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from 'package:rstanarm':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    dirichlet, exponential, get_y, lasso, loo_R2, ngrps</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:lme4':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    ngrps</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from 'package:stats':</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    ar</span></div><div class='output co'>#&gt; 
+}</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
@@ -337,9 +328,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.55 seconds (Warm-up)
-#&gt; Chain 1:                0.61 seconds (Sampling)
-#&gt; Chain 1:                1.16 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.547 seconds (Warm-up)
+#&gt; Chain 1:                0.534 seconds (Sampling)
+#&gt; Chain 1:                1.081 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -362,9 +353,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.526 seconds (Warm-up)
-#&gt; Chain 2:                0.593 seconds (Sampling)
-#&gt; Chain 2:                1.119 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.557 seconds (Warm-up)
+#&gt; Chain 2:                0.654 seconds (Sampling)
+#&gt; Chain 2:                1.211 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -387,9 +378,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.565 seconds (Warm-up)
-#&gt; Chain 3:                0.549 seconds (Sampling)
-#&gt; Chain 3:                1.114 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.577 seconds (Warm-up)
+#&gt; Chain 3:                0.571 seconds (Sampling)
+#&gt; Chain 3:                1.148 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -412,9 +403,9 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.566 seconds (Warm-up)
-#&gt; Chain 4:                0.525 seconds (Sampling)
-#&gt; Chain 4:                1.091 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.52 seconds (Warm-up)
+#&gt; Chain 4:                0.613 seconds (Sampling)
+#&gt; Chain 4:                1.133 seconds (Total)
 #&gt; Chain 4: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -437,9 +428,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 1.705 seconds (Warm-up)
-#&gt; Chain 1:                2.144 seconds (Sampling)
-#&gt; Chain 1:                3.849 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 1.535 seconds (Warm-up)
+#&gt; Chain 1:                1.232 seconds (Sampling)
+#&gt; Chain 1:                2.767 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -462,9 +453,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 1.633 seconds (Warm-up)
-#&gt; Chain 2:                1.614 seconds (Sampling)
-#&gt; Chain 2:                3.247 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 1.575 seconds (Warm-up)
+#&gt; Chain 2:                1.306 seconds (Sampling)
+#&gt; Chain 2:                2.881 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -487,9 +478,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 1.401 seconds (Warm-up)
-#&gt; Chain 3:                1.647 seconds (Sampling)
-#&gt; Chain 3:                3.048 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 1.554 seconds (Warm-up)
+#&gt; Chain 3:                1.292 seconds (Sampling)
+#&gt; Chain 3:                2.846 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -512,10 +503,10 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 1.848 seconds (Warm-up)
-#&gt; Chain 4:                1.566 seconds (Sampling)
-#&gt; Chain 4:                3.414 seconds (Total)
-#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>Compiling the C++ model</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; 
+#&gt; Chain 4:  Elapsed Time: 1.482 seconds (Warm-up)
+#&gt; Chain 4:                1.494 seconds (Sampling)
+#&gt; Chain 4:                2.976 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>Compiling the C++ model</span></div><div class='output co'>#&gt; <span class='message'>recompiling to avoid crashing R session</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
@@ -536,15 +527,15 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.023 seconds (Warm-up)
-#&gt; Chain 1:                0.019 seconds (Sampling)
-#&gt; Chain 1:                0.042 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.021 seconds (Warm-up)
+#&gt; Chain 1:                0.042 seconds (Sampling)
+#&gt; Chain 1:                0.063 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 0.001 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 10 seconds.
+#&gt; Chain 2: Gradient evaluation took 0 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -561,9 +552,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.022 seconds (Warm-up)
-#&gt; Chain 2:                0.02 seconds (Sampling)
-#&gt; Chain 2:                0.042 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.023 seconds (Warm-up)
+#&gt; Chain 2:                0.022 seconds (Sampling)
+#&gt; Chain 2:                0.045 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 3).
@@ -586,8 +577,8 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.022 seconds (Warm-up)
-#&gt; Chain 3:                0.022 seconds (Sampling)
+#&gt; Chain 3:  Elapsed Time: 0.021 seconds (Warm-up)
+#&gt; Chain 3:                0.023 seconds (Sampling)
 #&gt; Chain 3:                0.044 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
@@ -612,34 +603,34 @@
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
 #&gt; Chain 4:  Elapsed Time: 0.022 seconds (Warm-up)
-#&gt; Chain 4:                0.025 seconds (Sampling)
-#&gt; Chain 4:                0.047 seconds (Total)
+#&gt; Chain 4:                0.022 seconds (Sampling)
+#&gt; Chain 4:                0.044 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt;    Petal.Length   Median   CI_low  CI_high
-#&gt; 1      1.000000 3.347936 3.248451 3.440575
-#&gt; 2      1.245833 3.322157 3.229365 3.409525
-#&gt; 3      1.491667 3.296748 3.212402 3.380181
-#&gt; 4      1.737500 3.270344 3.192618 3.348164
-#&gt; 5      1.983333 3.244602 3.173439 3.319488
-#&gt; 6      2.229167 3.219010 3.148184 3.284434
-#&gt; 7      2.475000 3.193049 3.130943 3.257846
-#&gt; 8      2.720833 3.166997 3.108511 3.227348
-#&gt; 9      2.966667 3.140911 3.086722 3.199264
-#&gt; 10     3.212500 3.115076 3.060976 3.169689
-#&gt; 11     3.458333 3.089307 3.035754 3.141958
-#&gt; 12     3.704167 3.063723 3.011434 3.116211
-#&gt; 13     3.950000 3.037496 2.986156 3.091532
-#&gt; 14     4.195833 3.011384 2.957855 3.065937
-#&gt; 15     4.441667 2.985422 2.926304 3.038921
-#&gt; 16     4.687500 2.959116 2.900786 3.020058
-#&gt; 17     4.933333 2.933503 2.873362 2.999861
-#&gt; 18     5.179167 2.908006 2.841639 2.975457
-#&gt; 19     5.425000 2.882333 2.812783 2.955205
-#&gt; 20     5.670833 2.855797 2.779065 2.931304
-#&gt; 21     5.916667 2.829981 2.746497 2.909560
-#&gt; 22     6.162500 2.804290 2.713289 2.886914
-#&gt; 23     6.408333 2.778340 2.680263 2.866068
-#&gt; 24     6.654167 2.752833 2.646205 2.844277
-#&gt; 25     6.900000 2.727130 2.612035 2.823428</div><div class='input'># }
+#&gt; 1      1.000000 3.349734 3.248486 3.440138
+#&gt; 2      1.245833 3.323630 3.234887 3.414473
+#&gt; 3      1.491667 3.297483 3.217512 3.385378
+#&gt; 4      1.737500 3.271412 3.196388 3.352658
+#&gt; 5      1.983333 3.245616 3.173400 3.319653
+#&gt; 6      2.229167 3.219807 3.152801 3.289613
+#&gt; 7      2.475000 3.193544 3.129778 3.258166
+#&gt; 8      2.720833 3.167191 3.105142 3.226260
+#&gt; 9      2.966667 3.141280 3.084457 3.200852
+#&gt; 10     3.212500 3.114938 3.059356 3.171209
+#&gt; 11     3.458333 3.089038 3.032142 3.139500
+#&gt; 12     3.704167 3.062617 3.011761 3.116026
+#&gt; 13     3.950000 3.036596 2.985792 3.090350
+#&gt; 14     4.195833 3.010646 2.957293 3.064523
+#&gt; 15     4.441667 2.984965 2.928620 3.041372
+#&gt; 16     4.687500 2.959014 2.902875 3.021613
+#&gt; 17     4.933333 2.933226 2.874369 3.000468
+#&gt; 18     5.179167 2.907332 2.839148 2.973182
+#&gt; 19     5.425000 2.881167 2.804864 2.949321
+#&gt; 20     5.670833 2.855023 2.773002 2.929130
+#&gt; 21     5.916667 2.828779 2.745734 2.912756
+#&gt; 22     6.162500 2.803008 2.713785 2.892247
+#&gt; 23     6.408333 2.777177 2.673399 2.864007
+#&gt; 24     6.654167 2.750981 2.642521 2.844756
+#&gt; 25     6.900000 2.724604 2.611051 2.825082</div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

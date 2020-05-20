@@ -78,16 +78,15 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
     if (any(class(model) == "brmsfit")) {
       posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, scale = args$transform)
-    } else{
+    } else {
       posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
     }
   } else {
     if (any(class(model) == "brmsfit")) {
       posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, transform = NULL)
-    } else{
+    } else {
       posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
     }
-
   }
 
   # Summary
@@ -194,4 +193,3 @@ estimate_response.brmsfit <- estimate_response.stanreg
 
 #' @export
 estimate_link.brmsfit <- estimate_link.stanreg
-

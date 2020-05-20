@@ -1,3 +1,8 @@
+# modelbased 0.2.0
+
+- Partial support of formulas.
+- Refactor the emmeans wrapping.
+
 # modelbased 0.1.3
 
 - Fix CRAN check issues.

@@ -9,12 +9,12 @@
 #' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #'
 #' estimate_means(model)
-#' estimate_means(model, fixed="Sepal.Width")
-#' estimate_means(model, levels = c("Species", "Sepal.Width"), length=2)
+#' estimate_means(model, fixed = "Sepal.Width")
+#' estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
 #' estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
 #' estimate_means(model, levels = "Sepal.Width=c(2, 4)")
 #' estimate_means(model, levels = c("Species", "Sepal.Width=0"))
-#' estimate_means(model, modulate = "Sepal.Width", length=5)
+#' estimate_means(model, modulate = "Sepal.Width", length = 5)
 #' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 #' \donttest{
 #' if (require("lme4")) {
@@ -23,14 +23,13 @@
 #'
 #'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #'   estimate_means(model)
-#'   estimate_means(model, modulate = "Sepal.Width", length=3)
+#'   estimate_means(model, modulate = "Sepal.Width", length = 3)
 #' }
 #' }
 #' @return A data frame of estimated marginal means.
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
-
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
 

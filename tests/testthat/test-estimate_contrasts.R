@@ -1,7 +1,6 @@
 if (require("testthat") && require("modelbased") && require("rstanarm") && require("insight") && require("lme4")) {
   test_that("estimate_contrasts", {
-
-    if(require("rstanarm")){
+    if (require("rstanarm")) {
       testthat::expect_error(estimate_contrasts(insight::download_model("stanreg_lm_4")))
 
       data <- iris
@@ -31,7 +30,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_contrasts(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
-    estim <- estimate_contrasts(model, levels="Species=c('versicolor', 'virginica')")
+    estim <- estimate_contrasts(model, levels = "Species=c('versicolor', 'virginica')")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(1, 10))
 
     # Two factors
@@ -42,9 +41,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_contrasts(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(15, 10))
-    estim <- estimate_contrasts(model, levels="Species")
+    estim <- estimate_contrasts(model, levels = "Species")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
-    estim <- estimate_contrasts(model, fixed="fac")
+    estim <- estimate_contrasts(model, fixed = "fac")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 11))
 
     # One factor and one continuous
@@ -56,7 +55,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_contrasts(model, modulate = "Petal.Width", length = 4)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 11))
 
-    if(require("lme4")){
+    if (require("lme4")) {
       data <- iris
       data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
