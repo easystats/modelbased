@@ -55,6 +55,16 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_contrasts(model, modulate = "Petal.Width", length = 4)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 11))
 
+
+    # Contrast between continuous
+    model <- lm(Sepal.Width ~ Petal.Length, data = iris)
+
+    estim <- estimate_contrasts(model, levels = "Petal.Width=c(2.3, 3)")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(1, 10))
+    estim <- estimate_contrasts(model, levels = "Petal.Width=c(2, 3, 4)")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
+
+    # Mixed models
     if (require("lme4")) {
       data <- iris
       data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
