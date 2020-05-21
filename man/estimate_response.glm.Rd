@@ -44,7 +44,7 @@
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

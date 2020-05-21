@@ -48,6 +48,8 @@ estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transfor
   .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, centrality = centrality, ci = ci, ci_method = ci_method, test = test, rope_range = rope_range, rope_ci = rope_ci)
 }
 
+#' @export
+estimate_slopes.brmsfit <- estimate_slopes.stanreg
 
 
 

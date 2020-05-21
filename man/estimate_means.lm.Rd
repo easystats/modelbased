@@ -41,9 +41,16 @@ Estimate marginal means
 \examples{
 library(modelbased)
 
-model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
+model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
+
 estimate_means(model)
-estimate_means(model, modulate = "Sepal.Width")
+estimate_means(model, fixed="Sepal.Width")
+estimate_means(model, levels = c("Species", "Sepal.Width"), length=2)
+estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
+estimate_means(model, levels = "Sepal.Width=c(2, 4)")
+estimate_means(model, levels = c("Species", "Sepal.Width=0"))
+estimate_means(model, modulate = "Sepal.Width", length=5)
+estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 \donttest{
 if (require("lme4")) {
   data <- iris
@@ -51,7 +58,7 @@ if (require("lme4")) {
 
   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
   estimate_means(model)
-  estimate_means(model, modulate = "Sepal.Width")
+  estimate_means(model, modulate = "Sepal.Width", length=3)
 }
 }
 }

@@ -50,9 +50,18 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #'   estimate_contrasts(model)
 #'   estimate_contrasts(model, fixed = "Petal.Width")
 #'   estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+#'   estimate_contrasts(model, levels = "Petal.Width", length = 4)
 #'
 #'   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
 #'   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
+#' }
+#'
+#' if (require("brms")) {
+#'   data <- iris
+#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
+#'   model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   estimate_contrasts(model)
 #' }
 #' }
 #' @return A data frame of estimated contrasts.
@@ -64,8 +73,13 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @importFrom insight find_response
 #' @export
 estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform = transform, length = length, type = "contrasts", ...)
-  posteriors <- emmeans::contrast(estimated$means, method = "pairwise")
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
+  posteriors <- emmeans::contrast(estimated,
+    by = c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
+    method = "pairwise",
+    ...
+  )
 
   # Summary
   contrasts <- .summarize_posteriors(posteriors,
@@ -116,9 +130,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   attributes(contrasts) <- c(
     attributes(contrasts),
     list(
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       ci = ci,
       ci_method = ci_method,
@@ -131,3 +145,6 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
   class(contrasts) <- unique(c("estimate_contrasts", "see_estimate_contrasts", class(contrasts)))
   contrasts
 }
+
+#' @export
+estimate_contrasts.brmsfit <- estimate_contrasts.stanreg

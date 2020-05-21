@@ -6,9 +6,16 @@
 #' @examples
 #' library(modelbased)
 #'
-#' model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
+#' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
+#'
 #' estimate_means(model)
-#' estimate_means(model, modulate = "Sepal.Width")
+#' estimate_means(model, fixed = "Sepal.Width")
+#' estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
+#' estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
+#' estimate_means(model, levels = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, levels = c("Species", "Sepal.Width=0"))
+#' estimate_means(model, modulate = "Sepal.Width", length = 5)
+#' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 #' \donttest{
 #' if (require("lme4")) {
 #'   data <- iris
@@ -16,17 +23,18 @@
 #'
 #'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #'   estimate_means(model)
-#'   estimate_means(model, modulate = "Sepal.Width")
+#'   estimate_means(model, modulate = "Sepal.Width", length = 3)
 #' }
 #' }
 #' @return A data frame of estimated marginal means.
 #' @importFrom stats confint
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
 
   # Clean and rename
-  means <- as.data.frame(stats::confint(estimated$means, level = ci))
+  means <- as.data.frame(stats::confint(estimated, level = ci))
   if ("df" %in% names(means)) means$df <- NULL
   means <- .clean_emmeans_frequentist(means)
 
@@ -38,9 +46,9 @@ estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NUL
     attributes(means),
     list(
       ci = ci,
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       response = insight::find_response(model)
     )

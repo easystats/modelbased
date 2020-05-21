@@ -1,7 +1,7 @@
 Package: modelbased
 Type: Package
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: c(
 	person("Dominique", 
 		"Makowski", 
@@ -27,7 +27,7 @@ Imports:
 	insight (>= 0.7.1),
 	bayestestR (>= 0.4.0),
 	parameters (>= 0.3.0),
-	emmeans,
+	emmeans (>= 1.4.4),
 	graphics,
 	stats,
 	utils

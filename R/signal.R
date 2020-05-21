@@ -77,11 +77,8 @@ zero_crossings <- function(x) {
 #' x <- sin(seq(0, 4 * pi, length.out = 100))
 #' plot(x, type = "b")
 #' find_inversions(x)
-#'
 #' @return Vector of inversion points.
 #' @export
 find_inversions <- function(x) {
   zero_crossings(diff(x))
 }
-
-

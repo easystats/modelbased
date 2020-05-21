@@ -23,7 +23,6 @@
 #' @examples
 #' as.numeric_ifnumeric(c("1", "2"))
 #' as.numeric_ifnumeric(c("1", "2", "A"))
-#'
 #' @return Numeric
 #' @export
 as.numeric_ifnumeric <- function(x) {
@@ -54,6 +53,10 @@ as.numeric_ifnumeric <- function(x) {
 
 #' @keywords internal
 .find_name_level <- function(x) {
+  if (length(unique(x)) == 1) {
+    return("Contrast")
+  }
+
   splitted <- strsplit(as.character(x), " ")
   splitted <- data.frame(do.call(rbind, splitted), stringsAsFactors = FALSE)
   uniques <- sapply(splitted, unique)

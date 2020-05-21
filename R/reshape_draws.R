@@ -18,7 +18,7 @@
 reshape_draws <- function(draws) {
 
   # Sanity check
-  if(sum(grepl("Draw", names(draws))) == 0){
+  if (sum(grepl("Draw", names(draws))) == 0) {
     stop("Couldn't find columns corresponding to draws ('Draw_*') in your dataframe.")
   }
 

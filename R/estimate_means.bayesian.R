@@ -44,6 +44,11 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #'   estimate_means(model, modulate = "Sepal.Width")
 #'   estimate_means(model, fixed = "Sepal.Width")
 #' }
+#'
+#' if (require("brms")) {
+#'   model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   estimate_means(model)
+#' }
 #' }
 #' @return A dataframe of estimated marginal means.
 #'
@@ -52,8 +57,9 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
-  estimated <- .emmeans_wrapper(model, levels = levels, fixed = fixed, modulate = modulate, transform, length = length, type = "mean", ...)
-  posteriors <- emmeans::as.mcmc.emmGrid(estimated$means)
+  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
+  posteriors <- emmeans::as.mcmc.emmGrid(estimated)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
@@ -78,7 +84,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   means <- .restore_factor_levels(means, insight::get_data(model))
 
   # Restore type
-  means[c(fixed, modulate)] <- sapply(means[c(fixed, modulate)], as.numeric_ifnumeric)
+  means[c(args$fixed, args$modulate)] <- sapply(means[c(args$fixed, args$modulate)], as.numeric_ifnumeric)
 
   # Add attributes
   attributes(means) <- c(
@@ -86,9 +92,9 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
     list(
       ci = ci,
       ci_method = ci_method,
-      levels = estimated$levels,
-      fixed = estimated$fixed,
-      modulate = estimated$modulate,
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
       transform = transform,
       response = insight::find_response(model)
     )
@@ -97,3 +103,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
   class(means) <- c("estimate_means", class(means))
   means
 }
+
+
+#' @export
+estimate_means.brmsfit <- estimate_means.stanreg

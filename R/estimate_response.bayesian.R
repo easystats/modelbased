@@ -77,17 +77,16 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   # Predict link or response
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
     if (any(class(model) == "brmsfit")) {
-      posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, scale = args$transform)
-    } else{
+      posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, scale = args$transform)
+    } else {
       posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
     }
   } else {
     if (any(class(model) == "brmsfit")) {
-      posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = NULL)
-    } else{
+      posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, transform = NULL)
+    } else {
       posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
     }
-
   }
 
   # Summary
@@ -159,6 +158,7 @@ estimate_link.stanreg <- function(model, data = "grid", transform = "response", 
 }
 
 
+
 #' @rdname estimate_response.stanreg
 #' @export
 estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
@@ -193,4 +193,3 @@ estimate_response.brmsfit <- estimate_response.stanreg
 
 #' @export
 estimate_link.brmsfit <- estimate_link.stanreg
-

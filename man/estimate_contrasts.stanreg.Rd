@@ -41,7 +41,7 @@
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
@@ -86,9 +86,18 @@ if (require("rstanarm")) {
   estimate_contrasts(model)
   estimate_contrasts(model, fixed = "Petal.Width")
   estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+  estimate_contrasts(model, levels = "Petal.Width", length = 4)
 
   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
+}
+
+if (require("brms")) {
+  data <- iris
+  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+
+  model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  estimate_contrasts(model)
 }
 }
 }

@@ -32,7 +32,7 @@
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
@@ -61,6 +61,11 @@ if (require("rstanarm")) {
   estimate_means(model)
   estimate_means(model, modulate = "Sepal.Width")
   estimate_means(model, fixed = "Sepal.Width")
+}
+
+if (require("brms")) {
+  model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  estimate_means(model)
 }
 }
 }
