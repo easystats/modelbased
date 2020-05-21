@@ -59,9 +59,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     # Contrast between continuous
     model <- lm(Sepal.Width ~ Petal.Length, data = iris)
 
-    estim <- estimate_contrasts(model, levels = "Petal.Width=c(2.3, 3)")
+    estim <- estimate_contrasts(model, levels = "Petal.Length=c(2.3, 3)")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(1, 10))
-    estim <- estimate_contrasts(model, levels = "Petal.Width=c(2, 3, 4)")
+    estim <- estimate_contrasts(model, levels = "Petal.Length=c(2, 3, 4)")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
 
     # Mixed models
