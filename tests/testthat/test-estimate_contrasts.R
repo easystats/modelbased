@@ -78,6 +78,22 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
 
 
+    data <- iris
+    data$factor1 <- ifelse(data$Sepal.Width > 3, "A", "B")
+    data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
+    data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
+
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data=data)
+
+    estim <- estimate_contrasts(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(28, 10))
+    estim <- estimate_contrasts(model, fixed="factor3")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
+    estim <- estimate_contrasts(model, fixed="factor3='F'")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
+    estim <- estimate_contrasts(model, modulate="factor3")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 11))
+
 
     # Mixed models
     if (require("lme4")) {

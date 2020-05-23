@@ -92,6 +92,22 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_means(model, fixed="gear='5'")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
 
+    data <- iris
+    data$factor1 <- ifelse(data$Sepal.Width > 3, "A", "B")
+    data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
+    data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
+
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data=data)
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(8, 7))
+    estim <- estimate_means(model, fixed="factor3")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
+    estim <- estimate_means(model, fixed="factor3='F'")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
+    estim <- estimate_means(model, modulate="factor2")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(8, 7))
+
+
     # Mixed models
     if (require("lme4")) {
 
