@@ -52,10 +52,10 @@
   }
 
   # Get emmeans refgrid
-  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data = data, ...))
+  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data = data, nesting=NULL, ...))
 
   # Run emmeans
-  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, transform = transform, ...)
+  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, transform = transform)
   means
 }
 

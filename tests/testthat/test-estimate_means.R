@@ -78,5 +78,37 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
     estim <- estimate_means(model, fixed = "Petal.Length_factor='B'")
     testthat::expect_true(as.character(unique(estim$Petal.Length_factor)) == "B")
+
+
+    # Three factors
+    data <- mtcars
+    data[c("gear", "vs", "am")] <- sapply(data[c("gear", "vs", "am")], as.factor)
+    model <- lm(mpg ~ gear * vs * am, data = data)
+
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 7))
+    estim <- estimate_means(model, fixed="am")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 7))
+    estim <- estimate_means(model, fixed="gear='5'")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
+
+    # Mixed models
+    if (require("lme4")) {
+
+      data <- iris
+      data$Petal.Length_factor <- as.factor(ifelse(data$Petal.Length < 4.2, "A", "B"))
+
+      model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+
+      estim <- estimate_means(model)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+    }
+
+    # GLM
+    model <- glm(Petal.Length_factor ~ Species, data = data, family="binomial")
+
+    estim <- estimate_means(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+
   })
 }

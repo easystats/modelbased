@@ -18,5 +18,4 @@ Tries to convert vector to numeric if possible. Otherwise, leaves it as is.
 \examples{
 as.numeric_ifnumeric(c("1", "2"))
 as.numeric_ifnumeric(c("1", "2", "A"))
-
 }

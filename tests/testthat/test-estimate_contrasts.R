@@ -64,6 +64,21 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_contrasts(model, levels = "Petal.Length=c(2, 3, 4)")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
 
+
+    # Three factors
+    data <- mtcars
+    data[c("gear", "vs", "am")] <- sapply(data[c("gear", "vs", "am")], as.factor)
+    model <- lm(mpg ~ gear * vs * am, data = data)
+
+    estim <- estimate_contrasts(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(66, 10))
+    estim <- estimate_contrasts(model, fixed="gear")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
+    estim <- estimate_contrasts(model, fixed="gear='5'")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
+
+
+
     # Mixed models
     if (require("lme4")) {
       data <- iris
