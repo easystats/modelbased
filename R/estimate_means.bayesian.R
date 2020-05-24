@@ -56,14 +56,15 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @importFrom insight find_response
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.89, ci_method = "hdi", ...) {
+estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
   posteriors <- emmeans::as.mcmc.emmGrid(estimated)
   posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
   means <- .summarize_posteriors(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
+  means <- .clean_names_bayesian(means, model, transform, type="mean")
 
   # Format means
   levelcols <- strsplit(as.character(means$Parameter), ", ")

@@ -82,7 +82,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
 #' @importFrom stats confint
 #' @importFrom emmeans emtrends
 #' @keywords internal
-.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.95, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -129,7 +129,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
     slopes <- cbind(params, slopes)
   } else {
     params <- as.data.frame(stats::confint(trends, levels = ci, ...))
-    slopes <- .clean_emmeans_frequentist(params)
+    slopes <- .clean_names_frequentist(params)
     names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
   }
 

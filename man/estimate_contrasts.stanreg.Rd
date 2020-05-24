@@ -14,7 +14,7 @@
   standardize = TRUE,
   standardize_robust = FALSE,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   test = c("pd", "rope"),
   rope_range = "default",

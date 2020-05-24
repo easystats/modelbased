@@ -72,7 +72,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @importFrom bayestestR describe_posterior
 #' @importFrom insight find_response
 #' @export
-estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.95, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
   posteriors <- emmeans::contrast(estimated,
@@ -87,8 +87,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
     centrality = centrality,
     test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
   )
+  contrasts <- .clean_names_bayesian(contrasts, model, transform, type="contrast")
   # Standardized differences
-  if (standardize) {
+  if (standardize & transform != "response") {
     contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
   }
 
