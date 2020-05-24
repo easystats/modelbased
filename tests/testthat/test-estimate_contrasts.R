@@ -28,12 +28,17 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       # GLM
       df <- iris
       df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B")))-1
-      model <- rstanarm::stan_glm(y ~ Species, family='binomial', data=df, refresh = 0)
+      model <- rstanarm::stan_glm(y ~ Species, family='binomial', data=df, refresh = 0,
+                                  prior = rstanarm::normal(scale = 0.5))
 
       estim <- estimate_contrasts(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
       estim <- estimate_contrasts(model, transform="response")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
+
+      testthat::expect_error(estimate_contrasts(model, test = "bf"), regexp = NA)
+      testthat::expect_error(estimate_contrasts(model, transform = "response", test = "bf"), regexp = NA)
+
 
     }
 
