@@ -5,6 +5,7 @@
 #' @keywords internal
 .clean_names_frequentist <- function(means) {
   names(means)[names(means) == "emmean"] <- "Mean"
+  names(means)[names(means) == "response"] <- "Mean"
   names(means)[names(means) == "prob"] <- "Probability"
   names(means)[names(means) == "estimate"] <- "Difference"
   names(means)[names(means) == "odds.ratio"] <- "Odds_ratio"
@@ -42,4 +43,20 @@
   }
 
   means
+}
+
+#' @keywords internal
+.format_names_contrasts <- function(model, levelcols, transform="response") {
+  if(transform == "response" & insight::model_info(model)$is_logit){
+    levelcols <- strsplit(as.character(levelcols$Contrast), "/")
+  } else{
+    levelcols <- strsplit(as.character(levelcols$Contrast), "-")
+  }
+  levelcols <- lapply(levelcols, trimws)
+
+  levelcols <- data.frame(do.call(rbind, levelcols))
+  names(levelcols) <- c("Level1", "Level2")
+  levelcols$Level1 <- gsub(",", " - ", levelcols$Level1)
+  levelcols$Level2 <- gsub(",", " - ", levelcols$Level2)
+  levelcols
 }

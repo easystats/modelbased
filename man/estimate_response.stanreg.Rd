@@ -19,7 +19,7 @@
   draws = NULL,
   seed = NULL,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   ...
 )
@@ -36,7 +36,7 @@
   draws = NULL,
   seed = NULL,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   ...
 )
@@ -53,7 +53,7 @@
   draws = NULL,
   seed = NULL,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   ...
 )
@@ -70,7 +70,7 @@
   draws = NULL,
   seed = NULL,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   ...
 )

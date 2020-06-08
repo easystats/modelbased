@@ -12,7 +12,7 @@
   transform = "response",
   length = 10,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   ...
 )

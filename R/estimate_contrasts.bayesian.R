@@ -115,11 +115,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
 
   # Format contrasts names
-  levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
-  levelcols <- data.frame(do.call(rbind, levelcols))
-  names(levelcols) <- c("Level1", "Level2")
-  levelcols$Level1 <- gsub(",", " - ", levelcols$Level1)
-  levelcols$Level2 <- gsub(",", " - ", levelcols$Level2)
+  levelcols <- .format_names_contrasts(model, levelcols, transform=transform)
 
   contrasts$Parameter <- NULL
   if (nrow(others) != nrow(levelcols)) {

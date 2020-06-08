@@ -125,6 +125,11 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+
+      model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data, family="Gamma")
+
+      estim <- estimate_means(model)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
     }
 
     # GLM
@@ -135,6 +140,10 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
     estim <- estimate_means(model, transform="none")
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
+
+    model <- glm(Petal.Length ~ Species, data = iris, family="Gamma")
+    estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
 
   })

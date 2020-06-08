@@ -34,11 +34,13 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       estim <- estimate_contrasts(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
       estim <- estimate_contrasts(model, transform="response")
-      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 7))
 
-      testthat::expect_error(estimate_contrasts(model, test = "bf"), regexp = NA)
-      testthat::expect_error(estimate_contrasts(model, transform = "response", test = "bf"), regexp = NA)
-
+      library(logspline)
+      estim <- estimate_contrasts(model, test = "bf")
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 7))
+      estim <- estimate_contrasts(model, transform = "response", test = "bf")
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
 
     }
 
