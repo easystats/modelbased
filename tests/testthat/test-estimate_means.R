@@ -30,12 +30,12 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(30, 5))
 
       df <- iris
-      df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B")))-1
-      model <- rstanarm::stan_glm(y ~ Species, family='binomial', data=df, refresh = 0)
+      df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))) - 1
+      model <- rstanarm::stan_glm(y ~ Species, family = "binomial", data = df, refresh = 0)
 
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
-      estim <- estimate_means(model, transform="response")
+      estim <- estimate_means(model, transform = "response")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
     }
 
@@ -94,9 +94,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 7))
-    estim <- estimate_means(model, fixed="am")
+    estim <- estimate_means(model, fixed = "am")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 7))
-    estim <- estimate_means(model, fixed="gear='5'")
+    estim <- estimate_means(model, fixed = "gear='5'")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
 
     data <- iris
@@ -104,20 +104,19 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
     data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
 
-    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data=data)
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = data)
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(8, 7))
-    estim <- estimate_means(model, fixed="factor3")
+    estim <- estimate_means(model, fixed = "factor3")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
-    estim <- estimate_means(model, fixed="factor3='F'")
+    estim <- estimate_means(model, fixed = "factor3='F'")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(4, 7))
-    estim <- estimate_means(model, modulate="factor2")
+    estim <- estimate_means(model, modulate = "factor2")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(8, 7))
 
 
     # Mixed models
     if (require("lme4")) {
-
       data <- iris
       data$Petal.Length_factor <- as.factor(ifelse(data$Petal.Length < 4.2, "A", "B"))
 
@@ -126,7 +125,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
 
-      model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data, family="Gamma")
+      model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data, family = "Gamma")
 
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
@@ -135,16 +134,15 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     # GLM
     data <- iris
     data$Petal.Length_factor <- as.factor(ifelse(data$Petal.Length < 4.2, "A", "B"))
-    model <- glm(Petal.Length_factor ~ Species, data = data, family="binomial")
+    model <- glm(Petal.Length_factor ~ Species, data = data, family = "binomial")
 
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
-    estim <- estimate_means(model, transform="none")
+    estim <- estimate_means(model, transform = "none")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
 
-    model <- glm(Petal.Length ~ Species, data = iris, family="Gamma")
+    model <- glm(Petal.Length ~ Species, data = iris, family = "Gamma")
     estim <- estimate_means(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 5))
-
   })
 }

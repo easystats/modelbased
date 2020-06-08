@@ -79,7 +79,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -164,7 +164,7 @@
   <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
   <span class='no'>...</span>
 )
@@ -182,7 +182,7 @@
   <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
   <span class='no'>...</span>
 )
@@ -200,7 +200,7 @@
   <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
   <span class='no'>...</span>
 )
@@ -218,7 +218,7 @@
   <span class='kw'>draws</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>centrality</span> <span class='kw'>=</span> <span class='st'>"median"</span>,
-  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.89</span>,
+  <span class='kw'>ci</span> <span class='kw'>=</span> <span class='fl'>0.95</span>,
   <span class='kw'>ci_method</span> <span class='kw'>=</span> <span class='st'>"hdi"</span>,
   <span class='no'>...</span>
 )</pre>
@@ -328,9 +328,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.547 seconds (Warm-up)
-#&gt; Chain 1:                0.534 seconds (Sampling)
-#&gt; Chain 1:                1.081 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.564 seconds (Warm-up)
+#&gt; Chain 1:                0.613 seconds (Sampling)
+#&gt; Chain 1:                1.177 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -353,9 +353,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.557 seconds (Warm-up)
-#&gt; Chain 2:                0.654 seconds (Sampling)
-#&gt; Chain 2:                1.211 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.572 seconds (Warm-up)
+#&gt; Chain 2:                0.514 seconds (Sampling)
+#&gt; Chain 2:                1.086 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -378,9 +378,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.577 seconds (Warm-up)
-#&gt; Chain 3:                0.571 seconds (Sampling)
-#&gt; Chain 3:                1.148 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.585 seconds (Warm-up)
+#&gt; Chain 3:                0.474 seconds (Sampling)
+#&gt; Chain 3:                1.059 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -403,9 +403,9 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.52 seconds (Warm-up)
-#&gt; Chain 4:                0.613 seconds (Sampling)
-#&gt; Chain 4:                1.133 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.548 seconds (Warm-up)
+#&gt; Chain 4:                0.566 seconds (Sampling)
+#&gt; Chain 4:                1.114 seconds (Total)
 #&gt; Chain 4: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
@@ -428,9 +428,9 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 1.535 seconds (Warm-up)
-#&gt; Chain 1:                1.232 seconds (Sampling)
-#&gt; Chain 1:                2.767 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 1.506 seconds (Warm-up)
+#&gt; Chain 1:                1.465 seconds (Sampling)
+#&gt; Chain 1:                2.971 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
@@ -453,9 +453,9 @@
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 1.575 seconds (Warm-up)
-#&gt; Chain 2:                1.306 seconds (Sampling)
-#&gt; Chain 2:                2.881 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 1.491 seconds (Warm-up)
+#&gt; Chain 2:                1.468 seconds (Sampling)
+#&gt; Chain 2:                2.959 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
@@ -478,9 +478,9 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 1.554 seconds (Warm-up)
-#&gt; Chain 3:                1.292 seconds (Sampling)
-#&gt; Chain 3:                2.846 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 1.535 seconds (Warm-up)
+#&gt; Chain 3:                1.463 seconds (Sampling)
+#&gt; Chain 3:                2.998 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
@@ -503,11 +503,12 @@
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 1.482 seconds (Warm-up)
-#&gt; Chain 4:                1.494 seconds (Sampling)
-#&gt; Chain 4:                2.976 seconds (Total)
-#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>Compiling the C++ model</span></div><div class='output co'>#&gt; <span class='message'>recompiling to avoid crashing R session</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; 
-#&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 1).
+#&gt; Chain 4:  Elapsed Time: 1.533 seconds (Warm-up)
+#&gt; Chain 4:                1.648 seconds (Sampling)
+#&gt; Chain 4:                3.181 seconds (Total)
+#&gt; Chain 4: </div><div class='output co'>#&gt; <span class='warning'>Warning: There were 2 divergent transitions after warmup. Increasing adapt_delta above 0.95 may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Examine the pairs() plot to diagnose sampling problems</span></div><div class='output co'>#&gt; <span class='message'>Compiling the C++ model</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; 
+#&gt; SAMPLING FOR MODEL '41ad373e93cb15b3569caf639d15141c' NOW (CHAIN 1).
 #&gt; Chain 1: 
 #&gt; Chain 1: Gradient evaluation took 0 seconds
 #&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -527,12 +528,12 @@
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.021 seconds (Warm-up)
-#&gt; Chain 1:                0.042 seconds (Sampling)
-#&gt; Chain 1:                0.063 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.026 seconds (Warm-up)
+#&gt; Chain 1:                0.038 seconds (Sampling)
+#&gt; Chain 1:                0.064 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
-#&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 2).
+#&gt; SAMPLING FOR MODEL '41ad373e93cb15b3569caf639d15141c' NOW (CHAIN 2).
 #&gt; Chain 2: 
 #&gt; Chain 2: Gradient evaluation took 0 seconds
 #&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -553,11 +554,11 @@
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
 #&gt; Chain 2:  Elapsed Time: 0.023 seconds (Warm-up)
-#&gt; Chain 2:                0.022 seconds (Sampling)
-#&gt; Chain 2:                0.045 seconds (Total)
+#&gt; Chain 2:                0.021 seconds (Sampling)
+#&gt; Chain 2:                0.044 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
-#&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 3).
+#&gt; SAMPLING FOR MODEL '41ad373e93cb15b3569caf639d15141c' NOW (CHAIN 3).
 #&gt; Chain 3: 
 #&gt; Chain 3: Gradient evaluation took 0 seconds
 #&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -577,12 +578,12 @@
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.021 seconds (Warm-up)
-#&gt; Chain 3:                0.023 seconds (Sampling)
-#&gt; Chain 3:                0.044 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.022 seconds (Warm-up)
+#&gt; Chain 3:                0.036 seconds (Sampling)
+#&gt; Chain 3:                0.058 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
-#&gt; SAMPLING FOR MODEL '5773b78a6fe64a304d84ec36d58c7c69' NOW (CHAIN 4).
+#&gt; SAMPLING FOR MODEL '41ad373e93cb15b3569caf639d15141c' NOW (CHAIN 4).
 #&gt; Chain 4: 
 #&gt; Chain 4: Gradient evaluation took 0 seconds
 #&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0 seconds.
@@ -606,31 +607,31 @@
 #&gt; Chain 4:                0.022 seconds (Sampling)
 #&gt; Chain 4:                0.044 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt;    Petal.Length   Median   CI_low  CI_high
-#&gt; 1      1.000000 3.349734 3.248486 3.440138
-#&gt; 2      1.245833 3.323630 3.234887 3.414473
-#&gt; 3      1.491667 3.297483 3.217512 3.385378
-#&gt; 4      1.737500 3.271412 3.196388 3.352658
-#&gt; 5      1.983333 3.245616 3.173400 3.319653
-#&gt; 6      2.229167 3.219807 3.152801 3.289613
-#&gt; 7      2.475000 3.193544 3.129778 3.258166
-#&gt; 8      2.720833 3.167191 3.105142 3.226260
-#&gt; 9      2.966667 3.141280 3.084457 3.200852
-#&gt; 10     3.212500 3.114938 3.059356 3.171209
-#&gt; 11     3.458333 3.089038 3.032142 3.139500
-#&gt; 12     3.704167 3.062617 3.011761 3.116026
-#&gt; 13     3.950000 3.036596 2.985792 3.090350
-#&gt; 14     4.195833 3.010646 2.957293 3.064523
-#&gt; 15     4.441667 2.984965 2.928620 3.041372
-#&gt; 16     4.687500 2.959014 2.902875 3.021613
-#&gt; 17     4.933333 2.933226 2.874369 3.000468
-#&gt; 18     5.179167 2.907332 2.839148 2.973182
-#&gt; 19     5.425000 2.881167 2.804864 2.949321
-#&gt; 20     5.670833 2.855023 2.773002 2.929130
-#&gt; 21     5.916667 2.828779 2.745734 2.912756
-#&gt; 22     6.162500 2.803008 2.713785 2.892247
-#&gt; 23     6.408333 2.777177 2.673399 2.864007
-#&gt; 24     6.654167 2.750981 2.642521 2.844756
-#&gt; 25     6.900000 2.724604 2.611051 2.825082</div><div class='input'># }
+#&gt; 1      1.000000 3.350221 3.226839 3.461433
+#&gt; 2      1.245833 3.324106 3.209060 3.428509
+#&gt; 3      1.491667 3.298335 3.192304 3.398032
+#&gt; 4      1.737500 3.272169 3.181559 3.372423
+#&gt; 5      1.983333 3.246093 3.161059 3.338556
+#&gt; 6      2.229167 3.219952 3.138533 3.305303
+#&gt; 7      2.475000 3.194165 3.112991 3.269487
+#&gt; 8      2.720833 3.168070 3.095344 3.241514
+#&gt; 9      2.966667 3.141945 3.074075 3.211935
+#&gt; 10     3.212500 3.116193 3.053150 3.186210
+#&gt; 11     3.458333 3.090036 3.026799 3.155760
+#&gt; 12     3.704167 3.063503 3.003394 3.129245
+#&gt; 13     3.950000 3.037633 2.977873 3.103403
+#&gt; 14     4.195833 3.012254 2.948479 3.077697
+#&gt; 15     4.441667 2.986112 2.916061 3.050907
+#&gt; 16     4.687500 2.960357 2.887227 3.028520
+#&gt; 17     4.933333 2.934642 2.858010 3.007327
+#&gt; 18     5.179167 2.908199 2.828995 2.989147
+#&gt; 19     5.425000 2.882113 2.792630 2.964074
+#&gt; 20     5.670833 2.855860 2.760717 2.945467
+#&gt; 21     5.916667 2.829691 2.728597 2.926016
+#&gt; 22     6.162500 2.803451 2.699789 2.910156
+#&gt; 23     6.408333 2.777377 2.662129 2.887899
+#&gt; 24     6.654167 2.751467 2.626543 2.865852
+#&gt; 25     6.900000 2.725177 2.598197 2.850994</div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

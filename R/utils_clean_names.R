@@ -23,21 +23,20 @@
 
 
 #' @keywords internal
-.clean_names_bayesian <- function(means, model, transform, type="mean") {
+.clean_names_bayesian <- function(means, model, transform, type = "mean") {
   vars <- names(means)[names(means) %in% c("Median", "Mean", "MAP")]
-  if(length(vars) == 1){
-    if(type == "contrast"){
-      if(insight::model_info(model)$is_logit & transform == "response"){
-        names(means)[names(means)==vars] <- "Odds_Ratio"
-      } else{
-        names(means)[names(means)==vars] <- "Difference"
-      }
-
-    } else{
-      if(insight::model_info(model)$is_logit & transform == "response"){
-        names(means)[names(means)==vars] <- "Probability"
+  if (length(vars) == 1) {
+    if (type == "contrast") {
+      if (insight::model_info(model)$is_logit & transform == "response") {
+        names(means)[names(means) == vars] <- "Odds_Ratio"
       } else {
-        names(means)[names(means)==vars] <- "Mean"
+        names(means)[names(means) == vars] <- "Difference"
+      }
+    } else {
+      if (insight::model_info(model)$is_logit & transform == "response") {
+        names(means)[names(means) == vars] <- "Probability"
+      } else {
+        names(means)[names(means) == vars] <- "Mean"
       }
     }
   }
@@ -46,10 +45,10 @@
 }
 
 #' @keywords internal
-.format_names_contrasts <- function(model, levelcols, transform="response") {
-  if(transform == "response" & insight::model_info(model)$is_logit){
+.format_names_contrasts <- function(model, levelcols, transform = "response") {
+  if (transform == "response" & insight::model_info(model)$is_logit) {
     levelcols <- strsplit(as.character(levelcols$Contrast), "/")
-  } else{
+  } else {
     levelcols <- strsplit(as.character(levelcols$Contrast), "-")
   }
   levelcols <- lapply(levelcols, trimws)

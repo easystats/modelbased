@@ -32,21 +32,23 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @examples
 #' library(modelbased)
 #' \donttest{
-#' data <- iris
-#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
+#' data <- mtcars
+#' data$cyl <- as.factor(data$cyl)
+#' data$am <- as.factor(data$am)
 #'
 #' if (require("rstanarm")) {
-#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   model <- stan_glm(Sepal.Width ~ cyl * am, data = data, refresh=0)
 #'   estimate_means(model)
 #'
-#'   model <- stan_glm(Petal.Length ~ Sepal.Width * Species, data = iris)
+#'   model <- stan_glm(Petal.Length ~ cyl * wt, data = iris, refresh=0)
 #'   estimate_means(model)
-#'   estimate_means(model, modulate = "Sepal.Width")
-#'   estimate_means(model, fixed = "Sepal.Width")
+#'   estimate_means(model, modulate = "wt")
+#'   estimate_means(model, fixed = "wt")
 #' }
 #'
 #' if (require("brms")) {
-#'   model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   model <- brm(Sepal.Width ~ cyl * am, data = data, refresh=0)
 #'   estimate_means(model)
 #' }
 #' }
@@ -64,7 +66,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
 
   # Summary
   means <- .summarize_posteriors(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
-  means <- .clean_names_bayesian(means, model, transform, type="mean")
+  means <- .clean_names_bayesian(means, model, transform, type = "mean")
 
   # Format means
   levelcols <- strsplit(as.character(means$Parameter), ", ")

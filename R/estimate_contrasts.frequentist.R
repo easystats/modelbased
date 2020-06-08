@@ -77,7 +77,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
 
   # Format contrasts names
-  levelcols <- .format_names_contrasts(model, levelcols, transform=transform)
+  levelcols <- .format_names_contrasts(model, levelcols, transform = transform)
 
   contrasts$contrast <- NULL
   if (nrow(others) != nrow(levelcols)) {

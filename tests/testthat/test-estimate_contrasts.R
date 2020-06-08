@@ -27,13 +27,15 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
       # GLM
       df <- iris
-      df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B")))-1
-      model <- rstanarm::stan_glm(y ~ Species, family='binomial', data=df, refresh = 0,
-                                  prior = rstanarm::normal(scale = 0.5))
+      df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))) - 1
+      model <- rstanarm::stan_glm(y ~ Species,
+        family = "binomial", data = df, refresh = 0,
+        prior = rstanarm::normal(scale = 0.5)
+      )
 
       estim <- estimate_contrasts(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 8))
-      estim <- estimate_contrasts(model, transform="response")
+      estim <- estimate_contrasts(model, transform = "response")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 7))
 
       library(logspline)
@@ -41,7 +43,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 7))
       estim <- estimate_contrasts(model, transform = "response", test = "bf")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 6))
-
     }
 
 
@@ -96,9 +97,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
     estim <- estimate_contrasts(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(66, 10))
-    estim <- estimate_contrasts(model, fixed="gear")
+    estim <- estimate_contrasts(model, fixed = "gear")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
-    estim <- estimate_contrasts(model, fixed="gear='5'")
+    estim <- estimate_contrasts(model, fixed = "gear='5'")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
 
 
@@ -107,15 +108,15 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
     data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
 
-    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data=data)
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = data)
 
     estim <- estimate_contrasts(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(28, 10))
-    estim <- estimate_contrasts(model, fixed="factor3")
+    estim <- estimate_contrasts(model, fixed = "factor3")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
-    estim <- estimate_contrasts(model, fixed="factor3='F'")
+    estim <- estimate_contrasts(model, fixed = "factor3='F'")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 11))
-    estim <- estimate_contrasts(model, modulate="factor3")
+    estim <- estimate_contrasts(model, modulate = "factor3")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(12, 11))
 
 
@@ -133,12 +134,11 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     # GLM
     df <- iris
     df$y <- as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))
-    model <- glm(y ~ Species, family='binomial', data=df)
+    model <- glm(y ~ Species, family = "binomial", data = df)
 
     estim <- estimate_contrasts(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
-    estim <- estimate_contrasts(model, transform="response")
+    estim <- estimate_contrasts(model, transform = "response")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
-
   })
 }
