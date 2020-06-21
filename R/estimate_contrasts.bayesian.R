@@ -60,7 +60,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' }
 #'
 #' if (require("brms")) {
-#'   model <- brm(Sepal.Width ~ cyl * am, data = data, refresh=0)
+#'   model <- brm(mpg ~ cyl * am, data = data, refresh=0)
 #'   estimate_contrasts(model)
 #' }
 #' }

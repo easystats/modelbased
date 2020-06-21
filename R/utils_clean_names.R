@@ -49,7 +49,7 @@
   if (transform == "response" & insight::model_info(model)$is_logit) {
     levelcols <- strsplit(as.character(levelcols$Contrast), "/")
   } else {
-    levelcols <- strsplit(as.character(levelcols$Contrast), "-")
+    levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
   }
   levelcols <- lapply(levelcols, trimws)
 
