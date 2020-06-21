@@ -16,7 +16,7 @@
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response.glm <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {
+estimate_response.glm <- function(model, data = NULL, transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
 
   prediction <- predict_wrapper(model,

@@ -75,14 +75,12 @@ predict_wrapper.polr <- function(model, newdata = NULL, ...) {
 
 #' @keywords internal
 predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = NULL, transform = "response", ...) {
-  if (is.na(re.form)) {
+  if (!is.null(re.form) && is.na(re.form)) {
     if (!is.null(ci)) {
       warning("CI cannot be computed for mixed models when no random effects present in data. Provide some data with random effects, or set `ci = NULL`.")
       ci <- NULL
     }
   }
-
-
 
   if (is.null(ci)) {
     # type <- ifelse(transform == "response", TRUE, FALSE)

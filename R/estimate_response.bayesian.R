@@ -60,7 +60,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Checks
   if (any(class(model) == "stanreg") & !requireNamespace("rstanarm", quietly = TRUE)) {

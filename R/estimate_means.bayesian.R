@@ -38,17 +38,17 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' data$am <- as.factor(data$am)
 #'
 #' if (require("rstanarm")) {
-#'   model <- stan_glm(Sepal.Width ~ cyl * am, data = data, refresh=0)
+#'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh=0)
 #'   estimate_means(model)
 #'
-#'   model <- stan_glm(Petal.Length ~ cyl * wt, data = iris, refresh=0)
+#'   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh=0)
 #'   estimate_means(model)
 #'   estimate_means(model, modulate = "wt")
 #'   estimate_means(model, fixed = "wt")
 #' }
 #'
 #' if (require("brms")) {
-#'   model <- brm(Sepal.Width ~ cyl * am, data = data, refresh=0)
+#'   model <- brm(mpg ~ cyl * am, data = data, refresh=0)
 #'   estimate_means(model)
 #' }
 #' }
