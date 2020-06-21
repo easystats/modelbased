@@ -44,7 +44,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
   # Summary
   contrasts <- as.data.frame(merge(as.data.frame(contrasts), stats::confint(contrasts, level = ci, adjust = adjust)))
-  contrasts <- .clean_emmeans_frequentist(contrasts)
+  contrasts <- .clean_names_frequentist(contrasts)
 
   # Reorder columns
   order_SE <- grep("SE", names(contrasts))
@@ -52,7 +52,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
   contrasts <- cbind(contrasts[c(1:order_SE)], contrasts[col_order[col_order %in% names(contrasts)]])
 
   # Standardized differences
-  if (standardize) {
+  if (standardize & transform != "response") {
     contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
   }
 
@@ -77,11 +77,7 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
 
   # Format contrasts names
-  levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
-  levelcols <- data.frame(do.call(rbind, levelcols))
-  names(levelcols) <- c("Level1", "Level2")
-  levelcols$Level1 <- gsub(",", " - ", levelcols$Level1)
-  levelcols$Level2 <- gsub(",", " - ", levelcols$Level2)
+  levelcols <- .format_names_contrasts(model, levelcols, transform = transform)
 
   contrasts$contrast <- NULL
   if (nrow(others) != nrow(levelcols)) {

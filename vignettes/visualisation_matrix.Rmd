@@ -73,7 +73,7 @@ library(modelbased)
 visualisation_matrix(iris["Sepal.Length"])
 ```
 
-If we pass a numeric variable to the function, it will return a vector of **equally spread points** (having the same range (*i.e.*, minimum and maximum) than the original data). The default **length** is 10, but we can adjust that through the `length` argument. Let's generate predictions using this reference grid of the predictor.
+If we pass a numeric variable to the function, it will return a vector of **equally spread points** (having the same range, i.e., the same minimum and maximum, than the original data). The default **length** is 10, but we can adjust that through the `length` argument. Let's generate predictions using this reference grid of the predictor.
 
 ```{r message=FALSE, warning=FALSE}
 newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)

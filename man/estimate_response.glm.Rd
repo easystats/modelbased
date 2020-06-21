@@ -9,7 +9,7 @@
   model,
   data = NULL,
   transform = "response",
-  random = FALSE,
+  random = TRUE,
   length = 25,
   preserve_range = TRUE,
   predict = "response",

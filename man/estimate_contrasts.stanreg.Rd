@@ -14,7 +14,7 @@
   standardize = TRUE,
   standardize_robust = FALSE,
   centrality = "median",
-  ci = 0.89,
+  ci = 0.95,
   ci_method = "hdi",
   test = c("pd", "rope"),
   rope_range = "default",
@@ -73,30 +73,30 @@ Estimate contrasts
 }
 \examples{
 library(modelbased)
+
+data <- mtcars
+data$cyl <- as.factor(data$cyl)
+data$am <- as.factor(data$am)
+
 \donttest{
 if (require("rstanarm")) {
-  data <- iris
-  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-  model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  model <- stan_glm(mpg ~ cyl * am, data = data, refresh=0)
   estimate_contrasts(model)
-  estimate_contrasts(model, fixed = "Petal.Length_factor")
+  estimate_contrasts(model, fixed = "am")
 
-  model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
+  model <- stan_glm(mpg ~ cyl * wt, data = data, refresh=0)
   estimate_contrasts(model)
-  estimate_contrasts(model, fixed = "Petal.Width")
-  estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-  estimate_contrasts(model, levels = "Petal.Width", length = 4)
+  estimate_contrasts(model, fixed = "wt")
+  estimate_contrasts(model, modulate = "wt", length = 4)
+  estimate_contrasts(model, levels = "wt", length = 4)
 
-  model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
+  model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh=0)
   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 }
 
 if (require("brms")) {
-  data <- iris
-  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-
-  model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+  model <- brm(mpg ~ cyl * am, data = data, refresh=0)
   estimate_contrasts(model)
 }
 }

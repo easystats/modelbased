@@ -37,30 +37,30 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #'
 #' @examples
 #' library(modelbased)
+#'
+#' data <- mtcars
+#' data$cyl <- as.factor(data$cyl)
+#' data$am <- as.factor(data$am)
+#'
 #' \donttest{
 #' if (require("rstanarm")) {
-#'   data <- iris
-#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh=0)
 #'   estimate_contrasts(model)
-#'   estimate_contrasts(model, fixed = "Petal.Length_factor")
+#'   estimate_contrasts(model, fixed = "am")
 #'
-#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
+#'   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh=0)
 #'   estimate_contrasts(model)
-#'   estimate_contrasts(model, fixed = "Petal.Width")
-#'   estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-#'   estimate_contrasts(model, levels = "Petal.Width", length = 4)
+#'   estimate_contrasts(model, fixed = "wt")
+#'   estimate_contrasts(model, modulate = "wt", length = 4)
+#'   estimate_contrasts(model, levels = "wt", length = 4)
 #'
-#'   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris)
+#'   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh=0)
 #'   estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
 #' }
 #'
 #' if (require("brms")) {
-#'   data <- iris
-#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-#'
-#'   model <- brm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+#'   model <- brm(mpg ~ cyl * am, data = data, refresh=0)
 #'   estimate_contrasts(model)
 #' }
 #' }
@@ -72,7 +72,7 @@ estimate_contrasts <- function(model, levels = NULL, fixed = NULL, modulate = NU
 #' @importFrom bayestestR describe_posterior
 #' @importFrom insight find_response
 #' @export
-estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.89, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
+estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "none", length = 10, standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.95, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
   posteriors <- emmeans::contrast(estimated,
@@ -87,8 +87,9 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
     centrality = centrality,
     test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
   )
+  contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
   # Standardized differences
-  if (standardize) {
+  if (standardize & transform != "response") {
     contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
   }
 
@@ -114,11 +115,7 @@ estimate_contrasts.stanreg <- function(model, levels = NULL, fixed = NULL, modul
 
 
   # Format contrasts names
-  levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
-  levelcols <- data.frame(do.call(rbind, levelcols))
-  names(levelcols) <- c("Level1", "Level2")
-  levelcols$Level1 <- gsub(",", " - ", levelcols$Level1)
-  levelcols$Level2 <- gsub(",", " - ", levelcols$Level2)
+  levelcols <- .format_names_contrasts(model, levelcols, transform = transform)
 
   contrasts$Parameter <- NULL
   if (nrow(others) != nrow(levelcols)) {

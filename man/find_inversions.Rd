@@ -19,5 +19,4 @@ Find points of inversion of a curve.
 x <- sin(seq(0, 4 * pi, length.out = 100))
 plot(x, type = "b")
 find_inversions(x)
-
 }

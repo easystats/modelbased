@@ -31,12 +31,12 @@
 #' @export
 estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ci = 0.95, ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform, length = length, ...)
+  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
 
   # Clean and rename
   means <- as.data.frame(stats::confint(estimated, level = ci))
   if ("df" %in% names(means)) means$df <- NULL
-  means <- .clean_emmeans_frequentist(means)
+  means <- .clean_names_frequentist(means)
 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))

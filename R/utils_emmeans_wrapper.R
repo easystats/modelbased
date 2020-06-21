@@ -52,30 +52,9 @@
   }
 
   # Get emmeans refgrid
-  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data = data, ...))
+  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data = data, nesting = NULL, ...))
 
   # Run emmeans
-  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, transform = transform, ...)
-  means
-}
-
-
-
-# Utils frequentist cleaning ----------------------------------------------
-
-
-
-#' @keywords internal
-.clean_emmeans_frequentist <- function(means) {
-  names(means)[names(means) == "emmean"] <- "Mean"
-  names(means)[names(means) == "prob"] <- "Probability"
-  names(means)[names(means) == "estimate"] <- "Difference"
-  names(means)[names(means) == "t.ratio"] <- "t"
-  names(means)[names(means) == "z.ratio"] <- "z"
-  names(means)[names(means) == "p.value"] <- "p"
-  names(means)[names(means) == "lower.CL"] <- "CI_low"
-  names(means)[names(means) == "upper.CL"] <- "CI_high"
-  names(means)[names(means) == "asymp.LCL"] <- "CI_low"
-  names(means)[names(means) == "asymp.UCL"] <- "CI_high"
+  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)
   means
 }

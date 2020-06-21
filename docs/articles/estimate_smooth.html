@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
       </span>
     </div>
 
@@ -121,29 +121,29 @@
 <h1 class="hasAnchor">
 <a href="#estimate_smooth" class="anchor"></a>estimate_smooth</h1>
 <p>Let’s start by creating a very simple dataset:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">x =</span> <span class="dv">-50</span><span class="op">:</span><span class="dv">50</span>)  <span class="co"># Generate dataframe with one variable x</span></a>
-<a class="sourceLine" id="cb1-2" title="2">data<span class="op">$</span>y &lt;-<span class="st"> </span>data<span class="op">$</span>x<span class="op">^</span><span class="dv">2</span>  <span class="co"># Add a variable y</span></a>
-<a class="sourceLine" id="cb1-3" title="3">data<span class="op">$</span>y &lt;-<span class="st"> </span>data<span class="op">$</span>y <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(data), <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">100</span>)  <span class="co"># Add some gaussian noise</span></a></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)  <span class="co"># For plotting</span></a>
-<a class="sourceLine" id="cb2-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)  <span class="co"># For nice themes</span></a>
-<a class="sourceLine" id="cb2-3" title="3"></a>
-<a class="sourceLine" id="cb2-4" title="4"><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-5" title="5"><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb2-6" title="6"><span class="st">  </span>see<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">x =</span> <span class="dv">-50</span><span class="op">:</span><span class="dv">50</span>)  <span class="co"># Generate dataframe with one variable x</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>data<span class="op">$</span>y &lt;-<span class="st"> </span>data<span class="op">$</span>x<span class="op">^</span><span class="dv">2</span>  <span class="co"># Add a variable y</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>data<span class="op">$</span>y &lt;-<span class="st"> </span>data<span class="op">$</span>y <span class="op">+</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(data), <span class="dt">mean =</span> <span class="dv">0</span>, <span class="dt">sd =</span> <span class="dv">100</span>)  <span class="co"># Add some gaussian noise</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)  <span class="co"># For plotting</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)  <span class="co"># For nice themes</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">ggplot</span>(data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="st">  </span>see<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()</span></code></pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-3-1.png" width="3281.25"></p>
 <p>Looking nice! Now let’s model this non-linear relationship using a <strong>polynomial</strong> term:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(x, <span class="dv">2</span>), <span class="dt">data =</span> data)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>model &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span>(y <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(x, <span class="dv">2</span>), <span class="dt">data =</span> data)</span></code></pre></div>
 <p>Let’s continue with <strong>visualising the fitted model</strong>:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
-<a class="sourceLine" id="cb4-2" title="2"></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> Predicted)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">"purple"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb4-6" title="6"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st">  </span><span class="co"># Add original data points</span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="st">  </span>see<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> Predicted)) <span class="op">+</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">"purple"</span>) <span class="op">+</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> data, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y)) <span class="op">+</span><span class="st">  </span><span class="co"># Add original data points</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="st">  </span>see<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()</span></code></pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-5-1.png" width="3281.25"></p>
 <p>Altough a visual representation is usually recommended, how can we <strong>verbally describe this relationship</strong>?</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(model)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(model)</span></code></pre></div>
 <pre><code>&gt; Part |  Start |   End |   Size |  Trend | Linearity
 &gt; ---------------------------------------------------
 &gt; 1    | -50.00 | -0.75 | 49.50% | -25.17 |      0.94
@@ -154,22 +154,22 @@
 <h1 class="hasAnchor">
 <a href="#real-application-effect-of-time-on-memory" class="anchor"></a>Real application: Effect of time on memory</h1>
 <p>We will download and use a dataset where participants had to answer questions about the movie <strong>Avengers: Age of ultron</strong> (combined into a <strong>memory score</strong>) a few days after watching it at the theater (the <strong>delay</strong> variable). Let’s visualise how the <code>Delay</code>, in days, influences the <code>Memory</code> score, by plotting the data points and a raw <em>loess</em> fit on this raw data.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</a>
-<a class="sourceLine" id="cb7-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</a>
-<a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</a>
-<a class="sourceLine" id="cb7-4" title="4"></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="co"># Load the data and filter out outliers</span></a>
-<a class="sourceLine" id="cb7-6" title="6">df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv"</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-7" title="7"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(Delay <span class="op">&lt;=</span><span class="st"> </span><span class="dv">14</span>,</a>
-<a class="sourceLine" id="cb7-8" title="8">         Memory <span class="op">&gt;=</span><span class="st"> </span><span class="dv">20</span>) </a>
-<a class="sourceLine" id="cb7-9" title="9"></a>
-<a class="sourceLine" id="cb7-10" title="10"><span class="co"># Plot the density of the point and a loess smooth line</span></a>
-<a class="sourceLine" id="cb7-11" title="11"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>Delay, <span class="dt">y=</span>Memory)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-12" title="12"><span class="st">  </span><span class="kw">stat_density_2d</span>(<span class="dt">geom =</span> <span class="st">"raster"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ..density..), <span class="dt">contour =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-13" title="13"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb7-14" title="14"><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-15" title="15"><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">"loess"</span>, <span class="dt">color =</span> <span class="st">"red"</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb7-16" title="16"><span class="st">  </span><span class="kw">theme_modern</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggplot2)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(dplyr)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(see)</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co"># Load the data and filter out outliers</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>df &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span>(<span class="st">"https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv"</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span>(Delay <span class="op">&lt;=</span><span class="st"> </span><span class="dv">14</span>,</span>
+<span id="cb7-8"><a href="#cb7-8"></a>         Memory <span class="op">&gt;=</span><span class="st"> </span><span class="dv">20</span>) </span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># Plot the density of the point and a loess smooth line</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(<span class="dt">x=</span>Delay, <span class="dt">y=</span>Memory)) <span class="op">+</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="st">  </span><span class="kw">stat_density_2d</span>(<span class="dt">geom =</span> <span class="st">"raster"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ..density..), <span class="dt">contour =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="st">  </span><span class="kw">scale_fill_viridis_c</span>() <span class="op">+</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="st">  </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">"loess"</span>, <span class="dt">color =</span> <span class="st">"red"</span>, <span class="dt">se =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="st">  </span><span class="kw">theme_modern</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>)</span></code></pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
 <p>Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the litterature suggestiong a 2nd order polynomial curve <span class="citation">(Averell and Heathcote 2011)</span>.</p>
 </div>
@@ -177,49 +177,49 @@
 <h1 class="hasAnchor">
 <a href="#modelling-non-linear-curves" class="anchor"></a>Modelling non-linear curves</h1>
 <p>We can fit a Bayesian linear mixed regression to model such relationship, adding it a few other variables that could influence this curve, such as the <strong>familiarity with the characters of the movie</strong>, the <strong>language of the movie</strong>, the <strong>immersion</strong> (2D/3D).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</a>
-<a class="sourceLine" id="cb8-2" title="2"></a>
-<a class="sourceLine" id="cb8-3" title="3">model &lt;-<span class="st"> </span><span class="kw">stan_lmer</span>(Memory <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(Delay, <span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>Characters_Familiarity <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Movie_Language) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Immersion), <span class="dt">data =</span> df)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(rstanarm)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>model &lt;-<span class="st"> </span><span class="kw">stan_lmer</span>(Memory <span class="op">~</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(Delay, <span class="dv">2</span>) <span class="op">*</span><span class="st"> </span>Characters_Familiarity <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Movie_Language) <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span><span class="op">|</span>Immersion), <span class="dt">data =</span> df)</span></code></pre></div>
 <p>We can visualise the link between the Delay and the Memory score by using the <code>estimate_link</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</a>
-<a class="sourceLine" id="cb9-2" title="2"></a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">target =</span> <span class="st">"Delay"</span>, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.50</span>, <span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.97</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-4" title="4"><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Delay, <span class="dt">y=</span>Median)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-5" title="5"><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">data =</span> df, <span class="kw">aes</span>(<span class="dt">y=</span>Memory), <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb9-6" title="6"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">97</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">97</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-7" title="7"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">89</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">89</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-8" title="8"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">69</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">69</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-9" title="9"><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">50</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">50</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-10" title="10"><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">"blue"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-11" title="11"><span class="st">  </span><span class="kw">theme_modern</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb9-12" title="12"><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Memory"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(modelbased)</span>
+<span id="cb9-2"><a href="#cb9-2"></a></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="kw"><a href="../reference/estimate_response.html">estimate_link</a></span>(model, <span class="dt">target =</span> <span class="st">"Delay"</span>, <span class="dt">ci =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.50</span>, <span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.97</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x=</span>Delay, <span class="dt">y=</span>Median)) <span class="op">+</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="st">  </span><span class="kw">geom_jitter</span>(<span class="dt">data =</span> df, <span class="kw">aes</span>(<span class="dt">y=</span>Memory), <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">height =</span> <span class="fl">0.2</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">97</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">97</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">89</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">89</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">69</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">69</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin =</span> CI_low_<span class="dv">50</span>, <span class="dt">ymax =</span> CI_high_<span class="dv">50</span>), <span class="dt">alpha =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="st">"blue"</span>) <span class="op">+</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">color =</span> <span class="st">"blue"</span>) <span class="op">+</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="st">  </span><span class="kw">theme_modern</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">"Memory"</span>)</span></code></pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
 <p>It seems that the memory score starts by decreasing, up to a point where it stabilizes (and even increases, which might be related by some other factors, such as discussions about the movie, watching of youtube reviews and such). <strong>But what is the point of change?</strong></p>
 </div>
 <div id="describing-smooth" class="section level1">
 <h1 class="hasAnchor">
 <a href="#describing-smooth" class="anchor"></a>Describing smooth</h1>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="kw"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(model, <span class="dt">smooth =</span> <span class="st">"Delay"</span>)</a></code></pre></div>
-<pre><code>&gt; Part | Start |   End |   Size | Trend | Linearity
-&gt; -------------------------------------------------
-&gt; 1    |  0.00 |  6.47 | 46.50% | -0.09 |      0.98
-&gt; 2    |  6.47 |  6.68 |  1.50% | -0.01 |      0.68
-&gt; 3    |  6.68 |  6.89 |  2.00% | -0.01 |      0.63
-&gt; 4    |  6.89 |  6.96 |  0.50% |       |          
-&gt; 5    |  6.96 |  7.18 |  2.00% | -0.01 |      0.77
-&gt; 6    |  7.18 |  7.25 |  0.50% |       |          
-&gt; 7    |  7.25 |  7.60 |  3.00% | -0.03 |      0.93
-&gt; 8    |  7.60 |  7.74 |  1.50% |  0.00 |      0.06
-&gt; 9    |  7.74 |  7.88 |  1.00% |       |          
-&gt; 10   |  7.88 |  8.23 |  2.50% |  0.00 |      0.02
-&gt; 11   |  8.23 |  8.30 |  1.00% |       |          
-&gt; 12   |  8.30 |  8.72 |  3.00% |  0.01 |      0.26
-&gt; 13   |  8.72 |  8.79 |  0.50% |       |          
-&gt; 14   |  8.79 | 10.06 |  9.50% |  0.03 |      0.95
-&gt; 15   | 10.06 | 10.20 |  1.00% |       |          
-&gt; 16   | 10.20 | 10.41 |  2.00% |  0.05 |      0.82
-&gt; 17   | 10.41 | 10.48 |  1.00% |       |          
-&gt; 18   | 10.48 | 14.00 | 25.00% |  0.06 |      0.97</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(model, <span class="dt">smooth =</span> <span class="st">"Delay"</span>)</span></code></pre></div>
+<pre><code>&gt; Part |    Start |   End |   Size |     Trend | Linearity
+&gt; --------------------------------------------------------
+&gt; 1    | 0.00e+00 |  6.47 | 46.50% |     -0.09 |      0.98
+&gt; 2    |     6.47 |  6.68 |  1.50% |     -0.01 |      0.68
+&gt; 3    |     6.68 |  6.89 |  2.00% | -6.46e-03 |      0.63
+&gt; 4    |     6.89 |  6.96 |  0.50% |           |          
+&gt; 5    |     6.96 |  7.18 |  2.00% |     -0.01 |      0.77
+&gt; 6    |     7.18 |  7.25 |  0.50% |           |          
+&gt; 7    |     7.25 |  7.60 |  3.00% |     -0.03 |      0.93
+&gt; 8    |     7.60 |  7.74 |  1.50% |  1.62e-03 |      0.06
+&gt; 9    |     7.74 |  7.88 |  1.00% |           |          
+&gt; 10   |     7.88 |  8.23 |  2.50% | -8.21e-04 |      0.02
+&gt; 11   |     8.23 |  8.30 |  1.00% |           |          
+&gt; 12   |     8.30 |  8.72 |  3.00% |  5.63e-03 |      0.26
+&gt; 13   |     8.72 |  8.79 |  0.50% |           |          
+&gt; 14   |     8.79 | 10.06 |  9.50% |      0.03 |      0.95
+&gt; 15   |    10.06 | 10.20 |  1.00% |           |          
+&gt; 16   |    10.20 | 10.41 |  2.00% |      0.05 |      0.82
+&gt; 17   |    10.41 | 10.48 |  1.00% |           |          
+&gt; 18   |    10.48 | 14.00 | 25.00% |      0.06 |      0.97</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

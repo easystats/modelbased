@@ -67,8 +67,8 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter2(width = 0.05, alpha = 0.5) +
   
-  geom_line(data = means, aes(y = Median, group = 1), size = 1) +
-  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
+  geom_pointrange(data = means, aes(y = Mean, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
   theme_modern()
 ```
 
@@ -119,7 +119,7 @@ contrasts <- estimate_contrasts(model, modulate = "Petal.Width", length = 100)
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2) 
 
 # Visualise the changes in the differences
-ggplot(contrasts, aes(x = Petal.Width, y = Median)) +
+ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
   geom_ribbon(aes(fill = Contrast, ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line(aes(colour = Contrast), size = 1) +
   geom_hline(yintercept = 0, linetype = "dashed") +
