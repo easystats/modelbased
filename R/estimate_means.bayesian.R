@@ -61,27 +61,16 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
-  posteriors <- emmeans::as.mcmc.emmGrid(estimated)
-  posteriors <- as.data.frame(as.matrix(posteriors))
 
   # Summary
-  means <- .summarize_posteriors(posteriors, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
+  means <- .summarize_posteriors(estimated, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
   means <- .clean_names_bayesian(means, model, transform, type = "mean")
 
   # Format means
-  levelcols <- strsplit(as.character(means$Parameter), ", ")
-  levelcols <- data.frame(do.call(rbind, levelcols))
-  names(levelcols) <- unlist(sapply(levelcols, .find_name_level))
-  if (nrow(levelcols) > 1) {
-    levelcols <- as.data.frame(sapply(levelcols, .remove_name_level), stringsAsFactors = FALSE)
-    levelcols <- as.data.frame(sapply(levelcols, as.numeric_ifnumeric), stringsAsFactors = FALSE)
-  } else {
-    levelcols <- as.data.frame(t(sapply(levelcols, .remove_name_level)), stringsAsFactors = FALSE)
-    levelcols <- as.data.frame(t(sapply(levelcols, as.numeric_ifnumeric)), stringsAsFactors = FALSE)
-  }
+  temp <- as.data.frame(estimated)
+  temp <- temp[1:(ncol(temp)-3)]
+  means <- cbind(temp, means)
   means$Parameter <- NULL
-  means <- cbind(levelcols, means)
-
 
   # Restore factor levels
   means <- .restore_factor_levels(means, insight::get_data(model))

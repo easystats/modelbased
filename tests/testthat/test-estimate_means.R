@@ -4,12 +4,12 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       data <- mtcars
       data$gear <- as.factor(data$gear)
 
-      model <- stan_glm(mpg ~ wt * gear, data = data, refresh = 0, iter = 200, chains = 2)
+      model <- rstanarm::stan_glm(mpg ~ wt * gear, data = data, refresh = 0, iter = 200, chains = 2)
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
       data$cyl <- as.factor(data$cyl)
-      model <- stan_glm(vs ~ cyl, data = data, refresh = 0, iter = 200, chains = 2)
+      model <- rstanarm::stan_glm(vs ~ cyl, data = data, refresh = 0, iter = 200, chains = 2)
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
@@ -18,11 +18,11 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       data <- iris
       data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-      model <- stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data, refresh = 0, iter = 200, chains = 2)
+      model <- rstanarm::stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data, refresh = 0, iter = 200, chains = 2)
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 5))
 
-      model <- stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
+      model <- rstanarm::stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
@@ -37,6 +37,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
       estim <- estimate_means(model, transform = "response")
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
+      testthat::expect_true(all(estim$Probability >= 0) & all(estim$Probability <= 1))
     }
 
 
