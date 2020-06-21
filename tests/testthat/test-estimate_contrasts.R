@@ -6,7 +6,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
 
     if (require("rstanarm")) {
-      testthat::expect_error(estimate_contrasts(insight::download_model("stanreg_lm_4")))
+      testthat::expect_error(estimate_contrasts(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2), data = mtcars, iter=200, refresh=0)))
 
       data <- iris
       data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
