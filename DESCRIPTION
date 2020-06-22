@@ -38,6 +38,7 @@ Suggests:
 	effectsize,
 	gganimate,
 	ggplot2,
+	glmmTMB,
 	knitr,
 	lme4,
 	logspline,

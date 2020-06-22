@@ -64,3 +64,7 @@ estimate_means.lm <- function(model, levels = NULL, fixed = NULL, modulate = NUL
 
 #' @export
 estimate_means.merMod <- estimate_means.lm
+
+
+#' @export
+estimate_means.glmmTMB <- estimate_means.lm
