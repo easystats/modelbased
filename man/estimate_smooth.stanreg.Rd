@@ -19,7 +19,7 @@
 
 \item{smooth}{A character indicating the name of the "smooth" term.}
 
-\item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+\item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
 \item{length}{Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.}
 

@@ -1,4 +1,5 @@
 if (require("testthat") && require("modelbased") && require("glmmTMB") && require("emmeans")) {
+  data(Salamanders)
   model <- glmmTMB(
     count ~ mined + (1 | site),
     ziformula = ~mined,

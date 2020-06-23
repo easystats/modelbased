@@ -7,10 +7,11 @@
 #'  }
 #'
 #' @inheritParams estimate_contrasts
-#' @param trend A character indicating the name of the numeric variable for which to compute the slopes.
-#' @param levels A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
+#' @param trend A character vector indicating the name of the numeric variable for which to compute the slopes.
+#' @param levels A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
+#' @param component A character vector indicating the model component for which estimation is requested. Only applies to models from \pkg{glmmTMB}. Use \code{"conditional"} for the count-model or \code{"zero_inflate"} or \code{"zi"} for the zero-inflation model.
 #'
-#' @return A dataframe of slopes.
+#' @return A data frame of slopes.
 #' @export
 estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ...) {
   UseMethod("estimate_slopes")
@@ -73,6 +74,15 @@ estimate_slopes.lm <- function(model, trend = NULL, levels = NULL, transform = "
 estimate_slopes.merMod <- estimate_slopes.lm
 
 
+#' @rdname estimate_slopes
+#' @export
+estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, component = c("conditional", "zero_inflated", "zi"), ...) {
+  component <- match.arg(component)
+  if (component == "zi") component <- "zero_inflated"
+  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, component = component)
+}
+
+
 
 
 
@@ -82,12 +92,15 @@ estimate_slopes.merMod <- estimate_slopes.lm
 #' @importFrom stats confint
 #' @importFrom emmeans emtrends
 #' @keywords internal
-.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.95, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
-  predictors <- insight::find_predictors(model)$conditional
+.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, centrality = "median", ci = 0.95, ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, component = "conditional", ...) {
+  predictors <- insight::find_predictors(model)[[component]]
   data <- insight::get_data(model)
 
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
+    if (!length(trend) || is.na(trend)) {
+      stop("Model contains no numeric predictor. Cannot estimate trend.")
+    }
     message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }
   if (length(trend) > 1) {
@@ -106,9 +119,23 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
   # Basis
   # Sometimes (when exactly?) fails when transform argument is passed
-  trends <- tryCatch(emmeans::emtrends(model, levels, var = trend, transform = transform, ...),
-    error = function(e) emmeans::emtrends(model, levels, var = trend, ...)
-  )
+  trends <-
+    tryCatch(
+      {
+        if (component != "conditional") {
+          emmeans::emtrends(model, levels, var = trend, transform = transform, component = "zi", ...)
+        } else {
+          emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
+        }
+      },
+      error = function(e) {
+        if (component != "conditional") {
+          emmeans::emtrends(model, levels, var = trend, component = "zi", ...)
+        } else {
+          emmeans::emtrends(model, levels, var = trend, ...)
+        }
+      }
+    )
 
 
 
