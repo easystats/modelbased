@@ -117,3 +117,40 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
   }
   prediction
 }
+
+
+
+#' @importFrom insight link_inverse
+#' @importFrom stats predict
+#' @keywords internal
+predict_wrapper.glmmTMB <- function(model, newdata = NULL, ci = NULL, re.form = NULL, transform = "response", ...) {
+  if (is.null(ci)) {
+    prediction <- data.frame(
+      Predicted = stats::predict(model,
+                                 newdata = newdata,
+                                 re.form = re.form,
+                                 type = transform
+      ),
+      CI_low = NA,
+      CI_high = NA
+    )
+  } else {
+    pr <- stats::predict(model,
+                         newdata = newdata,
+                         re.form = re.form,
+                         type = transform,
+                         se.fit = TRUE)
+
+    ## TODO check if we need linkinverse
+    if (transform != "zprob" && transform != "disp") {
+      linkinverse <- insight::link_inverse(model)
+    }
+
+    prediction <- data.frame(
+      Predicted = pr$fit,
+      CI_low = pr$fit - (pr$se.fit * stats::qnorm((1 + ci) / 2)),
+      CI_high = pr$fit + (pr$se.fit * stats::qnorm((1 + ci) / 2))
+    )
+  }
+  prediction
+}

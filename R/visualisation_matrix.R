@@ -68,6 +68,8 @@ visualisation_matrix.polr <- visualisation_matrix.stanreg
 visualisation_matrix.merMod <- visualisation_matrix.stanreg
 #' @export
 visualisation_matrix.lmerMod <- visualisation_matrix.stanreg
+#' @export
+visualisation_matrix.glmmTMB <- visualisation_matrix.stanreg
 
 
 
