@@ -80,12 +80,23 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   # Basis
   newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
-  smooth_data <- estimate_link(model, newdata,
-    predict = "link",
-    centrality = centrality, transform = transform,
-    keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, ...
-  )
+  random <- list(...)$random
+  if (is.null(random)) {
+    estimate_link(model, newdata,
+                  predict = "link",
+                  centrality = centrality, transform = transform,
+                  keep_draws = FALSE, draws = NULL,
+                  seed = NULL, random = FALSE, ...
+    )
+  } else {
+    smooth_data <- estimate_link(model, newdata,
+                                 predict = "link",
+                                 centrality = centrality, transform = transform,
+                                 keep_draws = FALSE, draws = NULL,
+                                 seed = NULL, ...
+    )
+  }
+
 
   # Predicted name
   pred_name <- c("Median", "Mean", "MAP", "Predicted")
@@ -137,6 +148,10 @@ estimate_smooth.glm <- estimate_smooth.stanreg
 #' @export
 estimate_smooth.merMod <- estimate_smooth.stanreg
 
+#' @export
+estimate_smooth.glmmTMB <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
+  estimate_smooth.stanreg(model = model, smooth = smooth, levels = levels, length = length, transform = transform, centrality = centrality, random = TRUE, ...)
+}
 
 
 #' @importFrom utils tail
