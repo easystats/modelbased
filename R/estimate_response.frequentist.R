@@ -80,10 +80,7 @@ estimate_link.merMod <- estimate_link.glm
 #' @export
 estimate_response.glmmTMB <- estimate_response.glm
 #' @export
-estimate_link.glmmTMB <- function(model, data = "grid", transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "link", ci = 0.95, ...) {
-  estimate_response(model, data = data, transform = transform, random = random, length = length, preserve_range = preserve_range, predict = predict, ci = ci, ...)
-}
-
+estimate_link.glmmTMB <- estimate_link.glm
 
 #' @export
 estimate_response.polr <- estimate_response.glm

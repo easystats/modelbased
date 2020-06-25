@@ -56,6 +56,31 @@ visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors
 }
 
 
+
+#' @importFrom insight find_random
+#' @export
+visualisation_matrix.glmmTMB <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, include_response = FALSE, ...) {
+  data <- insight::get_data(x)
+  if (include_response == FALSE) {
+    data <- data[names(data) != insight::find_response(x)]
+  }
+
+  # if (random == FALSE) {
+  #   data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
+  # }
+
+  data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
+  data <- visualisation_matrix(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, random = TRUE, ...)
+
+  random <- insight::find_random(x, split_nested = TRUE, flatten = TRUE)
+  data[random] <- NA
+
+  attr(data, "model") <- x
+  data
+}
+
+
+
 #' @export
 visualisation_matrix.brmsfit <- visualisation_matrix.stanreg
 #' @export
@@ -68,8 +93,8 @@ visualisation_matrix.polr <- visualisation_matrix.stanreg
 visualisation_matrix.merMod <- visualisation_matrix.stanreg
 #' @export
 visualisation_matrix.lmerMod <- visualisation_matrix.stanreg
-#' @export
-visualisation_matrix.glmmTMB <- visualisation_matrix.stanreg
+
+
 
 
 
