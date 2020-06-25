@@ -9,7 +9,7 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
 
   test_that("estimate_slope", {
     estim <- estimate_slopes(model, trend = "cover")
-    # estim2 <- as.data.frame(emmeans::emtrends(model, "mined", var = "cover", transform = "response"))
-    # testthat::expect_equal(estim$rate, rev(estim2$rate), tolerance = 1e-3)
+    estim2 <- as.data.frame(emmeans::emtrends(model, "mined", var = "cover", transform = "response"))
+    testthat::expect_equal(estim$Coefficient, estim2$cover.trend, tolerance = 1e-3)
   })
 }
