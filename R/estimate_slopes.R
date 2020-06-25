@@ -79,7 +79,7 @@ estimate_slopes.merMod <- estimate_slopes.lm
 estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, component = c("conditional", "zero_inflated", "zi"), ...) {
   component <- match.arg(component)
   if (component == "zi") component <- "zero_inflated"
-  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, component = component)
+  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, component = component, ...)
 }
 
 
@@ -118,25 +118,7 @@ estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transfor
 
 
   # Basis
-  # Sometimes (when exactly?) fails when transform argument is passed
-  trends <-
-    tryCatch(
-      {
-        if (component != "conditional") {
-          emmeans::emtrends(model, levels, var = trend, transform = transform, component = "zi", ...)
-        } else {
-          emmeans::emtrends(model, levels, var = trend, transform = transform, ...)
-        }
-      },
-      error = function(e) {
-        if (component != "conditional") {
-          emmeans::emtrends(model, levels, var = trend, component = "zi", ...)
-        } else {
-          emmeans::emtrends(model, levels, var = trend, ...)
-        }
-      }
-    )
-
+  trends <- .emtrends_helper(model, levels, trend, transform, component, ...)
 
 
   if (insight::model_info(model)$is_bayesian) {
@@ -219,4 +201,35 @@ estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transfor
   }
   names(std) <- paste0("Std_", names(std))
   as.data.frame(std)
+}
+
+
+
+
+.emtrends_helper <- function(model, levels, trend, transform, component, ...) {
+  if (component != "conditional") {
+    if (transform == "response") {
+      emmeans::emtrends(model, levels, var = trend, transform = "response", component = "zi", ...)
+    } else if (transform == "mu") {
+      emmeans::emtrends(model, levels, var = trend, transform = "mu", component = "zi", ...)
+    } else if (transform == "unlink") {
+      emmeans::emtrends(model, levels, var = trend, transform = "unlink", component = "zi", ...)
+    } else if (transform == "log") {
+      emmeans::emtrends(model, levels, var = trend, transform = "log", component = "zi", ...)
+    } else if (transform == "none") {
+      emmeans::emtrends(model, levels, var = trend, transform = "none", component = "zi", ...)
+    }
+  } else {
+    if (transform == "response") {
+      emmeans::emtrends(model, levels, var = trend, transform = "response", ...)
+    } else if (transform == "mu") {
+      emmeans::emtrends(model, levels, var = trend, transform = "mu", ...)
+    } else if (transform == "unlink") {
+      emmeans::emtrends(model, levels, var = trend, transform = "unlink", ...)
+    } else if (transform == "log") {
+      emmeans::emtrends(model, levels, var = trend, transform = "log", ...)
+    } else if (transform == "none") {
+      emmeans::emtrends(model, levels, var = trend, transform = "none", ...)
+    }
+  }
 }
