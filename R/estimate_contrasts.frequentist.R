@@ -106,3 +106,6 @@ estimate_contrasts.lm <- function(model, levels = NULL, fixed = NULL, modulate =
 
 #' @export
 estimate_contrasts.merMod <- estimate_contrasts.lm
+
+#' @export
+estimate_contrasts.glmmTMB <- estimate_contrasts.lm
