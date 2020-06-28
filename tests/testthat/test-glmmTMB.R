@@ -37,4 +37,28 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
     estim2 <- as.data.frame(emmeans::emtrends(model, "mined", var = "cover", transform = "response"))
     testthat::expect_equal(estim$Coefficient, estim2$cover.trend, tolerance = 1e-3)
   })
+
+  test_that("estimate_response - glmmTMB", {
+    model <- glmmTMB::glmmTMB(
+      count ~ cover + (1 | site),
+      ziformula = ~ cover + mined,
+      family = glmmTMB::truncated_poisson,
+      data = data
+    )
+
+    estim <- estimate_response(model)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(nrow(data), 6))
+  })
+
+  test_that("estimate_link - glmmTMB", {
+    model <- glmmTMB::glmmTMB(
+      count ~ cover + (1 | site),
+      ziformula = ~ cover + mined,
+      family = glmmTMB::truncated_poisson,
+      data = data
+    )
+
+    # estim <- estimate_link(model)
+    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(nrow(data), 6))
+  })
 }
