@@ -12,6 +12,7 @@ estimate_slopes(
   transform = "response",
   standardize = TRUE,
   standardize_robust = FALSE,
+  ci = 0.95,
   ...
 )
 
@@ -28,7 +29,7 @@ estimate_slopes(
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
 \item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
 
@@ -39,6 +40,8 @@ estimate_slopes(
 \item{standardize}{If \code{TRUE}, adds standardized differences or coefficients.}
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
+
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
 
 \item{...}{Arguments passed to or from other methods.}
 

@@ -15,7 +15,7 @@
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
 \item{smooth}{A character indicating the name of the "smooth" term.}
 

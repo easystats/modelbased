@@ -16,7 +16,7 @@
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
 \item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
 

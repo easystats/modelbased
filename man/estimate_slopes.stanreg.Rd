@@ -11,8 +11,8 @@
   transform = "response",
   standardize = TRUE,
   standardize_robust = FALSE,
+  ci = 0.95,
   centrality = "median",
-  ci = 0.89,
   ci_method = "hdi",
   test = c("pd", "rope"),
   rope_range = "default",
@@ -21,7 +21,7 @@
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
 \item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
 
@@ -33,9 +33,9 @@
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
-
 \item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
+
+\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
