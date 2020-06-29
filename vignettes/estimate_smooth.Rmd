@@ -105,12 +105,12 @@ library(dplyr)
 library(see)
 
 # Load the data and filter out outliers
-df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv") %>% 
-  filter(Delay <= 14,
-         Memory >= 20) 
+df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv")
+df <- filter(df, Delay <= 14, Memory >= 20) 
+
 
 # Plot the density of the point and a loess smooth line
-ggplot(df, aes(x=Delay, y=Memory)) +
+ggplot(df, aes(x = Delay, y = Memory)) +
   stat_density_2d(geom = "raster", aes(fill = ..density..), contour = FALSE) +
   geom_jitter(width = 0.2, height = 0.2) + 
   scale_fill_viridis_c() +
@@ -118,7 +118,7 @@ ggplot(df, aes(x=Delay, y=Memory)) +
   theme_modern(legend.position = "none")
 ```
 
-Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the litterature suggestiong a 2nd order polynomial curve [@Averell_2011].
+Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve [@Averell_2011].
 
 
 
@@ -137,14 +137,14 @@ library(rstanarm)
 model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1|Movie_Language) + (1|Immersion), data = df, chains = 1, iter = 1000, refresh = 0)
 ```
 
-We can visualise the link between the Delay and the Memory score by using the `estimate_link`.
+We can visualize the link between the Delay and the Memory score by using the `estimate_link`.
 
 ```{r message=FALSE, warning=FALSE}
 library(modelbased)
 
-estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97)) %>% 
-  ggplot(aes(x=Delay, y=Median)) +
-  geom_jitter(data = df, aes(y=Memory), width = 0.2, height = 0.2) + 
+estim <- estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
+ggplot(estim, aes(x = Delay, y = Median)) +
+  geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) + 
   geom_ribbon(aes(ymin = CI_low_97, ymax = CI_high_97), alpha = 0.2, fill = "blue") +
   geom_ribbon(aes(ymin = CI_low_89, ymax = CI_high_89), alpha = 0.2, fill = "blue") +
   geom_ribbon(aes(ymin = CI_low_69, ymax = CI_high_69), alpha = 0.2, fill = "blue") +
@@ -155,7 +155,7 @@ estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97)) %>%
 ```
 
 
-It seems that the memory score starts by decreasing, up to a point where it stabilizes (and even increases, which might be related by some other factors, such as discussions about the movie, watching of youtube reviews and such). **But what is the point of change?**
+It seems that the memory score starts by decreasing, up to a point where it stabilizes (and even increases, which might be related by some other factors, such as discussions about the movie, watching of YouTube reviews and such). **But what is the point of change?**
 
 # Describing smooth
 
