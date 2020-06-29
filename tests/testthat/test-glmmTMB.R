@@ -48,7 +48,7 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
   })
 
   test_that("estimate_link - glmmTMB", {
-    estim <- estimate_link(model)
+    estim <- estimate_link(model2)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(35, 6))
   })
 }
