@@ -55,12 +55,17 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #'   estimate_smooth(model, levels = "Species")
 #' }
 #' }
-#' @importFrom insight find_predictors get_data
+#' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
 estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
+
+  # glmmTMB fix
+  if (inherits(model, "glmmTMB")) {
+    predictors <- c(predictors, insight::find_random(model, split_nested = TRUE, flatten = TRUE))
+  }
 
   if (is.null(smooth)) {
     smooth <- predictors[sapply(data[predictors], is.numeric)][1]
@@ -81,10 +86,10 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
   smooth_data <- estimate_link(model, newdata,
-    predict = "link",
-    centrality = centrality, transform = transform,
-    keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, ...
+                               predict = "link",
+                               centrality = centrality, transform = transform,
+                               keep_draws = FALSE, draws = NULL,
+                               seed = NULL, random = FALSE, ...
   )
 
   # Predicted name
@@ -137,6 +142,8 @@ estimate_smooth.glm <- estimate_smooth.stanreg
 #' @export
 estimate_smooth.merMod <- estimate_smooth.stanreg
 
+#' @export
+estimate_smooth.glmmTMB <- estimate_smooth.stanreg
 
 
 #' @importFrom utils tail

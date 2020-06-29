@@ -11,8 +11,8 @@
   transform = "response",
   standardize = TRUE,
   standardize_robust = FALSE,
+  ci = 0.95,
   centrality = "median",
-  ci = 0.89,
   ci_method = "hdi",
   test = c("pd", "rope"),
   rope_range = "default",
@@ -21,11 +21,11 @@
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
-\item{trend}{A character indicating the name of the numeric variable for which to compute the slopes.}
+\item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
 
-\item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+\item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
 \item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
@@ -33,9 +33,9 @@
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
-
 \item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
+
+\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}

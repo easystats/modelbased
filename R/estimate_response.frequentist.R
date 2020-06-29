@@ -78,6 +78,11 @@ estimate_response.merMod <- estimate_response.glm
 estimate_link.merMod <- estimate_link.glm
 
 #' @export
+estimate_response.glmmTMB <- estimate_response.glm
+#' @export
+estimate_link.glmmTMB <- estimate_link.glm
+
+#' @export
 estimate_response.polr <- estimate_response.glm
 #' @export
 estimate_link.polr <- estimate_link.glm

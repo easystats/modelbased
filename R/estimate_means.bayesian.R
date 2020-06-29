@@ -55,7 +55,7 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @return A dataframe of estimated marginal means.
 #'
 #' @importFrom emmeans as.mcmc.emmGrid
-#' @importFrom insight find_response
+#' @importFrom insight find_response get_data
 #' @importFrom stats mad median sd setNames
 #' @export
 estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
@@ -68,7 +68,7 @@ estimate_means.stanreg <- function(model, levels = NULL, fixed = NULL, modulate 
 
   # Format means
   temp <- as.data.frame(estimated)
-  temp <- temp[1:(ncol(temp)-3)]
+  temp <- temp[1:(ncol(temp) - 3)]
   means <- cbind(temp, means)
   means$Parameter <- NULL
 

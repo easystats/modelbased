@@ -1,3 +1,13 @@
+# modelbased 0.3.0
+
+## New supported models
+
+- Models from package *glmmTMB* are now supported.
+
+## Bug fixes
+
+- `estimate_slope()` now gives an informative error when no numeric predictor is present.
+
 # modelbased 0.2.0
 
 - Partial support of formulas.

@@ -2,6 +2,7 @@
 % Please edit documentation in R/estimate_slopes.R
 \name{estimate_slopes}
 \alias{estimate_slopes}
+\alias{estimate_slopes.glmmTMB}
 \title{Estimate the slopes of a numeric predictor (over different factor levels)}
 \usage{
 estimate_slopes(
@@ -11,15 +12,28 @@ estimate_slopes(
   transform = "response",
   standardize = TRUE,
   standardize_robust = FALSE,
+  ci = 0.95,
+  ...
+)
+
+\method{estimate_slopes}{glmmTMB}(
+  model,
+  trend = NULL,
+  levels = NULL,
+  transform = "response",
+  standardize = TRUE,
+  standardize_robust = FALSE,
+  ci = 0.95,
+  component = c("conditional", "zero_inflated", "zi"),
   ...
 )
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{model}{A Bayesian model.}
 
-\item{trend}{A character indicating the name of the numeric variable for which to compute the slopes.}
+\item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
 
-\item{levels}{A character vectors indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+\item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
 \item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
@@ -27,10 +41,14 @@ estimate_slopes(
 
 \item{standardize_robust}{Robust standardization through \code{MAD} (Median Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
+
 \item{...}{Arguments passed to or from other methods.}
+
+\item{component}{A character vector indicating the model component for which estimation is requested. Only applies to models from \pkg{glmmTMB}. Use \code{"conditional"} for the count-model or \code{"zero_inflate"} or \code{"zi"} for the zero-inflation model.}
 }
 \value{
-A dataframe of slopes.
+A data frame of slopes.
 }
 \description{
 See the documentation for your object's class:
