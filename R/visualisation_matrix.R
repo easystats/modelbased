@@ -322,13 +322,13 @@ visualisation_matrix.character <- visualisation_matrix.vector
 #' @keywords internal
 .visualisation_matrix_vector <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x, ...) {
   if (is.factor(x)) {
-    out <- as.factor(levels(droplevels(x)))
+    out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
   } else if (is.character(x)) {
     x <- as.factor(x)
-    out <- as.factor(levels(droplevels(x)))
+    out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
   } else if (is.logical(x)) {
     x <- as.factor(x)
-    out <- as.factor(levels(droplevels(x)))
+    out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
     # } else if (length(unique(x)) < 3) {
     #   x <- as.factor(x)
     #   out <- as.factor(levels(droplevels(x)))
