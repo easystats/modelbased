@@ -40,9 +40,13 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_response(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
+    estim <- modelbased::estimate_response(model, ci=NULL)
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 3))
+
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
     estim <- estimate_link(model, target = "wt")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
+
 
     library(lme4)
     data <- mtcars
