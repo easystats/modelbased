@@ -8,7 +8,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_response(model, data = "grid", seed = 333)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(43, 5))
 
-    model <- rstanarm::stan_glm(mpg ~ as.factor(gear)/wt, data = mtcars, refresh = 0, iter = 500, chains = 2)
+    model <- rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 500, chains = 2)
     estim <- estimate_response(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 

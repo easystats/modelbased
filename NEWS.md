@@ -1,5 +1,9 @@
 # modelbased 0.3.0
 
+## Breaking changes
+
+- `Predicted` is now the name of the predicted column for Bayesian models (similarly to Frequentist ones), instead of the centrality index (e.g., `Median`).
+
 ## New supported models
 
 - Models from package *glmmTMB* are now supported.
