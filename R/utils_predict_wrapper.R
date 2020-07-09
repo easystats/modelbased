@@ -74,13 +74,13 @@ predict_wrapper.polr <- function(model, newdata = NULL, ...) {
 
 
 #' @keywords internal
-predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = NULL, transform = "response", ...) {
-  if (!is.null(re.form) && is.na(re.form)) {
-    if (!is.null(ci)) {
-      warning("CI cannot be computed for mixed models when no random effects present in data. Provide some data with random effects, or set `ci = NULL`.")
-      ci <- NULL
-    }
-  }
+predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = NULL, transform = "response", interval = "confidence", ...) {
+  # if (!is.null(re.form) && is.na(re.form)) {
+  #   if (!is.null(ci)) {
+  #     warning("CI cannot be computed for mixed models when no random effects present in data. Provide some data with random effects, or set `ci = NULL`.")
+  #     ci <- NULL
+  #   }
+  # }
 
   if (is.null(ci)) {
     # type <- ifelse(transform == "response", TRUE, FALSE)
@@ -105,15 +105,25 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
       type <- "linear.prediction"
     }
 
-    prediction <- as.data.frame(
-      merTools::predictInterval(model,
-        which = "fixed",
-        newdata = newdata,
-        type = type,
-        stat = "median",
-        level = ci
-      )
-    )
+    refgrid <- emmeans::ref_grid(model, at=as.list(newdata), data=newdata)
+    prediction <- as.data.frame(predict(refgrid, transform=transform, ci = ci, interval = interval))
+
+    # Clean
+    prediction[names(newdata)] <- NULL
+    prediction$Predicted <- prediction[, 1]
+    prediction$CI_low <- prediction[, grepl("lower.|LCL", names(prediction))]
+    prediction$CI_high <- prediction[, grepl("upper.|UCL", names(prediction))]
+    prediction[!names(prediction) %in% c("Predicted", "CI_low", "CI_high")] <- NULL
+
+    # prediction <- as.data.frame(
+    #   merTools::predictInterval(model,
+    #     which = "fixed",
+    #     newdata = newdata,
+    #     type = type,
+    #     stat = "median",
+    #     level = ci
+    #   )
+    # )
   }
   prediction
 }

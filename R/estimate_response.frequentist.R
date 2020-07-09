@@ -19,6 +19,11 @@
 estimate_response.glm <- function(model, data = NULL, transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "response", ci = 0.95, ...) {
   args <- .estimate_response_init(model, data, transform, random, length, preserve_range, predict, ...)
 
+  # Avoid failure in predict()
+  if(is.null(ci)){
+    ci <- 0
+  }
+
   prediction <- predict_wrapper(model,
     newdata = args$data,
     ci = ci,
@@ -28,11 +33,16 @@ estimate_response.glm <- function(model, data = NULL, transform = "response", ra
     ...
   )
 
-
   # Rename
   names(prediction)[names(prediction) == "fit"] <- "Predicted"
   names(prediction)[names(prediction) == "lwr"] <- "CI_low"
   names(prediction)[names(prediction) == "upr"] <- "CI_high"
+
+  # Restore ci=NULL
+  if(ci == 0){
+    prediction$CI_low <- prediction$CI_high <- ci <- NULL
+  }
+
 
 
   # Add predictors

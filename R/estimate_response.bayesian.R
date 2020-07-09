@@ -93,6 +93,14 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   prediction <- .summarize_posteriors(as.data.frame(posteriors, stringsAsFactors = FALSE), ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
   prediction$Parameter <- NULL
 
+  # Rename
+  var <- names(prediction)[grepl(paste0(centrality, collapse = "|"), tolower(names(prediction)))]
+  if (length(c(var)) == 1){
+    names(prediction)[names(prediction) == var] <- "Predicted"
+  } else{
+    names(prediction)[names(prediction) %in% var] <- paste0("Predicted_", names(prediction)[names(prediction) %in% var])
+  }
+
   # Draws
   if (keep_draws == TRUE | !is.null(draws)) {
     posteriors <- as.data.frame(t(posteriors))
