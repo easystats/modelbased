@@ -63,10 +63,10 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Checks
-  if (any(class(model) == "stanreg") & !requireNamespace("rstanarm", quietly = TRUE)) {
+  if (inherits(model, "stanreg") & !requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
-  if (any(class(model) == "brmsfit") & !requireNamespace("brms", quietly = TRUE)) {
+  if (inherits(model, "brmsfit") & !requireNamespace("brms", quietly = TRUE)) {
     stop("This function needs `brms` to be installed.")
   }
 
@@ -76,13 +76,21 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
   # Predict link or response
   if (predict == "link" && !insight::model_info(model)$is_ordinal) {
-    if (any(class(model) == "brmsfit")) {
-      posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, scale = args$transform)
+    if (inherits(model, "brmsfit")) {
+      if (isTRUE(args$transform)) {
+        posteriors <- brms::posterior_epred(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws)
+      } else {
+        posteriors <- brms::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws)
+      }
     } else {
-      posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = args$transform)
+      if (isTRUE(args$transform)) {
+        posteriors <- rstanarm::posterior_epred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws)
+      } else {
+        posteriors <- rstanarm::posterior_linpred(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws)
+      }
     }
   } else {
-    if (any(class(model) == "brmsfit")) {
+    if (inherits(model, "brmsfit")) {
       posteriors <- brms::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, nsamples = draws, transform = NULL)
     } else {
       posteriors <- rstanarm::posterior_predict(model, newdata = data, re.form = args$re.form, seed = seed, draws = draws, transform = "response")
@@ -95,7 +103,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
   # Rename
   var <- names(prediction)[grepl(paste0(centrality, collapse = "|"), tolower(names(prediction)))]
-  if (length(c(var)) == 1){
+  if (length(var) == 1) {
     names(prediction)[names(prediction) == var] <- "Predicted"
   } else{
     names(prediction)[names(prediction) %in% var] <- paste0("Predicted_", names(prediction)[names(prediction) %in% var])
