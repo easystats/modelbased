@@ -22,7 +22,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(6, 5))
 
-      model <- rstanarm::stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris)
+      model <- rstanarm::stan_glm(Petal.Length ~ Sepal.Width + Species, data = iris, refresh = 0, iter = 200, chains = 2)
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
 
@@ -31,7 +31,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
       df <- iris
       df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))) - 1
-      model <- rstanarm::stan_glm(y ~ Species, family = "binomial", data = df, refresh = 0)
+      model <- rstanarm::stan_glm(y ~ Species, family = "binomial", data = df, refresh = 0, iter = 200, chains = 2)
 
       estim <- estimate_means(model)
       testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 4))
