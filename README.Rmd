@@ -21,16 +21,14 @@ library(dplyr)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  dpi=450,
+  dpi = 450, 
   fig.path = "man/figures/"
 )
 ```
 
 
 [![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
-[![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
-[![Build Status](https://travis-ci.org/easystats/modelbased.svg?branch=master)](https://travis-ci.org/easystats/modelbased)
-[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
+[![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased) [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
 
 
 
@@ -97,7 +95,7 @@ model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
 # Create dataframe
 newdata <- iris %>% 
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>% 
-  visualisation_matrix("Petal.Width", length=3, numerics = "combination", standardize = TRUE)
+  visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE)
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 # Express values in an abstract way
@@ -126,8 +124,8 @@ means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin(aes(color = Species)) +
   geom_jitter2(width = 0.05, alpha = 0.5) +
-  geom_line(data = means, aes(y = Median, group = 1), size = 1) +
-  geom_pointrange(data = means, aes(y = Median, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
+  geom_pointrange(data = means, aes(y = Mean, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
   scale_fill_material() +
   scale_colour_material() +
   theme_modern()
@@ -196,9 +194,9 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 data <- iris
 model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
 predicted <- estimate_response(model)
-data$Predicted <- predicted$Median
+data$Predicted <- predicted$Predicted
 model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
-data$Predicted_2 <- estimate_response(model)$Median
+data$Predicted_2 <- estimate_response(model)$Predicted
 data %>% 
   ggplot() +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
