@@ -68,14 +68,14 @@ predicted <- estimate_response(model)
 head(predicted)
 ```
 
-The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for **each of the value of the original dataframe** (used for fitting the model). Hence, we can simply add the prediction column (`Median`) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).
+The output is a data frame containing predicted values (the median and CI of the posterior distribution) for **each of the value of the original data frame** (used for fitting the model). Hence, we can simply add the prediction column (`Predicted`) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
 library(dplyr)
 library(see)
 
-data$Predicted <- predicted$Median
+data$Predicted <- predicted$Predicted
 
 data %>% 
   ggplot(aes(x = Petal.Length, y = Predicted)) +
@@ -89,11 +89,11 @@ It seems like our model does not perform too bad. What if we added information a
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data)
-data$Predicted_2 <- estimate_response(model)$Median
+data$Predicted_2 <- estimate_response(model)$Predicted
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
-data$Predicted_2 <- estimate_response(model)$Median
+data$Predicted_2 <- estimate_response(model)$Predicted
 ```
 
 We could now plot the second observations, based on a more complex model, as a red overlay to the previous points:
@@ -112,7 +112,7 @@ The new model generated much more accurate predictions (closer from the underlyi
 
 # Estimating response *vs.* link
 
-Rather than visualising the predictions made by a model, we are often interested in visualising the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/visualisation_matrix.html) of the model's data instead of the original dataset.
+Rather than visualizing the predictions made by a model, we are often interested in visualizing the *links*. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the [**data grid**](https://easystats.github.io/estimate/articles/visualisation_matrix.html) of the model's data instead of the original dataset.
 
 We will do that to visualise the relationship between the response (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
 
@@ -123,14 +123,14 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
 
 
-However, you might notice that the **Credible Interval (CI) bands are quite big**. This is where `estimate_link()` is comming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting **the link** (*i.e.*, the regression line and the uncertainty interval associated *with this line*).
+However, you might notice that the **Credible Interval (CI) bands are quite big**. This is where `estimate_link()` is coming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting **the link** (*i.e.*, the regression line and the uncertainty interval associated *with this line*).
 
-In order to facilitate visualisation of links, we added `estimate_link()` as a shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models, `predict = "link"` and some smoothing by default. `estimate_response()` would be used in the context of generating actual predictions for the existing or new data, whereas `estimate_link()` is more relevant in the context of visualisation and plotting.
+In order to facilitate visualization of links, we added `estimate_link()` as a shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models, `predict = "link"` and some smoothing by default. `estimate_response()` would be used in the context of generating actual predictions for the existing or new data, whereas `estimate_link()` is more relevant in the context of visualization and plotting.
 
 ```{r message=FALSE, warning=FALSE}
 predicted <- estimate_link(model)
@@ -179,7 +179,7 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = draws, aes(y = Draw, color = Species, group = group), alpha = 0.05) +
-  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
 
