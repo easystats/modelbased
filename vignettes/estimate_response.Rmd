@@ -157,7 +157,7 @@ iris %>%
   geom_ribbon(data = predicted, aes(ymin = CI_low_99, ymax = CI_high_99, fill = Species), alpha = 0.2) +
   geom_ribbon(data = predicted, aes(ymin = CI_low_89, ymax = CI_high_89, fill = Species), alpha = 0.3) +
   geom_ribbon(data = predicted, aes(ymin = CI_low_69, ymax = CI_high_69, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
 
