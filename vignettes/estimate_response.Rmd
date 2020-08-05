@@ -139,7 +139,7 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Median, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
 
