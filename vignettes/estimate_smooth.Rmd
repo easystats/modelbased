@@ -44,7 +44,7 @@ This vignette will present how to model and describe non-linear relationships us
 
 However, advances in software makes modeling of non-linear relationship very straightforward (*insert link to future blogpost*). Nevertheless, the added cost in terms of **interpretation, report and communication** often remain a barrier, as the human brain more easily understands linear relationships (*e.g.*, as this variable increases, that variable increases).
 
-The `estimate` package aims at easing this step by **summarising non-linear curves in terms of linear segments**.
+The `estimate` package aims at easing this step by **summarizing non-linear curves in terms of linear segments**.
 
 # estimate_smooth
 
@@ -84,7 +84,7 @@ ggplot(estim, aes(x = x, y = Predicted)) +
   see::theme_modern()
 ```
 
-Altough a visual representation is usually recommended, how can we **verbally describe this relationship**?
+Although a visual representation is usually recommended, how can we **verbally describe this relationship**?
 
 ```{r message=FALSE, warning=FALSE}
 estimate_smooth(model)
@@ -97,7 +97,7 @@ estimate_smooth(model)
 
 # Real application: Effect of time on memory
 
-We will download and use a dataset where participants had to answer questions about the movie **Avengers: Age of ultron** (combined into a **memory score**) a few days after watching it at the theater (the **delay** variable). Let's visualise how the `Delay`, in days, influences the `Memory` score, by plotting the data points and a raw *loess* fit on this raw data.
+We will download and use a dataset where participants had to answer questions about the movie **Avengers: Age of ultron** (combined into a **memory score**) a few days after watching it at the theater (the **delay** variable). Let's visualize how the `Delay`, in days, influences the `Memory` score, by plotting the data points and a raw *loess* fit on this raw data.
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
@@ -118,7 +118,7 @@ ggplot(df, aes(x = Delay, y = Memory)) +
   theme_modern(legend.position = "none")
 ```
 
-Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve [@Averell_2011].
+Unsurprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve [@Averell_2011].
 
 
 
@@ -143,7 +143,7 @@ We can visualize the link between the Delay and the Memory score by using the `e
 library(modelbased)
 
 estim <- estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
-ggplot(estim, aes(x = Delay, y = Median)) +
+ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) + 
   geom_ribbon(aes(ymin = CI_low_97, ymax = CI_high_97), alpha = 0.2, fill = "blue") +
   geom_ribbon(aes(ymin = CI_low_89, ymax = CI_high_89), alpha = 0.2, fill = "blue") +
