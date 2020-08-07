@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for lm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(
   <span class='kw'>model</span>,
   levels = <span class='kw'>NULL</span>,
   fixed = <span class='kw'>NULL</span>,
@@ -226,21 +226,21 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
 
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span>, data = <span class='kw'>iris</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |         95% CI |     t |  df |      p | Difference (std.)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |         95% CI |     t |  df |      p | Difference (std.)
 #&gt; -------------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |       0.66 | 0.07 | [ 0.49,  0.82] |  9.69 | 147 | &lt; .001 |              1.51
 #&gt; setosa     |  virginica |       0.45 | 0.07 | [ 0.29,  0.62] |  6.68 | 147 | &lt; .001 |              1.04
 #&gt; versicolor |  virginica |      -0.20 | 0.07 | [-0.37, -0.04] | -3.00 | 147 | 0.003  |             -0.47</div><div class='input'>
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Width</span>, data = <span class='kw'>iris</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
 #&gt; -----------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |       1.59 | 0.39 | [ 0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
 #&gt; setosa     |  virginica |       1.77 | 0.41 | [ 0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
-#&gt; versicolor |  virginica |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"Petal.Width"</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
+#&gt; versicolor |  virginica |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"Petal.Width"</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |    t |  df |      p | Difference (std.)
 #&gt; -------------------------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |        1.20 |       1.59 | 0.39 | [ 0.64, 2.54] | 4.04 | 144 | &lt; .001 |              3.65
 #&gt; setosa     |  virginica |        1.20 |       1.77 | 0.41 | [ 0.77, 2.78] | 4.29 | 144 | &lt; .001 |              4.07
-#&gt; versicolor |  virginica |        1.20 |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"Petal.Width"</span>, length = <span class='fl'>4</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |     t |  df |      p | Difference (std.)
+#&gt; versicolor |  virginica |        1.20 |       0.18 | 0.15 | [-0.17, 0.54] | 1.27 | 144 | 0.205  |              0.42</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"Petal.Width"</span>, length = <span class='fl'>4</span>)</div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Difference |   SE |        95% CI |     t |  df |      p | Difference (std.)
 #&gt; --------------------------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |        0.10 |       1.83 | 0.28 | [ 1.15, 2.50] |  6.55 | 144 | &lt; .001 |              4.19
 #&gt; setosa     | versicolor |        0.90 |       1.65 | 0.29 | [ 0.96, 2.35] |  5.74 | 144 | &lt; .001 |              3.80
@@ -253,7 +253,7 @@
 #&gt; versicolor |  virginica |        0.10 |      -0.28 | 0.41 | [-1.26, 0.70] | -0.69 | 144 | 0.492  |             -0.64
 #&gt; versicolor |  virginica |        0.90 |       0.06 | 0.21 | [-0.44, 0.56] |  0.28 | 144 | 0.780  |              0.13
 #&gt; versicolor |  virginica |        1.70 |       0.40 | 0.11 | [ 0.12, 0.67] |  3.50 | 144 | 0.002  |              0.91
-#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 | [ 0.08, 1.39] |  2.70 | 144 | 0.023  |              1.68</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, levels = <span class='st'>"Petal.Width"</span>, length = <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     t |  df |      p | Difference (std.)
+#&gt; versicolor |  virginica |        2.50 |       0.73 | 0.27 | [ 0.08, 1.39] |  2.70 | 144 | 0.023  |              1.68</div><div class='input'><span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, levels = <span class='st'>"Petal.Width"</span>, length = <span class='fl'>4</span>)</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     t |  df |      p | Difference (std.)
 #&gt; -----------------------------------------------------------------------------------------------
 #&gt; 0.1    |    0.9 |      -0.67 | 0.13 | [-1.02, -0.33] | -5.18 | 144 | &lt; .001 |             -1.54
 #&gt; 0.1    |    1.7 |      -1.35 | 0.26 | [-2.04, -0.65] | -5.18 | 144 | &lt; .001 |             -3.09
@@ -266,7 +266,7 @@
   <span class='kw'>data</span><span class='op'>$</span><span class='kw'>Petal.Length_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='kw'>data</span><span class='op'>$</span><span class='kw'>Petal.Length</span> <span class='op'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
 
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Petal.Length_factor</span>), data = <span class='kw'>data</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)
 }</div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; Level1     |     Level2 | Difference |   SE |        95% CI |     z |  df |      p | Difference (std.)
 #&gt; ------------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |       0.87 | 0.09 | [ 0.66, 1.08] | 10.11 | Inf | &lt; .001 |              2.00

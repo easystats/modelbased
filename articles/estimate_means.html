@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -161,9 +161,9 @@
 </pre></div>
 <pre><code>&gt; Species    | Mean |       95% CI
 &gt; --------------------------------
-&gt; setosa     | 3.42 | [3.33, 3.52]
-&gt; versicolor | 2.77 | [2.68, 2.87]
-&gt; virginica  | 2.98 | [2.88, 3.07]</code></pre>
+&gt; setosa     | 3.43 | [3.33, 3.53]
+&gt; versicolor | 2.77 | [2.67, 2.87]
+&gt; virginica  | 2.97 | [2.88, 3.08]</code></pre>
 <p>We can now add these means, as well as the <a href="https://easystats.github.io/bayestestR/articles/credible_interval.html"><strong>credible interval (CI)</strong></a> representing the uncertainty of the estimation, as an overlay on the previous plot:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Species</span>, y = <span class="kw">Sepal.Width</span>, fill = <span class="kw">Species</span>)) <span class="op">+</span>
@@ -187,9 +187,9 @@
 </pre></div>
 <pre><code>&gt; Species    | Mean |       95% CI
 &gt; --------------------------------
-&gt; setosa     | 4.18 | [3.49, 4.85]
-&gt; versicolor | 2.66 | [2.58, 2.74]
-&gt; virginica  | 2.37 | [2.16, 2.58]</code></pre>
+&gt; setosa     | 4.18 | [3.47, 4.89]
+&gt; versicolor | 2.67 | [2.57, 2.76]
+&gt; virginica  | 2.36 | [2.13, 2.62]</code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit">
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Species</span>, y = <span class="kw">Sepal.Width</span>, fill = <span class="kw">Species</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span>() <span class="op">+</span>

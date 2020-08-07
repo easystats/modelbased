@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -116,7 +116,7 @@
 <hr>
 <p><strong>Most of relationships present in nature are non-linear</strong>, consisting of quadratic curves or more complex shapes. In spite of that, scientists tend to model data through linear links. Reasons for that include <strong>technical and interpretation complexity</strong>.</p>
 <p>However, advances in software makes modeling of non-linear relationship very straightforward (<em>insert link to future blogpost</em>). Nevertheless, the added cost in terms of <strong>interpretation, report and communication</strong> often remain a barrier, as the human brain more easily understands linear relationships (<em>e.g.</em>, as this variable increases, that variable increases).</p>
-<p>The <code>estimate</code> package aims at easing this step by <strong>summarising non-linear curves in terms of linear segments</strong>.</p>
+<p>The <code>estimate</code> package aims at easing this step by <strong>summarizing non-linear curves in terms of linear segments</strong>.</p>
 <div id="estimate_smooth" class="section level1">
 <h1 class="hasAnchor">
 <a href="#estimate_smooth" class="anchor"></a>estimate_smooth</h1>
@@ -151,7 +151,7 @@
   <span class="kw">see</span>::<span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()
 </pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-5-1.png" width="3281.25"></p>
-<p>Altough a visual representation is usually recommended, how can we <strong>verbally describe this relationship</strong>?</p>
+<p>Although a visual representation is usually recommended, how can we <strong>verbally describe this relationship</strong>?</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="fu"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(<span class="kw">model</span>)
 </pre></div>
@@ -164,7 +164,7 @@
 <div id="real-application-effect-of-time-on-memory" class="section level1">
 <h1 class="hasAnchor">
 <a href="#real-application-effect-of-time-on-memory" class="anchor"></a>Real application: Effect of time on memory</h1>
-<p>We will download and use a dataset where participants had to answer questions about the movie <strong>Avengers: Age of ultron</strong> (combined into a <strong>memory score</strong>) a few days after watching it at the theater (the <strong>delay</strong> variable). Let’s visualise how the <code>Delay</code>, in days, influences the <code>Memory</code> score, by plotting the data points and a raw <em>loess</em> fit on this raw data.</p>
+<p>We will download and use a dataset where participants had to answer questions about the movie <strong>Avengers: Age of ultron</strong> (combined into a <strong>memory score</strong>) a few days after watching it at the theater (the <strong>delay</strong> variable). Let’s visualize how the <code>Delay</code>, in days, influences the <code>Memory</code> score, by plotting the data points and a raw <em>loess</em> fit on this raw data.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
@@ -184,7 +184,7 @@
   <span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>(legend.position = <span class="st">"none"</span>)
 </pre></div>
 <p><img src="estimate_smooth_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
-<p>Unsuprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve <span class="citation">(Averell and Heathcote 2011)</span>.</p>
+<p>Unsurprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve <span class="citation">(Averell and Heathcote 2011)</span>.</p>
 </div>
 <div id="modelling-non-linear-curves" class="section level1">
 <h1 class="hasAnchor">
@@ -200,7 +200,7 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://github.com/easystats/modelbased">modelbased</a></span>)
 
 <span class="kw">estim</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_link</a></span>(<span class="kw">model</span>, target = <span class="st">"Delay"</span>, ci = <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0.50</span>, <span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.97</span>))
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">estim</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Delay</span>, y = <span class="kw">Median</span>)) <span class="op">+</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="kw">estim</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Delay</span>, y = <span class="kw">Predicted</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span>(data = <span class="kw">df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Memory</span>), width = <span class="fl">0.2</span>, height = <span class="fl">0.2</span>) <span class="op">+</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low_97</span>, ymax = <span class="kw">CI_high_97</span>), alpha = <span class="fl">0.2</span>, fill = <span class="st">"blue"</span>) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low_89</span>, ymax = <span class="kw">CI_high_89</span>), alpha = <span class="fl">0.2</span>, fill = <span class="st">"blue"</span>) <span class="op">+</span>
@@ -219,24 +219,14 @@
 <div class="sourceCode" id="cb10"><pre class="downlit">
 <span class="fu"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span>(<span class="kw">model</span>, smooth = <span class="st">"Delay"</span>)
 </pre></div>
-<pre><code>&gt; Part | Start |   End |   Size |     Trend | Linearity
-&gt; -----------------------------------------------------
-&gt; 1    |  0.00 |  6.75 | 48.50% |     -0.08 |      0.97
-&gt; 2    |  6.75 |  6.89 |  1.00% |           |          
-&gt; 3    |  6.89 |  7.04 |  1.50% |     -0.02 |      0.75
-&gt; 4    |  7.04 |  7.18 |  1.00% |           |          
-&gt; 5    |  7.18 |  7.88 |  5.50% |     -0.03 |      0.97
-&gt; 6    |  7.88 |  8.02 |  1.00% |           |          
-&gt; 7    |  8.02 |  8.23 |  2.00% |     -0.04 |      0.70
-&gt; 8    |  8.23 |  8.51 |  2.50% |  3.67e-03 |      0.19
-&gt; 9    |  8.51 |  8.93 |  3.00% |     -0.02 |      0.85
-&gt; 10   |  8.93 |  9.29 |  2.50% |      0.02 |      0.52
-&gt; 11   |  9.29 |  9.64 |  3.00% | -9.05e-04 |      0.05
-&gt; 12   |  9.64 | 10.27 |  4.50% |      0.02 |      0.86
-&gt; 13   | 10.27 | 10.34 |  0.50% |           |          
-&gt; 14   | 10.34 | 11.05 |  5.00% |      0.04 |      0.98
-&gt; 15   | 11.05 | 11.12 |  1.00% |           |          
-&gt; 16   | 11.12 | 14.00 | 20.50% |      0.08 |      0.99</code></pre>
+<pre><code>&gt; Part | Start |   End |   Size | Trend | Linearity
+&gt; -------------------------------------------------
+&gt; 1    |  0.00 |  7.95 | 57.00% | -0.07 |      0.96
+&gt; 2    |  7.95 |  8.16 |  1.50% | -0.01 |      0.69
+&gt; 3    |  8.16 |  8.79 |  5.00% | -0.02 |      0.95
+&gt; 4    |  8.79 | 12.24 | 25.00% |  0.03 |      0.98
+&gt; 5    | 12.24 | 12.38 |  1.00% |       |          
+&gt; 6    | 12.38 | 14.00 | 11.50% |  0.06 |      0.98</code></pre>
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">

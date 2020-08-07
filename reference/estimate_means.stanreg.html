@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(
   <span class='kw'>model</span>,
   levels = <span class='kw'>NULL</span>,
   fixed = <span class='kw'>NULL</span>,
@@ -230,21 +230,21 @@
 
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>am</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
 
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>wt</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"wt"</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"wt"</span>)
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"wt"</span>)
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"wt"</span>)
 }</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; cyl |   wt |  Mean |         95% CI
 #&gt; -----------------------------------
-#&gt; 4   | 3.22 | 21.87 | [19.00, 24.85]
-#&gt; 6   | 3.22 | 19.38 | [17.33, 21.26]
-#&gt; 8   | 3.22 | 17.04 | [15.11, 18.89]</div><div class='input'>
+#&gt; 4   | 3.22 | 21.70 | [18.83, 24.57]
+#&gt; 6   | 3.22 | 19.39 | [17.39, 21.40]
+#&gt; 8   | 3.22 | 16.93 | [14.98, 18.84]</div><div class='input'>
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>am</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Compiling the C++ model</span></div><div class='output co'>#&gt; <span class='message'>recompiling to avoid crashing R session</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Method 'parse_bf' is deprecated. Please use 'brmsterms' instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Method 'parse_bf' is deprecated. Please use 'brmsterms' instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Argument 'exact_match' is deprecated. Please use 'fixed' instead.</span></div><div class='output co'>#&gt; cyl | am |  Mean |         95% CI
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Compiling Stan program...</span></div><div class='output co'>#&gt; <span class='message'>recompiling to avoid crashing R session</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Method 'parse_bf' is deprecated. Please use 'brmsterms' instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Method 'parse_bf' is deprecated. Please use 'brmsterms' instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Argument 'exact_match' is deprecated. Please use 'fixed' instead.</span></div><div class='output co'>#&gt; cyl | am |  Mean |         95% CI
 #&gt; ---------------------------------
 #&gt; 4   |  0 | 22.86 | [19.08, 26.35]
 #&gt; 6   |  0 | 19.07 | [16.07, 22.26]

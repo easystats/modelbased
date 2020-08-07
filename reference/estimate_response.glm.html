@@ -82,7 +82,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -155,7 +155,7 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for glm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_response</a></span>(
+<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(
   <span class='kw'>model</span>,
   data = <span class='kw'>NULL</span>,
   transform = <span class='st'>"response"</span>,
@@ -168,7 +168,7 @@
 )
 
 <span class='co'># S3 method for glm</span>
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_link</a></span>(
+<span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(
   <span class='kw'>model</span>,
   data = <span class='st'>"grid"</span>,
   transform = <span class='st'>"response"</span>,
@@ -189,7 +189,7 @@
     </tr>
     <tr>
       <th>data</th>
-      <td><p>A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through <code><a href='https://rdrr.io/pkg/modelbased/man/visualisation_matrix.html'>visualisation_matrix</a></code>).</p></td>
+      <td><p>A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>).</p></td>
     </tr>
     <tr>
       <th>transform</th>
@@ -201,15 +201,15 @@
     </tr>
     <tr>
       <th>length</th>
-      <td><p>Passed to <code><a href='https://rdrr.io/pkg/modelbased/man/visualisation_matrix.html'>visualisation_matrix</a></code> if <code>data = "grid"</code>.</p></td>
+      <td><p>Passed to <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> if <code>data = "grid"</code>.</p></td>
     </tr>
     <tr>
       <th>preserve_range</th>
-      <td><p>Passed to <code><a href='https://rdrr.io/pkg/modelbased/man/visualisation_matrix.html'>visualisation_matrix</a></code> if <code>data = "grid"</code>.</p></td>
+      <td><p>Passed to <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> if <code>data = "grid"</code>.</p></td>
     </tr>
     <tr>
       <th>predict</th>
-      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_link(model)</a></code>.</p></td>
+      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code><a href='estimate_response.html'>estimate_response(model, predict="link")</a></code> is equivalent to <code><a href='estimate_response.html'>estimate_link(model)</a></code>.</p></td>
     </tr>
     <tr>
       <th>ci</th>
@@ -229,7 +229,7 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
 
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
-<span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;        Species Petal.Length Predicted   CI_low  CI_high
+<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;        Species Petal.Length Predicted   CI_low  CI_high
 #&gt; 1       setosa          1.4  3.403952 2.771791 4.036113
 #&gt; 2       setosa          1.4  3.403952 2.771791 4.036113
 #&gt; 3       setosa          1.3  3.365164 2.728335 4.001994
@@ -379,7 +379,7 @@
 #&gt; 147  virginica          5.0  2.844640 2.206996 3.482284
 #&gt; 148  virginica          5.2  2.891509 2.257589 3.525430
 #&gt; 149  virginica          5.4  2.938379 2.306543 3.570215
-#&gt; 150  virginica          5.1  2.868075 2.232495 3.503654</div><div class='input'><span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;       Species Petal.Length Predicted   CI_low  CI_high
+#&gt; 150  virginica          5.1  2.868075 2.232495 3.503654</div><div class='input'><span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;       Species Petal.Length Predicted   CI_low  CI_high
 #&gt; 1      setosa     1.000000  3.248802 2.995307 3.502298
 #&gt; 2      setosa     1.245833  3.344155 3.202123 3.486186
 #&gt; 3      setosa     1.491667  3.439507 3.349793 3.529221
@@ -404,47 +404,36 @@
 #&gt; 22  virginica     6.900000  3.289901 3.054539 3.525264</div><div class='input'>
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)
-  <span class='fu'><a href='https://rdrr.io/pkg/modelbased/man/estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Registered S3 methods overwritten by 'broom.mixed':</span>
-#&gt; <span class='message'>  method         from </span>
-#&gt; <span class='message'>  augment.lme    broom</span>
-#&gt; <span class='message'>  augment.merMod broom</span>
-#&gt; <span class='message'>  glance.lme     broom</span>
-#&gt; <span class='message'>  glance.merMod  broom</span>
-#&gt; <span class='message'>  glance.stanreg broom</span>
-#&gt; <span class='message'>  tidy.brmsfit   broom</span>
-#&gt; <span class='message'>  tidy.gamlss    broom</span>
-#&gt; <span class='message'>  tidy.lme       broom</span>
-#&gt; <span class='message'>  tidy.merMod    broom</span>
-#&gt; <span class='message'>  tidy.rjags     broom</span>
-#&gt; <span class='message'>  tidy.stanfit   broom</span>
-#&gt; <span class='message'>  tidy.stanreg   broom</span></div><div class='output co'>#&gt; <span class='warning'>Warning: CI cannot be computed for mixed models when no random effects present in data. Provide some data with random effects, or set `ci = NULL`.</span></div><div class='output co'>#&gt;    Petal.Length Predicted CI_low CI_high
-#&gt; 1      1.000000  2.280195     NA      NA
-#&gt; 2      1.245833  2.349465     NA      NA
-#&gt; 3      1.491667  2.418735     NA      NA
-#&gt; 4      1.737500  2.488005     NA      NA
-#&gt; 5      1.983333  2.557275     NA      NA
-#&gt; 6      2.229167  2.626545     NA      NA
-#&gt; 7      2.475000  2.695815     NA      NA
-#&gt; 8      2.720833  2.765085     NA      NA
-#&gt; 9      2.966667  2.834355     NA      NA
-#&gt; 10     3.212500  2.903625     NA      NA
-#&gt; 11     3.458333  2.972894     NA      NA
-#&gt; 12     3.704167  3.042164     NA      NA
-#&gt; 13     3.950000  3.111434     NA      NA
-#&gt; 14     4.195833  3.180704     NA      NA
-#&gt; 15     4.441667  3.249974     NA      NA
-#&gt; 16     4.687500  3.319244     NA      NA
-#&gt; 17     4.933333  3.388514     NA      NA
-#&gt; 18     5.179167  3.457784     NA      NA
-#&gt; 19     5.425000  3.527054     NA      NA
-#&gt; 20     5.670833  3.596324     NA      NA
-#&gt; 21     5.916667  3.665594     NA      NA
-#&gt; 22     6.162500  3.734864     NA      NA
-#&gt; 23     6.408333  3.804134     NA      NA
-#&gt; 24     6.654167  3.873404     NA      NA
-#&gt; 25     6.900000  3.942674     NA      NA</div></pre>
+  <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)
+  <span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)
+}</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
+#&gt; <span class='message'>  method      from </span>
+#&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "satterthwaite" because *lmerTest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "satterthwaite" because *lmerTest* package is not installed</span></div><div class='output co'>#&gt;    Petal.Length Predicted   CI_low  CI_high
+#&gt; 1      1.000000  2.280195 1.219437 3.340953
+#&gt; 2      1.245833  2.349465 1.296992 3.401938
+#&gt; 3      1.491667  2.418735 1.373832 3.463638
+#&gt; 4      1.737500  2.488005 1.449939 3.526070
+#&gt; 5      1.983333  2.557275 1.525301 3.589249
+#&gt; 6      2.229167  2.626545 1.599902 3.653187
+#&gt; 7      2.475000  2.695815 1.673732 3.717898
+#&gt; 8      2.720833  2.765085 1.746780 3.783389
+#&gt; 9      2.966667  2.834355 1.819037 3.849672
+#&gt; 10     3.212500  2.903625 1.890497 3.916752
+#&gt; 11     3.458333  2.972894 1.961153 3.984636
+#&gt; 12     3.704167  3.042164 2.031004 4.053325
+#&gt; 13     3.950000  3.111434 2.100047 4.122822
+#&gt; 14     4.195833  3.180704 2.168283 4.193126
+#&gt; 15     4.441667  3.249974 2.235714 4.264234
+#&gt; 16     4.687500  3.319244 2.302345 4.336143
+#&gt; 17     4.933333  3.388514 2.368183 4.408845
+#&gt; 18     5.179167  3.457784 2.433234 4.482334
+#&gt; 19     5.425000  3.527054 2.497509 4.556599
+#&gt; 20     5.670833  3.596324 2.561019 4.631629
+#&gt; 21     5.916667  3.665594 2.623776 4.707411
+#&gt; 22     6.162500  3.734864 2.685795 4.783932
+#&gt; 23     6.408333  3.804134 2.747091 4.861176
+#&gt; 24     6.654167  3.873404 2.807680 4.939127
+#&gt; 25     6.900000  3.942674 2.867579 5.017768</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

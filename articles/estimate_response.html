@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0</span>
       </span>
     </div>
 
@@ -131,20 +131,20 @@
 <span class="kw">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_response</a></span>(<span class="kw">model</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw">predicted</span>)
 </pre></div>
-<pre><code>&gt;   Sepal.Length Median CI_low CI_high
-&gt; 1          5.1    2.4   0.67     4.1
-&gt; 2          4.9    2.0   0.22     3.6
-&gt; 3          4.7    1.7  -0.14     3.4
-&gt; 4          4.6    1.5  -0.20     3.3
-&gt; 5          5.0    2.2   0.43     3.8
-&gt; 6          5.4    2.9   1.28     4.7</code></pre>
-<p>The output is a dataframe containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original dataframe</strong> (used for fitting the model). Hence, we can simply add the prediction column (<code>Median</code>) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
+<pre><code>&gt;   Sepal.Length Predicted CI_low CI_high
+&gt; 1          5.1       2.4   0.62     4.1
+&gt; 2          4.9       2.0   0.17     3.6
+&gt; 3          4.7       1.6  -0.12     3.4
+&gt; 4          4.6       1.4  -0.35     3.2
+&gt; 5          5.0       2.2   0.52     3.9
+&gt; 6          5.4       2.9   1.19     4.7</code></pre>
+<p>The output is a data frame containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original data frame</strong> (used for fitting the model). Hence, we can simply add the prediction column (<code>Predicted</code>) to the original dataset and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="http://ggplot2.tidyverse.org">ggplot2</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://dplyr.tidyverse.org">dplyr</a></span>)
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="kw"><a href="https://easystats.github.io/see">see</a></span>)
 
-<span class="kw">data</span><span class="op">$</span><span class="kw">Predicted</span> <span class="op">&lt;-</span> <span class="kw">predicted</span><span class="op">$</span><span class="kw">Median</span>
+<span class="kw">data</span><span class="op">$</span><span class="kw">Predicted</span> <span class="op">&lt;-</span> <span class="kw">predicted</span><span class="op">$</span><span class="kw">Predicted</span>
 
 <span class="kw">data</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Petal.Length</span>, y = <span class="kw">Predicted</span>)) <span class="op">+</span>
@@ -157,7 +157,7 @@
 <p>It seems like our model does not perform too bad. What if we added information about the <code>Species</code> in the model?</p>
 <div class="sourceCode" id="cb5"><pre class="downlit">
 <span class="kw">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span>(<span class="kw">Petal.Length</span> <span class="op">~</span> <span class="kw">Sepal.Length</span> <span class="op">*</span> <span class="kw">Species</span>, data = <span class="kw">data</span>)
-<span class="kw">data</span><span class="op">$</span><span class="kw">Predicted_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_response</a></span>(<span class="kw">model</span>)<span class="op">$</span><span class="kw">Median</span>
+<span class="kw">data</span><span class="op">$</span><span class="kw">Predicted_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_response</a></span>(<span class="kw">model</span>)<span class="op">$</span><span class="kw">Predicted</span>
 </pre></div>
 <p>We could now plot the second observations, based on a more complex model, as a red overlay to the previous points:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit">
@@ -175,7 +175,7 @@
 <div id="estimating-response-vs--link" class="section level1">
 <h1 class="hasAnchor">
 <a href="#estimating-response-vs--link" class="anchor"></a>Estimating response <em>vs.</em> link</h1>
-<p>Rather than visualising the predictions made by a model, we are often interested in visualising the <em>links</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
+<p>Rather than visualizing the predictions made by a model, we are often interested in visualizing the <em>links</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit">
 <span class="kw">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_response</a></span>(<span class="kw">model</span>, data = <span class="st">"grid"</span>)
@@ -184,12 +184,12 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Sepal.Length</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Petal.Length</span>, color = <span class="kw">Species</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low</span>, ymax = <span class="kw">CI_high</span>, fill = <span class="kw">Species</span>), alpha = <span class="fl">0.3</span>) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Median</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Predicted</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()
 </pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-9-1.png" width="3281.25"></p>
-<p>However, you might notice that the <strong>Credible Interval (CI) bands are quite big</strong>. This is where <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is comming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting <strong>the link</strong> (<em>i.e.</em>, the regression line and the uncertainty interval associated <em>with this line</em>).</p>
-<p>In order to facilitate visualisation of links, we added <code><a href="../reference/estimate_response.html">estimate_link()</a></code> as a shortcut to <code><a href="../reference/estimate_response.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_response.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is more relevant in the context of visualisation and plotting.</p>
+<p>However, you might notice that the <strong>Credible Interval (CI) bands are quite big</strong>. This is where <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is coming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting <strong>the link</strong> (<em>i.e.</em>, the regression line and the uncertainty interval associated <em>with this line</em>).</p>
+<p>In order to facilitate visualization of links, we added <code><a href="../reference/estimate_response.html">estimate_link()</a></code> as a shortcut to <code><a href="../reference/estimate_response.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_response.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_response.html">estimate_link()</a></code> is more relevant in the context of visualization and plotting.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="kw">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_response.html">estimate_link</a></span>(<span class="kw">model</span>)
 
@@ -197,7 +197,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Sepal.Length</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Petal.Length</span>, color = <span class="kw">Species</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low</span>, ymax = <span class="kw">CI_high</span>, fill = <span class="kw">Species</span>), alpha = <span class="fl">0.3</span>) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Median</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Predicted</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()
 </pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
@@ -215,7 +215,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low_99</span>, ymax = <span class="kw">CI_high_99</span>, fill = <span class="kw">Species</span>), alpha = <span class="fl">0.2</span>) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low_89</span>, ymax = <span class="kw">CI_high_89</span>, fill = <span class="kw">Species</span>), alpha = <span class="fl">0.3</span>) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(ymin = <span class="kw">CI_low_69</span>, ymax = <span class="kw">CI_high_69</span>, fill = <span class="kw">Species</span>), alpha = <span class="fl">0.3</span>) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Median</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Predicted</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()
 </pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-11-1.png" width="3281.25"></p>
@@ -236,7 +236,7 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(x = <span class="kw">Sepal.Length</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span>(<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Petal.Length</span>, color = <span class="kw">Species</span>)) <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">draws</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Draw</span>, color = <span class="kw">Species</span>, group = <span class="kw">group</span>), alpha = <span class="fl">0.05</span>) <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Median</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span>(data = <span class="kw">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span>(y = <span class="kw">Predicted</span>, color = <span class="kw">Species</span>), size = <span class="fl">1</span>) <span class="op">+</span>
   <span class="fu"><a href="https://rdrr.io/pkg/see/man/theme_modern.html">theme_modern</a></span>()
 </pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-12-1.png" width="3281.25"></p>
