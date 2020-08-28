@@ -229,7 +229,8 @@
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
 
 <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
-<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;        Species Petal.Length Predicted   CI_low  CI_high
+<span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)
+</div><div class='output co'>#&gt;        Species Petal.Length Predicted   CI_low  CI_high
 #&gt; 1       setosa          1.4  3.403952 2.771791 4.036113
 #&gt; 2       setosa          1.4  3.403952 2.771791 4.036113
 #&gt; 3       setosa          1.3  3.365164 2.728335 4.001994
@@ -379,7 +380,8 @@
 #&gt; 147  virginica          5.0  2.844640 2.206996 3.482284
 #&gt; 148  virginica          5.2  2.891509 2.257589 3.525430
 #&gt; 149  virginica          5.4  2.938379 2.306543 3.570215
-#&gt; 150  virginica          5.1  2.868075 2.232495 3.503654</div><div class='input'><span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)</div><div class='output co'>#&gt;       Species Petal.Length Predicted   CI_low  CI_high
+#&gt; 150  virginica          5.1  2.868075 2.232495 3.503654</div><div class='input'><span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)
+</div><div class='output co'>#&gt;       Species Petal.Length Predicted   CI_low  CI_high
 #&gt; 1      setosa     1.000000  3.248802 2.995307 3.502298
 #&gt; 2      setosa     1.245833  3.344155 3.202123 3.486186
 #&gt; 3      setosa     1.491667  3.439507 3.349793 3.529221
@@ -406,7 +408,8 @@
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Petal.Length</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Species</span>), data = <span class='kw'>iris</span>)
   <span class='fu'><a href='estimate_response.html'>estimate_response</a></span>(<span class='kw'>model</span>)
   <span class='fu'><a href='estimate_response.html'>estimate_link</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
+}
+</div><div class='output co'>#&gt; <span class='message'>Registered S3 method overwritten by 'broom.mixed':</span>
 #&gt; <span class='message'>  method      from </span>
 #&gt; <span class='message'>  tidy.gamlss broom</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "satterthwaite" because *lmerTest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span></div><div class='output co'>#&gt; <span class='message'>Cannot use mode = "satterthwaite" because *lmerTest* package is not installed</span></div><div class='output co'>#&gt;    Petal.Length Predicted   CI_low  CI_high
 #&gt; 1      1.000000  2.280195 1.219437 3.340953

@@ -247,11 +247,12 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
   <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
   <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(<span class='kw'>model</span>)
-}</div><div class='output co'>#&gt; 
+}
+</div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 3.7e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.37 seconds.
+#&gt; Chain 1: Gradient evaluation took 2.6e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -268,15 +269,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 1.02713 seconds (Warm-up)
-#&gt; Chain 1:                0.992923 seconds (Sampling)
-#&gt; Chain 1:                2.02005 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.825048 seconds (Warm-up)
+#&gt; Chain 1:                0.815064 seconds (Sampling)
+#&gt; Chain 1:                1.64011 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.3e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.2e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -293,15 +294,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.919927 seconds (Warm-up)
-#&gt; Chain 2:                1.0779 seconds (Sampling)
-#&gt; Chain 2:                1.99783 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.782692 seconds (Warm-up)
+#&gt; Chain 2:                0.788938 seconds (Sampling)
+#&gt; Chain 2:                1.57163 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 2.1e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.21 seconds.
+#&gt; Chain 3: Gradient evaluation took 1.1e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -318,15 +319,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.913207 seconds (Warm-up)
-#&gt; Chain 3:                0.920578 seconds (Sampling)
-#&gt; Chain 3:                1.83378 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.732433 seconds (Warm-up)
+#&gt; Chain 3:                0.746723 seconds (Sampling)
+#&gt; Chain 3:                1.47916 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 1.4e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#&gt; Chain 4: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -343,14 +344,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.857209 seconds (Warm-up)
-#&gt; Chain 4:                0.895015 seconds (Sampling)
-#&gt; Chain 4:                1.75222 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.76815 seconds (Warm-up)
+#&gt; Chain 4:                0.795882 seconds (Sampling)
+#&gt; Chain 4:                1.56403 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span></div><div class='output co'>#&gt; Species    | Median |        95% CI |     pd | % in ROPE | Median (std.)
 #&gt; ------------------------------------------------------------------------
 #&gt; setosa     |   0.35 | [-0.02, 0.74] | 96.53% |     8.45% |          1.40
 #&gt; versicolor |   0.36 | [ 0.18, 0.55] |   100% |     0.22% |          1.44
-#&gt; virginica  |   0.23 | [ 0.07, 0.38] | 99.85% |     5.47% |          0.93</div><div class='input'><span class='co'># }</span></div></pre>
+#&gt; virginica  |   0.23 | [ 0.07, 0.38] | 99.85% |     5.47% |          0.93</div><div class='input'><span class='co'># }</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
