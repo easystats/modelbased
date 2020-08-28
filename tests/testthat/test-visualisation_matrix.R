@@ -6,7 +6,7 @@ if (require("testthat") && require("modelbased")) {
     testthat::expect_equal(nrow(visualisation_matrix(iris, target = "Species", length = 2, numerics = 0)), 3)
     testthat::expect_equal(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 3, standardize = TRUE)), 3)
     testthat::expect_equal(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 3, standardize = TRUE, standardize_robust = TRUE)), 3)
-    testthat::expect_warning(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 4, standardize = TRUE)), 5)
+    testthat::expect_warning(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 4, standardize = TRUE)))
 
     testthat::expect_equal(nrow(visualisation_matrix(data.frame(
       X = c("A", "A", "B"),
