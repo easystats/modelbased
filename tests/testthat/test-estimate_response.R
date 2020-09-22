@@ -27,9 +27,9 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_link(model, keep_draws = TRUE)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
 
-    model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield", refresh=0)
-    estim <- estimate_link(model, keep_draws = TRUE)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
+    # model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield", refresh=0)
+    # estim <- estimate_link(model, keep_draws = TRUE)
+    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
   })
 
 
