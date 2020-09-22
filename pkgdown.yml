@@ -1,6 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 1.5.1.9000
-pkgdown_sha: ecce89ed7fc0bfe4a2ec6e2fdc9285f238e13e7c
-articles: []
-last_built: 2020-08-28T05:33Z
+pkgdown: 1.6.1.9000
+pkgdown_sha: e1e46f2e13c7efdb17bc4eae40bc3779c2b0b517
+articles:
+  estimate_contrasts: estimate_contrasts.html
+  estimate_means: estimate_means.html
+  estimate_response: estimate_response.html
+  estimate_smooth: estimate_smooth.html
+  visualisation_matrix: visualisation_matrix.html
+last_built: 2020-09-22T11:31Z
 
