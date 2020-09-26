@@ -1,4 +1,7 @@
 if (require("testthat") && require("modelbased") && require("glmmTMB") && require("emmeans")) {
+
+  # testthat::skip_on_cran()
+
   data <- glmmTMB::Salamanders
   model <- glmmTMB::glmmTMB(
     count ~ mined + (1 | site),
