@@ -24,7 +24,7 @@ navbar:
   - text: Tutorials
     menu:
       - text: 'Data grids'
-        href: articles/data_grid.html
+        href: articles/visualisation_matrix.html
       - text: 'Marginal means'
         href: articles/estimate_means.html
       - text: 'Contrast analysis'
