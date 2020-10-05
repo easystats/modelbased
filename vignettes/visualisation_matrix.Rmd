@@ -208,7 +208,7 @@ newdata <- iris %>%
   visualisation_matrix("Petal.Width", length=5, numerics = "combination")
 ```
 
-What did we do her? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating `10 * 10 = 100` rows. The next step was to reduce `Petal.Length` to a set of 5 values, but without touching the other variables (*i.e.*, keeping the 10 values created for `Petal.Length`). This was achieved using  `numerics = "combination"`.
+What did we do here? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating `10 * 10 = 100` rows. The next step was to reduce `Petal.Length` to a set of 5 values, but without touching the other variables (*i.e.*, keeping the 10 values created for `Petal.Length`). This was achieved using  `numerics = "combination"`.
 
 We can then visualise it as follows:
 
