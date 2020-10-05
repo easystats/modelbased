@@ -172,7 +172,7 @@ estimate_link.stanreg <- function(model, data = "grid", transform = "response", 
 estimate_response.data.frame <- function(model, data = NULL, transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if ((is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model)) {
+  if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
@@ -185,7 +185,7 @@ estimate_response.data.frame <- function(model, data = NULL, transform = "respon
 estimate_link.data.frame <- function(model, data = "grid", transform = "response", random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
-  if ((is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model)) {
+  if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
