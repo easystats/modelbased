@@ -108,7 +108,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/visualisation_matrix.html">Data grids</a>
     </li>
     <li>
       <a href="../articles/estimate_means.html">Marginal means</a>
@@ -155,16 +155,16 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for lm</span>
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(
-  <span class='kw'>model</span>,
-  levels = <span class='kw'>NULL</span>,
-  fixed = <span class='kw'>NULL</span>,
-  modulate = <span class='kw'>NULL</span>,
-  transform = <span class='st'>"response"</span>,
-  length = <span class='fl'>10</span>,
-  ci = <span class='fl'>0.95</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  levels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fixed <span class='op'>=</span> <span class='cn'>NULL</span>,
+  modulate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transform <span class='op'>=</span> <span class='st'>"response"</span>,
+  length <span class='op'>=</span> <span class='fl'>10</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -208,21 +208,21 @@
     <p>A data frame of estimated marginal means.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/easystats/modelbased'>modelbased</a></span><span class='op'>)</span>
 
-<span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Sepal.Width</span> <span class='op'>*</span> <span class='kw'>Species</span>, data = <span class='kw'>iris</span>)
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>*</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
 
-<span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
+<span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Species    | Mean |   SE |       95% CI
 #&gt; ---------------------------------------
 #&gt; setosa     | 1.43 | 0.08 | [1.28, 1.58]
 #&gt; versicolor | 4.50 | 0.07 | [4.35, 4.65]
-#&gt; virginica  | 5.61 | 0.06 | [5.50, 5.72]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"Sepal.Width"</span>)
+#&gt; virginica  | 5.61 | 0.06 | [5.50, 5.72]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Sepal.Width"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        3.06 | 1.43 | 0.08 | [1.28, 1.58]
 #&gt; versicolor |        3.06 | 4.50 | 0.07 | [4.35, 4.65]
-#&gt; virginica  |        3.06 | 5.61 | 0.06 | [5.50, 5.72]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Species"</span>, <span class='st'>"Sepal.Width"</span>), length = <span class='fl'>2</span>)
+#&gt; virginica  |        3.06 | 5.61 | 0.06 | [5.50, 5.72]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Species"</span>, <span class='st'>"Sepal.Width"</span><span class='op'>)</span>, length <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        2.00 | 1.35 | 0.21 | [0.92, 1.77]
@@ -230,20 +230,20 @@
 #&gt; virginica  |        2.00 | 4.88 | 0.17 | [4.54, 5.23]
 #&gt; setosa     |        4.40 | 1.54 | 0.15 | [1.24, 1.84]
 #&gt; versicolor |        4.40 | 5.63 | 0.29 | [5.05, 6.20]
-#&gt; virginica  |        4.40 | 6.53 | 0.25 | [6.04, 7.02]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, levels = <span class='st'>"Species=c('versicolor', 'setosa')"</span>)
+#&gt; virginica  |        4.40 | 6.53 | 0.25 | [6.04, 7.02]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"Species=c('versicolor', 'setosa')"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Species    | Mean |   SE |       95% CI
 #&gt; ---------------------------------------
 #&gt; versicolor | 4.50 | 0.07 | [4.35, 4.65]
-#&gt; setosa     | 1.43 | 0.08 | [1.28, 1.58]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, levels = <span class='st'>"Sepal.Width=c(2, 4)"</span>)
+#&gt; setosa     | 1.43 | 0.08 | [1.28, 1.58]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"Sepal.Width=c(2, 4)"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; Sepal.Width | Mean |   SE |       95% CI
 #&gt; ----------------------------------------
 #&gt; 2.00        | 3.28 | 0.10 | [3.07, 3.49]
-#&gt; 4.00        | 4.35 | 0.10 | [4.15, 4.55]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, levels = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Species"</span>, <span class='st'>"Sepal.Width=0"</span>))
+#&gt; 4.00        | 4.35 | 0.10 | [4.15, 4.55]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Species"</span>, <span class='st'>"Sepal.Width=0"</span><span class='op'>)</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        0.00 | 1.18 | 0.50 | [0.19, 2.17]
 #&gt; versicolor |        0.00 | 1.93 | 0.49 | [0.97, 2.90]
-#&gt; virginica  |        0.00 | 3.51 | 0.51 | [2.50, 4.52]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"Sepal.Width"</span>, length = <span class='fl'>5</span>)
+#&gt; virginica  |        0.00 | 3.51 | 0.51 | [2.50, 4.52]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Sepal.Width"</span>, length <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        2.00 | 1.35 | 0.21 | [0.92, 1.77]
@@ -260,7 +260,7 @@
 #&gt; virginica  |        3.80 | 6.12 | 0.15 | [5.82, 6.42]
 #&gt; setosa     |        4.40 | 1.54 | 0.15 | [1.24, 1.84]
 #&gt; versicolor |        4.40 | 5.63 | 0.29 | [5.05, 6.20]
-#&gt; virginica  |        4.40 | 6.53 | 0.25 | [6.04, 7.02]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"Sepal.Width=c(2, 4)"</span>)
+#&gt; virginica  |        4.40 | 6.53 | 0.25 | [6.04, 7.02]</div><div class='input'><span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Sepal.Width=c(2, 4)"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        2.00 | 1.35 | 0.21 | [0.92, 1.77]
@@ -269,14 +269,14 @@
 #&gt; setosa     |        4.00 | 1.51 | 0.10 | [1.31, 1.70]
 #&gt; versicolor |        4.00 | 5.29 | 0.22 | [4.85, 5.73]
 #&gt; virginica  |        4.00 | 6.26 | 0.18 | [5.89, 6.62]</div><div class='input'><span class='co'># \donttest{</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/lme4/lme4'>"lme4"</a></span>)) {
-  <span class='kw'>data</span> <span class='op'>&lt;-</span> <span class='kw'>iris</span>
-  <span class='kw'>data</span><span class='op'>$</span><span class='kw'>Petal.Length_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span>(<span class='kw'>data</span><span class='op'>$</span><span class='kw'>Petal.Length</span> <span class='op'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span>)
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>Petal.Length_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Petal.Length</span> <span class='op'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span>(<span class='kw'>Petal.Length</span> <span class='op'>~</span> <span class='kw'>Sepal.Width</span> <span class='op'>+</span> <span class='kw'>Species</span> <span class='op'>+</span> (<span class='fl'>1</span> <span class='op'>|</span> <span class='kw'>Petal.Length_factor</span>), data = <span class='kw'>data</span>)
-  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>)
-  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"Sepal.Width"</span>, length = <span class='fl'>3</span>)
-}
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Sepal.Width</span> <span class='op'>+</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Petal.Length_factor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Sepal.Width"</span>, length <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; Species    | Sepal.Width | Mean |   SE |       95% CI
 #&gt; -----------------------------------------------------
 #&gt; setosa     |        2.00 | 1.34 | 0.37 | [0.62, 2.07]

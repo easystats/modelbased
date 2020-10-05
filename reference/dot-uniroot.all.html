@@ -108,7 +108,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/visualisation_matrix.html">Data grids</a>
     </li>
     <li>
       <a href="../articles/estimate_means.html">Marginal means</a>
@@ -154,16 +154,16 @@
     <p>Copied from rootSolve package</p>
     </div>
 
-    <pre class="usage"><span class='fu'>.uniroot.all</span>(
-  <span class='kw'>f</span>,
-  <span class='kw'>interval</span>,
-  lower = <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='kw'>interval</span>),
-  upper = <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='kw'>interval</span>),
-  tol = <span class='kw'>.Machine</span><span class='op'>$</span><span class='kw'>double.eps</span><span class='op'>^</span><span class='fl'>0.2</span>,
-  maxiter = <span class='fl'>1000</span>,
-  n = <span class='fl'>100</span>,
-  <span class='kw'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>.uniroot.all</span><span class='op'>(</span>
+  <span class='va'>f</span>,
+  <span class='va'>interval</span>,
+  lower <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>interval</span><span class='op'>)</span>,
+  upper <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span><span class='op'>(</span><span class='va'>interval</span><span class='op'>)</span>,
+  tol <span class='op'>=</span> <span class='va'>.Machine</span><span class='op'>$</span><span class='va'>double.eps</span><span class='op'>^</span><span class='fl'>0.2</span>,
+  maxiter <span class='op'>=</span> <span class='fl'>1000</span>,
+  n <span class='op'>=</span> <span class='fl'>100</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
 
 

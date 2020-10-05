@@ -108,7 +108,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/visualisation_matrix.html">Data grids</a>
     </li>
     <li>
       <a href="../articles/estimate_means.html">Marginal means</a>
@@ -155,21 +155,21 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(
-  <span class='kw'>model</span>,
-  trend = <span class='kw'>NULL</span>,
-  levels = <span class='kw'>NULL</span>,
-  transform = <span class='st'>"response"</span>,
-  standardize = <span class='fl'>TRUE</span>,
-  standardize_robust = <span class='fl'>FALSE</span>,
-  ci = <span class='fl'>0.95</span>,
-  centrality = <span class='st'>"median"</span>,
-  ci_method = <span class='st'>"hdi"</span>,
-  test = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>),
-  rope_range = <span class='st'>"default"</span>,
-  rope_ci = <span class='fl'>1</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  trend <span class='op'>=</span> <span class='cn'>NULL</span>,
+  levels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transform <span class='op'>=</span> <span class='st'>"response"</span>,
+  standardize <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  standardize_robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  centrality <span class='op'>=</span> <span class='st'>"median"</span>,
+  ci_method <span class='op'>=</span> <span class='st'>"hdi"</span>,
+  test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pd"</span>, <span class='st'>"rope"</span><span class='op'>)</span>,
+  rope_range <span class='op'>=</span> <span class='st'>"default"</span>,
+  rope_ci <span class='op'>=</span> <span class='fl'>1</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -200,7 +200,7 @@
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See <code><a href='https://rdrr.io/pkg/bayestestR/man/ci.html'>ci</a></code> for further details.</p></td>
+      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See <code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>ci</a></code> for further details.</p></td>
     </tr>
     <tr>
       <th>centrality</th>
@@ -209,9 +209,9 @@
     <tr>
       <th>ci_method</th>
       <td><p>The type of index used for Credible Interval. Can be
-<code>"HDI"</code> (default, see <code><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></code>), <code>"ETI"</code>
-(see <code><a href='https://rdrr.io/pkg/bayestestR/man/eti.html'>eti</a></code>) or <code>"SI"</code>
-(see <code><a href='https://rdrr.io/pkg/bayestestR/man/si.html'>si</a></code>).</p></td>
+<code>"HDI"</code> (default, see <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>), <code>"ETI"</code>
+(see <code><a href='https://easystats.github.io/bayestestR/reference/eti.html'>eti</a></code>) or <code>"SI"</code>
+(see <code><a href='https://easystats.github.io/bayestestR/reference/si.html'>si</a></code>).</p></td>
     </tr>
     <tr>
       <th>test</th>
@@ -220,7 +220,7 @@ list with one or more of these options: <code>"p_direction"</code> (or <code>"pd
 <code>"rope"</code>, <code>"p_map"</code>, <code>"equivalence_test"</code> (or <code>"equitest"</code>),
 <code>"bayesfactor"</code> (or <code>"bf"</code>) or <code>"all"</code> to compute all tests.
 For each "test", the corresponding <span class="pkg">bayestestR</span> function is called
-(e.g. <code><a href='https://rdrr.io/pkg/bayestestR/man/rope.html'>rope</a></code> or <code><a href='https://rdrr.io/pkg/bayestestR/man/p_direction.html'>p_direction</a></code>) and its results
+(e.g. <code><a href='https://easystats.github.io/bayestestR/reference/rope.html'>rope</a></code> or <code><a href='https://easystats.github.io/bayestestR/reference/p_direction.html'>p_direction</a></code>) and its results
 included in the summary output.</p></td>
     </tr>
     <tr>
@@ -242,17 +242,17 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/easystats/modelbased'>modelbased</a></span><span class='op'>)</span>
 <span class='co'># \donttest{</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>*</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>)
-  <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span>(<span class='kw'>model</span>)
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 3e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.3 seconds.
+#&gt; Chain 1: Gradient evaluation took 2.5e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.25 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -269,15 +269,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.865222 seconds (Warm-up)
-#&gt; Chain 1:                0.872028 seconds (Sampling)
-#&gt; Chain 1:                1.73725 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.870613 seconds (Warm-up)
+#&gt; Chain 1:                0.863492 seconds (Sampling)
+#&gt; Chain 1:                1.73411 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.6e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.16 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -294,15 +294,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.817346 seconds (Warm-up)
-#&gt; Chain 2:                0.835569 seconds (Sampling)
-#&gt; Chain 2:                1.65292 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.828221 seconds (Warm-up)
+#&gt; Chain 2:                0.826626 seconds (Sampling)
+#&gt; Chain 2:                1.65485 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 1.7e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
+#&gt; Chain 3: Gradient evaluation took 1.3e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -319,15 +319,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.787012 seconds (Warm-up)
-#&gt; Chain 3:                0.785221 seconds (Sampling)
-#&gt; Chain 3:                1.57223 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.755985 seconds (Warm-up)
+#&gt; Chain 3:                0.770606 seconds (Sampling)
+#&gt; Chain 3:                1.52659 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 2.7e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.27 seconds.
+#&gt; Chain 4: Gradient evaluation took 2.6e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.26 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -344,9 +344,9 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.810411 seconds (Warm-up)
-#&gt; Chain 4:                0.82364 seconds (Sampling)
-#&gt; Chain 4:                1.63405 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.802304 seconds (Warm-up)
+#&gt; Chain 4:                0.826451 seconds (Sampling)
+#&gt; Chain 4:                1.62875 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span></div><div class='output co'>#&gt; Species    | Median |        95% CI |     pd | % in ROPE | Median (std.)
 #&gt; ------------------------------------------------------------------------
 #&gt; setosa     |   0.35 | [-0.02, 0.74] | 96.53% |     8.45% |          1.40

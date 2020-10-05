@@ -108,7 +108,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/visualisation_matrix.html">Data grids</a>
     </li>
     <li>
       <a href="../articles/estimate_means.html">Marginal means</a>
@@ -155,23 +155,23 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for stanreg</span>
-<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(
-  <span class='kw'>model</span>,
-  levels = <span class='kw'>NULL</span>,
-  fixed = <span class='kw'>NULL</span>,
-  modulate = <span class='kw'>NULL</span>,
-  transform = <span class='st'>"none"</span>,
-  length = <span class='fl'>10</span>,
-  standardize = <span class='fl'>TRUE</span>,
-  standardize_robust = <span class='fl'>FALSE</span>,
-  centrality = <span class='st'>"median"</span>,
-  ci = <span class='fl'>0.95</span>,
-  ci_method = <span class='st'>"hdi"</span>,
-  test = <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"pd"</span>, <span class='st'>"rope"</span>),
-  rope_range = <span class='st'>"default"</span>,
-  rope_ci = <span class='fl'>1</span>,
-  <span class='kw'>...</span>
-)</pre>
+<span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  levels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fixed <span class='op'>=</span> <span class='cn'>NULL</span>,
+  modulate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transform <span class='op'>=</span> <span class='st'>"none"</span>,
+  length <span class='op'>=</span> <span class='fl'>10</span>,
+  standardize <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  standardize_robust <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  centrality <span class='op'>=</span> <span class='st'>"median"</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  ci_method <span class='op'>=</span> <span class='st'>"hdi"</span>,
+  test <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pd"</span>, <span class='st'>"rope"</span><span class='op'>)</span>,
+  rope_range <span class='op'>=</span> <span class='st'>"default"</span>,
+  rope_ci <span class='op'>=</span> <span class='fl'>1</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -214,14 +214,14 @@
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See <code><a href='https://rdrr.io/pkg/bayestestR/man/ci.html'>ci</a></code> for further details.</p></td>
+      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See <code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>ci</a></code> for further details.</p></td>
     </tr>
     <tr>
       <th>ci_method</th>
       <td><p>The type of index used for Credible Interval. Can be
-<code>"HDI"</code> (default, see <code><a href='https://rdrr.io/pkg/bayestestR/man/hdi.html'>hdi</a></code>), <code>"ETI"</code>
-(see <code><a href='https://rdrr.io/pkg/bayestestR/man/eti.html'>eti</a></code>) or <code>"SI"</code>
-(see <code><a href='https://rdrr.io/pkg/bayestestR/man/si.html'>si</a></code>).</p></td>
+<code>"HDI"</code> (default, see <code><a href='https://easystats.github.io/bayestestR/reference/hdi.html'>hdi</a></code>), <code>"ETI"</code>
+(see <code><a href='https://easystats.github.io/bayestestR/reference/eti.html'>eti</a></code>) or <code>"SI"</code>
+(see <code><a href='https://easystats.github.io/bayestestR/reference/si.html'>si</a></code>).</p></td>
     </tr>
     <tr>
       <th>test</th>
@@ -230,7 +230,7 @@ list with one or more of these options: <code>"p_direction"</code> (or <code>"pd
 <code>"rope"</code>, <code>"p_map"</code>, <code>"equivalence_test"</code> (or <code>"equitest"</code>),
 <code>"bayesfactor"</code> (or <code>"bf"</code>) or <code>"all"</code> to compute all tests.
 For each "test", the corresponding <span class="pkg">bayestestR</span> function is called
-(e.g. <code><a href='https://rdrr.io/pkg/bayestestR/man/rope.html'>rope</a></code> or <code><a href='https://rdrr.io/pkg/bayestestR/man/p_direction.html'>p_direction</a></code>) and its results
+(e.g. <code><a href='https://easystats.github.io/bayestestR/reference/rope.html'>rope</a></code> or <code><a href='https://easystats.github.io/bayestestR/reference/p_direction.html'>p_direction</a></code>) and its results
 included in the summary output.</p></td>
     </tr>
     <tr>
@@ -255,28 +255,28 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
     <p>A data frame of estimated contrasts.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='kw'><a href='https://github.com/easystats/modelbased'>modelbased</a></span>)
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/easystats/modelbased'>modelbased</a></span><span class='op'>)</span>
 
-<span class='kw'>data</span> <span class='op'>&lt;-</span> <span class='kw'>mtcars</span>
-<span class='kw'>data</span><span class='op'>$</span><span class='kw'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span><span class='op'>$</span><span class='kw'>cyl</span>)
-<span class='kw'>data</span><span class='op'>$</span><span class='kw'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span>(<span class='kw'>data</span><span class='op'>$</span><span class='kw'>am</span>)
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span>
 
 <span class='co'># \donttest{</span>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://mc-stan.org/rstanarm'>"rstanarm"</a></span>)) {
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>am</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"am"</span>)
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"am"</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>wt</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"wt"</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, modulate = <span class='st'>"wt"</span>, length = <span class='fl'>4</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, levels = <span class='st'>"wt"</span>, length = <span class='fl'>4</span>)
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"wt"</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"wt"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"wt"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
 
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span>(<span class='kw'>Sepal.Width</span> <span class='op'>~</span> <span class='kw'>Species</span> <span class='op'>+</span> <span class='kw'>Petal.Width</span> <span class='op'>+</span> <span class='kw'>Petal.Length</span>, data = <span class='kw'>iris</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>, fixed = <span class='st'>"Petal.Width"</span>, modulate = <span class='st'>"Petal.Length"</span>, test = <span class='st'>"bf"</span>)
-}
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span>, test <span class='op'>=</span> <span class='st'>"bf"</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>Computation of Bayes factors: sampling priors, please wait...</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: logspline</span></div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Petal.Length | Difference |       95% CI |     BF | Difference (std.)
 #&gt; -------------------------------------------------------------------------------------------------------------
 #&gt; setosa     | versicolor |        1.20 |         1.00 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
@@ -309,10 +309,10 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; setosa     | versicolor |        1.20 |         6.90 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
 #&gt; setosa     |  virginica |        1.20 |         6.90 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
 #&gt; versicolor |  virginica |        1.20 |         6.90 |       0.41 | [0.20, 0.63] |  21.50 |              0.95</div><div class='input'>
-<span class='co'>if</span> (<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span>)) {
-  <span class='kw'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span>(<span class='kw'>mpg</span> <span class='op'>~</span> <span class='kw'>cyl</span> <span class='op'>*</span> <span class='kw'>am</span>, data = <span class='kw'>data</span>, refresh=<span class='fl'>0</span>)
-  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span>(<span class='kw'>model</span>)
-}
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: brms</span></div><div class='output co'>#&gt; <span class='message'>Loading 'brms' package (version 2.13.5). Useful instructions</span>
 #&gt; <span class='message'>can be found by typing help('brms'). A more detailed introduction</span>
 #&gt; <span class='message'>to the package is available through vignette('brms_overview').</span></div><div class='output co'>#&gt; <span class='message'></span>

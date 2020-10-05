@@ -108,7 +108,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/data_grid.html">Data grids</a>
+      <a href="../articles/visualisation_matrix.html">Data grids</a>
     </li>
     <li>
       <a href="../articles/estimate_means.html">Marginal means</a>
@@ -154,7 +154,7 @@
     <p>Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>smoothing</span>(<span class='kw'>x</span>, method = <span class='st'>"loess"</span>, strength = <span class='fl'>0.25</span>, <span class='kw'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>smoothing</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"loess"</span>, strength <span class='op'>=</span> <span class='fl'>0.25</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -182,15 +182,15 @@
     <p>A smoothed vector or data frame.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='kw'>pi</span>, length.out = <span class='fl'>100</span>)) <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>0.2</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>x</span>, type = <span class='st'>"l"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'>smoothing</span>(<span class='kw'>x</span>, method = <span class='st'>"smooth"</span>), type = <span class='st'>"l"</span>, col = <span class='st'>"blue"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'>smoothing</span>(<span class='kw'>x</span>, method = <span class='st'>"loess"</span>), type = <span class='st'>"l"</span>, col = <span class='st'>"red"</span>)
+    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='va'>pi</span>, length.out <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>100</span>, <span class='fl'>0</span>, <span class='fl'>0.2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>"l"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'>smoothing</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"smooth"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'>smoothing</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"loess"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
 </div><div class='img'><img src='smoothing-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='kw'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span>(<span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='kw'>pi</span>, length.out = <span class='fl'>10000</span>)) <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>10000</span>, <span class='fl'>0</span>, <span class='fl'>0.2</span>)
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span>(<span class='kw'>x</span>, type = <span class='st'>"l"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'>smoothing</span>(<span class='kw'>x</span>, method = <span class='st'>"smooth"</span>), type = <span class='st'>"l"</span>, col = <span class='st'>"blue"</span>)
-</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span>(<span class='fu'>smoothing</span>(<span class='kw'>x</span>, method = <span class='st'>"loess"</span>), type = <span class='st'>"l"</span>, col = <span class='st'>"red"</span>)
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='va'>pi</span>, length.out <span class='op'>=</span> <span class='fl'>10000</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>10000</span>, <span class='fl'>0</span>, <span class='fl'>0.2</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span>, type <span class='op'>=</span> <span class='st'>"l"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'>smoothing</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"smooth"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='st'>"blue"</span><span class='op'>)</span>
+</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/graphics/lines.html'>lines</a></span><span class='op'>(</span><span class='fu'>smoothing</span><span class='op'>(</span><span class='va'>x</span>, method <span class='op'>=</span> <span class='st'>"loess"</span><span class='op'>)</span>, type <span class='op'>=</span> <span class='st'>"l"</span>, col <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>
 </div><div class='img'><img src='smoothing-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
