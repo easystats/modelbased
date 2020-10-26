@@ -1,37 +1,38 @@
-if (require("testthat") && require("modelbased") && require("rstanarm") && require("insight") && require("brms") && require("lme4")) {
-  test_that("estimate_response - Bayesian", {
-    model <- rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2, raw = TRUE), data = mtcars, refresh = 0, iter = 200, chains = 2)
-    estim <- estimate_response(model, seed = 333)
-    testthat::expect_equal(nrow(estim), nrow(mtcars))
+if (require("testthat") && require("modelbased") && require("rstanarm") && require("MASS") && require("insight") && require("brms") && require("lme4")) {
+  if (Sys.info()["sysname"] != "Darwin") {
+    test_that("estimate_response - Bayesian", {
+      model <- rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2, raw = TRUE), data = mtcars, refresh = 0, iter = 200, chains = 2)
+      estim <- estimate_response(model, seed = 333)
+      testthat::expect_equal(nrow(estim), nrow(mtcars))
 
-    model <- rstanarm::stan_glm(mpg ~ wt * as.factor(gear), data = mtcars, refresh = 0, iter = 200, chains = 2)
-    estim <- estimate_response(model, data = "grid", seed = 333)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(43, 5))
+      model <- rstanarm::stan_glm(mpg ~ wt * as.factor(gear), data = mtcars, refresh = 0, iter = 200, chains = 2)
+      estim <- estimate_response(model, data = "grid", seed = 333)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(43, 5))
 
-    model <- rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 200, chains = 2)
-    estim <- estimate_response(model)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
+      model <- rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 200, chains = 2)
+      estim <- estimate_response(model)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
-    model <- rstanarm::stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2)
-    estim <- estimate_link(model, keep_draws = TRUE)
-    draws <- reshape_draws(estim)
-    testthat::expect_equal(c(nrow(draws), ncol(draws)), c(5000, 7))
+      model <- rstanarm::stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2)
+      estim <- estimate_link(model, keep_draws = TRUE)
+      draws <- reshape_draws(estim)
+      testthat::expect_equal(c(nrow(draws), ncol(draws)), c(5000, 7))
 
-    # Polr
-    model <- rstanarm::stan_polr(Species ~ Petal.Width + Petal.Length, data = iris, refresh = 0, iter = 200, chains = 2, prior = rstanarm::R2(0.2, "mean"))
-    estim <- estimate_link(model, length = 5)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
+      # Polr
+      model <- rstanarm::stan_polr(Species ~ Petal.Width + Petal.Length, data = iris, refresh = 0, iter = 200, chains = 2, prior = rstanarm::R2(0.2, "mean"))
+      estim <- estimate_link(model, length = 5)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
 
-    # Non-sampling algorithms
-    # model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh=0)
-    # estim <- estimate_link(model, keep_draws = TRUE)
-    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
+      # Non-sampling algorithms
+      # model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh=0)
+      # estim <- estimate_link(model, keep_draws = TRUE)
+      # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
 
-    # model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield", refresh=0)
-    # estim <- estimate_link(model, keep_draws = TRUE)
-    # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
-  })
-
+      # model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield", refresh=0)
+      # estim <- estimate_link(model, keep_draws = TRUE)
+      # testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 1004))
+    })
+  }
 
 
   test_that("estimate_response - Frequentist", {
@@ -40,7 +41,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_response(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
-    estim <- modelbased::estimate_response(model, ci=NULL)
+    estim <- modelbased::estimate_response(model, ci = NULL)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 3))
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
@@ -48,7 +49,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
 
 
-    library(lme4)
     data <- mtcars
     data$gear <- as.factor(data$gear)
 
@@ -64,7 +64,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_response(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))
 
-    library(MASS)
     model <- MASS::polr(Species ~ Sepal.Width, data = iris)
     estim <- estimate_link(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(25, 4))
