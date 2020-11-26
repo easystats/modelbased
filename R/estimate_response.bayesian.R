@@ -63,7 +63,7 @@ estimate_response <- function(model, data = NULL, transform = "response", random
 estimate_response.stanreg <- function(model, data = NULL, transform = "response", random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Checks
-  if (inherits(model, "stanreg") & !requireNamespace("rstanarm", quietly = TRUE)) {
+  if (!requireNamespace("rstanarm", quietly = TRUE)) {
     stop("This function needs `rstanarm` to be installed.")
   }
   if (inherits(model, "brmsfit") & !requireNamespace("brms", quietly = TRUE)) {
