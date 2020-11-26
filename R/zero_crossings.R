@@ -1,3 +1,31 @@
+#' Find zero crossings of a vector
+#'
+#' Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.
+#' @param x A numeric vector.
+#'
+#' @examples
+#' x <- sin(seq(0, 4 * pi, length.out = 100))
+#' plot(x)
+#' zero_crossings(x)
+#' @importFrom stats approxfun
+#' @return Vector of zero crossings.
+#' @seealso Based on the \code{uniroot.all} function from the rootSolve package.
+#' @export
+zero_crossings <- function(x) {
+
+  # Estimate gradient
+  zerocrossings <- .uniroot.all(stats::approxfun(1:length(x), x), interval = range(1:length(x)))
+  if (length(zerocrossings) == 0) {
+    return(NA)
+  }
+  zerocrossings
+}
+
+
+
+
+
+
 #' Copied from rootSolve package
 #' @importFrom stats uniroot
 #' @keywords internal
@@ -39,28 +67,6 @@
 
 
 
-#' Find zero crossings of a vector
-#'
-#' Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.
-#' @param x A numeric vector.
-#'
-#' @examples
-#' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x)
-#' zero_crossings(x)
-#' @importFrom stats approxfun
-#' @return Vector of zero crossings.
-#' @seealso Based on the \code{uniroot.all} function from the rootSolve package.
-#' @export
-zero_crossings <- function(x) {
-
-  # Estimate gradient
-  zerocrossings <- .uniroot.all(stats::approxfun(1:length(x), x), interval = range(1:length(x)))
-  if (length(zerocrossings) == 0) {
-    return(NA)
-  }
-  zerocrossings
-}
 
 
 
