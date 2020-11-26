@@ -277,43 +277,43 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
   <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span>, test <span class='op'>=</span> <span class='st'>"bf"</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>Computation of Bayes factors: sampling priors, please wait...</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: logspline</span></div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Petal.Length | Difference |       95% CI |     BF | Difference (std.)
-#&gt; -------------------------------------------------------------------------------------------------------------
-#&gt; setosa     | versicolor |        1.20 |         1.00 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         1.00 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         1.00 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         1.66 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         1.66 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         1.66 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         2.31 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         2.31 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         2.31 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         2.97 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         2.97 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         2.97 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         3.62 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         3.62 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         3.62 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         4.28 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         4.28 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         4.28 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         4.93 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         4.93 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         4.93 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         5.59 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         5.59 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         5.59 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         6.24 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         6.24 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         6.24 |       0.41 | [0.20, 0.63] |  21.50 |              0.95
-#&gt; setosa     | versicolor |        1.20 |         6.90 |       1.73 | [1.39, 2.07] | &gt; 1000 |              3.96
-#&gt; setosa     |  virginica |        1.20 |         6.90 |       2.14 | [1.64, 2.65] | &gt; 1000 |              4.90
-#&gt; versicolor |  virginica |        1.20 |         6.90 |       0.41 | [0.20, 0.63] |  21.50 |              0.95</div><div class='input'>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: rstanarm</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Rcpp</span></div><div class='output co'>#&gt; <span class='message'>This is rstanarm version 2.21.1</span></div><div class='output co'>#&gt; <span class='message'>- See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span></div><div class='output co'>#&gt; <span class='message'>- Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span></div><div class='output co'>#&gt; <span class='message'>- For execution on a local, multicore CPU with excess RAM we recommend calling</span></div><div class='output co'>#&gt; <span class='message'>  options(mc.cores = parallel::detectCores())</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>Sampling priors, please wait...</span></div><div class='output co'>#&gt; <span class='message'>Loading required namespace: logspline</span></div><div class='output co'>#&gt; Level1     |     Level2 | Petal.Width | Petal.Length | Difference |       95% CI |     BF | Std_Difference
+#&gt; ----------------------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |        1.20 |         1.00 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         1.00 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         1.00 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         1.66 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         1.66 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         1.66 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         2.31 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         2.31 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         2.31 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         2.97 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         2.97 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         2.97 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         3.62 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         3.62 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         3.62 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         4.28 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         4.28 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         4.28 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         4.93 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         4.93 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         4.93 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         5.59 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         5.59 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         5.59 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         6.24 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         6.24 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         6.24 |       0.41 | [0.20, 0.63] |  21.50 |           0.95
+#&gt; setosa     | versicolor |        1.20 |         6.90 |       1.73 | [1.39, 2.07] | &gt; 1000 |           3.96
+#&gt; setosa     |  virginica |        1.20 |         6.90 |       2.14 | [1.64, 2.65] | &gt; 1000 |           4.90
+#&gt; versicolor |  virginica |        1.20 |         6.90 |       0.41 | [0.20, 0.63] |  21.50 |           0.95</div><div class='input'>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
   <span class='fu'><a href='estimate_contrasts.html'>estimate_contrasts</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='message'>Loading required package: brms</span></div><div class='output co'>#&gt; <span class='message'>Loading 'brms' package (version 2.13.5). Useful instructions</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: brms</span></div><div class='output co'>#&gt; <span class='message'>Loading 'brms' package (version 2.14.4). Useful instructions</span>
 #&gt; <span class='message'>can be found by typing help('brms'). A more detailed introduction</span>
 #&gt; <span class='message'>to the package is available through vignette('brms_overview').</span></div><div class='output co'>#&gt; <span class='message'></span>
 #&gt; <span class='message'>Attaching package: ‘brms’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:rstanarm’:</span>
@@ -322,23 +322,23 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>    ngrps</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:stats’:</span>
 #&gt; <span class='message'></span>
-#&gt; <span class='message'>    ar</span></div><div class='output co'>#&gt; <span class='message'>Compiling Stan program...</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; Level1 | Level2 | Difference |           95% CI |     pd | % in ROPE | Difference (std.)
-#&gt; ----------------------------------------------------------------------------------------
-#&gt; 4 0    |    6 0 |       3.79 | [ -0.77,   8.64] | 94.58% |     0.95% |              0.63
-#&gt; 4 0    |    8 0 |       7.83 | [  3.54,  11.74] | 99.98% |        0% |              1.30
-#&gt; 4 0    |    4 1 |      -5.18 | [ -9.48,  -1.13] | 99.20% |     0.18% |             -0.86
-#&gt; 4 0    |    6 1 |       2.30 | [ -2.74,   7.31] | 81.23% |     1.88% |              0.38
-#&gt; 4 0    |    8 1 |       7.53 | [  1.62,  12.89] | 99.22% |        0% |              1.25
-#&gt; 6 0    |    8 0 |       4.05 | [  0.57,   7.80] | 98.55% |     0.25% |              0.67
-#&gt; 6 0    |    4 1 |      -8.97 | [-12.71,  -4.99] |   100% |        0% |             -1.49
-#&gt; 6 0    |    6 1 |      -1.45 | [ -6.01,   3.63] | 74.17% |     2.97% |             -0.24
-#&gt; 6 0    |    8 1 |       3.73 | [ -1.46,   9.19] | 91.75% |     1.20% |              0.62
-#&gt; 8 0    |    4 1 |     -13.01 | [-15.95, -10.18] |   100% |        0% |             -2.16
-#&gt; 8 0    |    6 1 |      -5.51 | [ -9.67,  -1.60] | 99.48% |     0.18% |             -0.91
-#&gt; 8 0    |    8 1 |      -0.32 | [ -4.94,   4.46] | 55.07% |     3.48% |             -0.05
-#&gt; 4 1    |    6 1 |       7.46 | [  3.41,  11.89] | 99.90% |     0.03% |              1.24
-#&gt; 4 1    |    8 1 |      12.68 | [  7.53,  17.46] |   100% |        0% |              2.10
-#&gt; 6 1    |    8 1 |       5.21 | [ -0.73,  10.63] | 96.30% |     0.33% |              0.86</div><div class='input'><span class='co'># }</span>
+#&gt; <span class='message'>    ar</span></div><div class='output co'>#&gt; <span class='message'>Compiling Stan program...</span></div><div class='output co'>#&gt; <span class='message'>Start sampling</span></div><div class='output co'>#&gt; Level1 | Level2 | Difference |           95% CI |     pd | % in ROPE | Std_Difference
+#&gt; -------------------------------------------------------------------------------------
+#&gt; 4 0    |    6 0 |       3.81 | [ -1.00,   8.64] | 94.58% |     0.90% |           0.63
+#&gt; 4 0    |    8 0 |       7.90 | [  3.59,  11.80] | 99.95% |        0% |           1.31
+#&gt; 4 0    |    4 1 |      -5.20 | [ -9.66,  -1.15] | 98.88% |     0.20% |          -0.86
+#&gt; 4 0    |    6 1 |       2.32 | [ -2.97,   7.24] | 81.88% |     2.23% |           0.38
+#&gt; 4 0    |    8 1 |       7.52 | [  1.38,  13.16] | 99.28% |     0.15% |           1.25
+#&gt; 6 0    |    8 0 |       4.10 | [  0.52,   7.66] | 98.55% |     0.35% |           0.68
+#&gt; 6 0    |    4 1 |      -8.98 | [-12.83,  -5.29] |   100% |        0% |          -1.49
+#&gt; 6 0    |    6 1 |      -1.51 | [ -6.04,   3.27] | 73.92% |     2.70% |          -0.25
+#&gt; 6 0    |    8 1 |       3.71 | [ -1.74,   9.15] | 91.20% |     1.47% |           0.62
+#&gt; 8 0    |    4 1 |     -13.08 | [-15.83, -10.19] |   100% |        0% |          -2.17
+#&gt; 8 0    |    6 1 |      -5.58 | [ -9.61,  -1.48] | 99.70% |     0.07% |          -0.93
+#&gt; 8 0    |    8 1 |      -0.40 | [ -5.42,   4.34] | 56.23% |     2.80% |          -0.07
+#&gt; 4 1    |    6 1 |       7.47 | [  3.63,  11.91] | 99.98% |     0.03% |           1.24
+#&gt; 4 1    |    8 1 |      12.71 | [  7.68,  17.60] |   100% |        0% |           2.11
+#&gt; 6 1    |    8 1 |       5.24 | [ -0.32,  10.90] | 96.38% |     0.45% |           0.87</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

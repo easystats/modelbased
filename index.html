@@ -112,11 +112,11 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>Run the following:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"easystats/modelbased"</span><span class="op">)</span></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/easystats/modelbased">"modelbased"</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"devtools"</span><span class="op">)</span>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"easystats/modelbased"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/easystats/modelbased">"modelbased"</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -164,12 +164,12 @@
 <a href="#estimate-marginal-means" class="anchor"></a>Estimate marginal means</h3>
 <p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/">rstanarm</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/">rstanarm</a></span><span class="op">)</span>
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Species    | Mean |       95% CI</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">## --------------------------------</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a><span class="co">## setosa     | 3.43 | [3.33, 3.52]</span></span>
@@ -181,21 +181,21 @@
 <a href="#contrast-analysis" class="anchor"></a>Contrast analysis</h3>
 <p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-8-1.png"><!-- --></p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">## Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Difference (std.)</span>
 <span class="co">## ----------------------------------------------------------------------------------------------</span>
 <span class="co">## setosa     | versicolor |       0.66 | [ 0.52,  0.78] |   100% |        0% |              1.50</span>
 <span class="co">## setosa     |  virginica |       0.45 | [ 0.31,  0.58] |   100% |        0% |              1.04</span>
-<span class="co">## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 99.78% |     6.95% |             -0.47</span></pre></div>
+<span class="co">## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 99.78% |     6.95% |             -0.47</span></code></pre></div>
 </div>
 <div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
 <h3 class="hasAnchor">
 <a href="#check-the-contrasts-at-different-points-of-another-linear-predictor" class="anchor"></a>Check the contrasts at different points of another linear predictor</h3>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## Level1     |     Level2 | Petal.Length | Difference |        95% CI |     pd | % in ROPE | Difference (std.)</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co">## ------------------------------------------------------------------------------------------------------------</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a><span class="co">## setosa     | versicolor |         1.00 |       1.67 | [ 1.06, 2.31] |   100% |        0% |              3.83</span></span>
@@ -211,21 +211,21 @@
 <div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
 <h3 class="hasAnchor">
 <a href="#find-a-predictors-slopes-at-each-factor-level" class="anchor"></a>Find a predictor’s slopes at each factor level</h3>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">## Species    | Median |       95% CI |     pd | % in ROPE | Median (std.)</span>
 <span class="co">## -----------------------------------------------------------------------</span>
 <span class="co">## setosa     |   0.36 | [0.01, 0.75] | 97.10% |     8.00% |          1.44</span>
 <span class="co">## versicolor |   0.36 | [0.19, 0.56] |   100% |     0.22% |          1.46</span>
-<span class="co">## virginica  |   0.23 | [0.08, 0.39] | 99.78% |     5.10% |          0.94</span></pre></div>
+<span class="co">## virginica  |   0.23 | [0.08, 0.39] | 99.78% |     5.10% |          0.94</span></code></pre></div>
 </div>
 <div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
 <h3 class="hasAnchor">
 <a href="#generate-predictions-from-your-model-to-compare-it-with-original-data" class="anchor"></a>Generate predictions from your model to compare it with original data</h3>
 <p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot:</p>
 <p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu"><a href="reference/estimate_response.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/estimate_response.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">Sepal.Length</th>
@@ -284,10 +284,10 @@
 <h3 class="hasAnchor">
 <a href="#estimate-the-link-between-the-response-and-a-predictor" class="anchor"></a>Estimate the link between the response and a predictor</h3>
 <p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot: <img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data<span class="op">=</span><span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_response.html">estimate_link</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="reference/estimate_response.html">estimate_link</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="right">Petal.Length</th>
@@ -344,12 +344,12 @@
 <div id="describe-the-smooth-term-by-its-linear-parts" class="section level3">
 <h3 class="hasAnchor">
 <a href="#describe-the-smooth-term-by-its-linear-parts" class="anchor"></a>Describe the smooth term by its linear parts</h3>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="reference/estimate_smooth.html">estimate_smooth</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="reference/estimate_smooth.html">estimate_smooth</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">## Part | Start |  End |   Size | Trend | Linearity</span>
 <span class="co">## ------------------------------------------------</span>
 <span class="co">## 1    |  1.00 | 4.08 | 52.50% | -0.01 |      0.94</span>
-<span class="co">## 2    |  4.08 | 6.90 | 47.50% |  0.01 |      0.93</span></pre></div>
+<span class="co">## 2    |  4.08 | 6.90 | 47.50% |  0.01 |      0.93</span></code></pre></div>
 </div>
 </div>
 </div>
