@@ -96,3 +96,8 @@ estimate_link.glmmTMB <- estimate_link.glm
 estimate_response.polr <- estimate_response.glm
 #' @export
 estimate_link.polr <- estimate_link.glm
+
+#' @export
+estimate_response.gamm <- estimate_response.glm
+#' @export
+estimate_link.gamm <- estimate_link.glm

@@ -43,7 +43,6 @@ Suggests:
 	lme4,
 	logspline,
 	MASS,
-	mgcv,
 	merTools,
 	mgcv,
 	rmarkdown,

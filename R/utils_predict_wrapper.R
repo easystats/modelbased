@@ -164,3 +164,34 @@ predict_wrapper.glmmTMB <- function(model, newdata = NULL, ci = NULL, re.form = 
   }
   prediction
 }
+
+
+#' @importFrom stats predict
+#' @keywords internal
+predict_wrapper.gamm <- function(model, newdata = NULL, ci = 0.95, re.form = NULL, transform = "response", interval = "confidence", ...) {
+  if (is.null(ci)) {
+    prediction <- data.frame(
+      Predicted = stats::predict(model$gam,
+                                 newdata = newdata,
+                                 re.form = re.form,
+                                 type = transform
+      ),
+      CI_low = NA,
+      CI_high = NA
+    )
+  } else {
+    pr <- stats::predict(model$gam,
+                         newdata = newdata,
+                         re.form = re.form,
+                         type = transform,
+                         se.fit = TRUE)
+
+
+    prediction <- data.frame(
+      Predicted = pr$fit,
+      CI_low = pr$fit - (pr$se.fit * stats::qnorm((1 + ci) / 2)),
+      CI_high = pr$fit + (pr$se.fit * stats::qnorm((1 + ci) / 2))
+    )
+  }
+  prediction
+}
