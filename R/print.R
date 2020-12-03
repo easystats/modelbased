@@ -20,13 +20,14 @@ print.estimate_smooth <- print.estimate_contrasts
 
 
 
-#' @importFrom insight format_value format_table
+#' @importFrom insight format_value parameters_table
 #' @export
 format.estimate_contrasts <- function(x, ...) {
   orig_x <- x
   if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
   if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
-  insight::format_table(x, ...)
+  ## TODO change to "format_table()" after insight 0.11.1 or higher on CRAN
+  insight::parameters_table(x, ...)
 }
 
 #' @export
