@@ -139,28 +139,18 @@
 <p><strong>Contrast analysis</strong> can be achieved through the <code>estimate_contrasts</code> function:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference
-&gt; -------------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |       0.66 | [ 0.52,  0.79] |   100% |        0% |           1.50
-&gt; setosa     |  virginica |       0.45 | [ 0.32,  0.59] |   100% |        0% |           1.04
-&gt; versicolor |  virginica |      -0.20 | [-0.34, -0.08] | 99.88% |     6.33% |          -0.46</code></pre>
 <p>As we can see here, all pairwise differences can be considered as significant.</p>
 </div>
 <div id="complex-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#complex-model" class="anchor"></a>Complex model</h1>
 <p>Again, as contrast analysis is based on marginal means, it can be applied to more complex models:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Level1     |     Level2 | Difference |        95% CI |     pd | % in ROPE | Std_Difference
-&gt; ------------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |       1.52 | [ 0.80, 2.23] |   100% |        0% |           3.48
-&gt; setosa     |  virginica |       1.70 | [ 0.98, 2.50] |   100% |        0% |           3.89
-&gt; versicolor |  virginica |       0.17 | [-0.11, 0.43] | 88.20% |    27.30% |           0.39</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can see that the difference between <em>versicolor</em> and <em>virginica</em> becomes not significant (and even changes sign).</p>
 <p>Note that we can plot simple contrast analysis through <strong>lighthouse plots</strong> with the help of the <code>see</code> package:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/">see</a></span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -172,7 +162,7 @@
 <h1 class="hasAnchor">
 <a href="#changes-in-difference" class="anchor"></a>Changes in difference</h1>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># Create a variable with the two levels concatenated </span>
