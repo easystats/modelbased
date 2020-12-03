@@ -51,7 +51,7 @@ estimate_means(model, levels = "Sepal.Width=c(2, 4)")
 estimate_means(model, levels = c("Species", "Sepal.Width=0"))
 estimate_means(model, modulate = "Sepal.Width", length = 5)
 estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
-\donttest{
+\dontrun{
 if (require("lme4")) {
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
