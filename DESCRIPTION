@@ -24,8 +24,8 @@ URL: https://github.com/easystats/modelbased
 BugReports: https://github.com/easystats/modelbased/issues
 Description: Implements a general interface for model-based estimations for a wide variety of models (see support list of insight; Lüdecke, Waggoner & Makowski (2019) <doi:10.21105/joss.01412>), used in the computation of marginal means, contrast analysis and predictions.
 Imports:
-	insight (>= 0.7.1),
-	bayestestR (>= 0.4.0),
+	insight (>= 0.11.0),
+	bayestestR (>= 0.7.0),
 	parameters (>= 0.3.0),
 	emmeans (>= 1.4.4),
 	graphics,

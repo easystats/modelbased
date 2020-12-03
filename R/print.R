@@ -1,23 +1,39 @@
-#' @importFrom insight format_value format_table
-#' @importFrom parameters parameters_table
-#' @keywords internal
-.print_estimate <- function(x, ...) {
-  orig_x <- x
-  if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
-  if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
-  formatted_table <- parameters::parameters_table(x, ...)
-  cat(insight::format_table(formatted_table))
-  invisible(orig_x)
+#' @importFrom insight export_table
+#' @export
+print.estimate_contrasts <- function(x, ...) {
+  cat(insight::export_table(format(x)))
+  invisible(x)
 }
 
 #' @export
-print.estimate_contrasts <- .print_estimate
+print.estimate_means <- print.estimate_contrasts
 
 #' @export
-print.estimate_means <- .print_estimate
+print.estimate_slopes <- print.estimate_contrasts
 
 #' @export
-print.estimate_slopes <- .print_estimate
+print.estimate_smooth <- print.estimate_contrasts
+
+
+
+# Format ------------------------------------------------------------------
+
+
+
+#' @importFrom insight format_value format_table
+#' @export
+format.estimate_contrasts <- function(x, ...) {
+  orig_x <- x
+  if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
+  if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
+  insight::format_table(x, ...)
+}
 
 #' @export
-print.estimate_smooth <- .print_estimate
+format.estimate_means <- format.estimate_contrasts
+
+#' @export
+format.estimate_slopes <- format.estimate_contrasts
+
+#' @export
+format.estimate_smooth <- format.estimate_contrasts
