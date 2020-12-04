@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • modelbased</title>
+<title>Format the name of the p-value adjustment methods — format_p_adjust • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,7 +48,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Format the name of the p-value adjustment methods — format_p_adjust" />
+<meta property="og:description" content="Format the name of the p-value adjustment methods." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -68,7 +69,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -142,162 +143,37 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Format the name of the p-value adjustment methods</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/format_p_adjust.R'><code>R/format_p_adjust.R</code></a></small>
+    <div class="hidden name"><code>format_p_adjust.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Format the name of the p-value adjustment methods.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>format_p_adjust</span><span class='op'>(</span><span class='va'>method</span><span class='op'>)</span></pre>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="as.numeric_ifnumeric.html">as.numeric_ifnumeric()</a></code> </p>
-        </td>
-        <td><p>Convert to Numeric if Possible</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts between factor levels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.lm.html">estimate_contrasts(<i>&lt;lm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.stanreg.html">estimate_contrasts(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.html">estimate_means()</a></code> </p>
-        </td>
-        <td><p>Estimate average value of response variable at each factor levels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.lm.html">estimate_means(<i>&lt;lm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate marginal means</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.stanreg.html">estimate_means(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate marginal means</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.html">estimate_response()</a></code> <code><a href="estimate_response.html">estimate_link()</a></code> </p>
-        </td>
-        <td><p>Generates predictions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.glm.html">estimate_response(<i>&lt;glm&gt;</i>)</a></code> <code><a href="estimate_response.glm.html">estimate_link(<i>&lt;glm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generates predictions for Frequentist models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_link(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_link(<i>&lt;data.frame&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generates predictions for Bayesian models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.html">estimate_slopes()</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.lm.html">estimate_slopes(<i>&lt;lm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.stanreg.html">estimate_slopes(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_smooth.html">estimate_smooth()</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_smooth.stanreg.html">estimate_smooth(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="find_inversions.html">find_inversions()</a></code> </p>
-        </td>
-        <td><p>Find points of inversion</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="format_p_adjust.html">format_p_adjust()</a></code> </p>
-        </td>
-        <td><p>Format the name of the p-value adjustment methods</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reshape_draws.html">reshape_draws()</a></code> </p>
-        </td>
-        <td><p>Reshape estimations with Bayesian posterior draws to long format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="smoothing.html">smoothing()</a></code> </p>
-        </td>
-        <td><p>Smoothing a vector or a time series</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="visualisation_matrix.html">visualisation_matrix()</a></code> </p>
-        </td>
-        <td><p>Create a reference grid</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="zero_crossings.html">zero_crossings()</a></code> </p>
-        </td>
-        <td><p>Find zero crossings of a vector</p></td>
-      </tr>
-    </tbody>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>method</th>
+      <td><p>Name of the method.</p></td>
+    </tr>
     </table>
-  </div>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>String.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>format_p_adjust</span><span class='op'>(</span><span class='st'>"holm"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Holm (1979)"</div><div class='input'><span class='fu'>format_p_adjust</span><span class='op'>(</span><span class='st'>"bonferroni"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Bonferroni"</div></pre>
+  </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
