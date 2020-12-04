@@ -7,16 +7,22 @@ print.estimate_contrasts <- function(x, ...) {
   # P-value adjustment title
   if("adjust" %in% names(info)){
     if(info$adjust == "none"){
-      caption <- "p-values are uncorrected."
+      footer <- "p-values are uncorrected."
     } else{
-      caption <- paste("p-values are corrected using the", format_p_adjust(info$adjust), "method.")
+
+      # Because it's a new function
+      footer = tryCatch({
+        paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
+      }, error = function(e) {
+        paste0("p-value adjustment method: ", info$adjust)
+      })
     }
   } else{
-    caption <- NULL
+    footer <- NULL
   }
 
   # Out
-  cat(insight::export_table(format(x), caption=caption, ...))
+  cat(insight::export_table(format(x), footer=footer, ...))
   invisible(x)
 }
 
