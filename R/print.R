@@ -9,13 +9,9 @@ print.estimate_contrasts <- function(x, ...) {
     if(info$adjust == "none"){
       footer <- "p-values are uncorrected."
     } else{
-
-      # Because it's a new function
-      footer = tryCatch({
-        paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
-      }, error = function(e) {
-        paste0("p-value adjustment method: ", info$adjust)
-      })
+      # TODO: activate that once parmaeters is on CRAN
+      # paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
+      paste0("p-value adjustment method: ", info$adjust)
     }
   } else{
     footer <- NULL
