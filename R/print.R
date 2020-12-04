@@ -1,7 +1,22 @@
 #' @importFrom insight export_table
 #' @export
 print.estimate_contrasts <- function(x, ...) {
-  cat(insight::export_table(format(x)))
+
+  info <- attributes(x)
+
+  # P-value adjustment title
+  if("adjust" %in% names(info)){
+    if(info$adjust == "none"){
+      caption <- "p-values are uncorrected."
+    } else{
+      caption <- paste("p-values are corrected using the", format_p_adjust(info$adjust), "method.")
+    }
+  } else{
+    caption <- NULL
+  }
+
+  # Out
+  cat(insight::export_table(format(x), caption=caption, ...))
   invisible(x)
 }
 
