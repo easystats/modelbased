@@ -146,6 +146,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
                        treatment = gl(3,3))
     model <- glm(counts ~ treatment, data=data, family = poisson())
 
-    estimate_contrasts(model, transform= 'response')
+    estim <- estimate_contrasts(model, transform= 'response')
+    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
   })
 }
