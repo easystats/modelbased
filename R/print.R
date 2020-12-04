@@ -5,20 +5,20 @@ print.estimate_contrasts <- function(x, ...) {
   info <- attributes(x)
 
   # P-value adjustment title
-  if("adjust" %in% names(info)){
-    if(info$adjust == "none"){
+  if ("adjust" %in% names(info)) {
+    if (info$adjust == "none") {
       footer <- "p-values are uncorrected."
     } else{
       # TODO: activate that once parmaeters is on CRAN
-      # paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
-      paste0("p-value adjustment method: ", info$adjust)
+      # footer <- paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
+      footer <- paste0("p-value adjustment method: ", info$adjust)
     }
   } else{
     footer <- NULL
   }
 
   # Out
-  cat(insight::export_table(format(x), footer=footer, ...))
+  cat(insight::export_table(format(x), footer = footer, ...))
   invisible(x)
 }
 
