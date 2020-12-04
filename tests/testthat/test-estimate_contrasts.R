@@ -131,7 +131,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     }
 
 
-    # GLM
+    # GLM - binomial
     df <- iris
     df$y <- as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))
     model <- glm(y ~ Species, family = "binomial", data = df)
@@ -140,5 +140,12 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 10))
     estim <- estimate_contrasts(model, transform = "response")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
+
+    # GLM - poisson
+    data <- data.frame(counts = c(18,17,15,20,10,20,25,13,12),
+                       treatment = gl(3,3))
+    model <- glm(counts ~ treatment, data=data, family = poisson())
+
+    estimate_contrasts(model, transform= 'response')
   })
 }

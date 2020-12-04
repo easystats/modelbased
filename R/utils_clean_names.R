@@ -46,7 +46,8 @@
 
 #' @keywords internal
 .format_names_contrasts <- function(model, levelcols, transform = "response") {
-  if (transform == "response" & insight::model_info(model)$is_logit) {
+  info <- insight::model_info(model)
+  if (transform == "response" & (info$is_logit | info$is_count)) {
     levelcols <- strsplit(as.character(levelcols$Contrast), "/")
   } else {
     levelcols <- strsplit(as.character(levelcols$Contrast), " - ")
