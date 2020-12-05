@@ -1,24 +1,7 @@
 #' @importFrom insight export_table
 #' @export
 print.estimate_contrasts <- function(x, ...) {
-
-  info <- attributes(x)
-
-  # P-value adjustment title
-  if ("adjust" %in% names(info)) {
-    if (info$adjust == "none") {
-      footer <- "p-values are uncorrected."
-    } else{
-      # TODO: activate that once parmaeters is on CRAN
-      # footer <- paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
-      footer <- paste0("p-value adjustment method: ", info$adjust)
-    }
-  } else{
-    footer <- NULL
-  }
-
-  # Out
-  cat(insight::export_table(format(x), footer = footer, ...))
+  cat(insight::export_table(format(x), ...))
   invisible(x)
 }
 
@@ -40,11 +23,27 @@ print.estimate_smooth <- print.estimate_contrasts
 #' @importFrom insight format_value parameters_table
 #' @export
 format.estimate_contrasts <- function(x, ...) {
-  orig_x <- x
+  # Colnames
   if ("Size" %in% names(x)) x$Size <- ifelse(x$Size < 1, paste0(insight::format_value(x$Size * 100), "%"), "100%")
   if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
+
+  # Title etc.
+  info <- attributes(x)
+
   ## TODO change to "format_table()" after insight 0.11.1 or higher on CRAN
-  insight::parameters_table(x, ...)
+  out <- insight::parameters_table(x, ...)
+
+  # P-value adjustment footer
+  if ("adjust" %in% names(info)) {
+    if (info$adjust == "none") {
+      attr(out, "table_footer") <- "p-values are uncorrected."
+    } else{
+      # TODO: activate that once parmaeters is on CRAN
+      # footer <- paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
+      attr(out, "table_footer") <- paste0("p-value adjustment method: ", info$adjust)
+    }
+  }
+  out
 }
 
 #' @export
