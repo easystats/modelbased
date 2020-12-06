@@ -36,11 +36,11 @@ format.estimate_contrasts <- function(x, ...) {
   # P-value adjustment footer
   if ("adjust" %in% names(info)) {
     if (info$adjust == "none") {
-      attr(out, "table_footer") <- "p-values are uncorrected."
+      attr(out, "table_footer") <- c("\np-values are uncorrected.", "blue")
     } else{
       # TODO: activate that once parmaeters is on CRAN
       # footer <- paste0("p-value adjustment method: ", parameters::format_p_adjust(info$adjust))
-      attr(out, "table_footer") <- paste0("p-value adjustment method: ", info$adjust)
+      attr(out, "table_footer") <- c(paste0("\np-value adjustment method: ", info$adjust), "blue")
     }
   }
   out
