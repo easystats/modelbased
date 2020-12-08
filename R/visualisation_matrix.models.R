@@ -2,13 +2,13 @@
 
 
 #' @export
-visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, include_response = FALSE, ...) {
+visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, include_random = TRUE, include_response = FALSE, ...) {
   data <- insight::get_data(x)
   if (include_response == FALSE) {
     data <- data[names(data) != insight::find_response(x)]
   }
 
-  if (random == FALSE) {
+  if (include_random == FALSE) {
     data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
 
@@ -22,13 +22,13 @@ visualisation_matrix.stanreg <- function(x, target = "all", length = 10, factors
 
 # #' @importFrom insight find_random
 # #' @export
-# visualisation_matrix.glmmTMB <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, random = TRUE, include_response = FALSE, ...) {
+# visualisation_matrix.glmmTMB <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, include_random = TRUE, include_response = FALSE, ...) {
 #   data <- insight::get_data(x)
 #   if (include_response == FALSE) {
 #     data <- data[names(data) != insight::find_response(x)]
 #   }
 #
-#   # if (random == FALSE) {
+#   # if (include_random == FALSE) {
 #   #   data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
 #   # }
 #

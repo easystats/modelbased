@@ -11,7 +11,7 @@
   model,
   data = NULL,
   transform = "response",
-  random = TRUE,
+  include_random = TRUE,
   length = 25,
   preserve_range = TRUE,
   predict = "response",
@@ -28,7 +28,7 @@
   model,
   data = "grid",
   transform = "response",
-  random = FALSE,
+  include_random = FALSE,
   length = 25,
   preserve_range = TRUE,
   predict = "link",
@@ -45,7 +45,7 @@
   model,
   data = NULL,
   transform = "response",
-  random = FALSE,
+  include_random = FALSE,
   length = 25,
   preserve_range = TRUE,
   predict = "link",
@@ -62,7 +62,7 @@
   model,
   data = "grid",
   transform = "response",
-  random = FALSE,
+  include_random = FALSE,
   length = 25,
   preserve_range = TRUE,
   predict = "link",
@@ -82,7 +82,7 @@
 
 \item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
 
-\item{random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
+\item{include_random}{Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).}
 
 \item{length}{Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.}
 

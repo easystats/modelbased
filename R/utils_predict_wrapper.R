@@ -134,6 +134,11 @@ predict_wrapper.merMod <- function(model, newdata = NULL, ci = NULL, re.form = N
 #' @importFrom stats predict
 #' @keywords internal
 predict_wrapper.glmmTMB <- function(model, newdata = NULL, ci = NULL, re.form = NULL, transform = "response", ...) {
+
+  if(!is.null(re.form)){
+    newdata[insight::find_variables(model, effects="random")$random] <- NA
+  }
+
   if (is.null(ci)) {
     prediction <- data.frame(
       Predicted = stats::predict(model,

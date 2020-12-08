@@ -1,5 +1,5 @@
 if (require("testthat") && require("modelbased")) {
-  test_that("visualisation_matrix", {
+  test_that("visualisation_matrix - dataframes", {
     testthat::expect_equal(nrow(visualisation_matrix(iris, length = 2)), 48)
     testthat::expect_equal(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 2, factors = "combinations")), 6)
     testthat::expect_equal(nrow(visualisation_matrix(iris, target = "Species", length = 2, factors = "combinations")), 3)
