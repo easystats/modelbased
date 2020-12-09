@@ -3,26 +3,26 @@ if (require("testthat") && require("modelbased")) {
 
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1|Species), data = iris)
-    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model)), 2)
+    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=TRUE)), 2)
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=FALSE)), 1)
 
     # GLMMTMB
     model <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1|Species), data = iris)
-    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model)), 2)
+    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=TRUE)), 2)
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=FALSE)), 1)
 
     # MGCV
     model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
-    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model)), 2)
-    # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_smooth=FALSE)), 1)
+    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=TRUE)), 2)
+    testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_smooth=FALSE)), 1)
 
     model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)
-    # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model)), 3)
+    # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=TRUE)), 3)
     # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=FALSE, include_smooth=FALSE)), 1)
 
     # GAMM4
     model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
-    # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model)), 3)
+    # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=TRUE)), 3)
     # testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random=FALSE)), 1)
 
 

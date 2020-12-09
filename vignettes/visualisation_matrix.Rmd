@@ -33,6 +33,7 @@ if (!requireNamespace("parameters", quietly = TRUE) ||
   knitr::opts_chunk$set(eval = FALSE)
 }
 
+library(gamm4)
 set.seed(333)
 ```
 
@@ -117,9 +118,13 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   theme_modern()
 ```
 
+
+
+
+
 # Fixed variables
 
-The above way of constructing the reference grid is almost equivalent to the following:
+The above way of constructing the reference grid, i.e., by providing a single column of data to the function, is almost equivalent to the following:
 
 ```{r message=FALSE, warning=FALSE}
 newdata <- visualisation_matrix(iris, target = "Sepal.Length", length = 5)
@@ -185,7 +190,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 
 
-# Visualising an interaction between two numeric variables
+# Visualising an interaction between two numeric variables (three-way interaction)
 
 ```{r message=FALSE, warning=FALSE}
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
@@ -248,3 +253,27 @@ iris %>%
 
 
 As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
+
+
+# Tips and Tricks
+
+## visualization_matrix() also runs directly on models 
+
+Let's take the following example of a **general additive mixed model (GAMM)**, in which are specified a **smooth term** (a non-linear relationship) and some **random factor**. One can directly extract the visualization matrix by running the function on it:
+
+
+```{r message=FALSE, warning=FALSE}
+library(gamm4)
+
+model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~(1|Species), data = iris)
+
+newdata <- visualisation_matrix(model, length=3, include_random = FALSE)
+newdata
+```
+
+One can also skip the smooth term if the only interest are the fixed effects:
+
+```{r message=FALSE, warning=FALSE}
+visualisation_matrix(model, length=3, include_random = FALSE, include_smooth = FALSE)
+```
+
