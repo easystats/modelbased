@@ -5,21 +5,25 @@
 visualisation_matrix.glm <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, include_smooth = TRUE, include_random = FALSE, include_response = FALSE, ...) {
 
   data <- insight::get_data(x)[insight::find_variables(x, "all", flatten=TRUE)]
-  info <- insight::model_info(x)
 
   if (include_response == FALSE) {
     data <- data[!names(data) %in% insight::find_response(x)]
-  }
-
-  if (include_smooth == FALSE) {
-    data <- data[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
   }
 
   if (include_random == FALSE) {
     data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
 
+  if(target == "all") target <- names(data)
+  if (include_smooth == FALSE | include_smooth == "fixed") {
+    target <- names(data)[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
+  }
+
   data <- visualisation_matrix(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, ...)
+
+  if(include_smooth == FALSE) {
+    data <-  data[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
+  }
 
   attr(data, "model") <- x
   data

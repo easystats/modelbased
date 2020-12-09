@@ -10,13 +10,14 @@
 #'
 #' @inheritParams estimate_contrasts
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
+#' @param include_smooth Should the smooth terms (in General Additive Models - GAM) be included?
 #' @param include_random Should it take the random effects into account? Can be \code{TRUE}, \code{FALSE} or a formula indicating which group-level parameters to condition on when making predictions. The data argument may include new levels of the grouping factors that were specified when the model was estimated, in which case the resulting posterior predictions marginalize over the relevant variables (see \code{posterior_predict.stanreg}).
 #' @param length Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #' @param preserve_range Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.
 #'
 #' @return A data frame of predicted values.
 #' @export
-estimate_response <- function(model, data = NULL, transform = "response", include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
+estimate_response <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
 }
 
@@ -60,7 +61,7 @@ estimate_response <- function(model, data = NULL, transform = "response", includ
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, transform = "response", include_random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Checks
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
@@ -71,7 +72,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   }
 
   # Initialize
-  args <- .estimate_response_init(model, data, transform, include_random, length, preserve_range, predict, ...)
+  args <- .estimate_response_init(model, data, transform, include_smooth, include_random, length, preserve_range, predict, ...)
   data <- args$data
 
   # Predict link or response
@@ -110,6 +111,9 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 
   # Add predictors
   out <- cbind(data, prediction)
+
+  # Drop smooth column if needed
+  if(include_smooth==FALSE) out <- out[!names(out) %in% insight::clean_names(insight::find_smooth(model, flatten = TRUE))]
 
   # Restore factor levels
   out <- .restore_factor_levels(out, insight::get_data(model))
@@ -152,7 +156,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 #' @rdname estimate_response
 #' @export
 #' @export
-estimate_link <- function(model, data = "grid", transform = "response", include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
+estimate_link <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_link")
 }
 
@@ -161,35 +165,35 @@ estimate_link <- function(model, data = "grid", transform = "response", include_
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.stanreg <- function(model, data = "grid", transform = "response", include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
-  estimate_response(model, data = data, transform = transform, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_link.stanreg <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+  estimate_response(model, data = data, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_response.data.frame <- function(model, data = NULL, transform = "response", include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_response.data.frame <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
   if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
-  estimate_response(data, data = model, transform = transform, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+  estimate_response(data, data = model, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.data.frame <- function(model, data = "grid", transform = "response", include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_link.data.frame <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
   if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
-  estimate_response(data, data = model, transform = transform, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+  estimate_response(data, data = model, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 

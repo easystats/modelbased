@@ -1,12 +1,14 @@
 #' @importFrom insight get_data find_predictors model_info find_random
 #' @keywords internal
-.estimate_response_init <- function(model, data, transform, include_random, length, preserve_range, predict, ...) {
+.estimate_response_init <- function(model, data, transform, include_smooth, include_random, length, preserve_range, predict, ...) {
   # Data
+  if(include_smooth==FALSE) include_smooth <- "fixed"  # Otherwise cannot make predictions
+
   if (is.null(data)) {
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
-      data <- visualisation_matrix(model, include_random = include_random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
+      data <- visualisation_matrix(model, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, reference = insight::get_data(model), ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }

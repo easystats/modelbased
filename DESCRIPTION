@@ -49,7 +49,9 @@ Suggests:
 	rstanarm,
 	brms,
 	see,
-	testthat
+	testthat,
+Remotes:
+    easystats/insight
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
