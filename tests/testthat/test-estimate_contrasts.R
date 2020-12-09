@@ -6,7 +6,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
 
     if (require("rstanarm")) {
-      testthat::expect_error(estimate_contrasts(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2), data = mtcars, iter=200, refresh=0)))
+      testthat::expect_error(estimate_contrasts(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2), data = mtcars, iter = 200, refresh = 0)))
 
       data <- iris
       data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -142,11 +142,13 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
 
     # GLM - poisson
-    data <- data.frame(counts = c(18,17,15,20,10,20,25,13,12),
-                       treatment = gl(3,3))
-    model <- glm(counts ~ treatment, data=data, family = poisson())
+    data <- data.frame(
+      counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12),
+      treatment = gl(3, 3)
+    )
+    model <- glm(counts ~ treatment, data = data, family = poisson())
 
-    estim <- estimate_contrasts(model, transform= 'response')
+    estim <- estimate_contrasts(model, transform = "response")
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
   })
 }

@@ -17,7 +17,7 @@
 #'
 #' @return A data frame of predicted values.
 #' @export
-estimate_response <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
+estimate_response <- function(model, data = NULL, transform = "response", include_smooth = TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_response")
 }
 
@@ -61,7 +61,7 @@ estimate_response <- function(model, data = NULL, transform = "response", includ
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response.stanreg <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_response.stanreg <- function(model, data = NULL, transform = "response", include_smooth = TRUE, include_random = TRUE, length = 25, preserve_range = TRUE, predict = "response", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Checks
   if (!requireNamespace("rstanarm", quietly = TRUE)) {
@@ -98,7 +98,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   var <- names(prediction)[grepl(paste0(centrality, collapse = "|"), tolower(names(prediction)))]
   if (length(var) == 1) {
     names(prediction)[names(prediction) == var] <- "Predicted"
-  } else{
+  } else {
     names(prediction)[names(prediction) %in% var] <- paste0("Predicted_", names(prediction)[names(prediction) %in% var])
   }
 
@@ -113,7 +113,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   out <- cbind(data, prediction)
 
   # Drop smooth column if needed
-  if(include_smooth==FALSE) out <- out[!names(out) %in% insight::clean_names(insight::find_smooth(model, flatten = TRUE))]
+  if (include_smooth == FALSE) out <- out[!names(out) %in% insight::clean_names(insight::find_smooth(model, flatten = TRUE))]
 
   # Restore factor levels
   out <- .restore_factor_levels(out, insight::get_data(model))
@@ -156,7 +156,7 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
 #' @rdname estimate_response
 #' @export
 #' @export
-estimate_link <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
+estimate_link <- function(model, data = "grid", transform = "response", include_smooth = TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, ...) {
   UseMethod("estimate_link")
 }
 
@@ -165,35 +165,35 @@ estimate_link <- function(model, data = "grid", transform = "response", include_
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.stanreg <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
-  estimate_response(model, data = data, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+estimate_link.stanreg <- function(model, data = "grid", transform = "response", include_smooth = TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+  estimate_response(model, data = data, transform = transform, include_smooth = include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_response.data.frame <- function(model, data = NULL, transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_response.data.frame <- function(model, data = NULL, transform = "response", include_smooth = TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
   if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
-  estimate_response(data, data = model, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+  estimate_response(data, data = model, transform = transform, include_smooth = include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 
 #' @rdname estimate_response.stanreg
 #' @export
-estimate_link.data.frame <- function(model, data = "grid", transform = "response", include_smooth=TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_link.data.frame <- function(model, data = "grid", transform = "response", include_smooth = TRUE, include_random = FALSE, length = 25, preserve_range = TRUE, predict = "link", keep_draws = FALSE, draws = NULL, seed = NULL, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
 
   # Try retrieve model from data
   if ((!insight::is_model(data) && (is.null(data) | all(data == "grid")) & !is.null(attributes(model)$model))) {
     data <- attributes(model)$model
   }
 
-  estimate_response(data, data = model, transform = transform, include_smooth=include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
+  estimate_response(data, data = model, transform = transform, include_smooth = include_smooth, include_random = include_random, length = length, preserve_range = preserve_range, predict = predict, keep_draws = keep_draws, draws = draws, seed = seed, centrality = centrality, ci = ci, ci_method = ci_method, ...)
 }
 
 

@@ -24,7 +24,9 @@
 #'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #'   estimate_means(model)
 #'   estimate_means(model, modulate = "Sepal.Width", length = 3)
-#' }}
+#' }
+#' }
+#'
 #' @return A data frame of estimated marginal means.
 #' @importFrom stats confint
 #' @export

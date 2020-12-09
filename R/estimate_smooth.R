@@ -86,10 +86,10 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
 
   smooth_data <- estimate_link(model, newdata,
-                               predict = "link",
-                               centrality = centrality, transform = transform,
-                               keep_draws = FALSE, draws = NULL,
-                               seed = NULL, random = FALSE, ...
+    predict = "link",
+    centrality = centrality, transform = transform,
+    keep_draws = FALSE, draws = NULL,
+    seed = NULL, random = FALSE, ...
   )
 
   # Predicted name

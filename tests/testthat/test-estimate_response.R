@@ -36,7 +36,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
 
 
   test_that("estimate_response - Frequentist", {
-
     model <- lm(mpg ~ wt + cyl, data = mtcars)
     estim <- estimate_response(model)
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(32, 5))

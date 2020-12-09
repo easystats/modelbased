@@ -66,7 +66,7 @@ estimate_slopes.brmsfit <- estimate_slopes.stanreg
 #' estimate_slopes(model)
 #' @export
 estimate_slopes.lm <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, ...) {
-  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, ci=ci, ...)
+  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, ci = ci, ...)
 }
 
 

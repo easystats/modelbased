@@ -46,7 +46,7 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
   })
 
   test_that("estimate_smooth - glmmTMB", {
-    model <- glmmTMB::glmmTMB(Sepal.Width ~ poly(Petal.Length, 2) + (1|Species), data = iris)
+    model <- glmmTMB::glmmTMB(Sepal.Width ~ poly(Petal.Length, 2) + (1 | Species), data = iris)
     estim <- estimate_smooth(model, smooth = "Petal.Length")
   })
 
