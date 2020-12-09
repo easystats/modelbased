@@ -59,5 +59,7 @@ if (require("lme4")) {
   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
   estimate_means(model)
   estimate_means(model, modulate = "Sepal.Width", length = 3)
-}}
+}
+}
+
 }

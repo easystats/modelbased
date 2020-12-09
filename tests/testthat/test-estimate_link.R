@@ -22,7 +22,7 @@ if (require("testthat") && require("modelbased")) {
     model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
       random = ~ (1 | Species), data = iris
     )
-    testthat::expect_equal(nrow(modelbased::estimate_link(model, length = 3)), 3)
+    testthat::expect_equal(nrow(modelbased::estimate_link(model, length = 3)), 9)
     testthat::expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 4))
 
 
