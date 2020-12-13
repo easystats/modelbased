@@ -13,7 +13,7 @@ visualisation_matrix.glm <- function(x, target = "all", length = 10, factors = "
     data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
 
-  if (target == "all") target <- names(data)
+  if (all(target == "all")) target <- names(data)
   if (include_smooth == FALSE | include_smooth == "fixed") {
     target <- names(data)[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
   }
