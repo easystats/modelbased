@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("gamm4")) {
+if (require("testthat") && require("modelbased") && require("gamm4") && require("rstanarm") && require("lme4") && require("glmmTMB") && require("mgcv")) {
   test_that("estimate_link", {
 
     # LMER4
@@ -7,7 +7,7 @@ if (require("testthat") && require("modelbased") && require("gamm4")) {
     testthat::expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
     # GLMMTMB
-    model <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+    model <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
     testthat::expect_equal(nrow(modelbased::estimate_link(model, length = 5)), 5)
     testthat::expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
@@ -27,10 +27,10 @@ if (require("testthat") && require("modelbased") && require("gamm4")) {
 
 
     # STAN_GAMM4
-    model <- rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
+    model <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
       random = ~ (1 | Species), data = iris,
       iter = 100, chains = 2, refresh = 0
-    )
+    ))
     testthat::expect_equal(nrow(modelbased::estimate_link(model, length = 3)), 9)
     testthat::expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 4))
   })
