@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased")) {
+if (require("testthat") && require("modelbased") && require("gamm4")) {
   test_that("visualisation_matrix - models", {
 
     # LMER4
