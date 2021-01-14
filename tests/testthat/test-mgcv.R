@@ -25,12 +25,14 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
   model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)
   # estim <- modelbased::estimate_link(model)
 
-  model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
+  if (packageVersion("insight") > "0.11.1") {
+    model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
 
-  test_that("estimate_response - mgcv gamm", {
-    estim <- estimate_response(model)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(150, 5))
-  })
+    test_that("estimate_response - mgcv gamm", {
+      estim <- estimate_response(model)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(150, 6))
+    })
+  }
 
   test_that("estimate_link - mgcv gamm", {
     estim <- estimate_link(model, length = 4)
