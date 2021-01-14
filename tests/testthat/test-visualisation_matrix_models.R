@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("gamm4")) {
+if (require("testthat") && require("modelbased") && require("gamm4") && require("glmmTMB") && require("mgcv") && require("rstanarm")) {
   test_that("visualisation_matrix - models", {
 
     # LMER4
@@ -7,7 +7,7 @@ if (require("testthat") && require("modelbased") && require("gamm4")) {
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 1)
 
     # GLMMTMB
-    model <- glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
+    model <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = TRUE)), 2)
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 1)
 
@@ -30,7 +30,7 @@ if (require("testthat") && require("modelbased") && require("gamm4")) {
 
 
     # STAN_GAMM4
-    model <- rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris, iter = 100, chains = 2, refresh = 0)
+    model <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris, iter = 100, chains = 2, refresh = 0))
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = TRUE)), 3)
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE, include_smooth = "fixed")), 2)
     testthat::expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE, include_smooth = FALSE)), 1)

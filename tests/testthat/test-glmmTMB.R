@@ -3,19 +3,19 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
   # testthat::skip_on_cran()
 
   data <- glmmTMB::Salamanders
-  model <- glmmTMB::glmmTMB(
+  model <- suppressWarnings(glmmTMB::glmmTMB(
     count ~ mined + (1 | site),
     ziformula = ~mined,
     family = poisson,
     data = data
-  )
+  ))
 
-  model2 <- glmmTMB::glmmTMB(
+  model2 <- suppressWarnings(glmmTMB::glmmTMB(
     count ~ cover + mined + (1 | site),
     ziformula = ~ cover + mined,
     family = glmmTMB::truncated_poisson,
     data = data
-  )
+  ))
 
   test_that("estimate_means - glmmTMB", {
     estim <- estimate_means(model)
@@ -46,7 +46,7 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
   })
 
   test_that("estimate_smooth - glmmTMB", {
-    model <- glmmTMB::glmmTMB(Sepal.Width ~ poly(Petal.Length, 2) + (1 | Species), data = iris)
+    model <- suppressWarnings(glmmTMB::glmmTMB(Sepal.Width ~ poly(Petal.Length, 2) + (1 | Species), data = iris))
     estim <- estimate_smooth(model, smooth = "Petal.Length")
   })
 
