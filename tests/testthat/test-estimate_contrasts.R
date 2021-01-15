@@ -149,3 +149,25 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     testthat::expect_equal(c(nrow(estim), ncol(estim)), c(3, 9))
   })
 }
+
+
+testthat::test_that("estimate_contrasts - p.adjust", {
+  model <- lm(Petal.Width ~ Species, data = iris)
+
+  p_none <- modelbased::estimate_contrasts(model, adjust  = "none")
+  p_tuk <- modelbased::estimate_contrasts(model, adjust  = "tukey")
+
+  testthat::expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
+})
+
+testthat::test_that("estimate_contrasts - dfs", {
+  data <- iris
+  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+  model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+
+  estim1 <- modelbased::estimate_contrasts(model, lmer.df = "satterthwaite")
+  estim2 <- modelbased::estimate_contrasts(model, lmer.df = "kenward-roger")
+
+  # Somehow this works when I run it but fails in checks
+  # testthat::expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
+})

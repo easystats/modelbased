@@ -32,7 +32,7 @@ knitr::opts_chunk$set(
 
 
 
-`modelbased` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and predictions.
+`modelbased` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and model predictions.
 
 
 ## Installation
