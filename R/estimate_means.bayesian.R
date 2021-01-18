@@ -32,7 +32,6 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #' @examples
 #' library(modelbased)
 #' \donttest{
-#'
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
@@ -46,7 +45,9 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 #'   estimate_means(model, modulate = "wt")
 #'   estimate_means(model, fixed = "wt")
 #' }
+#' }
 #'
+#' \dontrun{
 #' if (require("brms")) {
 #'   model <- brm(mpg ~ cyl * am, data = data, refresh = 0)
 #'   estimate_means(model)
