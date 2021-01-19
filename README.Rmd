@@ -27,9 +27,9 @@ knitr::opts_chunk$set(
 ```
 
 
-[![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
-[![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased) [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
-
+[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
+[![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased) 
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/) 
 
 
 `modelbased` is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and model predictions.
@@ -37,16 +37,24 @@ knitr::opts_chunk$set(
 
 ## Installation
 
+[![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
+![Tests](https://github.com/easystats/modelbased/workflows/Tests/badge.svg)
+[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
 
-Run the following:
 
-```{r eval=FALSE, message=FALSE, warning=FALSE}
-install.packages("devtools")
-devtools::install_github("easystats/modelbased")
+Run the following to install the stable release of **modelbased** from CRAN:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+install.packages("modelbased")
 ```
-```{r message=FALSE, warning=FALSE}
-library("modelbased")
+
+Or this one to install the latest development version:
+
+```{r, warning=FALSE, message=FALSE, eval=FALSE}
+install.packages("remotes")
+remotes::install_github("easystats/modelbased")
 ```
+
 
 ## Documentation
 
