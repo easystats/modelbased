@@ -1,3 +1,12 @@
+osx <- tryCatch({
+  si <- Sys.info()
+  if (!is.null(si["sysname"])) {
+    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
+  } else {
+    FALSE
+  }
+})
+
 if (require("testthat") && require("modelbased") && require("mgcv") && require("gamm4") && require("emmeans")) {
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
@@ -34,10 +43,12 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
     })
   }
 
-  test_that("estimate_link - mgcv gamm", {
-    estim <- estimate_link(model, length = 4)
-    testthat::expect_equal(c(nrow(estim), ncol(estim)), c(16, 5))
-  })
+  if (!osx) {
+    test_that("estimate_link - mgcv gamm", {
+      estim <- estimate_link(model, length = 4)
+      testthat::expect_equal(c(nrow(estim), ncol(estim)), c(16, 5))
+    })
+  }
 
 
   # Gamm4 -------------------------------------------------------------------
