@@ -15,7 +15,10 @@ visualisation_matrix.glm <- function(x, target = "all", length = 10, factors = "
 
   if (all(target == "all")) target <- names(data)
   if (include_smooth == FALSE | include_smooth == "fixed") {
-    target <- names(data)[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
+    s <- insight::find_smooth(x, flatten = TRUE)
+    if(!is.null(s)){
+      target <- names(data)[!names(data) %in% insight::clean_names(s)]
+    }
   }
 
   data <- visualisation_matrix(data, target = target, length = length, factors = factors, numerics = numerics, preserve_range = preserve_range, standardize = standardize, standardize_robust = standardize_robust, reference = data, na.rm = na.rm, ...)

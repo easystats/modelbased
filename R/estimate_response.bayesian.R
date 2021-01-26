@@ -113,8 +113,9 @@ estimate_response.stanreg <- function(model, data = NULL, transform = "response"
   out <- cbind(data, prediction)
 
   # Drop smooth column if needed
-  if (include_smooth == FALSE) out <- out[!names(out) %in% insight::clean_names(insight::find_smooth(model, flatten = TRUE))]
-
+  if (include_smooth == FALSE && !is.null(insight::find_smooth(model, flatten = TRUE))) {
+    out <- out[!names(out) %in% insight::clean_names(insight::find_smooth(model, flatten = TRUE))]
+  }
   # Restore factor levels
   out <- .restore_factor_levels(out, insight::get_data(model))
 
