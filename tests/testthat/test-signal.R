@@ -6,6 +6,6 @@ if (require("testthat") && require("modelbased") && require("parameters")) {
     s1 <- as.vector(smoothing(x, method = "loess"))
     s2 <- as.vector(smoothing(x, method = "smooth"))
 
-    testthat::expect_true(as.numeric(parameters::smoothness(s1)) > as.numeric(parameters::smoothness(s2)))
+    expect_true(as.numeric(parameters::smoothness(s1)) > as.numeric(parameters::smoothness(s2)))
   })
 }

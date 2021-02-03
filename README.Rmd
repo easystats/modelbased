@@ -21,7 +21,7 @@ library(dplyr)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  dpi = 450, 
+  dpi = 450,
   fig.path = "man/figures/"
 )
 ```
@@ -98,11 +98,11 @@ library(modelbased)
 
 
 # Fit model
-model <- lm(Sepal.Length ~ Petal.Length * Petal.Width , data = iris)
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # Create dataframe
-newdata <- iris %>% 
-  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>% 
+newdata <- iris %>%
+  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE)
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
@@ -110,10 +110,10 @@ newdata$Predicted_Sepal.Length <- predict(model, newdata)
 newdata$Petal.Width <- effectsize::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
 
 # Plot
-iris %>% 
+iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), color = "white", shape=21, size = 5) +  # Only shapes from 21 to 25 have a fill aesthetic
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) + 
+  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
+  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) +
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
@@ -205,14 +205,13 @@ predicted <- estimate_response(model)
 data$Predicted <- predicted$Predicted
 model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
 data$Predicted_2 <- estimate_response(model)$Predicted
-data %>% 
+data %>%
   ggplot() +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
   geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
   ylab("Petal.Length (predicted)") +
   theme_modern()
-  
 ```
 
 
@@ -222,9 +221,11 @@ estimate_response(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
 knitr::kable(
-  model %>% 
-    estimate_response() %>% 
-    head(), digits=2)
+  model %>%
+    estimate_response() %>%
+    head(),
+  digits = 2
+)
 ```
 
 ### Estimate the link between the response and a predictor
@@ -237,16 +238,17 @@ knitr::include_graphics("https://github.com/easystats/modelbased/raw/master/man/
 
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 
 estimate_link(model)
 ```
 ```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris, refresh = 0)
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris, refresh = 0)
 knitr::kable(
-  model %>% 
-    estimate_link(length=7, smooth_strength = 0.3),
-    digits=2)
+  model %>%
+    estimate_link(length = 7, smooth_strength = 0.3),
+  digits = 2
+)
 ```
 
 ### Describe the smooth term by its linear parts
