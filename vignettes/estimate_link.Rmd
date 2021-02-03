@@ -21,23 +21,23 @@ bibliography: bibliography.bib
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
-options(knitr.kable.NA = '')
+options(knitr.kable.NA = "")
 knitr::opts_chunk$set(comment = ">", dpi = 450)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
-    !requireNamespace("see", quietly = TRUE) ||
-    !requireNamespace("gganimate", quietly = TRUE) ||
-    !requireNamespace("rstanarm", quietly = TRUE) ||
-    !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("gganimate", quietly = TRUE) ||
+  !requireNamespace("rstanarm", quietly = TRUE) ||
+  !requireNamespace("dplyr", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
 set.seed(333)
 ```
 
-
-This vignette will present how to visualize the effects and interactions using `estimate_link()`.
+This vignette will present how to visualize the effects and interactions using
+`estimate_link()`.
 
 # Simple regression
 
@@ -46,42 +46,43 @@ This vignette will present how to visualize the effects and interactions using `
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(modelbased)
 
-model <- glm(Sepal.Length ~ Sepal.Width, data=iris)
+model <- glm(Sepal.Length ~ Sepal.Width, data = iris)
 
 visualization_data <- modelbased::estimate_link(model)
 head(visualization_data)
 ```
 
 <!-- Demo using 'see' instead? -->
+
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(dplyr)  
-library(ggplot2)  
+library(dplyr)
+library(ggplot2)
 library(see)
 
-visualization_data %>% 
-  ggplot(aes(x=Sepal.Width, y=Predicted)) +
-  geom_ribbon(aes(ymin=CI_low, ymax=CI_high), alpha=0.2) +
+visualization_data %>%
+  ggplot(aes(x = Sepal.Width, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
   see::theme_modern()
 ```
 
-
 # More complex regressions
-
 
 ## Non-linear relationships
 
-Note that non-linear relationships can be also described by linear approximations using [**estimate_smooth**](https://easystats.github.io/modelbased/articles/estimate_smooth.html).
+Note that non-linear relationships can be also described by linear
+approximations using
+[**estimate_smooth**](https://easystats.github.io/modelbased/articles/estimate_smooth.html).
 
 ### Polynomial
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-glm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris) %>% 
-  modelbased::estimate_link() %>% 
-  ggplot(aes(x=Sepal.Width, y=Predicted)) +
-    geom_ribbon(aes(ymin=CI_low, ymax=CI_high), alpha=0.2) +
-    geom_line() +
-    see::theme_modern()
+glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
+  modelbased::estimate_link() %>%
+  ggplot(aes(x = Sepal.Width, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
+  geom_line() +
+  see::theme_modern()
 ```
 
 ### Additive Models
@@ -89,12 +90,12 @@ glm(Sepal.Length ~ poly(Sepal.Width, 2), data=iris) %>%
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(mgcv)
 
-mgcv::gam(Sepal.Length ~ s(Sepal.Width), data=iris) %>% 
-  modelbased::estimate_link() %>% 
-  ggplot(aes(x=Sepal.Width, y=Predicted)) +
-    geom_ribbon(aes(ymin=CI_low, ymax=CI_high), alpha=0.2) +
-    geom_line() +
-    see::theme_modern()
+mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) %>%
+  modelbased::estimate_link() %>%
+  ggplot(aes(x = Sepal.Width, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
+  geom_line() +
+  see::theme_modern()
 ```
 
 # Interactions
@@ -112,3 +113,4 @@ TODO.
 TODO.
 
 # References
+

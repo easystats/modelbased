@@ -21,25 +21,34 @@ bibliography: bibliography.bib
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
-options(knitr.kable.NA = '')
+options(knitr.kable.NA = "")
 knitr::opts_chunk$set(comment = ">", dpi = 450)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
-    !requireNamespace("see", quietly = TRUE) ||
-    !requireNamespace("rstanarm", quietly = TRUE)) {
+  !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
 set.seed(333)
 ```
 
-
-Warning: we will go **full Bayesian** in this vignette. If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+Warning: we will go **full Bayesian** in this vignette. If you're not familiar
+with the Bayesian framework, we recommend starting with [**this gentle
+introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
 # Testing pairwise differences
 
-In the [**previous tutorial**](https://easystats.github.io/estimate/articles/estimate_means.html), we computed marginal at the 3 different `Species` levels from the  [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However, one might also want to **statistically test** the differences between each levels, which can be achieved through **contrast analysis**. Although the procedure is much more powerful, its aim is somehow analog to the ***post hoc*** analysis (pretty much consisting of pairwise t-tests) heavily used in psychological science to palliate the uselessness of ANOVAs.
+In the [**previous
+tutorial**](https://easystats.github.io/estimate/articles/estimate_means.html),
+we computed marginal at the 3 different `Species` levels from the
+[`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However,
+one might also want to **statistically test** the differences between each
+levels, which can be achieved through **contrast analysis**. Although the
+procedure is much more powerful, its aim is somehow analog to the ***post hoc***
+analysis (pretty much consisting of pairwise t-tests) heavily used in
+psychological science to palliate the uselessness of ANOVAs.
 
 Let's do that based on the simple model from the previous tutorial:
 
@@ -66,13 +75,13 @@ means <- estimate_means(model)
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter2(width = 0.05, alpha = 0.5) +
-  
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
   geom_pointrange(data = means, aes(y = Mean, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
   theme_modern()
 ```
 
-**Contrast analysis** can be achieved through the `estimate_contrasts` function:
+**Contrast analysis** can be achieved through the `estimate_contrasts`
+function:
 
 ```{r message=FALSE, warning=FALSE}
 estimate_contrasts(model)
@@ -82,8 +91,8 @@ As we can see here, all pairwise differences can be considered as significant.
 
 # Complex model
 
-
-Again, as contrast analysis is based on marginal means, it can be applied to more complex models:
+Again, as contrast analysis is based on marginal means, it can be applied to
+more complex models:
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
@@ -94,9 +103,12 @@ model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0,
 estimate_contrasts(model)
 ```
 
-For instance, if we add `Petal.Width` in the model, we can see that the difference between *versicolor* and *virginica* becomes not significant (and even changes sign). 
+For instance, if we add `Petal.Width` in the model, we can see that the
+difference between *versicolor* and *virginica* becomes not significant (and
+even changes sign).
 
-Note that we can plot simple contrast analysis through **lighthouse plots** with the help of the `see` package:
+Note that we can plot simple contrast analysis through **lighthouse plots** with
+the help of the `see` package:
 
 ```{r message=FALSE, warning=FALSE}
 library(see)
@@ -105,18 +117,22 @@ plot(estimate_contrasts(model), estimate_means(model)) +
   theme_modern()
 ```
 
-
-These represent the estimated means and their CI range (in black), while the gray areas show the CI range of the difference (as compared to the point estimate).
+These represent the estimated means and their CI range (in black), while the
+gray areas show the CI range of the difference (as compared to the point
+estimate).
 
 # Changes in difference
 
-Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with `Petal.Width`), we will compute the contrasts at 100 equally-spaced points of `Petal.Width`, that we will then visualise.
+Interestingly, we can also see how these differences are modulated by another
+continuous variable. Based on the model above (including the interaction with
+`Petal.Width`), we will compute the contrasts at 100 equally-spaced points of
+`Petal.Width`, that we will then visualise.
 
 ```{r message=FALSE, warning=FALSE, fig}
 contrasts <- estimate_contrasts(model, modulate = "Petal.Width", length = 100)
 
-# Create a variable with the two levels concatenated 
-contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2) 
+# Create a variable with the two levels concatenated
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
 
 # Visualise the changes in the differences
 ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
@@ -127,8 +143,9 @@ ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
   ylab("Difference")
 ```
 
-
-As we can see, the difference between *versicolor* and *virginica* increases as `Petal.Width` increases. In conclusion, contrast analysis is a powerful tool to interpret and understand statistical models.
-
+As we can see, the difference between *versicolor* and *virginica* increases as
+`Petal.Width` increases. In conclusion, contrast analysis is a powerful tool to
+interpret and understand statistical models.
 
 # References
+
