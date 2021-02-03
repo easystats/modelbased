@@ -3,7 +3,10 @@
 #'
 #' @inheritParams estimate_contrasts.stanreg
 #' @inheritParams estimate_means.lm
-#' @param adjust The p-values adjustment method for multi-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment section in the \code{emmeans::test} documentation.
+#' @param adjust The p-values adjustment method for multi-comparisons. Can be
+#'   one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
+#'   "BY", "fdr" or "none". See the p-value adjustment section in the
+#'   \code{emmeans::test} documentation.
 #'
 #' @examples
 #' library(modelbased)
