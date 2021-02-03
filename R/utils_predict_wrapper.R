@@ -203,4 +203,4 @@ predict_wrapper.gamm <- function(model, newdata = NULL, ci = 0.95, re.form = NUL
 }
 
 #' @keywords internal
-predict_wrapper.list <- predict_wrapper.gamm  # gamm4
+predict_wrapper.list <- predict_wrapper.gamm # gamm4

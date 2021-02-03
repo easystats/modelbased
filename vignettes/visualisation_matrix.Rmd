@@ -252,7 +252,7 @@ iris %>%
 ```
 
 
-As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Altough, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
+As the `Petal.Width` increases (becomes yellow), the coefficient between `Petal.Length` and `Sepal.Length` increases (the slope is more steep). Although, as we can guess, this in fact captures the underlying effect of species... **but we'll leave discussing the meaningfulness of your models to you :)**
 
 
 # Tips and Tricks

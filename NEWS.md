@@ -1,8 +1,12 @@
+# modelbased 0.5.1
+
 # modelbased 0.3.0
 
 ## Breaking changes
 
-- `Predicted` is now the name of the predicted column for Bayesian models (similarly to Frequentist ones), instead of the centrality index (e.g., `Median`).
+- `Predicted` is now the name of the predicted column for Bayesian models
+  (similarly to Frequentist ones), instead of the centrality index (e.g.,
+  `Median`).
 
 ## New supported models
 
@@ -10,11 +14,13 @@
 
 ## Bug fixes
 
-- `estimate_slope()` now gives an informative error when no numeric predictor is present.
+- `estimate_slope()` now gives an informative error when no numeric predictor is
+  present.
 
 # modelbased 0.2.0
 
 - Partial support of formulas.
+
 - Refactor the emmeans wrapping.
 
 # modelbased 0.1.3
@@ -23,7 +29,8 @@
 
 # modelbased 0.1.2
 
-- Minor code changes to address changes from the forthcoming `parameters` package update.
+- Minor code changes to address changes from the forthcoming `parameters`
+  package update.
 
 # modelbased 0.1.1
 
@@ -32,3 +39,4 @@
 # modelbased 0.1.0
 
 - Added a `NEWS.md` file to track changes to the package
+

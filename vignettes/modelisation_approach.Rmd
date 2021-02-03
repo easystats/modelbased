@@ -58,7 +58,7 @@ But here are the problems:
 2. The visualisation are usually based on the data, rather than on the model (which is problematic in the case of complex models).
 3. New indices, such as *group means*, *contrasts*, etc., are also derived from the data, instead of using the model.
 
-Thus, we will describe below another approach to statistics, centred around statistical modelisation.
+Thus, we will describe below another approach to statistics, centered around statistical modelisation.
 
 # The Traditional Way
 
