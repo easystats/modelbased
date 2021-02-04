@@ -23,7 +23,13 @@
 
 \item{length}{Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.}
 
-\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+\item{transform}{Can be \code{"none"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
+\code{"log"}. \code{"none"}  will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations
+expressed in log-odds (probabilities on logit scale) and \code{"response"}
+in terms of probabilities.}
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 

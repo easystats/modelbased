@@ -20,19 +20,30 @@
 \arguments{
 \item{model}{A Bayesian model.}
 
-\item{levels}{A character vector or formula specifying the names of the predictors over which to estimate means or contrasts.}
+\item{levels}{A character vector or formula specifying the names of the
+predictors over which to estimate means or contrasts.}
 
-\item{fixed}{A character vector indicating the names of the predictors to be "fixed" (i.e., maintained), so that the estimation is made at these values.}
+\item{fixed}{A character vector indicating the names of the predictors to be
+"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
-\item{modulate}{A character vector indicating the names of a numeric variable along which the means or the contrasts will be estimated. Adjust its length using \code{length}.}
+\item{modulate}{A character vector indicating the names of a numeric variable
+along which the means or the contrasts will be estimated. Adjust its length
+using \code{length}.}
 
-\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+\item{transform}{Can be \code{"none"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
+\code{"log"}. \code{"none"}  will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations
+expressed in log-odds (probabilities on logit scale) and \code{"response"}
+in terms of probabilities.}
 
 \item{length}{Length of the spread numeric variables.}
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See
+\code{\link[bayestestR]{ci}} for further details.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}

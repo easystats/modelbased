@@ -7,7 +7,7 @@ Authors@R:
              family = "Makowski",
              role = c("aut", "cre"),
              email = "dom.makowski@gmail.com",
-             comment = c(ORCID = "0000-0001-5375-9967")),
+             comment = c(ORCID = "0000-0001-5375-9967", Twitter = "@Dom_Makowski")),
       person(given = "Daniel",
              family = "Lüdecke",
              role = "aut",
@@ -61,6 +61,10 @@ Suggests:
     see,
     testthat,
     spelling
+Remotes: 
+    easystats/insight,
+    easystats/bayestestR,
+    easystats/parameters
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

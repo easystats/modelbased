@@ -84,7 +84,13 @@
 
 \item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).}
 
-\item{transform}{Can be \code{"none"} (default for contrasts), \code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"}  will leave the values on scale of the linear predictors. \code{"response"} will transform them on scale of the response variable. Thus for a logistic model, \code{"none"} will give estimations expressed in log-odds (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+\item{transform}{Can be \code{"none"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
+\code{"log"}. \code{"none"}  will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations
+expressed in log-odds (probabilities on logit scale) and \code{"response"}
+in terms of probabilities.}
 
 \item{include_smooth}{Should the smooth terms (in General Additive Models - GAM) be included?}
 
@@ -104,7 +110,8 @@
 
 \item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
-\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See \code{\link[bayestestR]{ci}} for further details.}
+\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See
+\code{\link[bayestestR]{ci}} for further details.}
 
 \item{ci_method}{The type of index used for Credible Interval. Can be
 \code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
