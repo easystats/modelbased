@@ -5,7 +5,7 @@
 #' @inheritParams estimate_contrasts
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
 #' @param predict Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.
-#' @param keep_iterations If \code{TRUE}, will keep all prediction iterations (draws).
+#' @param keep_iterations Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws).
 #' @param ... The are all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.
 #'
 #' @examples
@@ -14,36 +14,47 @@
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
 #' estimate_response2(model)
-#' estimate_link(model)
+#' estimate_link2(model)
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
 #' estimate_response2(model)
-#' estimate_link(model)
+#' estimate_link2(model)
 #'
 #' # Mixed models
 #' if (require("lme4")) {
 #'   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
 #'   estimate_response2(model)
-#'   estimate_link(model)
+#'   estimate_link2(model)
 #' }
 #'
 #' # Bayesian models
 #' if (require("rstanarm")) {
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
 #'   estimate_response2(model)
+#'   estimate_link2(model)
 #' }
 #' @return A dataframe of predicted values.
 #' @export
 estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "response", keep_iterations = FALSE, ...) {
-  # Get data
-  newdata <- .estimate_response_data(model, data, ...)
 
-  # Get predicted
+  # Get data ----------------
+  if (is.null(data)) {
+    newdata <- insight::get_data(model)
+  } else if (!is.data.frame(data)) {
+    if (data == "grid") {
+      newdata <- visualisation_matrix(model, reference = insight::get_data(model), ...)
+    } else {
+      stop('The `data` argument must either NULL, "grid" or another data.frame.')
+    }
+  }
+  newdata <- newdata[names(newdata) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
+
+  # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
   predicted <- insight::get_predicted(model, newdata = newdata, ci = ci, ci_type = ci_type, ...)
 
-  # Format predicted
+  # Format predicted ----------------
   if(insight::model_info(model)$is_bayesian) {
     out <- bayestestR::describe_posterior(predicted, ci = ci, ...)
     centrality <- c("Median", "Mean", "MAP")[c("Median", "Mean", "MAP") %in% names(out)][1]
@@ -55,8 +66,8 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
   out <- out[c("Predicted", "CI_low", "CI_high")]
   if(keep_iterations && "iter_1" %in% names(predicted)) out <- cbind(out, predicted)
 
-  # Bind data and predicted
-  out <- cbind(newdata, )
+  # Bind data and predicted ----------------
+  out <- cbind(newdata, out)
 
   # Prepare output
   attr(out, "ci") <- ci
@@ -65,6 +76,11 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
   class(out) <- c("estimate_response", "see_estimate_response", class(out))
   out
 }
+
+
+
+
+
 
 #' @export
 estimate_link2 <- function(model, data = "grid", ci = 0.95, predict = "link", keep_iterations = FALSE, ...) {

@@ -36,23 +36,24 @@ library(modelbased)
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
 estimate_response2(model)
-estimate_link(model)
+estimate_link2(model)
 
 # Logistic Models
 model <- glm(vs ~ wt, data = mtcars, family = "binomial")
 estimate_response2(model)
-estimate_link(model)
+estimate_link2(model)
 
 # Mixed models
 if (require("lme4")) {
   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
   estimate_response2(model)
-  estimate_link(model)
+  estimate_link2(model)
 }
 
 # Bayesian models
 if (require("rstanarm")) {
   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
   estimate_response2(model)
+  estimate_link2(model)
 }
 }
