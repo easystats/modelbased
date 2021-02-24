@@ -69,10 +69,14 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
   # Bind data and predicted ----------------
   out <- cbind(newdata, out)
 
+  # Restore factor levels
+  out <- .restore_factor_levels(out, insight::get_data(model))
+
   # Prepare output
   attr(out, "ci") <- ci
   attr(out, "ci_method") <- attributes(predicted)$ci_method
   attr(out, "centrality") <- centrality
+  attr(out, "response") <- insight::find_response(model)
   class(out) <- c("estimate_response", "see_estimate_response", class(out))
   out
 }
