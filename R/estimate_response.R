@@ -13,30 +13,30 @@
 #'
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
-#' estimate_response2(model)
-#' estimate_link2(model)
+#' estimate_response(model)
+#' estimate_link(model)
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-#' estimate_response2(model)
-#' estimate_link2(model)
+#' estimate_response(model)
+#' estimate_link(model)
 #'
 #' # Mixed models
 #' if (require("lme4")) {
 #'   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-#'   estimate_response2(model)
-#'   estimate_link2(model)
+#'   estimate_response(model)
+#'   estimate_link(model)
 #' }
 #'
 #' # Bayesian models
 #' if (require("rstanarm")) {
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
-#'   estimate_response2(model)
-#'   estimate_link2(model)
+#'   estimate_response(model)
+#'   estimate_link(model)
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "response", keep_iterations = FALSE, ...) {
+estimate_response <- function(model, data = NULL, ci = 0.95, predict = "response", keep_iterations = FALSE, ...) {
 
   # Get data ----------------
   if (is.null(data)) {
@@ -49,6 +49,9 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
     }
   }
   newdata <- newdata[names(newdata) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
+
+  # Restore factor levels
+  newdata <- .restore_factor_levels(newdata, insight::get_data(model))
 
   # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
@@ -63,14 +66,14 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
     out <- as.data.frame(predicted)
     centrality <- NULL
   }
-  out <- out[c("Predicted", "CI_low", "CI_high")]
+
+  # Select columns
+  out <- out[c("Predicted", "CI_low", "CI_high")[c("Predicted", "CI_low", "CI_high") %in% names(out)]]
   if(keep_iterations && "iter_1" %in% names(predicted)) out <- cbind(out, predicted)
 
   # Bind data and predicted ----------------
   out <- cbind(newdata, out)
-
-  # Restore factor levels
-  out <- .restore_factor_levels(out, insight::get_data(model))
+  row.names(out) <- NULL
 
   # Prepare output
   attr(out, "ci") <- ci
@@ -87,6 +90,6 @@ estimate_response2 <- function(model, data = NULL, ci = 0.95, predict = "respons
 
 
 #' @export
-estimate_link2 <- function(model, data = "grid", ci = 0.95, predict = "link", keep_iterations = FALSE, ...) {
-  estimate_response2(model, data = data, ci = ci, predict = predict, keep_iterations = keep_iterations, ...)
+estimate_link <- function(model, data = "grid", ci = 0.95, predict = "link", keep_iterations = FALSE, ...) {
+  estimate_response(model, data = data, ci = ci, predict = predict, keep_iterations = keep_iterations, ...)
 }

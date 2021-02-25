@@ -20,8 +20,6 @@ estimate_smooth(
 
 \item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
 
-\item{length}{Passed to \code{\link{visualisation_matrix}} if \code{data = "grid"}.}
-
 \item{transform}{Can be \code{"none"} (default for contrasts),
 \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
 \code{"log"}. \code{"none"}  will leave the values on scale of the linear
