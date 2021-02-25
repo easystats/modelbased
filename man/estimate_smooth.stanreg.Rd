@@ -4,15 +4,7 @@
 \alias{estimate_smooth.stanreg}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-\method{estimate_smooth}{stanreg}(
-  model,
-  smooth = NULL,
-  levels = NULL,
-  length = 200,
-  transform = "response",
-  centrality = "median",
-  ...
-)
+\method{estimate_smooth}{stanreg}(model, smooth = NULL, levels = NULL, ...)
 }
 \arguments{
 \item{model}{A Bayesian model.}
@@ -20,16 +12,6 @@
 \item{smooth}{A character indicating the name of the "smooth" term.}
 
 \item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
-
-\item{transform}{Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"}  will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
-
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -40,7 +22,7 @@ Describe the smooth term (for GAMs) or non-linear predictors
 library(modelbased)
 \donttest{
 if (require("rstanarm")) {
-  model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)
+  model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris, refresh = 0)
   estimate_smooth(model)
 
   model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)

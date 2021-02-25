@@ -46,22 +46,22 @@ relationship between two continuous variables using **correlations**.
 
 Every psychology student heard that *"ANOVAs, t-tests and correlations are all
 linear models"* (aka, linear regressions). And thus, one can only wonder why
-these different tests have not been yet replaced by a unified model?
+these different tests have not been yet replaced by a unified model.
 
 ```{r echo=FALSE, fig.align='center', out.width="50%"}
 knitr::include_graphics("https://github.com/easystats/easystats/raw/master/man/figures/modelbased/allregressions.png")
 ```
 
-The tests mentioned above have major perks. For instance, they are very easy to
+The tests mentioned above have major advantages. For instance, they are very easy to
 compute (one can even figure them out by hand). This partially explains their
 historical popularity, as these tests became the norm at an age when computers
 and fancy programs weren't available. Moreover, they are easy to visualize (or
 so it is *believed*, as it's not always true - but we'll come to that later)
 and, most importantly, they have straightforward (or at least, *conventionally
-accepted*) interpretations. And, after all, statistics in many fields are used
+accepted*) interpretations. After all, most of the time, statistics are used
 with the aim to draw some conclusions from the data.
 
-But here are the problems:
+But here are some problems with this approach:
 
 1. We don't know whether the model lying underlying the test (the *t*-test, the
    ANOVAs or the correlation) is any good to "represent" the data, preventing in
@@ -138,4 +138,6 @@ of significance (which are abstract).
 ## 5. Investigate its Parameters
 
 # References
+
+<!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
 

@@ -55,7 +55,8 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
 
   # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
-  predicted <- insight::get_predicted(model, newdata = newdata, ci = ci, ci_type = ci_type, ...)
+  predicted <- insight::get_predicted(model, newdata = newdata, ci_type = ci_type, ...)
+  ci <- attributes(predicted)$ci
 
   # Format predicted ----------------
   if(insight::model_info(model)$is_bayesian) {
