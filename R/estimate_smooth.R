@@ -35,7 +35,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #'
 #' @inheritParams estimate_smooth
 #' @inheritParams estimate_slopes.stanreg
-#' @inheritParams estimate_response.stanreg
+#' @inheritParams estimate_response
 #'
 #' @examples
 #' library(modelbased)

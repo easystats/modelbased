@@ -2,13 +2,21 @@
 % Please edit documentation in R/estimate_response.R
 \name{estimate_response}
 \alias{estimate_response}
+\alias{estimate_link}
 \title{Generates predictions for models}
 \usage{
 estimate_response(
   model,
   data = NULL,
-  ci = 0.95,
   predict = "response",
+  keep_iterations = FALSE,
+  ...
+)
+
+estimate_link(
+  model,
+  data = "grid",
+  predict = "link",
   keep_iterations = FALSE,
   ...
 )
@@ -20,9 +28,9 @@ estimate_response(
 
 \item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 
-\item{keep_iterations}{Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws).}
+\item{keep_iterations}{Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
-\item{...}{The are all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+\item{...}{You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
 A dataframe of predicted values.
