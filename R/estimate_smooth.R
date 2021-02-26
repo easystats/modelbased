@@ -2,39 +2,7 @@
 #'
 #' This function summarises the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterized by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
 #'
-#' See the documentation for your object's class:
-#' \itemize{
-#'  \item{\link[=estimate_smooth.stanreg]{Bayesian models (stanreg and brms)}}
-#'  }
-#'
-#' @param smooth A character indicating the name of the "smooth" term.
-#' @inheritParams estimate_slopes
-#' @inheritParams estimate_response
-#' @inheritParams visualisation_matrix
-#'
-#' @return A dataframe of linear description of non-linear terms.
-#'
-#' @export
-estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
-  UseMethod("estimate_smooth")
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' Describe the smooth term (for GAMs) or non-linear predictors
-#'
-#' @inheritParams estimate_smooth
+#' @param smooth A character indicating the name of the "smooth" term
 #' @inheritParams estimate_slopes.stanreg
 #' @inheritParams estimate_response
 #' @inheritParams visualisation_matrix
@@ -57,10 +25,11 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
 #'   estimate_smooth(model, levels = "Species")
 #' }
 #' }
+#' @return A dataframe of linear description of non-linear terms.
 #' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, ...) {
+estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -85,9 +54,9 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, ...) {
   }
 
   # Basis
-  newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
+  newdata <- visualisation_matrix(data[predictors], target, factors = "reference", numerics = "mean", ...)
 
-  smooth_data <- estimate_link(model, newdata, predict = "link", ...)
+  smooth_data <- estimate_link(model, data = newdata, predict = "link", ...)
 
   # Segmentation
   if (!is.null(levels)) {
@@ -127,17 +96,15 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, ...) {
   description
 }
 
-#' @export
-estimate_smooth.brmsfit <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.glm <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.merMod <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.glmmTMB <- estimate_smooth.stanreg
+
+# Helper ------------------------------------------------------------------
+
+
+
+
 
 
 #' @importFrom utils tail

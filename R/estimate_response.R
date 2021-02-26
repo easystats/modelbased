@@ -40,22 +40,22 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
 
   # Get data ----------------
   if (is.null(data)) {
-    newdata <- insight::get_data(model)
+    data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
-      newdata <- visualisation_matrix(model, reference = insight::get_data(model), ...)
+      data <- visualisation_matrix(model, reference = insight::get_data(model), ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }
-  newdata <- newdata[names(newdata) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
+  data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
 
   # Restore factor levels
-  newdata <- .restore_factor_levels(newdata, insight::get_data(model))
+  data <- .restore_factor_levels(data, insight::get_data(model))
 
   # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
-  predicted <- insight::get_predicted(model, newdata = newdata, ci_type = ci_type, ...)
+  predicted <- insight::get_predicted(model, newdata = data, ci_type = ci_type, ...)
   ci <- attributes(predicted)$ci
 
   # Format predicted ----------------
@@ -73,7 +73,7 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
   if(keep_iterations && "iter_1" %in% names(predicted)) out <- cbind(out, predicted)
 
   # Bind data and predicted ----------------
-  out <- cbind(newdata, out)
+  out <- cbind(data, out)
   row.names(out) <- NULL
 
   # Prepare output
