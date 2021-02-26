@@ -28,7 +28,7 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
 
   test_that("estimate_link - mgcv gam", {
     estim <- estimate_link(model)
-    expect_equal(c(nrow(estim), ncol(estim)), c(52, 5))
+    expect_equal(c(nrow(estim), ncol(estim)), c(30, 5))
   })
 
   model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)

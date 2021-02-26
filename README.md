@@ -103,8 +103,8 @@ estimate_means(model)
     ## Species    | Mean |       95% CI
     ## --------------------------------
     ## setosa     | 3.43 | [3.34, 3.52]
-    ## versicolor | 2.77 | [2.68, 2.86]
-    ## virginica  | 2.98 | [2.88, 3.07]
+    ## versicolor | 2.77 | [2.68, 2.87]
+    ## virginica  | 2.97 | [2.89, 3.07]
 
 ### Contrast analysis
 
@@ -118,9 +118,9 @@ to create this plot:
 estimate_contrasts(model)
 ## Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference
 ## -------------------------------------------------------------------------------------------
-## setosa     | versicolor |       0.66 | [ 0.53,  0.79] |   100% |        0% |           1.51
-## setosa     |  virginica |       0.45 | [ 0.31,  0.57] |   100% |        0% |           1.04
-## versicolor |  virginica |      -0.21 | [-0.33, -0.07] | 99.83% |     6.53% |          -0.47
+## setosa     | versicolor |       0.66 | [ 0.53,  0.80] |   100% |        0% |           1.51
+## setosa     |  virginica |       0.45 | [ 0.33,  0.59] |   100% |        0% |           1.04
+## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 99.83% |     6.68% |          -0.47
 ```
 
 ### Check the contrasts at different points of another linear predictor
@@ -133,15 +133,15 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 
     ## Level1     |     Level2 | Petal.Length | Difference |        95% CI |     pd | % in ROPE | Std_Difference
     ## ---------------------------------------------------------------------------------------------------------
-    ## setosa     | versicolor |         1.00 |       1.68 | [ 1.05, 2.29] |   100% |        0% |           3.85
-    ## setosa     |  virginica |         1.00 |       1.34 | [ 0.63, 2.08] | 99.98% |     0.05% |           3.08
-    ## versicolor |  virginica |         1.00 |      -0.33 | [-1.25, 0.62] | 76.02% |    13.23% |          -0.75
-    ## setosa     | versicolor |         3.95 |       1.61 | [ 0.67, 2.56] | 99.95% |     0.12% |           3.70
-    ## setosa     |  virginica |         3.95 |       1.66 | [ 0.64, 2.63] | 99.92% |     0.12% |           3.82
-    ## versicolor |  virginica |         3.95 |       0.05 | [-0.24, 0.34] | 64.03% |    48.77% |           0.13
-    ## setosa     | versicolor |         6.90 |       1.51 | [-0.45, 3.65] | 92.27% |     2.38% |           3.47
-    ## setosa     |  virginica |         6.90 |       1.97 | [-0.05, 4.06] | 96.95% |     1.60% |           4.53
-    ## versicolor |  virginica |         6.90 |       0.44 | [-0.10, 0.99] | 94.38% |     7.83% |           1.02
+    ## setosa     | versicolor |         1.00 |       1.67 | [ 1.05, 2.27] |   100% |        0% |           3.84
+    ## setosa     |  virginica |         1.00 |       1.34 | [ 0.59, 2.07] |   100% |     0.02% |           3.07
+    ## versicolor |  virginica |         1.00 |      -0.33 | [-1.27, 0.57] | 75.48% |    13.60% |          -0.76
+    ## setosa     | versicolor |         3.95 |       1.61 | [ 0.66, 2.54] | 99.92% |     0.07% |           3.70
+    ## setosa     |  virginica |         3.95 |       1.66 | [ 0.69, 2.68] | 99.90% |     0.15% |           3.81
+    ## versicolor |  virginica |         3.95 |       0.05 | [-0.23, 0.34] | 63.50% |    47.48% |           0.12
+    ## setosa     | versicolor |         6.90 |       1.54 | [-0.54, 3.60] | 93.00% |     2.73% |           3.54
+    ## setosa     |  virginica |         6.90 |       2.00 | [-0.02, 4.00] | 97.35% |     1.27% |           4.58
+    ## versicolor |  virginica |         6.90 |       0.44 | [-0.08, 0.96] | 94.62% |     8.80% |           1.01
 
 ### Find a predictor’s slopes at each factor level
 
@@ -149,9 +149,9 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 estimate_slopes(model)
 ## Species    | Median |        95% CI |     pd | % in ROPE | Std. Median
 ## ----------------------------------------------------------------------
-## setosa     |   0.34 | [-0.03, 0.71] | 95.58% |    10.30% |        1.37
-## versicolor |   0.36 | [ 0.17, 0.54] | 99.98% |     0.27% |        1.46
-## virginica  |   0.23 | [ 0.08, 0.38] | 99.85% |     5.42% |        0.93
+## setosa     |   0.34 | [-0.05, 0.69] | 96.00% |     8.48% |        1.37
+## versicolor |   0.36 | [ 0.18, 0.54] | 99.98% |     0.18% |        1.46
+## virginica  |   0.23 | [ 0.07, 0.38] | 99.88% |     5.78% |        0.93
 ```
 
 ### Generate predictions from your model to compare it with original data
@@ -168,12 +168,12 @@ estimate_response(model)
 
 | Sepal.Length | Species | Predicted | CI\_low | CI\_high |
 |-------------:|:--------|----------:|--------:|---------:|
-|          5.1 | setosa  |      1.48 |    1.01 |     2.07 |
-|          4.9 | setosa  |      1.45 |    0.93 |     1.98 |
-|          4.7 | setosa  |      1.41 |    0.88 |     1.89 |
-|          4.6 | setosa  |      1.41 |    0.83 |     1.92 |
-|          5.0 | setosa  |      1.46 |    0.96 |     1.98 |
-|          5.4 | setosa  |      1.52 |    1.01 |     2.04 |
+|          5.1 | setosa  |      1.47 |    0.98 |     1.98 |
+|          4.9 | setosa  |      1.45 |    0.92 |     1.97 |
+|          4.7 | setosa  |      1.41 |    0.88 |     1.96 |
+|          4.6 | setosa  |      1.42 |    0.92 |     1.98 |
+|          5.0 | setosa  |      1.46 |    0.90 |     1.96 |
+|          5.4 | setosa  |      1.51 |    1.00 |     2.11 |
 
 ### Estimate the link between the response and a predictor
 
@@ -183,27 +183,27 @@ to create this plot:
 <img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
 
 ``` r
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data=iris)
+model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 
 estimate_link(model)
 ```
 
 | Petal.Length | Predicted | CI\_low | CI\_high |
 |-------------:|----------:|--------:|---------:|
-|         1.00 |      3.62 |    3.49 |     3.76 |
-|         1.98 |      3.18 |    3.10 |     3.26 |
-|         2.97 |      2.89 |    2.80 |     2.99 |
-|         3.95 |      2.78 |    2.68 |     2.86 |
-|         4.93 |      2.83 |    2.76 |     2.90 |
-|         5.92 |      3.05 |    2.94 |     3.17 |
+|         1.00 |      3.62 |    3.49 |     3.75 |
+|         1.98 |      3.18 |    3.09 |     3.26 |
+|         2.97 |      2.90 |    2.81 |     2.99 |
+|         3.95 |      2.78 |    2.69 |     2.87 |
+|         4.93 |      2.83 |    2.77 |     2.91 |
+|         5.92 |      3.05 |    2.94 |     3.16 |
 |         6.90 |      3.44 |    3.20 |     3.68 |
 
 ### Describe the smooth term by its linear parts
 
 ``` r
 estimate_smooth(model)
-## Part | Start |  End |   Size |     Trend | Linearity
-## ----------------------------------------------------
-## 1    |  1.00 | 4.11 | 53.00% | -8.07e-03 |      0.94
-## 2    |  4.11 | 6.90 | 47.00% |  6.89e-03 |      0.93
+## Part | Start |  End |   Size | Trend | Linearity
+## ------------------------------------------------
+## 1    |  1.00 | 3.62 | 50.00% | -0.19 |      0.96
+## 2    |  3.62 | 6.90 | 50.00% |  0.08 |      0.81
 ```

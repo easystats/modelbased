@@ -202,10 +202,10 @@ summaries like the median or the CI.
 
 ```{r message=FALSE, warning=FALSE}
 # Keep only 100 draws (keeping all the draws might be slower)
-predicted <- estimate_link(model, keep_draws = TRUE, draws = 100)
+predicted <- estimate_link(model, keep_iterations = TRUE, iterations = 100)
 
 # Format draws for plotting
-draws <- reshape_draws(predicted)
+draws <- bayestestR::reshape_iterations(predicted)
 draws$group <- paste0(draws$Draw_Group, draws$Species)
 
 iris %>%

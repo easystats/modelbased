@@ -1,47 +1,17 @@
 #' Describe the smooth term (for GAMs) or non-linear predictors
 #'
-#' This function summarise the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterised by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
+#' This function summarises the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterized by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
 #'
-#' See the documentation for your object's class:
-#' \itemize{
-#'  \item{\link[=estimate_smooth.stanreg]{Bayesian models (stanreg and brms)}}
-#'  }
-#'
-#' @param smooth A character indicating the name of the "smooth" term.
-#' @inheritParams estimate_slopes
-#' @inheritParams estimate_response
-#'
-#' @return A dataframe of linear description of non-linear terms.
-#'
-#' @export
-estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", ...) {
-  UseMethod("estimate_smooth")
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#' Describe the smooth term (for GAMs) or non-linear predictors
-#'
-#' @inheritParams estimate_smooth
+#' @param smooth A character indicating the name of the "smooth" term
 #' @inheritParams estimate_slopes.stanreg
-#' @inheritParams estimate_response.stanreg
+#' @inheritParams estimate_response
+#' @inheritParams visualisation_matrix
 #'
 #' @examples
 #' library(modelbased)
 #' \donttest{
 #' if (require("rstanarm")) {
-#'   model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris)
+#'   model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris, refresh = 0)
 #'   estimate_smooth(model)
 #'
 #'   model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
@@ -55,10 +25,11 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, length = 200, t
 #'   estimate_smooth(model, levels = "Species")
 #' }
 #' }
+#' @return A dataframe of linear description of non-linear terms.
 #' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length = 200, transform = "response", centrality = "median", ...) {
+estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
   predictors <- insight::find_predictors(model)$conditional
   data <- insight::get_data(model)
 
@@ -83,19 +54,11 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   }
 
   # Basis
-  newdata <- visualisation_matrix(data[predictors], target, length = length, factors = "reference", numerics = "mean", ...)
+  newdata <- visualisation_matrix(data[predictors], target, factors = "reference", numerics = "mean", ...)
 
-  smooth_data <- estimate_link(model, newdata,
-    predict = "link",
-    centrality = centrality, transform = transform,
-    keep_draws = FALSE, draws = NULL,
-    seed = NULL, random = FALSE, ...
-  )
+  smooth_data <- estimate_link(model, data = newdata, predict = "link", ...)
 
-  # Predicted name
-  pred_name <- c("Median", "Mean", "MAP", "Predicted")
-  pred_name <- pred_name[pred_name %in% names(smooth_data)]
-
+  # Segmentation
   if (!is.null(levels)) {
     description <- data.frame()
     groups <- visualisation_matrix(smooth_data[levels])
@@ -103,7 +66,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       data <- smooth_data
       for (col in names(groups)) {
         data <- data[data[[col]] == groups[row, col], ]
-        current_description <- .describe_smooth(data[[pred_name]])
+        current_description <- .describe_smooth(data$Predicted)
         current_description$Start <- data[current_description$Start, smooth]
         current_description$End <- data[current_description$End, smooth]
         group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
@@ -119,7 +82,7 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
       }
     }
   } else {
-    description <- .describe_smooth(smooth_data[[pred_name]])
+    description <- .describe_smooth(smooth_data$Predicted)
 
     description$Start <- smooth_data[description$Start, smooth]
     description$End <- smooth_data[description$End, smooth]
@@ -133,17 +96,15 @@ estimate_smooth.stanreg <- function(model, smooth = NULL, levels = NULL, length 
   description
 }
 
-#' @export
-estimate_smooth.brmsfit <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.glm <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.merMod <- estimate_smooth.stanreg
 
-#' @export
-estimate_smooth.glmmTMB <- estimate_smooth.stanreg
+
+# Helper ------------------------------------------------------------------
+
+
+
+
 
 
 #' @importFrom utils tail

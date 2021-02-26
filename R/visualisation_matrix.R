@@ -13,7 +13,7 @@
 #' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods.
 #' @inheritParams effectsize::format_standardize
-#' @inheritParams estimate_link
+#' @inheritParams estimate_response
 #'
 #'
 #' @return Reference grid data frame.
