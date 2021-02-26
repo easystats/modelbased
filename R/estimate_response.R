@@ -51,7 +51,7 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
   data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
 
   # Restore factor levels
-  data <- .restore_factor_levels(data, insight::get_data(model))
+  data <- data_restoretype(data, insight::get_data(model))
 
   # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
