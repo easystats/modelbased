@@ -65,7 +65,10 @@ But here are some problems with this approach:
 
 1. We don't know whether the model lying underlying the test (the *t*-test, the
    ANOVAs or the correlation) is any good to "represent" the data, preventing in
-   turn to adjust the confidence in the results.
+   turn to adjust the confidence in the results. For instance, we know that reaction
+   times (RTs) have a non-normal distribution, and yet we often see the use of 
+   unsuited methods, like outliers-removal, scale-transformations, and computation
+   of empirical scores like "mean" or "SD" that do not represent the data well.
 
 2. The visualisation are usually based on the data, rather than on the model
    (which is problematic in the case of complex models).

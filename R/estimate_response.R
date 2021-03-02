@@ -36,7 +36,7 @@
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_response <- function(model, data = NULL, predict = "response", keep_iterations = FALSE, ...) {
+estimate_response <- function(model, data = NULL, predict = "response", ci = 0.95, keep_iterations = FALSE, ...) {
 
   # Get data ----------------
   if (is.null(data)) {
@@ -55,8 +55,7 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
 
   # Get predicted ----------------
   ci_type <- ifelse(predict == "link", "confidence", "prediction")
-  predicted <- insight::get_predicted(model, newdata = data, ci_type = ci_type, ...)
-  ci <- attributes(predicted)$ci
+  predicted <- insight::get_predicted(model, newdata = data, ci = ci, ci_type = ci_type, ...)
 
   # Format predicted ----------------
   if(insight::model_info(model)$is_bayesian) {
@@ -91,6 +90,6 @@ estimate_response <- function(model, data = NULL, predict = "response", keep_ite
 
 #' @rdname estimate_response
 #' @export
-estimate_link <- function(model, data = "grid", predict = "link", keep_iterations = FALSE, ...) {
-  estimate_response(model, data = data, predict = predict, keep_iterations = keep_iterations, ...)
+estimate_link <- function(model, data = "grid", predict = "link", ci = 0.95, keep_iterations = FALSE, ...) {
+  estimate_response(model, data = data, predict = predict, ci = ci, keep_iterations = keep_iterations, ...)
 }

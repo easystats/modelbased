@@ -9,6 +9,7 @@ estimate_response(
   model,
   data = NULL,
   predict = "response",
+  ci = 0.95,
   keep_iterations = FALSE,
   ...
 )
@@ -17,6 +18,7 @@ estimate_link(
   model,
   data = "grid",
   predict = "link",
+  ci = 0.95,
   keep_iterations = FALSE,
   ...
 )
