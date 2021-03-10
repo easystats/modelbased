@@ -26,19 +26,38 @@ estimate_link(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).}
+\item{data}{A data frame with model's predictors to estimate the response. If
+NULL, the model's data is used. If "grid", the model matrix is obtained
+(through \code{\link{visualisation_matrix}}).}
 
-\item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
+\item{predict}{Can be "response" (default) or "link". The former predicts the
+the outcome per se, while the latter predicts the link function (i.e., the
+regression "line"), equivalent to estimating the \code{fit}. In other
+words, \code{estimate_response(model, predict="link")} is equivalent to
+\code{estimate_link(model)}.}
 
-\item{keep_iterations}{Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
+\item{keep_iterations}{Only relevant for Bayesian models or simulated models.
+If \code{TRUE}, will keep all prediction iterations (draws). You can
+reshape them by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
-\item{...}{You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+\item{...}{You can add all the additional control arguments from
+\code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and
+\code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
 A dataframe of predicted values.
 }
 \description{
-\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally).
+\code{estimate_link} is a shortcut to \code{estimate_response} with
+\code{data = "grid"}. \code{estimate_response} would be used in the context
+of generating actual predictions for the existing or new data, whereas
+\code{estimate_link} is more relevant in the context of visualisation and
+plotting. There are many control parameters that are not listed here but can
+be used, such as the arguments from  \code{\link{visualisation_matrix}} (used
+when \code{data = "grid"}) and from
+\code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
+to compute predictions used internally).
 }
 \examples{
 library(modelbased)
@@ -62,7 +81,7 @@ if (require("lme4")) {
 
 # Bayesian models
 if (require("rstanarm")) {
-  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
+  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
   estimate_response(model)
   estimate_link(model)
 }

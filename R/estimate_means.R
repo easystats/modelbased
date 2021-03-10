@@ -51,13 +51,39 @@
 #'
 #' @return A dataframe of estimated marginal means.
 #' @export
-estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, centrality = "median", ci = 0.95, ci_method = "hdi", ...) {
+estimate_means <- function(model,
+                           levels = NULL,
+                           fixed = NULL,
+                           modulate = NULL,
+                           transform = "response",
+                           length = 10,
+                           centrality = "median",
+                           ci = 0.95,
+                           ci_method = "hdi",
+                           ...) {
   args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-  estimated <- .emmeans_wrapper(model, levels = args$levels, fixed = args$fixed, modulate = args$modulate, transform = transform, length = length, ...)
+
+  estimated <- .emmeans_wrapper(
+    model,
+    levels = args$levels,
+    fixed = args$fixed,
+    modulate = args$modulate,
+    transform = transform,
+    length = length,
+    ...
+  )
 
   # Summarize and clean
-  if(insight::model_info(model)$is_bayesian) {
-    means <- .summarize_posteriors(estimated, ci = ci, centrality = centrality, ci_method = ci_method, test = NULL, rope_range = NULL)
+  if (insight::model_info(model)$is_bayesian) {
+    means <- .summarize_posteriors(
+      estimated,
+      ci = ci,
+      centrality = centrality,
+      ci_method = ci_method,
+      test = NULL,
+      rope_range = NULL
+    )
+
     means <- .clean_names_bayesian(means, model, transform, type = "mean")
 
     temp <- as.data.frame(estimated)
@@ -257,4 +283,3 @@ estimate_means <- function(model, levels = NULL, fixed = NULL, modulate = NULL, 
 
 #' @export
 # estimate_means.glmmTMB <- estimate_means.lm
-
