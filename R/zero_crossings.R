@@ -1,6 +1,8 @@
 #' Find zero crossings of a vector
 #'
-#' Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.
+#' Find zero crossings of a vector, i.e., indices when the numeric variable
+#' crosses 0.
+#'
 #' @param x A numeric vector.
 #'
 #' @examples
@@ -29,9 +31,14 @@ zero_crossings <- function(x) {
 #' Copied from rootSolve package
 #' @importFrom stats uniroot
 #' @keywords internal
-.uniroot.all <- function(f, interval, lower = min(interval),
-                         upper = max(interval), tol = .Machine$double.eps^0.2,
-                         maxiter = 1000, n = 100, ...) {
+.uniroot.all <- function(f,
+                         interval,
+                         lower = min(interval),
+                         upper = max(interval),
+                         tol = .Machine$double.eps^0.2,
+                         maxiter = 1000,
+                         n = 100,
+                         ...) {
 
   ## error checking as in uniroot...
   if (!missing(interval) && length(interval) != 2) {
@@ -58,17 +65,6 @@ zero_crossings <- function(x) {
 
   return(Equi)
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 

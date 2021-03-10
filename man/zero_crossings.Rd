@@ -13,7 +13,8 @@ zero_crossings(x)
 Vector of zero crossings.
 }
 \description{
-Find zero crossings of a vector, i.e., indices when the numeric variable crosses 0.
+Find zero crossings of a vector, i.e., indices when the numeric variable
+crosses 0.
 }
 \examples{
 x <- sin(seq(0, 4 * pi, length.out = 100))

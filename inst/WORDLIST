@@ -6,6 +6,7 @@ Modelisation
 Modelling
 NaNs
 ROPE's
+RTs
 Setosa
 Versicolor
 Virginica
@@ -15,7 +16,6 @@ Waggoner
 aproximative
 blogpost
 bonferroni
-characterised
 codecov
 doi
 easystats
@@ -33,10 +33,11 @@ rootSolve
 se
 setosa
 spinoff
-summarise
 summarised
+summarises
 tukey
 ultron
+uninformativeness
 versicolor
 virginica
 visualisation

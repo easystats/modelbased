@@ -1,6 +1,12 @@
 #' @importFrom emmeans emmeans ref_grid
 #' @keywords internal
-.emmeans_wrapper <- function(model, levels = NULL, fixed = NULL, modulate = NULL, transform = "response", length = 10, ...) {
+.emmeans_wrapper <- function(model,
+                             levels = NULL,
+                             fixed = NULL,
+                             modulate = NULL,
+                             transform = "response",
+                             length = 10,
+                             ...) {
   data <- insight::get_data(model)
 
   # Sanitize fixed
@@ -52,7 +58,13 @@
   }
 
   # Get emmeans refgrid
-  suppressMessages(refgrid <- emmeans::ref_grid(model, at = at, data = data, nesting = NULL, ...))
+  suppressMessages(refgrid <- emmeans::ref_grid(
+    model,
+    at = at,
+    data = data,
+    nesting = NULL,
+    ...
+  ))
 
   # Run emmeans
   means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)

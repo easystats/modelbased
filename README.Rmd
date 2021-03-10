@@ -133,7 +133,12 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin(aes(color = Species)) +
   geom_jitter2(width = 0.05, alpha = 0.5) +
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
-  geom_pointrange(data = means, aes(y = Mean, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  geom_pointrange(
+    data = means,
+    aes(y = Mean, ymin = CI_low, ymax = CI_high),
+    size = 1,
+    color = "white"
+  ) +
   scale_fill_material() +
   scale_colour_material() +
   theme_modern()
