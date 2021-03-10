@@ -62,7 +62,6 @@ estimate_response <- function(model,
                               keep_iterations = FALSE,
                               ...) {
 
-
   # Get data ----------------
   if (is.null(data)) {
     data <- insight::get_data(model)

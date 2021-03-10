@@ -43,9 +43,14 @@ data_restoretype <- function(data, reference_data = NULL) {
     if (is.character(data[[i]])) {
       # Check if contains only numeric
       if (all(!grepl("^[[:alpha:]]+$", data[[i]], perl = TRUE))) {
-        data[[i]] <- tryCatch(as.numeric(data[[i]]), error = function(e) data[[i]], warning = function(w) data[[i]])
+        data[[i]] <- tryCatch(
+          as.numeric(data[[i]]),
+          error = function(e) data[[i]],
+          warning = function(w) data[[i]]
+        )
       }
     }
   }
+
   data
 }

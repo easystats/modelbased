@@ -9,9 +9,11 @@ smoothing(x, method = "loess", strength = 0.25, ...)
 \arguments{
 \item{x}{A numeric vector.}
 
-\item{method}{Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}. A loess smoothing can be slow.}
+\item{method}{Can be \link[=loess]{"loess"} (default) or
+\link[=smooth]{"smooth"}. A loess smoothing can be slow.}
 
-\item{strength}{This argument only applies to \code{smooth_method = "loess"}. Degree of smoothing passed to \code{span} (see \code{\link{loess}}).}
+\item{strength}{This argument only applies to \code{smooth_method = "loess"}.
+Degree of smoothing passed to \code{span} (see \code{\link{loess}}).}
 
 \item{...}{Arguments passed to or from other methods.}
 }
@@ -19,7 +21,9 @@ smoothing(x, method = "loess", strength = 0.25, ...)
 A smoothed vector or data frame.
 }
 \description{
-Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination).
+Smoothing a vector or a time series. For data.frames, the function will
+smooth all numeric variables stratified by factor levels (i.e., will smooth
+within each factor level combination).
 }
 \examples{
 x <- sin(seq(0, 4 * pi, length.out = 100)) + rnorm(100, 0, 0.2)

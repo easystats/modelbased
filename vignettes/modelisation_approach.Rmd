@@ -1,10 +1,6 @@
 ---
 title: "The Modelisation Approach to Statistics"
 output: 
-  github_document:
-    toc: true
-    fig_width: 10.08
-    fig_height: 6
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -169,7 +165,7 @@ of significance (which are abstract).
 
 ## 1. Draw what you want to visualize
 
-We can use `geom_smooth()`, which can fit non-linear relationships in an emprical way, to give us an idea of the shape of the relationships.
+We can use `geom_smooth()`, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.
 
 ```{r message=FALSE, warning=FALSE}
 data %>%
