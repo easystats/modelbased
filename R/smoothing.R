@@ -1,10 +1,14 @@
 #' Smoothing a vector or a time series
 #'
-#' Smoothing a vector or a time series. For data.frames, the function will smooth all numeric variables stratified by factor levels (i.e., will smooth within each factor level combination).
+#' Smoothing a vector or a time series. For data.frames, the function will
+#' smooth all numeric variables stratified by factor levels (i.e., will smooth
+#' within each factor level combination).
 #'
 #' @param x A numeric vector.
-#' @param method Can be \link[=loess]{"loess"} (default) or \link[=smooth]{"smooth"}. A loess smoothing can be slow.
-#' @param strength This argument only applies to \code{smooth_method = "loess"}. Degree of smoothing passed to \code{span} (see \code{\link{loess}}).
+#' @param method Can be \link[=loess]{"loess"} (default) or
+#'   \link[=smooth]{"smooth"}. A loess smoothing can be slow.
+#' @param strength This argument only applies to \code{smooth_method = "loess"}.
+#'   Degree of smoothing passed to \code{span} (see \code{\link{loess}}).
 #' @param ... Arguments passed to or from other methods.
 #'
 #'

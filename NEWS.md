@@ -1,4 +1,8 @@
+# modelbased 0.6.0
+
 # modelbased 0.5.1
+
+- Minor improvements.
 
 # modelbased 0.3.0
 

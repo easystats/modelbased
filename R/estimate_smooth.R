@@ -1,6 +1,11 @@
 #' Describe the smooth term (for GAMs) or non-linear predictors
 #'
-#' This function summarises the smooth term trend in terms of linear segments. Using the aproximative derivative, it separates a non-linear vector into quasi-linear segments (in which the trend is either positive or negative). Each of this segment its characterized by its beginning, end, size (in proportion, relative to the total size) trend (the linear regression coefficient) and linearity (the R2 of the linear regression).
+#' This function summarises the smooth term trend in terms of linear segments.
+#' Using the aproximative derivative, it separates a non-linear vector into
+#' quasi-linear segments (in which the trend is either positive or negative).
+#' Each of this segment its characterized by its beginning, end, size (in
+#' proportion, relative to the total size) trend (the linear regression
+#' coefficient) and linearity (the R2 of the linear regression).
 #'
 #' @param smooth A character indicating the name of the "smooth" term
 #' @inheritParams estimate_slopes.stanreg
@@ -90,7 +95,12 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
 
   attributes(description) <- c(
     attributes(description),
-    list(smooth = smooth, levels = levels, transform = transform, response = insight::find_response(model))
+    list(
+      smooth = smooth,
+      levels = levels,
+      transform = transform,
+      response = insight::find_response(model)
+    )
   )
   class(description) <- c("estimate_smooth", class(description))
   description
@@ -101,11 +111,6 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
 
 
 # Helper ------------------------------------------------------------------
-
-
-
-
-
 
 #' @importFrom utils tail
 #' @importFrom stats lm

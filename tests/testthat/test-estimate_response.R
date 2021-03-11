@@ -24,7 +24,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
       expect_equal(c(nrow(estim), ncol(estim)), c(25, 5))
 
       # Non-sampling algorithms
-      model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh=0)
+      model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh = 0)
       estim <- estimate_link(model, keep_iterations = TRUE)
       expect_equal(c(nrow(estim), ncol(estim)), c(10, 1004))
 
