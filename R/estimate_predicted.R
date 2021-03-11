@@ -82,18 +82,17 @@ estimate_response <- estimate_prediction
 
   # Get predicted ----------------
   predictions <- insight::get_predicted(model,
-                                        newdata = data,
+                                        data = data,
                                         predict = predict,
                                         ci = ci,
                                         dispersion_function = "mad",
                                         interval_function = "hdi",
                                         ...)
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
+  out <- cbind(data, out)
 
   # Prepare output
   attr(out, "ci") <- ci
-  attr(out, "ci_method") <- attributes(predicted)$ci_method
-  attr(out, "centrality") <- centrality
   attr(out, "response") <- insight::find_response(model)
   class(out) <- c("estimate_response", "see_estimate_response", class(out))
   out
