@@ -52,16 +52,16 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
 
   test_that("estimate_response - glmmTMB", {
     estim <- estimate_response(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(nrow(data), 6))
+    expect_equal(c(nrow(estim), ncol(estim)), c(nrow(data), 7))
   })
 
   test_that("estimate_link - glmmTMB", {
     estim <- estimate_link(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(20, 5))
+    expect_equal(c(nrow(estim), ncol(estim)), c(20, 6))
   })
 
   test_that("estimate_response - glmmTMB", {
     estim <- estimate_response(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(644, 6))
+    expect_equal(c(nrow(estim), ncol(estim)), c(644, 7))
   })
 }

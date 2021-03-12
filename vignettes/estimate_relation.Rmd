@@ -5,7 +5,7 @@ output:
     toc: true
     fig_width: 10.08
     fig_height: 6
-tags: [r, estimate, estimate link, predictions]
+tags: [r, estimate, estimate link, estimate relation, predictions]
 vignette: >
   %\VignetteIndexEntry{Visualize effects and interactions}
   \usepackage[utf8]{inputenc}
@@ -33,7 +33,7 @@ set.seed(333)
 ```
 
 This vignette will present how to visualize the effects and interactions using
-`estimate_link()`.
+`estimate_relation()`.
 
 # Simple regression
 
@@ -44,7 +44,7 @@ library(modelbased)
 
 model <- glm(Sepal.Length ~ Sepal.Width, data = iris)
 
-visualization_data <- modelbased::estimate_link(model)
+visualization_data <- modelbased::estimate_relation(model)
 head(visualization_data)
 ```
 
@@ -74,7 +74,7 @@ approximations using
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
-  modelbased::estimate_link() %>%
+  modelbased::estimate_relation() %>%
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
@@ -87,7 +87,7 @@ glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
 library(mgcv)
 
 mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) %>%
-  modelbased::estimate_link() %>%
+  modelbased::estimate_relation() %>%
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
