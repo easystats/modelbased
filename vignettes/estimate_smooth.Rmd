@@ -164,7 +164,7 @@ ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low_0.97, ymax = CI_high_0.97), alpha = 0.2, fill = "blue") +
   geom_ribbon(aes(ymin = CI_low_0.89, ymax = CI_high_0.89), alpha = 0.2, fill = "blue") +
   geom_ribbon(aes(ymin = CI_low_0.69, ymax = CI_high_0.69), alpha = 0.2, fill = "blue") +
-  geom_ribbon(aes(ymin = CI_low_0.50, ymax = CI_high_0.50), alpha = 0.2, fill = "blue") +
+  geom_ribbon(aes(ymin = CI_low_0.5, ymax = CI_high_0.5), alpha = 0.2, fill = "blue") +
   geom_line(color = "blue") +
   theme_modern(legend.position = "none") +
   ylab("Memory")
