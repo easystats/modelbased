@@ -83,7 +83,7 @@ Let's continue with **visualising the fitted model**:
 ```{r message=FALSE, warning=FALSE}
 library(modelbased)
 
-estim <- estimate_link(model)
+estim <- estimate_relation(model)
 
 ggplot(estim, aes(x = x, y = Predicted)) +
   geom_line(color = "purple") +
@@ -119,7 +119,7 @@ library(see)
 
 # Load the data and filter out outliers
 df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv")
-df <- filter(df, Delay <= 14, Memory >= 20)
+df <- dplyr::filter(df, Delay <= 14, Memory >= 20)
 
 
 # Plot the density of the point and a loess smooth line
@@ -158,13 +158,13 @@ We can visualize the link between the Delay and the Memory score by using the
 ```{r message=FALSE, warning=FALSE}
 library(modelbased)
 
-estim <- estimate_link(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
+estim <- estimate_relation(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
 ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) +
-  geom_ribbon(aes(ymin = CI_low_97, ymax = CI_high_97), alpha = 0.2, fill = "blue") +
-  geom_ribbon(aes(ymin = CI_low_89, ymax = CI_high_89), alpha = 0.2, fill = "blue") +
-  geom_ribbon(aes(ymin = CI_low_69, ymax = CI_high_69), alpha = 0.2, fill = "blue") +
-  geom_ribbon(aes(ymin = CI_low_50, ymax = CI_high_50), alpha = 0.2, fill = "blue") +
+  geom_ribbon(aes(ymin = CI_low_0.97, ymax = CI_high_0.97), alpha = 0.2, fill = "blue") +
+  geom_ribbon(aes(ymin = CI_low_0.89, ymax = CI_high_0.89), alpha = 0.2, fill = "blue") +
+  geom_ribbon(aes(ymin = CI_low_0.69, ymax = CI_high_0.69), alpha = 0.2, fill = "blue") +
+  geom_ribbon(aes(ymin = CI_low_0.50, ymax = CI_high_0.50), alpha = 0.2, fill = "blue") +
   geom_line(color = "blue") +
   theme_modern(legend.position = "none") +
   ylab("Memory")

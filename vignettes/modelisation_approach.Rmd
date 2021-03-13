@@ -108,9 +108,23 @@ generate_data <- function(effect = 5, noise = 0.5) {
 }
 
 data <- generate_data(effect = rnorm(30, 2, 2), noise = rnorm(30, 0, 0.4))
+# 
+# library(rtdists)
+# 
+# data <- data.frame(
+#   Participant = paste0("S", speed_acc$id),
+#   Item = as.numeric(speed_acc$stim),
+#   Condition = speed_acc$condition,
+#   Correct = ifelse(as.character(speed_acc$stim_cat) == as.character(speed_acc$response), 1, 0),
+#   RT = speed_acc$rt * 1000
+# )
 ```
 
 </details>
+
+
+## Preprocessing 
+
 
 ## ANOVAs 
 

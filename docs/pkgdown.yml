@@ -1,0 +1,13 @@
+pandoc: 2.11.2
+pkgdown: 1.5.1
+pkgdown_sha: ~
+articles:
+  estimate_contrasts: estimate_contrasts.html
+  estimate_means: estimate_means.html
+  estimate_relation: estimate_relation.html
+  estimate_response: estimate_response.html
+  estimate_smooth: estimate_smooth.html
+  modelisation_approach: modelisation_approach.html
+  visualisation_matrix: visualisation_matrix.html
+last_built: 2021-03-13T01:56Z
+

@@ -7,7 +7,7 @@ output:
     fig_height: 6
 tags: [r, estimate, marginal means, emmeans]
 vignette: >
-  %\VignetteIndexEntry{Marginal means}
+  %\VignetteIndexEntry{What are, why use and how to get marginal means}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

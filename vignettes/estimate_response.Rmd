@@ -181,9 +181,9 @@ predicted <- estimate_link(model, ci = c(0.69, .89, 0.99))
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_99, ymax = CI_high_99, fill = Species), alpha = 0.2) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_89, ymax = CI_high_89, fill = Species), alpha = 0.3) +
-  geom_ribbon(data = predicted, aes(ymin = CI_low_69, ymax = CI_high_69, fill = Species), alpha = 0.3) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_0.99, ymax = CI_high_0.99, fill = Species), alpha = 0.2) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_0.89, ymax = CI_high_0.89, fill = Species), alpha = 0.3) +
+  geom_ribbon(data = predicted, aes(ymin = CI_low_0.69, ymax = CI_high_0.69, fill = Species), alpha = 0.3) +
   geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
@@ -201,13 +201,13 @@ summaries like the median or the CI.
 predicted <- estimate_link(model, keep_iterations = TRUE, iterations = 100)
 
 # Format draws for plotting
-draws <- bayestestR::reshape_iterations(predicted)
-draws$group <- paste0(draws$Draw_Group, draws$Species)
+iterations <- bayestestR::reshape_iterations(predicted)
+iterations$group <- paste0(iterations$iter_group, iterations$Species)
 
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_line(data = draws, aes(y = Draw, color = Species, group = group), alpha = 0.05) +
+  geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.05) +
   geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
 ```
@@ -221,9 +221,9 @@ library(gganimate)
 p <- iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
-  geom_line(data = draws, aes(y = Draw, color = Species, group = group)) +
+  geom_line(data = iterations, aes(y = iter_value, color = Species, group = group)) +
   theme_modern() +
-  transition_states(Draw_Group, 0, 1) +
+  transition_states(iter_group, 0, 1) +
   shadow_mark(past = TRUE, future = TRUE, alpha = 1 / 20, color = "grey")
 
 gganimate::animate(p)
@@ -237,7 +237,7 @@ if (knitr::is_html_output()) {
   iris %>%
     ggplot(aes(x = Sepal.Length)) +
     geom_point(aes(y = Petal.Length, color = Species)) +
-    geom_line(data = draws, aes(y = Draw, color = Species, group = group)) +
+    geom_line(data = iterations, aes(y = iter_value, color = Species, group = group)) +
     theme_modern()
 }
 ```
