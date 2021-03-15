@@ -15,10 +15,16 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%",
+  dpi = 450
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -30,71 +36,69 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
 set.seed(333)
 ```
 
-Warning: we will go **full Bayesian** in this vignette. If you're not familiar
-with the Bayesian framework, we recommend starting with [**this gentle
-introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
+**Warning**: We will go **full Bayesian** in this vignette!
+If you're not familiar
+with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
 # Testing pairwise differences
 
-In the [**previous
-tutorial**](https://easystats.github.io/estimate/articles/estimate_means.html),
-we computed marginal at the 3 different `Species` levels from the
+In the [**previous tutorial**](https://easystats.github.io/estimate/articles/estimate_means.html),
+we computed marginal means at the 3 different `Species` levels from the
 [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset. However,
 one might also want to **statistically test** the differences between each
 levels, which can be achieved through **contrast analysis**. Although the
-procedure is much more powerful, its aim is somehow analog to the ***post hoc***
-analysis (pretty much consisting of pairwise t-tests) heavily used in
-psychological science to palliate the uselessness of ANOVAs.
+procedure is much more powerful, its aim is analogous to the ***post hoc***
+analysis (pretty much consisting of pairwise *t*-tests), which are heavily
+utilized in behavioral sciences as a way to follow up on hypotheses about global
+differences tested by ANOVAs with more specific hypotheses about pairwise
+differences.
 
-Let's do that based on the simple model from the previous tutorial:
+Let's carry out contrast analysis on the simple model from the previous tutorial:
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r}
 library(ggplot2)
 library(see)
 library(rstanarm)
 library(modelbased)
 
-
-model <- stan_glm(Sepal.Width ~ Species, data = iris)
-means <- estimate_means(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(ggplot2)
-library(see)
-library(rstanarm)
-library(modelbased)
-
+# you can ignore the `refresh` argument, it just prevents the function from printing
+# a few details to the console
 model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
 means <- estimate_means(model)
 ```
-```{r message=FALSE, warning=FALSE}
+
+```{r }
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter2(width = 0.05, alpha = 0.5) +
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
-  geom_pointrange(data = means, aes(y = Mean, ymin = CI_low, ymax = CI_high), size = 1, color = "white") +
+  geom_pointrange(data = means, 
+                  aes(y = Mean, ymin = CI_low, ymax = CI_high),
+                  size = 1, 
+                  color = "white") +
   theme_modern()
 ```
 
 **Contrast analysis** can be achieved through the `estimate_contrasts`
 function:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 estimate_contrasts(model)
 ```
 
-As we can see here, all pairwise differences can be considered as significant.
+If you can recall your [Bayesian apprenticeship](https://easystats.github.io/bayestestR/articles/example1.html),
+we can conclude that all pairwise differences are statistically significant.
 
 # Complex model
 
 Again, as contrast analysis is based on marginal means, it can be applied to
 more complex models:
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
 estimate_contrasts(model)
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0, iter = 1000, chains = 2)
 estimate_contrasts(model)
 ```
@@ -106,7 +110,7 @@ even changes sign).
 Note that we can plot simple contrast analysis through **lighthouse plots** with
 the help of the `see` package:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(see)
 
 plot(estimate_contrasts(model), estimate_means(model)) +
@@ -124,7 +128,7 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`), we will compute the contrasts at 100 equally-spaced points of
 `Petal.Width`, that we will then visualise.
 
-```{r message=FALSE, warning=FALSE, fig}
+```{r, fig}
 contrasts <- estimate_contrasts(model, modulate = "Petal.Width", length = 100)
 
 # Create a variable with the two levels concatenated
@@ -140,8 +144,11 @@ ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
 ```
 
 As we can see, the difference between *versicolor* and *virginica* increases as
-`Petal.Width` increases. In conclusion, contrast analysis is a powerful tool to
-interpret and understand statistical models.
+`Petal.Width` increases. 
+
+# Conclusion
+
+Contrast analysis can be a powerful tool to interpret and understand statistical
+models.
 
 # References
-
