@@ -20,6 +20,7 @@ codecov
 doi
 easystats
 emmeans
+favour
 fdr
 glmmTMB
 hochberg
@@ -29,6 +30,7 @@ joss
 loess
 modelisation
 nd
+polyvalent
 rootSolve
 se
 setosa

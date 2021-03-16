@@ -31,7 +31,7 @@
 #'
 #' # Bayesian models
 #' if (require("rstanarm")) {
-#'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
+#'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
 #'   estimate_response(model)
 #'   estimate_relation(model)
 #' }
@@ -83,12 +83,13 @@ estimate_response <- estimate_prediction
 
   # Get predicted ----------------
   predictions <- insight::get_predicted(model,
-                                        data = data,
-                                        predict = predict,
-                                        ci = ci,
-                                        dispersion_function = "mad",
-                                        interval_function = "hdi",
-                                        ...)
+    data = data,
+    predict = predict,
+    ci = ci,
+    dispersion_function = "mad",
+    interval_function = "hdi",
+    ...
+  )
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
