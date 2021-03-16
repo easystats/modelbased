@@ -68,9 +68,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -84,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -190,19 +196,28 @@
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Can be <code>"none"</code> (default for contrasts), <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear predictors. <code>"response"</code> will transform them on scale of the response variable. Thus for a logistic model, <code>"none"</code> will give estimations expressed in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></td>
+      <td><p>Can be <code>"none"</code> (default for contrasts),
+<code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
+<code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear
+predictors. <code>"response"</code> will transform them on scale of the response
+variable. Thus for a logistic model, <code>"none"</code> will give estimations
+expressed in log-odds (probabilities on logit scale) and <code>"response"</code>
+in terms of probabilities.</p></td>
     </tr>
     <tr>
       <th>standardize</th>
-      <td><p>If <code>TRUE</code>, adds standardized differences or coefficients.</p></td>
+      <td><p>If <code>TRUE</code>, adds standardized differences or
+coefficients.</p></td>
     </tr>
     <tr>
       <th>standardize_robust</th>
-      <td><p>Robust standardization through <code>MAD</code> (Median Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
+      <td><p>Robust standardization through <code>MAD</code> (Median
+Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See <code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>ci</a></code> for further details.</p></td>
+      <td><p>Credible Interval (CI) level. Default to 0.89 (89%). See
+<code><a href='https://easystats.github.io/bayestestR/reference/ci.html'>ci</a></code> for further details.</p></td>
     </tr>
     <tr>
       <th>centrality</th>
@@ -253,8 +268,8 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 </div><div class='output co'>#&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).
 #&gt; Chain 1: 
-#&gt; Chain 1: Gradient evaluation took 5.4e-05 seconds
-#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.54 seconds.
+#&gt; Chain 1: Gradient evaluation took 3.2e-05 seconds
+#&gt; Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.32 seconds.
 #&gt; Chain 1: Adjust your expectations accordingly!
 #&gt; Chain 1: 
 #&gt; Chain 1: 
@@ -271,15 +286,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 1: 
-#&gt; Chain 1:  Elapsed Time: 0.73414 seconds (Warm-up)
-#&gt; Chain 1:                0.883546 seconds (Sampling)
-#&gt; Chain 1:                1.61769 seconds (Total)
+#&gt; Chain 1:  Elapsed Time: 0.765086 seconds (Warm-up)
+#&gt; Chain 1:                0.763469 seconds (Sampling)
+#&gt; Chain 1:                1.52855 seconds (Total)
 #&gt; Chain 1: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).
 #&gt; Chain 2: 
-#&gt; Chain 2: Gradient evaluation took 1.4e-05 seconds
-#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
+#&gt; Chain 2: Gradient evaluation took 1.7e-05 seconds
+#&gt; Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.17 seconds.
 #&gt; Chain 2: Adjust your expectations accordingly!
 #&gt; Chain 2: 
 #&gt; Chain 2: 
@@ -296,15 +311,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 2: 
-#&gt; Chain 2:  Elapsed Time: 0.820885 seconds (Warm-up)
-#&gt; Chain 2:                0.776849 seconds (Sampling)
-#&gt; Chain 2:                1.59773 seconds (Total)
+#&gt; Chain 2:  Elapsed Time: 0.776202 seconds (Warm-up)
+#&gt; Chain 2:                0.945447 seconds (Sampling)
+#&gt; Chain 2:                1.72165 seconds (Total)
 #&gt; Chain 2: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).
 #&gt; Chain 3: 
-#&gt; Chain 3: Gradient evaluation took 1.3e-05 seconds
-#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#&gt; Chain 3: Gradient evaluation took 1.4e-05 seconds
+#&gt; Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.
 #&gt; Chain 3: Adjust your expectations accordingly!
 #&gt; Chain 3: 
 #&gt; Chain 3: 
@@ -321,15 +336,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 3: 
-#&gt; Chain 3:  Elapsed Time: 0.821551 seconds (Warm-up)
-#&gt; Chain 3:                1.01707 seconds (Sampling)
-#&gt; Chain 3:                1.83862 seconds (Total)
+#&gt; Chain 3:  Elapsed Time: 0.79723 seconds (Warm-up)
+#&gt; Chain 3:                0.86241 seconds (Sampling)
+#&gt; Chain 3:                1.65964 seconds (Total)
 #&gt; Chain 3: 
 #&gt; 
 #&gt; SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).
 #&gt; Chain 4: 
-#&gt; Chain 4: Gradient evaluation took 1.3e-05 seconds
-#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.
+#&gt; Chain 4: Gradient evaluation took 2.3e-05 seconds
+#&gt; Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.23 seconds.
 #&gt; Chain 4: Adjust your expectations accordingly!
 #&gt; Chain 4: 
 #&gt; Chain 4: 
@@ -346,14 +361,14 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 #&gt; Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)
 #&gt; Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)
 #&gt; Chain 4: 
-#&gt; Chain 4:  Elapsed Time: 0.842487 seconds (Warm-up)
-#&gt; Chain 4:                0.788568 seconds (Sampling)
-#&gt; Chain 4:                1.63105 seconds (Total)
+#&gt; Chain 4:  Elapsed Time: 0.772469 seconds (Warm-up)
+#&gt; Chain 4:                0.938291 seconds (Sampling)
+#&gt; Chain 4:                1.71076 seconds (Total)
 #&gt; Chain 4: </div><div class='output co'>#&gt; <span class='message'>No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span></div><div class='output co'>#&gt; Species    | Median |        95% CI |     pd | % in ROPE | Std. Median
 #&gt; ----------------------------------------------------------------------
-#&gt; setosa     |   0.34 | [-0.06, 0.71] | 96.00% |    10.05% |        1.38
-#&gt; versicolor |   0.36 | [ 0.17, 0.53] | 99.98% |     0.20% |        1.46
-#&gt; virginica  |   0.23 | [ 0.07, 0.38] | 99.90% |     4.60% |        0.93</div><div class='input'><span class='co'># }</span>
+#&gt; setosa     |   0.34 | [-0.07, 0.70] | 95.80% |     9.83% |        1.36
+#&gt; versicolor |   0.36 | [ 0.17, 0.54] | 99.98% |     0.33% |        1.45
+#&gt; virginica  |   0.23 | [ 0.07, 0.39] | 99.67% |     5.12% |        0.92</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -366,11 +381,11 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>.</p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -378,6 +393,8 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 
   
 
+
+  
 
   </body>
 </html>

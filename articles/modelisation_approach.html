@@ -27,6 +27,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -39,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -84,7 +86,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/easystats/modelbased/">
+  <a href="https://github.com/easystats/modelbased/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -105,7 +107,7 @@
       <h1 data-toc-skip>The Modelisation Approach to Statistics</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/modelisation_approach.Rmd"><code>vignettes/modelisation_approach.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/modelisation_approach.Rmd" class="external-link"><code>vignettes/modelisation_approach.Rmd</code></a></small>
       <div class="hidden name"><code>modelisation_approach.Rmd</code></div>
 
     </div>
@@ -113,46 +115,61 @@
     
     
 <p>For a long time, applied statistics, especially in psychology, revolved around the idea of assessing differences between groups, using <strong><em>t</em>-tests</strong> or <strong>ANOVAs</strong>, or by investigating the existence of a significant linear relationship between two continuous variables using <strong>correlations</strong>.</p>
-<p>Every psychology student heard that <em>“ANOVAs, t-tests and correlations are all linear models”</em> (aka, linear regressions). And thus, one can only wonder why these different tests have not been yet replaced by a unified model?</p>
+<p>Every psychology student heard that <em>“ANOVAs, t-tests and correlations are all linear models”</em> (aka, linear regressions). And thus, one can only wonder why these different tests have not been yet replaced by a unified model.</p>
 <p><img src="https://github.com/easystats/easystats/raw/master/man/figures/modelbased/allregressions.png" width="50%" style="display: block; margin: auto;"></p>
-<p>The tests mentioned above have major perks. For instance, they are very easy to compute (one can even figure them out by hand). This partially explains their historical popularity, as these tests became the norm at an age when computers and fancy programs weren’t available. Moreover, they are easy to visualize (or so it is <em>believed</em>, as it’s not always true - but we’ll come to that later) and, most importantly, they have straightforward (or at least, <em>conventionally accepted</em>) interpretations. And, after all, statistics in many fields are used with the aim to draw some conclusions from the data.</p>
-<p>But here are the problems:</p>
+<p>The tests mentioned above have major advantages. For instance, they are very easy to compute (one can even figure them out by hand). This partially explains their historical popularity, as these tests became the norm at an age when computers and fancy programs weren’t available. Moreover, they are easy to visualize (or so it is <em>believed</em>, as it’s not always true - but we’ll come to that later) and, most importantly, they have straightforward (or at least, <em>conventionally accepted</em>) interpretations. After all, most of the time, statistics are used with the aim to draw some conclusions from the data.</p>
+<p>But here are some problems with this approach:</p>
 <ol style="list-style-type: decimal">
-<li>We don’t know whether the model lying underlying the test (the <em>t</em>-test, the ANOVAs or the correlation) is any good to “represent” the data, preventing in turn to adjust the confidence in the results.</li>
-<li>The visualisation are usually based on the data, rather than on the model (which is problematic in the case of complex models).</li>
-<li>New indices, such as <em>group means</em>, <em>contrasts</em>, etc., are also derived from the data, instead of using the model.</li>
+<li><p>We don’t know whether the model lying underlying the test (the <em>t</em>-test, the ANOVAs or the correlation) is any good to “represent” the data, preventing in turn to adjust the confidence in the results. For instance, we know that reaction times (RTs) have a non-normal distribution, and yet we often see the use of unsuited methods, like outliers-removal, scale-transformations, and computation of empirical scores like “mean” or “SD” that do not represent the data well.</p></li>
+<li><p>The visualisation are usually based on the data, rather than on the model (which is problematic in the case of complex models).</p></li>
+<li><p>New indices, such as <em>group means</em>, <em>contrasts</em>, etc., are also derived from the data, instead of using the model.</p></li>
 </ol>
-<p>Thus, we will describe below another approach to statistics, centred around statistical modelisation.</p>
+<p>Thus, we will describe below another approach to statistics, centered around statistical modelisation.</p>
 <div id="the-traditional-way" class="section level1">
 <h1 class="hasAnchor">
 <a href="#the-traditional-way" class="anchor"></a>The Traditional Way</h1>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rvlenth/emmeans" class="external-link">emmeans</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></code></pre></div>
 <div id="data-simulation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#data-simulation" class="anchor"></a>Data Simulation</h2>
 <p>First we will run the function below to simulate some data. There’s no need to understand the hows and whys, as we will explain everything in due time.</p>
 <details><p><summary>Click here to see the code to generate the data.</summary></p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">generate_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">effect</span><span class="op">=</span><span class="fl">5</span>, <span class="va">noise</span><span class="op">=</span><span class="fl">0.5</span><span class="op">)</span><span class="op">{</span>
-  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">generate_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">effect</span> <span class="op">=</span> <span class="fl">5</span>, <span class="va">noise</span> <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">{</span>
+  <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="op">)</span>
   <span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">100</span>
-  <span class="kw">for</span><span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">effect</span><span class="op">)</span><span class="op">)</span><span class="op">{</span>
-    <span class="va">participant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Experimental_Variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span>, length<span class="op">=</span><span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span>, length<span class="op">=</span><span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">participant</span><span class="op">$</span><span class="va">RT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">participant</span><span class="op">$</span><span class="va">Experimental_Variable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">**</span><span class="fl">2</span> <span class="op">-</span> <span class="va">effect</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">(</span><span class="va">participant</span><span class="op">$</span><span class="va">Experimental_Variable</span><span class="op">[</span><span class="op">(</span><span class="va">n</span><span class="op">/</span><span class="fl">2</span><span class="op">+</span><span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">]</span> <span class="op">+</span> <span class="va">effect</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">noise</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-    <span class="va">participant</span><span class="op">$</span><span class="va">Condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each<span class="op">=</span><span class="va">n</span><span class="op">/</span><span class="fl">2</span><span class="op">)</span>
-    <span class="va">participant</span><span class="op">$</span><span class="va">Participant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="va">i</span><span class="op">)</span>
-    <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">rbind</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">participant</span><span class="op">)</span>
+  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">effect</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">participant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>Experimental_Variable <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span>, length <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span>, length <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">participant</span><span class="op">$</span><span class="va">RT</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">participant</span><span class="op">$</span><span class="va">Experimental_Variable</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="op">(</span><span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span><span class="op">**</span><span class="fl">2</span> <span class="op">-</span> <span class="va">effect</span><span class="op">[</span><span class="va">i</span><span class="op">]</span>, <span class="op">(</span><span class="va">participant</span><span class="op">$</span><span class="va">Experimental_Variable</span><span class="op">[</span><span class="op">(</span><span class="va">n</span> <span class="op">/</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span><span class="op">:</span><span class="va">n</span><span class="op">]</span> <span class="op">+</span> <span class="va">effect</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">abs</a></span><span class="op">(</span><span class="va">noise</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
+    <span class="va">participant</span><span class="op">$</span><span class="va">Condition</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span>, each <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span>
+    <span class="va">participant</span><span class="op">$</span><span class="va">Participant</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"S"</span>, <span class="va">i</span><span class="op">)</span>
+    <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">participant</span><span class="op">)</span>
   <span class="op">}</span>
   <span class="va">data</span><span class="op">$</span><span class="va">RT</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">100</span> <span class="op">+</span> <span class="va">data</span><span class="op">$</span><span class="va">RT</span><span class="op">)</span> <span class="op">*</span> <span class="fl">10</span>
   <span class="va">data</span>
 <span class="op">}</span>
 
-<span class="fu">generate_data</span><span class="op">(</span>effect<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, noise<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">0</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Experimental_Variable</span>, y<span class="op">=</span><span class="va">RT</span>, color<span class="op">=</span><span class="va">Condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="modelisation_approach_files/figure-html/unnamed-chunk-3-1.png" width="3281.25"></p>
+<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">generate_data</span><span class="op">(</span>effect <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">2</span>, <span class="fl">2</span><span class="op">)</span>, noise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fl">30</span>, <span class="fl">0</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># </span>
+<span class="co"># library(rtdists)</span>
+<span class="co"># </span>
+<span class="co"># data &lt;- data.frame(</span>
+<span class="co">#   Participant = paste0("S", speed_acc$id),</span>
+<span class="co">#   Item = as.numeric(speed_acc$stim),</span>
+<span class="co">#   Condition = speed_acc$condition,</span>
+<span class="co">#   Correct = ifelse(as.character(speed_acc$stim_cat) == as.character(speed_acc$response), 1, 0),</span>
+<span class="co">#   RT = speed_acc$rt * 1000</span>
+<span class="co"># )</span></code></pre></div>
 </details>
+</div>
+<div id="preprocessing" class="section level2">
+<h2 class="hasAnchor">
+<a href="#preprocessing" class="anchor"></a>Preprocessing</h2>
 </div>
 <div id="anovas" class="section level2">
 <h2 class="hasAnchor">
@@ -160,10 +177,67 @@
 <p>In ANOVAs, it’s all about groups. Even though people also add in continuous variables (creating these ANCOVAs, MANOVAs and other monstrosities), it’s not really “in their spirit”: ANOVAs were made to compare groups.</p>
 <p>So we will take, for each participant, its 20…</p>
 <p><strong>TO DO: COMPLETE THIS VIGNETTE</strong>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data_anova</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span>
+    <span class="va">Experimental_Variable</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1.5</span> <span class="op">~</span> <span class="st">"Low"</span>,
+    <span class="va">Experimental_Variable</span> <span class="op">&gt;</span> <span class="fl">1.5</span> <span class="op">~</span> <span class="st">"High"</span>,
+    <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Middle"</span>
+  <span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></span><span class="op">(</span><span class="va">Category</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span>, <span class="va">Category</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>RT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">RT</span><span class="op">)</span><span class="op">)</span>
+
+<span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov</a></span><span class="op">(</span><span class="va">RT</span> <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">Error</a></span><span class="op">(</span><span class="va">Participant</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_anova</span><span class="op">)</span>
+<span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; # Participant
+&gt; 
+&gt; Parameter | Sum_Squares | df | Mean_Square
+&gt; ------------------------------------------
+&gt; Residuals |       33.32 | 29 |        1.15
+&gt; 
+&gt; # Within
+&gt; 
+&gt; Parameter          | Sum_Squares |  df | Mean_Square |     F |      p
+&gt; ---------------------------------------------------------------------
+&gt; Condition          |       73.09 |   1 |       73.09 |  0.14 | 0.705 
+&gt; Category           |    37375.24 |   2 |    18687.62 | 36.84 | &lt; .001
+&gt; Condition:Category |    36990.41 |   2 |    18495.20 | 36.46 | &lt; .001
+&gt; Residuals          |    73550.75 | 145 |      507.25 |       |</code></pre>
+<p>What can we conclude from that? Absolutely <strong>nothing</strong>! We need to investigate in more details, for instance by running post-hoc comparison tests. This uninformativeness is one reason why ANOVA should be banned from psychological science.</p>
 </div>
 <div id="post-hoc-comparison-tests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#post-hoc-comparison-tests" class="anchor"></a>Post-hoc comparison tests</h2>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">results</span>, <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+  <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="op">)</span>
+<span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">posthoc</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; contrast            | Coefficient |   SE |           95% CI | t(145) |      p
+&gt; -----------------------------------------------------------------------------
+&gt; A Low - B Low       |       36.83 | 5.82 | [ 25.33,  48.32] |   6.33 | &lt; .001
+&gt; A Low - A Middle    |       46.52 | 5.82 | [ 35.02,  58.01] |   8.00 | &lt; .001
+&gt; A Low - B Middle    |       14.18 | 5.82 | [  2.69,  25.67] |   2.44 | 0.491 
+&gt; A Low - A High      |       -0.23 | 5.82 | [-11.73,  11.26] |  -0.04 | &gt; .999
+&gt; A Low - B High      |       -8.54 | 5.82 | [-20.04,   2.95] |  -1.47 | 0.979 
+&gt; B Low - A Middle    |        9.69 | 5.82 | [ -1.80,  21.18] |   1.67 | 0.940 
+&gt; B Low - B Middle    |      -22.65 | 5.82 | [-34.14, -11.15] |  -3.89 | 0.012 
+&gt; B Low - A High      |      -37.06 | 5.82 | [-48.55, -25.56] |  -6.37 | &lt; .001
+&gt; B Low - B High      |      -45.37 | 5.82 | [-56.86, -33.87] |  -7.80 | &lt; .001
+&gt; A Middle - B Middle |      -32.34 | 5.82 | [-43.83, -20.84] |  -5.56 | &lt; .001
+&gt; A Middle - A High   |      -46.75 | 5.82 | [-58.24, -35.25] |  -8.04 | &lt; .001
+&gt; A Middle - B High   |      -55.06 | 5.82 | [-66.55, -43.57] |  -9.47 | &lt; .001
+&gt; B Middle - A High   |      -14.41 | 5.82 | [-25.90,  -2.92] |  -2.48 | 0.463 
+&gt; B Middle - B High   |      -22.72 | 5.82 | [-34.21, -11.23] |  -3.91 | 0.012 
+&gt; A High - B High     |       -8.31 | 5.82 | [-19.80,   3.18] |  -1.43 | 0.983 
+&gt; 
+&gt; p-value adjustment method: Tukey</code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data_anova</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Category</span>, y <span class="op">=</span> <span class="va">RT</span>, fill <span class="op">=</span> <span class="va">Condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="modelisation_approach_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
 </div>
 </div>
 <div id="the-modelisation-approach" class="section level1">
@@ -177,6 +251,15 @@
 <div id="draw-what-you-want-to-visualize" class="section level2">
 <h2 class="hasAnchor">
 <a href="#draw-what-you-want-to-visualize" class="anchor"></a>1. Draw what you want to visualize</h2>
+<p>We can use <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code>, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span><span class="op">)</span> <span class="op">%&gt;%</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Experimental_Variable</span>, y <span class="op">=</span> <span class="va">RT</span>, color <span class="op">=</span> <span class="va">Condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="modelisation_approach_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 </div>
 <div id="make-models-for-it" class="section level2">
 <h2 class="hasAnchor">
@@ -198,6 +281,7 @@
 <div id="references" class="section level1">
 <h1 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h1>
+<!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
 </div>
   </div>
 
@@ -212,11 +296,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a>.</p>
+  <p></p>
+<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link external-link">Mattan S. Ben-Shachar</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
 </div>
 
       </footer>
@@ -224,6 +310,8 @@
 
   
 
+
+  
 
   </body>
 </html>

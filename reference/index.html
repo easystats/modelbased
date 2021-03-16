@@ -67,9 +67,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-reference-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -83,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -178,6 +184,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="data_restoretype.html">data_restoretype()</a></code> </p>
+        </td>
+        <td><p>Restore the type of columns according to a reference data.frame</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> </p>
         </td>
         <td><p>Estimate contrasts between factor levels</p></td>
@@ -202,33 +214,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="estimate_means.lm.html">estimate_means(<i>&lt;lm&gt;</i>)</a></code> </p>
+          <p><code><a href="estimate_relation.html">estimate_relation()</a></code> <code><a href="estimate_relation.html">estimate_link()</a></code> <code><a href="estimate_relation.html">estimate_prediction()</a></code> <code><a href="estimate_relation.html">estimate_response()</a></code> </p>
         </td>
-        <td><p>Estimate marginal means</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.stanreg.html">estimate_means(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate marginal means</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.html">estimate_response()</a></code> <code><a href="estimate_response.html">estimate_link()</a></code> </p>
-        </td>
-        <td><p>Generates predictions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.glm.html">estimate_response(<i>&lt;glm&gt;</i>)</a></code> <code><a href="estimate_response.glm.html">estimate_link(<i>&lt;glm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generates predictions for Frequentist models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_link(<i>&lt;stanreg&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_response(<i>&lt;data.frame&gt;</i>)</a></code> <code><a href="estimate_response.stanreg.html">estimate_link(<i>&lt;data.frame&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Generates predictions for Bayesian models</p></td>
+        <td><p>Generates predictions from models</p></td>
       </tr><tr>
         
         <td>
@@ -256,21 +244,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="estimate_smooth.stanreg.html">estimate_smooth(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="find_inversions.html">find_inversions()</a></code> </p>
         </td>
         <td><p>Find points of inversion</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="reshape_draws.html">reshape_draws()</a></code> </p>
-        </td>
-        <td><p>Reshape estimations with Bayesian posterior draws to long format</p></td>
       </tr><tr>
         
         <td>
@@ -304,11 +280,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>.</p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -316,6 +292,8 @@
 
   
 
+
+  
 
   </body>
 </html>

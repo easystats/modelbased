@@ -67,9 +67,15 @@
 
 
 
+  
+
+  
+
   </head>
 
   <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -83,7 +89,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
       </span>
     </div>
 
@@ -150,6 +156,23 @@
       <small>Source: <a href='https://github.com/easystats/modelbased/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="modelbased-060" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#modelbased-060" class="anchor"></a>modelbased 0.6.0<small> Unreleased </small>
+</h1>
+<ul>
+<li>
+<span class="emoji" data-emoji="warning">⚠️</span> <code><a href="../reference/estimate_relation.html">estimate_link()</a></code> and <code><a href="../reference/estimate_relation.html">estimate_response()</a></code> are replaced in favour of <code><a href="../reference/estimate_relation.html">estimate_link()</a></code> (which does <strong>not</strong> transform predictions on the response scale for GLMs), <code><a href="../reference/estimate_relation.html">estimate_relation()</a></code> and <code><a href="../reference/estimate_relation.html">estimate_prediction()</a></code>. This follows the implementation of <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there. This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</li>
+</ul>
+</div>
+    <div id="modelbased-051" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.1">
+<a href="#modelbased-051" class="anchor"></a>modelbased 0.5.1<small> 2021-01-27 </small>
+</h1>
+<ul>
+<li>Minor improvements.</li>
+</ul>
+</div>
     <div id="modelbased-030" class="section level1">
 <h1 class="page-header" data-toc-text="0.3.0">
 <a href="#modelbased-030" class="anchor"></a>modelbased 0.3.0<small> 2020-09-26 </small>
@@ -183,8 +206,8 @@
 <a href="#modelbased-020" class="anchor"></a>modelbased 0.2.0<small> Unreleased </small>
 </h1>
 <ul>
-<li>Partial support of formulas.</li>
-<li>Refactor the emmeans wrapping.</li>
+<li><p>Partial support of formulas.</p></li>
+<li><p>Refactor the emmeans wrapping.</p></li>
 </ul>
 </div>
     <div id="modelbased-013" class="section level1">
@@ -232,11 +255,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>.</p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>.</p></p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.9000.</p>
+  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9000.</p></p>
 </div>
 
       </footer>
@@ -244,6 +267,8 @@
 
   
 
+
+  
 
   </body>
 </html>
