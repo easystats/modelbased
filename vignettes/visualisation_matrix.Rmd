@@ -15,10 +15,16 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%",
+  dpi = 450
+)
 options(digits = 2)
 
 if (!requireNamespace("parameters", quietly = TRUE) ||
@@ -47,7 +53,7 @@ represent and understand them.
 For instance, let's fit a simple linear model that models the relationship
 between `Sepal.Width` and `Sepal.Length`.
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(parameters)
 
 model <- lm(Sepal.Width ~ Sepal.Length, data = iris)
@@ -57,7 +63,7 @@ model_parameters(model)
 The most obvious way of representing this model is to plot the data points and
 add the regression line using the `geom_smooth` function from `ggplot2`:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(ggplot2)
 library(see)
 
@@ -74,7 +80,7 @@ create the regression line.
 
 Let's try the `visualisation_matrix` function from the `estimate` package.
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(modelbased)
 
 visualisation_matrix(iris["Sepal.Length"])
@@ -86,7 +92,7 @@ maximum, than the original data). The default **length** is 10, but we can
 adjust that through the `length` argument. Let's generate predictions using this
 reference grid of the predictor.
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata
@@ -95,7 +101,7 @@ newdata
 Now that we have our *x* and *y* values, we can plot the line as an overlay to
 the actual data points:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point() +
   geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1, color = "red") +
@@ -108,13 +114,12 @@ useful?
 # Mixed models
 
 Data grids are useful to represent more complex models. For instance, in the
-models above, the negative relationship between the length and width of the
+models above, the **negative** relationship between the length and width of the
 sepals is in fact biased by the presence of three different species. One way of
-adjusting the model for this grouping structure is to add it as a **random
-effect** in a **mixed model**. In the model below, the "fixed" effects (the
-parameters of interest) will be adjusted ("averaged over") the random effects.
+adjusting the model for this grouping structure is to add it as a **random effect** in a **mixed model**. In the model below, the "fixed" effects (the
+parameters of interest) will be adjusted ("averaged over") to the random effects.
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(lme4)
 
 model <- lmer(Sepal.Width ~ Sepal.Length + (1 | Species), data = iris)
@@ -122,11 +127,13 @@ model_parameters(model)
 ```
 
 As we can see, when adjusting for the species, the relationship between the two
-variables **has become positive**! We can represent it using the same procedure
-as above (note the `re.form = NA` in the `predict` function to say that the
-random variable is not present in the new dataset).
+variables **has become positive**! 
 
-```{r message=FALSE, warning=FALSE}
+We can represent it using the same procedure as above (note the `re.form = NA`
+in the `predict` function to say that the random variable is not present in the
+new dataset).
+
+```{r }
 newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata, re.form = NA)
 
@@ -141,20 +148,19 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 The above way of constructing the reference grid, i.e., by providing a single
 column of data to the function, is almost equivalent to the following:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 newdata <- visualisation_matrix(iris, target = "Sepal.Length", length = 5)
 newdata
 ```
 
 However, the other variables (present in the dataframe but not selected as
-`target`) have been "fixed", *i.e.*, maintained at some values. This is useful
-when we have other variables in the model which effect we are not interested
-in.
+`target`) are "fixed", *i.e.*, they are maintained at specific values. This is
+useful when we have other variables in the model in whose effect we are not
+interested.
 
-By default, **factors** are fixed by their **"reference" level** and **numeric
-variables** are fixed at their **mean**. However, this can be easily changed:
+By default, **factors** are fixed by their **"reference" level** and **numeric variables** are fixed at their **mean**. However, this can be easily changed:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 newdata <- visualisation_matrix(iris, target = "Sepal.Length", numerics = "min")
 newdata
 ```
@@ -168,21 +174,21 @@ factor.
 
 Let's visualise the regression line for each of the levels of `Species`:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
 ```
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r, eval=FALSE}
 newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
+```{r, echo=FALSE}
 newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 newdata$Petal.Length <- NULL
 newdata
 ```
-```{r message=FALSE, warning=FALSE}
+```{r }
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point() +
   geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
@@ -197,8 +203,13 @@ line**. The `preserve_range` option allows to remove observations that are
 "outside" the original dataset (however, the length should be increased to
 improve the precision toward the edges):
 
-```{r message=FALSE, warning=FALSE}
-newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 100, preserve_range = TRUE)
+```{r }
+newdata <- visualisation_matrix(iris,
+  target = c("Sepal.Length", "Species"),
+  length = 100,
+  preserve_range = TRUE
+)
+
 newdata$Predicted_Sepal.Width <- predict(model, newdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
@@ -209,24 +220,24 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 # Visualising an interaction between two numeric variables (three-way interaction)
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 model_parameters(model)
 ```
 
 This idea can also be used to visualise interactions between two numeric
-variables, **aka the nightmare of every psychologist**. One possibility is to
+variables, **aka the nightmare of every scientist**. One possibility is to
 basically represent the relationship between the response and one predictor **at
 a few representative values of the second predictor**.
 
 In this case, we will represent the regression line between `Sepal.Length` and
-`Petal.Length` and a 5 equally spaced values of `Petal.Length`, to get a feel of
+`Petal.Length` and a 5 equally spaced values of `Petal.Length`, to get a feel for
 the interaction.
 
 We can obtain the right reference grid quite easily by chaining two
 `visualisation_matrix` together as follows:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(dplyr)
 
 newdata <- iris %>%
@@ -243,7 +254,7 @@ using `numerics = "combination"`.
 
 We can then visualise it as follows:
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 iris %>%
@@ -257,10 +268,16 @@ iris %>%
 Such plot can be more clear by expressing the interaction variable in terms of
 deviations from the mean (as a standardized variable).
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 newdata <- iris %>%
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
-  visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE, reference = iris)
+  visualisation_matrix("Petal.Width",
+    length = 3,
+    numerics = "combination",
+    standardize = TRUE,
+    reference = iris
+  )
+
 newdata$Predicted_Sepal.Length <- predict(model, newdata)
 
 
@@ -283,25 +300,36 @@ we'll leave discussing the meaningfulness of your models to you :)**
 
 # Tips and Tricks
 
-## visualization_matrix() also runs directly on models 
+## `visualization_matrix()` also runs directly on model objects 
 
-Let's take the following example of a **general additive mixed model (GAMM)**,
-in which are specified a **smooth term** (a non-linear relationship) and some
-**random factor**. One can directly extract the visualization matrix by running
-the function on it:
+To illustrate this, let's set up a **general additive mixed model (GAMM)**,
+where we are going to specify a **smooth term** (a non-linear relationship;
+specified by `s()` function) and some **random effects** structure. 
 
-```{r message=FALSE, warning=FALSE}
+```{r }
 library(gamm4)
 
-model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length), random = ~ (1 | Species), data = iris)
-
-newdata <- visualisation_matrix(model, length = 3, include_random = FALSE)
-newdata
+model <- gamm4::gamm4(
+  formula = Petal.Length ~ Petal.Width + s(Sepal.Length),
+  random = ~ (1 | Species),
+  data = iris
+)
 ```
 
-One can also skip the smooth term if the only interest are the fixed effects:
+One can directly extract the visualization matrix for this model by entering the entire object into the function:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
+visualisation_matrix(model, length = 3, include_random = FALSE)
+```
+
+We also skip the smooth term if we are interested only in the fixed effects:
+
+```{r }
 visualisation_matrix(model, length = 3, include_random = FALSE, include_smooth = FALSE)
 ```
 
+We can also include random effects:
+
+```{r }
+visualisation_matrix(model, length = 3, include_random = TRUE)
+```
