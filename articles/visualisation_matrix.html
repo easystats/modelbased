@@ -184,7 +184,9 @@
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Species</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Parameter    | Coefficient |   SE |       95% CI | t(146) |      p
+<pre><code>&gt; # Fixed Effects
+&gt; 
+&gt; Parameter    | Coefficient |   SE |       95% CI | t(146) |      p
 &gt; ------------------------------------------------------------------
 &gt; (Intercept)  |        1.04 | 0.43 | [0.21, 1.88] |   2.45 | 0.014 
 &gt; Sepal.Length |        0.34 | 0.05 | [0.25, 0.43] |   7.47 | &lt; .001</code></pre>
@@ -430,7 +432,7 @@
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
 </div>
 
       </footer>
