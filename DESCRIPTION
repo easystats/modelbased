@@ -61,13 +61,8 @@ Suggests:
     see,
     testthat,
     spelling
-Remotes: 
-    easystats/insight,
-    easystats/bayestestR,
-    easystats/parameters
 Encoding: UTF-8
-LazyData: true
-RoxygenNote: 7.1.1.9001
+RoxygenNote: 7.1.1
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Language: en-US
