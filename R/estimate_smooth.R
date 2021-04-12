@@ -61,7 +61,7 @@ estimate_smooth <- function(model, smooth = NULL, levels = NULL, ...) {
   # Basis
   newdata <- visualisation_matrix(data[predictors], target, factors = "reference", numerics = "mean", ...)
 
-  smooth_data <- estimate_link(model, data = newdata, predict = "link", ...)
+  smooth_data <- estimate_link(model, data = newdata, ...)
 
   # Segmentation
   if (!is.null(levels)) {

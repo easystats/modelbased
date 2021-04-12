@@ -15,14 +15,7 @@ estimate_relation(
   ...
 )
 
-estimate_link(
-  model,
-  data = "grid",
-  predict = "link",
-  ci = 0.95,
-  keep_iterations = FALSE,
-  ...
-)
+estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
 
 estimate_prediction(
   model,
@@ -44,8 +37,6 @@ estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 \item{keep_iterations}{Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
-
-\item{predict}{Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the \code{fit}. In other words, \code{estimate_response(model, predict="link")} is equivalent to \code{estimate_link(model)}.}
 }
 \value{
 A dataframe of predicted values.
@@ -75,7 +66,7 @@ if (require("lme4")) {
 
 # Bayesian models
 if (require("rstanarm")) {
-  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh=0)
+  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
   estimate_response(model)
   estimate_relation(model)
 }

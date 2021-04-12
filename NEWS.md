@@ -1,6 +1,6 @@
 # modelbased 0.6.0
 
-- :warning: `estimate_link()` and `estimate_response()` are replaced in favour of `estimate_link()` (which does **not** transform predictions on the response scale for GLMs), `estimate_relation()` and `estimate_prediction()`. This follows the implementation of [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.html), so more details can be found there. This will allow *modelbased* to be more robust and polyvalent. Apologies for the breaks.
+- `estimate_link()` now does *not* transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new `estimate_relation()` instead. This follows a change in how predictions are made internally (which now relies on [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.html), so more details can be found there).
 
 # modelbased 0.5.1
 
