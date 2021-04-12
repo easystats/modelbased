@@ -330,21 +330,25 @@
 #&gt; 10 5.424000  8.825937 1.7378723  5.266066 12.38581</div><div class='input'>
 <span class='co'># Bayesian models</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, iter <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
   <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
   <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>
-</div><div class='output co'>#&gt;          wt Predicted        SE    CI_low  CI_high
-#&gt; 1  1.513000 29.180253 1.1716877 26.865488 31.47500
-#&gt; 2  1.947556 26.859637 0.9516804 24.928473 28.63410
-#&gt; 3  2.382111 24.539020 0.7522710 23.040706 25.95555
-#&gt; 4  2.816667 22.218403 0.6087395 21.003294 23.39196
-#&gt; 5  3.251222 19.897786 0.5645489 18.760959 20.97093
-#&gt; 6  3.685778 17.577170 0.6354078 16.274467 18.75940
-#&gt; 7  4.120333 15.256553 0.7923116 13.752388 16.81048
-#&gt; 8  4.554889 12.935936 0.9952561 11.065049 14.90769
-#&gt; 9  4.989444 10.615320 1.2002690  8.225173 12.96357
-#&gt; 10 5.424000  8.294703 1.4346843  5.626438 11.30207</div></pre>
+</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
+#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt;          wt Predicted        SE    CI_low  CI_high
+#&gt; 1  1.513000 29.274250 1.1004610 27.156175 31.77946
+#&gt; 2  1.947556 26.954757 0.8832321 25.148806 28.91545
+#&gt; 3  2.382111 24.635264 0.6552640 23.249963 26.07341
+#&gt; 4  2.816667 22.315772 0.5219196 21.151439 23.36400
+#&gt; 5  3.251222 19.996279 0.5586185 19.034741 20.99429
+#&gt; 6  3.685778 17.676787 0.5875893 16.626442 18.84273
+#&gt; 7  4.120333 15.357294 0.7553496 13.795527 16.68095
+#&gt; 8  4.554889 13.037802 0.9548458 11.135329 14.89487
+#&gt; 9  4.989444 10.718309 1.1429696  8.234683 13.01889
+#&gt; 10 5.424000  8.398817 1.3325746  5.797602 11.68445</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
