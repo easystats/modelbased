@@ -93,7 +93,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -173,14 +173,7 @@
   <span class='va'>...</span>
 <span class='op'>)</span>
 
-<span class='fu'>estimate_link</span><span class='op'>(</span>
-  <span class='va'>model</span>,
-  data <span class='op'>=</span> <span class='st'>"grid"</span>,
-  predict <span class='op'>=</span> <span class='st'>"link"</span>,
-  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
-  keep_iterations <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
+<span class='fu'>estimate_link</span><span class='op'>(</span><span class='va'>model</span>, data <span class='op'>=</span> <span class='st'>"grid"</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, keep_iterations <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>estimate_prediction</span><span class='op'>(</span>
   <span class='va'>model</span>,
@@ -214,10 +207,6 @@
     <tr>
       <th>...</th>
       <td><p>You can add all the additional control arguments from <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> (used when <code>data = "grid"</code>) and <code><a href='https://easystats.github.io/insight/reference/get_predicted.html'>insight::get_predicted()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>predict</th>
-      <td><p>Can be "response" (default) or "link". The former predicts the the outcome per se, while the latter predicts the link function (i.e., the regression "line"), equivalent to estimating the <code>fit</code>. In other words, <code>estimate_response(model, predict="link")</code> is equivalent to <code>estimate_link(model)</code>.</p></td>
     </tr>
     </table>
 
@@ -341,7 +330,7 @@
 #&gt; 10 5.424000  8.825937 1.7378723  5.266066 12.38581</div><div class='input'>
 <span class='co'># Bayesian models</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh<span class='op'>=</span><span class='fl'>0</span><span class='op'>)</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
   <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
   <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 <span class='op'>}</span>

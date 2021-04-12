@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -163,7 +163,7 @@
 </h1>
 <ul>
 <li>
-<span class="emoji" data-emoji="warning">⚠️</span> <code><a href="../reference/estimate_relation.html">estimate_link()</a></code> and <code><a href="../reference/estimate_relation.html">estimate_response()</a></code> are replaced in favour of <code><a href="../reference/estimate_relation.html">estimate_link()</a></code> (which does <strong>not</strong> transform predictions on the response scale for GLMs), <code><a href="../reference/estimate_relation.html">estimate_relation()</a></code> and <code><a href="../reference/estimate_relation.html">estimate_prediction()</a></code>. This follows the implementation of <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there. This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</li>
+<code><a href="../reference/estimate_relation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="../reference/estimate_relation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there).</li>
 </ul>
 </div>
     <div id="modelbased-051" class="section level1">

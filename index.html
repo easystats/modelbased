@@ -45,7 +45,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
       </span>
     </div>
 
@@ -113,6 +113,9 @@
 <a href="#modelbased-" class="anchor"></a>modelbased <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
+<hr>
+<p><span class="emoji" data-emoji="warning">⚠️</span> <code><a href="reference/estimate_relation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="reference/estimate_relation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there). This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</p>
+<hr>
 <p><code>modelbased</code> is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and model predictions.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -180,9 +183,9 @@
 <span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co">## Species    | Mean |       95% CI</span></span>
 <span id="cb4-2"><a href="#cb4-2"></a><span class="co">## --------------------------------</span></span>
-<span id="cb4-3"><a href="#cb4-3"></a><span class="co">## setosa     | 3.43 | [3.34, 3.52]</span></span>
-<span id="cb4-4"><a href="#cb4-4"></a><span class="co">## versicolor | 2.77 | [2.68, 2.87]</span></span>
-<span id="cb4-5"><a href="#cb4-5"></a><span class="co">## virginica  | 2.97 | [2.89, 3.07]</span></span></code></pre></div>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">## setosa     | 3.43 | [3.33, 3.52]</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">## versicolor | 2.77 | [2.67, 2.86]</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">## virginica  | 2.97 | [2.88, 3.08]</span></span></code></pre></div>
 </div>
 <div id="contrast-analysis" class="section level3">
 <h3 class="hasAnchor">
@@ -193,9 +196,9 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">## Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference</span>
 <span class="co">## -------------------------------------------------------------------------------------------</span>
-<span class="co">## setosa     | versicolor |       0.66 | [ 0.53,  0.80] |   100% |        0% |           1.51</span>
+<span class="co">## setosa     | versicolor |       0.66 | [ 0.52,  0.79] |   100% |        0% |           1.50</span>
 <span class="co">## setosa     |  virginica |       0.45 | [ 0.33,  0.59] |   100% |        0% |           1.04</span>
-<span class="co">## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 99.83% |     6.68% |          -0.47</span></code></pre></div>
+<span class="co">## versicolor |  virginica |      -0.20 | [-0.33, -0.06] | 99.78% |     7.38% |          -0.47</span></code></pre></div>
 </div>
 <div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
 <h3 class="hasAnchor">
@@ -206,15 +209,15 @@
 <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co">## Level1     |     Level2 | Petal.Length | Difference |        95% CI |     pd | % in ROPE | Std_Difference</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a><span class="co">## ---------------------------------------------------------------------------------------------------------</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a><span class="co">## setosa     | versicolor |         1.00 |       1.67 | [ 1.05, 2.27] |   100% |        0% |           3.84</span></span>
-<span id="cb7-4"><a href="#cb7-4"></a><span class="co">## setosa     |  virginica |         1.00 |       1.34 | [ 0.59, 2.07] |   100% |     0.02% |           3.07</span></span>
-<span id="cb7-5"><a href="#cb7-5"></a><span class="co">## versicolor |  virginica |         1.00 |      -0.33 | [-1.27, 0.57] | 75.48% |    13.60% |          -0.76</span></span>
-<span id="cb7-6"><a href="#cb7-6"></a><span class="co">## setosa     | versicolor |         3.95 |       1.61 | [ 0.66, 2.54] | 99.92% |     0.07% |           3.70</span></span>
-<span id="cb7-7"><a href="#cb7-7"></a><span class="co">## setosa     |  virginica |         3.95 |       1.66 | [ 0.69, 2.68] | 99.90% |     0.15% |           3.81</span></span>
-<span id="cb7-8"><a href="#cb7-8"></a><span class="co">## versicolor |  virginica |         3.95 |       0.05 | [-0.23, 0.34] | 63.50% |    47.48% |           0.12</span></span>
-<span id="cb7-9"><a href="#cb7-9"></a><span class="co">## setosa     | versicolor |         6.90 |       1.54 | [-0.54, 3.60] | 93.00% |     2.73% |           3.54</span></span>
-<span id="cb7-10"><a href="#cb7-10"></a><span class="co">## setosa     |  virginica |         6.90 |       2.00 | [-0.02, 4.00] | 97.35% |     1.27% |           4.58</span></span>
-<span id="cb7-11"><a href="#cb7-11"></a><span class="co">## versicolor |  virginica |         6.90 |       0.44 | [-0.08, 0.96] | 94.62% |     8.80% |           1.01</span></span></code></pre></div>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="co">## setosa     | versicolor |         1.00 |       1.68 | [ 1.01, 2.25] |   100% |        0% |           3.86</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">## setosa     |  virginica |         1.00 |       1.35 | [ 0.59, 2.02] | 99.92% |     0.15% |           3.09</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">## versicolor |  virginica |         1.00 |      -0.35 | [-1.27, 0.55] | 76.02% |    12.28% |          -0.79</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">## setosa     | versicolor |         3.95 |       1.61 | [ 0.69, 2.56] |   100% |     0.10% |           3.70</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">## setosa     |  virginica |         3.95 |       1.67 | [ 0.70, 2.67] |   100% |     0.05% |           3.83</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">## versicolor |  virginica |         3.95 |       0.05 | [-0.25, 0.32] | 63.18% |    48.08% |           0.11</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">## setosa     | versicolor |         6.90 |       1.55 | [-0.46, 3.57] | 92.30% |     3.17% |           3.55</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">## setosa     |  virginica |         6.90 |       1.98 | [-0.07, 3.94] | 97.45% |     1.30% |           4.54</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">## versicolor |  virginica |         6.90 |       0.44 | [-0.08, 0.99] | 95.40% |     7.95% |           1.01</span></span></code></pre></div>
 </div>
 <div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
 <h3 class="hasAnchor">
@@ -223,9 +226,9 @@
 <code class="sourceCode R"><span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="co">## Species    | Median |        95% CI |     pd | % in ROPE | Std. Median</span>
 <span class="co">## ----------------------------------------------------------------------</span>
-<span class="co">## setosa     |   0.34 | [-0.05, 0.69] | 96.00% |     8.48% |        1.37</span>
-<span class="co">## versicolor |   0.36 | [ 0.18, 0.54] | 99.98% |     0.18% |        1.46</span>
-<span class="co">## virginica  |   0.23 | [ 0.07, 0.38] | 99.88% |     5.78% |        0.93</span></code></pre></div>
+<span class="co">## setosa     |   0.34 | [-0.03, 0.71] | 96.38% |    10.95% |        1.37</span>
+<span class="co">## versicolor |   0.36 | [ 0.18, 0.54] | 99.95% |     0.25% |        1.46</span>
+<span class="co">## virginica  |   0.23 | [ 0.07, 0.38] | 99.65% |     5.17% |        0.93</span></code></pre></div>
 </div>
 <div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
 <h3 class="hasAnchor">
@@ -239,6 +242,7 @@
 <th align="right">Sepal.Length</th>
 <th align="left">Species</th>
 <th align="right">Predicted</th>
+<th align="right">SE</th>
 <th align="right">CI_low</th>
 <th align="right">CI_high</th>
 </tr></thead>
@@ -246,44 +250,50 @@
 <tr class="odd">
 <td align="right">5.1</td>
 <td align="left">setosa</td>
-<td align="right">1.47</td>
+<td align="right">1.48</td>
+<td align="right">0.27</td>
 <td align="right">0.98</td>
-<td align="right">1.98</td>
+<td align="right">2.03</td>
 </tr>
 <tr class="even">
 <td align="right">4.9</td>
 <td align="left">setosa</td>
-<td align="right">1.45</td>
-<td align="right">0.92</td>
-<td align="right">1.97</td>
+<td align="right">1.44</td>
+<td align="right">0.27</td>
+<td align="right">0.91</td>
+<td align="right">1.98</td>
 </tr>
 <tr class="odd">
 <td align="right">4.7</td>
 <td align="left">setosa</td>
-<td align="right">1.41</td>
+<td align="right">1.42</td>
+<td align="right">0.27</td>
 <td align="right">0.88</td>
-<td align="right">1.96</td>
+<td align="right">1.97</td>
 </tr>
 <tr class="even">
 <td align="right">4.6</td>
 <td align="left">setosa</td>
-<td align="right">1.42</td>
-<td align="right">0.92</td>
-<td align="right">1.98</td>
+<td align="right">1.41</td>
+<td align="right">0.27</td>
+<td align="right">0.90</td>
+<td align="right">1.94</td>
 </tr>
 <tr class="odd">
 <td align="right">5.0</td>
 <td align="left">setosa</td>
 <td align="right">1.46</td>
-<td align="right">0.90</td>
-<td align="right">1.96</td>
+<td align="right">0.27</td>
+<td align="right">0.97</td>
+<td align="right">2.04</td>
 </tr>
 <tr class="even">
 <td align="right">5.4</td>
 <td align="left">setosa</td>
 <td align="right">1.51</td>
+<td align="right">0.27</td>
 <td align="right">1.00</td>
-<td align="right">2.11</td>
+<td align="right">2.01</td>
 </tr>
 </tbody>
 </table>
@@ -300,6 +310,7 @@
 <thead><tr class="header">
 <th align="right">Petal.Length</th>
 <th align="right">Predicted</th>
+<th align="right">SE</th>
 <th align="right">CI_low</th>
 <th align="right">CI_high</th>
 </tr></thead>
@@ -307,44 +318,51 @@
 <tr class="odd">
 <td align="right">1.00</td>
 <td align="right">3.62</td>
-<td align="right">3.49</td>
+<td align="right">0.06</td>
+<td align="right">3.50</td>
 <td align="right">3.75</td>
 </tr>
 <tr class="even">
 <td align="right">1.98</td>
 <td align="right">3.18</td>
-<td align="right">3.09</td>
+<td align="right">0.04</td>
+<td align="right">3.10</td>
 <td align="right">3.26</td>
 </tr>
 <tr class="odd">
 <td align="right">2.97</td>
 <td align="right">2.90</td>
+<td align="right">0.05</td>
 <td align="right">2.81</td>
 <td align="right">2.99</td>
 </tr>
 <tr class="even">
 <td align="right">3.95</td>
 <td align="right">2.78</td>
+<td align="right">0.05</td>
 <td align="right">2.69</td>
 <td align="right">2.87</td>
 </tr>
 <tr class="odd">
 <td align="right">4.93</td>
 <td align="right">2.83</td>
-<td align="right">2.77</td>
+<td align="right">0.04</td>
+<td align="right">2.76</td>
 <td align="right">2.91</td>
 </tr>
 <tr class="even">
 <td align="right">5.92</td>
 <td align="right">3.05</td>
-<td align="right">2.94</td>
+<td align="right">0.06</td>
+<td align="right">2.95</td>
 <td align="right">3.16</td>
 </tr>
 <tr class="odd">
 <td align="right">6.90</td>
 <td align="right">3.44</td>
+<td align="right">0.12</td>
 <td align="right">3.20</td>
-<td align="right">3.68</td>
+<td align="right">3.67</td>
 </tr>
 </tbody>
 </table>
