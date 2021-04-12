@@ -30,7 +30,7 @@
 #'
 #' # Bayesian models
 #' if (require("rstanarm")) {
-#'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
+#'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0, iter = 200)
 #'   estimate_response(model)
 #'   estimate_relation(model)
 #' }
