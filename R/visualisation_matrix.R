@@ -113,19 +113,19 @@ visualisation_matrix.vector <- function(x, target = "all", length = 10, factors 
 }
 
 #' @export
-visualisation_matrix.numeric <- visualisation_matrix.vector
+# visualisation_matrix.numeric <- visualisation_matrix.vector
 
 #' @export
-visualisation_matrix.double <- visualisation_matrix.vector
+# visualisation_matrix.double <- visualisation_matrix.vector
 
 #' @export
-visualisation_matrix.factor <- visualisation_matrix.vector
+# visualisation_matrix.factor <- visualisation_matrix.vector
 
 #' @export
-visualisation_matrix.logical <- visualisation_matrix.vector
+# visualisation_matrix.logical <- visualisation_matrix.vector
 
 #' @export
-visualisation_matrix.character <- visualisation_matrix.vector
+# visualisation_matrix.character <- visualisation_matrix.vector
 
 
 

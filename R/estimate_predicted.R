@@ -92,9 +92,16 @@ estimate_response <- estimate_prediction
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
-  # Prepare output
+  # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "response") <- insight::find_response(model)
-  class(out) <- c("estimate_response", "see_estimate_response", class(out))
+
+  # Class
+  if(predict %in% c("link", "relation")) {
+    class(out) <- c("estimate_relation", "see_estimate_relation", class(out))
+  } else {
+    class(out) <- c("estimate_response", "see_estimate_response", class(out))
+  }
+
   out
 }
