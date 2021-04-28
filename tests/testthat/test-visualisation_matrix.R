@@ -5,17 +5,20 @@ if (require("testthat") && require("modelbased")) {
 
 
   test_that("visualisation_matrix - vectors", {
+
+    # Factors
     expect_equal(length(visualisation_matrix(iris$Species)), 3)
     expect_equal(length(visualisation_matrix(c("A", "A", "B"))), 2)
 
-    expect_equal(length(visualisation_matrix(iris$Species, target = "c('versicolor')")), 1)
+    expect_equal(length(visualisation_matrix(x = iris$Species, target = "c('versicolor')")), 1)
     expect_equal(length(visualisation_matrix(iris$Species, target = "A = c('versicolor')")), 1)
     expect_equal(length(visualisation_matrix(c("A", "A", "B"), target = "dupa = 'A'")), 1)
     expect_equal(length(visualisation_matrix(iris$Species, target = "['versicolor', 'virginica']")), 2)
     expect_equal(length(visualisation_matrix(iris$Species, target = "[versicolor, virginica]")), 2)
 
 
-    expect_equal(length(visualisation_matrix(iris$Sepal.Length)), 7)
+    # Numerics
+    expect_equal(length(visualisation_matrix(x = iris$Sepal.Length)), 7)
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)), 7)
     expect_equal(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)[4], mean(iris$Sepal.Length))
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, target = "c(1, 3, 4)")), 3)
