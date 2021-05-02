@@ -47,13 +47,8 @@ visualisation_matrix.numeric <- function(x, target = NULL, length = 7, standardi
     }
 
   } else {
-
     # Run the expression cleaned from target
-    out <- tryCatch({
-      eval(parse(text = specs$expression))
-    }, error = function(r) {
-      stop(paste0("The `target` argument (", target, ") cannot be read and could be mispecified."))
-    })
+    out <- eval(parse(text = specs$expression))
   }
 
   out
@@ -84,14 +79,8 @@ visualisation_matrix.factor <- function(x, target = NULL, ...) {
     }
 
   } else {
-
     # Run the expression cleaned from target
-    out <- tryCatch({
-      eval(parse(text = specs$expression))
-    }, error = function(r) {
-      stop(paste0("The `target` argument (", target, ") cannot be read and could be mispecified."))
-    })
-
+    out <- eval(parse(text = specs$expression))
   }
   out
 }
@@ -111,8 +100,13 @@ visualisation_matrix.logical <- visualisation_matrix.character
 .visualisation_matrix_clean_target <- function(x, target = NULL) {
   expression <- NA
   varname <- NA
+  original_target <- target
 
   if(!is.null(target)) {
+
+    if(is.data.frame(x) && target %in% names(x)) {
+      return(data.frame(varname = target, expression = NA))
+    }
 
     # If there is an equal sign
     if(grepl("=", target)) {
@@ -157,10 +151,17 @@ visualisation_matrix.logical <- visualisation_matrix.character
       # Else, try to directly eval the content
     } else {
       expression <- target
+      # Try to eval and make sure it works
+      tryCatch({
+        eval(parse(text = target))
+      }, error = function(r) {
+        stop(paste0("The `target` argument (", original_target, ") cannot be read and could be mispecified."))
+      })
+
     }
   }
 
-  list(varname = varname, expression = expression)
+  data.frame(varname = varname, expression = expression)
 }
 
 
