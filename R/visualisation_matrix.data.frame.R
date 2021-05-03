@@ -38,6 +38,11 @@ print.visualisation_matrix <- function(x, ...) {
 }
 
 
+#' @export
+standardize.visualisation_matrix <- function(x, ...) {
+  effectsize::standardize(x, ...)
+}
+
 # -------------------------------------------------------------------------
 # Below are visualisation_matrix functions for DataFrames
 # -------------------------------------------------------------------------
