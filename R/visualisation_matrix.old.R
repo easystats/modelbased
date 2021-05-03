@@ -21,17 +21,17 @@
 #' @examples
 #' library(modelbased)
 #'
-#' visualisation_matrix(iris, target = "Sepal.Length")
-#' visualisation_matrix(iris, target = "Sepal.Length", factors = "combinations")
-#' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
-#' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
-#' visualisation_matrix(iris, target = c("Sepal.Length = 3", "Species"))
-#' visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
-#' visualisation_matrix(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
+#' visualisation_matrix_old(iris, target = "Sepal.Length")
+#' visualisation_matrix_old(iris, target = "Sepal.Length", factors = "combinations")
+#' visualisation_matrix_old(iris, target = c("Sepal.Length", "Species"), length = 3)
+#' visualisation_matrix_old(iris, target = c("Sepal.Length", "Species"), numerics = 0)
+#' visualisation_matrix_old(iris, target = c("Sepal.Length = 3", "Species"))
+#' visualisation_matrix_old(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#' visualisation_matrix_old(iris, target = "Sepal.Length", standardize = TRUE, length = 3)
 #' @importFrom stats na.omit
 #' @export
-visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
-  UseMethod("visualisation_matrix")
+visualisation_matrix_old <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
+  UseMethod("visualisation_matrix_old")
 }
 
 
@@ -41,19 +41,19 @@ visualisation_matrix <- function(x, target = "all", length = 10, factors = "refe
 # dataframes ---------------------------------------------------------------
 
 #' @export
-visualisation_matrix.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
+visualisation_matrix_old.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
 
   # Target
   if (all(target == "all") | ncol(x) == 1 | all(names(x) %in% c(target))) {
-    grid <- .visualisation_matrix_target(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
+    grid <- .visualisation_matrix_old_target(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
     grid <- .preserve_range(grid, x, preserve_range)
-    class(grid) <- c("visualisation_matrix", class(grid))
+    class(grid) <- c("visualisation_matrix_old", class(grid))
     attr(grid, "reference") <- reference
     return(grid)
   }
 
 
-  target_df <- .visualisation_matrix_target(x, varnames = target, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
+  target_df <- .visualisation_matrix_old_target(x, varnames = target, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference)
   target <- names(target_df)
 
   # Rest
@@ -70,7 +70,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
     facs <- as.data.frame(sapply(facs, .smart_summary, factors = factors, na.rm = na.rm, simplify = FALSE))
   } else {
     facs <- expand.grid(lapply(as.list(facs), unique), stringsAsFactors = FALSE)
-    # facs <- .visualisation_matrix_target(facs)
+    # facs <- .visualisation_matrix_old_target(facs)
   }
 
   if (is.numeric(numerics)) {
@@ -78,7 +78,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
     nums <- nums[1, ]
   } else if (numerics == "combination") {
     nums <- expand.grid(lapply(as.list(nums), unique), stringsAsFactors = FALSE)
-    # nums <- .visualisation_matrix_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
+    # nums <- .visualisation_matrix_old_target(nums, length = length, standardize = FALSE, standardize_robust = standardize_robust, reference = reference)
   } else {
     nums <- as.data.frame(sapply(nums, .smart_summary, numerics = numerics, na.rm = na.rm, simplify = FALSE))
   }
@@ -97,7 +97,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
   # Preserve range
   grid <- .preserve_range(grid, x, preserve_range)
-  class(grid) <- c("visualisation_matrix", class(grid))
+  class(grid) <- c("visualisation_matrix_old", class(grid))
   attr(grid, "reference") <- reference
   grid
 }
@@ -108,8 +108,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 
 #' @export
-visualisation_matrix.vector <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
-  .visualisation_matrix_vector(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference, ...)
+visualisation_matrix_old.vector <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, standardize = FALSE, standardize_robust = FALSE, reference = x, na.rm = TRUE, ...) {
+  .visualisation_matrix_old_vector(x, length = length, standardize = standardize, standardize_robust = standardize_robust, reference = reference, ...)
 }
 
 
@@ -186,7 +186,7 @@ visualisation_matrix.vector <- function(x, target = "all", length = 10, factors 
 
 
 #' @keywords internal
-.visualisation_matrix_target <- function(x, varnames = NULL, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
+.visualisation_matrix_old_target <- function(x, varnames = NULL, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x) {
   if (is.null(varnames)) {
     varnames <- names(x)
   }
@@ -197,7 +197,7 @@ visualisation_matrix.vector <- function(x, target = "all", length = 10, factors 
       parts <- unlist(sapply(parts, trimws, simplify = FALSE)) # trim whitespaces
       vars[[parts[1]]] <- eval(parse(text = parts[2]))
     } else {
-      vars[[i]] <- .visualisation_matrix_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference, stringsAsFactors = FALSE)[[i]])
+      vars[[i]] <- .visualisation_matrix_old_vector(x[[i]], length = length, standardize = standardize, standardize_robust = standardize_robust, reference = as.data.frame(reference, stringsAsFactors = FALSE)[[i]])
     }
   }
 
@@ -227,7 +227,7 @@ visualisation_matrix.vector <- function(x, target = "all", length = 10, factors 
 
 #' @importFrom stats median sd mad
 #' @keywords internal
-.visualisation_matrix_vector <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x, ...) {
+.visualisation_matrix_old_vector <- function(x, length = 10, standardize = FALSE, standardize_robust = FALSE, reference = x, ...) {
   if (is.factor(x)) {
     out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
   } else if (is.character(x)) {
