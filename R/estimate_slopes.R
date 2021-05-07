@@ -273,7 +273,7 @@ estimate_slopes.glmmTMB <- function(model,
 .emtrends_helper <- function(model, levels, trend, transform, component, ...) {
   # check if available
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans').", call. = FALSE)
+    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans')`.", call. = FALSE)
   }
 
   if (component != "conditional") {

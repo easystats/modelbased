@@ -58,7 +58,7 @@
 
   # check if available
   if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans').", call. = FALSE)
+    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans')`.", call. = FALSE)
   }
 
   # Get emmeans refgrid
