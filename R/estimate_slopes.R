@@ -7,25 +7,28 @@
 #'  }
 #'
 #' @inheritParams estimate_contrasts.lm
-#' @param trend A character vector indicating the name of the numeric variable for which to compute the slopes.
-#' @param levels A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.
-#' @param component A character vector indicating the model component for which estimation is requested. Only applies to models from \pkg{glmmTMB}. Use \code{"conditional"} for the count-model or \code{"zero_inflate"} or \code{"zi"} for the zero-inflation model.
+#' @param trend A character vector indicating the name of the numeric variable
+#'   for which to compute the slopes.
+#' @param levels A character vector indicating the variables over which the
+#'   slope will be computed. If NULL (default), it will select all the remaining
+#'   predictors.
+#' @param component A character vector indicating the model component for which
+#'   estimation is requested. Only applies to models from \pkg{glmmTMB}. Use
+#'   \code{"conditional"} for the count-model or \code{"zero_inflate"} or
+#'   \code{"zi"} for the zero-inflation model.
 #'
 #' @return A data frame of slopes.
 #' @export
-estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, ...) {
+estimate_slopes <- function(model,
+                            trend = NULL,
+                            levels = NULL,
+                            transform = "response",
+                            standardize = TRUE,
+                            standardize_robust = FALSE,
+                            ci = 0.95,
+                            ...) {
   UseMethod("estimate_slopes")
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -45,8 +48,33 @@ estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "res
 #' }
 #' @importFrom stats mad median sd setNames
 #' @export
-estimate_slopes.stanreg <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, centrality = "median", ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, ...) {
-  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, centrality = centrality, ci = ci, ci_method = ci_method, test = test, rope_range = rope_range, rope_ci = rope_ci)
+estimate_slopes.stanreg <- function(model,
+                                    trend = NULL,
+                                    levels = NULL,
+                                    transform = "response",
+                                    standardize = TRUE,
+                                    standardize_robust = FALSE,
+                                    ci = 0.95,
+                                    centrality = "median",
+                                    ci_method = "hdi",
+                                    test = c("pd", "rope"),
+                                    rope_range = "default",
+                                    rope_ci = 1,
+                                    ...) {
+  .estimate_slopes(
+    model,
+    trend = trend,
+    levels = levels,
+    transform = transform,
+    standardize = standardize,
+    standardize_robust = standardize_robust,
+    centrality = centrality,
+    ci = ci,
+    ci_method = ci_method,
+    test = test,
+    rope_range = rope_range,
+    rope_ci = rope_ci
+  )
 }
 
 #' @export
@@ -65,8 +93,24 @@ estimate_slopes.brmsfit <- estimate_slopes.stanreg
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)
 #' @export
-estimate_slopes.lm <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, ...) {
-  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, ci = ci, ...)
+estimate_slopes.lm <- function(model,
+                               trend = NULL,
+                               levels = NULL,
+                               transform = "response",
+                               standardize = TRUE,
+                               standardize_robust = FALSE,
+                               ci = 0.95,
+                               ...) {
+  .estimate_slopes(
+    model,
+    trend = trend,
+    levels = levels,
+    transform = transform,
+    standardize = standardize,
+    standardize_robust = standardize_robust,
+    ci = ci,
+    ...
+  )
 }
 
 
@@ -76,23 +120,50 @@ estimate_slopes.merMod <- estimate_slopes.lm
 
 #' @rdname estimate_slopes
 #' @export
-estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, component = c("conditional", "zero_inflated", "zi"), ...) {
+estimate_slopes.glmmTMB <- function(model,
+                                    trend = NULL,
+                                    levels = NULL,
+                                    transform = "response",
+                                    standardize = TRUE,
+                                    standardize_robust = FALSE,
+                                    ci = 0.95,
+                                    component = c("conditional", "zero_inflated", "zi"),
+                                    ...) {
   component <- match.arg(component)
+
   if (component == "zi") component <- "zero_inflated"
-  .estimate_slopes(model, trend = trend, levels = levels, transform = transform, standardize = standardize, standardize_robust = standardize_robust, ci = ci, component = component, ...)
+
+  .estimate_slopes(
+    model,
+    trend = trend,
+    levels = levels,
+    transform = transform,
+    standardize = standardize,
+    standardize_robust = standardize_robust,
+    ci = ci,
+    component = component,
+    ...
+  )
 }
 
 
 
-
-
-
-
-
 #' @importFrom stats confint
-#' @importFrom emmeans emtrends
 #' @keywords internal
-.estimate_slopes <- function(model, trend = NULL, levels = NULL, transform = "response", standardize = TRUE, standardize_robust = FALSE, ci = 0.95, centrality = "median", ci_method = "hdi", test = c("pd", "rope"), rope_range = "default", rope_ci = 1, component = "conditional", ...) {
+.estimate_slopes <- function(model,
+                             trend = NULL,
+                             levels = NULL,
+                             transform = "response",
+                             standardize = TRUE,
+                             standardize_robust = FALSE,
+                             ci = 0.95,
+                             centrality = "median",
+                             ci_method = "hdi",
+                             test = c("pd", "rope"),
+                             rope_range = "default",
+                             rope_ci = 1,
+                             component = "conditional",
+                             ...) {
   predictors <- insight::find_predictors(model)[[component]]
   data <- insight::get_data(model)
 
@@ -172,13 +243,6 @@ estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transfor
 }
 
 
-
-
-
-
-
-
-
 #' @importFrom insight get_response model_info get_predictors
 #' @importFrom stats sd mad
 #' @keywords internal
@@ -207,6 +271,11 @@ estimate_slopes.glmmTMB <- function(model, trend = NULL, levels = NULL, transfor
 
 
 .emtrends_helper <- function(model, levels, trend, transform, component, ...) {
+  # check if available
+  if (!requireNamespace("emmeans", quietly = TRUE)) {
+    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans').", call. = FALSE)
+  }
+
   if (component != "conditional") {
     if (transform == "response") {
       emmeans::emtrends(model, levels, var = trend, transform = "response", component = "zi", ...)

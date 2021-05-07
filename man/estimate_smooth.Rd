@@ -11,7 +11,9 @@ estimate_smooth(model, smooth = NULL, levels = NULL, ...)
 
 \item{smooth}{A character indicating the name of the "smooth" term}
 
-\item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+\item{levels}{A character vector indicating the variables over which the
+slope will be computed. If NULL (default), it will select all the remaining
+predictors.}
 
 \item{...}{Arguments passed to or from other methods.}
 }

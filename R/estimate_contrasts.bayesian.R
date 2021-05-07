@@ -84,7 +84,6 @@ estimate_contrasts <- function(model,
 #' }
 #' @return A data frame of estimated contrasts.
 #'
-#' @importFrom emmeans contrast
 #' @importFrom graphics pairs
 #' @importFrom stats mad median sd setNames
 #' @importFrom bayestestR describe_posterior

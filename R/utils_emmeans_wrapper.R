@@ -1,4 +1,3 @@
-#' @importFrom emmeans emmeans ref_grid
 #' @keywords internal
 .emmeans_wrapper <- function(model,
                              levels = NULL,
@@ -57,6 +56,11 @@
     }
   }
 
+  # check if available
+  if (!requireNamespace("emmeans", quietly = TRUE)) {
+    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans').", call. = FALSE)
+  }
+
   # Get emmeans refgrid
   suppressMessages(refgrid <- emmeans::ref_grid(
     model,
@@ -68,5 +72,6 @@
 
   # Run emmeans
   means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)
+
   means
 }
