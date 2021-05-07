@@ -121,7 +121,7 @@
 <p>The <code>estimate</code> package aims at easing this step by <strong>summarizing non-linear curves in terms of linear segments</strong>.</p>
 <div id="estimate_smooth" class="section level1">
 <h1 class="hasAnchor">
-<a href="#estimate_smooth" class="anchor"></a>estimate_smooth</h1>
+<a href="#estimate_smooth" class="anchor" aria-hidden="true"></a>estimate_smooth</h1>
 <p>Let’s start by creating a very simple dataset:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">50</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span> <span class="co"># Generate dataframe with one variable x</span>
@@ -160,7 +160,7 @@
 </div>
 <div id="real-application-effect-of-time-on-memory" class="section level1">
 <h1 class="hasAnchor">
-<a href="#real-application-effect-of-time-on-memory" class="anchor"></a>Real application: Effect of time on memory</h1>
+<a href="#real-application-effect-of-time-on-memory" class="anchor" aria-hidden="true"></a>Real application: Effect of time on memory</h1>
 <p>We will download and use a dataset where participants had to answer questions about the movie <strong>Avengers: Age of ultron</strong> (combined into a <strong>memory score</strong>) a few days after watching it at the theater (the <strong>delay</strong> variable). Let’s visualize how the <code>Delay</code>, in days, influences the <code>Memory</code> score, by plotting the data points and a raw <em>loess</em> fit on this raw data.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -184,7 +184,7 @@
 </div>
 <div id="modelling-non-linear-curves" class="section level1">
 <h1 class="hasAnchor">
-<a href="#modelling-non-linear-curves" class="anchor"></a>Modelling non-linear curves</h1>
+<a href="#modelling-non-linear-curves" class="anchor" aria-hidden="true"></a>Modelling non-linear curves</h1>
 <p>We can fit a Bayesian linear mixed regression to model such relationship, adding it a few other variables that could influence this curve, such as the <strong>familiarity with the characters of the movie</strong>, the <strong>language of the movie</strong>, the <strong>immersion</strong> (2D/3D).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
@@ -209,7 +209,7 @@
 </div>
 <div id="describing-smooth" class="section level1">
 <h1 class="hasAnchor">
-<a href="#describing-smooth" class="anchor"></a>Describing smooth</h1>
+<a href="#describing-smooth" class="anchor" aria-hidden="true"></a>Describing smooth</h1>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/estimate_smooth.html">estimate_smooth</a></span><span class="op">(</span><span class="va">model</span>, smooth <span class="op">=</span> <span class="st">"Delay"</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; Part | Start |   End |   Size | Trend | Linearity
@@ -219,7 +219,7 @@
 </div>
 <div id="references" class="section level1 unnumbered">
 <h1 class="hasAnchor">
-<a href="#references" class="anchor"></a>References</h1>
+<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
 <div id="refs" class="references">
 <div id="ref-Averell_2011">
 <p>Averell, Lee, and Andrew Heathcote. 2011. “The Form of the Forgetting Curve and the Fate of Memories.” <em>Journal of Mathematical Psychology</em> 55 (1): 25–35. <a href="https://doi.org/10.1016/j.jmp.2010.08.009" class="external-link">https://doi.org/10.1016/j.jmp.2010.08.009</a>.</p>

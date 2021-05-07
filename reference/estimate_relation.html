@@ -215,140 +215,148 @@
     <p>A dataframe of predicted values.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span>
-
-<span class='co'># Linear Models</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                        wt Predicted       SE    CI_low  CI_high
-#&gt; Mazda RX4           2.620 23.282611 3.111080 16.928937 29.63628
-#&gt; Mazda RX4 Wag       2.875 21.919770 3.099021 15.590725 28.24882
-#&gt; Datsun 710          2.320 24.885952 3.133524 18.486442 31.28546
-#&gt; Hornet 4 Drive      3.215 20.102650 3.093108 13.785680 26.41962
-#&gt; Hornet Sportabout   3.440 18.900144 3.095614 12.578057 25.22223
-#&gt; Valiant             3.460 18.793255 3.096084 12.470207 25.11630
-#&gt; Duster 360          3.570 18.205363 3.099389 11.875565 24.53516
-#&gt; Merc 240D           3.190 20.236262 3.093145 13.919216 26.55331
-#&gt; Merc 230            3.150 20.450041 3.093336 14.132605 26.76748
-#&gt; Merc 280            3.440 18.900144 3.095614 12.578057 25.22223
-#&gt; Merc 280C           3.440 18.900144 3.095614 12.578057 25.22223
-#&gt; Merc 450SE          4.070 15.533127 3.129637  9.141555 21.92470
-#&gt; Merc 450SL          3.730 17.350247 3.106365 11.006204 23.69429
-#&gt; Merc 450SLC         3.780 17.083024 3.109069 10.733457 23.43259
-#&gt; Cadillac Fleetwood  5.250  9.226650 3.295296  2.496758 15.95654
-#&gt; Lincoln Continental 5.424  8.296712 3.330101  1.495740 15.09769
-#&gt; Chrysler Imperial   5.345  8.718926 3.313990  1.950855 15.48700
-#&gt; Fiat 128            2.200 25.527289 3.144962 19.104419 31.95016
-#&gt; Honda Civic         1.615 28.653805 3.220219 22.077240 35.23037
-#&gt; Toyota Corolla      1.835 27.478021 3.188191 20.966866 33.98918
-#&gt; Toyota Corona       2.465 24.111004 3.121571 17.735905 30.48610
-#&gt; Dodge Challenger    3.520 18.472586 3.097736 12.146165 24.79901
-#&gt; AMC Javelin         3.435 18.926866 3.095503 12.605006 25.24873
-#&gt; Camaro Z28          3.840 16.762355 3.112643 10.405490 23.11922
-#&gt; Pontiac Firebird    3.845 16.735633 3.112957 10.378127 23.09314
-#&gt; Fiat X1-9           1.935 26.943574 3.175102 20.459150 33.42800
-#&gt; Porsche 914-2       2.140 25.847957 3.151202 19.412345 32.28357
-#&gt; Lotus Europa        1.513 29.198941 3.236547 22.589030 35.80885
-#&gt; Ford Pantera L      3.170 20.343151 3.093221 14.025952 26.66035
-#&gt; Ferrari Dino        2.770 22.480940 3.103199 16.143362 28.81852
-#&gt; Maserati Bora       3.570 18.205363 3.099389 11.875565 24.53516
-#&gt; Volvo 142E          2.780 22.427495 3.102754 16.090827 28.76416</div><div class='input'><span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          wt Predicted        SE    CI_low  CI_high
-#&gt; 1  1.513000 29.198941 1.0944578 26.963760 31.43412
-#&gt; 2  1.947556 26.876471 0.8909876 25.056831 28.69611
-#&gt; 3  2.382111 24.554001 0.7126988 23.098476 26.00953
-#&gt; 4  2.816667 22.231531 0.5831635 21.040552 23.42251
-#&gt; 5  3.251222 19.909061 0.5387759 18.808734 21.00939
-#&gt; 6  3.685778 17.586592 0.5987811 16.363718 18.80947
-#&gt; 7  4.120333 15.264122 0.7381448 13.756629 16.77161
-#&gt; 8  4.554889 12.941652 0.9215401 11.059616 14.82369
-#&gt; 9  4.989444 10.619182 1.1276853  8.316141 12.92222
-#&gt; 10 5.424000  8.296712 1.3461693  5.547468 11.04596</div><div class='input'>
-<span class='co'># Logistic Models</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span>
-<span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;                        wt  Predicted       CI_low      CI_high
-#&gt; Mazda RX4           2.620 0.67019044 2.220446e-16 1.000000e+00
-#&gt; Mazda RX4 Wag       2.875 0.55523783 2.220446e-16 1.000000e+00
-#&gt; Datsun 710          2.320 0.78282588 2.220446e-16 1.000000e+00
-#&gt; Hornet 4 Drive      3.215 0.39466867 2.220446e-16 1.000000e+00
-#&gt; Hornet Sportabout   3.440 0.29784048 2.220446e-16 1.000000e+00
-#&gt; Valiant             3.460 0.28991157 2.220446e-16 1.000000e+00
-#&gt; Duster 360          3.570 0.24862226 2.220446e-16 1.000000e+00
-#&gt; Merc 240D           3.190 0.40613518 2.220446e-16 1.000000e+00
-#&gt; Merc 230            3.150 0.42469141 2.220446e-16 1.000000e+00
-#&gt; Merc 280            3.440 0.29784048 2.220446e-16 1.000000e+00
-#&gt; Merc 280C           3.440 0.29784048 2.220446e-16 1.000000e+00
-#&gt; Merc 450SE          4.070 0.11292079 2.220446e-16 1.000000e+00
-#&gt; Merc 450SL          3.730 0.19597214 2.220446e-16 1.000000e+00
-#&gt; Merc 450SLC         3.780 0.18135578 2.220446e-16 1.000000e+00
-#&gt; Cadillac Fleetwood  5.250 0.01318121 2.220446e-16 2.220446e-16
-#&gt; Lincoln Continental 5.424 0.00948861 2.220446e-16 2.220446e-16
-#&gt; Chrysler Imperial   5.345 0.01101745 2.220446e-16 2.220446e-16
-#&gt; Fiat 128            2.200 0.81927993 2.220446e-16 1.000000e+00
-#&gt; Honda Civic         1.615 0.93271404 2.220446e-16 1.000000e+00
-#&gt; Toyota Corolla      1.835 0.90103934 2.220446e-16 1.000000e+00
-#&gt; Toyota Corona       2.465 0.73207609 2.220446e-16 1.000000e+00
-#&gt; Dodge Challenger    3.520 0.26689250 2.220446e-16 1.000000e+00
-#&gt; AMC Javelin         3.435 0.29984210 2.220446e-16 1.000000e+00
-#&gt; Camaro Z28          3.840 0.16495379 2.220446e-16 1.000000e+00
-#&gt; Pontiac Firebird    3.845 0.16364217 2.220446e-16 1.000000e+00
-#&gt; Fiat X1-9           1.935 0.88265040 2.220446e-16 1.000000e+00
-#&gt; Porsche 914-2       2.140 0.83563597 2.220446e-16 1.000000e+00
-#&gt; Lotus Europa        1.513 0.94396025 2.220446e-16 1.000000e+00
-#&gt; Ford Pantera L      3.170 0.41538330 2.220446e-16 1.000000e+00
-#&gt; Ferrari Dino        2.770 0.60407280 2.220446e-16 1.000000e+00
-#&gt; Maserati Bora       3.570 0.24862226 2.220446e-16 1.000000e+00
-#&gt; Volvo 142E          2.780 0.59949440 2.220446e-16 1.000000e+00</div><div class='input'><span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;          wt  Predicted         SE       CI_low   CI_high
-#&gt; 1  1.513000 0.94396025 0.06549629 0.5980458895 0.9947836
-#&gt; 2  1.947556 0.88014286 0.10010589 0.5334198865 0.9792388
-#&gt; 3  2.382111 0.76197619 0.12409535 0.4557422335 0.9244626
-#&gt; 4  2.816667 0.58256343 0.11811766 0.3500822761 0.7833487
-#&gt; 5  3.251222 0.37826154 0.10617035 0.2007286531 0.5957721
-#&gt; 6  3.685778 0.20962741 0.10102636 0.0743117139 0.4670288
-#&gt; 7  4.120333 0.10364064 0.07991040 0.0209726481 0.3842652
-#&gt; 8  4.554889 0.04798689 0.05225091 0.0053284850 0.3217030
-#&gt; 9  4.989444 0.02150163 0.03031776 0.0013024456 0.2702071
-#&gt; 10 5.424000 0.00948861 0.01640034 0.0003132392 0.2265267</div><div class='input'>
-<span class='co'># Mixed models</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-  <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-  <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt;          wt Predicted        SE    CI_low  CI_high
-#&gt; 1  1.513000 28.556963 1.3710323 25.748531 31.36540
-#&gt; 2  1.947556 26.364627 1.1782480 23.951095 28.77816
-#&gt; 3  2.382111 24.172291 1.0253547 22.071947 26.27263
-#&gt; 4  2.816667 21.979954 0.9321916 20.070446 23.88946
-#&gt; 5  3.251222 19.787618 0.9171450 17.908932 21.66630
-#&gt; 6  3.685778 17.595282 0.9838059 15.580047 19.61052
-#&gt; 7  4.120333 15.402945 1.1176484 13.113546 17.69234
-#&gt; 8  4.554889 13.210609 1.2980551 10.551664 15.86955
-#&gt; 9  4.989444 11.018273 1.5084101  7.928435 14.10811
-#&gt; 10 5.424000  8.825937 1.7378723  5.266066 12.38581</div><div class='input'>
-<span class='co'># Bayesian models</span>
-<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, iter <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
-  <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-  <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#bulk-ess</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
-#&gt; <span class='warning'>Running the chains for more iterations may help. See</span>
-#&gt; <span class='warning'>http://mc-stan.org/misc/warnings.html#tail-ess</span></div><div class='output co'>#&gt;          wt Predicted        SE    CI_low  CI_high
-#&gt; 1  1.513000 29.274250 1.1004610 27.156175 31.77946
-#&gt; 2  1.947556 26.954757 0.8832321 25.148806 28.91545
-#&gt; 3  2.382111 24.635264 0.6552640 23.249963 26.07341
-#&gt; 4  2.816667 22.315772 0.5219196 21.151439 23.36400
-#&gt; 5  3.251222 19.996279 0.5586185 19.034741 20.99429
-#&gt; 6  3.685778 17.676787 0.5875893 16.626442 18.84273
-#&gt; 7  4.120333 15.357294 0.7553496 13.795527 16.68095
-#&gt; 8  4.554889 13.037802 0.9548458 11.135329 14.89487
-#&gt; 9  4.989444 10.718309 1.1429696  8.234683 13.01889
-#&gt; 10 5.424000  8.398817 1.3325746  5.797602 11.68445</div></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Linear Models</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        wt Predicted       SE    CI_low  CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4           2.620 23.282611 3.111080 16.928937 29.63628</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4 Wag       2.875 21.919770 3.099021 15.590725 28.24882</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Datsun 710          2.320 24.885952 3.133524 18.486442 31.28546</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet 4 Drive      3.215 20.102650 3.093108 13.785680 26.41962</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet Sportabout   3.440 18.900144 3.095614 12.578057 25.22223</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Valiant             3.460 18.793255 3.096084 12.470207 25.11630</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Duster 360          3.570 18.205363 3.099389 11.875565 24.53516</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 240D           3.190 20.236262 3.093145 13.919216 26.55331</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 230            3.150 20.450041 3.093336 14.132605 26.76748</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 280            3.440 18.900144 3.095614 12.578057 25.22223</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 280C           3.440 18.900144 3.095614 12.578057 25.22223</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SE          4.070 15.533127 3.129637  9.141555 21.92470</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SL          3.730 17.350247 3.106365 11.006204 23.69429</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SLC         3.780 17.083024 3.109069 10.733457 23.43259</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cadillac Fleetwood  5.250  9.226650 3.295296  2.496758 15.95654</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lincoln Continental 5.424  8.296712 3.330101  1.495740 15.09769</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chrysler Imperial   5.345  8.718926 3.313990  1.950855 15.48700</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fiat 128            2.200 25.527289 3.144962 19.104419 31.95016</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Honda Civic         1.615 28.653805 3.220219 22.077240 35.23037</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Toyota Corolla      1.835 27.478021 3.188191 20.966866 33.98918</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Toyota Corona       2.465 24.111004 3.121571 17.735905 30.48610</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dodge Challenger    3.520 18.472586 3.097736 12.146165 24.79901</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AMC Javelin         3.435 18.926866 3.095503 12.605006 25.24873</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Camaro Z28          3.840 16.762355 3.112643 10.405490 23.11922</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Pontiac Firebird    3.845 16.735633 3.112957 10.378127 23.09314</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fiat X1-9           1.935 26.943574 3.175102 20.459150 33.42800</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Porsche 914-2       2.140 25.847957 3.151202 19.412345 32.28357</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lotus Europa        1.513 29.198941 3.236547 22.589030 35.80885</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Ford Pantera L      3.170 20.343151 3.093221 14.025952 26.66035</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Ferrari Dino        2.770 22.480940 3.103199 16.143362 28.81852</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Maserati Bora       3.570 18.205363 3.099389 11.875565 24.53516</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Volvo 142E          2.780 22.427495 3.102754 16.090827 28.76416</span>
+<span class='r-in'><span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          wt Predicted        SE    CI_low  CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  1.513000 29.198941 1.0944578 26.963760 31.43412</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  1.947556 26.876471 0.8909876 25.056831 28.69611</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  2.382111 24.554001 0.7126988 23.098476 26.00953</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  2.816667 22.231531 0.5831635 21.040552 23.42251</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  3.251222 19.909061 0.5387759 18.808734 21.00939</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  3.685778 17.586592 0.5987811 16.363718 18.80947</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  4.120333 15.264122 0.7381448 13.756629 16.77161</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  4.554889 12.941652 0.9215401 11.059616 14.82369</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  4.989444 10.619182 1.1276853  8.316141 12.92222</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 5.424000  8.296712 1.3461693  5.547468 11.04596</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Logistic Models</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>                        wt  Predicted       CI_low      CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4           2.620 0.67019044 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Mazda RX4 Wag       2.875 0.55523783 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Datsun 710          2.320 0.78282588 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet 4 Drive      3.215 0.39466867 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Hornet Sportabout   3.440 0.29784048 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Valiant             3.460 0.28991157 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Duster 360          3.570 0.24862226 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 240D           3.190 0.40613518 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 230            3.150 0.42469141 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 280            3.440 0.29784048 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 280C           3.440 0.29784048 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SE          4.070 0.11292079 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SL          3.730 0.19597214 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Merc 450SLC         3.780 0.18135578 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Cadillac Fleetwood  5.250 0.01318121 2.220446e-16 2.220446e-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lincoln Continental 5.424 0.00948861 2.220446e-16 2.220446e-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chrysler Imperial   5.345 0.01101745 2.220446e-16 2.220446e-16</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fiat 128            2.200 0.81927993 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Honda Civic         1.615 0.93271404 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Toyota Corolla      1.835 0.90103934 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Toyota Corona       2.465 0.73207609 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Dodge Challenger    3.520 0.26689250 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> AMC Javelin         3.435 0.29984210 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Camaro Z28          3.840 0.16495379 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Pontiac Firebird    3.845 0.16364217 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Fiat X1-9           1.935 0.88265040 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Porsche 914-2       2.140 0.83563597 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Lotus Europa        1.513 0.94396025 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Ford Pantera L      3.170 0.41538330 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Ferrari Dino        2.770 0.60407280 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Maserati Bora       3.570 0.24862226 2.220446e-16 1.000000e+00</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Volvo 142E          2.780 0.59949440 2.220446e-16 1.000000e+00</span>
+<span class='r-in'><span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          wt  Predicted         SE       CI_low   CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  1.513000 0.94396025 0.06549629 0.5980458895 0.9947836</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  1.947556 0.88014286 0.10010589 0.5334198865 0.9792388</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  2.382111 0.76197619 0.12409535 0.4557422335 0.9244626</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  2.816667 0.58256343 0.11811766 0.3500822761 0.7833487</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  3.251222 0.37826154 0.10617035 0.2007286531 0.5957721</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  3.685778 0.20962741 0.10102636 0.0743117139 0.4670288</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  4.120333 0.10364064 0.07991040 0.0209726481 0.3842652</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  4.554889 0.04798689 0.05225091 0.0053284850 0.3217030</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  4.989444 0.02150163 0.03031776 0.0013024456 0.2702071</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 5.424000 0.00948861 0.01640034 0.0003132392 0.2265267</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Mixed models</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>gear</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          wt Predicted        SE    CI_low  CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  1.513000 28.556963 1.3710323 25.748531 31.36540</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  1.947556 26.364627 1.1782480 23.951095 28.77816</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  2.382111 24.172291 1.0253547 22.071947 26.27263</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  2.816667 21.979954 0.9321916 20.070446 23.88946</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  3.251222 19.787618 0.9171450 17.908932 21.66630</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  3.685778 17.595282 0.9838059 15.580047 19.61052</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  4.120333 15.402945 1.1176484 13.113546 17.69234</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  4.554889 13.210609 1.2980551 10.551664 15.86955</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  4.989444 11.018273 1.5084101  7.928435 14.10811</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 5.424000  8.825937 1.7378723  5.266066 12.38581</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Bayesian models</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, iter <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> http://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> http://mc-stan.org/misc/warnings.html#tail-ess</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          wt Predicted        SE    CI_low  CI_high</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1  1.513000 29.274250 1.1004610 27.156175 31.77946</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2  1.947556 26.954757 0.8832321 25.148806 28.91545</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3  2.382111 24.635264 0.6552640 23.249963 26.07341</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  2.816667 22.315772 0.5219196 21.151439 23.36400</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5  3.251222 19.996279 0.5586185 19.034741 20.99429</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6  3.685778 17.676787 0.5875893 16.626442 18.84273</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7  4.120333 15.357294 0.7553496 13.795527 16.68095</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8  4.554889 13.037802 0.9548458 11.135329 14.89487</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9  4.989444 10.718309 1.1429696  8.234683 13.01889</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10 5.424000  8.398817 1.3325746  5.797602 11.68445</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

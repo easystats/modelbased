@@ -117,7 +117,7 @@
 <p>Sometimes, for instance for <strong>visualization</strong> purposes, we want to extract a <strong>reference grid</strong> (or <em>data grid</em>) of our dataset, that we will call a <strong>visualisation matrix</strong>. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, <strong>balanced</strong>, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.</p>
 <div id="simple-linear-regression" class="section level1">
 <h1 class="hasAnchor">
-<a href="#simple-linear-regression" class="anchor"></a>Simple linear regression</h1>
+<a href="#simple-linear-regression" class="anchor" aria-hidden="true"></a>Simple linear regression</h1>
 <p>For instance, let’s fit a simple linear model that models the relationship between <code>Sepal.Width</code> and <code>Sepal.Length</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
@@ -177,7 +177,7 @@
 </div>
 <div id="mixed-models" class="section level1">
 <h1 class="hasAnchor">
-<a href="#mixed-models" class="anchor"></a>Mixed models</h1>
+<a href="#mixed-models" class="anchor" aria-hidden="true"></a>Mixed models</h1>
 <p>Data grids are useful to represent more complex models. For instance, in the models above, the <strong>negative</strong> relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a <strong>random effect</strong> in a <strong>mixed model</strong>. In the model below, the “fixed” effects (the parameters of interest) will be adjusted (“averaged over”) to the random effects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
@@ -204,7 +204,7 @@
 </div>
 <div id="fixed-variables" class="section level1">
 <h1 class="hasAnchor">
-<a href="#fixed-variables" class="anchor"></a>Fixed variables</h1>
+<a href="#fixed-variables" class="anchor" aria-hidden="true"></a>Fixed variables</h1>
 <p>The above way of constructing the reference grid, i.e., by providing a single column of data to the function, is almost equivalent to the following:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, target <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
@@ -234,7 +234,7 @@
 </div>
 <div id="target-variables" class="section level1">
 <h1 class="hasAnchor">
-<a href="#target-variables" class="anchor"></a>Target variables</h1>
+<a href="#target-variables" class="anchor" aria-hidden="true"></a>Target variables</h1>
 <p>If more than one target variable is selected, <code>visualisation_matrix</code> will return the <strong>combination</strong> of them (<em>i.e.</em>, all unique values crossed together). This can be useful in the case of an <strong>interaction</strong> between a numeric variable and a factor.</p>
 <p>Let’s visualise the regression line for each of the levels of <code>Species</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -268,7 +268,7 @@
 </div>
 <div id="preserve-range" class="section level1">
 <h1 class="hasAnchor">
-<a href="#preserve-range" class="anchor"></a>Preserve range</h1>
+<a href="#preserve-range" class="anchor" aria-hidden="true"></a>Preserve range</h1>
 <p>However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the <strong>red line</strong>. The <code>preserve_range</code> option allows to remove observations that are “outside” the original dataset (however, the length should be increased to improve the precision toward the edges):</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>,
@@ -287,7 +287,7 @@
 </div>
 <div id="visualising-an-interaction-between-two-numeric-variables-three-way-interaction" class="section level1">
 <h1 class="hasAnchor">
-<a href="#visualising-an-interaction-between-two-numeric-variables-three-way-interaction" class="anchor"></a>Visualising an interaction between two numeric variables (three-way interaction)</h1>
+<a href="#visualising-an-interaction-between-two-numeric-variables-three-way-interaction" class="anchor" aria-hidden="true"></a>Visualising an interaction between two numeric variables (three-way interaction)</h1>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
@@ -303,15 +303,15 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
 
-<span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">5</span>, numerics <span class="op">=</span> <span class="st">"combination"</span><span class="op">)</span></code></pre></div>
 <p>What did we do here? We started by generating a reference grid containing all the combinations between the 10 equally spread values of the two target variables, creating <code>10 * 10 = 100</code> rows. The next step was to reduce <code>Petal.Length</code> to a set of 5 values, but without touching the other variables (<em>i.e.</em>, keeping the 10 values created for <code>Petal.Length</code>). This was achieved using <code>numerics = "combination"</code>.</p>
 <p>We can then visualise it as follows:</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">newdata</span><span class="op">$</span><span class="va">Predicted_Sepal.Length</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">newdata</span><span class="op">)</span>
 
-<span class="va">iris</span> <span class="op">%&gt;%</span>
+<span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span>, color <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Predicted_Sepal.Length</span>, group <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -320,8 +320,8 @@
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-18-1.png" width="100%"></p>
 <p>Such plot can be more clear by expressing the interaction variable in terms of deviations from the mean (as a standardized variable).</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<code class="sourceCode R"><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>,
     length <span class="op">=</span> <span class="fl">3</span>,
     numerics <span class="op">=</span> <span class="st">"combination"</span>,
@@ -335,7 +335,7 @@
 <span class="co"># Express values in an abstract way</span>
 <span class="va">newdata</span><span class="op">$</span><span class="va">Petal.Width</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/format_standardize.html" class="external-link">format_standardize</a></span><span class="op">(</span><span class="va">newdata</span><span class="op">$</span><span class="va">Petal.Width</span>, reference <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Width</span><span class="op">)</span>
 
-<span class="va">iris</span> <span class="op">%&gt;%</span>
+<span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_point2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"white"</span>, shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Only shapes from 21 to 25 have a fill aesthetic</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">newdata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Predicted_Sepal.Length</span>, color <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
@@ -347,10 +347,10 @@
 </div>
 <div id="tips-and-tricks" class="section level1">
 <h1 class="hasAnchor">
-<a href="#tips-and-tricks" class="anchor"></a>Tips and Tricks</h1>
+<a href="#tips-and-tricks" class="anchor" aria-hidden="true"></a>Tips and Tricks</h1>
 <div id="visualization_matrix-also-runs-directly-on-model-objects" class="section level2">
 <h2 class="hasAnchor">
-<a href="#visualization_matrix-also-runs-directly-on-model-objects" class="anchor"></a><code>visualization_matrix()</code> also runs directly on model objects</h2>
+<a href="#visualization_matrix-also-runs-directly-on-model-objects" class="anchor" aria-hidden="true"></a><code>visualization_matrix()</code> also runs directly on model objects</h2>
 <p>To illustrate this, let’s set up a <strong>general additive mixed model (GAMM)</strong>, where we are going to specify a <strong>smooth term</strong> (a non-linear relationship; specified by <code><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s()</a></code> function) and some <strong>random effects</strong> structure.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gamm4</span><span class="op">)</span>
