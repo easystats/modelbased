@@ -31,9 +31,12 @@ estimate_slopes(
 \arguments{
 \item{model}{A Bayesian model.}
 
-\item{trend}{A character vector indicating the name of the numeric variable for which to compute the slopes.}
+\item{trend}{A character vector indicating the name of the numeric variable
+for which to compute the slopes.}
 
-\item{levels}{A character vector indicating the variables over which the slope will be computed. If NULL (default), it will select all the remaining predictors.}
+\item{levels}{A character vector indicating the variables over which the
+slope will be computed. If NULL (default), it will select all the remaining
+predictors.}
 
 \item{transform}{Can be \code{"none"} (default for contrasts),
 \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
@@ -54,7 +57,10 @@ Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
 
 \item{...}{Arguments passed to or from other methods.}
 
-\item{component}{A character vector indicating the model component for which estimation is requested. Only applies to models from \pkg{glmmTMB}. Use \code{"conditional"} for the count-model or \code{"zero_inflate"} or \code{"zi"} for the zero-inflation model.}
+\item{component}{A character vector indicating the model component for which
+estimation is requested. Only applies to models from \pkg{glmmTMB}. Use
+\code{"conditional"} for the count-model or \code{"zero_inflate"} or
+\code{"zi"} for the zero-inflation model.}
 }
 \value{
 A data frame of slopes.
