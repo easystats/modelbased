@@ -313,21 +313,24 @@ visualisation_matrix.logical <- visualisation_matrix.character
     }
 
     # If there is an equal sign
-    if(grepl("=", target)) {
+    if(grepl("length.out =", target)) {
+      expression <- target  # This is an edgecase
+    } else if(grepl("=", target)) {
       parts <- trimws(unlist(strsplit(target, "=", fixed = TRUE)))  # Split and clean
       varname <- parts[1]  # left-hand part is probably the name of the variable
       target <- parts[2]  # right-hand part is the real target
     }
 
-    if(is.data.frame(x)) {
+    if(is.na(expression) && is.data.frame(x)) {
       if(!is.na(varname)) {
         x <- x[[varname]]
       } else {
         stop("Couldn't find which variable were selected in `target`. Check spelling and specification.")
       }
     }
+
     # If brackets are detected [a, b]
-    if(grepl("\\[.*\\]", target)) {
+    if(is.na(expression) && grepl("\\[.*\\]", target)) {
 
       # Clean --------------------
       # Keep the content
@@ -364,9 +367,12 @@ visualisation_matrix.logical <- visualisation_matrix.character
       expression <- target
       # Try to eval and make sure it works
       tryCatch({
+        # This is just to make sure that an expression with `length` in
+        # it doesn't fail because of this undefined var
+        length <- 10
         eval(parse(text = target))
       }, error = function(r) {
-        stop(paste0("The `target` argument (", original_target, ") cannot be read and could be mispecified."))
+        stop(paste0("The `target` argument (`", original_target, "`) cannot be read and could be mispecified."))
       })
     }
   }
