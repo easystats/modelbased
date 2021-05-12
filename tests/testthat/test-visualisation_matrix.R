@@ -9,7 +9,6 @@ if (require("testthat") && require("modelbased")) {
     # Factors
     expect_equal(length(visualisation_matrix(iris$Species)), 3)
     expect_equal(length(visualisation_matrix(c("A", "A", "B"))), 2)
-
     expect_equal(length(visualisation_matrix(x = iris$Species, target = "c('versicolor')")), 1)
     expect_equal(length(visualisation_matrix(iris$Species, target = "A = c('versicolor')")), 1)
     expect_equal(length(visualisation_matrix(c("A", "A", "B"), target = "dupa = 'A'")), 1)
@@ -19,12 +18,16 @@ if (require("testthat") && require("modelbased")) {
 
     # Numerics
     expect_equal(length(visualisation_matrix(x = iris$Sepal.Length)), 10)
-    # expect_equal(length(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)), 7)
-    # expect_equal(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)[4], mean(iris$Sepal.Length))
+    expect_equal(length(visualisation_matrix(x = iris$Sepal.Length, length = 5)), 5)
+    expect_equal(min(visualisation_matrix(x = iris$Sepal.Length, range = "iqr")), as.numeric(quantile(iris$Sepal.Length, 0.025)))
+    expect_equal(min(visualisation_matrix(x = iris$Sepal.Length, range = "hdi")), as.numeric(bayestestR::hdi(iris$Sepal.Length, ci = 0.95))[2])
+    expect_equal(min(visualisation_matrix(x = iris$Sepal.Length, range = "eti")), as.numeric(bayestestR::eti(iris$Sepal.Length, ci = 0.95))[2])
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, target = "c(1, 3, 4)")), 3)
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, target = "A = c(1, 3, 4)")), 3)
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, target = "[1, 3, 4]")), 3)
     expect_equal(length(visualisation_matrix(iris$Sepal.Length, target = "[1, 4]")), 10)
+    # expect_equal(length(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)), 7)
+    # expect_equal(visualisation_matrix(iris$Sepal.Length, standardize = TRUE)[4], mean(iris$Sepal.Length))
   })
 
 

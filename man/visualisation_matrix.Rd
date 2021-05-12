@@ -2,12 +2,13 @@
 % Please edit documentation in R/visualisation_matrix.data.frame.R
 \name{visualisation_matrix}
 \alias{visualisation_matrix}
+\alias{visualisation_matrix.numeric}
+\alias{visualisation_matrix.factor}
 \title{Create a reference grid}
 \usage{
 visualisation_matrix(
   x,
   target = "all",
-  length = 10,
   factors = "reference",
   numerics = "mean",
   preserve_range = FALSE,
@@ -15,15 +16,17 @@ visualisation_matrix(
   na.rm = TRUE,
   ...
 )
+
+\method{visualisation_matrix}{numeric}(x, length = 10, range = "range", ...)
+
+\method{visualisation_matrix}{factor}(x, ...)
 }
 \arguments{
 \item{x}{An object from which to construct the reference grid.}
 
 \item{target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
 
-\item{length}{Length of numeric target variables.}
-
-\item{factors}{Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).}
+\item{factors}{Type of summary for factors. Can be reference" (set at the reference level) or "mode" (set at the most common level).}
 
 \item{numerics}{Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).}
 
@@ -33,7 +36,11 @@ visualisation_matrix(
 
 \item{na.rm}{Remove NaNs.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
+
+\item{length}{Length of numeric target variables.}
+
+\item{range}{Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.}
 }
 \value{
 Reference grid data frame.
@@ -45,6 +52,9 @@ Create a reference matrix, useful for visualisation, with evenly spread and comb
 library(modelbased)
 
 visualisation_matrix(iris, target = "Sepal.Length")
+visualisation_matrix(iris, target = "Sepal.Length", length = 3)
+visualisation_matrix(iris, target = "Sepal.Length", range = "ci", ci = 0.90)
+visualisation_matrix(iris, target = "Sepal.Length", factors = "mode")
 visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
 visualisation_matrix(iris, target = c("Sepal.Length", "Species"), preserve_range = TRUE)
 visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)

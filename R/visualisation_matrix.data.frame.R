@@ -5,11 +5,12 @@
 #' @param x An object from which to construct the reference grid.
 #' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
 #' @param length Length of numeric target variables.
-#' @param factors Type of summary for factors. Can be "combination" (include all unique values), "reference" (set at the reference level) or "mode" (set at the most common level).
+#' @param range Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.
+#' @param factors Type of summary for factors. Can be reference" (set at the reference level) or "mode" (set at the most common level).
 #' @param numerics Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.
 #' @param na.rm Remove NaNs.
-#' @param ... Arguments passed to or from other methods.
+#' @param ... Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).
 #' @inheritParams effectsize::format_standardize
 #' @inheritParams estimate_response
 #'
@@ -20,6 +21,9 @@
 #' library(modelbased)
 #'
 #' visualisation_matrix(iris, target = "Sepal.Length")
+#' visualisation_matrix(iris, target = "Sepal.Length", length = 3)
+#' visualisation_matrix(iris, target = "Sepal.Length", range = "ci", ci = 0.90)
+#' visualisation_matrix(iris, target = "Sepal.Length", factors = "mode")
 #' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
 #' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), preserve_range = TRUE)
 #' visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
@@ -27,7 +31,7 @@
 #' visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #' @importFrom stats na.omit
 #' @export
-visualisation_matrix <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
+visualisation_matrix <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
   UseMethod("visualisation_matrix")
 }
 
@@ -49,7 +53,7 @@ standardize.visualisation_matrix <- function(x, ...) {
 
 
 #' @export
-visualisation_matrix.data.frame <- function(x, target = "all", length = 10, factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
+visualisation_matrix.data.frame <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
 
   # Valid target argument
   if (all(target == "all") || ncol(x) == 1 || all(names(x) %in% c(target))) {
@@ -59,7 +63,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   # Deal with targets ==========================================================
 
   # Find eventual user-defined specifications for each target
-  specs <- do.call(rbind, lapply(target, modelbased:::.visualisation_matrix_clean_target, x = x))
+  specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
   specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
 
   # Create target list of factors -----------------------------------------
@@ -73,8 +77,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
   for(num in specs[specs$is_factor == FALSE, "varname"]) {
     nums[[num]] <- visualisation_matrix(x[[num]],
                                         target = specs[specs$varname == num, "expression"],
-                                        length = length,
-                                        reference = reference[[num]])
+                                        reference = reference[[num]],
+                                        ...)
   }
   # Assemble the two
   targets <- expand.grid(c(nums, facs))
@@ -86,8 +90,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
     facs_combinations <- expand.grid(facs)
     for(i in 1:nrow(facs_combinations)) {
       # Query subset of original dataset
-      subset <- x[.data_match(x, to = facs_combinations[i, , drop = FALSE]), ]
-      idx <- .data_match(targets, to = facs_combinations[i, , drop = FALSE])
+      subset <- x[insight::data_match(x, to = facs_combinations[i, , drop = FALSE]), ]
+      idx <- insight::data_match(targets, to = facs_combinations[i, , drop = FALSE])
 
       # Skip if no instance of factor combination, drop the chunk
       if(nrow(subset) == 0) {
@@ -150,21 +154,6 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 # Utils -------------------------------------------------------------------
 
-
-#' @keywords internal
-.data_match <- function(x, to) {
-  idx <- 1:nrow(x)
-  for(col in names(to)) {
-    idx <- idx[x[[col]][idx] %in% to[[col]]]
-  }
-  idx
-}
-
-
-
-
-
-
 #' @importFrom stats na.omit
 #' @keywords internal
 .visualisation_matrix_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE) {
@@ -209,9 +198,9 @@ visualisation_matrix.data.frame <- function(x, target = "all", length = 10, fact
 
 # Numeric -----------------------------------------------------------------
 
-
+#' @rdname visualisation_matrix
 #' @export
-visualisation_matrix.numeric <- function(x, target = NULL, length = 10, ...) {
+visualisation_matrix.numeric <- function(x, length = 10, range = "range", ...) {
 
   # Sanity check
   if (!is.numeric(length)) {
@@ -219,11 +208,11 @@ visualisation_matrix.numeric <- function(x, target = NULL, length = 10, ...) {
   }
 
   # Check and clean the target argument
-  specs <- .visualisation_matrix_clean_target(x, target)
+  specs <- .visualisation_matrix_clean_target(x, ...)
 
   if(is.na(specs$expression)) {
-    # Regular spread
-    out <- seq(min(x, na.rm = TRUE), max(x, na.rm = TRUE), length.out = length)
+    # Create a spread
+    out <-.create_spread(x, length = length, range = range, ...)
   } else {
     # Run the expression cleaned from target
     out <- eval(parse(text = specs$expression))
@@ -237,15 +226,17 @@ visualisation_matrix.double <- visualisation_matrix.numeric
 
 
 
+
+
 # Factors & Characters ----------------------------------------------------
 
 
-
+#' @rdname visualisation_matrix
 #' @export
-visualisation_matrix.factor <- function(x, target = NULL, ...) {
+visualisation_matrix.factor <- function(x, ...) {
 
   # Check and clean the target argument
-  specs <- .visualisation_matrix_clean_target(x, target)
+  specs <- .visualisation_matrix_clean_target(x, ...)
 
   if(is.na(specs$expression)) {
 
@@ -271,11 +262,38 @@ visualisation_matrix.logical <- visualisation_matrix.character
 
 
 
+#' @importFrom stats quantile
+#' @keywords internal
+.create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
+  range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
+
+  if(range == "iqr") {
+    mini <- quantile(x, (1 - ci) / 2, ...)
+    maxi <- quantile(x, (1 + ci) / 2, ...)
+  } else if (range == "ci") {
+    out <- bayestestR::ci(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "eti") {
+    out <- bayestestR::eti(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else if (range == "hdi") {
+    out <- bayestestR::hdi(x, ci = ci, ...)
+    mini <- out$CI_low
+    maxi <- out$CI_high
+  } else {
+    mini <- min(x, na.rm = TRUE)
+    maxi <- max(x, na.rm = TRUE)
+  }
+  seq(mini, maxi, length.out = length)
+}
+
 
 # Utilities -----------------------------------------------------------------
 
 #' @keywords internal
-.visualisation_matrix_clean_target <- function(x, target = NULL) {
+.visualisation_matrix_clean_target <- function(x, target = NULL, ...) {
   expression <- NA
   varname <- NA
   original_target <- target
@@ -339,4 +357,6 @@ visualisation_matrix.logical <- visualisation_matrix.character
   }
   data.frame(varname = varname, expression = expression)
 }
+
+
 
