@@ -180,7 +180,7 @@ estimate_means <- function(model,
 #   means <- .restore_factor_levels(means, insight::get_data(model))
 #
 #   # Restore type
-#   means[c(args$fixed, args$modulate)] <- sapply(means[c(args$fixed, args$modulate)], as.numeric_ifnumeric)
+#   means[c(args$fixed, args$modulate)] <- sapply(means[c(args$fixed, args$modulate)], insight::as.numeric_ifnumeric)
 #
 #   # Add attributes
 #   attributes(means) <- c(
