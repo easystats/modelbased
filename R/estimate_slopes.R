@@ -220,7 +220,7 @@ estimate_slopes.glmmTMB <- function(model,
   }
 
   # Restore factor levels
-  slopes <- data_restoretype(slopes, insight::get_data(model))
+  slopes <- insight::data_restoretype(slopes, insight::get_data(model))
 
 
   attributes(slopes) <- c(

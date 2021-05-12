@@ -155,7 +155,7 @@ estimate_contrasts.stanreg <- function(model,
     # others <- as.data.frame(sapply(others, .remove_name_level), stringsAsFactors = FALSE)
     levelcols <- data.frame("Contrast" = others$Contrast)
     others$Contrast <- NULL
-    others <- as.data.frame(sapply(others, as.numeric_ifnumeric), stringsAsFactors = FALSE)
+    others <- as.data.frame(sapply(others, insight::as.numeric_ifnumeric), stringsAsFactors = FALSE)
   } else {
     others <- data.frame()
     levelcols <- data.frame("Contrast" = names)

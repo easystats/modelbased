@@ -78,7 +78,7 @@ estimate_response <- estimate_prediction
   data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
 
   # Restore factor levels
-  data <- data_restoretype(data, insight::get_data(model))
+  data <- insight::data_restoretype(data, insight::get_data(model))
 
   # Get predicted ----------------
   predictions <- insight::get_predicted(model,

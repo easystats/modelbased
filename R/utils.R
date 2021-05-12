@@ -1,25 +1,3 @@
-#' Convert to Numeric if Possible
-#'
-#' Tries to convert vector to numeric if possible. Otherwise, leaves it as is.
-#' @param x A vector to be converted.
-#'
-#' @examples
-#' as.numeric_ifnumeric(c("1", "2"))
-#' as.numeric_ifnumeric(c("1", "2", "A"))
-#' @return Numeric
-#' @export
-as.numeric_ifnumeric <- function(x) {
-  x <- tryCatch(as.numeric(as.character(x)), error = function(e) x, warning = function(w) x)
-  x
-}
-
-
-
-
-
-
-
-
 #' @keywords internal
 .remove_name_level <- function(x, ...) {
   name <- .find_name_level(x, ...)
