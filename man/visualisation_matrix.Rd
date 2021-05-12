@@ -51,13 +51,19 @@ Create a reference matrix, useful for visualisation, with evenly spread and comb
 \examples{
 library(modelbased)
 
-visualisation_matrix(iris, target = "Sepal.Length")
-visualisation_matrix(iris, target = "Sepal.Length", length = 3)
-visualisation_matrix(iris, target = "Sepal.Length", range = "ci", ci = 0.90)
-visualisation_matrix(iris, target = "Sepal.Length", factors = "mode")
-visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 3)
-visualisation_matrix(iris, target = c("Sepal.Length", "Species"), preserve_range = TRUE)
-visualisation_matrix(iris, target = c("Sepal.Length", "Species"), numerics = 0)
-visualisation_matrix(iris, target = c("Sepal.Length = 3", "Species"))
-visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+data <- rbind(iris, iris[149, ], make.row.names = FALSE)  # Add one row to change the "mode" of Species
+
+# Single variable is of interest; all others are "fixed"
+visualisation_matrix(data, target = "Sepal.Length")
+visualisation_matrix(data, target = "Sepal.Length", length = 3)
+visualisation_matrix(data, target = "Sepal.Length", range = "ci", ci = 0.90)
+visualisation_matrix(data, target = "Sepal.Length", factors = "mode")
+
+# Multiple variables are of interest, creating a combination
+visualisation_matrix(data, target = c("Sepal.Length", "Species"), length = 3)
+visualisation_matrix(data, target = c(1, 3), length = 3)
+visualisation_matrix(data, target = c("Sepal.Length", "Species"), preserve_range = TRUE)
+visualisation_matrix(data, target = c("Sepal.Length", "Species"), numerics = 0)
+visualisation_matrix(data, target = c("Sepal.Length = 3", "Species"))
+visualisation_matrix(data, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 }
