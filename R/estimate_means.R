@@ -97,7 +97,7 @@ estimate_means <- function(model,
   }
 
   # Restore factor levels
-  means <- data_restoretype(means, insight::get_data(model))
+  means <- insight::data_restoretype(means, insight::get_data(model))
 
   # Add attributes
   attributes(means) <- c(
