@@ -1,6 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 1.6.1.9001
-pkgdown_sha: aae5ce1adce646d180f29ede23210ef13527ac7c
+pkgdown_sha: 71849077a7232b20d0f76eb7203e558b437e0dd7
 articles:
   estimate_contrasts: estimate_contrasts.html
   estimate_means: estimate_means.html
@@ -9,5 +9,5 @@ articles:
   estimate_smooth: estimate_smooth.html
   modelisation_approach: modelisation_approach.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2021-05-08T01:01Z
+last_built: 2021-05-12T10:54Z
 
