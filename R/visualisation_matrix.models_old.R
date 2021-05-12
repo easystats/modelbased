@@ -1,6 +1,5 @@
-# -------------------------------------------------------------------------
-# Below are visualisation_matrix functions that work on statistical models
-# -------------------------------------------------------------------------
+# Models ------------------------------------------------------------------
+
 
 #' @export
 visualisation_matrix_old.glm <- function(x,
@@ -112,11 +111,6 @@ visualisation_matrix_old.gamm <- visualisation_matrix_old.glm
 #' @export
 visualisation_matrix_old.list <- visualisation_matrix_old.glm # list is gamm4
 
-
-
-# -------------------------------------------------------------------------
-# Below are visualisation_matrix functions that work on visualisation_matrix
-# -------------------------------------------------------------------------
 
 #' @export
 visualisation_matrix_old.visualisation_matrix <- function(x,
