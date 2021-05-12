@@ -319,6 +319,13 @@ visualisation_matrix.logical <- visualisation_matrix.character
       target <- parts[2]  # right-hand part is the real target
     }
 
+    if(is.data.frame(x)) {
+      if(!is.na(varname)) {
+        x <- x[[varname]]
+      } else {
+        stop("Couldn't find which variable were selected in `target`. Check spelling and specification.")
+      }
+    }
     # If brackets are detected [a, b]
     if(grepl("\\[.*\\]", target)) {
 
