@@ -29,7 +29,6 @@
 #' }
 #' @return A dataframe of estimated contrasts.
 #'
-#' @importFrom emmeans contrast
 #' @importFrom stats mad median sd setNames confint
 #' @importFrom bayestestR describe_posterior
 #' @export
