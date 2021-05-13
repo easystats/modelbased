@@ -9,7 +9,6 @@
 #' @param factors Type of summary for factors. Can be reference" (set at the reference level) or "mode" (set at the most common level).
 #' @param numerics Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.
-#' @param na.rm Remove NaNs.
 #' @param ... Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).
 #' @inheritParams effectsize::format_standardize
 #' @inheritParams estimate_response
@@ -20,7 +19,8 @@
 #' @examples
 #' library(modelbased)
 #'
-#' data <- rbind(iris, iris[149, ], make.row.names = FALSE)  # Add one row to change the "mode" of Species
+#' # Add one row to change the "mode" of Species
+#' data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 #'
 #' # Single variable is of interest; all others are "fixed"
 #' visualisation_matrix(data, target = "Sepal.Length")
@@ -37,7 +37,7 @@
 #' visualisation_matrix(data, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #' @importFrom stats na.omit
 #' @export
-visualisation_matrix <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
+visualisation_matrix <- function(x, ...) {
   UseMethod("visualisation_matrix")
 }
 
@@ -48,6 +48,7 @@ print.visualisation_matrix <- function(x, ...) {
 }
 
 
+#' @rdname visualisation_matrix
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
   effectsize::standardize(x, ...)
@@ -57,9 +58,9 @@ standardize.visualisation_matrix <- function(x, ...) {
 # Below are visualisation_matrix functions for DataFrames
 # -------------------------------------------------------------------------
 
-
+#' @rdname visualisation_matrix
 #' @export
-visualisation_matrix.data.frame <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, na.rm = TRUE, ...) {
+visualisation_matrix.data.frame <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
 
   # Valid target argument
   if (all(target == "all") || ncol(x) == 1 || all(names(x) %in% c(target))) {
@@ -124,7 +125,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
   if(length(rest_vars) >= 1) {
-    rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, na.rm = na.rm)
+    rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, ...)
     rest_df <- as.data.frame(rest_df)
     targets <- cbind(targets, rest_df)
   }
@@ -164,7 +165,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
 
 #' @importFrom stats na.omit
 #' @keywords internal
-.visualisation_matrix_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE) {
+.visualisation_matrix_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
   if (na.rm == TRUE) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {

@@ -6,6 +6,11 @@
 \usage{
 visualisation_recipe(x, ...)
 }
+\arguments{
+\item{x}{Something.}
+
+\item{...}{Other arguments passed to other functions.}
+}
 \description{
 Visualization helper
 }
@@ -15,5 +20,4 @@ library(modelbased)
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
 x <- estimate_relation(model)
-
 }

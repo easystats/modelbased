@@ -1,6 +1,14 @@
 if (require("testthat") && require("modelbased") && require("gamm4") && require("glmmTMB") && require("mgcv") && require("rstanarm")) {
   test_that("visualisation_matrix - models", {
 
+    # GLM
+    model <- glm(Petal.Length ~ Petal.Width * Sepal.Length, data = iris)
+    expect_equal(dim(modelbased::visualisation_matrix(model)), c(100, 2))
+
+    model <- glm(Petal.Length ~ Petal.Width * Species, data = iris)
+    expect_equal(dim(modelbased::visualisation_matrix(model)), c(10, 2))
+
+
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
     expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = TRUE)), 2)

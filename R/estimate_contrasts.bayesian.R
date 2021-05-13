@@ -6,14 +6,6 @@
 #'  \item{\link[=estimate_contrasts.stanreg]{Bayesian models}}
 #' }
 #'
-#' @param model A statistical model.
-#' @param levels A character vector or formula specifying the names of the
-#'   predictors over which to estimate means or contrasts.
-#' @param fixed A character vector indicating the names of the predictors to be
-#'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param modulate A character vector indicating the names of a numeric variable
-#'   along which the means or the contrasts will be estimated. Adjust its length
-#'   using \code{length}.
 #' @param transform Can be \code{"none"} (default for contrasts),
 #'   \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
 #'   \code{"log"}. \code{"none"}  will leave the values on scale of the linear

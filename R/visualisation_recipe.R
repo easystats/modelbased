@@ -1,12 +1,15 @@
 #' Visualization helper
 #'
+#' @param x Something.
+#' @param ... Other arguments passed to other functions.
+#'
 #' @examples
 #' library(modelbased)
 #'
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
 #' x <- estimate_relation(model)
-#'
+#' @export
 visualisation_recipe <- function(x, ...) {
   UseMethod("visualisation_recipe")
 }

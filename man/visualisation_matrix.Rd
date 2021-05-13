@@ -2,18 +2,23 @@
 % Please edit documentation in R/visualisation_matrix.data.frame.R
 \name{visualisation_matrix}
 \alias{visualisation_matrix}
+\alias{standardize.visualisation_matrix}
+\alias{visualisation_matrix.data.frame}
 \alias{visualisation_matrix.numeric}
 \alias{visualisation_matrix.factor}
 \title{Create a reference grid}
 \usage{
-visualisation_matrix(
+visualisation_matrix(x, ...)
+
+standardize.visualisation_matrix(x, ...)
+
+\method{visualisation_matrix}{data.frame}(
   x,
   target = "all",
   factors = "reference",
   numerics = "mean",
   preserve_range = FALSE,
   reference = x,
-  na.rm = TRUE,
   ...
 )
 
@@ -24,6 +29,8 @@ visualisation_matrix(
 \arguments{
 \item{x}{An object from which to construct the reference grid.}
 
+\item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
+
 \item{target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.}
 
 \item{factors}{Type of summary for factors. Can be reference" (set at the reference level) or "mode" (set at the most common level).}
@@ -33,10 +40,6 @@ visualisation_matrix(
 \item{preserve_range}{In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.}
 
 \item{reference}{The reference vector from which to compute the mean and SD.}
-
-\item{na.rm}{Remove NaNs.}
-
-\item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
 
 \item{length}{Length of numeric target variables.}
 
@@ -51,7 +54,8 @@ Create a reference matrix, useful for visualisation, with evenly spread and comb
 \examples{
 library(modelbased)
 
-data <- rbind(iris, iris[149, ], make.row.names = FALSE)  # Add one row to change the "mode" of Species
+# Add one row to change the "mode" of Species
+data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 
 # Single variable is of interest; all others are "fixed"
 visualisation_matrix(data, target = "Sepal.Length")
