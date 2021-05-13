@@ -89,19 +89,18 @@ estimate_contrasts <- function(model,
                                  method = "pairwise",
                                  ...)
 
-  # return(estimated)
-
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     contrasts <- bayestestR::describe_posterior(estimated, ci = ci, ...)
-    contrasts <- cbind(.get_variables_emmeans(estimated), contrasts)
+    contrasts <- cbind(estimated@grid, contrasts)
     contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
   } else {
-    contrasts <- as.data.frame(stats::confint(estimated, level = ci, adjust = adjust))
+    contrasts <- as.data.frame(merge(as.data.frame(estimated), stats::confint(estimated, level = ci, adjust = adjust)))
     contrasts <- .clean_names_frequentist(contrasts)
   }
+  contrasts <- insight::data_relocate(contrasts, c("CI_low", "CI_high"), after = c("Difference", "Odds_ratio", "Ratio"))
 
-  return(contrasts)
+
 
   # Standardized differences
   # if (standardize & transform != "response") {
@@ -109,13 +108,37 @@ estimate_contrasts <- function(model,
   # }
 
 
+  # Format contrasts names
+  # Split by either " - " or "/"
+  level_cols <- strsplit(as.character(contrasts$contrast), " - |\\/")
+  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
+  names(level_cols) <- c("Level1", "Level2")
+  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1)
+  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2)
+
+  # Merge levels and rest
+  contrasts$contrast <- NULL
+  contrasts <- cbind(level_cols, contrasts)
 
 
+  # Table formatting
+  attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(contrasts, "table_footer") <- .estimate_add_footer(contrasts, args, type = "contrasts", adjust = adjust)
 
+  # Add attributes
+  attributes(contrasts) <- c(
+    attributes(contrasts),
+    list(
+      levels = args$levels,
+      fixed = args$fixed,
+      modulate = args$modulate,
+      transform = transform,
+      ci = ci,
+      adjust = adjust,
+      response = insight::find_response(model)
+    )
+  )
 
-  contrasts1 <- estimate_contrasts(lm(Sepal.Width ~ Species * Petal.Width, data = iris), modulate = "Petal.Width")
-  estimated <- estimate_contrasts(stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris), modulate = "Petal.Width")
-
-  contrasts <- contrasts2
-
+  class(contrasts) <- c("estimate_contrasts", class(contrasts))
+  contrasts
 }

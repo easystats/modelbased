@@ -28,7 +28,13 @@ along which the means or the contrasts will be estimated. Other arguments
 from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 number of data points.}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}.}
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
+\code{"log"}. \code{"none"} will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations
+expressed in log-odds (probabilities on logit scale) and \code{"response"}
+in terms of probabilities.}
 
 \item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
 
@@ -43,6 +49,8 @@ Estimate average value of response variable at each factor levels
 \examples{
 library(modelbased)
 
+# Frequentist models
+# -------------------
 model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
@@ -53,7 +61,8 @@ estimate_means(model, levels = "Sepal.Width=c(2, 4)")
 estimate_means(model, levels = c("Species", "Sepal.Width=0"))
 estimate_means(model, modulate = "Sepal.Width", length = 5)
 estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
-\dontrun{
+
+\donttest{
 if (require("lme4")) {
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -62,8 +71,9 @@ if (require("lme4")) {
   estimate_means(model)
   estimate_means(model, modulate = "Sepal.Width", length = 3)
 }
-}
-\donttest{
+
+# Bayesian models
+# -------------------
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)

@@ -12,7 +12,7 @@ smoothing(x, method = "loess", strength = 0.25, ...)
 \item{method}{Can be \link[=loess]{"loess"} (default) or
 \link[=smooth]{"smooth"}. A loess smoothing can be slow.}
 
-\item{strength}{This argument only applies to \code{smooth_method = "loess"}.
+\item{strength}{This argument only applies when \code{method = "loess"}.
 Degree of smoothing passed to \code{span} (see \code{\link{loess}}).}
 
 \item{...}{Arguments passed to or from other methods.}

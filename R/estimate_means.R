@@ -6,6 +6,8 @@
 #' @examples
 #' library(modelbased)
 #'
+#' # Frequentist models
+#' # -------------------
 #' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #'
 #' estimate_means(model)
@@ -16,7 +18,8 @@
 #' estimate_means(model, levels = c("Species", "Sepal.Width=0"))
 #' estimate_means(model, modulate = "Sepal.Width", length = 5)
 #' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
-#' \dontrun{
+#'
+#' \donttest{
 #' if (require("lme4")) {
 #'   data <- iris
 #'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -25,8 +28,9 @@
 #'   estimate_means(model)
 #'   estimate_means(model, modulate = "Sepal.Width", length = 3)
 #' }
-#' }
-#' \donttest{
+#'
+#' # Bayesian models
+#' # -------------------
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
@@ -76,16 +80,23 @@ estimate_means <- function(model,
   if (insight::model_info(model)$is_bayesian) {
 
     means <- bayestestR::describe_posterior(estimated, test = NULL, rope_range = NULL, ci = ci, ...)
-    means <- cbind(.get_variables_emmeans(estimated), means)
+    means <- cbind(estimated@grid, means)
+    means$`.wgt.` <- NULL  # Drop the weight column
     means <- .clean_names_bayesian(means, model, transform, type = "mean")
-
   } else {
+
     means <- as.data.frame(stats::confint(estimated, level = ci))
+    means$df <- NULL
     means <- .clean_names_frequentist(means)
   }
 
   # Restore factor levels
   means <- insight::data_restoretype(means, insight::get_data(model))
+
+
+  # Table formatting
+  attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
+  attr(means, "table_footer") <- .estimate_add_footer(means, args, type = "means")
 
   # Add attributes
   attributes(means) <- c(
@@ -102,4 +113,87 @@ estimate_means <- function(model,
 
   class(means) <- c("estimate_means", class(means))
   means
+}
+
+
+# Clean names -------------------------------------------------------------
+
+
+#' @keywords internal
+.clean_names_frequentist <- function(means) {
+  names(means)[names(means) == "emmean"] <- "Mean"
+  names(means)[names(means) == "response"] <- "Mean"
+  names(means)[names(means) == "prob"] <- "Probability"
+  names(means)[names(means) == "estimate"] <- "Difference"
+  names(means)[names(means) == "odds.ratio"] <- "Odds_ratio"
+  names(means)[names(means) == "ratio"] <- "Ratio"
+  names(means)[names(means) == "t.ratio"] <- "t"
+  names(means)[names(means) == "z.ratio"] <- "z"
+  names(means)[names(means) == "p.value"] <- "p"
+  names(means)[names(means) == "lower.CL"] <- "CI_low"
+  names(means)[names(means) == "upper.CL"] <- "CI_high"
+  names(means)[names(means) == "asymp.LCL"] <- "CI_low"
+  names(means)[names(means) == "asymp.UCL"] <- "CI_high"
+  means
+}
+
+
+
+
+#' @keywords internal
+.clean_names_bayesian <- function(means, model, transform, type = "mean") {
+  vars <- names(means)[names(means) %in% c("Median", "Mean", "MAP")]
+  if (length(vars) == 1) {
+    if (type == "contrast") {
+      if (insight::model_info(model)$is_logit & transform == "response") {
+        names(means)[names(means) == vars] <- "Odds_ratio"
+      } else if (insight::model_info(model)$is_poisson & transform == "response") {
+        names(means)[names(means) == vars] <- "Ratio"
+      } else {
+        names(means)[names(means) == vars] <- "Difference"
+      }
+    } else {
+      if (insight::model_info(model)$is_logit & transform == "response") {
+        names(means)[names(means) == vars] <- "Probability"
+      } else {
+        names(means)[names(means) == vars] <- "Mean"
+      }
+    }
+  }
+  means$CI <- NULL
+  means$ROPE_CI <- NULL
+  means$ROPE_low <- NULL
+  means$ROPE_high <- NULL
+  means$Parameter <- NULL
+  means
+}
+
+
+# Table Formating ----------------------------------------------------------
+
+
+.estimate_add_footer <- function(x, args = NULL, type = "means", adjust = NULL) {
+  table_footer <- ""
+
+  # Levels
+  if(length(args$levels) > 0) {
+    table_footer <- paste0(table_footer,
+                           "\nMarginal ",
+                           type,
+                           " estimated for ",
+                           paste0(args$levels, collapse = ", "))
+
+  }
+
+  # P-value adjustment footer
+  if (!is.null(adjust) && "p" %in% names(x)) {
+    if (adjust == "none") {
+      table_footer <- paste0(table_footer, "\np-values are uncorrected.")
+    } else {
+      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(adjust))
+    }
+  }
+
+  if(table_footer == "") table_footer <- NULL
+  c(table_footer, "blue")
 }

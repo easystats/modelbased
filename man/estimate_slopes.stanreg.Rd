@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_slopes.R
 \name{estimate_slopes.stanreg}
 \alias{estimate_slopes.stanreg}
-\title{Estimate the slopes of a numeric predictor (over different factor levels)}
+\title{Estimate the marginal slope of a numeric predictor (over different factor levels)}
 \usage{
 \method{estimate_slopes}{stanreg}(
   model,
@@ -21,58 +21,15 @@
 )
 }
 \arguments{
-\item{model}{A Bayesian model.}
-
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
 
 \item{levels}{A character vector indicating the variables over which the
 slope will be computed. If NULL (default), it will select all the remaining
 predictors.}
-
-\item{transform}{Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"}  will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
-
-\item{standardize}{If \code{TRUE}, adds standardized differences or
-coefficients.}
-
-\item{standardize_robust}{Robust standardization through \code{MAD} (Median
-Absolute Deviation, a robust estimate of SD) instead of regular \code{SD}.}
-
-\item{ci}{Credible Interval (CI) level. Default to 0.89 (89\%). See
-\code{\link[bayestestR]{ci}} for further details.}
-
-\item{centrality}{The point-estimates (centrality indices) to compute.  Character (vector) or list with one or more of these options: \code{"median"}, \code{"mean"}, \code{"MAP"} or \code{"all"}.}
-
-\item{ci_method}{The type of index used for Credible Interval. Can be
-\code{"HDI"} (default, see \code{\link[bayestestR:hdi]{hdi}}), \code{"ETI"}
-(see \code{\link[bayestestR:eti]{eti}}) or \code{"SI"}
-(see \code{\link[bayestestR:si]{si}}).}
-
-\item{test}{The indices of effect existence to compute. Character (vector) or
-list with one or more of these options: \code{"p_direction"} (or \code{"pd"}),
-\code{"rope"}, \code{"p_map"}, \code{"equivalence_test"} (or \code{"equitest"}),
-\code{"bayesfactor"} (or \code{"bf"}) or \code{"all"} to compute all tests.
-For each "test", the corresponding \pkg{bayestestR} function is called
-(e.g. \code{\link[bayestestR:rope]{rope}} or \code{\link[bayestestR:p_direction]{p_direction}}) and its results
-included in the summary output.}
-
-\item{rope_range}{ROPE's lower and higher bounds. Should be a list of two
-values (e.g., \code{c(-0.1, 0.1)}) or \code{"default"}. If \code{"default"},
-the bounds are set to \code{x +- 0.1*SD(response)}.}
-
-\item{rope_ci}{The Credible Interval (CI) probability, corresponding to the
-proportion of HDI, to use for the percentage in ROPE.}
-
-\item{...}{Arguments passed to or from other methods.}
 }
 \description{
-Estimate the slopes of a numeric predictor (over different factor levels)
+Estimate the marginal slope of a numeric predictor (over different factor levels)
 }
 \examples{
 library(modelbased)

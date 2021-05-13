@@ -28,6 +28,8 @@ estimate_prediction(
 estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 }
 \arguments{
+\item{model}{A statistical model.}
+
 \item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).}
 
 \item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
