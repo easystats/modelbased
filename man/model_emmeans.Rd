@@ -28,6 +28,8 @@ from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 number of data points.}
 
 \item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}.}
+
+\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
 An \code{emmeans} object.

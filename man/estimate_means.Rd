@@ -10,27 +10,29 @@ estimate_means(
   fixed = NULL,
   modulate = NULL,
   transform = "response",
-  length = 10,
-  centrality = "median",
   ci = 0.95,
-  ci_method = "hdi",
   ...
 )
 }
 \arguments{
-\item{transform}{Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"}  will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
+\item{model}{A statistical model.}
 
-\item{length}{Length of the spread numeric variables.}
+\item{levels}{A character vector or formula specifying the names of the
+predicting factors over which to estimate means or contrasts.}
 
-\item{centrality, ci, ci_method}{Arguments for Bayesian models.}
+\item{fixed}{A character vector indicating the names of the predictors to be
+"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
-\item{...}{Arguments passed to or from other methods.}
+\item{modulate}{A character vector indicating the names of a numeric variable
+along which the means or the contrasts will be estimated. Other arguments
+from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
+number of data points.}
+
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}.}
+
+\item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
+
+\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
 A dataframe of estimated marginal means.

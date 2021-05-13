@@ -21,6 +21,17 @@
 \arguments{
 \item{model}{A Bayesian model.}
 
+\item{levels}{A character vector or formula specifying the names of the
+predicting factors over which to estimate means or contrasts.}
+
+\item{fixed}{A character vector indicating the names of the predictors to be
+"fixed" (i.e., maintained), so that the estimation is made at these values.}
+
+\item{modulate}{A character vector indicating the names of a numeric variable
+along which the means or the contrasts will be estimated. Other arguments
+from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
+number of data points.}
+
 \item{transform}{Can be \code{"none"} (default for contrasts),
 \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
 \code{"log"}. \code{"none"}  will leave the values on scale of the linear

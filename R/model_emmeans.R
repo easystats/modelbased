@@ -11,7 +11,14 @@
 #'   along which the means or the contrasts will be estimated. Other arguments
 #'   from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 #'   number of data points.
-#' @param transform Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}.
+#' @param transform Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
+#'   \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
+#'   \code{"log"}. \code{"none"} will leave the values on scale of the linear
+#'   predictors. \code{"response"} will transform them on scale of the response
+#'   variable. Thus for a logistic model, \code{"none"} will give estimations
+#'   expressed in log-odds (probabilities on logit scale) and \code{"response"}
+#'   in terms of probabilities.
+#' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
 #'
 #' @return An \code{emmeans} object.
 #' @examples
@@ -139,12 +146,6 @@ model_emmeans <- function(model,
 }
 
 
-
-
-
-
-
-
 #' @keywords internal
 .guess_arguments_levels <- function(model, levels = NULL) {
 
@@ -179,6 +180,10 @@ model_emmeans <- function(model,
 }
 
 
+
+# Cleaning ----------------------------------------------------------------
+
+
 #' @keywords internal
 .clean_argument <- function(arg) {
   if (!is.null(arg)) {
@@ -187,4 +192,7 @@ model_emmeans <- function(model,
     arg
   }
 }
+
+
+
 

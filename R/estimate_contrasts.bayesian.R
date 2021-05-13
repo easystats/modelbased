@@ -50,9 +50,28 @@ estimate_contrasts <- function(model,
 #' @examples
 #' library(modelbased)
 #'
+#' model <- lm(Sepal.Width ~ Species, data = iris)
+#' estimate_contrasts(model)
+#'
+#' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+#' estimate_contrasts(model)
+#' estimate_contrasts(model, fixed = "Petal.Width")
+#' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+#' estimate_contrasts(model, levels = "Petal.Width", length = 4)
+#'
+#' if (require("lme4")) {
+#'   data <- iris
+#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
+#'   model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+#'   estimate_contrasts(model)
+#' }
+#'
+#'
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
+#'
 #' \dontrun{
 #' if (require("rstanarm")) {
 #'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)

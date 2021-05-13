@@ -33,7 +33,7 @@ estimate_slopes <- function(model,
 
 
 
-#' Estimate the slopes of a numeric predictor (over different factor levels)
+#' Estimate the marginal slope of a numeric predictor (over different factor levels)
 #'
 #' @inheritParams estimate_slopes
 #' @inheritParams estimate_contrasts.stanreg
