@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_means.R
 \name{estimate_means}
 \alias{estimate_means}
-\title{Estimate average value of response variable at each factor levels}
+\title{Estimated Marginal Means (Model-based Average at each Factor Level)}
 \usage{
 estimate_means(
   model,
@@ -44,7 +44,8 @@ in terms of probabilities.}
 A dataframe of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor levels
+Estimate average value of response variable at each factor levels. See also other
+functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 }
 \examples{
 library(modelbased)

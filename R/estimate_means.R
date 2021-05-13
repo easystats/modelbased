@@ -1,4 +1,7 @@
-#' Estimate average value of response variable at each factor levels
+#' Estimate Marginal Means (Model-based Average at each Factor Level)
+#'
+#' Estimate average value of response variable at each factor levels. See also other
+#' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams model_emmeans
 #' @param ci Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).

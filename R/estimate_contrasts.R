@@ -1,6 +1,7 @@
-#' Estimate contrasts between factor levels
+#' Estimate Marginal Contrasts
 #'
-#' Run a contrast analysis.
+#' Run a contrast analysis by estimating the differences between each level of a factor. See also other
+#' related functions such as \code{\link{estimate_means}} and \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams estimate_means
 #' @param adjust The p-values adjustment method for frequentist multiple comparisons. Can be
