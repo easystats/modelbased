@@ -100,8 +100,8 @@ estimate_response <- estimate_prediction
     data = data,
     predict = predict,
     ci = ci,
-    dispersion_function = "mad",
-    interval_function = "hdi",
+    dispersion_method = "mad",
+    ci_method = "hdi",
     ...
   )
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)

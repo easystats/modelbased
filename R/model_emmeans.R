@@ -145,7 +145,7 @@ model_emmeans <- function(model,
   )
 }
 
-
+#' @importFrom utils tail
 #' @keywords internal
 .guess_arguments_levels <- function(model, levels = NULL) {
 
@@ -161,7 +161,7 @@ model_emmeans <- function(model,
   } else if (class(levels) == "formula") {
 
     # Transform to string and keep predictors
-    levels <- as.character(tail(as.list(levels), 1))
+    levels <- as.character(utils::tail(as.list(levels), 1))
     # Remove white spaces
     levels <- gsub(" ", "", levels, fixed = TRUE)
     # Separate fixed from interactions

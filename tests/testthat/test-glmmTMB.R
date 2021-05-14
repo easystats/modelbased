@@ -29,39 +29,39 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
 
   test_that("estimate_contrasts - glmmTMB", {
     estim <- estimate_contrasts(model)
-    expect_equal(c(nrow(estim), ncol(estim)), c(1, 10))
+    expect_equal(dim(estim), c(1, 9))
     expect_equal(estim$Difference, -1.141923, tolerance = 1e-1)
     expect_equal(c(estim$Level1[1], estim$Level2[1]), c("yes", "no"))
 
     estim <- estimate_contrasts(model, component = "zi")
-    expect_equal(c(nrow(estim), ncol(estim)), c(1, 10))
+    expect_equal(dim(estim), c(1, 9))
     expect_equal(estim$Difference, 1.736067, tolerance = 1e-1)
     expect_equal(c(estim$Level1[1], estim$Level2[1]), c("yes", "no"))
   })
 
   test_that("estimate_slope - glmmTMB", {
-    estim <- estimate_slopes(model2, trend = "cover")
+    estim <- estimate_slopes(model2, trend = "cover", transform = "response")
     estim2 <- as.data.frame(emmeans::emtrends(model2, "mined", var = "cover", transform = "response"))
     expect_equal(estim$Coefficient, estim2$cover.trend, tolerance = 1e-2)
   })
 
   test_that("estimate_smooth - glmmTMB", {
-    model <- suppressWarnings(glmmTMB::glmmTMB(Sepal.Width ~ poly(Petal.Length, 2) + (1 | Species), data = iris))
-    estim <- estimate_smooth(model, smooth = "Petal.Length")
+    model <- suppressWarnings(glmmTMB::glmmTMB(Sepal.Width ~ Species * poly(Petal.Length, 2) + (1 | Species), data = iris))
+    estim <- describe_nonlinear(model, nonlinear = "Petal.Length")
   })
 
   test_that("estimate_response - glmmTMB", {
     estim <- estimate_response(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(nrow(data), 7))
+    expect_equal(dim(estim), c(nrow(data), 8))
   })
 
   test_that("estimate_link - glmmTMB", {
-    estim <- estimate_link(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(20, 6))
+    estim <- estimate_link(model2, preserve_range = FALSE)
+    expect_equal(dim(estim), c(20, 6))
   })
 
   test_that("estimate_response - glmmTMB", {
     estim <- estimate_response(model2)
-    expect_equal(c(nrow(estim), ncol(estim)), c(644, 7))
+    expect_equal(dim(estim), c(644, 8))
   })
 }
