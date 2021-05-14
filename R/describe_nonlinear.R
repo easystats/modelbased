@@ -1,0 +1,180 @@
+#' Describe the smooth term (for GAMs) or non-linear predictors
+#'
+#' This function summarises the smooth term trend in terms of linear segments.
+#' Using the aproximative derivative, it separates a non-linear vector into
+#' quasi-linear segments (in which the trend is either positive or negative).
+#' Each of this segment its characterized by its beginning, end, size (in
+#' proportion, relative to the total size) trend (the linear regression
+#' coefficient) and linearity (the R2 of the linear regression).
+#'
+#' @param nonlinear A character indicating the name of the "smooth" term
+#' @inheritParams estimate_slopes
+#' @param smooth Same as \code{nonlinear} (added for compatibility reasons with old API).
+#'
+#' @examples
+#' library(modelbased)
+#'
+#' # Create data
+#' data <- data.frame(x = rnorm(200))
+#' data$y <- data$x^2 + rnorm(200, 0, 0.5)
+#'
+#' model <- lm(y ~ poly(x, 2), data = data)
+#'
+#'
+#'
+#' \donttest{
+#' if (require("rstanarm")) {
+#'   # model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris, refresh = 0)
+#'   # estimate_smooth(model)
+#'
+#'   # model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
+#'   # estimate_smooth(model)
+#'
+#'   # model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data = iris)
+#'   # estimate_smooth(model)
+#'
+#'   # model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data = iris)
+#'   # estimate_smooth(model)
+#'   # estimate_smooth(model, levels = "Species")
+#' }
+#' }
+#' @return A dataframe of linear description of non-linear terms.
+#' @importFrom insight find_predictors get_data find_random
+#' @importFrom stats mad median sd setNames predict loess
+#' @export
+describe_nonlinear <- function(model, nonlinear = NULL, levels = NULL, smooth = nonlinear, ...) {
+  # Guess specs arguments
+  args <- .estimate_slopes_guess_args(model, nonlinear, levels, ...)
+  #
+  # # Segmentation
+  # if (!is.null(levels)) {
+  #   description <- data.frame()
+  #   groups <- visualisation_matrix(smooth_data[levels])
+  #   for (row in 1:nrow(groups)) {
+  #     data <- smooth_data
+  #     for (col in names(groups)) {
+  #       data <- data[data[[col]] == groups[row, col], ]
+  #       current_description <- .describe_smooth(data$Predicted)
+  #       current_description$Start <- data[current_description$Start, smooth]
+  #       current_description$End <- data[current_description$End, smooth]
+  #       group <- as.data.frame(groups[rep(row, nrow(current_description)), ])
+  #       names(group) <- names(groups)
+  #       current_description <- cbind(
+  #         group,
+  #         current_description
+  #       )
+  #       description <- rbind(
+  #         description,
+  #         current_description
+  #       )
+  #     }
+  #   }
+  # } else {
+  #   description <- .describe_smooth(smooth_data$Predicted)
+  #
+  #   description$Start <- smooth_data[description$Start, smooth]
+  #   description$End <- smooth_data[description$End, smooth]
+  # }
+  #
+  # attributes(description) <- c(
+  #   attributes(description),
+  #   list(
+  #     smooth = smooth,
+  #     levels = levels,
+  #     transform = transform,
+  #     response = insight::find_response(model)
+  #   )
+  # )
+  # class(description) <- c("estimate_smooth", class(description))
+  # description
+}
+
+#' @rdname describe_nonlinear
+#' @export
+estimate_smooth <- describe_nonlinear
+
+
+
+
+# Utils -------------------------------------------------------------------
+
+
+#' @keywords internal
+.describe_smooth <- function(smooth_values) {
+  inversions <- find_inversions(smooth_values)
+
+  # Add beginning and end
+  if (all(is.na(inversions))) {
+    parts <- c(1, length(smooth_values))
+  } else {
+    if (inversions[1] != 1) {
+      parts <- c(1, inversions)
+    } else {
+      parts <- inversions
+    }
+    if (utils::tail(inversions, 1) < length(smooth_values)) {
+      parts <- c(parts, length(smooth_values))
+    }
+  }
+  n_parts <- length(parts) - 1
+
+  df <- data.frame()
+  for (part in 1:n_parts) {
+    range <- parts[(1 * part):(1 * part + 1)]
+    segment <- smooth_values[range[1]:range[2]]
+
+    segment_df <- cbind(
+      data.frame(
+        "Part" = part,
+        "Start" = range[1],
+        "End" = range[2],
+        "Size" = length(segment) / length(smooth_values)
+      ),
+      .describe_segment(segment, range)
+    )
+
+    df <- rbind(df, segment_df)
+  }
+
+  df
+}
+
+
+
+#' @keywords internal
+.describe_segment <- function(segment, range, smoothness = FALSE) {
+  # Smoothness
+  if (smoothness) {
+    if (length(segment) < 10) {
+      smoothness <- NA
+    } else {
+      smoothness <- as.numeric(parameters::smoothness(segment, method = "cor", lag = 0.1))
+    }
+  }
+
+
+  if (length(segment) < 3) {
+    trend <- NA
+    linearity <- NA
+  } else {
+    model <- stats::lm(y ~ x,
+                       data = data.frame(
+                         "y" = segment,
+                         "x" = seq(range[1], range[2], length.out = length(segment))
+                       )
+    )
+
+    trend <- as.numeric(stats::coef(model)[2])
+    linearity <- as.numeric(summary(model)$r.squared)
+  }
+
+  out <- data.frame(
+    "Trend" = trend,
+    "Linearity" = linearity
+  )
+  if (smoothness != FALSE) {
+    out$Smoothness <- smoothness
+  }
+
+  out
+}

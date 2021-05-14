@@ -2,33 +2,13 @@
 % Please edit documentation in R/estimate_slopes.R
 \name{estimate_slopes}
 \alias{estimate_slopes}
-\alias{estimate_slopes.glmmTMB}
-\title{Estimate the slopes of a numeric predictor (over different factor levels)}
+\title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(
-  model,
-  trend = NULL,
-  levels = NULL,
-  transform = "response",
-  standardize = TRUE,
-  standardize_robust = FALSE,
-  ci = 0.95,
-  ...
-)
-
-\method{estimate_slopes}{glmmTMB}(
-  model,
-  trend = NULL,
-  levels = NULL,
-  transform = "response",
-  standardize = TRUE,
-  standardize_robust = FALSE,
-  ci = 0.95,
-  component = c("conditional", "zero_inflated", "zi"),
-  ...
-)
+estimate_slopes(model, trend = NULL, levels = NULL, ci = 0.95, ...)
 }
 \arguments{
+\item{model}{A statistical model.}
+
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
 
@@ -36,18 +16,24 @@ for which to compute the slopes.}
 slope will be computed. If NULL (default), it will select all the remaining
 predictors.}
 
-\item{component}{A character vector indicating the model component for which
-estimation is requested. Only applies to models from \pkg{glmmTMB}. Use
-\code{"conditional"} for the count-model or \code{"zero_inflate"} or
-\code{"zi"} for the zero-inflation model.}
+\item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
+
+\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
-A data frame of slopes.
+A data.frame.
 }
 \description{
-See the documentation for your object's class:
-\itemize{
- \item{\link[=estimate_slopes.lm]{Frequentist models}}
- \item{\link[=estimate_slopes.stanreg]{Bayesian models (stanreg and brms)}}
- }
+Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
+related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
+}
+\examples{
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+estimate_slopes(model)
+
+\dontrun{
+if (require("rstanarm")) {
+  model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
+  estimate_slopes(model)
+}}
 }

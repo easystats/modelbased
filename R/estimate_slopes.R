@@ -10,17 +10,17 @@
 #' @param levels A character vector indicating the variables over which the
 #'   slope will be computed. If NULL (default), it will select all the remaining
 #'   predictors.
-#' @param component A character vector indicating the model component for which
-#'   estimation is requested. Only applies to models from \pkg{glmmTMB}. Use
-#'   \code{"conditional"} for the count-model or \code{"zero_inflate"} or
-#'   \code{"zi"} for the zero-inflation model.
-#'
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' estimate_slopes(model)
 #'
-#' @return A data frame of slopes.
+#' \dontrun{
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
+#'   estimate_slopes(model)
+#' }}
+#' @return A data.frame.
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,
@@ -31,61 +31,43 @@ estimate_slopes <- function(model,
   insight::check_if_installed("emmeans")
 
   # Guess specs arguments
-  args <- .estimate_slopes_guess_args(model, trend, levels)
+  args <- .estimate_slopes_guess_args(model, trend, levels, ...)
 
   # Run emtrends
-  trends <-emmeans::emtrends(model, levels, var = trend, ...)
+  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, ...)
 
-
+  # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    params <- as.data.frame(trends)
-    rownames(params) <- NULL
-
-    # Remove the posterior summary
-    params <- params[names(params) %in% names(data)]
-
-    # Summary
-    slopes <- .summarize_posteriors(trends,
-                                    ci = ci, ci_method = ci_method,
-                                    centrality = centrality,
-                                    test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
-    )
-    slopes$Parameter <- NULL
-    slopes <- cbind(params, slopes)
+    trends <- bayestestR::describe_posterior(estimated, ci = ci, ...)
+    trends <- cbind(estimated@grid, trends)
+    trends$`.wgt.` <- NULL  # Drop the weight column
+    trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
+    trends <- insight::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
   } else {
-    params <- as.data.frame(stats::confint(trends, levels = ci, ...))
-    slopes <- .clean_names_frequentist(params)
-    names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
+    trends <- parameters::parameters(estimated, ci = ci, ...)
   }
-
 
   # Standardized slopes
-  if (standardize) {
-    slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
-  }
+  # if (standardize) {
+  #   slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
+  # }
 
   # Restore factor levels
-  slopes <- insight::data_restoretype(slopes, insight::get_data(model))
+  trends <- insight::data_restoretype(trends, insight::get_data(model))
 
 
-  attributes(slopes) <- c(
-    attributes(slopes),
+  attributes(trends) <- c(
+    attributes(trends),
     list(
       levels = levels,
       trend = trend,
-      transform = transform,
       ci = ci,
-      ci_method = ci_method,
-      rope_range = rope_range,
-      rope_ci = rope_ci,
       response = insight::find_response(model)
     )
   )
 
-  class(slopes) <- c("estimate_slopes", class(slopes))
-
-  slopes
-
+  class(trends) <- c("estimate_slopes", class(trends))
+  trends
 }
 
 
@@ -96,10 +78,10 @@ estimate_slopes <- function(model,
 # Utilities ---------------------------------------------------------------
 
 
-
-.estimate_slopes_guess_args <- function(model, trend, levels){
+#' @keywords internal
+.estimate_slopes_guess_args <- function(model, trend, levels, ...){
   # Gather info
-  predictors <- insight::find_predictors(model, ...)
+  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
   data <- insight::get_data(model)
 
   # Guess arguments

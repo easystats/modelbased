@@ -36,24 +36,30 @@
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_relation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
-  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "relation", ...)
+estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
+  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "expectation", ...)
 }
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
+#' @export
+estimate_relation <- estimate_expectation
+
+
+
+#' @rdname estimate_expectation
 #' @export
 estimate_link <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
   .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "link", ...)
 }
 
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
 #' @export
 estimate_prediction <- function(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...) {
   .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "prediction", ...)
 }
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
 #' @export
 estimate_response <- estimate_prediction
 
@@ -63,7 +69,7 @@ estimate_response <- estimate_prediction
 # Internal ----------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted <- function(model, data = "grid", predict = "relation", ci = 0.95, keep_iterations = FALSE, ...) {
+.estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
 
   # Get data ----------------
   if (is.null(data)) {
@@ -75,6 +81,15 @@ estimate_response <- estimate_prediction
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }
+
+  # Get response for later residuals -------------
+  if(insight::find_response(model) %in% names(data)) {
+    resid <- data[[insight::find_response(model)]]
+  } else {
+    resid <- NULL
+  }
+
+  # Keep only predictors --------
   data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
 
   # Restore factor levels
@@ -91,6 +106,11 @@ estimate_response <- estimate_prediction
   )
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
+
+  # Add residuals
+  if(!is.null(resid)) {
+    out$Residuals <- out$Predicted - resid
+  }
 
   # Store relevant information
   attr(out, "ci") <- ci

@@ -155,12 +155,14 @@ estimate_means <- function(model,
       } else {
         names(means)[names(means) == vars] <- "Difference"
       }
-    } else {
+    } else if (type == "mean") {
       if (insight::model_info(model)$is_logit & transform == "response") {
         names(means)[names(means) == vars] <- "Probability"
       } else {
         names(means)[names(means) == vars] <- "Mean"
       }
+    } else {
+      names(means)[names(means) == vars] <- "Coefficient"
     }
   }
   means$CI <- NULL

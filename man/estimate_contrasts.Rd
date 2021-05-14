@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_contrasts.R
 \name{estimate_contrasts}
 \alias{estimate_contrasts}
-\title{Estimate contrasts between factor levels}
+\title{Estimate Marginal Contrasts}
 \usage{
 estimate_contrasts(
   model,
@@ -50,7 +50,8 @@ one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
 A data frame of estimated contrasts.
 }
 \description{
-Run a contrast analysis.
+Run a contrast analysis by estimating the differences between each level of a factor. See also other
+related functions such as \code{\link{estimate_means}} and \code{\link{estimate_slopes}}.
 }
 \examples{
 library(modelbased)
