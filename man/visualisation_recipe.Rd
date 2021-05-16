@@ -2,7 +2,7 @@
 % Please edit documentation in R/visualisation_recipe.R
 \name{visualisation_recipe}
 \alias{visualisation_recipe}
-\title{Visualization helper}
+\title{Visualization helper (TODO)}
 \usage{
 visualisation_recipe(x, ...)
 }
@@ -12,7 +12,7 @@ visualisation_recipe(x, ...)
 \item{...}{Other arguments passed to other functions.}
 }
 \description{
-Visualization helper
+Visualization helper (TODO)
 }
 \examples{
 library(modelbased)

@@ -37,6 +37,7 @@ Imports:
     graphics,
     insight (>= 0.13.2),
     parameters (>= 0.13.0),
+    performance,
     stats,
     utils
 Suggests:
@@ -61,7 +62,10 @@ Suggests:
     see,
     testthat,
     spelling
-Remotes: easystats/insight
+Remotes: 
+    easystats/insight
+    easystats/bayestestR
+    easystats/parameters
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3

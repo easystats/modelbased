@@ -5,41 +5,23 @@
 \alias{estimate_smooth}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-describe_nonlinear(
-  model,
-  nonlinear = NULL,
-  levels = NULL,
-  smooth = nonlinear,
-  ...
-)
+describe_nonlinear(data, y = NULL, x = NULL, ...)
 
-estimate_smooth(
-  model,
-  nonlinear = NULL,
-  levels = NULL,
-  smooth = nonlinear,
-  ...
-)
+estimate_smooth(data, y = NULL, x = NULL, ...)
 }
 \arguments{
-\item{model}{A statistical model.}
+\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 
 \item{nonlinear}{A character indicating the name of the "smooth" term}
 
-\item{levels}{A character vector indicating the variables over which the
-slope will be computed. If NULL (default), it will select all the remaining
-predictors.}
-
 \item{smooth}{Same as \code{nonlinear} (added for compatibility reasons with old API).}
-
-\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
 A dataframe of linear description of non-linear terms.
 }
 \description{
 This function summarises the smooth term trend in terms of linear segments.
-Using the aproximative derivative, it separates a non-linear vector into
+Using the approximative derivative, it separates a non-linear vector into
 quasi-linear segments (in which the trend is either positive or negative).
 Each of this segment its characterized by its beginning, end, size (in
 proportion, relative to the total size) trend (the linear regression
@@ -52,24 +34,7 @@ library(modelbased)
 data <- data.frame(x = rnorm(200))
 data$y <- data$x^2 + rnorm(200, 0, 0.5)
 
-model <- lm(y ~ poly(x, 2), data = data)
+model <- lm(y ~ poly(x, 2), data = iris[1:50, ])
+link_data <- estimate_relation(model, length = 100, preserve_range = FALSE)
 
-
-
-\donttest{
-if (require("rstanarm")) {
-  # model <- stan_gamm4(Sepal.Width ~ s(Petal.Length), data = iris, refresh = 0)
-  # estimate_smooth(model)
-
-  # model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
-  # estimate_smooth(model)
-
-  # model <- stan_gamm4(Sepal.Width ~ Species + s(Petal.Length), data = iris)
-  # estimate_smooth(model)
-
-  # model <- stan_glm(Sepal.Width ~ Species * poly(Petal.Length, 2), data = iris)
-  # estimate_smooth(model)
-  # estimate_smooth(model, levels = "Species")
-}
-}
 }
