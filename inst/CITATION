@@ -1,11 +1,11 @@
 bibentry(
     bibtype="Article",
 	title="Estimation of Model-Based Predictions, Contrasts and Means.",
-	author=c(person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Daniel", "Lüdecke")),
+	author=c(person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Indrajeet", "Patil"), person("Daniel", "Lüdecke")),
     journal="CRAN",
     doi="",
 	year="2020",
 	url="https://github.com/easystats/modelbased",
-	textVersion = "Makowski, D., Ben-Shachar, M. S. & Lüdecke, D. (2020). *Estimation of Model-Based Predictions, Contrasts and Means*. CRAN.",
+	textVersion = "Makowski, D., Ben-Shachar, M. S., Patil, I., & Lüdecke, D. (2020). *Estimation of Model-Based Predictions, Contrasts and Means*. CRAN.",
 	mheader = "To cite 'modelbased' in publications use:"
 )

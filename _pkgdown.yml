@@ -5,13 +5,15 @@ authors:
     href: https://github.com/strengejacke
   Mattan S. Ben-Shachar:
     href: https://github.com/mattansb
-    
+  Indrajeet Patil:
+    href: https://sites.google.com/site/indrajeetspatilmorality/
+
 template:
   params:
     bootswatch: cosmo
 
- 
-  
+
+
 navbar:
   type: default
   left:
@@ -33,5 +35,5 @@ navbar:
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'
         href: articles/estimate_smooth.html
-      
+
 
