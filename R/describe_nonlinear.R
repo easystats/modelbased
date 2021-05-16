@@ -7,9 +7,9 @@
 #' proportion, relative to the total size) trend (the linear regression
 #' coefficient) and linearity (the R2 of the linear regression).
 #'
-#' @param nonlinear A character indicating the name of the "smooth" term
-#' @inheritParams estimate_slopes
-#' @param smooth Same as \code{nonlinear} (added for compatibility reasons with old API).
+#' @param data The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.
+#' @param x,y The name of the respones variable (\code{y}) predicting variable (\code{x}).
+#' @param ... Other arguments to be passed to or from.
 #'
 #' @examples
 #' library(modelbased)
@@ -18,8 +18,10 @@
 #' data <- data.frame(x = rnorm(200))
 #' data$y <- data$x^2 + rnorm(200, 0, 0.5)
 #'
-#' model <- lm(y ~ poly(x, 2), data = iris[1:50, ])
-#' link_data <- estimate_relation(model, length = 100, preserve_range = FALSE)
+#' model <- lm(y ~ poly(x, 2), data = data)
+#' link_data <- estimate_relation(model, length = 100)
+#'
+#' describe_nonlinear(link_data, x = "x")
 #'
 #' @return A dataframe of linear description of non-linear terms.
 #' @importFrom insight find_predictors get_data find_random
@@ -28,17 +30,6 @@
 describe_nonlinear <- function(data, y = NULL, x = NULL, ...) {
   UseMethod("describe_nonlinear")
 }
-
-
-
-# describe_nonlinear.data.frame <- function(data, x = NULL, y = "Predicted", ...) {
-#   info <- attributes(data)
-#
-#   link_data <- estimate_relation(model, length = 100, preserve_range = FALSE)[1:100, ]
-#   xname <- "x"
-#   yname <- "Predicted"
-#
-# }
 
 
 

@@ -10,11 +10,7 @@ describe_nonlinear(data, y = NULL, x = NULL, ...)
 estimate_smooth(data, y = NULL, x = NULL, ...)
 }
 \arguments{
-\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
-
-\item{nonlinear}{A character indicating the name of the "smooth" term}
-
-\item{smooth}{Same as \code{nonlinear} (added for compatibility reasons with old API).}
+\item{data}{The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.}
 }
 \value{
 A dataframe of linear description of non-linear terms.
@@ -34,7 +30,9 @@ library(modelbased)
 data <- data.frame(x = rnorm(200))
 data$y <- data$x^2 + rnorm(200, 0, 0.5)
 
-model <- lm(y ~ poly(x, 2), data = iris[1:50, ])
-link_data <- estimate_relation(model, length = 100, preserve_range = FALSE)
+model <- lm(y ~ poly(x, 2), data = data)
+link_data <- estimate_relation(model, length = 100)
+
+describe_nonlinear(link_data, x = "x")
 
 }
