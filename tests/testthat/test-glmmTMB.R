@@ -45,10 +45,6 @@ if (require("testthat") && require("modelbased") && require("glmmTMB") && requir
     expect_equal(estim$Coefficient, estim2$cover.trend, tolerance = 1e-2)
   })
 
-  test_that("estimate_smooth - glmmTMB", {
-    model <- suppressWarnings(glmmTMB::glmmTMB(Sepal.Width ~ Species * poly(Petal.Length, 2) + (1 | Species), data = iris))
-    estim <- describe_nonlinear(model, nonlinear = "Petal.Length")
-  })
 
   test_that("estimate_response - glmmTMB", {
     estim <- estimate_response(model2)

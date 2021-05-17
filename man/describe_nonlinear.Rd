@@ -12,7 +12,7 @@ estimate_smooth(data, x = NULL, y = NULL, ...)
 \arguments{
 \item{data}{The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.}
 
-\item{x, y}{The name of the respones variable (\code{y}) predicting variable (\code{x}).}
+\item{x, y}{The name of the responses variable (\code{y}) predicting variable (\code{x}).}
 
 \item{...}{Other arguments to be passed to or from.}
 }
