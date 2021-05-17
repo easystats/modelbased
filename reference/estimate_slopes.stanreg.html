@@ -68,8 +68,6 @@
 
 
 
-<!-- dependencies from examples -->
-
 
   
 
@@ -165,7 +163,7 @@
     <p>Estimate the slopes of a numeric predictor (over different factor levels)</p>
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for stanreg</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='co'># S3 method for stanreg</span>
 <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span><span class='op'>(</span>
   <span class='va'>model</span>,
   trend <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -180,7 +178,7 @@
   rope_range <span class='op'>=</span> <span class='st'>"default"</span>,
   rope_ci <span class='op'>=</span> <span class='fl'>1</span>,
   <span class='va'>...</span>
-<span class='op'>)</span></pre>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -265,7 +263,7 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span></span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
@@ -274,8 +272,8 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 1).</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: Gradient evaluation took 3.6e-05 seconds</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.36 seconds.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: Gradient evaluation took 2.4e-05 seconds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: 1000 transitions using 10 leapfrog steps per transition would take 0.24 seconds.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: Adjust your expectations accordingly!</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
@@ -292,15 +290,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:  Elapsed Time: 0.844208 seconds (Warm-up)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                0.866935 seconds (Sampling)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                1.71114 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:  Elapsed Time: 0.828335 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                0.839606 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1:                1.66794 seconds (Total)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 1: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 2).</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: Gradient evaluation took 1.4e-05 seconds</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.14 seconds.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: Gradient evaluation took 1.1e-05 seconds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: 1000 transitions using 10 leapfrog steps per transition would take 0.11 seconds.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: Adjust your expectations accordingly!</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: </span>
@@ -317,15 +315,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:  Elapsed Time: 0.773056 seconds (Warm-up)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:                0.842529 seconds (Sampling)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:                1.61558 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:  Elapsed Time: 0.76516 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:                0.819608 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2:                1.58477 seconds (Total)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 2: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 3).</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: Gradient evaluation took 1.2e-05 seconds</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: Gradient evaluation took 1.3e-05 seconds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: Adjust your expectations accordingly!</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: </span>
@@ -342,15 +340,15 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:  Elapsed Time: 0.777415 seconds (Warm-up)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:                0.829474 seconds (Sampling)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:                1.60689 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:  Elapsed Time: 0.750939 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:                0.803673 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3:                1.55461 seconds (Total)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 3: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> SAMPLING FOR MODEL 'continuous' NOW (CHAIN 4).</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: Gradient evaluation took 1.3e-05 seconds</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.13 seconds.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: Gradient evaluation took 1.2e-05 seconds</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: 1000 transitions using 10 leapfrog steps per transition would take 0.12 seconds.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: Adjust your expectations accordingly!</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: </span>
@@ -367,9 +365,9 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: Iteration: 1800 / 2000 [ 90%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: Iteration: 2000 / 2000 [100%]  (Sampling)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:  Elapsed Time: 0.804027 seconds (Warm-up)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:                0.862558 seconds (Sampling)</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:                1.66658 seconds (Total)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:  Elapsed Time: 0.787526 seconds (Warm-up)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:                0.839553 seconds (Sampling)</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4:                1.62708 seconds (Total)</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Chain 4: </span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Species    | Median |        95% CI |     pd | % in ROPE | Std. Median</span>
@@ -378,7 +376,7 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |   0.36 | [ 0.18, 0.55] |   100% |     0.25% |        1.45</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> virginica  |   0.23 | [ 0.07, 0.38] | 99.85% |     5.88% |        0.93</span>
 <span class='r-in'><span class='co'># }</span></span>
-</pre>
+</code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -390,7 +388,7 @@ proportion of HDI, to use for the percentage in ROPE.</p></td>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>.</p></p>
+  <p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p></p>
 </div>
 
 <div class="pkgdown">
