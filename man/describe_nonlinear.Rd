@@ -5,12 +5,16 @@
 \alias{estimate_smooth}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-describe_nonlinear(data, y = NULL, x = NULL, ...)
+describe_nonlinear(data, x = NULL, y = NULL, ...)
 
-estimate_smooth(data, y = NULL, x = NULL, ...)
+estimate_smooth(data, x = NULL, y = NULL, ...)
 }
 \arguments{
 \item{data}{The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.}
+
+\item{x, y}{The name of the respones variable (\code{y}) predicting variable (\code{x}).}
+
+\item{...}{Other arguments to be passed to or from.}
 }
 \value{
 A dataframe of linear description of non-linear terms.

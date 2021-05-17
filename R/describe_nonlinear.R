@@ -27,7 +27,7 @@
 #' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-describe_nonlinear <- function(data, y = NULL, x = NULL, ...) {
+describe_nonlinear <- function(data, x = NULL, y = NULL, ...) {
   UseMethod("describe_nonlinear")
 }
 
@@ -42,7 +42,7 @@ describe_nonlinear.estimate_response <- function(data, x = NULL, ...) {
 
 
 #' @export
-describe_nonlinear.data.frame <- function(data, y = NULL, x = NULL, ...) {
+describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
   # Sanity check
   if(is.null(x) || !x %in% names(data)) {
     stop("The name of the predictor variable (`x`) must be correctly supplied.")
