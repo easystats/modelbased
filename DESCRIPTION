@@ -63,8 +63,8 @@ Suggests:
     testthat,
     spelling
 Remotes: 
-    easystats/insight
-    easystats/bayestestR
+    easystats/insight,
+    easystats/bayestestR,
     easystats/parameters
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
