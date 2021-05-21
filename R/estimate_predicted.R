@@ -34,6 +34,10 @@
 #'   estimate_response(model)
 #'   estimate_relation(model)
 #' }
+#'
+#' # Standardize predictions
+#' pred <- estimate_response(lm(mpg ~ wt, data = mtcars))
+#' effectsize::standardize(pred, include_response = FALSE)
 #' @return A dataframe of predicted values.
 #' @export
 estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
@@ -115,13 +119,11 @@ estimate_response <- estimate_prediction
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "response") <- insight::find_response(model)
+  attr(out, "model") <- model
+  attr(out, "table_title") <- c(paste0("Variable predicted: ", insight::find_response(model)), "blue")
 
   # Class
-  if(predict %in% c("link", "relation")) {
-    class(out) <- c("estimate_relation", "see_estimate_relation", class(out))
-  } else {
-    class(out) <- c("estimate_response", "see_estimate_response", class(out))
-  }
+  class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
 
   out
 }

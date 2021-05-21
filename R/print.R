@@ -14,7 +14,8 @@ print.estimate_slopes <- print.estimate_contrasts
 #' @export
 print.estimate_smooth <- print.estimate_contrasts
 
-
+#' @export
+print.estimate_predicted <- print.estimate_contrasts
 
 # Format ------------------------------------------------------------------
 
@@ -29,7 +30,8 @@ format.estimate_means <- format.estimate_contrasts
 #' @export
 format.estimate_slopes <- format.estimate_contrasts
 
-
+#' @export
+format.estimate_predicted <- format.estimate_contrasts
 
 #' @export
 format.estimate_smooth <- function(x, ...) {

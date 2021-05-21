@@ -8,6 +8,36 @@ standardize.visualisation_matrix <- function(x, ...) {
 
 
 
+
+
+
+#' @rdname estimate_expectation
+#' @export
+standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
+  # Get data of predictors
+  data <- insight::get_data(attributes(x)$model, ...)
+  data[[attributes(x)$response]] <- NULL  # Remove resp from data
+
+  # Standardize predictors
+  x[names(data)] <- effectsize::standardize(as.data.frame(x)[names(data)], reference = data)
+
+  # Standardize response
+  if(include_response == TRUE) {
+    resp <- insight::get_response(attributes(x)$model)
+    for(col in c("Predicted", "CI_low", "CI_high")) {
+      if(col %in% names(x)) {
+        x[col] <- effectsize::standardize(x[[col]], reference = resp)
+      }
+    }
+  }
+  x
+}
+
+
+
+
+
+
 #' @importFrom insight get_response model_info
 #' @importFrom stats sd mad
 #' @keywords internal
