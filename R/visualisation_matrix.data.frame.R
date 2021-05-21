@@ -35,6 +35,10 @@
 #' visualisation_matrix(data, target = c("Sepal.Length", "Species"), numerics = 0)
 #' visualisation_matrix(data, target = c("Sepal.Length = 3", "Species"))
 #' visualisation_matrix(data, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#'
+#' # Standardize
+#' vizdata <- visualisation_matrix(data, target = "Sepal.Length")
+#' effectsize::standardize(vizdata)
 #' @importFrom stats na.omit
 #' @export
 visualisation_matrix <- function(x, ...) {
@@ -47,12 +51,6 @@ print.visualisation_matrix <- function(x, ...) {
   cat(insight::export_table(x))
 }
 
-
-#' @rdname visualisation_matrix
-#' @export
-standardize.visualisation_matrix <- function(x, ...) {
-  effectsize::standardize(x, ...)
-}
 
 # -------------------------------------------------------------------------
 # Below are visualisation_matrix functions for DataFrames

@@ -1,3 +1,13 @@
+#' @rdname visualisation_matrix
+#' @importFrom effectsize standardize
+#' @export
+standardize.visualisation_matrix <- function(x, ...) {
+  effectsize::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
+}
+
+
+
+
 #' @importFrom insight get_response model_info
 #' @importFrom stats sd mad
 #' @keywords internal
