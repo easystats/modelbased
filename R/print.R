@@ -1,4 +1,3 @@
-#' @importFrom insight export_table
 #' @export
 print.estimate_contrasts <- function(x, ...) {
   cat(insight::export_table(format(x), ...))
@@ -20,7 +19,6 @@ print.estimate_smooth <- print.estimate_contrasts
 
 
 
-#' @importFrom insight format_value parameters_table
 #' @export
 format.estimate_contrasts <- function(x, ...) {
   # Colnames
@@ -30,8 +28,7 @@ format.estimate_contrasts <- function(x, ...) {
   # Title etc.
   info <- attributes(x)
 
-  ## TODO change to "format_table()" after insight 0.11.1 or higher on CRAN
-  out <- insight::parameters_table(x, ...)
+  out <- insight::format_table(x, ...)
 
   # P-value adjustment footer
   if ("adjust" %in% names(info)) {
