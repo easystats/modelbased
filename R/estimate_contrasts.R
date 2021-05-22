@@ -124,7 +124,7 @@ estimate_contrasts <- function(model,
 
   # Table formatting
   attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(contrasts, "table_footer") <- .estimate_add_footer(contrasts, args, type = "contrasts", adjust = adjust)
+  attr(contrasts, "table_footer") <- .estimate_means_footer(contrasts, args, type = "contrasts", adjust = adjust)
 
   # Add attributes
   attributes(contrasts) <- c(

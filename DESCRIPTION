@@ -45,7 +45,6 @@ Suggests:
     brms,
     coda,
     dplyr,
-    effectsize,
     emmeans (>= 1.5.3),
     gamm4,
     gganimate,

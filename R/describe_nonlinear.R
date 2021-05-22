@@ -35,8 +35,8 @@ describe_nonlinear <- function(data, x = NULL, y = NULL, ...) {
 
 
 #' @export
-describe_nonlinear.estimate_response <- function(data, x = NULL, ...) {
-  describe_nonlinear.data.frame(data, x = x, y = "Predicted")
+describe_nonlinear.estimate_predicted <- function(data, x = NULL, ...) {
+  describe_nonlinear.data.frame(data, x = x, y = "Predicted", ...)
 }
 
 

@@ -99,7 +99,7 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_add_footer(means, args, type = "means")
+  attr(means, "table_footer") <- .estimate_means_footer(means, args, type = "means")
 
   # Add attributes
   attributes(means) <- c(
@@ -177,7 +177,7 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_add_footer <- function(x, args = NULL, type = "means", adjust = NULL) {
+.estimate_means_footer <- function(x, args = NULL, type = "means", adjust = NULL) {
   table_footer <- ""
 
   # Levels

@@ -7,6 +7,7 @@
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param keep_iterations Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.
 #' @param ... You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.
+#' @param x,include_response Applying \code{\link[effectsize:standardize]{effectsize:standardize()}} will standardize the data the predictors and, if \code{include_response} is \code{TRUE}, the predictions.
 #'
 #' @examples
 #' library(modelbased)
@@ -36,7 +37,7 @@
 #' }
 #'
 #' # Standardize predictions
-#' pred <- estimate_response(lm(mpg ~ wt, data = mtcars))
+#' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
 #' effectsize::standardize(pred, include_response = FALSE)
 #' @return A dataframe of predicted values.
 #' @export
@@ -76,11 +77,13 @@ estimate_response <- estimate_prediction
 .estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
 
   # Get data ----------------
+  grid_specs <- NULL
   if (is.null(data)) {
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
       data <- visualisation_matrix(model, reference = insight::get_data(model), ...)
+      grid_specs <- attributes(data)  # save grid specs for table footer
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
@@ -120,10 +123,34 @@ estimate_response <- estimate_prediction
   attr(out, "ci") <- ci
   attr(out, "response") <- insight::find_response(model)
   attr(out, "model") <- model
-  attr(out, "table_title") <- c(paste0("Variable predicted: ", insight::find_response(model)), "blue")
+  attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
+  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
 
   # Class
   class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
 
   out
+}
+
+
+
+
+# Utils -------------------------------------------------------------------
+
+#' @keywords internal
+.estimate_predicted_footer <- function(model, grid_specs) {
+  footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+
+  if("target" %in% names(grid_specs)) {
+    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$target, collapse = ", "))
+  }
+
+  if("adjusted_for" %in% names(grid_specs)) {
+    if(!is.na(grid_specs$adjusted_for)) {
+      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
+    }
+
+  }
+
+  c(footer, "blue")
 }

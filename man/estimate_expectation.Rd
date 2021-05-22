@@ -49,6 +49,8 @@ estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 \item{keep_iterations}{Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+
+\item{x, include_response}{Applying \code{\link[effectsize:standardize]{effectsize:standardize()}} will standardize the data the predictors and, if \code{include_response} is \code{TRUE}, the predictions.}
 }
 \value{
 A dataframe of predicted values.
@@ -84,6 +86,6 @@ if (require("rstanarm")) {
 }
 
 # Standardize predictions
-pred <- estimate_response(lm(mpg ~ wt, data = mtcars))
+pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
 effectsize::standardize(pred, include_response = FALSE)
 }
