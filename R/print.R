@@ -17,6 +17,10 @@ print.estimate_smooth <- print.estimate_contrasts
 #' @export
 print.estimate_predicted <- print.estimate_contrasts
 
+#' @export
+print.visualisation_matrix <- print.estimate_contrasts
+
+
 # Format ------------------------------------------------------------------
 
 #' @export
@@ -40,4 +44,9 @@ format.estimate_smooth <- function(x, ...) {
   if ("Part" %in% names(x)) x$Part <- insight::format_value(x$Part, protect_integers = TRUE)
 
   insight::format_table(x, ...)
+}
+
+#' @export
+format.visualisation_matrix <- function(x, ...) {
+  x
 }

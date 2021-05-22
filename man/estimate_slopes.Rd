@@ -29,7 +29,9 @@ related functions such as \code{\link{estimate_contrasts}} and \code{\link{estim
 }
 \examples{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-estimate_slopes(model)
+slopes <- estimate_slopes(model, trend = "Petal.Length")
+slopes
+effectsize::standardize(slopes)
 
 \dontrun{
 if (require("rstanarm")) {

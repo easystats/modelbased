@@ -12,15 +12,22 @@
 #' @examples
 #' library(modelbased)
 #'
+#' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
 #'
+#' # Dealing with interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 #' estimate_contrasts(model, levels = "Petal.Width", length = 4)
 #'
+#' # Standardized differences
+#' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
+#' effectsize::standardize(estimated)
+#'
+#' # Other models (mixed, Bayesian, ...)
 #' if (require("lme4")) {
 #'   data <- iris
 #'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -102,13 +109,6 @@ estimate_contrasts <- function(model,
   contrasts <- insight::data_relocate(contrasts, c("CI_low", "CI_high"), after = c("Difference", "Odds_ratio", "Ratio"))
 
 
-
-  # Standardized differences
-  # if (standardize & transform != "response") {
-  #   contrasts <- cbind(contrasts, .standardize_contrasts(contrasts, model, robust = standardize_robust))
-  # }
-
-
   # Format contrasts names
   # Split by either " - " or "/"
   level_cols <- strsplit(as.character(contrasts$contrast), " - |\\/")
@@ -127,19 +127,17 @@ estimate_contrasts <- function(model,
   attr(contrasts, "table_footer") <- .estimate_means_footer(contrasts, args, type = "contrasts", adjust = adjust)
 
   # Add attributes
-  attributes(contrasts) <- c(
-    attributes(contrasts),
-    list(
-      levels = args$levels,
-      fixed = args$fixed,
-      modulate = args$modulate,
-      transform = transform,
-      ci = ci,
-      adjust = adjust,
-      response = insight::find_response(model)
-    )
-  )
+  attr(contrasts, "model") <- model
+  attr(contrasts, "response") <- insight::find_response(model)
+  attr(contrasts, "ci") <- ci
+  attr(contrasts, "transform") <- transform
+  attr(contrasts, "levels") <- args$levels
+  attr(contrasts, "fixed") <- args$fixed
+  attr(contrasts, "modulate") <- args$modulate
+  attr(contrasts, "adjust") <- adjust
 
+
+  # Output
   class(contrasts) <- c("estimate_contrasts", class(contrasts))
   contrasts
 }

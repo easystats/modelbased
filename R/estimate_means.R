@@ -22,6 +22,9 @@
 #' estimate_means(model, modulate = "Sepal.Width", length = 5)
 #' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 #'
+#' means <- estimate_means(model, fixed = "Sepal.Width")
+#' effectsize::standardize(means)
+#'
 #' \donttest{
 #' if (require("lme4")) {
 #'   data <- iris
@@ -102,18 +105,16 @@ estimate_means <- function(model,
   attr(means, "table_footer") <- .estimate_means_footer(means, args, type = "means")
 
   # Add attributes
-  attributes(means) <- c(
-    attributes(means),
-    list(
-      levels = args$levels,
-      fixed = args$fixed,
-      modulate = args$modulate,
-      transform = transform,
-      response = insight::find_response(model),
-      ci = ci
-    )
-  )
+  attr(means, "model") <- model
+  attr(means, "response") <- insight::find_response(model)
+  attr(means, "ci") <- ci
+  attr(means, "transform") <- transform
+  attr(means, "levels") <- args$levels
+  attr(means, "fixed") <- args$fixed
+  attr(means, "modulate") <- args$modulate
 
+
+  # Output
   class(means) <- c("estimate_means", class(means))
   means
 }

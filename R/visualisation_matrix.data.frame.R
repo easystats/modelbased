@@ -46,10 +46,7 @@ visualisation_matrix <- function(x, ...) {
 }
 
 
-#' @export
-print.visualisation_matrix <- function(x, ...) {
-  cat(insight::export_table(x))
-}
+
 
 
 # -------------------------------------------------------------------------

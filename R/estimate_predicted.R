@@ -7,7 +7,6 @@
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param keep_iterations Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.
 #' @param ... You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.
-#' @param x,include_response Applying \code{\link[effectsize:standardize]{effectsize:standardize()}} will standardize the data the predictors and, if \code{include_response} is \code{TRUE}, the predictions.
 #'
 #' @examples
 #' library(modelbased)
@@ -16,6 +15,10 @@
 #' model <- lm(mpg ~ wt, data = mtcars)
 #' estimate_response(model)
 #' estimate_relation(model)
+#'
+#' # Standardize predictions
+#' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
+#' effectsize::standardize(pred, include_response = FALSE)
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
@@ -36,9 +39,6 @@
 #'   estimate_relation(model)
 #' }
 #'
-#' # Standardize predictions
-#' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
-#' effectsize::standardize(pred, include_response = FALSE)
 #' @return A dataframe of predicted values.
 #' @export
 estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {

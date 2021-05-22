@@ -56,15 +56,22 @@ related functions such as \code{\link{estimate_means}} and \code{\link{estimate_
 \examples{
 library(modelbased)
 
+# Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
 
+# Dealing with interactions
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "Petal.Width")
 estimate_contrasts(model, modulate = "Petal.Width", length = 4)
 estimate_contrasts(model, levels = "Petal.Width", length = 4)
 
+# Standardized differences
+estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
+effectsize::standardize(estimated)
+
+# Other models (mixed, Bayesian, ...)
 if (require("lme4")) {
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")

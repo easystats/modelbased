@@ -13,7 +13,9 @@
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimate_slopes(model)
+#' slopes <- estimate_slopes(model, trend = "Petal.Length")
+#' slopes
+#' effectsize::standardize(slopes)
 #'
 #' \dontrun{
 #' if (require("rstanarm")) {
@@ -47,25 +49,22 @@ estimate_slopes <- function(model,
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }
 
-  # Standardized slopes
-  # if (standardize) {
-  #   slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
-  # }
-
   # Restore factor levels
   trends <- insight::data_restoretype(trends, insight::get_data(model))
 
+  # Table formatting
+  attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
+  attr(trends, "table_footer") <- c(paste("Marginal effects estimated for", args$trend), "blue")
 
-  attributes(trends) <- c(
-    attributes(trends),
-    list(
-      levels = levels,
-      trend = trend,
-      ci = ci,
-      response = insight::find_response(model)
-    )
-  )
+  # Add attributes
+  attr(trends, "model") <- model
+  attr(trends, "response") <- insight::find_response(model)
+  attr(trends, "ci") <- ci
+  attr(trends, "levels") <- args$levels
+  attr(trends, "trend") <- args$trend
 
+
+  # Output
   class(trends) <- c("estimate_slopes", class(trends))
   trends
 }

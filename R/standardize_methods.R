@@ -1,4 +1,3 @@
-#' @rdname visualisation_matrix
 #' @importFrom effectsize standardize
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
@@ -11,7 +10,6 @@ standardize.visualisation_matrix <- function(x, ...) {
 
 
 
-#' @rdname estimate_expectation
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
@@ -22,62 +20,48 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   x[names(data)] <- effectsize::standardize(as.data.frame(x)[names(data)], reference = data)
 
   # Standardize response
-  if(include_response == TRUE) {
+  if(include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
-    for(col in c("Predicted", "CI_low", "CI_high")) {
+    for(col in c("Predicted", "Mean", "CI_low", "CI_high")) {
       if(col %in% names(x)) {
         x[col] <- effectsize::standardize(x[[col]], reference = resp)
       }
     }
   }
+  attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
   x
 }
 
 
+#' @export
+standardize.estimate_means <- standardize.estimate_predicted
 
 
 
 
-#' @importFrom insight get_response model_info
+
 #' @importFrom stats sd mad
-#' @keywords internal
-.standardize_contrasts <- function(contrasts, model, robust = FALSE) {
-  vars <- names(contrasts)[names(contrasts) %in% c("Median", "Mean", "MAP", "Coefficient", "Difference")]
+#' @export
+standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
+  model <- attributes(x)$model
   if (insight::model_info(model)$is_linear) {
-    response <- insight::get_response(model)
+    # Get dispersion scaling factor
     if (robust) {
-      std <- contrasts[vars] / stats::mad(response, na.rm = TRUE)
+      disp <- stats::mad(insight::get_response(model), na.rm = TRUE)
     } else {
-      std <- contrasts[vars] / stats::sd(response, na.rm = TRUE)
+      disp <- stats::sd(insight::get_response(model), na.rm = TRUE)
     }
-  } else {
-    std <- contrasts[vars]
-  }
-  names(std) <- paste0("Std_", names(std))
-  as.data.frame(std)
-}
-
-
-#' @importFrom insight get_response model_info get_predictors
-#' @importFrom stats sd mad
-#' @keywords internal
-.standardize_slopes <- function(slopes, model, trend, robust = FALSE) {
-  vars <- names(slopes)[names(slopes) %in% c("Median", "Mean", "MAP", "Coefficient")]
-  x <- insight::get_predictors(model)[[trend]]
-  if (insight::model_info(model)$is_linear) {
-    response <- insight::get_response(model)
-    if (robust) {
-      std <- slopes[vars] * stats::mad(x, na.rm = TRUE) / stats::mad(response, na.rm = TRUE)
-    } else {
-      std <- slopes[vars] * stats::sd(x, na.rm = TRUE) / stats::sd(response, na.rm = TRUE)
-    }
-  } else {
-    if (robust) {
-      std <- slopes[vars] * stats::mad(x, na.rm = TRUE)
-    } else {
-      std <- slopes[vars] * stats::sd(x, na.rm = TRUE)
+    # Standardize relevant cols
+    for(col in c("Difference", "Coefficient", "CI_low", "CI_high")) {
+      if(col %in% names(x)) {
+        x[col] <- x[[col]] / disp
+      }
     }
   }
-  names(std) <- paste0("Std_", names(std))
-  as.data.frame(std)
+  attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
+  x
 }
+
+#' @export
+standardize.estimate_slopes <- standardize.estimate_contrasts
+
