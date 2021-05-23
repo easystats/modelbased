@@ -6,8 +6,8 @@
 #' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
 #' @param length Length of numeric target variables.
 #' @param range Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.
-#' @param factors Type of summary for factors. Can be reference" (set at the reference level) or "mode" (set at the most common level).
-#' @param numerics Type of summary for numeric values. Can be "combination" (include all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
+#' @param factors Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.
+#' @param numerics Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
 #' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.
 #' @param ... Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).
 #' @inheritParams effectsize::format_standardize
@@ -121,8 +121,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
   rest_vars <- names(x)[!names(x) %in% names(targets)]
   if(length(rest_vars) >= 1) {
     rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, ...)
-    rest_df <- as.data.frame(rest_df)
-    targets <- cbind(targets, rest_df)
+    rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
+    targets <- merge(targets, rest_df, sort = FALSE)
   }
 
   # Prepare output =============================================================
@@ -167,10 +167,16 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
     if(is.numeric(numerics)) {
       out <- numerics
     } else {
-      out <- eval(parse(text = paste0(numerics, "(x)")))
+      if(numerics %in% c("all", "combination")) {
+        out <- unique(x)
+      } else {
+        out <- eval(parse(text = paste0(numerics, "(x)")))
+      }
     }
   } else {
-    if (factors == "mode") {
+    if (factors %in% c("all", "combination")) {
+      out <- unique(x)
+    } else if (factors == "mode") {
       # Get mode
       out <- names(sort(table(x), decreasing = TRUE)[1])
     } else {

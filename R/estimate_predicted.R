@@ -78,18 +78,23 @@ estimate_response <- estimate_prediction
 #' @keywords internal
 .estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
 
+  # What if a visualisation_matrix is passed
+
+
+
   # Get data ----------------
-  grid_specs <- NULL
   if (is.null(data)) {
     data <- insight::get_data(model)
   } else if (!is.data.frame(data)) {
     if (data == "grid") {
       data <- visualisation_matrix(model, reference = insight::get_data(model), ...)
-      grid_specs <- attributes(data)  # save grid specs for table footer
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }
+
+  # save grid specs for table footer
+  grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
   if(insight::find_response(model) %in% names(data)) {

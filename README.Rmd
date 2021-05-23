@@ -87,28 +87,23 @@ The package is built around 5 main functions:
 
 These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
 
-The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
-
-
 
 ## Create smart grids to represent complex interactions
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for more an introduction about this process.
 
-```{r message=FALSE, warning=FALSE, echo = FALSE}
-library(rstanarm)
+```{r message=FALSE, warning=FALSE}
 library(ggplot2)
-library(see)
+library(dplyr)
 library(modelbased)
 
 
-# Fit model
-model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
-
-# Create dataframe
-newdata <- model %>%
-  estimate_relation(target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) %>% 
-  effectsize::unstandardize(select = "Petal.Width", include_response = FALSE)
+# Fit model and get visualization matrix
+vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>%
+  modelbased::visualisation_matrix(target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) %>% 
+  effectsize::unstandardize(select = "Petal.Width") %>% 
+  modelbased::estimate_expectation()
+  
 
 # Use unstandardize???
 

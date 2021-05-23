@@ -79,23 +79,9 @@ visualisation_matrix.list <- visualisation_matrix.glm  # list is gamm4
 # -------------------------------------------------------------------------
 
 #' @export
-visualisation_matrix.visualisation_matrix <- function(x,
-                                                      target = "all",
-                                                      factors = "reference",
-                                                      numerics = "mean",
-                                                      preserve_range = FALSE,
-                                                      reference = attributes(x)$reference,
-                                                      na.rm = TRUE,
-                                                      ...) {
-  grid <- visualisation_matrix(
-    as.data.frame(x),
-    target = target,
-    factors = factors,
-    numerics = numerics,
-    preserve_range = preserve_range,
-    reference = reference,
-    ...
-  )
+visualisation_matrix.visualisation_matrix <- function(x, reference = attributes(x)$reference, ...) {
+
+  grid <- visualisation_matrix(as.data.frame(x), reference = reference, ...)
 
   if ("model" %in% names(attributes(x))) {
     attr(grid, "model") <- attributes(x)$model
