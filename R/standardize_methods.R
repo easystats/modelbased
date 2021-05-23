@@ -1,8 +1,16 @@
+# Standardize -------------------------------------------------------------
+
+
+
+
 #' @importFrom effectsize standardize
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
   effectsize::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
 }
+
+
+
 
 
 
@@ -71,3 +79,35 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
 #' @export
 standardize.estimate_slopes <- standardize.estimate_contrasts
 
+
+
+# Unstandardize -------------------------------------------------------------
+
+#' @method unstandardize estimate_predicted
+#' @importFrom effectsize unstandardize
+#' @export
+unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
+  # Get data of predictors
+  data <- insight::get_data(attributes(x)$model, ...)
+  data[[attributes(x)$response]] <- NULL  # Remove resp from data
+
+  # Standardize predictors
+  x[names(data)] <- effectsize::unstandardize(as.data.frame(x)[names(data)], reference = data, ...)
+
+  # Standardize response
+  if(include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
+    resp <- insight::get_response(attributes(x)$model)
+    disp <- attributes(effectsize::standardize(resp, ...))$scale
+    for(col in c("Predicted", "Mean", "CI_low", "CI_high")) {
+      if(col %in% names(x)) {
+        x[col] <- effectsize::unstandardize(x[[col]], reference = resp, ...)
+      }
+    }
+    for(col in c("SE", "MAD")) {
+      if(col %in% names(x)) {
+        x[col] <- x[[col]] * disp
+      }
+    }
+  }
+  x
+}

@@ -89,11 +89,11 @@ These functions are powered by the [`visualisation_matrix()`](https://easystats.
 
 The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 
-## Examples
 
-### Create smart grids to represent complex interactions
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) to create this plot:
+## Create smart grids to represent complex interactions
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for more an introduction about this process.
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(rstanarm)
@@ -106,6 +106,25 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # Create dataframe
+newdata <- model %>%
+  estimate_relation(target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) %>% 
+  effectsize::unstandardize(select = "Petal.Width", include_response = FALSE)
+
+# Use unstandardize???
+
+
+# Plot
+iris %>%
+  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
+  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
+  geom_line(data = newdata, aes(y = Predicted, color = Petal.Width, group = 1), size = 1) +
+  scale_color_viridis_d(direction = -1) +
+  scale_fill_viridis_c(guide = FALSE) +
+  theme_modern()
+
+
+
+
 newdata <- iris %>%
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE)
@@ -127,7 +146,7 @@ iris %>%
 
 
 
-### Estimate marginal means
+## Estimate marginal means
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) to create this plot:
  
@@ -165,7 +184,7 @@ model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
 estimate_means(model)
 ```
 
-### Contrast analysis
+## Contrast analysis
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) to create this plot:
 
@@ -182,7 +201,7 @@ estimate_contrasts(model)
 ```
 
 
-### Check the contrasts at different points of another linear predictor
+## Check the contrasts at different points of another linear predictor
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -197,14 +216,14 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 
 
 
-### Find a predictor's slopes at each factor level
+## Find a predictor's slopes at each factor level
 
 ```{r message=FALSE, warning=FALSE}
 estimate_slopes(model)
 ```
 
 
-### Generate predictions from your model to compare it with original data
+## Generate predictions from your model to compare it with original data
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
 
@@ -238,7 +257,7 @@ knitr::kable(
 )
 ```
 
-### Estimate the link between the response and a predictor
+## Estimate the link between the response and a predictor
 
 See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
@@ -261,7 +280,7 @@ knitr::kable(
 )
 ```
 
-### Describe the smooth term by its linear parts
+## Describe the smooth term by its linear parts
 ```{r message=FALSE, warning=FALSE}
 estimate_smooth(model)
 ```
