@@ -78,8 +78,15 @@ estimate_response <- estimate_prediction
 #' @keywords internal
 .estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
 
-  # What if a visualisation_matrix is passed
-
+  # If a visualisation_matrix is passed
+  if(inherits(model, "visualisation_matrix")) {
+    data <- model
+    if("model" %in% names(attributes(model))) {
+      model <- attributes(model)$model
+    } else {
+      stop("A model must be passed to make predictions.")
+    }
+  }
 
 
   # Get data ----------------

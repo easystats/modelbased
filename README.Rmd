@@ -90,49 +90,38 @@ These functions are powered by the [`visualisation_matrix()`](https://easystats.
 
 ## Create smart grids to represent complex interactions
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for more an introduction about this process.
+- **Problem**: I want to graphically represent the interaction between two continuous variable. On top of that, I would like to express one of them in terms of standardized change (i.e., standard deviation relative to the mean).
+- **Solution**: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using `ggplot`.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a detailed walkthrough on *visualisation matrices*.
 
 ```{r message=FALSE, warning=FALSE}
 library(ggplot2)
-library(dplyr)
+library(see)
 library(modelbased)
 
+# 1. Fit model and get visualization matrix
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
 
-# Fit model and get visualization matrix
-vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>%
-  modelbased::visualisation_matrix(target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) %>% 
-  effectsize::unstandardize(select = "Petal.Width") %>% 
-  modelbased::estimate_expectation()
-  
+# 2. Create a visualisation matrix with expected Z-score values of Petal.Width
+vizdata <- modelbased::visualisation_matrix(model, target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
 
-# Use unstandardize???
+# 3. Revert from expected SD to actual values
+vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
 
+# 4. Add predicted relationship from the model
+vizdata <- modelbased::estimate_expectation(vizdata)
 
-# Plot
-iris %>%
-  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
-  geom_line(data = newdata, aes(y = Predicted, color = Petal.Width, group = 1), size = 1) +
-  scale_color_viridis_d(direction = -1) +
-  scale_fill_viridis_c(guide = FALSE) +
-  theme_modern()
+# 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)
+vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
 
-
-
-
-newdata <- iris %>%
-  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
-  visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE)
-newdata$Predicted_Sepal.Length <- predict(model, newdata)
-
-# Express values in an abstract way
-newdata$Petal.Width <- effectsize::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
-
-# Plot
-iris %>%
-  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) +
+# 6. Plot
+ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
+  # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
+  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) + 
+  # Add relationship lines
+  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
+  # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
@@ -143,14 +132,26 @@ iris %>%
 
 ## Estimate marginal means
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) to create this plot:
- 
-```{r message=FALSE, warning=FALSE, echo = FALSE}
-means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0))
+- **Problem**: My model has a factor as a predictor, and the parameters only return the difference between levels and the intercept. I want to see the values *at* each factor level.
+- **Solution**: Estimate model-based means ("marginal means"). You can visualize them by plotting their confidence interval and the original data.
 
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin(aes(color = Species)) +
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
+ 
+```{r message=FALSE, warning=FALSE}
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Obtain estimated means
+means <- modelbased::estimate_means(model)
+means
+
+# 3. Plot 
+ggplot(iris, aes(x = Species, y = Sepal.Width)) +
+  # Add base data 
+  geom_violin(aes(fill = Species), color = "white") +
   geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  # Add pointrange and line from means
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
   geom_pointrange(
     data = means,
@@ -158,58 +159,66 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
     size = 1,
     color = "white"
   ) +
+  # Improve colors
   scale_fill_material() +
-  scale_colour_material() +
   theme_modern()
 ```
 
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(rstanarm)
-
-model <- stan_glm(Sepal.Width ~ Species, data = iris)
-
-estimate_means(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(rstanarm)
-
-model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
-
-estimate_means(model)
-```
 
 ## Contrast analysis
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) to create this plot:
+- **Problem**: The parameters of my model only return the difference between some of the factor levels and the intercept. I want to see the differences between each levels, as I would do with post-hoc comparison tests in ANOVAs.
+- **Solution**: Estimate model-based contrasts ("marginal contrasts"). You can visualize them by plotting their confidence interval.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) for a detailed walkthrough on *contrast analysis*.
+
+```{r message=FALSE, warning=FALSE}
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Estimate marginal contrasts
+contrasts <- modelbased::estimate_contrasts(model)
+contrasts
+```
+
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(see)
 
-plot(estimate_contrasts(model), estimate_means(model)) +
+plot(contrasts, estimate_means(model)) +
   theme_modern()
 ```
 
 
-```{r message=FALSE, warning=FALSE}
-estimate_contrasts(model)
-```
+
 
 
 ## Check the contrasts at different points of another linear predictor
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, modulate = "Petal.Length", length = 3)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 
+```{r message=FALSE, warning=FALSE}
+# Recompute comntrasts with more spread
+contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
 
+# Add Contrast column
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
+
+# Plot
+ggplot(contrasts, aes(x = Petal.Length, y = Difference,)) +
+  # Add line and CI band
+  geom_line(aes(color = Contrast)) +
+  geom_ribbon(aes(ymin = CI_low, ymax=CI_high, fill = Contrast), alpha = 0.2) +
+  # Add line at 0, indicating no difference
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  # Colors
+  theme_modern()
+```
 
 ## Find a predictor's slopes at each factor level
 

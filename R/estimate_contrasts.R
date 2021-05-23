@@ -138,6 +138,6 @@ estimate_contrasts <- function(model,
 
 
   # Output
-  class(contrasts) <- c("estimate_contrasts", class(contrasts))
+  class(contrasts) <- c("estimate_contrasts", "see_estimate_contrasts", class(contrasts))
   contrasts
 }
