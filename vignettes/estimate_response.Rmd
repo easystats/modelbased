@@ -174,17 +174,28 @@ iris %>%
   theme_modern()
 ```
 
-# Adding individual draws
+# Adding individual iterations
 
-Instead (or in addition to) representing credible/confidence intervals, the
-Bayesian framework also allow to represent every individual **posterior draw**.
-In this case, they correspond to all possible links estimated by the model. In
-it a nice insight into the "true" underlying probabilities in addition to
-summaries like the median or the CI.
+Let's now fit the same model under the Bayesian framework.
+
+**Note**: If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
 ```{r message=FALSE, warning=FALSE}
-# Keep only 100 draws (keeping all the draws might be slower)
-predicted <- estimate_link(model, keep_iterations = TRUE, iterations = 100)
+library(rstanarm)
+
+model <- stan_glm(Petal.Length ~ Sepal.Length * Species,
+                  refresh = 0, seed = 33,
+                  data = iris)
+```
+
+The `refresh` and `seed` arguments are included for reproducibility and readability, but they are not critical to the model.
+
+Instead (or in addition to) representing confidence intervals, one can also represent every individual **posterior draw**, which correspond to a random selection of all possible links compatible with the observed data. It is a nice insight into the "true" underlying probabilities.
+
+
+```{r message=FALSE, warning=FALSE}
+# Keep only 100 draws (keeping all the draws is slower)
+predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 100)
 
 # Format draws for plotting
 iterations <- bayestestR::reshape_iterations(predicted)
@@ -196,6 +207,28 @@ iris %>%
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.05) +
   geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
   theme_modern()
+```
+
+
+Note that it is also possible to obtain similar plots without Bayesian models, by **bootstrapping** the predictions. This can be done by setting the iterations argument to some number (e.g., 50).
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+
+# Bootstrap with n=50 iterations 
+predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 50)
+
+# Format draws for plotting
+iterations <- bayestestR::reshape_iterations(predicted)
+iterations$group <- paste0(iterations$iter_group, iterations$Species)
+
+p <- iris %>%
+  ggplot(aes(x = Sepal.Length)) +
+  geom_point(aes(y = Petal.Length, color = Species)) +
+  geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  theme_modern()
+p
 ```
 
 Animated hypothetical outcome plots can also be easily created with
@@ -215,6 +248,7 @@ p <- iris %>%
 gganimate::animate(p)
 ```
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
+# Save 
 # anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
 
 if (knitr::is_html_output()) {
