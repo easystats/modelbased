@@ -34,7 +34,7 @@ navbar:
       - text: 'Use a model to make predictions'
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'
-        href: articles/estimate_smooth.html
+        href: articles/describe_nonlinear.html
       - text: 'The modelisation approach'
         href: articles/modelisation_approach.html
 

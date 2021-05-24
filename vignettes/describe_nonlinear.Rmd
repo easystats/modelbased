@@ -83,7 +83,7 @@ Let's continue with **visualising the fitted model**:
 ```{r message=FALSE, warning=FALSE}
 library(modelbased)
 
-estim <- estimate_relation(model)
+estim <- estimate_relation(model, length = 50)
 
 ggplot(estim, aes(x = x, y = Predicted)) +
   geom_line(color = "purple") +
@@ -95,10 +95,10 @@ Although a visual representation is usually recommended, how can we **verbally
 describe this relationship**?
 
 ```{r message=FALSE, warning=FALSE}
-estimate_smooth(model)
+describe_nonlinear(estim, x = "x", y = "Predicted")
 ```
 
-`estimate_smooth` will decompose this curve into linear parts, returning their
+`describe_nonlinear` will decompose this curve into linear parts, returning their
 size (the percentage of the curve of the segment), and the trend (positive or
 negative). We can now say that that the relationship can be summarised as one
 negative link and positive link, with a **changing point** located roughly
@@ -127,7 +127,7 @@ ggplot(df, aes(x = Delay, y = Memory)) +
   stat_density_2d(geom = "raster", aes(fill = ..density..), contour = FALSE) +
   geom_jitter(width = 0.2, height = 0.2) +
   scale_fill_viridis_c() +
-  geom_smooth(method = "loess", color = "red", se = FALSE) +
+  geom_smooth(formula = "y ~ x", method = "loess", color = "red", se = FALSE) +
   theme_modern(legend.position = "none")
 ```
 
@@ -141,24 +141,21 @@ it a few other variables that could influence this curve, such as the
 **familiarity with the characters of the movie**, the **language of the movie**,
 the **immersion** (2D/3D).
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(rstanarm)
+```{r message=FALSE, warning=FALSE}
+library(lme4)
 
-model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1 | Movie_Language) + (1 | Immersion), data = df)
+model <- lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1 | Movie_Language) + (1 | Immersion), data = df)
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(rstanarm)
 
-model <- stan_lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1 | Movie_Language) + (1 | Immersion), data = df, chains = 1, iter = 1000, refresh = 0)
-```
 
 We can visualize the link between the Delay and the Memory score by using the
-`estimate_link`.
+`estimate_relation`.
 
 ```{r message=FALSE, warning=FALSE}
 library(modelbased)
 
 estim <- estimate_relation(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
+
 ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) +
   geom_ribbon(aes(ymin = CI_low_0.97, ymax = CI_high_0.97), alpha = 0.2, fill = "blue") +

@@ -84,6 +84,7 @@ library(emmeans)
 library(parameters)
 library(modelbased)
 ```
+
 ## Data Simulation
 
 
@@ -137,7 +138,6 @@ So we will take, for each participant, its 20...
 **TO DO: COMPLETE THIS VIGNETTE**.
 
 
-
 ```{r message=FALSE, warning=FALSE}
 data_anova <- data %>%
   mutate(Category = case_when(
@@ -152,12 +152,13 @@ data_anova <- data %>%
 results <- aov(RT ~ Condition * Category + Error(Participant), data = data_anova)
 parameters(results)
 ```
+
 What can we conclude from that? Absolutely **nothing**! We need to investigate in more details, for instance by running post-hoc comparison tests. This uninformativeness is one reason why ANOVA should be banned from psychological science.
 
 ## Post-hoc comparison tests
 
 ```{r message=FALSE, warning=FALSE}
-posthoc <- emmeans(results, ~ Condition * Category) %>% 
+posthoc <- model_emmeans(results, ~ Condition * Category) %>% 
   pairs()
 parameters(posthoc)
 ```

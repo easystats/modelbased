@@ -32,32 +32,20 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
 set.seed(333)
 ```
 
-This vignette will present how to generate predictions using `estimate`.
-Warning: we will go **full Bayesian**. If you're not familiar with the Bayesian
-framework, we recommend starting with [**this gentle
-introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
 # Prediction against original data
 
 Generating prediction from the model can be used for a wide variety of reasons,
 one of them being visualisation. This can be achieved via the
 `estimate_response()` function and its visualisation spinoff,
-`estimate_link()`.
+`estimate_relation()`.
 
-Let's start by fitting a Bayesian linear regression.
+Let's start by fitting a linear regression.
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(rstanarm)
-
-data <- iris
-model <- stan_glm(Petal.Length ~ Sepal.Length, data = data)
+```{r message=FALSE, warning=FALSE}
+model <- lm(Petal.Length ~ Sepal.Length, data = iris)
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(rstanarm)
 
-data <- iris
-model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
-```
 
 We might be interested in comparing the values predicted by the model to the
 actual "true" values. This can be done by generating predictions:
@@ -65,14 +53,14 @@ actual "true" values. This can be done by generating predictions:
 ```{r message=FALSE, warning=FALSE,}
 library(modelbased)
 
-predicted <- estimate_response(model)
-head(predicted)
+pred_data <- estimate_response(model)
+head(pred_data)
 ```
 
 The output is a data frame containing predicted values (the median and CI of the
 posterior distribution) for **each of the value of the original data frame**
-(used for fitting the model). Hence, we can simply add the prediction column
-(`Predicted`) to the original dataset and plot the original against the
+(used for fitting the model). Hence, we can simply add the original response column
+(`Petal.Length`) to this data and plot the original against the
 predicted data (on top of the identity line, representing the perfect
 relationship).
 
@@ -81,9 +69,9 @@ library(ggplot2)
 library(dplyr)
 library(see)
 
-data$Predicted <- predicted$Predicted
+pred_data$Petal.Length <- iris$Petal.Length
 
-data %>%
+pred_data %>%
   ggplot(aes(x = Petal.Length, y = Predicted)) +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point() +
@@ -94,20 +82,18 @@ data %>%
 It seems like our model does not perform too bad. What if we added information
 about the `Species` in the model?
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data)
-data$Predicted_2 <- estimate_response(model)$Predicted
+```{r message=FALSE, warning=FALSE}
+model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+
+pred_data$Predicted_2 <- estimate_response(model)$Predicted
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
-data$Predicted_2 <- estimate_response(model)$Predicted
-```
+
 
 We could now plot the second observations, based on a more complex model, as a
 red overlay to the previous points:
 
 ```{r message=FALSE, warning=FALSE}
-data %>%
+pred_data %>%
   ggplot() +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
@@ -119,10 +105,10 @@ data %>%
 The new model generated much more accurate predictions (closer from the
 underlying regression line).
 
-# Estimating response *vs.* link
+# Estimating response *vs.* relation
 
 Rather than visualizing the predictions made by a model, we are often interested
-in visualizing the *links*. In the model above, this would be the relationship
+in visualizing the *relation*. In the model above, this would be the relationship
 between the response and the two predictors. This can be achieved by generating
 the predictions on the [**data
 grid**](https://easystats.github.io/estimate/articles/visualisation_matrix.html)
@@ -143,22 +129,22 @@ iris %>%
 ```
 
 However, you might notice that the **Credible Interval (CI) bands are quite
-big**. This is where `estimate_link()` is coming in. In a traditional,
+big**. This is where `estimate_relation()` is coming in. In a traditional,
 frequentist, regression, the predictions are deterministic: they will always
 fall on the regression line. However, in a Bayesian framework, they are
 probabilistic. Hence here, predicting the response is not the same that
 predicting **the link** (*i.e.*, the regression line and the uncertainty
 interval associated *with this line*).
 
-In order to facilitate visualization of links, we added `estimate_link()` as a
+In order to facilitate visualization of links, we added `estimate_relation()` as a
 shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models,
 `predict = "link"` and some smoothing by default. `estimate_response()` would be
 used in the context of generating actual predictions for the existing or new
-data, whereas `estimate_link()` is more relevant in the context of visualization
+data, whereas `estimate_relation()` is more relevant in the context of visualization
 and plotting.
 
 ```{r message=FALSE, warning=FALSE}
-predicted <- estimate_link(model)
+predicted <- estimate_relation(model)
 
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
@@ -176,7 +162,7 @@ directly related to the shape of the posterior distribution. Thus, showing
 different CI levels (for instance, 69\%, 89\% and 99\%).
 
 ```{r message=FALSE, warning=FALSE}
-predicted <- estimate_link(model, ci = c(0.69, .89, 0.99))
+predicted <- estimate_relation(model, ci = c(0.69, .89, 0.99))
 
 iris %>%
   ggplot(aes(x = Sepal.Length)) +

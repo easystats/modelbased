@@ -40,6 +40,15 @@ describe_nonlinear.estimate_predicted <- function(data, x = NULL, y = "Predicted
 }
 
 
+#' @export
+describe_nonlinear.numeric <- function(y, x = NULL, ...) {
+  if(is.null(x)) {
+    x <- 1:length(y)
+  }
+  describe_nonlinear(data.frame(x = x, y = y), x = "x", y = "y")
+}
+
+
 
 #' @export
 describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
