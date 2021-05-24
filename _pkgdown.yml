@@ -35,5 +35,7 @@ navbar:
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'
         href: articles/estimate_smooth.html
+      - text: 'The modelisation approach'
+        href: articles/modelisation_approach.html
 
 

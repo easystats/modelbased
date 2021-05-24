@@ -137,7 +137,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
   attr(targets, "data") <- x
 
   # Printing decorations
-  attr(targets, "table_title") <- c("Visualisation Matrix", "blue")
+  attr(targets, "table_title") <- c("Visualisation Grid", "blue")
   if (length(rest_vars) >= 1) attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
   if(!is.null(attr(targets, "table_footer"))) attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
 

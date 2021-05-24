@@ -73,10 +73,10 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   theme_modern()
 ```
 
-But how to "access" the data of this regression line? One option is to select
-some values of of the predictor (`Sepal.Length`), and **predict** the response
-(`Sepal.Width`) using the model. Using these *x* and *y* points, we can then
-create the regression line.
+But how to "access" the data of this regression line? One good option is to select
+some values of of the predictor (`Sepal.Length`), and **predict** (using the 
+base R `predict()` method for now) the response (`Sepal.Width`) using the model. 
+Using these *x* and *y* points, we can then create the regression line.
 
 Let's try the `visualisation_matrix` function from the `estimate` package.
 
@@ -86,16 +86,17 @@ library(modelbased)
 visualisation_matrix(iris["Sepal.Length"])
 ```
 
-If we pass a numeric variable to the function, it will return a vector of
+If we pass a numeric column to the function, it will return a vector of
 **equally spread points** (having the same range, i.e., the same minimum and
 maximum, than the original data). The default **length** is 10, but we can
-adjust that through the `length` argument. Let's generate predictions using this
-reference grid of the predictor.
+adjust that through the `length` argument. For instance, for linear relationships 
+(i.e., a straight line), two points are in theory sufficient. Let's generate 
+predictions using this reference grid of the predictor.
 
 ```{r }
-newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
-newdata$Predicted_Sepal.Width <- predict(model, newdata)
-newdata
+vizdata <- visualisation_matrix(iris["Sepal.Length"], length = 2)
+vizdata$Predicted <- predict(model, vizdata)
+vizdata
 ```
 
 Now that we have our *x* and *y* values, we can plot the line as an overlay to
@@ -104,7 +105,7 @@ the actual data points:
 ```{r }
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point() +
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1, color = "red") +
+  geom_line(data = vizdata, aes(y = Predicted), size = 1, color = "red") +
   theme_modern()
 ```
 
@@ -116,8 +117,9 @@ useful?
 Data grids are useful to represent more complex models. For instance, in the
 models above, the **negative** relationship between the length and width of the
 sepals is in fact biased by the presence of three different species. One way of
-adjusting the model for this grouping structure is to add it as a **random effect** in a **mixed model**. In the model below, the "fixed" effects (the
-parameters of interest) will be adjusted ("averaged over") to the random effects.
+adjusting the model for this grouping structure is to add it as a **random effect** 
+in a **mixed model**. In the model below, the "fixed" effects (the parameters of 
+interest) will be adjusted ("averaged over") to the random effects.
 
 ```{r }
 library(lme4)
@@ -129,17 +131,19 @@ model_parameters(model)
 As we can see, when adjusting for the species, the relationship between the two
 variables **has become positive**! 
 
-We can represent it using the same procedure as above (note the `re.form = NA`
-in the `predict` function to say that the random variable is not present in the
-new dataset).
+We can represent it using the same procedure as above, but note that instead of 
+using the base R `predict()` function, we will be using [*get_predicted()*](https://easystats.github.io/insight/reference/get_predicted.html), 
+from the **insight** package, which is a more robust and user-friendly version 
+of `predict()`.
+
 
 ```{r }
-newdata <- visualisation_matrix(iris["Sepal.Length"], length = 5)
-newdata$Predicted_Sepal.Width <- predict(model, newdata, re.form = NA)
+vizdata <- visualisation_matrix(iris["Sepal.Length"])
+vizdata$Predicted <- insight::get_predicted(model, vizdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted), size = 1) +
   theme_modern()
 ```
 
@@ -149,8 +153,8 @@ The above way of constructing the reference grid, i.e., by providing a single
 column of data to the function, is almost equivalent to the following:
 
 ```{r }
-newdata <- visualisation_matrix(iris, target = "Sepal.Length", length = 5)
-newdata
+vizdata <- visualisation_matrix(iris, target = "Sepal.Length")
+vizdata
 ```
 
 However, the other variables (present in the dataframe but not selected as
@@ -161,8 +165,8 @@ interested.
 By default, **factors** are fixed by their **"reference" level** and **numeric variables** are fixed at their **mean**. However, this can be easily changed:
 
 ```{r }
-newdata <- visualisation_matrix(iris, target = "Sepal.Length", numerics = "min")
-newdata
+vizdata <- visualisation_matrix(iris, target = "Sepal.Length", numerics = "min")
+vizdata
 ```
 
 # Target variables
@@ -176,22 +180,14 @@ Let's visualise the regression line for each of the levels of `Species`:
 
 ```{r }
 model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
-```
-```{r, eval=FALSE}
-newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
-newdata$Predicted_Sepal.Width <- predict(model, newdata)
-newdata
-```
-```{r, echo=FALSE}
-newdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
-newdata$Predicted_Sepal.Width <- predict(model, newdata)
-newdata$Petal.Length <- NULL
-newdata
-```
-```{r }
+
+vizdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
+vizdata$Predicted <- insight::get_predicted(model, vizdata)
+vizdata
+
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point() +
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted), size = 1) +
   theme_modern()
 ```
 
@@ -204,17 +200,17 @@ line**. The `preserve_range` option allows to remove observations that are
 improve the precision toward the edges):
 
 ```{r }
-newdata <- visualisation_matrix(iris,
+vizdata <- visualisation_matrix(iris,
   target = c("Sepal.Length", "Species"),
   length = 100,
   preserve_range = TRUE
 )
 
-newdata$Predicted_Sepal.Width <- predict(model, newdata)
+vizdata$Predicted_Sepal.Width <- insight::get_predicted(model, vizdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point() +
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted_Sepal.Width), size = 1) +
   theme_modern()
 ```
 
@@ -240,7 +236,7 @@ We can obtain the right reference grid quite easily by chaining two
 ```{r }
 library(dplyr)
 
-newdata <- iris %>%
+vizdata <- iris %>%
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 5, numerics = "combination")
 ```
@@ -255,12 +251,12 @@ using `numerics = "combination"`.
 We can then visualise it as follows:
 
 ```{r }
-newdata$Predicted_Sepal.Length <- predict(model, newdata)
+vizdata$Predicted <- insight::get_predicted(model, vizdata)
 
 iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length, color = Petal.Width)) +
   geom_point() +
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, group = Petal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted, group = Petal.Width), size = 1) +
   scale_color_viridis_c() +
   theme_modern()
 ```
@@ -269,20 +265,8 @@ Such plot can be more clear by expressing the interaction variable in terms of
 deviations from the mean (as a standardized variable).
 
 ```{r }
-newdata <- iris %>%
-  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
-  visualisation_matrix("Petal.Width",
-    length = 3,
-    numerics = "combination",
-    standardize = TRUE,
-    reference = iris
-  )
-
-newdata$Predicted_Sepal.Length <- predict(model, newdata)
-
-
 # Express values in an abstract way
-newdata$Petal.Width <- effectsize::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
+vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
 
 iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
