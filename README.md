@@ -83,139 +83,288 @@ These functions are powered by the
 [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html)
 function, a smart tool for guessing the appropriate reference grid.
 
-The package currently only supports `rstanarm` models, but will be
-expanded to cover a large variety of frequentist and Bayesian models.
+## Create smart grids to represent complex interactions
 
-## Examples
-
-### Create smart grids to represent complex interactions
+-   **Problem**: I want to graphically represent the interaction between
+    two continuous variable. On top of that, I would like to express one
+    of them in terms of standardized change (i.e., standard deviation
+    relative to the mean).
+-   **Solution**: Create a data grid following the desired
+    specifications, and feed it to the model to obtain predictions.
+    Format some of the columns for better readability, and plot using
+    `ggplot`.
 
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
-to create this plot:
+for a detailed walkthrough on *visualisation matrices*.
+
+``` r
+library(ggplot2)
+library(see)
+library(modelbased)
+
+# 1. Fit model and get visualization matrix
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
+
+# 2. Create a visualisation matrix with expected Z-score values of Petal.Width
+vizdata <- modelbased::visualisation_matrix(model, target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
+
+# 3. Revert from expected SD to actual values
+vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
+
+# 4. Add predicted relationship from the model
+vizdata <- modelbased::estimate_expectation(vizdata)
+
+# 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)
+vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
+
+# 6. Plot
+ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
+  # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
+  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) + 
+  # Add relationship lines
+  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
+  # Improve colors / themes
+  scale_color_viridis_d(direction = -1) +
+  scale_fill_viridis_c(guide = FALSE) +
+  theme_modern()
+```
 
 ![](man/figures/unnamed-chunk-4-1.png)<!-- -->
 
-### Estimate marginal means
+## Estimate marginal means
+
+-   **Problem**: My model has a factor as a predictor, and the
+    parameters only return the difference between levels and the
+    intercept. I want to see the values *at* each factor level.
+-   **Solution**: Estimate model-based means (“marginal means”). You can
+    visualize them by plotting their confidence interval and the
+    original data.
 
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html)
-to create this plot:
+for a detailed walkthrough on *marginal means*.
+
+``` r
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Obtain estimated means
+means <- modelbased::estimate_means(model)
+means
+## Estimated Marginal Means
+## 
+## Species    | Mean |   SE |       95% CI
+## ---------------------------------------
+## setosa     | 3.43 | 0.05 | [3.33, 3.52]
+## versicolor | 2.77 | 0.05 | [2.68, 2.86]
+## virginica  | 2.97 | 0.05 | [2.88, 3.07]
+## 
+## Marginal means estimated for Species
+
+# 3. Plot 
+ggplot(iris, aes(x = Species, y = Sepal.Width)) +
+  # Add base data 
+  geom_violin(aes(fill = Species), color = "white") +
+  geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  # Add pointrange and line from means
+  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
+  geom_pointrange(
+    data = means,
+    aes(y = Mean, ymin = CI_low, ymax = CI_high),
+    size = 1,
+    color = "white"
+  ) +
+  # Improve colors
+  scale_fill_material() +
+  theme_modern()
+```
 
 ![](man/figures/unnamed-chunk-5-1.png)<!-- -->
 
-``` r
-library(rstanarm)
+## Contrast analysis
 
-model <- stan_glm(Sepal.Width ~ Species, data = iris)
-
-estimate_means(model)
-```
-
-    ## Species    | Mean |       95% CI
-    ## --------------------------------
-    ## setosa     | 3.43 | [3.33, 3.52]
-    ## versicolor | 2.77 | [2.67, 2.86]
-    ## virginica  | 2.97 | [2.88, 3.08]
-
-### Contrast analysis
+-   **Problem**: The parameters of my model only return the difference
+    between some of the factor levels and the intercept. I want to see
+    the differences between each levels, as I would do with post-hoc
+    comparison tests in ANOVAs.
+-   **Solution**: Estimate model-based contrasts (“marginal contrasts”).
+    You can visualize them by plotting their confidence interval.
 
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
-to create this plot:
-
-![](man/figures/unnamed-chunk-8-1.png)<!-- -->
+for a detailed walkthrough on *contrast analysis*.
 
 ``` r
-estimate_contrasts(model)
-## Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference
-## -------------------------------------------------------------------------------------------
-## setosa     | versicolor |       0.66 | [ 0.52,  0.79] |   100% |        0% |           1.50
-## setosa     |  virginica |       0.45 | [ 0.33,  0.59] |   100% |        0% |           1.04
-## versicolor |  virginica |      -0.20 | [-0.33, -0.06] | 99.78% |     7.38% |          -0.47
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Estimate marginal contrasts
+contrasts <- modelbased::estimate_contrasts(model)
+contrasts
+## Marginal Contrasts Analysis
+## 
+## Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+## ------------------------------------------------------------------------------
+## setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | < .001
+## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
+## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
+## 
+## Marginal contrasts estimated for Species
+## p-value adjustment method: Holm (1979)
 ```
 
-### Check the contrasts at different points of another linear predictor
+![](man/figures/unnamed-chunk-7-1.png)<!-- -->
+
+## Check the contrasts at different points of another linear predictor
+
+-   **Problem**: In the case of an interaction between a factor and a
+    continuous variable, you might be interested in computing how the
+    differences between the factor levels (the contrasts) change
+    depending on the other continuous variable.
+-   **Solution**: You can estimate the marginal contrasts at different
+    values of a contious variable (the *modulator*), and plot these
+    differences (they are significant if their 95% CI doesn’t cover 0).
 
 ``` r
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 estimate_contrasts(model, modulate = "Petal.Length", length = 3)
+## Marginal Contrasts Analysis
+## 
+## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p
+## --------------------------------------------------------------------------------------------
+## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34 |   4.97 | < .001
+## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65 |   2.67 | 0.023 
+## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44 |   1.24 | 0.434 
+## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40 |   3.38 | 0.003 
+## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66 |   2.70 | 0.021 
+## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42 |   1.58 | 0.257 
+## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49 |  -0.73 | 0.747 
+## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.926 
+## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.229 
+## 
+## Marginal contrasts estimated for Species
+## p-value adjustment method: Holm (1979)
 ```
-
-    ## Level1     |     Level2 | Petal.Length | Difference |        95% CI |     pd | % in ROPE | Std_Difference
-    ## ---------------------------------------------------------------------------------------------------------
-    ## setosa     | versicolor |         1.00 |       1.68 | [ 1.01, 2.25] |   100% |        0% |           3.86
-    ## setosa     |  virginica |         1.00 |       1.35 | [ 0.59, 2.02] | 99.92% |     0.15% |           3.09
-    ## versicolor |  virginica |         1.00 |      -0.35 | [-1.27, 0.55] | 76.02% |    12.28% |          -0.79
-    ## setosa     | versicolor |         3.95 |       1.61 | [ 0.69, 2.56] |   100% |     0.10% |           3.70
-    ## setosa     |  virginica |         3.95 |       1.67 | [ 0.70, 2.67] |   100% |     0.05% |           3.83
-    ## versicolor |  virginica |         3.95 |       0.05 | [-0.25, 0.32] | 63.18% |    48.08% |           0.11
-    ## setosa     | versicolor |         6.90 |       1.55 | [-0.46, 3.57] | 92.30% |     3.17% |           3.55
-    ## setosa     |  virginica |         6.90 |       1.98 | [-0.07, 3.94] | 97.45% |     1.30% |           4.54
-    ## versicolor |  virginica |         6.90 |       0.44 | [-0.08, 0.99] | 95.40% |     7.95% |           1.01
-
-### Find a predictor’s slopes at each factor level
 
 ``` r
-estimate_slopes(model)
-## Species    | Median |        95% CI |     pd | % in ROPE | Std. Median
-## ----------------------------------------------------------------------
-## setosa     |   0.34 | [-0.03, 0.71] | 96.38% |    10.95% |        1.37
-## versicolor |   0.36 | [ 0.18, 0.54] | 99.95% |     0.25% |        1.46
-## virginica  |   0.23 | [ 0.07, 0.38] | 99.65% |     5.17% |        0.93
+# Recompute contrasts with a higher precision (for a smoother plot)
+contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
+
+# Add Contrast column by concatenating 
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
+
+# Plot
+ggplot(contrasts, aes(x = Petal.Length, y = Difference,)) +
+  # Add line and CI band
+  geom_line(aes(color = Contrast)) +
+  geom_ribbon(aes(ymin = CI_low, ymax=CI_high, fill = Contrast), alpha = 0.2) +
+  # Add line at 0, indicating no difference
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  # Colors
+  theme_modern()
 ```
 
-### Generate predictions from your model to compare it with original data
+![](man/figures/unnamed-chunk-9-1.png)<!-- -->
+
+## Generate predictions from your model to compare it with original data
+
+-   **Problem**: You fitted different models, and you want to
+    intuitively visualize how they compare in terms of fit quality and
+    prediction accuracy, so that you don’t only rely on abstract indices
+    of performance.
+-   **Solution**: You can predict the response variable from different
+    models and plot them against the original true response. The closest
+    the points are on the identity line (the diagonal), the closest they
+    are from a perfect fit.
 
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html)
-to create this plot:
-
-![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+for a detailed walkthrough on *predictions*.
 
 ``` r
-estimate_response(model)
+# Fit model 1 and predict the response variable
+model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
+pred1 <- modelbased::estimate_response(model1)
+pred1$Petal.Length <- iris$Petal.Length  # Add true response
+
+# Print first 5 lines of output
+head(pred1, n = 5)
+## Model-based Prediction
+## 
+## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length
+## --------------------------------------------------------------------------
+## 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98 |         1.40
+## 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60 |         1.40
+## 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33 |         1.30
+## 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05 |         1.50
+## 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79 |         1.40
+## 
+## Variable predicted: Petal.Length
+
+# Same for model 2
+model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+pred2 <- modelbased::estimate_response(model2)
+pred2$Petal.Length <- iris$Petal.Length 
+
+
+# Initialize plot for model 1
+ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
+  # with identity line (diagonal) representing perfect predictions
+  geom_abline(linetype = "dashed") +
+  # Add the actual predicted points of the models
+  geom_point(aes(color = "Model 1")) +
+  geom_point(data = pred2, aes(color = "Model 2")) +
+  # Aesthetics changes
+  labs(y = "Petal.Length (predicted)", color = NULL) +
+  scale_color_manual(values = c("Model 1" = "blue", "Model 2" = "red")) +
+  theme_modern()
 ```
 
-| Sepal.Length | Species | Predicted |   SE | CI\_low | CI\_high |
-|-------------:|:--------|----------:|-----:|--------:|---------:|
-|          5.1 | setosa  |      1.48 | 0.27 |    0.98 |     2.03 |
-|          4.9 | setosa  |      1.44 | 0.27 |    0.91 |     1.98 |
-|          4.7 | setosa  |      1.42 | 0.27 |    0.88 |     1.97 |
-|          4.6 | setosa  |      1.41 | 0.27 |    0.90 |     1.94 |
-|          5.0 | setosa  |      1.46 | 0.27 |    0.97 |     2.04 |
-|          5.4 | setosa  |      1.51 | 0.27 |    1.00 |     2.01 |
+![](man/figures/unnamed-chunk-10-1.png)<!-- -->
 
-### Estimate the link between the response and a predictor
+## Describe the smooth term by its linear parts
+
+-   **Problem**: You model a non-linear relationship using polynomials,
+    splines or GAMs. You want to describe it in terms of linear parts:
+    where does it decrease, how much, where does it increase, etc.
+-   **Solution**: You can apply `describe_nonlinear` on a predicted
+    relationship that will return the different parts of increase and
+    decrease.
+
+``` r
+model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
+
+# 1. Visualize
+vizdata <- estimate_relation(model, length = 30)
+
+ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.3) +
+  geom_line() +
+  # Add original data points
+  geom_point(data = iris, aes(x = Petal.Length, y = Sepal.Width)) +
+  # Aesthetics
+  theme_modern()
+```
+
+![](man/figures/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+
+# 2. Describe smooth line
+describe_nonlinear(vizdata, x = "Petal.Length")
+## Start |  End | Length | Change | Slope |   R2
+## ---------------------------------------------
+## 1.00  | 4.05 |   0.50 |  -0.84 | -0.28 | 0.05
+## 4.05  | 6.90 |   0.47 |   0.66 |  0.23 | 0.05
+```
+
+## Plot all posterior draws for Bayesian models predictions
 
 See [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html)
-to create this plot:
+for a walkthrough on how to do that.
+
 <img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
-
-``` r
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
-
-estimate_link(model)
-```
-
-| Petal.Length | Predicted |   SE | CI\_low | CI\_high |
-|-------------:|----------:|-----:|--------:|---------:|
-|         1.00 |      3.62 | 0.06 |    3.50 |     3.75 |
-|         1.98 |      3.18 | 0.04 |    3.10 |     3.26 |
-|         2.97 |      2.90 | 0.05 |    2.81 |     2.99 |
-|         3.95 |      2.78 | 0.05 |    2.69 |     2.87 |
-|         4.93 |      2.83 | 0.04 |    2.76 |     2.91 |
-|         5.92 |      3.05 | 0.06 |    2.95 |     3.16 |
-|         6.90 |      3.44 | 0.12 |    3.20 |     3.67 |
-
-### Describe the smooth term by its linear parts
-
-``` r
-estimate_smooth(model)
-## Part | Start |  End |   Size | Trend | Linearity
-## ------------------------------------------------
-## 1    |  1.00 | 3.62 | 50.00% | -0.19 |      0.96
-## 2    |  3.62 | 6.90 | 50.00% |  0.08 |      0.81
-```

@@ -196,6 +196,10 @@ plot(contrasts, estimate_means(model)) +
 
 ## Check the contrasts at different points of another linear predictor
 
+- **Problem**: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.
+- **Solution**: You can estimate the marginal contrasts at different values of a contious variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
+
+
 ```{r message=FALSE, warning=FALSE}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
@@ -203,10 +207,10 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 
 ```{r message=FALSE, warning=FALSE}
-# Recompute comntrasts with more spread
+# Recompute contrasts with a higher precision (for a smoother plot)
 contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
 
-# Add Contrast column
+# Add Contrast column by concatenating 
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
 
 # Plot
@@ -220,71 +224,77 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference,)) +
   theme_modern()
 ```
 
-## Find a predictor's slopes at each factor level
-
-```{r message=FALSE, warning=FALSE}
-estimate_slopes(model)
-```
-
 
 ## Generate predictions from your model to compare it with original data
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
+- **Problem**: You fitted different models, and you want to intuitively visualize how they compare in terms of fit quality and prediction accuracy, so that you don't only rely on abstract indices of performance.
+- **Solution**: You can predict the response variable from different models and plot them against the original true response. The closest the points are on the identity line (the diagonal), the closest they are from a perfect fit.
 
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-data <- iris
-model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
-predicted <- estimate_response(model)
-data$Predicted <- predicted$Predicted
-model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
-data$Predicted_2 <- estimate_response(model)$Predicted
-data %>%
-  ggplot() +
-  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
-  geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
-  geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
-  ylab("Petal.Length (predicted)") +
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a detailed walkthrough on *predictions*.
+
+```{r message=FALSE, warning=FALSE}
+# Fit model 1 and predict the response variable
+model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
+pred1 <- modelbased::estimate_response(model1)
+pred1$Petal.Length <- iris$Petal.Length  # Add true response
+
+# Print first 5 lines of output
+head(pred1, n = 5)
+
+# Same for model 2
+model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+pred2 <- modelbased::estimate_response(model2)
+pred2$Petal.Length <- iris$Petal.Length 
+
+
+# Initialize plot for model 1
+ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
+  # with identity line (diagonal) representing perfect predictions
+  geom_abline(linetype = "dashed") +
+  # Add the actual predicted points of the models
+  geom_point(aes(color = "Model 1")) +
+  geom_point(data = pred2, aes(color = "Model 2")) +
+  # Aesthetics changes
+  labs(y = "Petal.Length (predicted)", color = NULL) +
+  scale_color_manual(values = c("Model 1" = "blue", "Model 2" = "red")) +
   theme_modern()
 ```
 
 
+## Describe the smooth term by its linear parts
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-estimate_response(model)
+- **Problem**: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.
+- **Solution**: You can apply `describe_nonlinear` on a predicted relationship that will return the different parts of increase and decrease.
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
+
+# 1. Visualize
+vizdata <- estimate_relation(model, length = 30)
+
+ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.3) +
+  geom_line() +
+  # Add original data points
+  geom_point(data = iris, aes(x = Petal.Length, y = Sepal.Width)) +
+  # Aesthetics
+  theme_modern()
+
+
+# 2. Describe smooth line
+describe_nonlinear(vizdata, x = "Petal.Length")
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(
-  model %>%
-    estimate_response() %>%
-    head(),
-  digits = 2
-)
-```
 
-## Estimate the link between the response and a predictor
 
-See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
+## Plot all posterior draws for Bayesian models predictions
+
+See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a walkthrough on how to do that.
+
+
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 knitr::include_graphics("https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif")
 ```
 
 
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 
-estimate_link(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris, refresh = 0)
-knitr::kable(
-  model %>%
-    estimate_link(length = 7, smooth_strength = 0.3),
-  digits = 2
-)
-```
-
-## Describe the smooth term by its linear parts
-```{r message=FALSE, warning=FALSE}
-estimate_smooth(model)
-```

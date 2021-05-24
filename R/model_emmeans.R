@@ -1,6 +1,6 @@
-#' Estimate Marginal Means using 'emmeans'
+#' Easy Creation of 'emmeans' Marginal Means Objects
 #'
-#' A wrapper to facilitate the usage of \code{emmeans::emmeans()}.
+#' The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()}, providing a somewhat simpler and smart API to find the variables of interest.
 #'
 #' @param model A statistical model.
 #' @param levels A character vector or formula specifying the names of the
