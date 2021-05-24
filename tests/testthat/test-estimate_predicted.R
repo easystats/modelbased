@@ -17,7 +17,8 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
   estim <- modelbased::estimate_relation(model, ci = 0.90)
   expect_equal(attributes(estim)$ci, 0.9)
   estim <- modelbased::estimate_relation(model, ci = c(0.90, .95))
-  expect_equal(attributes(estim)$ci, 0.9)
+  expect_equal(attributes(estim)$ci, c(0.90, 0.95))
+  expect_equal(dim(estim), c(10, 7))
 
   # vizdata <- visualisation_matrix(model)
   # insight::get_predicted(model, as.data.frame(vizdata), ci = c(0.90, .95))
@@ -113,7 +114,7 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     expect_equal(dim(estim), c(32, 7))
 
     estim <- modelbased::estimate_response(model, ci = NULL)
-    expect_equal(dim(estim), c(32, 6))
+    expect_equal(dim(estim), c(32, 5))
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
     estim <- estimate_link(model, target = "wt")

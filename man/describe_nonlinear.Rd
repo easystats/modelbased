@@ -2,19 +2,22 @@
 % Please edit documentation in R/describe_nonlinear.R
 \name{describe_nonlinear}
 \alias{describe_nonlinear}
+\alias{describe_nonlinear.data.frame}
 \alias{estimate_smooth}
 \title{Describe the smooth term (for GAMs) or non-linear predictors}
 \usage{
-describe_nonlinear(data, x = NULL, y = NULL, ...)
+describe_nonlinear(data, ...)
 
-estimate_smooth(data, x = NULL, y = NULL, ...)
+\method{describe_nonlinear}{data.frame}(data, x = NULL, y = NULL, ...)
+
+estimate_smooth(data, ...)
 }
 \arguments{
 \item{data}{The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.}
 
-\item{x, y}{The name of the responses variable (\code{y}) predicting variable (\code{x}).}
-
 \item{...}{Other arguments to be passed to or from.}
+
+\item{x, y}{The name of the responses variable (\code{y}) predicting variable (\code{x}).}
 }
 \value{
 A dataframe of linear description of non-linear terms.

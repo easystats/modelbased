@@ -27,7 +27,7 @@
 #' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
 #' @export
-describe_nonlinear <- function(data, x = NULL, y = NULL, ...) {
+describe_nonlinear <- function(data, ...) {
   UseMethod("describe_nonlinear")
 }
 
@@ -40,16 +40,17 @@ describe_nonlinear.estimate_predicted <- function(data, x = NULL, y = "Predicted
 }
 
 
+
 #' @export
-describe_nonlinear.numeric <- function(y, x = NULL, ...) {
+describe_nonlinear.numeric <- function(data, x = NULL, ...) {
   if(is.null(x)) {
-    x <- 1:length(y)
+    x <- 1:length(data)
   }
-  describe_nonlinear(data.frame(x = x, y = y), x = "x", y = "y")
+  describe_nonlinear(data.frame(x = x, y = data), x = "x", y = "y")
 }
 
 
-
+#' @rdname describe_nonlinear
 #' @export
 describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
   # Sanity check
