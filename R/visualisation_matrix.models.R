@@ -42,7 +42,7 @@ visualisation_matrix.glm <- function(x,
   )
 
   if (include_smooth == FALSE) {
-    data <- data[!names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))]
+    data[names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))] <- NULL
   }
 
   attr(data, "model") <- x

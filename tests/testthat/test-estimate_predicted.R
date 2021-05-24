@@ -22,7 +22,7 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
 
     # MGCV
     model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
-    expect_equal(nrow(modelbased::estimate_link(model, length = 3)), 9)
+    expect_equal(dim(modelbased::estimate_link(model, length = 3)), c(9, 6))
     expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
 
     model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/model_emmeans.R
 \name{model_emmeans}
 \alias{model_emmeans}
-\title{Estimate Marginal Means using 'emmeans'}
+\title{Easy Creation of 'emmeans' Marginal Means Objects}
 \usage{
 model_emmeans(
   model,
@@ -41,7 +41,7 @@ in terms of probabilities.}
 An \code{emmeans} object.
 }
 \description{
-A wrapper to facilitate the usage of \code{emmeans::emmeans()}.
+The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()}, providing a somewhat simpler and smart API to find the variables of interest.
 }
 \examples{
 library(modelbased)

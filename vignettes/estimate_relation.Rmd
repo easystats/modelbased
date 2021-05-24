@@ -35,6 +35,8 @@ set.seed(333)
 This vignette will present how to visualize the effects and interactions using
 `estimate_relation()`.
 
+Note that the statistically correct name of `estimate_relation` is `estimate_expectation` (which can be used as an alias), as it refers to expected predictions (see [more](https://easystats.github.io/insight/reference/get_predicted.html)). 
+
 # Simple regression
 
 ## Linear relationship
