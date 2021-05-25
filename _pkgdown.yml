@@ -12,8 +12,26 @@ template:
   params:
     bootswatch: cosmo
 
-
-
+reference:
+- title: "Model-based Estimations"
+  contents:
+  - estimate_expectation
+  - estimate_means
+  - estimate_contrasts
+  - estimate_slopes
+  - describe_nonlinear
+- title: "Data grids and Visualisation"
+  contents:
+  - visualisation_matrix
+  - visualisation_recipe
+- title: "Miscellaenous"
+  contents:
+  - model_emmeans
+  - find_inversions
+  - zero_crossings
+  - smoothing
+  
+  
 navbar:
   type: default
   left:
@@ -21,7 +39,7 @@ navbar:
     href: index.html
   - text: News
     href: news/index.html
-  - text: Features
+  - text: Functions
     href: reference/index.html
   - text: Tutorials
     menu:
