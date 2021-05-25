@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_means.R
 \name{estimate_means}
 \alias{estimate_means}
-\title{Estimate average value of response variable at each factor levels}
+\title{Estimate Marginal Means (Model-based Average at each Factor Level)}
 \usage{
 estimate_means(
   model,
@@ -10,10 +10,7 @@ estimate_means(
   fixed = NULL,
   modulate = NULL,
   transform = "response",
-  length = 10,
-  centrality = "median",
   ci = 0.95,
-  ci_method = "hdi",
   ...
 )
 }
@@ -21,38 +18,40 @@ estimate_means(
 \item{model}{A statistical model.}
 
 \item{levels}{A character vector or formula specifying the names of the
-predictors over which to estimate means or contrasts.}
+predicting factors over which to estimate means or contrasts.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
 \item{modulate}{A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Adjust its length
-using \code{length}.}
+along which the means or the contrasts will be estimated. Other arguments
+from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
+number of data points.}
 
-\item{transform}{Can be \code{"none"} (default for contrasts),
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
 \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"}  will leave the values on scale of the linear
+\code{"log"}. \code{"none"} will leave the values on scale of the linear
 predictors. \code{"response"} will transform them on scale of the response
 variable. Thus for a logistic model, \code{"none"} will give estimations
 expressed in log-odds (probabilities on logit scale) and \code{"response"}
 in terms of probabilities.}
 
-\item{length}{Length of the spread numeric variables.}
+\item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
 
-\item{centrality, ci, ci_method}{Arguments for Bayesian models.}
-
-\item{...}{Arguments passed to or from other methods.}
+\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
 A dataframe of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor levels
+Estimate average value of response variable at each factor levels. See also other
+related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 }
 \examples{
 library(modelbased)
 
+# Frequentist models
+# -------------------
 model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
@@ -63,7 +62,11 @@ estimate_means(model, levels = "Sepal.Width=c(2, 4)")
 estimate_means(model, levels = c("Species", "Sepal.Width=0"))
 estimate_means(model, modulate = "Sepal.Width", length = 5)
 estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
-\dontrun{
+
+means <- estimate_means(model, fixed = "Sepal.Width")
+effectsize::standardize(means)
+
+\donttest{
 if (require("lme4")) {
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -72,8 +75,9 @@ if (require("lme4")) {
   estimate_means(model)
   estimate_means(model, modulate = "Sepal.Width", length = 3)
 }
-}
-\donttest{
+
+# Bayesian models
+# -------------------
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)

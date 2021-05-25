@@ -43,7 +43,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -81,7 +81,10 @@
       <a href="articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -111,16 +114,21 @@
 <a href="#modelbased-" class="anchor"></a>modelbased <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
+<hr>
+<p><span class="emoji" data-emoji="warning">⚠️</span> <code><a href="reference/estimate_expectation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="reference/estimate_expectation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html"><code>get_predicted()</code></a>, so more details can be found there). This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</p>
+<hr>
 <p><code>modelbased</code> is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and model predictions.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p><a href="https://cran.r-project.org/package=modelbased"><img src="http://www.r-pkg.org/badges/version/modelbased" alt="CRAN"></a> <img src="https://github.com/easystats/modelbased/workflows/Tests/badge.svg" alt="Tests"><a href="https://codecov.io/gh/easystats/modelbased"><img src="https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg" alt="codecov"></a></p>
 <p>Run the following to install the stable release of <strong>modelbased</strong> from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"modelbased"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"modelbased"</span><span class="op">)</span></code></pre></div>
 <p>Or this one to install the latest development version:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"remotes"</span>)
-<span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"easystats/modelbased"</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
+<span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"easystats/modelbased"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="documentation" class="section level2">
 <h2 class="hasAnchor">
@@ -142,212 +150,267 @@
 <p>The package is built around 5 main functions:</p>
 <ul>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_means.html"><code><a href="reference/estimate_means.html">estimate_means()</a></code></a>: Estimates the average values at each factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_means.html"><code>estimate_means()</code></a>: Estimates the average values at each factor levels</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html"><code><a href="reference/estimate_contrasts.html">estimate_contrasts()</a></code></a>: Estimates and tests contrasts between different factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html"><code>estimate_contrasts()</code></a>: Estimates and tests contrasts between different factor levels</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html"><code><a href="reference/estimate_slopes.html">estimate_slopes()</a></code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html"><code>estimate_slopes()</code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_response.html"><code><a href="reference/estimate_relation.html">estimate_response()</a></code></a>: Predict the response variable using the model</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_response.html"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_smooth.html"><code><a href="reference/estimate_smooth.html">estimate_smooth()</a></code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_smooth.html"><code>estimate_smooth()</code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
-<p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html"><code><a href="reference/visualisation_matrix.html">visualisation_matrix()</a></code></a> function, a smart tool for guessing the appropriate reference grid.</p>
-<p>The package currently only supports <code>rstanarm</code> models, but will be expanded to cover a large variety of frequentist and Bayesian models.</p>
-<div id="examples" class="section level2">
+<p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html"><code>visualisation_matrix()</code></a> function, a smart tool for guessing the appropriate reference grid.</p>
+<div id="create-smart-grids-to-represent-complex-interactions" class="section level2">
 <h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
-<div id="create-smart-grids-to-represent-complex-interactions" class="section level3">
-<h3 class="hasAnchor">
-<a href="#create-smart-grids-to-represent-complex-interactions" class="anchor"></a>Create smart grids to represent complex interactions</h3>
-<p>Check-out <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>this vignette</strong></a> to create this plot:</p>
+<a href="#create-smart-grids-to-represent-complex-interactions" class="anchor"></a>Create smart grids to represent complex interactions</h2>
+<ul>
+<li>
+<strong>Problem</strong>: I want to graphically represent the interaction between two continuous variable. On top of that, I would like to express one of them in terms of standardized change (i.e., standard deviation relative to the mean).</li>
+<li>
+<strong>Solution</strong>: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using <code>ggplot</code>.</li>
+</ul>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>visualisation matrices</em>.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/">see</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span>
+
+<span class="co"># 1. Fit model and get visualization matrix</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span> 
+
+<span class="co"># 2. Create a visualisation matrix with expected Z-score values of Petal.Width</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">model</span>, target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width = c(-1, 0, 1)"</span><span class="op">)</span><span class="op">)</span> 
+
+<span class="co"># 3. Revert from expected SD to actual values</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/standardize.html">unstandardize</a></span><span class="op">(</span><span class="va">vizdata</span>, select <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span> 
+
+<span class="co"># 4. Add predicted relationship from the model</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_expectation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span>
+
+<span class="co"># 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)</span>
+<span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/format_standardize.html">format_standardize</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span>, reference <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Width</span><span class="op">)</span>
+
+<span class="co"># 6. Plot</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add points from original dataset (only shapes 21-25 have a fill aesthetic)</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html">geom_point2</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span>, shape <span class="op">=</span> <span class="fl">21</span>, size <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">+</span> 
+  <span class="co"># Add relationship lines</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">vizdata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Predicted</span>, color <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Improve colors / themes</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_color_viridis_d</a></span><span class="op">(</span>direction <span class="op">=</span> <span class="op">-</span><span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_fill_viridis_c</a></span><span class="op">(</span>guide <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-4-1.png"><!-- --></p>
 </div>
-<div id="estimate-marginal-means" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimate-marginal-means" class="anchor"></a>Estimate marginal means</h3>
-<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>this vignette</strong></a> to create this plot:</p>
+<div id="estimate-marginal-means" class="section level2">
+<h2 class="hasAnchor">
+<a href="#estimate-marginal-means" class="anchor"></a>Estimate marginal means</h2>
+<ul>
+<li>
+<strong>Problem</strong>: My model has a factor as a predictor, and the parameters only return the difference between levels and the intercept. I want to see the values <em>at</em> each factor level.</li>
+<li>
+<strong>Solution</strong>: Estimate model-based means (“marginal means”). You can visualize them by plotting their confidence interval and the original data.</li>
+</ul>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>marginal means</em>.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># 1. The model</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="co"># 2. Obtain estimated means</span>
+<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">means</span>
+<span class="co">## Estimated Marginal Means</span>
+<span class="co">## </span>
+<span class="co">## Species    | Mean |   SE |       95% CI</span>
+<span class="co">## ---------------------------------------</span>
+<span class="co">## setosa     | 3.43 | 0.05 | [3.33, 3.52]</span>
+<span class="co">## versicolor | 2.77 | 0.05 | [2.68, 2.86]</span>
+<span class="co">## virginica  | 2.97 | 0.05 | [2.88, 3.07]</span>
+<span class="co">## </span>
+<span class="co">## Marginal means estimated for Species</span>
+
+<span class="co"># 3. Plot </span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add base data </span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html">geom_violin</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
+  
+  <span class="co"># Add pointrange and line from means</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html">geom_pointrange</a></span><span class="op">(</span>
+    data <span class="op">=</span> <span class="va">means</span>,
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,
+    size <span class="op">=</span> <span class="fl">1</span>,
+    color <span class="op">=</span> <span class="st">"white"</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Improve colors</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_material.html">scale_fill_material</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-5-1.png"><!-- --></p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">rstanarm</span>)
+</div>
+<div id="contrast-analysis" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contrast-analysis" class="anchor"></a>Contrast analysis</h2>
+<ul>
+<li>
+<strong>Problem</strong>: The parameters of my model only return the difference between some of the factor levels and the intercept. I want to see the differences between each levels, as I would do with post-hoc comparison tests in ANOVAs.</li>
+<li>
+<strong>Solution</strong>: Estimate model-based contrasts (“marginal contrasts”). You can visualize them by plotting their confidence interval.</li>
+</ul>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>contrast analysis</em>.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># 1. The model</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu">stan_glm</span>(<span class="no">Sepal.Width</span> ~ <span class="no">Species</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="co"># 2. Estimate marginal contrasts</span>
+<span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">contrasts</span>
+<span class="co">## Marginal Contrasts Analysis</span>
+<span class="co">## </span>
+<span class="co">## Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
+<span class="co">## ------------------------------------------------------------------------------</span>
+<span class="co">## setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | &lt; .001</span>
+<span class="co">## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001</span>
+<span class="co">## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 </span>
+<span class="co">## </span>
+<span class="co">## Marginal contrasts estimated for Species</span>
+<span class="co">## p-value adjustment method: Holm (1979)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-7-1.png"><!-- --></p>
+</div>
+<div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#check-the-contrasts-at-different-points-of-another-linear-predictor" class="anchor"></a>Check the contrasts at different points of another linear predictor</h2>
+<ul>
+<li>
+<strong>Problem</strong>: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.</li>
+<li>
+<strong>Solution</strong>: You can estimate the marginal contrasts at different values of a contious variable (the <em>modulator</em>), and plot these differences (they are significant if their 95% CI doesn’t cover 0).</li>
+</ul>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span>(<span class="no">model</span>)</pre></div>
-<div class="sourceCode" id="cb4"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Species    | Mean |       95% CI</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="do">## --------------------------------</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     | 3.43 | [3.34, 3.52]</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="do">## versicolor | 2.77 | [2.68, 2.87]</span></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="do">## virginica  | 2.97 | [2.89, 3.07]</span></span></code></pre></div>
-</div>
-<div id="contrast-analysis" class="section level3">
-<h3 class="hasAnchor">
-<a href="#contrast-analysis" class="anchor"></a>Contrast analysis</h3>
-<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>this vignette</strong></a> to create this plot:</p>
-<p><img src="reference/figures/unnamed-chunk-8-1.png"><!-- --></p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(<span class="no">model</span>)
-<span class="co">## Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference</span>
-<span class="co">## -------------------------------------------------------------------------------------------</span>
-<span class="co">## setosa     | versicolor |       0.66 | [ 0.53,  0.80] |   100% |        0% |           1.51</span>
-<span class="co">## setosa     |  virginica |       0.45 | [ 0.33,  0.59] |   100% |        0% |           1.04</span>
-<span class="co">## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 99.83% |     6.68% |          -0.47</span></pre></div>
-</div>
-<div id="check-the-contrasts-at-different-points-of-another-linear-predictor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#check-the-contrasts-at-different-points-of-another-linear-predictor" class="anchor"></a>Check the contrasts at different points of another linear predictor</h3>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu">stan_glm</span>(<span class="no">Sepal.Width</span> ~ <span class="no">Species</span> * <span class="no">Petal.Length</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>
+<span class="co">## Marginal Contrasts Analysis</span>
+<span class="co">## </span>
+<span class="co">## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p</span>
+<span class="co">## --------------------------------------------------------------------------------------------</span>
+<span class="co">## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34 |   4.97 | &lt; .001</span>
+<span class="co">## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65 |   2.67 | 0.023 </span>
+<span class="co">## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44 |   1.24 | 0.434 </span>
+<span class="co">## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40 |   3.38 | 0.003 </span>
+<span class="co">## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66 |   2.70 | 0.021 </span>
+<span class="co">## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42 |   1.58 | 0.257 </span>
+<span class="co">## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49 |  -0.73 | 0.747 </span>
+<span class="co">## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.926 </span>
+<span class="co">## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.229 </span>
+<span class="co">## </span>
+<span class="co">## Marginal contrasts estimated for Species</span>
+<span class="co">## p-value adjustment method: Holm (1979)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Recompute contrasts with a higher precision (for a smoother plot)</span>
+<span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">20</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span>(<span class="no">model</span>, <span class="kw">modulate</span> <span class="kw">=</span> <span class="st">"Petal.Length"</span>, <span class="kw">length</span> <span class="kw">=</span> <span class="fl">3</span>)</pre></div>
-<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Level1     |     Level2 | Petal.Length | Difference |        95% CI |     pd | % in ROPE | Std_Difference</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## ---------------------------------------------------------------------------------------------------------</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     | versicolor |         1.00 |       1.67 | [ 1.05, 2.27] |   100% |        0% |           3.84</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     |  virginica |         1.00 |       1.34 | [ 0.59, 2.07] |   100% |     0.02% |           3.07</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## versicolor |  virginica |         1.00 |      -0.33 | [-1.27, 0.57] | 75.48% |    13.60% |          -0.76</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     | versicolor |         3.95 |       1.61 | [ 0.66, 2.54] | 99.92% |     0.07% |           3.70</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     |  virginica |         3.95 |       1.66 | [ 0.69, 2.68] | 99.90% |     0.15% |           3.81</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="do">## versicolor |  virginica |         3.95 |       0.05 | [-0.23, 0.34] | 63.50% |    47.48% |           0.12</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     | versicolor |         6.90 |       1.54 | [-0.54, 3.60] | 93.00% |     2.73% |           3.54</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="do">## setosa     |  virginica |         6.90 |       2.00 | [-0.02, 4.00] | 97.35% |     1.27% |           4.58</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="do">## versicolor |  virginica |         6.90 |       0.44 | [-0.08, 0.96] | 94.62% |     8.80% |           1.01</span></span></code></pre></div>
-</div>
-<div id="find-a-predictors-slopes-at-each-factor-level" class="section level3">
-<h3 class="hasAnchor">
-<a href="#find-a-predictors-slopes-at-each-factor-level" class="anchor"></a>Find a predictor’s slopes at each factor level</h3>
-<div class="sourceCode" id="cb8"><pre class="r"><span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span>(<span class="no">model</span>)
-<span class="co">## Species    | Median |        95% CI |     pd | % in ROPE | Std. Median</span>
-<span class="co">## ----------------------------------------------------------------------</span>
-<span class="co">## setosa     |   0.34 | [-0.05, 0.69] | 96.00% |     8.48% |        1.37</span>
-<span class="co">## versicolor |   0.36 | [ 0.18, 0.54] | 99.98% |     0.18% |        1.46</span>
-<span class="co">## virginica  |   0.23 | [ 0.07, 0.38] | 99.88% |     5.78% |        0.93</span></pre></div>
-</div>
-<div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level3">
-<h3 class="hasAnchor">
-<a href="#generate-predictions-from-your-model-to-compare-it-with-original-data" class="anchor"></a>Generate predictions from your model to compare it with original data</h3>
-<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot:</p>
-<p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
-<div class="sourceCode" id="cb9"><pre class="r"><span class="fu"><a href="reference/estimate_relation.html">estimate_response</a></span>(<span class="no">model</span>)</pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Sepal.Length</th>
-<th align="left">Species</th>
-<th align="right">Predicted</th>
-<th align="right">CI_low</th>
-<th align="right">CI_high</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">5.1</td>
-<td align="left">setosa</td>
-<td align="right">1.47</td>
-<td align="right">0.98</td>
-<td align="right">1.98</td>
-</tr>
-<tr class="even">
-<td align="right">4.9</td>
-<td align="left">setosa</td>
-<td align="right">1.45</td>
-<td align="right">0.92</td>
-<td align="right">1.97</td>
-</tr>
-<tr class="odd">
-<td align="right">4.7</td>
-<td align="left">setosa</td>
-<td align="right">1.41</td>
-<td align="right">0.88</td>
-<td align="right">1.96</td>
-</tr>
-<tr class="even">
-<td align="right">4.6</td>
-<td align="left">setosa</td>
-<td align="right">1.42</td>
-<td align="right">0.92</td>
-<td align="right">1.98</td>
-</tr>
-<tr class="odd">
-<td align="right">5.0</td>
-<td align="left">setosa</td>
-<td align="right">1.46</td>
-<td align="right">0.90</td>
-<td align="right">1.96</td>
-</tr>
-<tr class="even">
-<td align="right">5.4</td>
-<td align="left">setosa</td>
-<td align="right">1.51</td>
-<td align="right">1.00</td>
-<td align="right">2.11</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="estimate-the-link-between-the-response-and-a-predictor" class="section level3">
-<h3 class="hasAnchor">
-<a href="#estimate-the-link-between-the-response-and-a-predictor" class="anchor"></a>Estimate the link between the response and a predictor</h3>
-<p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> to create this plot: <img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="r"><span class="no">model</span> <span class="kw">&lt;-</span> <span class="fu">stan_glm</span>(<span class="no">Sepal.Width</span> ~ <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span>(<span class="no">Petal.Length</span>, <span class="fl">2</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">iris</span>)
+<span class="co"># Add Contrast column by concatenating </span>
+<span class="va">contrasts</span><span class="op">$</span><span class="va">Contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">contrasts</span><span class="op">$</span><span class="va">Level1</span>, <span class="st">"-"</span>, <span class="va">contrasts</span><span class="op">$</span><span class="va">Level2</span><span class="op">)</span>
 
-<span class="fu"><a href="reference/estimate_relation.html">estimate_link</a></span>(<span class="no">model</span>)</pre></div>
-<table class="table">
-<thead><tr class="header">
-<th align="right">Petal.Length</th>
-<th align="right">Predicted</th>
-<th align="right">CI_low</th>
-<th align="right">CI_high</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="right">1.00</td>
-<td align="right">3.62</td>
-<td align="right">3.49</td>
-<td align="right">3.75</td>
-</tr>
-<tr class="even">
-<td align="right">1.98</td>
-<td align="right">3.18</td>
-<td align="right">3.09</td>
-<td align="right">3.26</td>
-</tr>
-<tr class="odd">
-<td align="right">2.97</td>
-<td align="right">2.90</td>
-<td align="right">2.81</td>
-<td align="right">2.99</td>
-</tr>
-<tr class="even">
-<td align="right">3.95</td>
-<td align="right">2.78</td>
-<td align="right">2.69</td>
-<td align="right">2.87</td>
-</tr>
-<tr class="odd">
-<td align="right">4.93</td>
-<td align="right">2.83</td>
-<td align="right">2.77</td>
-<td align="right">2.91</td>
-</tr>
-<tr class="even">
-<td align="right">5.92</td>
-<td align="right">3.05</td>
-<td align="right">2.94</td>
-<td align="right">3.16</td>
-</tr>
-<tr class="odd">
-<td align="right">6.90</td>
-<td align="right">3.44</td>
-<td align="right">3.20</td>
-<td align="right">3.68</td>
-</tr>
-</tbody>
-</table>
+<span class="co"># Plot</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">contrasts</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Difference</span>,<span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add line and CI band</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Contrast</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax<span class="op">=</span><span class="va">CI_high</span>, fill <span class="op">=</span> <span class="va">Contrast</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add line at 0, indicating no difference</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Colors</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-9-1.png"><!-- --></p>
 </div>
-<div id="describe-the-smooth-term-by-its-linear-parts" class="section level3">
-<h3 class="hasAnchor">
-<a href="#describe-the-smooth-term-by-its-linear-parts" class="anchor"></a>Describe the smooth term by its linear parts</h3>
-<div class="sourceCode" id="cb11"><pre class="r"><span class="fu"><a href="reference/estimate_smooth.html">estimate_smooth</a></span>(<span class="no">model</span>)
-<span class="co">## Part | Start |  End |   Size | Trend | Linearity</span>
-<span class="co">## ------------------------------------------------</span>
-<span class="co">## 1    |  1.00 | 3.62 | 50.00% | -0.19 |      0.96</span>
-<span class="co">## 2    |  3.62 | 6.90 | 50.00% |  0.08 |      0.81</span></pre></div>
+<div id="generate-predictions-from-your-model-to-compare-it-with-original-data" class="section level2">
+<h2 class="hasAnchor">
+<a href="#generate-predictions-from-your-model-to-compare-it-with-original-data" class="anchor"></a>Generate predictions from your model to compare it with original data</h2>
+<ul>
+<li>
+<strong>Problem</strong>: You fitted different models, and you want to intuitively visualize how they compare in terms of fit quality and prediction accuracy, so that you don’t only rely on abstract indices of performance.</li>
+<li>
+<strong>Solution</strong>: You can predict the response variable from different models and plot them against the original true response. The closest the points are on the identity line (the diagonal), the closest they are from a perfect fit.</li>
+</ul>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>predictions</em>.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Fit model 1 and predict the response variable</span>
+<span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span>
+<span class="va">pred1</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span>  <span class="co"># Add true response</span>
+
+<span class="co"># Print first 5 lines of output</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">pred1</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="co">## Model-based Prediction</span>
+<span class="co">## </span>
+<span class="co">## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length</span>
+<span class="co">## --------------------------------------------------------------------------</span>
+<span class="co">## 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98 |         1.40</span>
+<span class="co">## 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60 |         1.40</span>
+<span class="co">## 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33 |         1.30</span>
+<span class="co">## 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05 |         1.50</span>
+<span class="co">## 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79 |         1.40</span>
+<span class="co">## </span>
+<span class="co">## Variable predicted: Petal.Length</span>
+
+<span class="co"># Same for model 2</span>
+<span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span>
+<span class="va">pred2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span> 
+
+
+<span class="co"># Initialize plot for model 1</span>
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pred1</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># with identity line (diagonal) representing perfect predictions</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add the actual predicted points of the models</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Model 1"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pred2</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"Model 2"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Aesthetics changes</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Petal.Length (predicted)"</span>, color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Model 1"</span> <span class="op">=</span> <span class="st">"blue"</span>, <span class="st">"Model 2"</span> <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-10-1.png"><!-- --></p>
 </div>
+<div id="describe-the-smooth-term-by-its-linear-parts" class="section level2">
+<h2 class="hasAnchor">
+<a href="#describe-the-smooth-term-by-its-linear-parts" class="anchor"></a>Describe the smooth term by its linear parts</h2>
+<ul>
+<li>
+<strong>Problem</strong>: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.</li>
+<li>
+<strong>Solution</strong>: You can apply <code>describe_nonlinear</code> on a predicted relationship that will return the different parts of increase and decrease.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="co"># 1. Visualize</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">vizdata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Add original data points</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="co"># Aesthetics</span>
+  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-11-1.png"><!-- --></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># 2. Describe smooth line</span>
+<span class="fu"><a href="reference/describe_nonlinear.html">describe_nonlinear</a></span><span class="op">(</span><span class="va">vizdata</span>, x <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span>
+<span class="co">## Start |  End | Length | Change | Slope |   R2</span>
+<span class="co">## ---------------------------------------------</span>
+<span class="co">## 1.00  | 4.05 |   0.50 |  -0.84 | -0.28 | 0.05</span>
+<span class="co">## 4.05  | 6.90 |   0.47 |   0.66 |  0.23 | 0.05</span></code></pre></div>
+</div>
+<div id="plot-all-posterior-draws-for-bayesian-models-predictions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#plot-all-posterior-draws-for-bayesian-models-predictions" class="anchor"></a>Plot all posterior draws for Bayesian models predictions</h2>
+<p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> for a walkthrough on how to do that.</p>
+<p><img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 </div>
 </div>
 
@@ -371,6 +434,13 @@
 <li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
 </ul>
 </div>
+<div class="community">
+<h2>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 <div class="citation">
 <h2>Citation</h2>
 <ul class="list-unstyled">
@@ -384,10 +454,14 @@
 <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a> <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0001-5375-9967" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@Dom_Makowski)</small>
 </li>
 <li>
-<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<a href="https://github.com/strengejacke">Daniel Lüdecke</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-8895-3206" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@strengejacke)</small>
+</li>
 <li>
-<a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4287-4801" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
-<li><a href="authors.html">All authors...</a></li>
+<a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0002-4287-4801" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@mattansb)</small>
+</li>
+<li>
+<a href="https://sites.google.com/site/indrajeetspatilmorality/">Indrajeet Patil</a> <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-1995-6531" target="orcid.widget" aria-label="ORCID"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> <br><small>(@patilindrajeets)</small>
+</li>
 </ul>
 </div>
 
@@ -404,11 +478,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a>.</p>
+  <p>Developed by <a href="https://dominiquemakowski.github.io/">Dominique Makowski</a>, <a href="https://github.com/strengejacke">Daniel Lüdecke</a>, <a href="https://github.com/mattansb">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

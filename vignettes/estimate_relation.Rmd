@@ -35,6 +35,8 @@ set.seed(333)
 This vignette will present how to visualize the effects and interactions using
 `estimate_relation()`.
 
+Note that the statistically correct name of `estimate_relation` is `estimate_expectation` (which can be used as an alias), as it refers to expected predictions (read [more](https://easystats.github.io/insight/reference/get_predicted.html)). 
+
 # Simple regression
 
 ## Linear relationship
@@ -44,7 +46,7 @@ library(modelbased)
 
 model <- glm(Sepal.Length ~ Sepal.Width, data = iris)
 
-visualization_data <- modelbased::estimate_relation(model)
+visualization_data <- estimate_relation(model)
 head(visualization_data)
 ```
 
@@ -68,13 +70,13 @@ visualization_data %>%
 
 Note that non-linear relationships can be also described by linear
 approximations using
-[**estimate_smooth**](https://easystats.github.io/modelbased/articles/estimate_smooth.html).
+[**describe_nonlinear**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html).
 
 ### Polynomial
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
-  modelbased::estimate_relation() %>%
+  modelbased::estimate_relation(length = 50) %>%
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
@@ -87,7 +89,7 @@ glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
 library(mgcv)
 
 mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) %>%
-  modelbased::estimate_relation() %>%
+  modelbased::estimate_relation(length = 50) %>%
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +

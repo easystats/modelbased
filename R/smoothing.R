@@ -7,7 +7,7 @@
 #' @param x A numeric vector.
 #' @param method Can be \link[=loess]{"loess"} (default) or
 #'   \link[=smooth]{"smooth"}. A loess smoothing can be slow.
-#' @param strength This argument only applies to \code{smooth_method = "loess"}.
+#' @param strength This argument only applies when \code{method = "loess"}.
 #'   Degree of smoothing passed to \code{span} (see \code{\link{loess}}).
 #' @param ... Arguments passed to or from other methods.
 #'
@@ -49,7 +49,7 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
       }
     )
   } else if (method == "smooth") {
-    smoothed <- stats::smooth(x)
+    smoothed <- stats::smooth(x, ...)
   } else {
     stop('method must be one of c("loess", "smooth")')
   }

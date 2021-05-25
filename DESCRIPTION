@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.6.0
+Version: 0.7.0
 Authors@R: 
     c(person(given = "Dominique",
              family = "Makowski",
@@ -36,14 +36,15 @@ Imports:
     bayestestR (>= 0.9.0),
     graphics,
     insight (>= 0.13.2),
+    effectsize,
     parameters (>= 0.13.0),
+    performance,
     stats,
     utils
 Suggests:
     brms,
     coda,
     dplyr,
-    effectsize,
     emmeans (>= 1.5.3),
     gamm4,
     gganimate,
@@ -61,7 +62,11 @@ Suggests:
     see,
     testthat,
     spelling
-Remotes: easystats/insight
+Remotes: 
+    easystats/insight,
+    easystats/effectsize,
+    easystats/bayestestR,
+    easystats/parameters
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3

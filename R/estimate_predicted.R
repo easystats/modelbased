@@ -2,7 +2,7 @@
 #'
 #' \code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally).
 #'
-#' @inheritParams estimate_contrasts
+#' @inheritParams estimate_means
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
 #' @param keep_iterations Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.
@@ -15,6 +15,12 @@
 #' model <- lm(mpg ~ wt, data = mtcars)
 #' estimate_response(model)
 #' estimate_relation(model)
+#'
+#' # Standardize predictions
+#' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
+#' z <- effectsize::standardize(pred, include_response = FALSE)
+#' z
+#' effectsize::unstandardize(z, include_response = FALSE)
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
@@ -34,26 +40,33 @@
 #'   estimate_response(model)
 #'   estimate_relation(model)
 #' }
+#'
 #' @return A dataframe of predicted values.
 #' @export
-estimate_relation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
-  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "relation", ...)
+estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
+  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "expectation", ...)
 }
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
+#' @export
+estimate_relation <- estimate_expectation
+
+
+
+#' @rdname estimate_expectation
 #' @export
 estimate_link <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
   .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "link", ...)
 }
 
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
 #' @export
 estimate_prediction <- function(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...) {
   .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "prediction", ...)
 }
 
-#' @rdname estimate_relation
+#' @rdname estimate_expectation
 #' @export
 estimate_response <- estimate_prediction
 
@@ -63,7 +76,18 @@ estimate_response <- estimate_prediction
 # Internal ----------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted <- function(model, data = "grid", predict = "relation", ci = 0.95, keep_iterations = FALSE, ...) {
+.estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
+
+  # If a visualisation_matrix is passed
+  if(inherits(model, "visualisation_matrix")) {
+    data <- model
+    if("model" %in% names(attributes(model))) {
+      model <- attributes(model)$model
+    } else {
+      stop("A model must be passed to make predictions.")
+    }
+  }
+
 
   # Get data ----------------
   if (is.null(data)) {
@@ -75,6 +99,18 @@ estimate_response <- estimate_prediction
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
   }
+
+  # save grid specs for table footer
+  grid_specs <- attributes(data)
+
+  # Get response for later residuals -------------
+  if(insight::find_response(model) %in% names(data)) {
+    resid <- data[[insight::find_response(model)]]
+  } else {
+    resid <- NULL
+  }
+
+  # Keep only predictors --------
   data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
 
   # Restore factor levels
@@ -85,16 +121,50 @@ estimate_response <- estimate_prediction
     data = data,
     predict = predict,
     ci = ci,
-    dispersion_function = "mad",
-    interval_function = "hdi",
+    dispersion_method = "mad",
+    ci_method = "hdi",
     ...
   )
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
-  # Prepare output
+  # Add residuals
+  if(!is.null(resid)) {
+    out$Residuals <- out$Predicted - resid
+  }
+
+  # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "response") <- insight::find_response(model)
-  class(out) <- c("estimate_response", "see_estimate_response", class(out))
+  attr(out, "model") <- model
+  attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
+  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
+
+  # Class
+  class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
+
   out
+}
+
+
+
+
+# Utils -------------------------------------------------------------------
+
+#' @keywords internal
+.estimate_predicted_footer <- function(model, grid_specs) {
+  footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+
+  if("target" %in% names(grid_specs)) {
+    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$target, collapse = ", "))
+  }
+
+  if("adjusted_for" %in% names(grid_specs)) {
+    if(!is.na(grid_specs$adjusted_for)) {
+      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
+    }
+
+  }
+
+  c(footer, "blue")
 }

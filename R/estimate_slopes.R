@@ -1,172 +1,89 @@
-#' Estimate the slopes of a numeric predictor (over different factor levels)
+#' Estimate Marginal Effects
 #'
-#' See the documentation for your object's class:
-#' \itemize{
-#'  \item{\link[=estimate_slopes.lm]{Frequentist models}}
-#'  \item{\link[=estimate_slopes.stanreg]{Bayesian models (stanreg and brms)}}
-#'  }
+#' Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
+#' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
 #'
-#' @inheritParams estimate_contrasts.lm
+#'
+#' @inheritParams estimate_contrasts
 #' @param trend A character vector indicating the name of the numeric variable
 #'   for which to compute the slopes.
 #' @param levels A character vector indicating the variables over which the
 #'   slope will be computed. If NULL (default), it will select all the remaining
 #'   predictors.
-#' @param component A character vector indicating the model component for which
-#'   estimation is requested. Only applies to models from \pkg{glmmTMB}. Use
-#'   \code{"conditional"} for the count-model or \code{"zero_inflate"} or
-#'   \code{"zi"} for the zero-inflation model.
 #'
-#' @return A data frame of slopes.
+#' @examples
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' slopes <- estimate_slopes(model, trend = "Petal.Length")
+#' slopes
+#' effectsize::standardize(slopes)
+#'
+#' \dontrun{
+#' if (require("rstanarm")) {
+#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
+#'   estimate_slopes(model)
+#' }}
+#' @return A data.frame.
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,
                             levels = NULL,
-                            transform = "response",
-                            standardize = TRUE,
-                            standardize_robust = FALSE,
                             ci = 0.95,
                             ...) {
-  UseMethod("estimate_slopes")
+  # check if available
+  insight::check_if_installed("emmeans")
+
+  # Guess specs arguments
+  args <- .estimate_slopes_guess_args(model, trend, levels, ...)
+
+  # Run emtrends
+  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, ...)
+
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    trends <- bayestestR::describe_posterior(estimated, ci = ci, ...)
+    trends <- cbind(estimated@grid, trends)
+    trends$`.wgt.` <- NULL  # Drop the weight column
+    trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
+    trends <- insight::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
+  } else {
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+  }
+
+  # Restore factor levels
+  trends <- insight::data_restoretype(trends, insight::get_data(model))
+
+  # Table formatting
+  attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
+  attr(trends, "table_footer") <- c(paste("Marginal effects estimated for", args$trend), "blue")
+
+  # Add attributes
+  attr(trends, "model") <- model
+  attr(trends, "response") <- insight::find_response(model)
+  attr(trends, "ci") <- ci
+  attr(trends, "levels") <- args$levels
+  attr(trends, "trend") <- args$trend
+
+
+  # Output
+  class(trends) <- c("estimate_slopes", class(trends))
+  trends
 }
 
 
 
 
-#' Estimate the slopes of a numeric predictor (over different factor levels)
-#'
-#' @inheritParams estimate_slopes
-#' @inheritParams estimate_contrasts.stanreg
-#'
-#' @examples
-#' library(modelbased)
-#' \donttest{
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   estimate_slopes(model)
-#' }
-#' }
-#' @importFrom stats mad median sd setNames
-#' @export
-estimate_slopes.stanreg <- function(model,
-                                    trend = NULL,
-                                    levels = NULL,
-                                    transform = "response",
-                                    standardize = TRUE,
-                                    standardize_robust = FALSE,
-                                    ci = 0.95,
-                                    centrality = "median",
-                                    ci_method = "hdi",
-                                    test = c("pd", "rope"),
-                                    rope_range = "default",
-                                    rope_ci = 1,
-                                    ...) {
-  .estimate_slopes(
-    model,
-    trend = trend,
-    levels = levels,
-    transform = transform,
-    standardize = standardize,
-    standardize_robust = standardize_robust,
-    centrality = centrality,
-    ci = ci,
-    ci_method = ci_method,
-    test = test,
-    rope_range = rope_range,
-    rope_ci = rope_ci
-  )
-}
-
-#' @export
-estimate_slopes.brmsfit <- estimate_slopes.stanreg
 
 
-
-#' Estimate the slopes of a numeric predictor (over different factor levels)
-#'
-#' @inheritParams estimate_slopes
-#' @inheritParams estimate_contrasts.lm
-#'
-#' @examples
-#' library(modelbased)
-#'
-#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' estimate_slopes(model)
-#' @export
-estimate_slopes.lm <- function(model,
-                               trend = NULL,
-                               levels = NULL,
-                               transform = "response",
-                               standardize = TRUE,
-                               standardize_robust = FALSE,
-                               ci = 0.95,
-                               ...) {
-  .estimate_slopes(
-    model,
-    trend = trend,
-    levels = levels,
-    transform = transform,
-    standardize = standardize,
-    standardize_robust = standardize_robust,
-    ci = ci,
-    ...
-  )
-}
+# Utilities ---------------------------------------------------------------
 
 
-#' @export
-estimate_slopes.merMod <- estimate_slopes.lm
-
-
-#' @rdname estimate_slopes
-#' @export
-estimate_slopes.glmmTMB <- function(model,
-                                    trend = NULL,
-                                    levels = NULL,
-                                    transform = "response",
-                                    standardize = TRUE,
-                                    standardize_robust = FALSE,
-                                    ci = 0.95,
-                                    component = c("conditional", "zero_inflated", "zi"),
-                                    ...) {
-  component <- match.arg(component)
-
-  if (component == "zi") component <- "zero_inflated"
-
-  .estimate_slopes(
-    model,
-    trend = trend,
-    levels = levels,
-    transform = transform,
-    standardize = standardize,
-    standardize_robust = standardize_robust,
-    ci = ci,
-    component = component,
-    ...
-  )
-}
-
-
-
-#' @importFrom stats confint
 #' @keywords internal
-.estimate_slopes <- function(model,
-                             trend = NULL,
-                             levels = NULL,
-                             transform = "response",
-                             standardize = TRUE,
-                             standardize_robust = FALSE,
-                             ci = 0.95,
-                             centrality = "median",
-                             ci_method = "hdi",
-                             test = c("pd", "rope"),
-                             rope_range = "default",
-                             rope_ci = 1,
-                             component = "conditional",
-                             ...) {
-  predictors <- insight::find_predictors(model)[[component]]
+.estimate_slopes_guess_args <- function(model, trend, levels, ...){
+  # Gather info
+  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
   data <- insight::get_data(model)
 
+  # Guess arguments
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
@@ -187,118 +104,5 @@ estimate_slopes.glmmTMB <- function(model,
     stop("No suitable factor levels detected over which to estimate slopes.")
   }
 
-
-  # Basis
-  trends <- .emtrends_helper(model, levels, trend, transform, component, ...)
-
-
-  if (insight::model_info(model)$is_bayesian) {
-    params <- as.data.frame(trends)
-    rownames(params) <- NULL
-
-    # Remove the posterior summary
-    params <- params[names(params) %in% names(data)]
-
-    # Summary
-    slopes <- .summarize_posteriors(trends,
-      ci = ci, ci_method = ci_method,
-      centrality = centrality,
-      test = test, rope_range = rope_range, rope_ci = rope_ci, bf_prior = model
-    )
-    slopes$Parameter <- NULL
-    slopes <- cbind(params, slopes)
-  } else {
-    params <- as.data.frame(stats::confint(trends, levels = ci, ...))
-    slopes <- .clean_names_frequentist(params)
-    names(slopes)[grepl("*.trend", names(slopes))] <- "Coefficient"
-  }
-
-
-  # Standardized slopes
-  if (standardize) {
-    slopes <- cbind(slopes, .standardize_slopes(slopes, model, trend, robust = standardize_robust))
-  }
-
-  # Restore factor levels
-  slopes <- insight::data_restoretype(slopes, insight::get_data(model))
-
-
-  attributes(slopes) <- c(
-    attributes(slopes),
-    list(
-      levels = levels,
-      trend = trend,
-      transform = transform,
-      ci = ci,
-      ci_method = ci_method,
-      rope_range = rope_range,
-      rope_ci = rope_ci,
-      response = insight::find_response(model)
-    )
-  )
-
-  class(slopes) <- c("estimate_slopes", class(slopes))
-
-  slopes
-}
-
-
-#' @importFrom insight get_response model_info get_predictors
-#' @importFrom stats sd mad
-#' @keywords internal
-.standardize_slopes <- function(slopes, model, trend, robust = FALSE) {
-  vars <- names(slopes)[names(slopes) %in% c("Median", "Mean", "MAP", "Coefficient")]
-  x <- insight::get_predictors(model)[[trend]]
-  if (insight::model_info(model)$is_linear) {
-    response <- insight::get_response(model)
-    if (robust) {
-      std <- slopes[vars] * stats::mad(x, na.rm = TRUE) / stats::mad(response, na.rm = TRUE)
-    } else {
-      std <- slopes[vars] * stats::sd(x, na.rm = TRUE) / stats::sd(response, na.rm = TRUE)
-    }
-  } else {
-    if (robust) {
-      std <- slopes[vars] * stats::mad(x, na.rm = TRUE)
-    } else {
-      std <- slopes[vars] * stats::sd(x, na.rm = TRUE)
-    }
-  }
-  names(std) <- paste0("Std_", names(std))
-  as.data.frame(std)
-}
-
-
-
-
-.emtrends_helper <- function(model, levels, trend, transform, component, ...) {
-  # check if available
-  if (!requireNamespace("emmeans", quietly = TRUE)) {
-    stop("Package `emmeans` is needed for this function to work. Please install it by running `install.packages('emmeans')`.", call. = FALSE)
-  }
-
-  if (component != "conditional") {
-    if (transform == "response") {
-      emmeans::emtrends(model, levels, var = trend, transform = "response", component = "zi", ...)
-    } else if (transform == "mu") {
-      emmeans::emtrends(model, levels, var = trend, transform = "mu", component = "zi", ...)
-    } else if (transform == "unlink") {
-      emmeans::emtrends(model, levels, var = trend, transform = "unlink", component = "zi", ...)
-    } else if (transform == "log") {
-      emmeans::emtrends(model, levels, var = trend, transform = "log", component = "zi", ...)
-    } else if (transform == "none") {
-      emmeans::emtrends(model, levels, var = trend, transform = "none", component = "zi", ...)
-    }
-  } else {
-    if (transform == "response") {
-      emmeans::emtrends(model, levels, var = trend, transform = "response", ...)
-    } else if (transform == "mu") {
-      emmeans::emtrends(model, levels, var = trend, transform = "mu", ...)
-    } else if (transform == "unlink") {
-      emmeans::emtrends(model, levels, var = trend, transform = "unlink", ...)
-    } else if (transform == "log") {
-      emmeans::emtrends(model, levels, var = trend, transform = "log", ...)
-    } else if (transform == "none") {
-      emmeans::emtrends(model, levels, var = trend, transform = "none", ...)
-    }
-  }
+  list(trend = trend, levels = levels)
 }

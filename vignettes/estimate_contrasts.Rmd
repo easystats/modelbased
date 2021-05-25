@@ -36,10 +36,6 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
 set.seed(333)
 ```
 
-**Warning**: We will go **full Bayesian** in this vignette!
-If you're not familiar
-with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
-
 # Testing pairwise differences
 
 In the [**previous tutorial**](https://easystats.github.io/estimate/articles/estimate_means.html),
@@ -58,24 +54,14 @@ Let's carry out contrast analysis on the simple model from the previous tutorial
 ```{r}
 library(ggplot2)
 library(see)
-library(rstanarm)
 library(modelbased)
 
-# you can ignore the `refresh` argument, it just prevents the function from printing
-# a few details to the console
-model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
+model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model)
-```
 
-```{r }
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin() +
-  geom_jitter2(width = 0.05, alpha = 0.5) +
-  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
-  geom_pointrange(data = means, 
-                  aes(y = Mean, ymin = CI_low, ymax = CI_high),
-                  size = 1, 
-                  color = "white") +
+ggplot(means, aes(x = Species, y = Mean)) +
+  geom_line(aes(group = 1)) +
+  geom_pointrange(aes(color = Species, ymin = CI_low, ymax = CI_high)) +
   theme_modern()
 ```
 
@@ -86,21 +72,17 @@ function:
 estimate_contrasts(model)
 ```
 
-If you can recall your [Bayesian apprenticeship](https://easystats.github.io/bayestestR/articles/example1.html),
-we can conclude that all pairwise differences are statistically significant.
+We can conclude that all pairwise differences are statistically significant.
 
 # Complex model
 
 Again, as contrast analysis is based on marginal means, it can be applied to
 more complex models:
 
-```{r, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris)
-estimate_contrasts(model)
-```
-```{r, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0, iter = 1000, chains = 2)
-estimate_contrasts(model)
+```{r }
+model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+contrasts <- estimate_contrasts(model)
+contrasts
 ```
 
 For instance, if we add `Petal.Width` in the model, we can see that the
@@ -113,12 +95,12 @@ the help of the `see` package:
 ```{r }
 library(see)
 
-plot(estimate_contrasts(model), estimate_means(model)) +
+plot(contrasts, estimate_means(model)) +
   theme_modern()
 ```
 
 These represent the estimated means and their CI range (in black), while the
-gray areas show the CI range of the difference (as compared to the point
+grey areas show the CI range of the difference (as compared to the point
 estimate).
 
 # Changes in difference

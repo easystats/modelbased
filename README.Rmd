@@ -87,38 +87,41 @@ The package is built around 5 main functions:
 
 These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
 
-The package currently only supports `rstanarm` models, but will be expanded to cover a large variety of frequentist and Bayesian models.
 
-## Examples
+## Create smart grids to represent complex interactions
 
-### Create smart grids to represent complex interactions
+- **Problem**: I want to graphically represent the interaction between two continuous variable. On top of that, I would like to express one of them in terms of standardized change (i.e., standard deviation relative to the mean).
+- **Solution**: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using `ggplot`.
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) to create this plot:
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a detailed walkthrough on *visualisation matrices*.
 
-```{r message=FALSE, warning=FALSE, echo = FALSE}
-library(rstanarm)
+```{r message=FALSE, warning=FALSE}
 library(ggplot2)
 library(see)
 library(modelbased)
 
+# 1. Fit model and get visualization matrix
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
 
-# Fit model
-model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+# 2. Create a visualisation matrix with expected Z-score values of Petal.Width
+vizdata <- modelbased::visualisation_matrix(model, target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
 
-# Create dataframe
-newdata <- iris %>%
-  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
-  visualisation_matrix("Petal.Width", length = 3, numerics = "combination", standardize = TRUE)
-newdata$Predicted_Sepal.Length <- predict(model, newdata)
+# 3. Revert from expected SD to actual values
+vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
 
-# Express values in an abstract way
-newdata$Petal.Width <- effectsize::format_standardize(newdata$Petal.Width, reference = iris$Petal.Width)
+# 4. Add predicted relationship from the model
+vizdata <- modelbased::estimate_expectation(vizdata)
 
-# Plot
-iris %>%
-  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
-  geom_line(data = newdata, aes(y = Predicted_Sepal.Length, color = Petal.Width), size = 1) +
+# 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)
+vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
+
+# 6. Plot
+ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
+  # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
+  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) + 
+  # Add relationship lines
+  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
+  # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +
   theme_modern()
@@ -127,16 +130,28 @@ iris %>%
 
 
 
-### Estimate marginal means
+## Estimate marginal means
 
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) to create this plot:
+- **Problem**: My model has a factor as a predictor, and the parameters only return the difference between levels and the intercept. I want to see the values *at* each factor level.
+- **Solution**: Estimate model-based means ("marginal means"). You can visualize them by plotting their confidence interval and the original data.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
  
-```{r message=FALSE, warning=FALSE, echo = FALSE}
-means <- estimate_means(stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0))
+```{r message=FALSE, warning=FALSE}
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
 
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin(aes(color = Species)) +
+# 2. Obtain estimated means
+means <- modelbased::estimate_means(model)
+means
+
+# 3. Plot 
+ggplot(iris, aes(x = Species, y = Sepal.Width)) +
+  # Add base data 
+  geom_violin(aes(fill = Species), color = "white") +
   geom_jitter2(width = 0.05, alpha = 0.5) +
+  
+  # Add pointrange and line from means
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
   geom_pointrange(
     data = means,
@@ -144,124 +159,142 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
     size = 1,
     color = "white"
   ) +
+  # Improve colors
   scale_fill_material() +
-  scale_colour_material() +
   theme_modern()
 ```
 
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(rstanarm)
 
-model <- stan_glm(Sepal.Width ~ Species, data = iris)
+## Contrast analysis
 
-estimate_means(model)
+- **Problem**: The parameters of my model only return the difference between some of the factor levels and the intercept. I want to see the differences between each levels, as I would do with post-hoc comparison tests in ANOVAs.
+- **Solution**: Estimate model-based contrasts ("marginal contrasts"). You can visualize them by plotting their confidence interval.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) for a detailed walkthrough on *contrast analysis*.
+
+```{r message=FALSE, warning=FALSE}
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Estimate marginal contrasts
+contrasts <- modelbased::estimate_contrasts(model)
+contrasts
 ```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-library(rstanarm)
 
-model <- stan_glm(Sepal.Width ~ Species, data = iris, refresh = 0)
-
-estimate_means(model)
-```
-
-### Contrast analysis
-
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) to create this plot:
 
 ```{r message=FALSE, warning=FALSE, echo = FALSE}
 library(see)
 
-plot(estimate_contrasts(model), estimate_means(model)) +
-  theme_modern()
-```
-
-
-```{r message=FALSE, warning=FALSE}
-estimate_contrasts(model)
-```
-
-
-### Check the contrasts at different points of another linear predictor
-
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, modulate = "Petal.Length", length = 3)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
-
-estimate_contrasts(model, modulate = "Petal.Length", length = 3)
-```
-
-
-
-### Find a predictor's slopes at each factor level
-
-```{r message=FALSE, warning=FALSE}
-estimate_slopes(model)
-```
-
-
-### Generate predictions from your model to compare it with original data
-
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
-
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-data <- iris
-model <- stan_glm(Petal.Length ~ Sepal.Length, data = data, refresh = 0)
-predicted <- estimate_response(model)
-data$Predicted <- predicted$Predicted
-model <- stan_glm(Petal.Length ~ Sepal.Length * Species, data = data, refresh = 0, chains = 2, iter = 1000)
-data$Predicted_2 <- estimate_response(model)$Predicted
-data %>%
-  ggplot() +
-  geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
-  geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
-  geom_point(aes(x = Petal.Length, y = Predicted_2), color = "red") +
-  ylab("Petal.Length (predicted)") +
+plot(contrasts, estimate_means(model)) +
   theme_modern()
 ```
 
 
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-estimate_response(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-knitr::kable(
-  model %>%
-    estimate_response() %>%
-    head(),
-  digits = 2
-)
+
+
+## Check the contrasts at different points of another linear predictor
+
+- **Problem**: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.
+- **Solution**: You can estimate the marginal contrasts at different values of a contious variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
+
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+
+estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ```
 
-### Estimate the link between the response and a predictor
+```{r message=FALSE, warning=FALSE}
+# Recompute contrasts with a higher precision (for a smoother plot)
+contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
 
-See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) to create this plot:
+# Add Contrast column by concatenating 
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
+
+# Plot
+ggplot(contrasts, aes(x = Petal.Length, y = Difference,)) +
+  # Add line and CI band
+  geom_line(aes(color = Contrast)) +
+  geom_ribbon(aes(ymin = CI_low, ymax=CI_high, fill = Contrast), alpha = 0.2) +
+  # Add line at 0, indicating no difference
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  # Colors
+  theme_modern()
+```
+
+
+## Generate predictions from your model to compare it with original data
+
+- **Problem**: You fitted different models, and you want to intuitively visualize how they compare in terms of fit quality and prediction accuracy, so that you don't only rely on abstract indices of performance.
+- **Solution**: You can predict the response variable from different models and plot them against the original true response. The closest the points are on the identity line (the diagonal), the closest they are from a perfect fit.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a detailed walkthrough on *predictions*.
+
+```{r message=FALSE, warning=FALSE}
+# Fit model 1 and predict the response variable
+model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
+pred1 <- modelbased::estimate_response(model1)
+pred1$Petal.Length <- iris$Petal.Length  # Add true response
+
+# Print first 5 lines of output
+head(pred1, n = 5)
+
+# Same for model 2
+model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+pred2 <- modelbased::estimate_response(model2)
+pred2$Petal.Length <- iris$Petal.Length 
+
+
+# Initialize plot for model 1
+ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
+  # with identity line (diagonal) representing perfect predictions
+  geom_abline(linetype = "dashed") +
+  # Add the actual predicted points of the models
+  geom_point(aes(color = "Model 1")) +
+  geom_point(data = pred2, aes(color = "Model 2")) +
+  # Aesthetics changes
+  labs(y = "Petal.Length (predicted)", color = NULL) +
+  scale_color_manual(values = c("Model 1" = "blue", "Model 2" = "red")) +
+  theme_modern()
+```
+
+
+## Describe the smooth term by its linear parts
+
+- **Problem**: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.
+- **Solution**: You can apply `describe_nonlinear` on a predicted relationship that will return the different parts of increase and decrease.
+
+```{r message=FALSE, warning=FALSE}
+model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
+
+# 1. Visualize
+vizdata <- estimate_relation(model, length = 30)
+
+ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.3) +
+  geom_line() +
+  # Add original data points
+  geom_point(data = iris, aes(x = Petal.Length, y = Sepal.Width)) +
+  # Aesthetics
+  theme_modern()
+
+
+# 2. Describe smooth line
+describe_nonlinear(vizdata, x = "Petal.Length")
+```
+
+
+## Plot all posterior draws for Bayesian models predictions
+
+See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a walkthrough on how to do that.
+
+
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
 knitr::include_graphics("https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif")
 ```
 
 
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 
-estimate_link(model)
-```
-```{r message=FALSE, warning=FALSE, echo=FALSE}
-model <- stan_glm(Sepal.Width ~ poly(Petal.Length, 2), data = iris, refresh = 0)
-knitr::kable(
-  model %>%
-    estimate_link(length = 7, smooth_strength = 0.3),
-  digits = 2
-)
-```
-
-### Describe the smooth term by its linear parts
-```{r message=FALSE, warning=FALSE}
-estimate_smooth(model)
-```

@@ -1,3 +1,11 @@
+# modelbased 0.7.0
+
+- General overhaul of the package. 
+- Entire refactoring of `visualisation_matrix()`.
+- Option of standardizing/unstandardizing predictions, contrasts and means is now available via `standardize()` instead of via options.
+- Introduction of `model_emmeans()` as a wrapper to easily create `emmeans` objects.
+- `estimate_smooth()` transformed into `describe_nonlinear()` and made more explicit.
+
 # modelbased 0.6.0
 
 - `estimate_link()` now does *not* transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new `estimate_relation()` instead. This follows a change in how predictions are made internally (which now relies on [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.html), so more details can be found there).
