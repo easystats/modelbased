@@ -73,7 +73,7 @@ Click on the buttons above to access the package [**documentation**](https://eas
 - [**Marginal means**](https://easystats.github.io/modelbased/articles/estimate_means.html)
 - [**Contrast analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
 - [**Use a model to make predictions**](https://easystats.github.io/modelbased/articles/estimate_response.html)
-- [**Describe non-linear curves**](https://easystats.github.io/modelbased/articles/estimate_smooth.html)
+- [**Describe non-linear curves**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
 
 # Features
 
@@ -83,7 +83,7 @@ The package is built around 5 main functions:
 - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels
 - [`estimate_response()`](https://easystats.github.io/modelbased/reference/estimate_response.html): Predict the response variable using the model
-- [`estimate_smooth()`](https://easystats.github.io/modelbased/reference/estimate_smooth.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
+- [`describe_nonlinear()`](https://easystats.github.io/modelbased/reference/describe_nonlinear.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
 These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
 
@@ -265,6 +265,9 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
 
 - **Problem**: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.
 - **Solution**: You can apply `describe_nonlinear` on a predicted relationship that will return the different parts of increase and decrease.
+
+See [**this vignette**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html) for more information.
+
 
 ```{r message=FALSE, warning=FALSE}
 model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)

@@ -61,7 +61,7 @@ check-out these vignettes:
 -   [**Use a model to make
     predictions**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 -   [**Describe non-linear
-    curves**](https://easystats.github.io/modelbased/articles/estimate_smooth.html)
+    curves**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
 
 # Features
 
@@ -76,7 +76,7 @@ The package is built around 5 main functions:
     levels
 -   [`estimate_response()`](https://easystats.github.io/modelbased/reference/estimate_response.html):
     Predict the response variable using the model
--   [`estimate_smooth()`](https://easystats.github.io/modelbased/reference/estimate_smooth.html):
+-   [`describe_nonlinear()`](https://easystats.github.io/modelbased/reference/describe_nonlinear.html):
     Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
 These functions are powered by the
@@ -333,6 +333,10 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
 -   **Solution**: You can apply `describe_nonlinear` on a predicted
     relationship that will return the different parts of increase and
     decrease.
+
+See [**this
+vignette**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
+for more information.
 
 ``` r
 model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
