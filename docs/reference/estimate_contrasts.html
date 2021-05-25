@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate contrasts between factor levels — estimate_contrasts • modelbased</title>
+<title>Estimate Marginal Contrasts — estimate_contrasts • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,12 +48,9 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Estimate contrasts between factor levels — estimate_contrasts" />
-<meta property="og:description" content="Contrast analysis. See the documentation for your object's class:
-Frequentist models
-Bayesian models
-
-" />
+<meta property="og:title" content="Estimate Marginal Contrasts — estimate_contrasts" />
+<meta property="og:description" content="Run a contrast analysis by estimating the differences between each level of a factor. See also other
+related functions such as estimate_means and estimate_slopes." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -86,7 +83,7 @@ Bayesian models
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -124,7 +121,10 @@ Bayesian models
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -149,30 +149,26 @@ Bayesian models
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate contrasts between factor levels</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_contrasts.bayesian.R'><code>R/estimate_contrasts.bayesian.R</code></a></small>
+    <h1>Estimate Marginal Contrasts</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_contrasts.R'><code>R/estimate_contrasts.R</code></a></small>
     <div class="hidden name"><code>estimate_contrasts.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Contrast analysis. See the documentation for your object's class:</p><ul>
-<li><p><a href='estimate_contrasts.lm.html'>Frequentist models</a></p></li>
-<li><p><a href='estimate_contrasts.stanreg.html'>Bayesian models</a></p></li>
-</ul>
-
+    <p>Run a contrast analysis by estimating the differences between each level of a factor. See also other
+related functions such as <code><a href='estimate_means.html'>estimate_means</a></code> and <code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>estimate_contrasts</span>(
-  <span class='no'>model</span>,
-  <span class='kw'>levels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>fixed</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>modulate</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>transform</span> <span class='kw'>=</span> <span class='st'>"none"</span>,
-  <span class='kw'>length</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-  <span class='kw'>standardize</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>standardize_robust</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>
-)</pre>
+    <pre class="usage"><span class='fu'>estimate_contrasts</span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  levels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  fixed <span class='op'>=</span> <span class='cn'>NULL</span>,
+  modulate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  transform <span class='op'>=</span> <span class='st'>"none"</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  adjust <span class='op'>=</span> <span class='st'>"holm"</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -184,7 +180,7 @@ Bayesian models
     <tr>
       <th>levels</th>
       <td><p>A character vector or formula specifying the names of the
-predictors over which to estimate means or contrasts.</p></td>
+predicting factors over which to estimate means or contrasts.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
@@ -194,36 +190,34 @@ predictors over which to estimate means or contrasts.</p></td>
     <tr>
       <th>modulate</th>
       <td><p>A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Adjust its length
-using <code>length</code>.</p></td>
+along which the means or the contrasts will be estimated. Other arguments
+from <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>, such as <code>length</code> to adjust the
+number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Can be <code>"none"</code> (default for contrasts),
+      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
 <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
-<code>"log"</code>. <code>"none"</code>  will leave the values on scale of the linear
+<code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
 predictors. <code>"response"</code> will transform them on scale of the response
 variable. Thus for a logistic model, <code>"none"</code> will give estimations
 expressed in log-odds (probabilities on logit scale) and <code>"response"</code>
 in terms of probabilities.</p></td>
     </tr>
     <tr>
-      <th>length</th>
-      <td><p>Length of the spread numeric variables.</p></td>
+      <th>ci</th>
+      <td><p>Uncertainty Interval (CI) level. Default to 95% (<code>0.95</code>).</p></td>
     </tr>
     <tr>
-      <th>standardize</th>
-      <td><p>If <code>TRUE</code>, adds standardized differences or
-coefficients.</p></td>
-    </tr>
-    <tr>
-      <th>standardize_robust</th>
-      <td><p>Robust standardization through <code>MAD</code> (Median
-Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.</p></td>
+      <th>adjust</th>
+      <td><p>The p-values adjustment method for frequentist multiple comparisons. Can be
+one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
+"BY", "fdr" or "none". See the p-value adjustment section in the
+<code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>emmeans::test</a></code> documentation.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed to or from other methods.</p></td>
+      <td><p>Other arguments passed for instance to <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>.</p></td>
     </tr>
     </table>
 
@@ -231,6 +225,135 @@ Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.
 
     <p>A data frame of estimated contrasts.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span>
+
+<span class='co'># Basic usage</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+#&gt; ------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | &lt; .001
+#&gt; setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001
+#&gt; versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'>
+<span class='co'># Dealing with interactions</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Width</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span>
+<span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p
+#&gt; -----------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001
+#&gt; setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
+#&gt; versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'><span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Petal.Width"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p
+#&gt; -------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |        1.20 |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001
+#&gt; setosa     |  virginica |        1.20 |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
+#&gt; versicolor |  virginica |        1.20 |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'><span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p
+#&gt; -------------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |        0.10 |       1.83 | [ 1.15, 2.50] | 0.28 |   6.55 | &lt; .001
+#&gt; setosa     | versicolor |        0.90 |       1.65 | [ 0.96, 2.35] | 0.29 |   5.74 | &lt; .001
+#&gt; setosa     | versicolor |        1.70 |       1.48 | [ 0.03, 2.94] | 0.60 |   2.47 | 0.039 
+#&gt; setosa     | versicolor |        2.50 |       1.31 | [-1.00, 3.62] | 0.95 |   1.37 | 0.359 
+#&gt; setosa     |  virginica |        0.10 |       1.55 | [ 0.79, 2.30] | 0.31 |   4.95 | &lt; .001
+#&gt; setosa     |  virginica |        0.90 |       1.71 | [ 0.93, 2.50] | 0.32 |   5.28 | &lt; .001
+#&gt; setosa     |  virginica |        1.70 |       1.88 | [ 0.43, 3.32] | 0.60 |   3.14 | 0.006 
+#&gt; setosa     |  virginica |        2.50 |       2.04 | [-0.19, 4.28] | 0.92 |   2.21 | 0.072 
+#&gt; versicolor |  virginica |        0.10 |      -0.28 | [-1.26, 0.70] | 0.41 |  -0.69 | 0.770 
+#&gt; versicolor |  virginica |        0.90 |       0.06 | [-0.44, 0.56] | 0.21 |   0.28 | 0.958 
+#&gt; versicolor |  virginica |        1.70 |       0.40 | [ 0.12, 0.67] | 0.11 |   3.50 | 0.002 
+#&gt; versicolor |  virginica |        2.50 |       0.73 | [ 0.08, 1.39] | 0.27 |   2.70 | 0.021 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'><span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1 | Level2 | Difference |         95% CI |   SE | t(144) |      p
+#&gt; ----------------------------------------------------------------------
+#&gt; 0.1    |    0.9 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001
+#&gt; 0.1    |    1.7 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | &lt; .001
+#&gt; 0.1    |    2.5 |      -2.02 | [-3.06, -0.98] | 0.39 |  -5.18 | &lt; .001
+#&gt; 0.9    |    1.7 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001
+#&gt; 0.9    |    2.5 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | &lt; .001
+#&gt; 1.7    |    2.5 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Petal.Width
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'>
+<span class='co'># Standardized differences</span>
+<span class='va'>estimated</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>estimated</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis (standardized)</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+#&gt; ------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       1.51 | [ 1.13,  1.89] | 0.16 |   9.69 | &lt; .001
+#&gt; setosa     |  virginica |       1.04 | [ 0.66,  1.42] | 0.16 |   6.68 | &lt; .001
+#&gt; versicolor |  virginica |      -0.47 | [-0.85, -0.09] | 0.16 |  -3.00 | 0.009 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'>
+<span class='co'># Other models (mixed, Bayesian, ...)</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>iris</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>Petal.Length_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>Petal.Length</span> <span class='op'>&lt;</span> <span class='fl'>4.2</span>, <span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>
+
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>Petal.Length_factor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: lme4</span></div><div class='output co'>#&gt; <span class='message'>Loading required package: Matrix</span></div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Marginal Contrasts Analysis</span><span>
+#&gt; 
+#&gt; Level1     |     Level2 | Difference |        95% CI |   SE |     df |     t |      p
+#&gt; -------------------------------------------------------------------------------------
+#&gt; setosa     | versicolor |       0.87 | [ 0.65, 1.09] | 0.09 | 135.61 |  9.54 | &lt; .001
+#&gt; setosa     |  virginica |       0.80 | [ 0.50, 1.09] | 0.12 | 118.54 |  6.52 | &lt; .001
+#&gt; versicolor |  virginica |      -0.07 | [-0.26, 0.11] | 0.08 | 145.27 | -0.97 | 0.597 
+#&gt; </span><span style='color: #0000BB;'>
+#&gt; Marginal contrasts estimated for Species
+#&gt; p-value adjustment method: Holm (1979)</span><span></div><div class='input'>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"am"</span><span class='op'>)</span>
+
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"wt"</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"wt"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"wt"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>
+
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>+</span> <span class='va'>Petal.Width</span> <span class='op'>+</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span>, test <span class='op'>=</span> <span class='st'>"bf"</span><span class='op'>)</span>
+<span class='op'>}</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/paul-buerkner/brms'>"brms"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/brms/man/brm.html'>brm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+  <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='op'>}</span>
+<span class='op'>}</span>
+
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -242,11 +365,11 @@ Absolute Deviation, a robust estimate of SD) instead of regular <code>SD</code>.
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>.</p>
+  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>, <a href='https://sites.google.com/site/indrajeetspatilmorality/'>Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

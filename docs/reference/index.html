@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.5.9</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -119,7 +119,10 @@
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -170,75 +173,45 @@
       <tr>
         
         <td>
-          <p><code><a href="as.numeric_ifnumeric.html">as.numeric_ifnumeric()</a></code> </p>
+          <p><code><a href="describe_nonlinear.html">describe_nonlinear()</a></code> <code><a href="describe_nonlinear.html">estimate_smooth()</a></code> </p>
         </td>
-        <td><p>Convert to Numeric if Possible</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="data_restoretype.html">data_restoretype()</a></code> </p>
-        </td>
-        <td><p>Restore the type of columns according to a reference data.frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_contrasts.lm.html">estimate_contrasts(<i>&lt;lm&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts</p></td>
+        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> </p>
         </td>
-        <td><p>Estimate contrasts between factor levels</p></td>
+        <td><p>Estimate Marginal Contrasts</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="estimate_contrasts.stanreg.html">estimate_contrasts(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate contrasts</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_means.html">estimate_means()</a></code> </p>
-        </td>
-        <td><p>Estimate average value of response variable at each factor levels</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_relation.html">estimate_relation()</a></code> <code><a href="estimate_relation.html">estimate_link()</a></code> <code><a href="estimate_relation.html">estimate_prediction()</a></code> <code><a href="estimate_relation.html">estimate_response()</a></code> </p>
+          <p><code><a href="estimate_expectation.html">estimate_expectation()</a></code> <code><a href="estimate_expectation.html">estimate_relation()</a></code> <code><a href="estimate_expectation.html">estimate_link()</a></code> <code><a href="estimate_expectation.html">estimate_prediction()</a></code> <code><a href="estimate_expectation.html">estimate_response()</a></code> </p>
         </td>
         <td><p>Generates predictions from models</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="estimate_slopes.lm.html">estimate_slopes(<i>&lt;lm&gt;</i>)</a></code> </p>
+          <p><code><a href="estimate_means.html">estimate_means()</a></code> </p>
         </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
+        <td><p>Estimate Marginal Means (Model-based Average at each Factor Level)</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="estimate_slopes.html">estimate_slopes()</a></code> </p>
         </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_slopes.stanreg.html">estimate_slopes(<i>&lt;stanreg&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Estimate the slopes of a numeric predictor (over different factor levels)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="estimate_smooth.html">estimate_smooth()</a></code> </p>
-        </td>
-        <td><p>Describe the smooth term (for GAMs) or non-linear predictors</p></td>
+        <td><p>Estimate Marginal Effects</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="find_inversions.html">find_inversions()</a></code> </p>
         </td>
         <td><p>Find points of inversion</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="model_emmeans.html">model_emmeans()</a></code> </p>
+        </td>
+        <td><p>Easy Creation of 'emmeans' Marginal Means Objects</p></td>
       </tr><tr>
         
         <td>
@@ -251,6 +224,12 @@
           <p><code><a href="visualisation_matrix.html">visualisation_matrix()</a></code> </p>
         </td>
         <td><p>Create a reference grid</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="visualisation_recipe.html">visualisation_recipe()</a></code> </p>
+        </td>
+        <td><p>Visualization helper (TODO)</p></td>
       </tr><tr>
         
         <td>
@@ -272,11 +251,11 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>.</p>
+  <p>Developed by <a href='https://dominiquemakowski.github.io/'>Dominique Makowski</a>, <a href='https://github.com/strengejacke'>Daniel Lüdecke</a>, <a href='https://github.com/mattansb'>Mattan S. Ben-Shachar</a>, <a href='https://sites.google.com/site/indrajeetspatilmorality/'>Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

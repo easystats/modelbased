@@ -175,7 +175,7 @@ such as discussions about the movie, watching of YouTube reviews and such).
 # Describing smooth
 
 ```{r message=FALSE, warning=FALSE}
-estimate_smooth(model, smooth = "Delay")
+estimate_smooth(estim, x = "Delay")
 ```
 
 # References
