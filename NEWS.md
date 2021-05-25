@@ -2,9 +2,9 @@
 
 - General overhaul of the package. 
 - Entire refactoring of `visualisation_matrix()`.
-- Option of standardizing predictions, contrasts and means is now avaialble via `standardize()` instead of via options.
+- Option of standardizing/unstandardizing predictions, contrasts and means is now available via `standardize()` instead of via options.
 - Introduction of `model_emmeans()` as a wrapper to easily create `emmeans` objects.
-- `estimate_smooth()` transformed into `describe_nonlinear()`.  
+- `estimate_smooth()` transformed into `describe_nonlinear()` and made more explicit.
 
 # modelbased 0.6.0
 
