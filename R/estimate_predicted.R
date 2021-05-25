@@ -139,6 +139,7 @@ estimate_response <- estimate_prediction
   attr(out, "model") <- model
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
   attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
+  attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
 
   # Class
   class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))

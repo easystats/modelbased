@@ -20,4 +20,8 @@ library(modelbased)
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
 x <- estimate_relation(model)
+# visualisation_recipe(x)
+
+x <- estimate_response(model)
+# visualisation_recipe(x)
 }
