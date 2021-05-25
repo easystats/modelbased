@@ -158,6 +158,8 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
   })
 
+  # TODO: Not sure why the below test fails on GH; re-activate next time to try again
+
   # test_that("estimate_contrasts - dfs", {
   #   data <- iris
   #   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
