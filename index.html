@@ -142,7 +142,7 @@
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html" class="external-link"><strong>Marginal means</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html" class="external-link"><strong>Contrast analysis</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><strong>Use a model to make predictions</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_smooth.html" class="external-link"><strong>Describe non-linear curves</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html" class="external-link"><strong>Describe non-linear curves</strong></a></li>
 </ul>
 </div>
 </div>
@@ -160,7 +160,7 @@
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_response.html" class="external-link"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_smooth.html" class="external-link"><code>estimate_smooth()</code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
+<a href="https://easystats.github.io/modelbased/reference/describe_nonlinear.html" class="external-link"><code>describe_nonlinear()</code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
 <p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html" class="external-link"><code>visualisation_matrix()</code></a> function, a smart tool for guessing the appropriate reference grid.</p>
 <div id="create-smart-grids-to-represent-complex-interactions" class="section level2">
@@ -385,6 +385,7 @@
 <li>
 <strong>Solution</strong>: You can apply <code>describe_nonlinear</code> on a predicted relationship that will return the different parts of increase and decrease.</li>
 </ul>
+<p>See <a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html" class="external-link"><strong>this vignette</strong></a> for more information.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
