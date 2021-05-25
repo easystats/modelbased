@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -79,7 +79,10 @@
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -114,7 +117,6 @@
 
     
     
-<p><strong>Warning</strong>: We will go <strong>full Bayesian</strong> in this vignette! If you’re not familiar with the Bayesian framework, we recommend starting with <a href="https://easystats.github.io/bayestestR/articles/bayestestR.html" class="external-link"><strong>this gentle introduction</strong></a>.</p>
 <div id="testing-pairwise-differences" class="section level1">
 <h1 class="hasAnchor">
 <a href="#testing-pairwise-differences" class="anchor" aria-hidden="true"></a>Testing pairwise differences</h1>
@@ -123,61 +125,64 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
 
-<span class="co"># you can ignore the `refresh` argument, it just prevents the function from printing</span>
-<span class="co"># a few details to the console</span>
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
-<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, 
-                  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,
-                  size <span class="op">=</span> <span class="fl">1</span>, 
-                  color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+
+<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Species</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
+<p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
 <p><strong>Contrast analysis</strong> can be achieved through the <code>estimate_contrasts</code> function:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Level1     |     Level2 | Difference |         95% CI |     pd | % in ROPE | Std_Difference
-&gt; -------------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |       0.66 | [ 0.52,  0.79] |   100% |        0% |           1.50
-&gt; setosa     |  virginica |       0.45 | [ 0.32,  0.59] |   100% |        0% |           1.04
-&gt; versicolor |  virginica |      -0.20 | [-0.34, -0.08] | 99.88% |     6.33% |          -0.46</code></pre>
-<p>If you can recall your <a href="https://easystats.github.io/bayestestR/articles/example1.html" class="external-link">Bayesian apprenticeship</a>, we can conclude that all pairwise differences are statistically significant.</p>
+<pre><code>&gt; Marginal Contrasts Analysis
+&gt; 
+&gt; Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+&gt; ------------------------------------------------------------------------------
+&gt; setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | &lt; .001
+&gt; setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001
+&gt; versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
+&gt; 
+&gt; Marginal contrasts estimated for Species
+&gt; p-value adjustment method: Holm (1979)</code></pre>
+<p>We can conclude that all pairwise differences are statistically significant.</p>
 </div>
 <div id="complex-model" class="section level1">
 <h1 class="hasAnchor">
 <a href="#complex-model" class="anchor" aria-hidden="true"></a>Complex model</h1>
 <p>Again, as contrast analysis is based on marginal means, it can be applied to more complex models:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Level1     |     Level2 | Difference |        95% CI |     pd | % in ROPE | Std_Difference
-&gt; ------------------------------------------------------------------------------------------
-&gt; setosa     | versicolor |       1.52 | [ 0.80, 2.23] |   100% |        0% |           3.48
-&gt; setosa     |  virginica |       1.70 | [ 0.98, 2.50] |   100% |        0% |           3.89
-&gt; versicolor |  virginica |       0.17 | [-0.11, 0.43] | 88.20% |    27.30% |           0.39</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+<span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">contrasts</span></code></pre></div>
+<pre><code>&gt; Marginal Contrasts Analysis
+&gt; 
+&gt; Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p
+&gt; -----------------------------------------------------------------------------
+&gt; setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001
+&gt; setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
+&gt; versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 
+&gt; 
+&gt; Marginal contrasts estimated for Species
+&gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can see that the difference between <em>versicolor</em> and <em>virginica</em> becomes not significant (and even changes sign).</p>
 <p>Note that we can plot simple contrast analysis through <strong>lighthouse plots</strong> with the help of the <code>see</code> package:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">contrasts</span>, <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
-<p>These represent the estimated means and their CI range (in black), while the gray areas show the CI range of the difference (as compared to the point estimate).</p>
+<p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
+<p>These represent the estimated means and their CI range (in black), while the grey areas show the CI range of the difference (as compared to the point estimate).</p>
 </div>
 <div id="changes-in-difference" class="section level1">
 <h1 class="hasAnchor">
 <a href="#changes-in-difference" class="anchor" aria-hidden="true"></a>Changes in difference</h1>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># Create a variable with the two levels concatenated</span>

@@ -13,6 +13,9 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
+    <loc>/articles/describe_nonlinear.html</loc>
+  </url>
+  <url>
     <loc>/articles/estimate_contrasts.html</loc>
   </url>
   <url>
@@ -23,9 +26,6 @@
   </url>
   <url>
     <loc>/articles/estimate_response.html</loc>
-  </url>
-  <url>
-    <loc>/articles/estimate_smooth.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
@@ -46,34 +46,22 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/describe_nonlinear.html</loc>
+  </url>
+  <url>
     <loc>/reference/dot-uniroot.all.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_contrasts.lm.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate_contrasts.stanreg.html</loc>
+    <loc>/reference/estimate_expectation.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_means.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_relation.html</loc>
-  </url>
-  <url>
     <loc>/reference/estimate_slopes.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate_slopes.lm.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate_slopes.stanreg.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate_smooth.html</loc>
   </url>
   <url>
     <loc>/reference/find_inversions.html</loc>
@@ -82,10 +70,16 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
+    <loc>/reference/model_emmeans.html</loc>
+  </url>
+  <url>
     <loc>/reference/smoothing.html</loc>
   </url>
   <url>
     <loc>/reference/visualisation_matrix.html</loc>
+  </url>
+  <url>
+    <loc>/reference/visualisation_recipe.html</loc>
   </url>
   <url>
     <loc>/reference/zero_crossings.html</loc>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find zero crossings of a vector — zero_crossings • modelbased</title>
+<title>Visualization helper (TODO) — visualisation_recipe • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -48,9 +48,8 @@
   <link href="../extra.css" rel="stylesheet">
   
 
-<meta property="og:title" content="Find zero crossings of a vector — zero_crossings" />
-<meta property="og:description" content="Find zero crossings of a vector, i.e., indices when the numeric variable
-crosses 0." />
+<meta property="og:title" content="Visualization helper (TODO) — visualisation_recipe" />
+<meta property="og:description" content="Visualization helper (TODO)" />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -158,40 +157,37 @@ crosses 0." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find zero crossings of a vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/zero_crossings.R'><code>R/zero_crossings.R</code></a></small>
-    <div class="hidden name"><code>zero_crossings.Rd</code></div>
+    <h1>Visualization helper (TODO)</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/TODO_visualisation_recipe.R'><code>R/TODO_visualisation_recipe.R</code></a></small>
+    <div class="hidden name"><code>visualisation_recipe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Find zero crossings of a vector, i.e., indices when the numeric variable
-crosses 0.</p>
+    <p>Visualization helper (TODO)</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>zero_crossings</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>A numeric vector.</p></td>
+      <td><p>Something.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to other functions.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Vector of zero crossings.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Based on the <code>uniroot.all</code> function from the rootSolve package.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='va'>pi</span>, length.out <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
-<span class='r-plt'><img src='zero_crossings-1.png' alt='' width='700' height='433' /></span>
-<span class='r-in'><span class='fu'>zero_crossings</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> [1]  1.00000 25.74975 50.50000 75.25025</span>
+    <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Linear Models</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -90,7 +90,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -128,7 +128,10 @@
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -157,11 +160,21 @@
       <small>Source: <a href='https://github.com/easystats/modelbased/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="modelbased-070" class="section level1">
+<h1 class="page-header" data-toc-text="0.7.0">
+<a href="#modelbased-070" class="anchor" aria-hidden="true"></a>modelbased 0.7.0<small> Unreleased </small></h1>
+<ul><li>General overhaul of the package.</li>
+<li>Entire refactoring of <code><a href="../reference/visualisation_matrix.html">visualisation_matrix()</a></code>.</li>
+<li>Option of standardizing/unstandardizing predictions, contrasts and means is now available via <code>standardize()</code> instead of via options.</li>
+<li>Introduction of <code><a href="../reference/model_emmeans.html">model_emmeans()</a></code> as a wrapper to easily create <code>emmeans</code> objects.</li>
+<li>
+<code><a href="../reference/describe_nonlinear.html">estimate_smooth()</a></code> transformed into <code><a href="../reference/describe_nonlinear.html">describe_nonlinear()</a></code> and made more explicit.</li>
+</ul></div>
     <div id="modelbased-060" class="section level1">
 <h1 class="page-header" data-toc-text="0.6.0">
 <a href="#modelbased-060" class="anchor" aria-hidden="true"></a>modelbased 0.6.0<small> 2021-04-12 </small></h1>
 <ul><li>
-<code><a href="../reference/estimate_relation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="../reference/estimate_relation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there).</li>
+<code><a href="../reference/estimate_expectation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there).</li>
 </ul></div>
     <div id="modelbased-051" class="section level1">
 <h1 class="page-header" data-toc-text="0.5.1">

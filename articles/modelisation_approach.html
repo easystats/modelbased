@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.6.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.7.0</span>
       </span>
     </div>
 
@@ -79,7 +79,10 @@
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
-      <a href="../articles/estimate_smooth.html">Describe non-linear curves</a>
+      <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
 </li>
@@ -203,14 +206,16 @@
 &gt; Condition          |       73.09 |   1 |       73.09 |  0.14 | 0.705 
 &gt; Category           |    37375.24 |   2 |    18687.62 | 36.84 | &lt; .001
 &gt; Condition:Category |    36990.41 |   2 |    18495.20 | 36.46 | &lt; .001
-&gt; Residuals          |    73550.75 | 145 |      507.25 |       |</code></pre>
+&gt; Residuals          |    73550.75 | 145 |      507.25 |       |       
+&gt; 
+&gt; Anova Table (Type 1 tests)</code></pre>
 <p>What can we conclude from that? Absolutely <strong>nothing</strong>! We need to investigate in more details, for instance by running post-hoc comparison tests. This uninformativeness is one reason why ANOVA should be banned from psychological science.</p>
 </div>
 <div id="post-hoc-comparison-tests" class="section level2">
 <h2 class="hasAnchor">
 <a href="#post-hoc-comparison-tests" class="anchor" aria-hidden="true"></a>Post-hoc comparison tests</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans</a></span><span class="op">(</span><span class="va">results</span>, <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+<code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_emmeans.html">model_emmeans</a></span><span class="op">(</span><span class="va">results</span>, <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">posthoc</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; contrast            | Coefficient |   SE |           95% CI | t(145) |      p
