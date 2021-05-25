@@ -158,16 +158,16 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
   })
 
-  test_that("estimate_contrasts - dfs", {
-    data <- iris
-    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-    model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
-
-    estim1 <- modelbased::estimate_contrasts(model, lmer.df = "satterthwaite")
-    estim2 <- modelbased::estimate_contrasts(model, lmer.df = "kenward-roger")
-
-    expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
-  })
+  # test_that("estimate_contrasts - dfs", {
+  #   data <- iris
+  #   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+  #   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+  #
+  #   estim1 <- estimate_contrasts(model, lmer.df = "satterthwaite")
+  #   estim2 <- estimate_contrasts(model, lmer.df = "kenward-roger")
+  #
+  #   expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
+  # })
 
 
 }
