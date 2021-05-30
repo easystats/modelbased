@@ -35,8 +35,8 @@ BugReports: https://github.com/easystats/modelbased/issues
 Imports:
     bayestestR (>= 0.9.0),
     graphics,
-    insight (>= 0.14.0),
-    effectsize (>= 0.4.4),
+    insight (>= 0.14.1),
+    effectsize (>= 0.4.5),
     parameters (>= 0.13.0),
     performance,
     stats,

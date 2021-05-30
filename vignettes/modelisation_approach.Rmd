@@ -75,7 +75,7 @@ But here are some problems with this approach:
 Thus, we will describe below another approach to statistics, centered around
 statistical modelisation.
 
-# The Traditional Way
+# The Empirical Approach (Classic)
 
 ```{r message=FALSE, warning=FALSE}
 library(dplyr)
