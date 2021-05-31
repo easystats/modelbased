@@ -10,12 +10,20 @@
 \usage{
 visualisation_recipe(x, ...)
 
-\method{visualisation_recipe}{estimate_means}(x, show_points = TRUE, ...)
+\method{visualisation_recipe}{estimate_means}(
+  x,
+  show_points = TRUE,
+  point = NULL,
+  line = NULL,
+  pointrange = NULL,
+  labs = NULL,
+  ...
+)
 
 \method{visualisation_recipe}{estimate_predicted}(
   x,
   show_points = TRUE,
-  points = NULL,
+  point = NULL,
   line = NULL,
   ribbon = NULL,
   labs = NULL,
@@ -29,7 +37,7 @@ visualisation_recipe(x, ...)
 
 \item{show_points}{If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.}
 
-\item{points, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
+\item{point, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
 Visualization helper
@@ -40,9 +48,9 @@ library(modelbased)
 
 # Default
 x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
-# layers <- visualisation_recipe(x)
-# layers
-# plot(layers)
+layers <- visualisation_recipe(x)
+layers
+plot(layers)
 }
 if(require("see")) {
 library(modelbased)
@@ -58,7 +66,7 @@ plot(layers)
 # Customize aesthetics
 x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 layers <- visualisation_recipe(x,
-                               points = list(color = "red", alpha = 0.6, size = 3),
+                               point = list(color = "red", alpha = 0.6, size = 3),
                                line = list(color = "blue", size = 4),
                                ribbon = list(fill = "green", alpha = 0.7),
                                labs = list(subtitle = "Oh yeah!"))

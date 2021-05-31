@@ -1,5 +1,7 @@
 #' Visualization helper
 #'
+#' @param point,pointrange,line,ribbon,labs Additional aesthetics and parameters for the geoms (see customization example).
+#'
 #' @param x Something.
 #' @param ... Other arguments passed to other functions.
 #'

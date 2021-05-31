@@ -1,7 +1,6 @@
 #' @rdname visualisation_recipe
 #'
 #' @param show_points If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.
-#' @param points,line,ribbon,labs Additional aesthetics and parameters for the geoms (see customization example).
 #' @param ... Other arguments to be passed to or from other functions.
 #'
 #'
@@ -20,7 +19,7 @@
 #' # Customize aesthetics
 #' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 #' layers <- visualisation_recipe(x,
-#'                                points = list(color = "red", alpha = 0.6, size = 3),
+#'                                point = list(color = "red", alpha = 0.6, size = 3),
 #'                                line = list(color = "blue", size = 4),
 #'                                ribbon = list(fill = "green", alpha = 0.7),
 #'                                labs = list(subtitle = "Oh yeah!"))
@@ -65,7 +64,7 @@
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_points = TRUE,
-                                                    points = NULL,
+                                                    point = NULL,
                                                     line = NULL,
                                                     ribbon = NULL,
                                                     labs = NULL,
@@ -127,8 +126,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Points
   if(show_points) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_points(info, x1, y, color)
-    if(!is.null(points)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], points)
+    if(!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     }
     l <- l + 1
   }
@@ -166,10 +165,11 @@ visualisation_recipe.estimate_predicted <- function(x,
 # Layer - Points ------------------------------------------------------------
 
 .visualisation_predicted_points <- function(info, x1, y, color) {
+  data <- insight::get_data(info$model)
   # Add response to data if not there
-  if(!y %in% names(info$data)) info$data[y] <- insight::get_response(info$model)
+  if(!y %in% names(data)) data[y] <- insight::get_response(info$model)
 
-  list(data = as.data.frame(info$data),
+  list(data = as.data.frame(data),
        geom = "point",
        aes = list(x = x1, y = y, color = color),
        stroke = 0,
@@ -210,7 +210,7 @@ visualisation_recipe.estimate_predicted <- function(x,
        alpha = 1/3)
 }
 
-# Layer 3 -----------------------------------------------------------------
+# Layer - Labels --------------------------------------------------------------
 
 .visualisation_predicted_labs <- function(info, x1, y) {
   list(geom = "labs",

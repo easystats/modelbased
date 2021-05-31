@@ -10,3 +10,7 @@ plot.estimate_predicted <- function(x, ...) {
   layers <- visualisation_recipe(x, ...)
   plot(layers)
 }
+
+
+#' @export
+plot.estimate_means <- plot.estimate_predicted
