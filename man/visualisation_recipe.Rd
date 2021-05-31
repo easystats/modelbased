@@ -14,6 +14,7 @@ visualisation_recipe(x, ...)
   x,
   show_points = TRUE,
   point = NULL,
+  jitter = point,
   line = NULL,
   pointrange = NULL,
   labs = NULL,
@@ -37,7 +38,7 @@ visualisation_recipe(x, ...)
 
 \item{show_points}{If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.}
 
-\item{point, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
+\item{point, jitter, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
 Visualization helper

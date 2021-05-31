@@ -14,6 +14,7 @@
 visualisation_recipe.estimate_means <- function(x,
                                                 show_points = TRUE,
                                                 point = NULL,
+                                                jitter = point,
                                                 line = NULL,
                                                 pointrange = NULL,
                                                 labs = NULL,
@@ -39,8 +40,8 @@ visualisation_recipe.estimate_means <- function(x,
   # Points
   if(show_points) {
     layers[[paste0("l", l)]] <- .visualisation_means_jitter(info, x1, y, color)
-    if(!is.null(point)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    if(!is.null(jitter)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], jitter)
     }
     l <- l + 1
   }
