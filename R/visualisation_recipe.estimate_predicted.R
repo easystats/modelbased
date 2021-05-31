@@ -6,8 +6,8 @@
 #'
 #'
 #' @examples
+#' if(require("see")) {
 #' library(modelbased)
-#' library(see)
 #'
 #' # Linear Models
 #' # =============================
@@ -61,7 +61,7 @@
 #' x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
 #' layers <- visualisation_recipe(x)
 #' plot(layers)
-#'
+#' }
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_points = TRUE,
@@ -158,6 +158,7 @@ visualisation_recipe.estimate_predicted <- function(x,
 
   # Out
   class(layers) <- c("visualisation_recipe", class(layers))
+  attr(layers, "data") <- data
   layers
 }
 
