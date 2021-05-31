@@ -21,38 +21,70 @@ visualisation_recipe(x, ...)
 \arguments{
 \item{x}{Something.}
 
-\item{...}{Other arguments passed to other functions.}
+\item{...}{Other arguments to be passed to or from other functions.}
+
+\item{show_points}{If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.}
+
+\item{points, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
 Visualization helper
 }
 \examples{
 library(modelbased)
+library(see)
 
 # Linear Models
-# ----------------
-# Simple
-model <- lm(mpg ~ wt, data = mtcars)
-x <- estimate_relation(model)
+# =============================
+# Default
+x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 layers <- visualisation_recipe(x)
 layers
+plot(layers)
 
-if (require("ggplot2")) {
-  ggplot() +
-    geom_line(data = layers$l1$data,
-              aes_string(x = layers$l1$x, y = layers$l1$y)) +
-    geom_ribbon(data = layers$l2$data, alpha = layers$l2$alpha,
-                aes_string(x = layers$l2$x, y = layers$l2$y,
-                           ymin = layers$l2$ymin, ymax = layers$l2$ymax)) +
-    labs(x = layers$l3$x, y = layers$l3$y, title = layers$l3$title)
-}
-
-# 2-ways interaction between numeric
-model <- lm(mpg ~ wt * am, data = mtcars)
-x <- estimate_relation(model)
-layers <- visualisation_recipe(x)
+# Customize aesthetics
+x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
+layers <- visualisation_recipe(x,
+                               points = list(color = "red", alpha = 0.6, size = 3),
+                               line = list(color = "blue", size = 4),
+                               ribbon = list(fill = "green", alpha = 0.7),
+                               labs = list(subtitle = "Oh yeah!"))
 layers
+plot(layers)
 
-x <- estimate_response(model)
-# visualisation_recipe(x)
+
+# 2-ways interaction ------------
+
+# Numeric * numeric
+x <- estimate_relation(lm(mpg ~ wt * qsec, data = mtcars))
+layers <- visualisation_recipe(x)
+plot(layers)
+
+# Factor * numeric
+x <- estimate_relation(lm(Sepal.Width ~ Species * Sepal.Length, data = iris))
+layers <- visualisation_recipe(x)
+plot(layers)
+
+
+# 3-ways interaction ------------
+data <- mtcars
+data$vs <- as.factor(data$vs)
+data$cyl <- as.factor(data$cyl)
+data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+
+# Numeric * numeric * numeric
+x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data))
+layers <- visualisation_recipe(x)
+plot(layers)
+
+# Numeric * numeric * factor
+x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
+layers <- visualisation_recipe(x)
+plot(layers)
+
+# Numeric * factor * factor
+x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
+layers <- visualisation_recipe(x)
+plot(layers)
+
 }

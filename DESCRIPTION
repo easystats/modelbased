@@ -64,6 +64,7 @@ Suggests:
     spelling
 Remotes: 
     easystats/bayestestR
+    easystats/see
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
