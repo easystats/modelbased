@@ -17,6 +17,23 @@
 #'                                jitter = list(width = 0.03, color = "red"),
 #'                                line = list(linetype = "dashed"))
 #' plot(layers)
+#'
+#' # Two levels ---------------
+#' data <- mtcars
+#' data$cyl <- as.factor(data$cyl)
+#' data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+#'
+#' model <- lm(mpg ~ new_factor * cyl * wt, data = data)
+#' x <- estimate_means(model, levels = c("new_factor", "cyl"))
+#' plot(visualisation_recipe(x))
+#'
+#' # Modulations --------------
+#' x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+#' plot(visualisation_recipe(x))
+#'
+#' x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+#' plot(visualisation_recipe(x))
+#'
 #' }
 #' @export
 visualisation_recipe.estimate_means <- function(x,
@@ -31,16 +48,28 @@ visualisation_recipe.estimate_means <- function(x,
   layers <- list()
 
 
-  # General plot type -----------------
+  # Main aesthetics -----------------
   data <- as.data.frame(x)
   y <- info$response
+  color <- NULL
+  alpha <- NULL
 
   levels <- info$levels
-  if(length(levels) > 1) {
-    stop("Can't deal with more than one variable set as `levels` yet.")
-  }
   x1 <- levels[1]
-  color <- NULL
+  if(length(levels) > 1) {
+    color <- levels[2]
+    if(length(levels) > 2) {
+      # TODO: add facetting (needs updating see::geom_from_list to work with facets)
+      warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.")
+    }
+  }
+  if(!is.null(info$modulate)) {
+    alpha <- info$modulate[1]
+    if(length(info$modulate) > 1) {
+      warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.")
+    }
+  }
+
 
   # Layers -----------------------
   l <- 1
@@ -55,14 +84,14 @@ visualisation_recipe.estimate_means <- function(x,
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1)
+  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, color, alpha)
   if(!is.null(line)) {
     layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
   }
   l <- l + 1
 
   # Pointrange
-  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1)
+  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, color, alpha)
   if(!is.null(pointrange)) {
     layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
   }
@@ -99,25 +128,54 @@ visualisation_recipe.estimate_means <- function(x,
 
 # Layer - Line -------------------------------------------------------------
 
-.visualisation_means_line <- function(data, x1) {
-  list(geom = "line",
-       data = data,
-       aes = list(y = "Mean",
-                  x = x1,
-                  group = 1)
-  )
+.visualisation_means_line <- function(data, x1, color, alpha) {
+  if(is.null(color) && is.null(alpha)) {
+    group <- 1
+  } else if(!is.null(color) && is.null(alpha)) {
+    group <- color
+  } else if(is.null(color) && !is.null(alpha)) {
+    group <- alpha
+  } else{
+    group <- paste0("interaction(", alpha, ", ", color, ")")
+  }
+
+  out <- list(geom = "line",
+              data = data,
+              aes = list(y = "Mean",
+                         x = x1,
+                         color = color,
+                         group = group,
+                         alpha = alpha)
+         )
+
+  if(!is.null(color) || !is.null(alpha)) {
+    out$position <- "dodge"
+    out$width <- 0.1
+  }
+
+  out
 }
 
 # Layer - Pointrange -------------------------------------------------------
 
-.visualisation_means_pointrange <- function(data, x1) {
-  list(geom = "pointrange",
-       data = data,
-       aes = list(y = "Mean",
-                  x = x1,
-                  ymin = "CI_low",
-                  ymax = "CI_high")
-  )
+.visualisation_means_pointrange <- function(data, x1, color, alpha) {
+
+  out <- list(geom = "pointrange",
+              data = data,
+              aes = list(y = "Mean",
+                         x = x1,
+                         ymin = "CI_low",
+                         ymax = "CI_high",
+                         color = color,
+                         alpha = alpha)
+              )
+
+  if(!is.null(color) || !is.null(alpha)) {
+    out$position <- "dodge"
+    out$width <- 0.1
+  }
+
+  out
 }
 
 

@@ -60,6 +60,23 @@ layers <- visualisation_recipe(x,
                                jitter = list(width = 0.03, color = "red"),
                                line = list(linetype = "dashed"))
 plot(layers)
+
+# Two levels ---------------
+data <- mtcars
+data$cyl <- as.factor(data$cyl)
+data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+
+model <- lm(mpg ~ new_factor * cyl * wt, data = data)
+x <- estimate_means(model, levels = c("new_factor", "cyl"))
+plot(visualisation_recipe(x))
+
+# Modulations --------------
+x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+plot(visualisation_recipe(x))
+
+x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+plot(visualisation_recipe(x))
+
 }
 # ==============================================
 # estimate_expectation, estimate_response, ...

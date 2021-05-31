@@ -71,7 +71,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   info <- attributes(x)
   layers <- list()
 
-  # General plot type -----------------
+  # Main aesthetics -----------------
   data <- as.data.frame(x)
   y <- info$response
 
