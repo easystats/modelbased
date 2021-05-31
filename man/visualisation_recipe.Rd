@@ -8,7 +8,15 @@
 \usage{
 visualisation_recipe(x, ...)
 
-\method{visualisation_recipe}{estimate_predicted}(x, ...)
+\method{visualisation_recipe}{estimate_predicted}(
+  x,
+  show_points = TRUE,
+  points = NULL,
+  line = NULL,
+  ribbon = NULL,
+  labs = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{Something.}
@@ -22,6 +30,8 @@ Visualization helper
 library(modelbased)
 
 # Linear Models
+# ----------------
+# Simple
 model <- lm(mpg ~ wt, data = mtcars)
 x <- estimate_relation(model)
 layers <- visualisation_recipe(x)
@@ -36,6 +46,12 @@ if (require("ggplot2")) {
                            ymin = layers$l2$ymin, ymax = layers$l2$ymax)) +
     labs(x = layers$l3$x, y = layers$l3$y, title = layers$l3$title)
 }
+
+# 2-ways interaction between numeric
+model <- lm(mpg ~ wt * am, data = mtcars)
+x <- estimate_relation(model)
+layers <- visualisation_recipe(x)
+layers
 
 x <- estimate_response(model)
 # visualisation_recipe(x)

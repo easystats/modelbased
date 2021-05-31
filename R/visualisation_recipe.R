@@ -14,8 +14,18 @@ print.visualisation_recipe <- function(x, ...) {
   for(i in 1:length(x)) {
     l <- x[[paste0("l", i)]]
     insight::print_color(paste0("Layer ", i, "\n--------\n"), "blue")
-    insight::print_color(paste0("Type: ", l$geom, "\n"), "yellow")
-    cat(paste0(names(l)[names(l) != "geom"], collapse = ", "))
+    insight::print_color(paste0("Geom type: ", l$geom, "\n"), "yellow")
+
+    elements <- names(l)[!sapply(l, is.null)]
+    cat(paste0(elements[elements != "geom"], collapse = ", "))
     cat("\n\n")
   }
+}
+
+
+#' @export
+plot.visualisation_recipe <- function(x, ...) {
+  insight::check_if_installed("see")
+
+  ggplot2::ggplot() + see::geoms_from_list(x, ...)
 }
