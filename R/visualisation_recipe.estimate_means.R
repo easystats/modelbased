@@ -37,7 +37,7 @@
 #' }
 #' @export
 visualisation_recipe.estimate_means <- function(x,
-                                                show_points = TRUE,
+                                                show_data = "points",
                                                 point = NULL,
                                                 jitter = point,
                                                 line = NULL,
@@ -75,8 +75,13 @@ visualisation_recipe.estimate_means <- function(x,
   l <- 1
 
   # Points
-  if(show_points) {
-    layers[[paste0("l", l)]] <- .visualisation_means_jitter(info, x1, y, color)
+  if(!is.null(show_data) && any(show_data != "none")) {
+    if(any(show_data %in% c("point", "points"))) {
+      layers[[paste0("l", l)]] <- .visualisation_means_jitter(info, x1, y, color)
+    } else {
+      # TODO: Violin and boxplot
+      stop("Only `show_data = 'points'` are supported for now.")
+    }
     if(!is.null(jitter)) {
       layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], jitter)
     }

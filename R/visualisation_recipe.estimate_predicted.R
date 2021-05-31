@@ -1,6 +1,6 @@
 #' @rdname visualisation_recipe
 #'
-#' @param show_points If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.
+#' @param show_data Display the "raw" data as a background to the model-based estimation. Set to \code{"none"} to not show it. If \code{"points"}, it will try adding the points of the original data corresponding to the x and y axes.
 #' @param ... Other arguments to be passed to or from other functions.
 #'
 #'
@@ -62,7 +62,7 @@
 #' }
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
-                                                    show_points = TRUE,
+                                                    show_data = "points",
                                                     point = NULL,
                                                     line = NULL,
                                                     ribbon = NULL,
@@ -123,8 +123,13 @@ visualisation_recipe.estimate_predicted <- function(x,
   l <- 1
 
   # Points
-  if(show_points) {
-    layers[[paste0("l", l)]] <- .visualisation_predicted_points(info, x1, y, color)
+  if(!is.null(show_data) && show_data != "none") {
+    if(show_data %in% c("point", "points")) {
+      layers[[paste0("l", l)]] <- .visualisation_predicted_points(info, x1, y, color)
+    } else {
+      # TODO: 2D density
+      stop("Only `show_data = 'points'` are supported for now.")
+    }
     if(!is.null(point)) {
       layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     }

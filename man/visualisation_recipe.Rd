@@ -12,7 +12,7 @@ visualisation_recipe(x, ...)
 
 \method{visualisation_recipe}{estimate_means}(
   x,
-  show_points = TRUE,
+  show_data = "points",
   point = NULL,
   jitter = point,
   line = NULL,
@@ -23,7 +23,7 @@ visualisation_recipe(x, ...)
 
 \method{visualisation_recipe}{estimate_predicted}(
   x,
-  show_points = TRUE,
+  show_data = "points",
   point = NULL,
   line = NULL,
   ribbon = NULL,
@@ -36,7 +36,7 @@ visualisation_recipe(x, ...)
 
 \item{...}{Other arguments to be passed to or from other functions.}
 
-\item{show_points}{If \code{TRUE}, will attempt at adding the points of the original data corresponding to the x and y axes.}
+\item{show_data}{Display the "raw" data as a background to the model-based estimation. Set to \code{"none"} to not show it. If \code{"points"}, it will try adding the points of the original data corresponding to the x and y axes.}
 
 \item{point, jitter, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }

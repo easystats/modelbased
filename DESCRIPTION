@@ -60,7 +60,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
-    see,
+    see (>= 0.6.5),
     testthat,
     spelling
 Remotes: 
