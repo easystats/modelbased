@@ -1,0 +1,94 @@
+---
+title: "How to use Mixed models to Estimate Individuals' Scores"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, mixed models]
+vignette: >
+  %\VignetteIndexEntry{How to use Mixed models to Estimate Individuals' Scores}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+knitr::opts_chunk$set(comment = ">", dpi = 450)
+options(digits = 2)
+
+if (!requireNamespace("ggplot2", quietly = TRUE) ||
+  !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("lme4", quietly = TRUE) ||
+  !requireNamespace("parameters", quietly = TRUE) ||
+  !requireNamespace("dplyr", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+set.seed(333)
+```
+
+
+Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the "fixed" effects), they can also be used to gain insight into group-level (i.e., individuals' level scores, if the random factors are individuals) variability.
+
+For this practical walkthrough, we will use the **Speed-Accuracy Data** (Wagenmakers, Ratcliff, Gomez, \& McKoon, 2008) from the `rtdists` package, in which 17 participants (the **id** variable) performed some reaction time (RT) experiment under two conditions, speed and accuracy (the **condition** variable). The words used as stimuli also belonged to 3 categories (the **stim_cat** variable): low, middle or high frequency.
+
+How hypotheses is that participants will be **faster** (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less **errors** in the accuracy condition as compared to the speed condition. Finally, these results will be modulated by the **frequency** of the stimuli: low frequency words will be related to slower RT and higher likelihood of error.
+
+In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.
+
+```{r warning=FALSE, message=FALSE}
+library(rtdists)
+library(ggplot2)
+library(dplyr)
+library(lme4)
+library(brms)
+library(parameters)
+library(modelbased)
+
+data <- rtdists::speed_acc %>% 
+  # Remove outliers &  Keep only word condition 
+  filter(rt < 1.3,  
+         stim_cat == "word") %>% 
+  # Add new 'error' column that is 1 if the response doesn't match the category
+  mutate(error = ifelse(as.character(response) != as.character(stim_cat), 1, 0))
+```
+
+# Population-level Effects
+
+## Speed
+
+For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a "successful" cognitive process. Then, and we will then plot the RT according to the condition and stimulus category.
+
+
+```{r warning=FALSE, message=FALSE}
+data_rt <- filter(data, error == 0)
+
+ggplot(data_rt, aes(y = rt, condition, fill = frequency)) + 
+  geom_violin()
+```
+
+The descriptive visualisation indeed seems to suggest that people are slowers in the **accuracy** condition as compared to the **speed** condition. And there could also be a slight effect of **frequency**. 
+
+Let's verify that using the [**modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html).
+
+```{r warning=FALSE, message=FALSE}
+model <- lmer(rt ~ condition * frequency + (1|id) + (1|stim), 
+              data = data_rt)
+parameters(model)
+```
+
+## Accuracy
+
+# Group-level
+
+# Non-linear Model
+
+# Scale-Location Model
+
+# References
+

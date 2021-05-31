@@ -59,6 +59,7 @@ Suggests:
     mgcv,
     rmarkdown,
     rstanarm,
+    rtdists,
     see,
     testthat,
     spelling

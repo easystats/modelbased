@@ -1,0 +1,119 @@
+#' Group-specific parameters of mixed models
+#'
+#' Extract parameters of each individual group in the context of mixed models.
+#'
+#' @param model A mixed model.
+#' @param indices A list containing the indices to extract.
+#' @param ... Other arguments passed to or from other methods.
+#'
+#' @examples
+#' library(modelbased)
+#'
+#' if (require("lme4")) {
+#'   data <- lme4::sleepstudy
+#'
+#'   # Random intercept
+#'   model <- lmer(Reaction ~ Days + (1 | Subject), data = data)
+#'   random <- estimate_individual(model)
+#'   head(random)
+#'   summary(random)
+#'
+#'   # Random slope and intercept
+#'   model <- lmer(Reaction ~ Days + (1 + Days  | Subject), data = data)
+#'   random <- estimate_individual(model)
+#'   head(random)
+#'
+#'   # Multiple random groups
+#'   model <- lmer(mpg ~ wt + (1 | gear) + (1 | carb), data = mtcars)
+#'   random <- estimate_individual(model)
+#'   head(random)
+#'
+#'   # Nested random factors
+#'   set.seed(33)
+#'   data$grp <- sample(letters[1:5], size = 180, replace = TRUE)
+#'   data$subgrp <- NA
+#'   for (i in letters[1:5]) {
+#'     filter_group <- data$grp == i
+#'     data$subgrp[filter_group] <- sample(LETTERS, size = sum(filter_group), replace = TRUE)
+#'   }
+#'   model <- lmer(Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject), data = data)
+#'   # estimate_individual(model)
+#' }
+#' @export
+estimate_individual <- function(model, indices = c("Coefficient", "SE"), ...) {
+  # Extract params
+  params <- parameters::model_parameters(model, effects = "random", group_level = TRUE)
+  params <- as.data.frame(params)  # TODO: improve / add new printing that groups by group/level?
+  random_terms <- unique(params$Group)
+
+  # Find info
+  if ("Coefficient" %in% indices) {
+    indices <- c(indices, "Median", "Mean", "MAP")  # Accommodate Bayesian
+  }
+  if ("SE" %in% indices) {
+    indices <- c(indices, "SD")  # Accommodate Bayesian
+  }
+  params_vars <- names(params)[names(params) %in% unique(indices)]
+
+  # Get original data frame of random
+  random_order <- insight::get_data(model)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
+  df_random <- random_order
+  for (random_group in random_terms) {
+
+    params_subset <- params[params$Group == random_group, ]
+    if (nrow(params_subset) == 0) next
+
+    # Clean subset of random factors
+    params_subset[[random_group]] <- params_subset$Level
+    params_newvars <- paste0(random_group, "_", params_vars)
+    names(params_subset)[names(params_subset) %in% params_vars] <- params_newvars
+
+    # Reshape
+    params_subset$Parameter <- ifelse(params_subset$Parameter == "(Intercept)",
+                                      "Intercept",
+                                      params_subset$Parameter)
+
+    wide <- insight::data_to_wide(params_subset[c(random_group, params_newvars, "Parameter")],
+                                  rows_from = random_group,
+                                  values_from = params_newvars,
+                                  colnames_from = "Parameter",
+                                  sep = "_")
+
+    # If nested, separate groups
+    if (grepl(":", random_group)) {
+      groups <- as.data.frame(t(sapply(strsplit(wide[[random_group]], ":"), function(x) as.data.frame(t(x)))))
+      names(groups) <- unlist(strsplit(random_group, ":"))
+      wide <- cbind(groups, wide)
+      wide[random_group] <- NULL
+      random_group <- names(groups)
+    }
+
+    # merge and sort
+    df_random[["__sort_id"]] <- 1:nrow(df_random)
+    df_random <- merge(df_random, wide, by = random_group, sort = FALSE)
+    df_random <- df_random[order(df_random[["__sort_id"]]), ]
+    df_random[["__sort_id"]] <- NULL
+  }
+
+
+  # Reorganize columns
+  params$Effects <- NULL
+  params <- params[c("Group", "Level", names(params)[!names(params) %in% c("Group", "Level")])]
+  params <- params[order(params$Group, params$Level, params$Parameter), ]
+
+  # Clean
+  row.names(params) <- NULL
+  row.names(df_random) <- NULL
+
+
+  # Assign new class
+  attr(df_random, "summary") <- params
+  class(df_random) <- c("parameters_groupspecific", class(df_random))
+  df_random
+}
+
+
+#' @export
+summary.parameters_groupspecific <- function(object, ...) {
+  attributes(object)$summary
+}
