@@ -5,19 +5,18 @@
 #'
 #'
 #' @examples
+#' # ==============================================
+#' # estimate_expectation, estimate_response, ...
+#' # ==============================================
 #' if(require("see")) {
-#' library(modelbased)
 #'
-#' # Linear Models
-#' # =============================
-#' # Default
+#' # Simple Model ---------------
 #' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 #' layers <- visualisation_recipe(x)
 #' layers
 #' plot(layers)
 #'
 #' # Customize aesthetics
-#' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 #' layers <- visualisation_recipe(x,
 #'                                point = list(color = "red", alpha = 0.6, size = 3),
 #'                                line = list(color = "blue", size = 4),

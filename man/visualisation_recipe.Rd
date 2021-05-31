@@ -44,28 +44,35 @@ visualisation_recipe(x, ...)
 Visualization helper
 }
 \examples{
+# ==============================================
+# estimate_means
+# ==============================================
 if(require("see")) {
-library(modelbased)
 
-# Default
+# Simple Model ---------------
 x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
 layers <- visualisation_recipe(x)
 layers
 plot(layers)
-}
-if(require("see")) {
-library(modelbased)
 
-# Linear Models
-# =============================
-# Default
+# Customize aesthetics
+layers <- visualisation_recipe(x,
+                               jitter = list(width = 0.03, color = "red"),
+                               line = list(linetype = "dashed"))
+plot(layers)
+}
+# ==============================================
+# estimate_expectation, estimate_response, ...
+# ==============================================
+if(require("see")) {
+
+# Simple Model ---------------
 x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 layers <- visualisation_recipe(x)
 layers
 plot(layers)
 
 # Customize aesthetics
-x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 layers <- visualisation_recipe(x,
                                point = list(color = "red", alpha = 0.6, size = 3),
                                line = list(color = "blue", size = 4),

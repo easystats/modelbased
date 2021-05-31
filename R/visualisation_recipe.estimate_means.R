@@ -1,13 +1,21 @@
 #' @rdname visualisation_recipe
 #'
 #' @examples
+#' # ==============================================
+#' # estimate_means
+#' # ==============================================
 #' if(require("see")) {
-#' library(modelbased)
 #'
-#' # Default
+#' # Simple Model ---------------
 #' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
 #' layers <- visualisation_recipe(x)
 #' layers
+#' plot(layers)
+#'
+#' # Customize aesthetics
+#' layers <- visualisation_recipe(x,
+#'                                jitter = list(width = 0.03, color = "red"),
+#'                                line = list(linetype = "dashed"))
 #' plot(layers)
 #' }
 #' @export
