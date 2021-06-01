@@ -43,10 +43,12 @@
 #' }
 #'
 #' # Bayesian models
+#' \donttest{
 #' if (require("rstanarm")) {
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0, iter = 200)
 #'   estimate_response(model)
 #'   estimate_relation(model)
+#' }
 #' }
 #' @return A dataframe of predicted values.
 #' @export
