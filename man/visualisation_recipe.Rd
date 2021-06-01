@@ -6,7 +6,7 @@
 \alias{visualisation_recipe}
 \alias{visualisation_recipe.estimate_means}
 \alias{visualisation_recipe.estimate_predicted}
-\title{Visualization helper}
+\title{Prepare objects for visualisation}
 \usage{
 visualisation_recipe(x, ...)
 
@@ -15,6 +15,8 @@ visualisation_recipe(x, ...)
   show_data = "points",
   point = NULL,
   jitter = point,
+  boxplot = NULL,
+  violin = NULL,
   line = NULL,
   pointrange = NULL,
   labs = NULL,
@@ -32,16 +34,16 @@ visualisation_recipe(x, ...)
 )
 }
 \arguments{
-\item{x}{Something.}
+\item{x}{An easystats object.}
 
-\item{...}{Other arguments to be passed to or from other functions.}
+\item{...}{Other arguments passed to other functions.}
 
-\item{show_data}{Display the "raw" data as a background to the model-based estimation. Set to \code{"none"} to not show it. If \code{"points"}, it will try adding the points of the original data corresponding to the x and y axes.}
+\item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_expectation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes).}
 
-\item{point, jitter, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
+\item{point, jitter, boxplot, violin, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
-Visualization helper
+THis function prepares some objects for avisualisation by returning a list of layers with data and geoms that can be easily plotted using \code{ggplot2}.
 }
 \examples{
 # ==============================================
@@ -57,6 +59,7 @@ plot(layers)
 
 # Customize aesthetics
 layers <- visualisation_recipe(x,
+                               show_data = c("violin", "boxplot", "points"),
                                jitter = list(width = 0.03, color = "red"),
                                line = list(linetype = "dashed"))
 plot(layers)

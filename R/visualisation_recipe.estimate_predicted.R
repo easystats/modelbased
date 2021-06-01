@@ -1,9 +1,5 @@
 #' @rdname visualisation_recipe
 #'
-#' @param show_data Display the "raw" data as a background to the model-based estimation. Set to \code{"none"} to not show it. If \code{"points"}, it will try adding the points of the original data corresponding to the x and y axes.
-#' @param ... Other arguments to be passed to or from other functions.
-#'
-#'
 #' @examples
 #' # ==============================================
 #' # estimate_expectation, estimate_response, ...

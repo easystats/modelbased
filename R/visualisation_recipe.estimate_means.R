@@ -14,6 +14,7 @@
 #'
 #' # Customize aesthetics
 #' layers <- visualisation_recipe(x,
+#'                                show_data = c("violin", "boxplot", "points"),
 #'                                jitter = list(width = 0.03, color = "red"),
 #'                                line = list(linetype = "dashed"))
 #' plot(layers)
@@ -40,6 +41,8 @@ visualisation_recipe.estimate_means <- function(x,
                                                 show_data = "points",
                                                 point = NULL,
                                                 jitter = point,
+                                                boxplot = NULL,
+                                                violin = NULL,
                                                 line = NULL,
                                                 pointrange = NULL,
                                                 labs = NULL,
@@ -74,18 +77,33 @@ visualisation_recipe.estimate_means <- function(x,
   # Layers -----------------------
   l <- 1
 
-  # Points
+  # Show data (points, boxplot, violin, etc.)
   if(!is.null(show_data) && any(show_data != "none")) {
-    if(any(show_data %in% c("point", "points"))) {
-      layers[[paste0("l", l)]] <- .visualisation_means_jitter(info, x1, y, color)
-    } else {
-      # TODO: Violin and boxplot
-      stop("Only `show_data = 'points'` are supported for now.")
+    rawdata <- insight::get_data(info$model)
+    # Add response to data if not there
+    if(!y %in% names(rawdata)) rawdata[y] <- insight::get_response(info$model)
+
+    for(i in show_data) {
+      if(i %in% c("point", "points", "jitter")) {
+        layers[[paste0("l", l)]] <- .visualisation_means_jitter(rawdata, x1, y, color)
+        if(!is.null(jitter)) {
+          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], jitter)
+        }
+      } else if (i == "boxplot") {
+        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot")
+        if(!is.null(boxplot)) {
+          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], boxplot)
+        }
+      } else if (i == "violin") {
+        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin")
+        if(!is.null(violin)) {
+          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], violin)
+        }
+      } else {
+        stop("'show_data' can only be some of 'points', 'boxplot', 'violin'. Check spelling.")
+      }
+      l <- l + 1
     }
-    if(!is.null(jitter)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], jitter)
-    }
-    l <- l + 1
   }
 
   # Line
@@ -117,12 +135,8 @@ visualisation_recipe.estimate_means <- function(x,
 
 # Layer - Jitter ------------------------------------------------------------
 
-.visualisation_means_jitter <- function(info, x1, y, color) {
-  data <- insight::get_data(info$model)
-  # Add response to data if not there
-  if(!y %in% names(data)) data[y] <- insight::get_response(info$model)
-
-  list(data = as.data.frame(data),
+.visualisation_means_jitter <- function(raw_data, x1, y, color) {
+  list(data = as.data.frame(raw_data),
        geom = "jitter",
        aes = list(x = x1, y = y, color = color),
        stroke = 0,
@@ -130,6 +144,18 @@ visualisation_recipe.estimate_means <- function(x,
        width = 0.1)
 }
 
+# Layer - Violin / boxplot ------------------------------------------------------------
+
+.visualisation_means_boxplot <- function(raw_data, x1, y, color, type = "boxplot") {
+  out <- list(data = as.data.frame(raw_data),
+              geom = type,
+              aes = list(x = x1, y = y, fill = color))
+
+  if(type == "boxplot") {
+    out$outlier.shape <- NA
+  }
+  out
+}
 
 # Layer - Line -------------------------------------------------------------
 
