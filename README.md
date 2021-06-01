@@ -5,6 +5,8 @@
 [![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
+***Taking your models to new heights***
+
 ------------------------------------------------------------------------
 
 :warning: `estimate_link()` now does *not* transform predictions on the
@@ -17,9 +19,9 @@ more robust and polyvalent. Apologies for the breaks.
 
 ------------------------------------------------------------------------
 
-`modelbased` is a lightweight package helping with model-based
-estimations, used in the computation of marginal means, contrast
-analysis and model predictions.
+`modelbased` is a package helping with model-based estimations, to
+easily compute of marginal means, contrast analysis and model
+predictions.
 
 ## Installation
 
@@ -224,7 +226,7 @@ contrasts
     differences between the factor levels (the contrasts) change
     depending on the other continuous variable.
 -   **Solution**: You can estimate the marginal contrasts at different
-    values of a contious variable (the *modulator*), and plot these
+    values of a continuous variable (the *modulator*), and plot these
     differences (they are significant if their 95% CI doesn’t cover 0).
 
 ``` r

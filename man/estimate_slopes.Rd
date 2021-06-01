@@ -32,10 +32,11 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 slopes <- estimate_slopes(model, trend = "Petal.Length")
 slopes
 effectsize::standardize(slopes)
-
 \dontrun{
 if (require("rstanarm")) {
   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
   estimate_slopes(model)
-}}
+}
+}
+
 }

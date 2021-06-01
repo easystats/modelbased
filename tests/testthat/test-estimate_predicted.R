@@ -8,27 +8,25 @@ osx <- tryCatch({
 })
 
 if (require("testthat") && require("modelbased") && require("gamm4") && require("rstanarm") && require("lme4") && require("glmmTMB") && require("mgcv") && require("MASS") && require("brms") && require("testthat")) {
-
-
   test_that("estimate_relation - shape", {
 
-  # CI
-  model <- lm(Petal.Length ~ Petal.Width, data = iris)
-  estim <- modelbased::estimate_relation(model, ci = 0.90)
-  expect_equal(attributes(estim)$ci, 0.9)
-  estim <- modelbased::estimate_relation(model, ci = c(0.90, .95))
-  expect_equal(attributes(estim)$ci, c(0.90, 0.95))
-  expect_equal(dim(estim), c(10, 7))
+    # CI
+    model <- lm(Petal.Length ~ Petal.Width, data = iris)
+    estim <- modelbased::estimate_relation(model, ci = 0.90)
+    expect_equal(attributes(estim)$ci, 0.9)
+    estim <- modelbased::estimate_relation(model, ci = c(0.90, .95))
+    expect_equal(attributes(estim)$ci, c(0.90, 0.95))
+    expect_equal(dim(estim), c(10, 7))
 
-  # vizdata <- visualisation_matrix(model)
-  # insight::get_predicted(model, as.data.frame(vizdata), ci = c(0.90, .95))
+    # vizdata <- visualisation_matrix(model)
+    # insight::get_predicted(model, as.data.frame(vizdata), ci = c(0.90, .95))
 
-  # Range
-  model <- lm(Petal.Length ~ Petal.Width * Species, data = iris)
-  estim <- modelbased::estimate_relation(model, length = 10)
-  expect_equal(dim(estim), c(10, 6))
-  estim <- modelbased::estimate_relation(model, length = 10, preserve_range = FALSE)
-  expect_equal(dim(estim), c(30, 6))
+    # Range
+    model <- lm(Petal.Length ~ Petal.Width * Species, data = iris)
+    estim <- modelbased::estimate_relation(model, length = 10)
+    expect_equal(dim(estim), c(10, 6))
+    estim <- modelbased::estimate_relation(model, length = 10, preserve_range = FALSE)
+    expect_equal(dim(estim), c(30, 6))
   })
 
 

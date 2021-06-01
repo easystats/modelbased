@@ -39,102 +39,114 @@ visualisation_recipe(x, ...)
 
 \item{...}{Other arguments passed to other functions.}
 
-\item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_expectation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes).}
+\item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_expectation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".}
 
 \item{point, jitter, boxplot, violin, pointrange, density_2d, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
-THis function prepares some objects for avisualisation by returning a list of layers with data and geoms that can be easily plotted using \code{ggplot2}.
+This function prepares some objects for visualisation by returning a list of layers with data and geoms that can be easily plotted using \code{ggplot2}.
 }
 \examples{
 # ==============================================
 # estimate_means
 # ==============================================
-if(require("see")) {
+if (require("see")) {
 
-# Simple Model ---------------
-x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
-layers <- visualisation_recipe(x)
-layers
-plot(layers)
+  # Simple Model ---------------
+  x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
+  layers <- visualisation_recipe(x)
+  layers
+  plot(layers)
 
-# Customize aesthetics
-layers <- visualisation_recipe(x,
-                               show_data = c("violin", "boxplot", "points"),
-                               jitter = list(width = 0.03, color = "red"),
-                               line = list(linetype = "dashed"))
-plot(layers)
+  # Customize aesthetics
+  layers <- visualisation_recipe(x,
+    jitter = list(width = 0.03, color = "red"),
+    line = list(linetype = "dashed")
+  )
+  plot(layers)
 
-# Two levels ---------------
-data <- mtcars
-data$cyl <- as.factor(data$cyl)
-data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+  # Customize raw data
+  plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "points")))
 
-model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-x <- estimate_means(model, levels = c("new_factor", "cyl"))
-plot(visualisation_recipe(x))
+  # Two levels ---------------
+  data <- mtcars
+  data$cyl <- as.factor(data$cyl)
+  data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
-# Modulations --------------
-x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
-plot(visualisation_recipe(x))
+  model <- lm(mpg ~ new_factor * cyl * wt, data = data)
+  x <- estimate_means(model, levels = c("new_factor", "cyl"))
+  plot(visualisation_recipe(x))
 
-x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
-plot(visualisation_recipe(x))
+  # Modulations --------------
+  x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+  plot(visualisation_recipe(x))
 
+  x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+  plot(visualisation_recipe(x))
 }
 # ==============================================
 # estimate_expectation, estimate_response, ...
 # ==============================================
-if(require("see")) {
+if (require("ggplot2")) {
 
-# Simple Model ---------------
-x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
-layers <- visualisation_recipe(x)
-layers
-plot(layers)
+  # Simple Model ---------------
+  x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
+  layers <- visualisation_recipe(x)
+  layers
+  plot(layers)
 
-# Customize aesthetics
-layers <- visualisation_recipe(x,
-                               point = list(color = "red", alpha = 0.6, size = 3),
-                               line = list(color = "blue", size = 4),
-                               ribbon = list(fill = "green", alpha = 0.7),
-                               labs = list(subtitle = "Oh yeah!"))
-layers
-plot(layers)
+  # Customize aesthetics
+  layers <- visualisation_recipe(x,
+    point = list(color = "red", alpha = 0.6, size = 3),
+    line = list(color = "blue", size = 4),
+    ribbon = list(fill = "green", alpha = 0.7),
+    labs = list(subtitle = "Oh yeah!")
+  )
+  layers
+  plot(layers)
 
-
-# 2-ways interaction ------------
-
-# Numeric * numeric
-x <- estimate_relation(lm(mpg ~ wt * qsec, data = mtcars))
-layers <- visualisation_recipe(x)
-plot(layers)
-
-# Factor * numeric
-x <- estimate_relation(lm(Sepal.Width ~ Species * Sepal.Length, data = iris))
-layers <- visualisation_recipe(x)
-plot(layers)
+  # Customize raw data
+  plot(visualisation_recipe(x, show_data = "none"))
+  plot(visualisation_recipe(x, show_data = c("density_2d", "points")))
+  plot(visualisation_recipe(x, show_data = "density_2d_filled"))
+  plot(visualisation_recipe(x, show_data = "density_2d_polygon"))
+  plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
+    scale_x_continuous(expand = c(0, 0)) +
+    scale_y_continuous(expand = c(0, 0))
 
 
-# 3-ways interaction ------------
-data <- mtcars
-data$vs <- as.factor(data$vs)
-data$cyl <- as.factor(data$cyl)
-data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+  # 2-ways interaction ------------
 
-# Numeric * numeric * numeric
-x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data))
-layers <- visualisation_recipe(x)
-plot(layers)
+  # Numeric * numeric
+  x <- estimate_relation(lm(mpg ~ wt * qsec, data = mtcars))
+  layers <- visualisation_recipe(x)
+  plot(layers)
 
-# Numeric * numeric * factor
-x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
-layers <- visualisation_recipe(x)
-plot(layers)
+  # Factor * numeric
+  x <- estimate_relation(lm(Sepal.Width ~ Species * Sepal.Length, data = iris))
+  layers <- visualisation_recipe(x)
+  plot(layers)
 
-# Numeric * factor * factor
-x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
-layers <- visualisation_recipe(x)
-plot(layers)
+
+  # 3-ways interaction ------------
+  data <- mtcars
+  data$vs <- as.factor(data$vs)
+  data$cyl <- as.factor(data$cyl)
+  data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+
+  # Numeric * numeric * numeric
+  x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data))
+  layers <- visualisation_recipe(x)
+  plot(layers)
+
+  # Numeric * numeric * factor
+  x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
+  layers <- visualisation_recipe(x)
+  plot(layers)
+
+  # Numeric * factor * factor
+  x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
+  layers <- visualisation_recipe(x)
+  plot(layers)
 }
 }

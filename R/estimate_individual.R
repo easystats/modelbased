@@ -19,7 +19,7 @@
 #'   summary(random)
 #'
 #'   # Random slope and intercept
-#'   model <- lmer(Reaction ~ Days + (1 + Days  | Subject), data = data)
+#'   model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = data)
 #'   random <- estimate_individual(model)
 #'   head(random)
 #'
@@ -43,15 +43,15 @@
 estimate_individual <- function(model, indices = c("Coefficient", "SE"), ...) {
   # Extract params
   params <- parameters::model_parameters(model, effects = "random", group_level = TRUE)
-  params <- as.data.frame(params)  # TODO: improve / add new printing that groups by group/level?
+  params <- as.data.frame(params) # TODO: improve / add new printing that groups by group/level?
   random_terms <- unique(params$Group)
 
   # Find info
   if ("Coefficient" %in% indices) {
-    indices <- c(indices, "Median", "Mean", "MAP")  # Accommodate Bayesian
+    indices <- c(indices, "Median", "Mean", "MAP") # Accommodate Bayesian
   }
   if ("SE" %in% indices) {
-    indices <- c(indices, "SD")  # Accommodate Bayesian
+    indices <- c(indices, "SD") # Accommodate Bayesian
   }
   params_vars <- names(params)[names(params) %in% unique(indices)]
 
@@ -59,7 +59,6 @@ estimate_individual <- function(model, indices = c("Coefficient", "SE"), ...) {
   random_order <- insight::get_data(model)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
   df_random <- random_order
   for (random_group in random_terms) {
-
     params_subset <- params[params$Group == random_group, ]
     if (nrow(params_subset) == 0) next
 
@@ -70,14 +69,16 @@ estimate_individual <- function(model, indices = c("Coefficient", "SE"), ...) {
 
     # Reshape
     params_subset$Parameter <- ifelse(params_subset$Parameter == "(Intercept)",
-                                      "Intercept",
-                                      params_subset$Parameter)
+      "Intercept",
+      params_subset$Parameter
+    )
 
     wide <- insight::data_to_wide(params_subset[c(random_group, params_newvars, "Parameter")],
-                                  rows_from = random_group,
-                                  values_from = params_newvars,
-                                  colnames_from = "Parameter",
-                                  sep = "_")
+      rows_from = random_group,
+      values_from = params_newvars,
+      colnames_from = "Parameter",
+      sep = "_"
+    )
 
     # If nested, separate groups
     if (grepl(":", random_group)) {

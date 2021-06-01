@@ -31,7 +31,6 @@
 #'
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' model_emmeans(model, modulate = "Petal.Width", length = 3)
-#'
 #' @export
 model_emmeans <- function(model,
                           levels = NULL,
@@ -192,7 +191,3 @@ model_emmeans <- function(model,
     arg
   }
 }
-
-
-
-

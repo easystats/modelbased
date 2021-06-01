@@ -41,5 +41,4 @@ model <- lm(y ~ poly(x, 2), data = data)
 link_data <- estimate_relation(model, length = 100)
 
 describe_nonlinear(link_data, x = "x")
-
 }

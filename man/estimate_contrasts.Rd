@@ -83,7 +83,6 @@ if (require("lme4")) {
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
-
 \dontrun{
 if (require("rstanarm")) {
   model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)

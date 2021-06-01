@@ -40,7 +40,6 @@
 #'   estimate_response(model)
 #'   estimate_relation(model)
 #' }
-#'
 #' @return A dataframe of predicted values.
 #' @export
 estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
@@ -79,9 +78,9 @@ estimate_response <- estimate_prediction
 .estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
 
   # If a visualisation_matrix is passed
-  if(inherits(model, "visualisation_matrix")) {
+  if (inherits(model, "visualisation_matrix")) {
     data <- model
-    if("model" %in% names(attributes(model))) {
+    if ("model" %in% names(attributes(model))) {
       model <- attributes(model)$model
     } else {
       stop("A model must be passed to make predictions.")
@@ -104,7 +103,7 @@ estimate_response <- estimate_prediction
   grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
-  if(insight::find_response(model) %in% names(data)) {
+  if (insight::find_response(model) %in% names(data)) {
     resid <- data[[insight::find_response(model)]]
   } else {
     resid <- NULL
@@ -129,7 +128,7 @@ estimate_response <- estimate_prediction
   out <- cbind(data, out)
 
   # Add residuals
-  if(!is.null(resid)) {
+  if (!is.null(resid)) {
     out$Residuals <- out$Predicted - resid
   }
 
@@ -156,15 +155,14 @@ estimate_response <- estimate_prediction
 .estimate_predicted_footer <- function(model, grid_specs) {
   footer <- paste0("\nVariable predicted: ", insight::find_response(model))
 
-  if("target" %in% names(grid_specs)) {
+  if ("target" %in% names(grid_specs)) {
     footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$target, collapse = ", "))
   }
 
-  if("adjusted_for" %in% names(grid_specs)) {
-    if(!is.na(grid_specs$adjusted_for)) {
+  if ("adjusted_for" %in% names(grid_specs)) {
+    if (!is.na(grid_specs$adjusted_for)) {
       footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
     }
-
   }
 
   c(footer, "blue")

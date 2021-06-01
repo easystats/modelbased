@@ -39,7 +39,6 @@
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
-#'
 #' \dontrun{
 #' if (require("rstanarm")) {
 #'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
@@ -93,9 +92,10 @@ estimate_contrasts <- function(model,
 
   # Compute pairwise contrasts
   estimated <- emmeans::contrast(estimated,
-                                 by = c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
-                                 method = "pairwise",
-                                 ...)
+    by = c(.clean_argument(args$fixed), .clean_argument(args$modulate)),
+    method = "pairwise",
+    ...
+  )
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {

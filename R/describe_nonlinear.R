@@ -22,7 +22,6 @@
 #' link_data <- estimate_relation(model, length = 100)
 #'
 #' describe_nonlinear(link_data, x = "x")
-#'
 #' @return A dataframe of linear description of non-linear terms.
 #' @importFrom insight find_predictors get_data find_random
 #' @importFrom stats mad median sd setNames predict loess
@@ -43,7 +42,7 @@ describe_nonlinear.estimate_predicted <- function(data, x = NULL, y = "Predicted
 
 #' @export
 describe_nonlinear.numeric <- function(data, x = NULL, ...) {
-  if(is.null(x)) {
+  if (is.null(x)) {
     x <- 1:length(data)
   }
   describe_nonlinear(data.frame(x = x, y = data), x = "x", y = "y")
@@ -54,15 +53,15 @@ describe_nonlinear.numeric <- function(data, x = NULL, ...) {
 #' @export
 describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
   # Sanity check
-  if(is.null(x) || !x %in% names(data)) {
+  if (is.null(x) || !x %in% names(data)) {
     stop("The name of the predictor variable (`x`) must be correctly supplied.")
   }
-  if(is.null(y) || !y %in% names(data)) {
+  if (is.null(y) || !y %in% names(data)) {
     stop("The name of the response variable (`y`) must be correctly supplied.")
   }
 
   # Verify that the x-axis is sorted
-  if(is.unsorted(data[[x]])) data <- data[order(data[[x]]), ]
+  if (is.unsorted(data[[x]])) data <- data[order(data[[x]]), ]
 
   # Find inversions
   parts <- .describe_nonlinear_parts(y = data[[y]], x = data[[x]])
@@ -111,15 +110,16 @@ estimate_smooth <- describe_nonlinear
   }
 
   out <- data.frame()
-  for(i in 1:(length(inversions) - 1)){
-
+  for (i in 1:(length(inversions) - 1)) {
     idx_start <- round(inversions[i])
     idx_end <- round(inversions[i + 1])
 
-    segment <- data.frame(Start = x[idx_start],
-                          End = x[idx_end],
-                          Length = (inversions[i + 1] - inversions[i]) / n,
-                          Change = y[idx_end] - y[idx_start])
+    segment <- data.frame(
+      Start = x[idx_start],
+      End = x[idx_end],
+      Length = (inversions[i + 1] - inversions[i]) / n,
+      Change = y[idx_end] - y[idx_start]
+    )
     segment$Slope <- segment$Change / (segment$End - segment$Start)
 
     segment$R2 <- .check_linearity(y, x)
@@ -141,4 +141,3 @@ estimate_smooth <- describe_nonlinear
 .check_linearity <- function(y, x) {
   performance::r2(stats::lm(y ~ x))$R2
 }
-

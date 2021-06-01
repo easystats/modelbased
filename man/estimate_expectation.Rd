@@ -85,5 +85,4 @@ if (require("rstanarm")) {
   estimate_response(model)
   estimate_relation(model)
 }
-
 }

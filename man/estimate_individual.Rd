@@ -29,7 +29,7 @@ if (require("lme4")) {
   summary(random)
 
   # Random slope and intercept
-  model <- lmer(Reaction ~ Days + (1 + Days  | Subject), data = data)
+  model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = data)
   random <- estimate_individual(model)
   head(random)
 

@@ -16,12 +16,13 @@
 #' slopes <- estimate_slopes(model, trend = "Petal.Length")
 #' slopes
 #' effectsize::standardize(slopes)
-#'
 #' \dontrun{
 #' if (require("rstanarm")) {
 #'   model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
 #'   estimate_slopes(model)
-#' }}
+#' }
+#' }
+#'
 #' @return A data.frame.
 #' @export
 estimate_slopes <- function(model,
@@ -42,7 +43,7 @@ estimate_slopes <- function(model,
   if (insight::model_info(model)$is_bayesian) {
     trends <- bayestestR::describe_posterior(estimated, ci = ci, ...)
     trends <- cbind(estimated@grid, trends)
-    trends$`.wgt.` <- NULL  # Drop the weight column
+    trends$`.wgt.` <- NULL # Drop the weight column
     trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
     trends <- insight::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
   } else {
@@ -78,7 +79,7 @@ estimate_slopes <- function(model,
 
 
 #' @keywords internal
-.estimate_slopes_guess_args <- function(model, trend, levels, ...){
+.estimate_slopes_guess_args <- function(model, trend, levels, ...) {
   # Gather info
   predictors <- insight::find_predictors(model, flatten = TRUE, ...)
   data <- insight::get_data(model)

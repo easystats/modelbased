@@ -70,7 +70,7 @@ visualisation_matrix.glmmTMB <- visualisation_matrix.glm
 #' @export
 visualisation_matrix.gamm <- visualisation_matrix.glm
 #' @export
-visualisation_matrix.list <- visualisation_matrix.glm  # list is gamm4
+visualisation_matrix.list <- visualisation_matrix.glm # list is gamm4
 
 
 
@@ -80,7 +80,6 @@ visualisation_matrix.list <- visualisation_matrix.glm  # list is gamm4
 
 #' @export
 visualisation_matrix.visualisation_matrix <- function(x, reference = attributes(x)$reference, ...) {
-
   grid <- visualisation_matrix(as.data.frame(x), reference = reference, ...)
 
   if ("model" %in% names(attributes(x))) {

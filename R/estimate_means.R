@@ -24,7 +24,6 @@
 #'
 #' means <- estimate_means(model, fixed = "Sepal.Width")
 #' effectsize::standardize(means)
-#'
 #' \donttest{
 #' if (require("lme4")) {
 #'   data <- iris
@@ -84,13 +83,11 @@ estimate_means <- function(model,
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-
     means <- bayestestR::describe_posterior(estimated, test = NULL, rope_range = NULL, ci = ci, ...)
     means <- cbind(estimated@grid, means)
-    means$`.wgt.` <- NULL  # Drop the weight column
+    means$`.wgt.` <- NULL # Drop the weight column
     means <- .clean_names_bayesian(means, model, transform, type = "mean")
   } else {
-
     means <- as.data.frame(stats::confint(estimated, level = ci))
     means$df <- NULL
     means <- .clean_names_frequentist(means)
@@ -182,13 +179,14 @@ estimate_means <- function(model,
   table_footer <- ""
 
   # Levels
-  if(length(args$levels) > 0) {
-    table_footer <- paste0(table_footer,
-                           "\nMarginal ",
-                           type,
-                           " estimated for ",
-                           paste0(args$levels, collapse = ", "))
-
+  if (length(args$levels) > 0) {
+    table_footer <- paste0(
+      table_footer,
+      "\nMarginal ",
+      type,
+      " estimated for ",
+      paste0(args$levels, collapse = ", ")
+    )
   }
 
   # P-value adjustment footer
@@ -200,6 +198,6 @@ estimate_means <- function(model,
     }
   }
 
-  if(table_footer == "") table_footer <- NULL
+  if (table_footer == "") table_footer <- NULL
   c(table_footer, "blue")
 }

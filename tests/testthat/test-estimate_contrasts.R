@@ -1,5 +1,4 @@
 if (require("testthat") && require("modelbased") && require("logspline") && require("rstanarm") && require("insight") && require("lme4")) {
-
   test_that("estimate_contrasts - Frequentist", {
 
     # One factor
@@ -104,8 +103,6 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
 
 
   test_that("estimate_contrasts - Bayesian", {
-
-
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2), data = mtcars, iter = 200, refresh = 0))
     expect_error(estimate_contrasts(model))
 
@@ -143,7 +140,6 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_equal(dim(estim), c(3, 6))
     estim <- estimate_contrasts(model, transform = "response", test = "bf")
     expect_equal(dim(estim), c(3, 6))
-
   })
 
 
@@ -170,6 +166,4 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
   #
   #   expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
   # })
-
-
 }

@@ -199,7 +199,7 @@ plot(contrasts, estimate_means(model)) +
 ## Check the contrasts at different points of another linear predictor
 
 - **Problem**: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.
-- **Solution**: You can estimate the marginal contrasts at different values of a contious variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
+- **Solution**: You can estimate the marginal contrasts at different values of a continuous variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
 
 
 ```{r message=FALSE, warning=FALSE}

@@ -65,7 +65,6 @@ estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 
 means <- estimate_means(model, fixed = "Sepal.Width")
 effectsize::standardize(means)
-
 \donttest{
 if (require("lme4")) {
   data <- iris

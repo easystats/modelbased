@@ -62,7 +62,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
     target <- names(x)
   }
 
-  if(is.numeric(target)) {
+  if (is.numeric(target)) {
     target <- names(x)[target]
   }
 
@@ -74,52 +74,53 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
 
   # Create target list of factors -----------------------------------------
   facs <- list()
-  for(fac in specs[specs$is_factor == TRUE, "varname"]) {
+  for (fac in specs[specs$is_factor == TRUE, "varname"]) {
     facs[[fac]] <- visualisation_matrix(x[[fac]], target = specs[specs$varname == fac, "expression"])
   }
 
   # Create target list of numerics ----------------------------------------
   nums <- list()
-  for(num in specs[specs$is_factor == FALSE, "varname"]) {
+  for (num in specs[specs$is_factor == FALSE, "varname"]) {
     nums[[num]] <- visualisation_matrix(x[[num]],
-                                        target = specs[specs$varname == num, "expression"],
-                                        reference = reference[[num]],
-                                        ...)
+      target = specs[specs$varname == num, "expression"],
+      reference = reference[[num]],
+      ...
+    )
   }
   # Assemble the two
   targets <- expand.grid(c(nums, facs))
 
   # Preserve range ---------------------------------------------------------
-  if(preserve_range == TRUE && length(facs) > 0) {
+  if (preserve_range == TRUE && length(facs) > 0) {
 
     # Loop through the combinations of factors
     facs_combinations <- expand.grid(facs)
-    for(i in 1:nrow(facs_combinations)) {
+    for (i in 1:nrow(facs_combinations)) {
       # Query subset of original dataset
       subset <- x[insight::data_match(x, to = facs_combinations[i, , drop = FALSE]), ]
       idx <- insight::data_match(targets, to = facs_combinations[i, , drop = FALSE])
 
       # Skip if no instance of factor combination, drop the chunk
-      if(nrow(subset) == 0) {
+      if (nrow(subset) == 0) {
         targets <- targets[-idx, ]
         break
       }
 
       # Else, filter given the range of numerics
       rows_to_remove <- c()
-      for(num in names(nums)) {
+      for (num in names(nums)) {
         mini <- min(subset[[num]], na.rm = TRUE)
         maxi <- max(subset[[num]], na.rm = TRUE)
         rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
       }
-      targets <- targets[-idx[idx %in% rows_to_remove], ]  # Drop incompatible rows
-      row.names(targets) <- NULL  # Reset row.names
+      targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
+      row.names(targets) <- NULL # Reset row.names
     }
   }
 
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
-  if(length(rest_vars) >= 1) {
+  if (length(rest_vars) >= 1) {
     rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, ...)
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
     targets <- merge(targets, rest_df, sort = FALSE)
@@ -139,7 +140,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
   # Printing decorations
   attr(targets, "table_title") <- c("Visualisation Grid", "blue")
   if (length(rest_vars) >= 1) attr(targets, "table_footer") <- paste0("\nMaintained constant: ", paste0(rest_vars, collapse = ", "))
-  if(!is.null(attr(targets, "table_footer"))) attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
+  if (!is.null(attr(targets, "table_footer"))) attr(targets, "table_footer") <- c(attr(targets, "table_footer"), "blue")
 
   class(targets) <- c("visualisation_matrix", class(targets))
   targets
@@ -164,10 +165,10 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
   if (na.rm == TRUE) x <- stats::na.omit(x)
 
   if (is.numeric(x)) {
-    if(is.numeric(numerics)) {
+    if (is.numeric(numerics)) {
       out <- numerics
     } else {
-      if(numerics %in% c("all", "combination")) {
+      if (numerics %in% c("all", "combination")) {
         out <- unique(x)
       } else {
         out <- eval(parse(text = paste0(numerics, "(x)")))
@@ -186,9 +187,11 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
       } else if (is.character(x) || is.logical(x)) {
         out <- unique(x)[1]
       } else {
-        stop(paste0("Argument is not numeric nor factor but ",
-                    class(x),
-                    ". Please report the bug at https://github.com/easystats/modelbased/issues"))
+        stop(paste0(
+          "Argument is not numeric nor factor but ",
+          class(x),
+          ". Please report the bug at https://github.com/easystats/modelbased/issues"
+        ))
       }
     }
   }
@@ -220,9 +223,9 @@ visualisation_matrix.numeric <- function(x, length = 10, range = "range", ...) {
   # Check and clean the target argument
   specs <- .visualisation_matrix_clean_target(x, ...)
 
-  if(is.na(specs$expression)) {
+  if (is.na(specs$expression)) {
     # Create a spread
-    out <-.create_spread(x, length = length, range = range, ...)
+    out <- .create_spread(x, length = length, range = range, ...)
   } else {
     # Run the expression cleaned from target
     out <- eval(parse(text = specs$expression))
@@ -248,15 +251,14 @@ visualisation_matrix.factor <- function(x, ...) {
   # Check and clean the target argument
   specs <- .visualisation_matrix_clean_target(x, ...)
 
-  if(is.na(specs$expression)) {
+  if (is.na(specs$expression)) {
 
     # Keep only unique levels
-    if(is.factor(x)) {
+    if (is.factor(x)) {
       out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
     } else {
       out <- unique(x)
     }
-
   } else {
     # Run the expression cleaned from target
     out <- eval(parse(text = specs$expression))
@@ -277,7 +279,7 @@ visualisation_matrix.logical <- visualisation_matrix.character
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
   range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
 
-  if(range == "iqr") {
+  if (range == "iqr") {
     mini <- quantile(x, (1 - ci) / 2, ...)
     maxi <- quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
@@ -308,23 +310,22 @@ visualisation_matrix.logical <- visualisation_matrix.character
   varname <- NA
   original_target <- target
 
-  if(!is.null(target)) {
-
-    if(is.data.frame(x) && target %in% names(x)) {
+  if (!is.null(target)) {
+    if (is.data.frame(x) && target %in% names(x)) {
       return(data.frame(varname = target, expression = NA))
     }
 
     # If there is an equal sign
-    if(grepl("length.out =", target)) {
-      expression <- target  # This is an edgecase
-    } else if(grepl("=", target)) {
-      parts <- trimws(unlist(strsplit(target, "=", fixed = TRUE)))  # Split and clean
-      varname <- parts[1]  # left-hand part is probably the name of the variable
-      target <- parts[2]  # right-hand part is the real target
+    if (grepl("length.out =", target)) {
+      expression <- target # This is an edgecase
+    } else if (grepl("=", target)) {
+      parts <- trimws(unlist(strsplit(target, "=", fixed = TRUE))) # Split and clean
+      varname <- parts[1] # left-hand part is probably the name of the variable
+      target <- parts[2] # right-hand part is the real target
     }
 
-    if(is.na(expression) && is.data.frame(x)) {
-      if(!is.na(varname)) {
+    if (is.na(expression) && is.data.frame(x)) {
+      if (!is.na(varname)) {
         x <- x[[varname]]
       } else {
         stop("Couldn't find which variable were selected in `target`. Check spelling and specification.")
@@ -332,7 +333,7 @@ visualisation_matrix.logical <- visualisation_matrix.character
     }
 
     # If brackets are detected [a, b]
-    if(is.na(expression) && grepl("\\[.*\\]", target)) {
+    if (is.na(expression) && grepl("\\[.*\\]", target)) {
 
       # Clean --------------------
       # Keep the content
@@ -342,25 +343,24 @@ visualisation_matrix.logical <- visualisation_matrix.character
       # Split by a separator like ','
       parts <- trimws(unlist(strsplit(parts, ",")))
       # If the elements have quotes around them, drop them
-      if(all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts)
-      if(all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts)
+      if (all(grepl("\\'.*\\'", parts))) parts <- gsub("'", "", parts)
+      if (all(grepl('\\".*\\"', parts))) parts <- gsub('"', "", parts)
 
       # Make expression ----------
-      if(is.factor(x) || is.character(x)) {  # Factor
+      if (is.factor(x) || is.character(x)) { # Factor
         # Add quotes around them
         parts <- paste0("'", parts, "'")
         # Convert to character
         expression <- paste0("as.factor(c(", paste0(parts, collapse = ", "), "))")
-
       } else { # Numeric
         # If only two, it's probably the range
-        if(length(parts) == 2) {
+        if (length(parts) == 2) {
           expression <- paste0("seq(", parts[1], ", ", parts[2], ", length.out = length)")
           # If more, it's probably the vector
-        } else if(length(parts) > 2){
+        } else if (length(parts) > 2) {
           parts <- as.numeric(parts)
           expression <- paste0("c(", paste0(parts, collapse = ", "), ")")
-        } else{
+        } else {
           stop(paste0("The `target` argument (", target, ") should indicate the min and the max."))
         }
       }
@@ -368,18 +368,18 @@ visualisation_matrix.logical <- visualisation_matrix.character
     } else {
       expression <- target
       # Try to eval and make sure it works
-      tryCatch({
-        # This is just to make sure that an expression with `length` in
-        # it doesn't fail because of this undefined var
-        length <- 10
-        eval(parse(text = target))
-      }, error = function(r) {
-        stop(paste0("The `target` argument (`", original_target, "`) cannot be read and could be mispecified."))
-      })
+      tryCatch(
+        {
+          # This is just to make sure that an expression with `length` in
+          # it doesn't fail because of this undefined var
+          length <- 10
+          eval(parse(text = target))
+        },
+        error = function(r) {
+          stop(paste0("The `target` argument (`", original_target, "`) cannot be read and could be mispecified."))
+        }
+      )
     }
   }
   data.frame(varname = varname, expression = expression)
 }
-
-
-

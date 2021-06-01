@@ -1,7 +1,7 @@
 if (require("testthat") && require("modelbased")) {
 
 
-# Vectors and columns -----------------------------------------------------
+  # Vectors and columns -----------------------------------------------------
 
 
   test_that("visualisation_matrix - vectors", {
@@ -31,7 +31,7 @@ if (require("testthat") && require("modelbased")) {
   })
 
 
-# Dataframes --------------------------------------------------------------
+  # Dataframes --------------------------------------------------------------
 
 
   test_that("visualisation_matrix - dataframes", {
@@ -52,5 +52,4 @@ if (require("testthat") && require("modelbased")) {
     x2 <- visualisation_matrix(iris[c("Species", "Sepal.Length")], length = 30, preserve_range = TRUE)
     expect_equal(dim(x2), c(55, 2))
   })
-
 }
