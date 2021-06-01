@@ -27,6 +27,7 @@ visualisation_recipe(x, ...)
   x,
   show_data = "points",
   point = NULL,
+  density_2d = NULL,
   line = NULL,
   ribbon = NULL,
   labs = NULL,
@@ -40,7 +41,7 @@ visualisation_recipe(x, ...)
 
 \item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_expectation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes).}
 
-\item{point, jitter, boxplot, violin, pointrange, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
+\item{point, jitter, boxplot, violin, pointrange, density_2d, line, ribbon, labs}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
 THis function prepares some objects for avisualisation by returning a list of layers with data and geoms that can be easily plotted using \code{ggplot2}.

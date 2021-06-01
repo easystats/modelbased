@@ -14,10 +14,12 @@
 #'
 #' # Customize aesthetics
 #' layers <- visualisation_recipe(x,
-#'                                show_data = c("violin", "boxplot", "points"),
 #'                                jitter = list(width = 0.03, color = "red"),
 #'                                line = list(linetype = "dashed"))
 #' plot(layers)
+#'
+#' # Customize raw data
+#' plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "points")))
 #'
 #' # Two levels ---------------
 #' data <- mtcars
@@ -79,26 +81,14 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Show data (points, boxplot, violin, etc.)
   if(!is.null(show_data) && any(show_data != "none")) {
-    rawdata <- insight::get_data(info$model)
-    # Add response to data if not there
-    if(!y %in% names(rawdata)) rawdata[y] <- insight::get_response(info$model)
-
+    rawdata <- .visualisation_recipe_getrawdata(x)
     for(i in show_data) {
       if(i %in% c("point", "points", "jitter")) {
-        layers[[paste0("l", l)]] <- .visualisation_means_jitter(rawdata, x1, y, color)
-        if(!is.null(jitter)) {
-          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], jitter)
-        }
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, type = "jitter", point = jitter)
       } else if (i == "boxplot") {
-        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot")
-        if(!is.null(boxplot)) {
-          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], boxplot)
-        }
+        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot", boxplot = boxplot)
       } else if (i == "violin") {
-        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin")
-        if(!is.null(violin)) {
-          layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], violin)
-        }
+        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin", boxplot = violin)
       } else {
         stop("'show_data' can only be some of 'points', 'boxplot', 'violin'. Check spelling.")
       }
@@ -107,25 +97,15 @@ visualisation_recipe.estimate_means <- function(x,
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, color, alpha)
-  if(!is.null(line)) {
-    layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
-  }
+  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, color, alpha, line = line)
   l <- l + 1
 
   # Pointrange
-  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, color, alpha)
-  if(!is.null(pointrange)) {
-    layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
-  }
+  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, color, alpha, pointrange = pointrange)
   l <- l + 1
 
   # Labs
-  layers[[paste0("l", l)]] <- .visualisation_means_labs(info, x1, y)
-  if(!is.null(labs)) {
-    layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], labs)
-  }
-
+  layers[[paste0("l", l)]] <- .visualisation_means_labs(info, x1, y, labs = labs)
 
   # Out
   class(layers) <- c("visualisation_recipe", class(layers))
@@ -133,20 +113,10 @@ visualisation_recipe.estimate_means <- function(x,
   layers
 }
 
-# Layer - Jitter ------------------------------------------------------------
-
-.visualisation_means_jitter <- function(raw_data, x1, y, color) {
-  list(data = as.data.frame(raw_data),
-       geom = "jitter",
-       aes = list(x = x1, y = y, color = color),
-       stroke = 0,
-       shape = 16,
-       width = 0.1)
-}
 
 # Layer - Violin / boxplot ------------------------------------------------------------
 
-.visualisation_means_boxplot <- function(raw_data, x1, y, color, type = "boxplot") {
+.visualisation_means_boxplot <- function(raw_data, x1, y, color, type = "boxplot", boxplot = NULL) {
   out <- list(data = as.data.frame(raw_data),
               geom = type,
               aes = list(x = x1, y = y, fill = color))
@@ -154,12 +124,13 @@ visualisation_recipe.estimate_means <- function(x,
   if(type == "boxplot") {
     out$outlier.shape <- NA
   }
+  if(!is.null(boxplot)) out <- utils::modifyList(out, boxplot) # Update with additional args
   out
 }
 
 # Layer - Line -------------------------------------------------------------
 
-.visualisation_means_line <- function(data, x1, color, alpha) {
+.visualisation_means_line <- function(data, x1, color, alpha, line = NULL) {
   if(is.null(color) && is.null(alpha)) {
     group <- 1
   } else if(!is.null(color) && is.null(alpha)) {
@@ -183,13 +154,13 @@ visualisation_recipe.estimate_means <- function(x,
     out$position <- "dodge"
     out$width <- 0.1
   }
-
+  if(!is.null(line)) out <- utils::modifyList(out, line) # Update with additional args
   out
 }
 
 # Layer - Pointrange -------------------------------------------------------
 
-.visualisation_means_pointrange <- function(data, x1, color, alpha) {
+.visualisation_means_pointrange <- function(data, x1, color, alpha, pointrange = NULL) {
 
   out <- list(geom = "pointrange",
               data = data,
@@ -205,7 +176,7 @@ visualisation_recipe.estimate_means <- function(x,
     out$position <- "dodge"
     out$width <- 0.1
   }
-
+  if(!is.null(pointrange)) out <- utils::modifyList(out, pointrange) # Update with additional args
   out
 }
 
@@ -213,12 +184,14 @@ visualisation_recipe.estimate_means <- function(x,
 
 # Layer - Labels --------------------------------------------------------------
 
-.visualisation_means_labs <- function(info, x1, y) {
-  list(geom = "labs",
+.visualisation_means_labs <- function(info, x1, y, labs = NULL) {
+  out <- list(geom = "labs",
        x = x1,
        y = y,
        title = paste0("Estimated Means (",
                       format(insight::find_formula(info$model)),
                       ")")
   )
+  if(!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
+  out
 }

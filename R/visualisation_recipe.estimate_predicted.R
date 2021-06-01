@@ -4,7 +4,7 @@
 #' # ==============================================
 #' # estimate_expectation, estimate_response, ...
 #' # ==============================================
-#' if(require("see")) {
+#' if(require("ggplot2")) {
 #'
 #' # Simple Model ---------------
 #' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
@@ -20,6 +20,15 @@
 #'                                labs = list(subtitle = "Oh yeah!"))
 #' layers
 #' plot(layers)
+#'
+#' # Customize raw data
+#' plot(visualisation_recipe(x, show_data = "none"))
+#' plot(visualisation_recipe(x, show_data = c("density_2d", "points")))
+#' plot(visualisation_recipe(x, show_data = "density_2d_filled"))
+#' plot(visualisation_recipe(x, show_data = "density_2d_polygon"))
+#' plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
+#'   scale_x_continuous(expand = c(0, 0)) +
+#'   scale_y_continuous(expand = c(0, 0))
 #'
 #'
 #' # 2-ways interaction ------------
@@ -60,6 +69,7 @@
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = "points",
                                                     point = NULL,
+                                                    density_2d = NULL,
                                                     line = NULL,
                                                     ribbon = NULL,
                                                     labs = NULL,
@@ -120,40 +130,31 @@ visualisation_recipe.estimate_predicted <- function(x,
 
   # Points
   if(!is.null(show_data) && show_data != "none") {
-    if(show_data %in% c("point", "points")) {
-      layers[[paste0("l", l)]] <- .visualisation_predicted_points(info, x1, y, color)
-    } else {
-      # TODO: 2D density
-      stop("Only `show_data = 'points'` are supported for now.")
+    rawdata <- .visualisation_recipe_getrawdata(x)
+    for(i in show_data) {
+      if(i %in% c("point", "points")) {
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, type = "point", point = point)
+      } else if(i %in% c("density_2d", "density_2d_filled", "density_2d_polygon", "density_2d_raster")) {
+        layers[[paste0("l", l)]] <- .visualisation_predicted_density2d(rawdata, x1, y, type = i, density_2d = density_2d)
+      } else {
+        stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.")
+      }
+      l <- l + 1
     }
-    if(!is.null(point)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
-    }
-    l <- l + 1
   }
 
   # Ribbon
   if(is.null(alpha) && is.null(linetype)) {
-    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, info, x1, fill = color)
-    if(!is.null(ribbon)) {
-      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
-    }
+    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, info, x1, fill = color, ribbon = ribbon)
     l <- l + 1
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data, info, x1, alpha, color, linetype)
-  if(!is.null(line)) {
-    layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
-  }
+  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data, info, x1, alpha, color, linetype, line = line)
   l <- l + 1
 
-
   # Labs
-  layers[[paste0("l", l)]] <- .visualisation_predicted_labs(info, x1, y)
-  if(!is.null(labs)) {
-    layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], labs)
-  }
+  layers[[paste0("l", l)]] <- .visualisation_predicted_labs(info, x1, y, labs = labs)
 
   # Out
   class(layers) <- c("visualisation_recipe", class(layers))
@@ -164,60 +165,77 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Points ------------------------------------------------------------
 
-.visualisation_predicted_points <- function(info, x1, y, color) {
-  data <- insight::get_data(info$model)
-  # Add response to data if not there
-  if(!y %in% names(data)) data[y] <- insight::get_response(info$model)
+.visualisation_predicted_points <- function(rawdata, x1, y, color, type = "point", point = NULL) {
+  out <- list(
+    data = as.data.frame(rawdata),
+    geom = type,
+    aes = list(x = x1, y = y, color = color),
+    stroke = 0,
+    shape = 16)
+  if(type == "jitter") out$width <- 0.1
+  if(!is.null(point)) out <- utils::modifyList(out, point) # Update with additional args
+  out
+}
 
-  list(data = as.data.frame(data),
-       geom = "point",
-       aes = list(x = x1, y = y, color = color),
-       stroke = 0,
-       shape = 16)
+# Layer - Density 2D ------------------------------------------------------------
+
+.visualisation_predicted_density2d <- function(rawdata, x1, y, type = "density_2d", density_2d = NULL) {
+  out <- list(
+    data = as.data.frame(rawdata),
+    geom = type,
+    aes = list(x = x1, y = y))
+  if(!is.null(density_2d)) out <- utils::modifyList(out, density_2d) # Update with additional args
+  out
 }
 
 # Layer - Lines -------------------------------------------------------------
 
 
-.visualisation_predicted_line <- function(data, info, x1, alpha, color, linetype) {
+.visualisation_predicted_line <- function(data, info, x1, alpha, color, linetype, line = NULL) {
 
   group <- alpha
   if(!is.null(alpha) && !is.null(color)) {
     group <- paste0("interaction(", alpha, ", ", color, ")")
   }
 
-  list(data = data,
-       geom = "line",
-       aes = list(y = "Predicted",
-                  x = x1,
-                  alpha = alpha,
-                  color = color,
-                  linetype = linetype,
-                  group = group))
+  out <- list(data = data,
+               geom = "line",
+               aes = list(y = "Predicted",
+                          x = x1,
+                          alpha = alpha,
+                          color = color,
+                          linetype = linetype,
+                          group = group))
+  if(!is.null(line)) out <- utils::modifyList(out, line) # Update with additional args
+  out
 }
 
 
 # Layer - Ribbon -------------------------------------------------------------
 
-.visualisation_predicted_ribbon <- function(data, info, x1, fill) {
-  list(geom = "ribbon",
-       data = data,
-       aes = list(y = "Predicted",
-                  x = x1,
-                  ymin = "CI_low",
-                  ymax = "CI_high",
-                  fill = fill),
-       alpha = 1/3)
+.visualisation_predicted_ribbon <- function(data, info, x1, fill, ribbon = NULL) {
+  out <- list(geom = "ribbon",
+             data = data,
+             aes = list(y = "Predicted",
+                        x = x1,
+                        ymin = "CI_low",
+                        ymax = "CI_high",
+                        fill = fill),
+             alpha = 1/3)
+  if(!is.null(ribbon)) out <- utils::modifyList(out, ribbon) # Update with additional args
+  out
 }
 
 # Layer - Labels --------------------------------------------------------------
 
-.visualisation_predicted_labs <- function(info, x1, y) {
-  list(geom = "labs",
-       x = x1,
-       y = y,
-       title = paste0("Predicted response (",
-                      format(insight::find_formula(info$model)),
-                      ")")
-  )
+.visualisation_predicted_labs <- function(info, x1, y, labs = NULL) {
+  out <- list(geom = "labs",
+             x = x1,
+             y = y,
+             title = paste0("Predicted response (",
+                            format(insight::find_formula(info$model)),
+                            ")")
+        )
+  if(!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
+  out
 }
