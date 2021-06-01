@@ -1,6 +1,6 @@
 #' Generates predictions from models
 #'
-#' \code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally).
+#' \code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally). For plotting, check the examples in \code{\link{visualisation_recipe}}.
 #'
 #' @inheritParams estimate_means
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
@@ -13,8 +13,16 @@
 #'
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
+#'
+#' # Get predicted and prediction interval (see insight::get_predicted)
 #' estimate_response(model)
-#' estimate_relation(model)
+#'
+#' # Get expected values with confidence interval
+#' pred <- estimate_relation(model)
+#' pred
+#'
+#' # Visualisation (see visualisation_recipe())
+#' plot(pred)
 #'
 #' # Standardize predictions
 #' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))

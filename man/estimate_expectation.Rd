@@ -51,15 +51,23 @@ estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 A dataframe of predicted values.
 }
 \description{
-\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally).
+\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally). For plotting, check the examples in \code{\link{visualisation_recipe}}.
 }
 \examples{
 library(modelbased)
 
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
+
+# Get predicted and prediction interval (see insight::get_predicted)
 estimate_response(model)
-estimate_relation(model)
+
+# Get expected values with confidence interval
+pred <- estimate_relation(model)
+pred
+
+# Visualisation (see visualisation_recipe())
+plot(pred)
 
 # Standardize predictions
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))

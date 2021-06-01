@@ -1,6 +1,6 @@
-#' Estimate Marginal Means (Model-based Average at each Factor Level)
+#' Estimate Marginal Means (Model-based average at each factor level)
 #'
-#' Estimate average value of response variable at each factor levels. See also other
+#' Estimate average value of response variable at each factor levels. For plotting, check the examples in \code{\link{visualisation_recipe}}. See also other
 #' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams model_emmeans
@@ -22,7 +22,9 @@
 #' estimate_means(model, modulate = "Sepal.Width", length = 5)
 #' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 #'
+#' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
+#' plot(means)  # which runs visualisation_recipe()
 #' effectsize::standardize(means)
 #' \donttest{
 #' if (require("lme4")) {

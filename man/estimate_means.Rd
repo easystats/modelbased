@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_means.R
 \name{estimate_means}
 \alias{estimate_means}
-\title{Estimate Marginal Means (Model-based Average at each Factor Level)}
+\title{Estimate Marginal Means (Model-based average at each factor level)}
 \usage{
 estimate_means(
   model,
@@ -44,7 +44,7 @@ in terms of probabilities.}
 A dataframe of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor levels. See also other
+Estimate average value of response variable at each factor levels. For plotting, check the examples in \code{\link{visualisation_recipe}}. See also other
 related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 }
 \examples{
@@ -63,7 +63,9 @@ estimate_means(model, levels = c("Species", "Sepal.Width=0"))
 estimate_means(model, modulate = "Sepal.Width", length = 5)
 estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 
+# Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
+plot(means)  # which runs visualisation_recipe()
 effectsize::standardize(means)
 \donttest{
 if (require("lme4")) {
