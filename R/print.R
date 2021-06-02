@@ -20,6 +20,8 @@ print.estimate_predicted <- print.estimate_contrasts
 #' @export
 print.visualisation_matrix <- print.estimate_contrasts
 
+#' @export
+print.estimate_random <- print.estimate_contrasts
 
 # Format ------------------------------------------------------------------
 
@@ -36,6 +38,9 @@ format.estimate_slopes <- format.estimate_contrasts
 
 #' @export
 format.estimate_predicted <- format.estimate_contrasts
+
+#' @export
+format.estimate_random <- format.estimate_contrasts
 
 #' @export
 format.estimate_smooth <- function(x, ...) {
