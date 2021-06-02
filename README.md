@@ -76,7 +76,7 @@ The package is built around 5 main functions:
 -   [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html):
     Estimates the slopes of numeric predictors at different factor
     levels
--   [`estimate_response()`](https://easystats.github.io/modelbased/reference/estimate_response.html):
+-   [`estimate_response()`](https://easystats.github.io/modelbased/articles/estimate_response.html):
     Predict the response variable using the model
 -   [`describe_nonlinear()`](https://easystats.github.io/modelbased/reference/describe_nonlinear.html):
     Describes a non-linear term (*e.g.* in GAMs) by its linear parts

@@ -84,7 +84,7 @@ The package is built around 5 main functions:
 - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.html): Estimates the average values at each factor levels
 - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels
-- [`estimate_response()`](https://easystats.github.io/modelbased/reference/estimate_response.html): Predict the response variable using the model
+- [`estimate_response()`](https://easystats.github.io/modelbased/articles/estimate_response.html): Predict the response variable using the model
 - [`describe_nonlinear()`](https://easystats.github.io/modelbased/reference/describe_nonlinear.html): Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
 These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
