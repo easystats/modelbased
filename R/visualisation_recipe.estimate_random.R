@@ -36,6 +36,9 @@ visualisation_recipe.estimate_random <- function(x,
                                                  ...) {
 
   data <- as.data.frame(x)
+  # Fix order so that it's plotted with sorted levels
+  data$Level <- factor(data$Level, levels = sort(insight::to_numeric(unique(data$Level))))
+
   layers <- list()
 
   # Main aesthetics -----------------

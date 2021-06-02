@@ -35,20 +35,25 @@ set.seed(333)
 
 Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the "fixed" effects), they can also be used to gain insight into group-level (i.e., individuals' level scores, if the random factors are individuals) variability.
 
-For this practical walkthrough, we will use the **Speed-Accuracy Data** (Wagenmakers, Ratcliff, Gomez, \& McKoon, 2008) from the `rtdists` package, in which 17 participants (the **id** variable) performed some reaction time (RT) experiment under two conditions, speed and accuracy (the **condition** variable).
+For this practical walkthrough, we will use the **Speed-Accuracy Data** (Wagenmakers, Ratcliff, Gomez, \& McKoon, 2008) from the `rtdists` package, in which **17 participants** (the **id** variable) performed some reaction time (RT) experiment under two conditions, speed and accuracy (the **condition** variable).
 
 How hypotheses is that participants will be **faster** (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less **errors** in the accuracy condition as compared to the speed condition.
 
 In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.
 
 ```{r warning=FALSE, message=FALSE}
-library(rtdists)
-library(ggplot2)
-library(dplyr)
-library(lme4)
-library(brms)
+# easystats packages
 library(parameters)
+library(correlation)
+library(performance)
 library(modelbased)
+
+# other packages 
+library(tidyverse)
+library(rtdists)
+library(brms)
+library(lme4)
+
 
 data <- rtdists::speed_acc %>% 
   # Remove outliers &  Keep only word condition 
@@ -79,8 +84,8 @@ The descriptive visualisation indeed seems to suggest that people are slower in 
 Let's verify that using the [**modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html).
 
 ```{r warning=FALSE, message=FALSE}
-model <- lmer(rt ~ condition + (1 + condition | id) + (1 | stim), 
-              data = data_rt)
+model_full <- lmer(rt ~ condition + (1 + condition | id) + (1 | stim), 
+                   data = data_rt)
 ```
 
 Let's unpack the formula of this model. We're tying to predict `rt` using different terms. These can be separated into two groups, the *fixed* effects and the *random* effects. Having `condition` as a fixed effect means that we are interested in estimating the **"general"** effect of the condition, across all subjects and items (i.e., at the ***population level***). On top of that effect of condition, a second 'fixed' parameter was implicitly specified and will be estimated, the **intercept** (as you might know, one has to explicitly remove it through `rt ~ 0 + condition`, otherwise it is added automatically).
@@ -88,7 +93,7 @@ Let's unpack the formula of this model. We're tying to predict `rt` using differ
 Let's investigate these two fixed parameters first:
 
 ```{r warning=FALSE, message=FALSE}
-parameters(model, effects = "fixed")
+parameters(model_full, effects = "fixed")
 ```
 
 Because `condition` is a factor with two levels, these parameters are easily interpretable. The *intercept* corresponds to the `rt` at the baseline level of the factor (accuracy), and the effect of condition corresponds to the change in `rt` between the intercept and the speed condition. In other words, the effect of `condition` refers to the difference between the two conditions, `speed - accuracy`. 
@@ -98,30 +103,112 @@ As we can see, this difference is significant, and people have, **in general**, 
 Let's visualize the [marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html) estimated by the model: 
 
 ```{r warning=FALSE, message=FALSE}
-estimate_means(model) %>% 
+estimate_means(model_full) %>% 
   plot(show_data = "violin") 
 ```
 
 Now, what's up with the **random effects**. In the formula, we specified random intercepts (i.e., the right part of the bar `|` symbol) for `id` (the participants) and `stim`. That means that **each participant and each stimulus will have its own "Intercept" parameter** (which, as we've seen before, corresponds to the `rt` in the accuracy condition). Additionally, we've specified the random effect ("random slope" - the left side of the bar) of `condition` for each participant. That means that **each participant will have its own effect of condition** computed.
 
-## Group-level Effects
-
-That's nice to know, but how to actually **get access** to these group-level scores.
+But do we need such a complex model? Let's compare it to a model without specifying random intercepts for the stimuli.
 
 ```{r warning=FALSE, message=FALSE}
-individual <- estimate_individual(model, indices = "Coefficient")
-summary(individual)
+model <- lmer(rt ~ condition + (1 + condition | id), data = data_rt)
+
+performance::test_performance(model_full, model)
 ```
 
+Mmmh, it seems that the simpler model performs **a lot worse** (the Bayes Factor is lower than 1). We could run `compare_performance()` to learn more details, but for this example we will go ahead and keep the **worse model** (for simplicity and conciseness when inspecting the random effects later, but keep in mind that in real life it's surely not the best thing to do).
 
 
+## Group-level Effects
 
+That's nice to know, but how to actually **get access** to these group-level scores. We can use the `estimate_random()` function to retrieve them.
+
+```{r warning=FALSE, message=FALSE}
+random <- estimate_random(model)
+random
+```
+
+Each of our participant (the **Level** column), numbered from 1 to 17, has two rows, corresponding to its own deviation from the main effect of the **intercept** and **condition effect**. 
+
+We can also use `reshape_random()` to select only the *Coefficient* column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: **it's a convenient way to re-incorporate the random effects into the data for further re-use**.
+
+```{r warning=FALSE, message=FALSE}
+reshaped <- reshape_random(random, indices = "Coefficient")
+
+head(reshaped)
+```
+
+As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use `summary()` to remove all the duplicate rows. Let's add it to the original data.
+
+```{r warning=FALSE, message=FALSE}
+data <- dplyr::full_join(data_rt, reshaped, by = "id")
+```
+
+We can also visualize the random effects:
+
+```{r warning=FALSE, message=FALSE}
+plot(random) + 
+  see::theme_lucid()
+```
+
+Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?
+
+## Correlation with empirical scores
+
+We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, he's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting `estimate_random(model, deviation = FALSE)`).
+
+Nevertheless, let's compute some **empirical scores**, such as the condition averages for each participant.
+
+We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
+
+```{r warning=FALSE, message=FALSE}
+data_sub <- data_rt %>% 
+  group_by(id, condition) %>% 
+  summarise(rt = mean(rt)) %>% 
+  pivot_wider(names_from = "condition", values_from = "rt")
+
+data_sub <- data.frame(
+  id = data_sub$id,
+  empirical_accuracy = data_sub$accuracy,
+  empirical_condition = data_sub$speed - data_sub$accuracy
+  )
+```
+
+Now, how to these **empirical scores** compare with the **random effects** estimated by the model? Let's merge the empirical scores with the random effects scores. For that, we will run `summary()` on the **reshaped** random effects to remove all the duplicate rows (and have only one row per participant, so that it matches the format of `data_sub`).
+
+```{r warning=FALSE, message=FALSE}
+data_sub <- dplyr::full_join(data_sub, summary(reshaped), by = "id")
+```
+
+Let's run a correlation between the model-based scores and the empirical scores.
+
+```{r warning=FALSE, message=FALSE}
+correlation::correlation(data_sub)
+```
+
+First thing to notice is that **everything is significantly and strongly correlated**!. 
+
+Then, the empirical scores for accuracy and condition, corresponding to the "raw" average of RT, correlate **almost perfectly with their model-based counterpart** ($r_{empirical\_accuracy/Coefficient\_Intercept} = 1$; $r_{empirical\_condition/Coefficient\_conditionspeed} > .99$). That's reassuring, it means that our model has managed to estimate some intuitive parameters! 
+
+Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:
+
+```{r warning=FALSE, message=FALSE}
+ggplot(data_sub, aes(x = d_Coefficient_Intercept, y = id_Coefficient_conditionspeed)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  see::theme_modern()
+```
+
+The slower they are in the accuracy condition, the bigger the difference with the speed condition.
 
 # Accuracy
 
+In this section, we will take interest in the accuracy - the probability of making errors, using **logistic models**.
 
+# Correlations between speed and accuracy
 
-# Non-linear Model
+# Log-shifted Model 
 
 # Scale-Location Model
 

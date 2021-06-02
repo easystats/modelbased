@@ -5,12 +5,14 @@
 \alias{reshape_random}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
-estimate_random(model, ...)
+estimate_random(model, deviation = TRUE, ...)
 
 reshape_random(x, indices = "all", ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
+
+\item{deviation}{If \code{TRUE}, the coefficients are the ones estimated natively by the model (as they are returned by for instance \code{lme4::ranef()}). They correspond to the \emph{deviation} of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, in is "in the norm"). If \code{FALSE}, will return the sum of the random effect and its corresponding fixed effects. This argument can be used to reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see \code{?coef.merMod}). Note that the sum is made between the random effects parameters and the fixed effect coefficient (which is a point-estimate), and thus does not take into account the variability and uncertainty in the fixed effects estimations. Thus, use these with caution.}
 
 \item{...}{Other arguments passed to or from other methods.}
 
@@ -22,12 +24,18 @@ reshape_random(x, indices = "all", ...)
 Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.
 }
 \examples{
-if (require("lme4")) {
+if (require("lme4") && require("see")) {
 
 # Random intercept ------------
 model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
 random <- estimate_random(model)
 random
+
+# Visualize random effects
+plot(random)
+
+# Show group-specific effects
+estimate_random(model, deviation = FALSE)
 
 # Reshape to wide data so that it matches the original dataframe...
 reshaped <- reshape_random(random, indices = c("Coefficient", "SE"))

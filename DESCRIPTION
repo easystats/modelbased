@@ -44,6 +44,7 @@ Imports:
 Suggests:
     brms,
     coda,
+    correlation,
     dplyr,
     emmeans (>= 1.5.3),
     gamm4,
