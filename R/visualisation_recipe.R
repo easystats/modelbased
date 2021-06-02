@@ -39,7 +39,11 @@ print.visualisation_recipe <- function(x, ...) {
       } else if (element == "aes"){
         for(aes in names(l$aes)) {
           if(!is.null(l$aes[[aes]])) {
-            cat(paste0("  ", aes, " = '", l$aes[[aes]], "'\n"))
+            if(is.character(l$aes[[aes]])) {
+              cat(paste0("  ", aes, " = '", l$aes[[aes]], "'\n"))
+            } else {
+              cat(paste0("  ", aes, " = ", l$aes[[aes]], "\n"))
+            }
           }
         }
         cat(")")
