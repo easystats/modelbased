@@ -14,3 +14,6 @@ plot.estimate_predicted <- function(x, ...) {
 
 #' @export
 plot.estimate_means <- plot.estimate_predicted
+
+#' @export
+plot.estimate_random <- plot.estimate_predicted
