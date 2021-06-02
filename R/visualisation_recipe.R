@@ -69,6 +69,11 @@ print.visualisation_recipe <- function(x, ...) {
 plot.visualisation_recipe <- function(x, ...) {
   insight::check_if_installed("see")
 
+  if(utils::packageVersion("see") < "0.6.5") {
+    warning("Plotting requires the latest version of 'see'. Please run remotes::install_github('easystats/see')")
+    return()
+  }
+
   ggplot2::ggplot(data = attributes(x)$data) +
     see::geoms_from_list(x, ...)
 }
