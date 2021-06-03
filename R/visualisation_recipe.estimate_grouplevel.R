@@ -2,7 +2,7 @@
 #'
 #' @examples
 #' # ==============================================
-#' # estimate_random
+#' # estimate_grouplevel
 #' # ==============================================
 #' if (require("see") && require("lme4")) {
 #'
@@ -12,23 +12,23 @@
 #'
 #' # 1 random intercept
 #' model <- lmer(Reaction ~ Days + (1|Subject), data = data)
-#' x <- estimate_random(model)
+#' x <- estimate_grouplevel(model)
 #' layers <- visualisation_recipe(x)
 #' layers
 #' plot(layers)
 #'
 #' # 2 random intercepts
 #' model <- lmer(Reaction ~ Days + (1|Subject) + (1|Newfactor), data = data)
-#' x <- estimate_random(model)
+#' x <- estimate_grouplevel(model)
 #' plot(visualisation_recipe(x))
 #'
 #'
 #' model <- lmer(Reaction ~ Days + (1 + Days|Subject) + (1|Newfactor), data = data)
-#' x <- estimate_random(model)
+#' x <- estimate_grouplevel(model)
 #' plot(visualisation_recipe(x))
 #' }
 #' @export
-visualisation_recipe.estimate_random <- function(x,
+visualisation_recipe.estimate_grouplevel <- function(x,
                                                  hline = NULL,
                                                  pointrange = NULL,
                                                  facet_wrap = NULL,
@@ -123,7 +123,7 @@ visualisation_recipe.estimate_random <- function(x,
 # Layer - Labels --------------------------------------------------------------
 
 .visualisation_random_labs <- function(labs = NULL) {
-  out <- list(geom = "labs", title = "Random Effects")
+  out <- list(geom = "labs", title = "Group-level Scores")
   if (!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
   out
 }

@@ -4,7 +4,7 @@
 #' # ==============================================
 #' # estimate_expectation, estimate_response, ...
 #' # ==============================================
-#' if (require("see")) {
+#' if (require("ggplot2")) {
 #'
 #'   # Simple Model ---------------
 #'   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))

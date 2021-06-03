@@ -19,7 +19,7 @@ reference:
   - estimate_means
   - estimate_contrasts
   - estimate_slopes
-  - estimate_random
+  - estimate_grouplevel
 - title: "Data grids and Visualisation"
   contents:
   - visualisation_matrix
@@ -55,7 +55,7 @@ navbar:
       - text: 'Describe non-linear curves'
         href: articles/describe_nonlinear.html
       - text: 'Estimate and re-use Random Effects'
-        href: articles/estimate_random.html
+        href: articles/estimate_grouplevel.html
       - text: 'The modelisation approach'
         href: articles/modelisation_approach.html
 

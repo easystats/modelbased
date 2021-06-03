@@ -122,10 +122,10 @@ Mmmh, it seems that the simpler model performs **a lot worse** (the Bayes Factor
 
 ## Group-level Effects
 
-That's nice to know, but how to actually **get access** to these group-level scores. We can use the `estimate_random()` function to retrieve them.
+That's nice to know, but how to actually **get access** to these group-level scores. We can use the `estimate_grouplevel()` function to retrieve them.
 
 ```{r warning=FALSE, message=FALSE}
-random <- estimate_random(model)
+random <- estimate_grouplevel(model)
 random
 ```
 
@@ -156,7 +156,7 @@ Wow! As we can see, there is a lot of between-participants variability. But what
 
 ## Correlation with empirical scores
 
-We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, it's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting `estimate_random(model, deviation = FALSE)`).
+We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, it's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by changing the `type` argument).
 
 Nevertheless, let's compute some **empirical scores**, such as the condition averages for each participant.
 

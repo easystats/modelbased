@@ -4,7 +4,7 @@
 #' # ==============================================
 #' # estimate_means
 #' # ==============================================
-#' if (require("see")) {
+#' if (require("ggplot2")) {
 #'
 #'   # Simple Model ---------------
 #'   x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))

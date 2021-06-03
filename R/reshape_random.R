@@ -1,5 +1,5 @@
-#' @rdname estimate_random
-#' @param x The output of \code{estimate_random()}.
+#' @rdname estimate_grouplevel
+#' @param x The output of \code{estimate_grouplevel()}.
 #' @param indices A list containing the indices to extract.
 #' @export
 reshape_random <- function(x, indices = "all", ...) {
@@ -8,7 +8,7 @@ reshape_random <- function(x, indices = "all", ...) {
 
 
 #' @export
-reshape_random.estimate_random <- function(x, indices = "all", ...) {
+reshape_random.estimate_grouplevel <- function(x, indices = "all", ...) {
 
   # Find indices
   if(any(indices == "all")) {
