@@ -215,19 +215,27 @@ model <- glmer(error ~ condition + (1 + condition | id),
 parameters::parameters(model, effects = "fixed")
 ```
 
-The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition.
+The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the **marginal means**) of making errors in the two conditions. 
 
 ```{r warning=FALSE, message=FALSE}
-plot(estimate_means(model))
+plot(estimate_means(model), show_data = "none")
 ```
 
-# Relationship between speed and accuracy
 
-## Inter-individual correlation
+Similarly, we can extract the group-level effects, clean them (rename the colums, otherwise it will be the same names as for the RT model), and merge them with the previous ones. 
 
-## Model-based interaction
+```{r warning=FALSE, message=FALSE}
+random <- estimate_grouplevel(model) 
+random
+plot(random)
+```
+
 
 # Log-shifted Model 
+
+
+
+
 
 # Scale-Location Model
 

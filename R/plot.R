@@ -16,4 +16,4 @@ plot.estimate_predicted <- function(x, ...) {
 plot.estimate_means <- plot.estimate_predicted
 
 #' @export
-plot.estimate_random <- plot.estimate_predicted
+plot.estimate_grouplevel <- plot.estimate_predicted
