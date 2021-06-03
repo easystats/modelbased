@@ -119,9 +119,9 @@
 
     
     
-<p>Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the “fixed” effects), they can also be used to gain insight into group-level (i.e., individuals’ level scores, if the random factors are individuals) variability.</p>
-<p>For this practical walkthrough, we will use the <strong>Speed-Accuracy Data</strong> (Wagenmakers, Ratcliff, Gomez, &amp; McKoon, 2008) from the <code>rtdists</code> package, in which <strong>17 participants</strong> (the <strong>id</strong> variable) performed some reaction time (RT) experiment under two conditions, speed and accuracy (the <strong>condition</strong> variable).</p>
-<p>How hypotheses is that participants will be <strong>faster</strong> (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less <strong>errors</strong> in the accuracy condition as compared to the speed condition.</p>
+<p>Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the “fixed” effects), they can also be used to gain insight into group-level effects (e.g., individuals’ scores, if the random factors are individuals).</p>
+<p>For this practical walkthrough on <strong>advanced mixed model analysis</strong>, we will use the <strong>Speed-Accuracy Data</strong> (Wagenmakers, Ratcliff, Gomez, &amp; McKoon, 2008) from the <code>rtdists</code> package, in which <strong>17 participants</strong> (the <strong>id</strong> variable) performed some reaction time (RT) task under two conditions, speed and accuracy (the <strong>condition</strong> variable).</p>
+<p>Our hypotheses is that participants are <strong>faster</strong> (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less <strong>errors</strong> in the accuracy condition as compared to the speed condition.</p>
 <p>In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># easystats packages</span>
@@ -150,7 +150,7 @@
 <div id="population-level-effects" class="section level2">
 <h2 class="hasAnchor">
 <a href="#population-level-effects" class="anchor" aria-hidden="true"></a>Population-level Effects</h2>
-<p>For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a “successful” cognitive process. Then, and we will then plot the RT according to the condition and stimulus category.</p>
+<p>For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a “successful” cognitive process. Then, and we will plot the RT according to the condition and stimulus category.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">error</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>
 
