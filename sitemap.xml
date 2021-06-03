@@ -19,10 +19,10 @@
     <loc>/articles/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_means.html</loc>
+    <loc>/articles/estimate_grouplevel.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_random.html</loc>
+    <loc>/articles/estimate_means.html</loc>
   </url>
   <url>
     <loc>/articles/estimate_relation.html</loc>
@@ -61,10 +61,10 @@
     <loc>/reference/estimate_expectation.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_means.html</loc>
+    <loc>/reference/estimate_grouplevel.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_random.html</loc>
+    <loc>/reference/estimate_means.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_slopes.html</loc>

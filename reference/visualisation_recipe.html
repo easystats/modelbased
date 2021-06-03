@@ -130,7 +130,7 @@
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
-      <a href="../articles/estimate_random.html">Estimate and re-use Random Effects</a>
+      <a href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -159,7 +159,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Prepare objects for visualisation</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.R'><code>R/visualisation_recipe.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_means.R'><code>R/visualisation_recipe.estimate_means.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_predicted.R'><code>R/visualisation_recipe.estimate_predicted.R</code></a>, and 1 more</small>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.R'><code>R/visualisation_recipe.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_grouplevel.R'><code>R/visualisation_recipe.estimate_grouplevel.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_means.R'><code>R/visualisation_recipe.estimate_means.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>visualisation_recipe.Rd</code></div>
     </div>
 
@@ -168,6 +168,16 @@
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for estimate_grouplevel</span>
+<span class='fu'>visualisation_recipe</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  hline <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pointrange <span class='op'>=</span> <span class='cn'>NULL</span>,
+  facet_wrap <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
 
 <span class='co'># S3 method for estimate_means</span>
 <span class='fu'>visualisation_recipe</span><span class='op'>(</span>
@@ -191,16 +201,6 @@
   density_2d <span class='op'>=</span> <span class='cn'>NULL</span>,
   line <span class='op'>=</span> <span class='cn'>NULL</span>,
   ribbon <span class='op'>=</span> <span class='cn'>NULL</span>,
-  labs <span class='op'>=</span> <span class='cn'>NULL</span>,
-  <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='co'># S3 method for estimate_random</span>
-<span class='fu'>visualisation_recipe</span><span class='op'>(</span>
-  <span class='va'>x</span>,
-  hline <span class='op'>=</span> <span class='cn'>NULL</span>,
-  pointrange <span class='op'>=</span> <span class='cn'>NULL</span>,
-  facet_wrap <span class='op'>=</span> <span class='cn'>NULL</span>,
   labs <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></code></pre></div>
@@ -229,9 +229,36 @@
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='co'># ==============================================</span></span>
+<span class='r-in'><span class='co'># estimate_grouplevel</span></span>
+<span class='r-in'><span class='co'># ==============================================</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>lme4</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/lme4/man/sleepstudy.html'>sleepstudy</a></span></span>
+<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>data</span><span class='op'>$</span><span class='va'>Newfactor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 1 random intercept</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_grouplevel.html'>estimate_grouplevel</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>layers</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># 2 random intercepts</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_grouplevel.html'>estimate_grouplevel</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_grouplevel.html'>estimate_grouplevel</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-plt'><img src='visualisation_recipe-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># ==============================================</span></span>
 <span class='r-in'><span class='co'># estimate_means</span></span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Simple Model ---------------</span></span>
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span></span>
@@ -270,13 +297,14 @@
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: ggplot2</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class='r-plt'><img src='visualisation_recipe-1.png' alt='' width='700' height='433' /></span>
+<span class='r-plt'><img src='visualisation_recipe-2.png' alt='' width='700' height='433' /></span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
 <span class='r-in'><span class='co'># estimate_expectation, estimate_response, ...</span></span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Simple Model ---------------</span></span>
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
@@ -343,34 +371,7 @@
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"jitter"</span>, point <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>height <span class='op'>=</span> <span class='fl'>0.03</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in scale_x_continuous(expand = c(0, 0))</span> could not find function "scale_x_continuous"</span>
-<span class='r-in'><span class='co'># ==============================================</span></span>
-<span class='r-in'><span class='co'># estimate_random</span></span>
-<span class='r-in'><span class='co'># ==============================================</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>lme4</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/lme4/man/sleepstudy.html'>sleepstudy</a></span></span>
-<span class='r-in'><span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>data</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>data</span><span class='op'>$</span><span class='va'>Newfactor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># 1 random intercept</span></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>layers</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='co'># 2 random intercepts</span></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
-<span class='r-in'></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-plt'><img src='visualisation_recipe-2.png' alt='' width='700' height='433' /></span>
+<span class='r-plt'><img src='visualisation_recipe-3.png' alt='' width='700' height='433' /></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

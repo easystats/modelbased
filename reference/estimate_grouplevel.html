@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Group-specific parameters of mixed models random effects — estimate_random • modelbased</title>
+<title>Group-specific parameters of mixed models random effects — estimate_grouplevel • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,7 +46,7 @@
 
 
 
-<meta property="og:title" content="Group-specific parameters of mixed models random effects — estimate_random" />
+<meta property="og:title" content="Group-specific parameters of mixed models random effects — estimate_grouplevel" />
 <meta property="og:description" content="Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data." />
 <meta property="og:image" content="/logo.png" />
 
@@ -130,7 +130,7 @@
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
-      <a href="../articles/estimate_random.html">Estimate and re-use Random Effects</a>
+      <a href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -159,15 +159,15 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Group-specific parameters of mixed models random effects</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_random.R'><code>R/estimate_random.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/reshape_random.R'><code>R/reshape_random.R</code></a></small>
-    <div class="hidden name"><code>estimate_random.Rd</code></div>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_grouplevel.R'><code>R/estimate_grouplevel.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/reshape_random.R'><code>R/reshape_random.R</code></a></small>
+    <div class="hidden name"><code>estimate_grouplevel.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span>, deviation <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_grouplevel</span><span class='op'>(</span><span class='va'>model</span>, type <span class='op'>=</span> <span class='st'>"random"</span>, <span class='va'>...</span><span class='op'>)</span>
 
 <span class='fu'>reshape_random</span><span class='op'>(</span><span class='va'>x</span>, indices <span class='op'>=</span> <span class='st'>"all"</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
@@ -179,8 +179,8 @@
       <td><p>A mixed model with random effects.</p></td>
     </tr>
     <tr>
-      <th>deviation</th>
-      <td><p>If <code>TRUE</code>, the coefficients are the ones estimated natively by the model (as they are returned by, for instance, <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the <em>deviation</em> of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If <code>FALSE</code>, will return the sum of the random effect and its corresponding fixed effects. This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that the sum is made between the random effects parameters and the fixed effect coefficient (which is a point-estimate), and thus does not take into account the variability and uncertainty in the fixed effects estimations. Thus, use these with caution.</p></td>
+      <th>type</th>
+      <td><p>If <code>"random"</code> (default), the coefficients are the ones estimated natively by the model (as they are returned by, for instance, <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If "total", it will return the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions). This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that BLUPs currently don't have uncertainty indices (such as SE and CI), as these are not computable.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -188,7 +188,7 @@
     </tr>
     <tr>
       <th>x</th>
-      <td><p>The output of <code>estimate_random()</code>.</p></td>
+      <td><p>The output of <code>estimate_grouplevel()</code>.</p></td>
     </tr>
     <tr>
       <th>indices</th>
@@ -202,14 +202,14 @@
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Random intercept ------------</span></span>
 <span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>carb</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>random</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>random</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_grouplevel</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>random</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Visualize random effects</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>random</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Show group-specific effects</span></span>
-<span class='r-in'><span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span>, deviation <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>estimate_grouplevel</span><span class='op'>(</span><span class='va'>model</span>, deviation <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Reshape to wide data so that it matches the original dataframe...</span></span>
 <span class='r-in'><span class='va'>reshaped</span> <span class='op'>&lt;-</span> <span class='fu'>reshape_random</span><span class='op'>(</span><span class='va'>random</span>, indices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Coefficient"</span>, <span class='st'>"SE"</span><span class='op'>)</span><span class='op'>)</span></span>
@@ -221,6 +221,7 @@
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>reshaped</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: see</span>
+<span class='r-plt'><img src='estimate_grouplevel-1.png' alt='' width='700' height='433' /></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>   carb carb_Coefficient_Intercept carb_SE_Intercept</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 1    4                -0.77955416         0.7829275</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> 2    1                 0.40506064         0.8390523</span>
