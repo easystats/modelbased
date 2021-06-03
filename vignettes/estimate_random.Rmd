@@ -156,7 +156,7 @@ Wow! As we can see, there is a lot of between-participants variability. But what
 
 ## Correlation with empirical scores
 
-We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, he's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting `estimate_random(model, deviation = FALSE)`).
+We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, it's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting `estimate_random(model, deviation = FALSE)`).
 
 Nevertheless, let's compute some **empirical scores**, such as the condition averages for each participant.
 

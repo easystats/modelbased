@@ -54,7 +54,7 @@ navbar:
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'
         href: articles/describe_nonlinear.html
-      - text: 'Estimate and Re-use Random Effects'
+      - text: 'Estimate and re-use Random Effects'
         href: articles/estimate_random.html
       - text: 'The modelisation approach'
         href: articles/modelisation_approach.html
