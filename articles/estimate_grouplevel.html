@@ -199,41 +199,42 @@
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="va">random</span></code></pre></div>
-<pre><code>&gt;    Group Level      Parameter Coefficient    SE   CI  CI_low CI_high
-&gt; 1     id     1    (Intercept)    -0.09676 0.012 0.95 -0.1205 -0.0731
-&gt; 2     id     1 conditionspeed     0.09411 0.016 0.95  0.0636  0.1246
-&gt; 3     id     2    (Intercept)     0.07896 0.019 0.95  0.0426  0.1153
-&gt; 4     id     2 conditionspeed    -0.03239 0.022 0.95 -0.0746  0.0098
-&gt; 5     id     3    (Intercept)     0.02481 0.012 0.95  0.0014  0.0482
-&gt; 6     id     3 conditionspeed    -0.01762 0.016 0.95 -0.0483  0.0130
-&gt; 7     id     4    (Intercept)    -0.12699 0.012 0.95 -0.1501 -0.1039
-&gt; 8     id     4 conditionspeed     0.07843 0.015 0.95  0.0483  0.1086
-&gt; 9     id     5    (Intercept)    -0.05216 0.012 0.95 -0.0757 -0.0286
-&gt; 10    id     5 conditionspeed     0.00667 0.015 0.95 -0.0235  0.0368
-&gt; 11    id     6    (Intercept)    -0.07711 0.012 0.95 -0.1008 -0.0534
-&gt; 12    id     6 conditionspeed     0.03722 0.016 0.95  0.0063  0.0681
-&gt; 13    id     7    (Intercept)    -0.09326 0.012 0.95 -0.1176 -0.0689
-&gt; 14    id     7 conditionspeed     0.09733 0.017 0.95  0.0648  0.1299
-&gt; 15    id     8    (Intercept)     0.21236 0.014 0.95  0.1851  0.2396
-&gt; 16    id     8 conditionspeed    -0.17855 0.018 0.95 -0.2131 -0.1439
-&gt; 17    id     9    (Intercept)     0.02704 0.012 0.95  0.0031  0.0510
-&gt; 18    id     9 conditionspeed    -0.01726 0.016 0.95 -0.0482  0.0137
-&gt; 19    id    10    (Intercept)    -0.10344 0.012 0.95 -0.1269 -0.0800
-&gt; 20    id    10 conditionspeed     0.07111 0.016 0.95  0.0404  0.1018
-&gt; 21    id    11    (Intercept)    -0.08936 0.012 0.95 -0.1131 -0.0656
-&gt; 22    id    11 conditionspeed     0.07486 0.016 0.95  0.0434  0.1063
-&gt; 23    id    12    (Intercept)    -0.00065 0.013 0.95 -0.0260  0.0247
-&gt; 24    id    12 conditionspeed     0.00365 0.016 0.95 -0.0283  0.0356
-&gt; 25    id    13    (Intercept)     0.07838 0.012 0.95  0.0539  0.1028
-&gt; 26    id    13 conditionspeed    -0.05645 0.016 0.95 -0.0880 -0.0249
-&gt; 27    id    14    (Intercept)     0.03066 0.013 0.95  0.0061  0.0552
-&gt; 28    id    14 conditionspeed    -0.03235 0.016 0.95 -0.0634 -0.0013
-&gt; 29    id    15    (Intercept)     0.09098 0.012 0.95  0.0673  0.1146
-&gt; 30    id    15 conditionspeed    -0.06902 0.016 0.95 -0.0997 -0.0383
-&gt; 31    id    16    (Intercept)     0.04005 0.012 0.95  0.0158  0.0643
-&gt; 32    id    16 conditionspeed    -0.01433 0.016 0.95 -0.0459  0.0172
-&gt; 33    id    17    (Intercept)     0.05650 0.012 0.95  0.0333  0.0797
-&gt; 34    id    17 conditionspeed    -0.04542 0.015 0.95 -0.0753 -0.0155</code></pre>
+<pre><code>&gt; Group | Level |      Parameter | Coefficient |   SE |         95% CI
+&gt; --------------------------------------------------------------------
+&gt; id    |     1 |    (Intercept) |       -0.10 | 0.01 | [-0.12, -0.07]
+&gt; id    |     1 | conditionspeed |        0.09 | 0.02 | [ 0.06,  0.12]
+&gt; id    |     2 |    (Intercept) |        0.08 | 0.02 | [ 0.04,  0.12]
+&gt; id    |     2 | conditionspeed |       -0.03 | 0.02 | [-0.07,  0.01]
+&gt; id    |     3 |    (Intercept) |        0.02 | 0.01 | [ 0.00,  0.05]
+&gt; id    |     3 | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
+&gt; id    |     4 |    (Intercept) |       -0.13 | 0.01 | [-0.15, -0.10]
+&gt; id    |     4 | conditionspeed |        0.08 | 0.02 | [ 0.05,  0.11]
+&gt; id    |     5 |    (Intercept) |       -0.05 | 0.01 | [-0.08, -0.03]
+&gt; id    |     5 | conditionspeed |    6.67e-03 | 0.02 | [-0.02,  0.04]
+&gt; id    |     6 |    (Intercept) |       -0.08 | 0.01 | [-0.10, -0.05]
+&gt; id    |     6 | conditionspeed |        0.04 | 0.02 | [ 0.01,  0.07]
+&gt; id    |     7 |    (Intercept) |       -0.09 | 0.01 | [-0.12, -0.07]
+&gt; id    |     7 | conditionspeed |        0.10 | 0.02 | [ 0.06,  0.13]
+&gt; id    |     8 |    (Intercept) |        0.21 | 0.01 | [ 0.19,  0.24]
+&gt; id    |     8 | conditionspeed |       -0.18 | 0.02 | [-0.21, -0.14]
+&gt; id    |     9 |    (Intercept) |        0.03 | 0.01 | [ 0.00,  0.05]
+&gt; id    |     9 | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
+&gt; id    |    10 |    (Intercept) |       -0.10 | 0.01 | [-0.13, -0.08]
+&gt; id    |    10 | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.10]
+&gt; id    |    11 |    (Intercept) |       -0.09 | 0.01 | [-0.11, -0.07]
+&gt; id    |    11 | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.11]
+&gt; id    |    12 |    (Intercept) |   -6.47e-04 | 0.01 | [-0.03,  0.02]
+&gt; id    |    12 | conditionspeed |    3.65e-03 | 0.02 | [-0.03,  0.04]
+&gt; id    |    13 |    (Intercept) |        0.08 | 0.01 | [ 0.05,  0.10]
+&gt; id    |    13 | conditionspeed |       -0.06 | 0.02 | [-0.09, -0.02]
+&gt; id    |    14 |    (Intercept) |        0.03 | 0.01 | [ 0.01,  0.06]
+&gt; id    |    14 | conditionspeed |       -0.03 | 0.02 | [-0.06,  0.00]
+&gt; id    |    15 |    (Intercept) |        0.09 | 0.01 | [ 0.07,  0.11]
+&gt; id    |    15 | conditionspeed |       -0.07 | 0.02 | [-0.10, -0.04]
+&gt; id    |    16 |    (Intercept) |        0.04 | 0.01 | [ 0.02,  0.06]
+&gt; id    |    16 | conditionspeed |       -0.01 | 0.02 | [-0.05,  0.02]
+&gt; id    |    17 |    (Intercept) |        0.06 | 0.01 | [ 0.03,  0.08]
+&gt; id    |    17 | conditionspeed |       -0.05 | 0.02 | [-0.08, -0.02]</code></pre>
 <p>Each of our participant (the <strong>Level</strong> column), numbered from 1 to 17, has two rows, corresponding to its own deviation from the main effect of the <strong>intercept</strong> and <strong>condition effect</strong>.</p>
 <p>We can also use <code><a href="../reference/estimate_grouplevel.html">reshape_random()</a></code> to select only the <em>Coefficient</em> column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: <strong>it’s a convenient way to re-incorporate the random effects into the data for further re-use</strong>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -255,7 +256,6 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-11-1.png" width="3281.25"></p>
-<pre><code>&gt; NULL</code></pre>
 <p>Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?</p>
 </div>
 <div id="correlation-with-empirical-scores" class="section level2">
@@ -264,7 +264,7 @@
 <p>We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the <strong>deviation from the fixed effect</strong>, so a coefficient close to 0 means that the participants’ effect is the same as the population-level effect. In other words, it’s <strong>“in the norm”</strong> (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by changing the <code>type</code> argument).</p>
 <p>Nevertheless, let’s compute some <strong>empirical scores</strong>, such as the condition averages for each participant.</p>
 <p>We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the <strong>accuracy</strong> condition, and the difference with the <strong>speed</strong> condition <em>(reminds you of something?)</em>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="va">data_rt</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">condition</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>rt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">rt</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
@@ -276,10 +276,10 @@
   empirical_condition <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">speed</span> <span class="op">-</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">accuracy</span>
   <span class="op">)</span></code></pre></div>
 <p>Now, how to these <strong>empirical scores</strong> compare with the <strong>random effects</strong> estimated by the model? Let’s merge the empirical scores with the random effects scores. For that, we will run <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> on the <strong>reshaped</strong> random effects to remove all the duplicate rows (and have only one row per participant, so that it matches the format of <code>data_sub</code>).</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">reshaped</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
 <p>Let’s run a correlation between the model-based scores and the empirical scores.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">correlation</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/correlation/reference/correlation.html" class="external-link">correlation</a></span><span class="op">(</span><span class="va">data_sub</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; # Correlation Matrix (pearson-method)
 &gt; 
@@ -297,7 +297,7 @@
 <p>First thing to notice is that <strong>everything is significantly and strongly correlated</strong>!.</p>
 <p>Then, the empirical scores for accuracy and condition, corresponding to the “raw” average of RT, correlate <strong>almost perfectly with their model-based counterpart</strong> (<span class="math inline">\(r_{empirical\_accuracy/Coefficient\_Intercept} = 1\)</span>; <span class="math inline">\(r_{empirical\_condition/Coefficient\_conditionspeed} &gt; .99\)</span>). That’s reassuring, it means that our model has managed to estimate some intuitive parameters!</p>
 <p>Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">id_Coefficient_Intercept</span>, y <span class="op">=</span> <span class="va">id_Coefficient_conditionspeed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span>
@@ -311,7 +311,7 @@
 <a href="#accuracy" class="anchor" aria-hidden="true"></a>Accuracy</h1>
 <p>In this section, we will take interest in the accuracy - the probability of making errors, using <strong>logistic models</strong>. For this, we will use the dataset that still includes the errors (<code>data</code>, and not <code>data_rt</code> used in the previous section).</p>
 <p>We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span><span class="va">error</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, 
                data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
 
@@ -322,22 +322,53 @@
 &gt; ----------------------------------------------------------------------
 &gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.15 | &lt; .001
 &gt; condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.72 | &lt; .001</code></pre>
-<p>The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p>The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the <strong>marginal means</strong>) of making errors in the two conditions.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, show_data <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-17-1.png" width="3281.25"></p>
-</div>
-<div id="relationship-between-speed-and-accuracy" class="section level1">
-<h1 class="hasAnchor">
-<a href="#relationship-between-speed-and-accuracy" class="anchor" aria-hidden="true"></a>Relationship between speed and accuracy</h1>
-<div id="inter-individual-correlation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#inter-individual-correlation" class="anchor" aria-hidden="true"></a>Inter-individual correlation</h2>
-</div>
-<div id="model-based-interaction" class="section level2">
-<h2 class="hasAnchor">
-<a href="#model-based-interaction" class="anchor" aria-hidden="true"></a>Model-based interaction</h2>
-</div>
+<p>Similarly, we can extract the group-level effects, clean them (rename the colums, otherwise it will be the same names as for the RT model), and merge them with the previous ones.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> 
+<span class="va">random</span></code></pre></div>
+<pre><code>&gt; Group | Level |      Parameter | Coefficient |   SE |         95% CI
+&gt; --------------------------------------------------------------------
+&gt; id    |     1 |    (Intercept) |   -4.69e-03 | 0.28 | [-0.55,  0.54]
+&gt; id    |     1 | conditionspeed |       -0.32 | 0.30 | [-0.90,  0.26]
+&gt; id    |     2 |    (Intercept) |       -0.54 | 0.41 | [-1.34,  0.26]
+&gt; id    |     2 | conditionspeed |        0.11 | 0.36 | [-0.61,  0.82]
+&gt; id    |     3 |    (Intercept) |       -0.26 | 0.30 | [-0.85,  0.32]
+&gt; id    |     3 | conditionspeed |        0.22 | 0.30 | [-0.38,  0.81]
+&gt; id    |     4 |    (Intercept) |       -0.63 | 0.33 | [-1.28,  0.01]
+&gt; id    |     4 | conditionspeed |        0.21 | 0.32 | [-0.43,  0.84]
+&gt; id    |     5 |    (Intercept) |       -0.28 | 0.31 | [-0.88,  0.32]
+&gt; id    |     5 | conditionspeed |       -0.51 | 0.31 | [-1.12,  0.11]
+&gt; id    |     6 |    (Intercept) |        0.17 | 0.26 | [-0.35,  0.69]
+&gt; id    |     6 | conditionspeed |       -0.04 | 0.28 | [-0.60,  0.51]
+&gt; id    |     7 |    (Intercept) |        0.91 | 0.21 | [ 0.49,  1.32]
+&gt; id    |     7 | conditionspeed |        0.12 | 0.24 | [-0.35,  0.58]
+&gt; id    |     8 |    (Intercept) |        1.18 | 0.21 | [ 0.77,  1.59]
+&gt; id    |     8 | conditionspeed |       -0.03 | 0.24 | [-0.50,  0.43]
+&gt; id    |     9 |    (Intercept) |       -0.24 | 0.30 | [-0.83,  0.35]
+&gt; id    |     9 | conditionspeed |        0.19 | 0.31 | [-0.41,  0.79]
+&gt; id    |    10 |    (Intercept) |       -0.20 | 0.29 | [-0.78,  0.37]
+&gt; id    |    10 | conditionspeed |        0.29 | 0.30 | [-0.30,  0.88]
+&gt; id    |    11 |    (Intercept) |        0.43 | 0.24 | [-0.05,  0.91]
+&gt; id    |    11 | conditionspeed |        0.12 | 0.26 | [-0.39,  0.64]
+&gt; id    |    12 |    (Intercept) |        1.00 | 0.21 | [ 0.59,  1.41]
+&gt; id    |    12 | conditionspeed |       -0.77 | 0.25 | [-1.25, -0.29]
+&gt; id    |    13 |    (Intercept) |        0.45 | 0.25 | [-0.04,  0.93]
+&gt; id    |    13 | conditionspeed |       -0.12 | 0.27 | [-0.65,  0.40]
+&gt; id    |    14 |    (Intercept) |       -0.32 | 0.31 | [-0.93,  0.29]
+&gt; id    |    14 | conditionspeed |       -0.12 | 0.32 | [-0.73,  0.50]
+&gt; id    |    15 |    (Intercept) |       -0.27 | 0.30 | [-0.86,  0.32]
+&gt; id    |    15 | conditionspeed |        0.18 | 0.31 | [-0.42,  0.78]
+&gt; id    |    16 |    (Intercept) |        0.21 | 0.26 | [-0.30,  0.73]
+&gt; id    |    16 | conditionspeed |        0.13 | 0.28 | [-0.42,  0.68]
+&gt; id    |    17 |    (Intercept) |       -1.16 | 0.38 | [-1.90, -0.42]
+&gt; id    |    17 | conditionspeed |        0.17 | 0.35 | [-0.52,  0.86]</code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-18-1.png" width="3281.25"></p>
 </div>
 <div id="log-shifted-model" class="section level1">
 <h1 class="hasAnchor">
