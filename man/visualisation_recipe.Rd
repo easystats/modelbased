@@ -14,7 +14,7 @@ visualisation_recipe(x, ...)
 
 \method{visualisation_recipe}{estimate_means}(
   x,
-  show_data = "points",
+  show_data = "jitter",
   point = NULL,
   jitter = point,
   boxplot = NULL,
@@ -77,7 +77,7 @@ if (require("see")) {
   plot(layers)
 
   # Customize raw data
-  plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "points")))
+  plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "jitter")))
 
   # Two levels ---------------
   data <- mtcars
@@ -94,11 +94,16 @@ if (require("see")) {
 
   x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
   plot(visualisation_recipe(x))
+
+  #'   # GLMs ---------------------
+  data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
+  x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"))
+  plot(visualisation_recipe(x))
 }
 # ==============================================
 # estimate_expectation, estimate_response, ...
 # ==============================================
-if (require("ggplot2")) {
+if (require("see")) {
 
   # Simple Model ---------------
   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
@@ -159,6 +164,11 @@ if (require("ggplot2")) {
   x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
   layers <- visualisation_recipe(x)
   plot(layers)
+
+  # GLMs ---------------------
+  x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
+  plot(visualisation_recipe(x))
+  plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
 }
 # ==============================================
 # estimate_random

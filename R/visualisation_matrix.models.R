@@ -66,6 +66,8 @@ visualisation_matrix.merMod <- visualisation_matrix.glm
 #' @export
 visualisation_matrix.lmerMod <- visualisation_matrix.glm
 #' @export
+visualisation_matrix.glmerMod <- visualisation_matrix.glm
+#' @export
 visualisation_matrix.glmmTMB <- visualisation_matrix.glm
 #' @export
 visualisation_matrix.gamm <- visualisation_matrix.glm

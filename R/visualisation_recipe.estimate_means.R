@@ -20,7 +20,7 @@
 #'   plot(layers)
 #'
 #'   # Customize raw data
-#'   plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "points")))
+#'   plot(visualisation_recipe(x, show_data = c("violin", "boxplot", "jitter")))
 #'
 #'   # Two levels ---------------
 #'   data <- mtcars
@@ -37,10 +37,15 @@
 #'
 #'   x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
 #'   plot(visualisation_recipe(x))
+#'
+#'   #'   # GLMs ---------------------
+#'   data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
+#'   x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"))
+#'   plot(visualisation_recipe(x))
 #' }
 #' @export
 visualisation_recipe.estimate_means <- function(x,
-                                                show_data = "points",
+                                                show_data = "jitter",
                                                 point = NULL,
                                                 jitter = point,
                                                 boxplot = NULL,
@@ -81,10 +86,19 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Show data (points, boxplot, violin, etc.)
   if (!is.null(show_data) && all(show_data != "none")) {
+
+    # Default changes for binomial models
+    shape <- 16
+    stroke <- 0
+    if(insight::model_info(info$model)$is_binomial) {
+      shape <- "|"
+      stroke <- 1
+    }
+
     rawdata <- .visualisation_recipe_getrawdata(x)
     for (i in show_data) {
       if (i %in% c("point", "points", "jitter")) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, type = "jitter", point = jitter)
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, shape = shape, stroke = stroke, type = i, width = 0.1, height = 0, point = jitter)
       } else if (i == "boxplot") {
         layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot", boxplot = boxplot)
       } else if (i == "violin") {
@@ -97,11 +111,11 @@ visualisation_recipe.estimate_means <- function(x,
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, color, alpha, line = line)
+  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, y = info$coef_name[1], color = color, alpha = alpha, line = line)
   l <- l + 1
 
   # Pointrange
-  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, color, alpha, pointrange = pointrange)
+  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, y = info$coef_name[1], color = color, alpha = alpha, pointrange = pointrange)
   l <- l + 1
 
   # Labs
@@ -132,7 +146,7 @@ visualisation_recipe.estimate_means <- function(x,
 
 # Layer - Line -------------------------------------------------------------
 
-.visualisation_means_line <- function(data, x1, color, alpha, line = NULL) {
+.visualisation_means_line <- function(data, x1, y, color, alpha, line = NULL) {
   if (is.null(color) && is.null(alpha)) {
     group <- 1
   } else if (!is.null(color) && is.null(alpha)) {
@@ -147,7 +161,7 @@ visualisation_recipe.estimate_means <- function(x,
     geom = "line",
     data = data,
     aes = list(
-      y = "Mean",
+      y = y,
       x = x1,
       color = color,
       group = group,
@@ -165,12 +179,12 @@ visualisation_recipe.estimate_means <- function(x,
 
 # Layer - Pointrange -------------------------------------------------------
 
-.visualisation_means_pointrange <- function(data, x1, color, alpha, pointrange = NULL) {
+.visualisation_means_pointrange <- function(data, x1, y, color, alpha, pointrange = NULL) {
   out <- list(
     geom = "pointrange",
     data = data,
     aes = list(
-      y = "Mean",
+      y = y,
       x = x1,
       ymin = "CI_low",
       ymax = "CI_high",
@@ -192,12 +206,20 @@ visualisation_recipe.estimate_means <- function(x,
 # Layer - Labels --------------------------------------------------------------
 
 .visualisation_means_labs <- function(info, x1, y, labs = NULL) {
+
+  if(all(info$coef_name == "Probability")) {
+    title <- "Estimated Mean Probabilities"
+  } else {
+    title <- "Estimated Means"
+  }
+
   out <- list(
     geom = "labs",
     x = x1,
     y = y,
     title = paste0(
-      "Estimated Means (",
+      title,
+      " (",
       format(insight::find_formula(info$model)),
       ")"
     )

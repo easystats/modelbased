@@ -142,7 +142,7 @@ head(reshaped)
 As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use `summary()` to remove all the duplicate rows. Let's add it to the original data.
 
 ```{r warning=FALSE, message=FALSE}
-data <- dplyr::full_join(data_rt, reshaped, by = "id")
+data_rt <- dplyr::full_join(data_rt, reshaped, by = "id")
 ```
 
 We can also visualize the random effects:
@@ -204,9 +204,28 @@ The slower they are in the accuracy condition, the bigger the difference with th
 
 # Accuracy
 
-In this section, we will take interest in the accuracy - the probability of making errors, using **logistic models**.
+In this section, we will take interest in the accuracy - the probability of making errors, using **logistic models**. For this, we will use the dataset that still includes the errors (`data`, and not `data_rt` used in the previous section).
 
-# Correlations between speed and accuracy
+We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.
+
+```{r warning=FALSE, message=FALSE}
+model <- glmer(error ~ condition + (1 + condition | id), 
+               data = data, family = "binomial")
+
+parameters::parameters(model, effects = "fixed")
+```
+
+The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition.
+
+```{r warning=FALSE, message=FALSE}
+plot(estimate_means(model))
+```
+
+# Relationship between speed and accuracy
+
+## Inter-individual correlation
+
+## Model-based interaction
 
 # Log-shifted Model 
 

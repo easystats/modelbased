@@ -4,7 +4,7 @@
 #' # ==============================================
 #' # estimate_expectation, estimate_response, ...
 #' # ==============================================
-#' if (require("ggplot2")) {
+#' if (require("see")) {
 #'
 #'   # Simple Model ---------------
 #'   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
@@ -65,6 +65,11 @@
 #'   x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
 #'   layers <- visualisation_recipe(x)
 #'   plot(layers)
+#'
+#'   # GLMs ---------------------
+#'   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
+#'   plot(visualisation_recipe(x))
+#'   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
 #' }
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
@@ -81,6 +86,10 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Main aesthetics -----------------
   data <- as.data.frame(x)
   y <- info$response
+  alpha <- NULL
+  color <- NULL
+  linetype <- NULL
+  group <- NULL
 
   # Retrieve predictors
   if ("target" %in% names(info)) {
@@ -88,17 +97,15 @@ visualisation_recipe.estimate_predicted <- function(x,
   } else {
     targets <- insight::find_predictors(info$model, effects = "fixed", flatten = TRUE)
   }
-  # Find which one is the linear one
+  # Find which one is the linear one (if none, then pick the first factor)
   x1 <- targets[sapply(data[targets], is.numeric)][1]
-  targets <- targets[targets != x1]
-  if (length(x1) == 0) {
-    stop("Factors not supported yet. Try using estimate_means().")
+  if (length(x1) == 0 || is.na(x1)) {
+    x1 <- targets[1]
+    group <- 1
   }
+  targets <- targets[targets != x1]
 
   # Deal with more than one target
-  alpha <- NULL
-  color <- NULL
-  linetype <- NULL
   if (length(targets) > 0) {
     # 2-way interaction
     x2 <- targets[1]
@@ -126,15 +133,25 @@ visualisation_recipe.estimate_predicted <- function(x,
     }
   }
 
+
   # Layers -----------------------
   l <- 1
 
   # Points
   if (!is.null(show_data) && all(show_data != "none")) {
+
+    # Default changes for binomial models
+    shape <- 16
+    stroke <- 0
+    if(insight::model_info(info$model)$is_binomial && show_data %in% c("point", "points")) {
+      shape <- "|"
+      stroke <- 1
+    }
+
     rawdata <- .visualisation_recipe_getrawdata(x)
     for (i in show_data) {
-      if (i %in% c("point", "points")) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, type = "point", point = point)
+      if (i %in% c("point", "points", "jitter")) {
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, shape = shape, stroke = stroke, type = i, point = point)
       } else if (i %in% c("density_2d", "density_2d_filled", "density_2d_polygon", "density_2d_raster")) {
         layers[[paste0("l", l)]] <- .visualisation_predicted_density2d(rawdata, x1, y, type = i, density_2d = density_2d)
       } else {
@@ -151,7 +168,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data, info, x1, alpha, color, linetype, line = line)
+  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data, info, x1, alpha, color, linetype, group = group, line = line)
   l <- l + 1
 
   # Labs
@@ -166,15 +183,19 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Points ------------------------------------------------------------
 
-.visualisation_predicted_points <- function(rawdata, x1, y, color, type = "point", point = NULL) {
+.visualisation_predicted_points <- function(rawdata, x1, y, color, type = "point", shape = 16, stroke = 0, width = NULL, height = NULL, point = NULL) {
+
+  if(type == "points") type <- "point"  # Sanity fix
+
   out <- list(
     data = as.data.frame(rawdata),
     geom = type,
     aes = list(x = x1, y = y, color = color),
-    stroke = 0,
-    shape = 16
+    stroke = stroke,
+    shape = shape
   )
-  if (type == "jitter") out$width <- 0.1
+  if(!is.null(width)) out$width <- width
+  if(!is.null(height)) out$height <- height
   if (!is.null(point)) out <- utils::modifyList(out, point) # Update with additional args
   out
 }
@@ -194,8 +215,8 @@ visualisation_recipe.estimate_predicted <- function(x,
 # Layer - Lines -------------------------------------------------------------
 
 
-.visualisation_predicted_line <- function(data, info, x1, alpha, color, linetype, line = NULL) {
-  group <- alpha
+.visualisation_predicted_line <- function(data, info, x1, alpha, color, linetype, group = NULL, line = NULL) {
+  if(is.null(group)) group <- alpha
   if (!is.null(alpha) && !is.null(color)) {
     group <- paste0("interaction(", alpha, ", ", color, ")")
   }

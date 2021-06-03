@@ -111,6 +111,7 @@ estimate_means <- function(model,
   attr(means, "levels") <- args$levels
   attr(means, "fixed") <- args$fixed
   attr(means, "modulate") <- args$modulate
+  attr(means, "coef_name") <- intersect(c("Mean", "Probability"), names(means))
 
 
   # Output
