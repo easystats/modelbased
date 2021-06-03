@@ -172,7 +172,7 @@
 <span class='co'># S3 method for estimate_means</span>
 <span class='fu'>visualisation_recipe</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  show_data <span class='op'>=</span> <span class='st'>"points"</span>,
+  show_data <span class='op'>=</span> <span class='st'>"jitter"</span>,
   point <span class='op'>=</span> <span class='cn'>NULL</span>,
   jitter <span class='op'>=</span> <span class='va'>point</span>,
   boxplot <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -247,7 +247,7 @@
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Customize raw data</span></span>
-<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"violin"</span>, <span class='st'>"boxplot"</span>, <span class='st'>"points"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"violin"</span>, <span class='st'>"boxplot"</span>, <span class='st'>"jitter"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Two levels ---------------</span></span>
 <span class='r-in'>  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span></span>
@@ -264,6 +264,11 @@
 <span class='r-in'></span>
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"new_factor"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, modulate <span class='op'>=</span> <span class='st'>"wt"</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'>#'   # GLMs ---------------------</span></span>
+<span class='r-in'>  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>vs <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>$</span><span class='va'>vs</span>, cyl <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>cyl</span>, data <span class='op'>=</span> <span class='va'>data</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
@@ -271,7 +276,7 @@
 <span class='r-in'><span class='co'># ==============================================</span></span>
 <span class='r-in'><span class='co'># estimate_expectation, estimate_response, ...</span></span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Simple Model ---------------</span></span>
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
@@ -332,9 +337,13 @@
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>new_factor</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'>  <span class='co'># GLMs ---------------------</span></span>
+<span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"jitter"</span>, point <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>height <span class='op'>=</span> <span class='fl'>0.03</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> Loading required package: ggplot2</span>
-<span class='r-plt'><img src='visualisation_recipe-2.png' alt='' width='700' height='433' /></span>
+<span class='r-err co'><span class='r-pr'>#&gt;</span> <span class='error'>Error in scale_x_continuous(expand = c(0, 0))</span> could not find function "scale_x_continuous"</span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
 <span class='r-in'><span class='co'># estimate_random</span></span>
 <span class='r-in'><span class='co'># ==============================================</span></span>
@@ -361,7 +370,7 @@
 <span class='r-in'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'><span class='op'>}</span></span>
-<span class='r-plt'><img src='visualisation_recipe-3.png' alt='' width='700' height='433' /></span>
+<span class='r-plt'><img src='visualisation_recipe-2.png' alt='' width='700' height='433' /></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

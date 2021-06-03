@@ -250,7 +250,7 @@
 &gt; 6  1                   -0.097                         0.094</code></pre>
 <p>As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to remove all the duplicate rows. Let’s add it to the original data.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></code></pre></div>
 <p>We can also visualize the random effects:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span> 
@@ -309,11 +309,35 @@
 <div id="accuracy" class="section level1">
 <h1 class="hasAnchor">
 <a href="#accuracy" class="anchor" aria-hidden="true"></a>Accuracy</h1>
-<p>In this section, we will take interest in the accuracy - the probability of making errors, using <strong>logistic models</strong>.</p>
+<p>In this section, we will take interest in the accuracy - the probability of making errors, using <strong>logistic models</strong>. For this, we will use the dataset that still includes the errors (<code>data</code>, and not <code>data_rt</code> used in the previous section).</p>
+<p>We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.</p>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span><span class="va">error</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, 
+               data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span>
+
+<span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; # Fixed Effects
+&gt; 
+&gt; Parameter         | Log-Odds |   SE |         95% CI |      z |      p
+&gt; ----------------------------------------------------------------------
+&gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.15 | &lt; .001
+&gt; condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.72 | &lt; .001</code></pre>
+<p>The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition.</p>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_random_files/figure-html/unnamed-chunk-17-1.png" width="3281.25"></p>
 </div>
-<div id="correlations-between-speed-and-accuracy" class="section level1">
+<div id="relationship-between-speed-and-accuracy" class="section level1">
 <h1 class="hasAnchor">
-<a href="#correlations-between-speed-and-accuracy" class="anchor" aria-hidden="true"></a>Correlations between speed and accuracy</h1>
+<a href="#relationship-between-speed-and-accuracy" class="anchor" aria-hidden="true"></a>Relationship between speed and accuracy</h1>
+<div id="inter-individual-correlation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#inter-individual-correlation" class="anchor" aria-hidden="true"></a>Inter-individual correlation</h2>
+</div>
+<div id="model-based-interaction" class="section level2">
+<h2 class="hasAnchor">
+<a href="#model-based-interaction" class="anchor" aria-hidden="true"></a>Model-based interaction</h2>
+</div>
 </div>
 <div id="log-shifted-model" class="section level1">
 <h1 class="hasAnchor">
