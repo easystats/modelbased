@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Find zero crossings of a vector — zero_crossings • modelbased</title>
+<title>Group-specific parameters of mixed models random effects — estimate_random • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,9 +46,8 @@
 
 
 
-<meta property="og:title" content="Find zero crossings of a vector — zero_crossings" />
-<meta property="og:description" content="Find zero crossings of a vector, i.e., indices when the numeric variable
-crosses 0." />
+<meta property="og:title" content="Group-specific parameters of mixed models random effects — estimate_random" />
+<meta property="og:description" content="Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -150,39 +149,75 @@ crosses 0." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Find zero crossings of a vector</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/zero_crossings.R'><code>R/zero_crossings.R</code></a></small>
-    <div class="hidden name"><code>zero_crossings.Rd</code></div>
+    <h1>Group-specific parameters of mixed models random effects</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_random.R'><code>R/estimate_random.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/reshape_random.R'><code>R/reshape_random.R</code></a></small>
+    <div class="hidden name"><code>estimate_random.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Find zero crossings of a vector, i.e., indices when the numeric variable
-crosses 0.</p>
+    <p>Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>zero_crossings</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span>, deviation <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>reshape_random</span><span class='op'>(</span><span class='va'>x</span>, indices <span class='op'>=</span> <span class='st'>"all"</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
+      <th>model</th>
+      <td><p>A mixed model with random effects.</p></td>
+    </tr>
+    <tr>
+      <th>deviation</th>
+      <td><p>If <code>TRUE</code>, the coefficients are the ones estimated natively by the model (as they are returned by for instance <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the <em>deviation</em> of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, in is "in the norm"). If <code>FALSE</code>, will return the sum of the random effect and its corresponding fixed effects. This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that the sum is made between the random effects parameters and the fixed effect coefficient (which is a point-estimate), and thus does not take into account the variability and uncertainty in the fixed effects estimations. Thus, use these with caution.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to or from other methods.</p></td>
+    </tr>
+    <tr>
       <th>x</th>
-      <td><p>A numeric vector.</p></td>
+      <td><p>The output of <code>estimate_random()</code>.</p></td>
+    </tr>
+    <tr>
+      <th>indices</th>
+      <td><p>A list containing the indices to extract.</p></td>
     </tr>
     </table>
 
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>Vector of zero crossings.</p>
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p>Based on the <code>uniroot.all</code> function from the rootSolve package.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Trig.html'>sin</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>4</span> <span class='op'>*</span> <span class='va'>pi</span>, length.out <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='img'><img src='zero_crossings-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>zero_crossings</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1]  1.00000 25.74975 50.50000 75.25025</div></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='co'># Random intercept ------------</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>hp</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>|</span> <span class='va'>carb</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+<span class='va'>random</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='va'>random</span>
+
+<span class='co'># Visualize random effects</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>random</span><span class='op'>)</span>
+
+<span class='co'># Show group-specific effects</span>
+<span class='fu'>estimate_random</span><span class='op'>(</span><span class='va'>model</span>, deviation <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+
+<span class='co'># Reshape to wide data so that it matches the original dataframe...</span>
+<span class='va'>reshaped</span> <span class='op'>&lt;-</span> <span class='fu'>reshape_random</span><span class='op'>(</span><span class='va'>random</span>, indices <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Coefficient"</span>, <span class='st'>"SE"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># ... and can be easily combined</span>
+<span class='va'>alldata</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>mtcars</span>, <span class='va'>reshaped</span><span class='op'>)</span>
+
+<span class='co'># Use summary() to remove duplicated rows</span>
+<span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>reshaped</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: see</span></div><div class='output co'>#&gt;   carb carb_Coefficient_Intercept carb_SE_Intercept
+#&gt; 1    4                -0.77955416         0.7829275
+#&gt; 2    1                 0.40506064         0.8390523
+#&gt; 3    2                 0.11088289         0.7829275
+#&gt; 4    3                -0.32486359         0.9369268
+#&gt; 5    6                 0.09296535         1.0007322
+#&gt; 6    8                 0.49550886         1.0007322</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -45,8 +45,6 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Estimate Marginal Contrasts — estimate_contrasts" />
 <meta property="og:description" content="Run a contrast analysis by estimating the differences between each level of a factor. See also other
@@ -99,7 +97,7 @@ related functions such as estimate_means and estimate_slopes." />
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="../reference/index.html">Features</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -122,6 +120,9 @@ related functions such as estimate_means and estimate_slopes." />
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -196,7 +197,7 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
+      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
 <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
 <code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
 predictors. <code>"response"</code> will transform them on scale of the response
@@ -330,7 +331,6 @@ one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
 <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
 <span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
 <span class='va'>data</span><span class='op'>$</span><span class='va'>am</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>am</span><span class='op'>)</span>
-
 <span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>data</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>

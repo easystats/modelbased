@@ -45,8 +45,6 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Easy Creation of 'emmeans' Marginal Means Objects — model_emmeans" />
 <meta property="og:description" content="The model_emmeans function is a wrapper to facilitate the usage of emmeans::emmeans(), providing a somewhat simpler and smart API to find the variables of interest." />
@@ -98,7 +96,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="../reference/index.html">Features</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -121,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -192,7 +193,7 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
+      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
 <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
 <code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
 predictors. <code>"response"</code> will transform them on scale of the response
@@ -243,8 +244,7 @@ in terms of probabilities.</p></td>
 #&gt;  versicolor   7.01 0.2375 146     6.54     7.48
 #&gt;  virginica    7.02 0.1143 146     6.80     7.25
 #&gt; 
-#&gt; Confidence level used: 0.95 </div><div class='input'>
-</div></pre>
+#&gt; Confidence level used: 0.95 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

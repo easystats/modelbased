@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Visualization helper (TODO) — visualisation_recipe • modelbased</title>
+<title>Prepare objects for visualisation — visualisation_recipe • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -45,11 +45,9 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
-<meta property="og:title" content="Visualization helper (TODO) — visualisation_recipe" />
-<meta property="og:description" content="Visualization helper (TODO)" />
+<meta property="og:title" content="Prepare objects for visualisation — visualisation_recipe" />
+<meta property="og:description" content="This function prepares some objects for visualisation by returning a list of layers with data and geoms that can be easily plotted using ggplot2." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -98,7 +96,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="../reference/index.html">Features</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -121,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -148,38 +149,205 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Visualization helper (TODO)</h1>
-    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/TODO_visualisation_recipe.R'><code>R/TODO_visualisation_recipe.R</code></a></small>
+    <h1>Prepare objects for visualisation</h1>
+    <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.R'><code>R/visualisation_recipe.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_means.R'><code>R/visualisation_recipe.estimate_means.R</code></a>, <a href='https://github.com/easystats/modelbased/blob/master/R/visualisation_recipe.estimate_predicted.R'><code>R/visualisation_recipe.estimate_predicted.R</code></a>, and 1 more</small>
     <div class="hidden name"><code>visualisation_recipe.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Visualization helper (TODO)</p>
+    <p>This function prepares some objects for visualisation by returning a list of layers with data and geoms that can be easily plotted using <code>ggplot2</code>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for estimate_means</span>
+<span class='fu'>visualisation_recipe</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  show_data <span class='op'>=</span> <span class='st'>"points"</span>,
+  point <span class='op'>=</span> <span class='cn'>NULL</span>,
+  jitter <span class='op'>=</span> <span class='va'>point</span>,
+  boxplot <span class='op'>=</span> <span class='cn'>NULL</span>,
+  violin <span class='op'>=</span> <span class='cn'>NULL</span>,
+  line <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pointrange <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for estimate_predicted</span>
+<span class='fu'>visualisation_recipe</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  show_data <span class='op'>=</span> <span class='st'>"points"</span>,
+  point <span class='op'>=</span> <span class='cn'>NULL</span>,
+  density_2d <span class='op'>=</span> <span class='cn'>NULL</span>,
+  line <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ribbon <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='co'># S3 method for estimate_random</span>
+<span class='fu'>visualisation_recipe</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  hline <span class='op'>=</span> <span class='cn'>NULL</span>,
+  pointrange <span class='op'>=</span> <span class='cn'>NULL</span>,
+  facet_wrap <span class='op'>=</span> <span class='cn'>NULL</span>,
+  labs <span class='op'>=</span> <span class='cn'>NULL</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>Something.</p></td>
+      <td><p>An easystats object.</p></td>
     </tr>
     <tr>
       <th>...</th>
       <td><p>Other arguments passed to other functions.</p></td>
     </tr>
+    <tr>
+      <th>show_data</th>
+      <td><p>Display the "raw" data as a background to the model-based estimation. Can be set to <code>"none"</code> to remove it. When input is the result of <code>estimate_means</code>, <code>show_data</code> can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of <code>estimate_response</code> or <code>estimate_expectation</code>, <code>show_data</code> can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".</p></td>
+    </tr>
+    <tr>
+      <th>point, jitter, boxplot, violin, pointrange, density_2d, line, hline, ribbon, labs, facet_wrap</th>
+      <td><p>Additional aesthetics and parameters for the geoms (see customization example).</p></td>
+    </tr>
     </table>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://easystats.github.io/modelbased/'>modelbased</a></span><span class='op'>)</span>
+    <pre class="examples"><div class='input'><span class='co'># ==============================================</span>
+<span class='co'># estimate_means</span>
+<span class='co'># ==============================================</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
 
-<span class='co'># Linear Models</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
-<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div></pre>
+  <span class='co'># Simple Model ---------------</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='va'>layers</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Customize aesthetics</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>,
+    jitter <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>0.03</span>, color <span class='op'>=</span> <span class='st'>"red"</span><span class='op'>)</span>,
+    line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>linetype <span class='op'>=</span> <span class='st'>"dashed"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Customize raw data</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"violin"</span>, <span class='st'>"boxplot"</span>, <span class='st'>"points"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># Two levels ---------------</span>
+  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>new_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>new_factor</span> <span class='op'>*</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"new_factor"</span>, <span class='st'>"cyl"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># Modulations --------------</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"new_factor"</span><span class='op'>)</span>, modulate <span class='op'>=</span> <span class='st'>"wt"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_means.html'>estimate_means</a></span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"new_factor"</span>, <span class='st'>"cyl"</span><span class='op'>)</span>, modulate <span class='op'>=</span> <span class='st'>"wt"</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='output co'>#&gt; <span class='message'>NOTE: Results may be misleading due to involvement in interactions</span></div><div class='img'><img src='visualisation_recipe-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ==============================================</span>
+<span class='co'># estimate_expectation, estimate_response, ...</span>
+<span class='co'># ==============================================</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+  <span class='co'># Simple Model ---------------</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='va'>layers</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Customize aesthetics</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>,
+    point <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"red"</span>, alpha <span class='op'>=</span> <span class='fl'>0.6</span>, size <span class='op'>=</span> <span class='fl'>3</span><span class='op'>)</span>,
+    line <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>color <span class='op'>=</span> <span class='st'>"blue"</span>, size <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span>,
+    ribbon <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"green"</span>, alpha <span class='op'>=</span> <span class='fl'>0.7</span><span class='op'>)</span>,
+    labs <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>subtitle <span class='op'>=</span> <span class='st'>"Oh yeah!"</span><span class='op'>)</span>
+  <span class='op'>)</span>
+  <span class='va'>layers</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Customize raw data</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"density_2d"</span>, <span class='st'>"points"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"density_2d_filled"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"density_2d_polygon"</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"density_2d_raster"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_x_continuous</a></span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
+    <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/scale_continuous.html'>scale_y_continuous</a></span><span class='op'>(</span>expand <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span>
+
+
+  <span class='co'># 2-ways interaction ------------</span>
+
+  <span class='co'># Numeric * numeric</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='va'>qsec</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Factor * numeric</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Sepal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+
+  <span class='co'># 3-ways interaction ------------</span>
+  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>mtcars</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>vs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>vs</span><span class='op'>)</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>$</span><span class='va'>cyl</span><span class='op'>)</span>
+  <span class='va'>data</span><span class='op'>$</span><span class='va'>new_factor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span><span class='op'>)</span>, length.out <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+  <span class='co'># Numeric * numeric * numeric</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='va'>qsec</span> <span class='op'>*</span> <span class='va'>hp</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Numeric * numeric * factor</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='va'>am</span> <span class='op'>*</span> <span class='va'>vs</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+  <span class='co'># Numeric * factor * factor</span>
+  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>*</span> <span class='va'>cyl</span> <span class='op'>*</span> <span class='va'>new_factor</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='output co'>#&gt; <span class='message'>Loading required package: ggplot2</span></div><div class='img'><img src='visualisation_recipe-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># ==============================================</span>
+<span class='co'># estimate_random</span>
+<span class='co'># ==============================================</span>
+<span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://easystats.github.io/see/'>"see"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
+
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'>lme4</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/lme4/man/sleepstudy.html'>sleepstudy</a></span>
+<span class='va'>data</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>data</span><span class='op'>)</span>
+<span class='va'>data</span><span class='op'>$</span><span class='va'>Newfactor</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"A"</span>, <span class='st'>"B"</span>, <span class='st'>"C"</span>, <span class='st'>"D"</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='co'># 1 random intercept</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='va'>layers</span> <span class='op'>&lt;-</span> <span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+<span class='va'>layers</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>layers</span><span class='op'>)</span>
+
+<span class='co'># 2 random intercepts</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+
+
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></span><span class='op'>(</span><span class='va'>Reaction</span> <span class='op'>~</span> <span class='va'>Days</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span> <span class='op'>+</span> <span class='va'>Days</span><span class='op'>|</span><span class='va'>Subject</span><span class='op'>)</span> <span class='op'>+</span> <span class='op'>(</span><span class='fl'>1</span><span class='op'>|</span><span class='va'>Newfactor</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>data</span><span class='op'>)</span>
+<span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_random.html'>estimate_random</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'>visualisation_recipe</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>}</span>
+</div><div class='img'><img src='visualisation_recipe-3.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -45,11 +45,9 @@
 
 
 
-  <link href="../extra.css" rel="stylesheet">
-  
 
 <meta property="og:title" content="Generates predictions from models — estimate_expectation" />
-<meta property="og:description" content="estimate_link is a shortcut to estimate_response with data = &quot;grid&quot;. estimate_response would be used in the context of generating actual predictions for the existing or new data, whereas estimate_link is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  visualisation_matrix (used when data = &quot;grid&quot;) and from insight::get_predicted() (the function to compute predictions used internally)." />
+<meta property="og:description" content="estimate_link is a shortcut to estimate_response with data = &quot;grid&quot;. estimate_response would be used in the context of generating actual predictions for the existing or new data, whereas estimate_link is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  visualisation_matrix (used when data = &quot;grid&quot;) and from insight::get_predicted() (the function to compute predictions used internally). For plotting, check the examples in visualisation_recipe." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -98,7 +96,7 @@
   <a href="../news/index.html">News</a>
 </li>
 <li>
-  <a href="../reference/index.html">Features</a>
+  <a href="../reference/index.html">Functions</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -121,6 +119,9 @@
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
+    </li>
+    <li>
+      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -154,7 +155,7 @@
     </div>
 
     <div class="ref-description">
-    <p><code>estimate_link</code> is a shortcut to <code>estimate_response</code> with <code>data = "grid"</code>. <code>estimate_response</code> would be used in the context of generating actual predictions for the existing or new data, whereas <code>estimate_link</code> is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> (used when <code>data = "grid"</code>) and from <code><a href='https://easystats.github.io/insight/reference/get_predicted.html'>insight::get_predicted()</a></code> (the function to compute predictions used internally).</p>
+    <p><code>estimate_link</code> is a shortcut to <code>estimate_response</code> with <code>data = "grid"</code>. <code>estimate_response</code> would be used in the context of generating actual predictions for the existing or new data, whereas <code>estimate_link</code> is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> (used when <code>data = "grid"</code>) and from <code><a href='https://easystats.github.io/insight/reference/get_predicted.html'>insight::get_predicted()</a></code> (the function to compute predictions used internally). For plotting, check the examples in <code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>estimate_expectation</span><span class='op'>(</span>
@@ -219,6 +220,8 @@
 
 <span class='co'># Linear Models</span>
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span>
+
+<span class='co'># Get predicted and prediction interval (see insight::get_predicted)</span>
 <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span style='color: #0000BB;'>Model-based Prediction</span><span>
 #&gt; 
@@ -257,7 +260,10 @@
 #&gt; 3.57 |     18.21 | 3.10 | [11.88, 24.54] |      3.21
 #&gt; 2.78 |     22.43 | 3.10 | [16.09, 28.76] |      1.03
 #&gt; </span><span style='color: #0000BB;'>
-#&gt; Variable predicted: mpg</span><span></div><div class='input'><span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+#&gt; Variable predicted: mpg</span><span></div><div class='input'>
+<span class='co'># Get expected values with confidence interval</span>
+<span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+<span class='va'>pred</span>
 </div><div class='output co'>#&gt; </span><span style='color: #0000BB;'>Model-based Expectation</span><span>
 #&gt; 
 #&gt; wt   | Predicted |   SE |         95% CI
@@ -275,6 +281,9 @@
 #&gt; </span><span style='color: #0000BB;'>
 #&gt; Variable predicted: mpg
 #&gt; Predictors modulated: wt</span><span></div><div class='input'>
+<span class='co'># Visualisation (see visualisation_recipe())</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span>
+</div><div class='img'><img src='estimate_expectation-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># Standardize predictions</span>
 <span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>pred</span>, include_response <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
@@ -575,6 +584,7 @@
 #&gt; Variable predicted: mpg
 #&gt; Predictors modulated: wt</span><span></div><div class='input'>
 <span class='co'># Bayesian models</span>
+<span class='co'># \donttest{</span>
 <span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span>
   <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span>, iter <span class='op'>=</span> <span class='fl'>200</span><span class='op'>)</span>
   <span class='fu'>estimate_response</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
@@ -600,7 +610,7 @@
 #&gt; 5.42 |      8.17 | 1.45 | [ 5.35, 10.81]
 #&gt; </span><span style='color: #0000BB;'>
 #&gt; Variable predicted: mpg
-#&gt; Predictors modulated: wt</span><span></div><div class='input'>
+#&gt; Predictors modulated: wt</span><span></div><div class='input'><span class='co'># }</span>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
