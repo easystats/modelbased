@@ -19,13 +19,14 @@ reference:
   - estimate_means
   - estimate_contrasts
   - estimate_slopes
-  - describe_nonlinear
+  - estimate_random
 - title: "Data grids and Visualisation"
   contents:
   - visualisation_matrix
   - visualisation_recipe
 - title: "Miscellaenous"
   contents:
+  - describe_nonlinear
   - model_emmeans
   - find_inversions
   - zero_crossings
