@@ -33,11 +33,11 @@ set.seed(333)
 ```
 
 
-Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the "fixed" effects), they can also be used to gain insight into group-level (i.e., individuals' level scores, if the random factors are individuals) variability.
+Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the "fixed" effects), they can also be used to gain insight into group-level effects (e.g., individuals' scores, if the random factors are individuals).
 
-For this practical walkthrough, we will use the **Speed-Accuracy Data** (Wagenmakers, Ratcliff, Gomez, \& McKoon, 2008) from the `rtdists` package, in which **17 participants** (the **id** variable) performed some reaction time (RT) experiment under two conditions, speed and accuracy (the **condition** variable).
+For this practical walkthrough on **advanced mixed model analysis**, we will use the **Speed-Accuracy Data** (Wagenmakers, Ratcliff, Gomez, \& McKoon, 2008) from the `rtdists` package, in which **17 participants** (the **id** variable) performed some reaction time (RT) task under two conditions, speed and accuracy (the **condition** variable).
 
-How hypotheses is that participants will be **faster** (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less **errors** in the accuracy condition as compared to the speed condition.
+Our hypotheses is that participants are **faster** (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less **errors** in the accuracy condition as compared to the speed condition.
 
 In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.
 
@@ -69,7 +69,7 @@ data <- rtdists::speed_acc %>%
 ## Population-level Effects
 
 
-For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a "successful" cognitive process. Then, and we will then plot the RT according to the condition and stimulus category.
+For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a "successful" cognitive process. Then, and we will plot the RT according to the condition and stimulus category.
 
 
 ```{r warning=FALSE, message=FALSE}
