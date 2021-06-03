@@ -130,7 +130,7 @@
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
-      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
+      <a href="../articles/estimate_random.html">Estimate and re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -180,7 +180,7 @@
     </tr>
     <tr>
       <th>deviation</th>
-      <td><p>If <code>TRUE</code>, the coefficients are the ones estimated natively by the model (as they are returned by for instance <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the <em>deviation</em> of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, in is "in the norm"). If <code>FALSE</code>, will return the sum of the random effect and its corresponding fixed effects. This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that the sum is made between the random effects parameters and the fixed effect coefficient (which is a point-estimate), and thus does not take into account the variability and uncertainty in the fixed effects estimations. Thus, use these with caution.</p></td>
+      <td><p>If <code>TRUE</code>, the coefficients are the ones estimated natively by the model (as they are returned by, for instance, <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the <em>deviation</em> of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If <code>FALSE</code>, will return the sum of the random effect and its corresponding fixed effects. This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that the sum is made between the random effects parameters and the fixed effect coefficient (which is a point-estimate), and thus does not take into account the variability and uncertainty in the fixed effects estimations. Thus, use these with caution.</p></td>
     </tr>
     <tr>
       <th>...</th>

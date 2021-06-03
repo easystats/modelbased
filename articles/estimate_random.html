@@ -81,7 +81,7 @@
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
-      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
+      <a href="../articles/estimate_random.html">Estimate and re-use Random Effects</a>
     </li>
     <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
@@ -261,7 +261,7 @@
 <div id="correlation-with-empirical-scores" class="section level2">
 <h2 class="hasAnchor">
 <a href="#correlation-with-empirical-scores" class="anchor" aria-hidden="true"></a>Correlation with empirical scores</h2>
-<p>We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the <strong>deviation from the fixed effect</strong>, so a coefficient close to 0 means that the participants’ effect is the same as the population-level effect. In other words, he’s <strong>“in the norm”</strong> (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting <code>estimate_random(model, deviation = FALSE)</code>).</p>
+<p>We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the <strong>deviation from the fixed effect</strong>, so a coefficient close to 0 means that the participants’ effect is the same as the population-level effect. In other words, it’s <strong>“in the norm”</strong> (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by setting <code>estimate_random(model, deviation = FALSE)</code>).</p>
 <p>Nevertheless, let’s compute some <strong>empirical scores</strong>, such as the condition averages for each participant.</p>
 <p>We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the <strong>accuracy</strong> condition, and the difference with the <strong>speed</strong> condition <em>(reminds you of something?)</em>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
