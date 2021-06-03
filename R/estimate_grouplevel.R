@@ -42,8 +42,8 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random[sapply(random, function(x) all(is.na(x)))] <- NULL
 
   # Correct for fixed effect
-  type <- match.arg(type, c("random", "coefficient"))
-  if(type == "coefficient") {
+  type <- match.arg(type, c("random", "total"))
+  if(type == "total") {
     fixed <- as.data.frame(params[params$Effects == "fixed", ])
     cols <- intersect(c("Coefficient", "Median", "Mean", "MAP_Estimate"), names(random))
     for(p in fixed$Parameter) {
