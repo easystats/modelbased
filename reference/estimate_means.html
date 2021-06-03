@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Estimate Marginal Means (Model-based Average at each Factor Level) — estimate_means • modelbased</title>
+<title>Estimate Marginal Means (Model-based average at each factor level) — estimate_means • modelbased</title>
 
 <!-- favicons -->
 <link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png">
@@ -46,8 +46,8 @@
 
 
 
-<meta property="og:title" content="Estimate Marginal Means (Model-based Average at each Factor Level) — estimate_means" />
-<meta property="og:description" content="Estimate average value of response variable at each factor levels. See also other
+<meta property="og:title" content="Estimate Marginal Means (Model-based average at each factor level) — estimate_means" />
+<meta property="og:description" content="Estimate average value of response variable at each factor levels. For plotting, check the examples in visualisation_recipe. See also other
 related functions such as estimate_contrasts and estimate_slopes." />
 <meta property="og:image" content="/logo.png" />
 
@@ -131,6 +131,9 @@ related functions such as estimate_contrasts and estimate_slopes." />
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
+      <a href="../articles/estimate_random.html">Estimate and Re-use Random Effects</a>
+    </li>
+    <li>
       <a href="../articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
@@ -156,13 +159,13 @@ related functions such as estimate_contrasts and estimate_slopes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Estimate Marginal Means (Model-based Average at each Factor Level)</h1>
+    <h1>Estimate Marginal Means (Model-based average at each factor level)</h1>
     <small class="dont-index">Source: <a href='https://github.com/easystats/modelbased/blob/master/R/estimate_means.R'><code>R/estimate_means.R</code></a></small>
     <div class="hidden name"><code>estimate_means.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Estimate average value of response variable at each factor levels. See also other
+    <p>Estimate average value of response variable at each factor levels. For plotting, check the examples in <code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>. See also other
 related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and <code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
     </div>
 
@@ -202,7 +205,7 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://cran.r-project.org/web/packages/emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
+      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
 <code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
 <code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
 predictors. <code>"response"</code> will transform them on scale of the response
@@ -331,7 +334,10 @@ in terms of probabilities.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal means estimated for Species</span></span>
 <span class='r-in'></span>
+<span class='r-in'><span class='co'># Methods that can be applied to it:</span></span>
 <span class='r-in'><span class='va'>means</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_means</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Sepal.Width"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>means</span><span class='op'>)</span>  <span class='co'># which runs visualisation_recipe()</span></span>
+<span class='r-plt'><img src='estimate_means-1.png' alt='' width='700' height='433' /></span>
 <span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>means</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Estimated Marginal Means (standardized)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
@@ -342,7 +348,6 @@ in terms of probabilities.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> virginica  |        0.00 |  1.05 | 0.03 | [ 0.99,  1.11]</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal means estimated for Species</span></span>
-<span class='r-in'></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://github.com/lme4/lme4/'>"lme4"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
 <span class='r-in'>  <span class='va'>data</span> <span class='op'>&lt;-</span> <span class='va'>iris</span></span>

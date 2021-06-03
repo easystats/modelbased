@@ -85,6 +85,9 @@
       <a href="articles/describe_nonlinear.html">Describe non-linear curves</a>
     </li>
     <li>
+      <a href="articles/estimate_random.html">Estimate and Re-use Random Effects</a>
+    </li>
+    <li>
       <a href="articles/modelisation_approach.html">The modelisation approach</a>
     </li>
   </ul>
@@ -115,10 +118,11 @@
 <a href="#modelbased-" class="anchor" aria-hidden="true"></a>modelbased <img src="reference/figures/logo.png" align="right" height="139">
 </h1></div>
 
+<p><strong><em>Taking your models to new heights</em></strong></p>
 <hr>
 <p><span class="emoji" data-emoji="warning">⚠️</span> <code><a href="reference/estimate_expectation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="reference/estimate_expectation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there). This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</p>
 <hr>
-<p><code>modelbased</code> is a lightweight package helping with model-based estimations, used in the computation of marginal means, contrast analysis and model predictions.</p>
+<p><code>modelbased</code> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor" aria-hidden="true"></a>Installation</h2>
@@ -157,7 +161,7 @@
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html" class="external-link"><code>estimate_slopes()</code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_response.html" class="external-link"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
+<a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
 <li>
 <a href="https://easystats.github.io/modelbased/reference/describe_nonlinear.html" class="external-link"><code>describe_nonlinear()</code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
@@ -286,7 +290,7 @@
 <li>
 <strong>Problem</strong>: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.</li>
 <li>
-<strong>Solution</strong>: You can estimate the marginal contrasts at different values of a contious variable (the <em>modulator</em>), and plot these differences (they are significant if their 95% CI doesn’t cover 0).</li>
+<strong>Solution</strong>: You can estimate the marginal contrasts at different values of a continuous variable (the <em>modulator</em>), and plot these differences (they are significant if their 95% CI doesn’t cover 0).</li>
 </ul>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>

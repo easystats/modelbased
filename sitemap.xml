@@ -22,6 +22,9 @@
     <loc>/articles/estimate_means.html</loc>
   </url>
   <url>
+    <loc>/articles/estimate_random.html</loc>
+  </url>
+  <url>
     <loc>/articles/estimate_relation.html</loc>
   </url>
   <url>
@@ -59,6 +62,9 @@
   </url>
   <url>
     <loc>/reference/estimate_means.html</loc>
+  </url>
+  <url>
+    <loc>/reference/estimate_random.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_slopes.html</loc>
