@@ -21,7 +21,7 @@
 #' estimate_grouplevel(model, deviation = FALSE)
 #'
 #' # Reshape to wide data so that it matches the original dataframe...
-#' reshaped <- reshape_random(random, indices = c("Coefficient", "SE"))
+#' reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 #'
 #' # ... and can be easily combined
 #' alldata <- cbind(mtcars, reshaped)

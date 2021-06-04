@@ -131,10 +131,10 @@ random
 
 Each of our participant (the **Level** column), numbered from 1 to 17, has two rows, corresponding to its own deviation from the main effect of the **intercept** and **condition effect**. 
 
-We can also use `reshape_random()` to select only the *Coefficient* column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: **it's a convenient way to re-incorporate the random effects into the data for further re-use**.
+We can also use `reshape_grouplevel()` to select only the *Coefficient* column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: **it's a convenient way to re-incorporate the random effects into the data for further re-use**.
 
 ```{r warning=FALSE, message=FALSE}
-reshaped <- reshape_random(random, indices = "Coefficient")
+reshaped <- reshape_grouplevel(random, indices = "Coefficient")
 
 head(reshaped)
 ```

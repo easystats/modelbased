@@ -327,6 +327,35 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
 
 ![](man/figures/unnamed-chunk-10-1.png)<!-- -->
 
+## Extract and Format Group-level Random Effects
+
+-   **Problem**: You have a mixed model and you would like to easily
+    access the random part, i.e., the group-level effects (e.g., the
+    individuals scores).
+-   **Solution**: You can apply `estimate_grouplevel` on a mixed model.
+
+See [**this
+vignette**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
+for more information.
+
+``` r
+library(lme4)
+
+model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
+
+modelbased::estimate_grouplevel(model)
+## Group | Level |   Parameter | Coefficient |   SE |         95% CI
+## -----------------------------------------------------------------
+## cyl   |     4 | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]
+## cyl   |     4 |        drat |        2.24 | 0.36 | [ 1.53,  2.95]
+## cyl   |     6 | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]
+## cyl   |     6 |        drat |       -0.09 | 0.54 | [-1.15,  0.98]
+## cyl   |     8 | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]
+## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]
+```
+
+<!-- TODO: add plotting example once 'see' on cran -->
+
 ## Describe the smooth term by its linear parts
 
 -   **Problem**: You model a non-linear relationship using polynomials,
@@ -355,7 +384,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 

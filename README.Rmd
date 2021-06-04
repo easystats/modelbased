@@ -262,6 +262,22 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
+## Extract and Format Group-level Random Effects
+
+- **Problem**: You have a mixed model and you would like to easily access the random part, i.e., the group-level effects (e.g., the individuals scores).
+- **Solution**: You can apply `estimate_grouplevel` on a mixed model.
+
+See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html) for more information.
+
+```{r message=FALSE, warning=FALSE}
+library(lme4)
+
+model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
+
+modelbased::estimate_grouplevel(model)
+```
+
+<!-- TODO: add plotting example once 'see' on cran -->
 
 ## Describe the smooth term by its linear parts
 

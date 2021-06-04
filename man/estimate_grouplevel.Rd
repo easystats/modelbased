@@ -2,12 +2,12 @@
 % Please edit documentation in R/estimate_grouplevel.R, R/reshape_random.R
 \name{estimate_grouplevel}
 \alias{estimate_grouplevel}
-\alias{reshape_random}
+\alias{reshape_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
 estimate_grouplevel(model, type = "random", ...)
 
-reshape_random(x, indices = "all", ...)
+reshape_grouplevel(x, indices = "all", ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
@@ -38,7 +38,7 @@ plot(random)
 estimate_grouplevel(model, deviation = FALSE)
 
 # Reshape to wide data so that it matches the original dataframe...
-reshaped <- reshape_random(random, indices = c("Coefficient", "SE"))
+reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 
 # ... and can be easily combined
 alldata <- cbind(mtcars, reshaped)

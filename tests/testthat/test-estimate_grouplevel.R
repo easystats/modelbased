@@ -7,19 +7,19 @@ if (require("testthat") && require("modelbased") && require("lme4")) {
     model <- lmer(Reaction ~ Days + (1 | Subject), data = data)
     random <- estimate_grouplevel(model)
     expect_equal(nrow(random), length(unique(data$Subject)))
-    expect_equal(nrow(reshape_random(random)), nrow(data))
+    expect_equal(nrow(reshape_grouplevel(random)), nrow(data))
 
     # 2 random intercepts
     model <- lmer(mpg ~ wt + (1 | gear) + (1 | carb), data = mtcars)
     random <- estimate_grouplevel(model)
     expect_equal(nrow(random), length(c(unique(mtcars$gear), unique(mtcars$carb))))
-    expect_equal(nrow(reshape_random(random)), nrow(mtcars))
+    expect_equal(nrow(reshape_grouplevel(random)), nrow(mtcars))
 
     # Random slope and intercept
     model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = data)
     random <- estimate_grouplevel(model)
     expect_equal(nrow(random), 2 * length(unique(data$Subject)))
-    expect_equal(nrow(reshape_random(random)), nrow(data))
+    expect_equal(nrow(reshape_grouplevel(random)), nrow(data))
 
     # Nested random factors
     set.seed(33)
@@ -33,7 +33,7 @@ if (require("testthat") && require("modelbased") && require("lme4")) {
     random <- estimate_grouplevel(model)
     expect_equal(nrow(random), sum(sapply(coef(model), nrow)))
 
-    reshaped <- reshape_random(random)
+    reshaped <- reshape_grouplevel(random)
     expect_equal(nrow(reshaped), nrow(data))
     ref <- insight::get_data(model)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
     all(reshaped$Subject == ref$Subject)

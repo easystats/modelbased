@@ -2,13 +2,13 @@
 #' @param x The output of \code{estimate_grouplevel()}.
 #' @param indices A list containing the indices to extract.
 #' @export
-reshape_random <- function(x, indices = "all", ...) {
-  UseMethod("reshape_random")
+reshape_grouplevel <- function(x, indices = "all", ...) {
+  UseMethod("reshape_grouplevel")
 }
 
 
 #' @export
-reshape_random.estimate_grouplevel <- function(x, indices = "all", ...) {
+reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
 
   # Find indices
   if(any(indices == "all")) {
@@ -74,13 +74,13 @@ reshape_random.estimate_grouplevel <- function(x, indices = "all", ...) {
   # Clean
   row.names(data) <- NULL
 
-  class(data) <- c("reshape_random", class(data))
+  class(data) <- c("reshape_grouplevel", class(data))
   data
 }
 
 
 #' @export
-summary.reshape_random <- function(object, ...) {
+summary.reshape_grouplevel <- function(object, ...) {
   x <- object[!duplicated(object), ]
   row.names(x) <- NULL
   x
