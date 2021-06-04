@@ -61,11 +61,9 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
-    see (>= 0.6.5),
+    see,
     testthat,
     spelling
-Remotes: 
-    easystats/see
 Encoding: UTF-8
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
