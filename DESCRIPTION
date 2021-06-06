@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.7.0
+Version: 0.8.0
 Authors@R: 
     c(person(given = "Dominique",
              family = "Makowski",
@@ -61,10 +61,11 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
-    see,
+    see (>= 0.6.5),
     testthat,
     spelling
-Encoding: UTF-8
+Remotes: 
+    easystats/see
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
 Config/testthat/parallel: true

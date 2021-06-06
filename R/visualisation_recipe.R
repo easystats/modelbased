@@ -67,12 +67,10 @@ print.visualisation_recipe <- function(x, ...) {
 
 #' @export
 plot.visualisation_recipe <- function(x, ...) {
-  # insight::check_if_installed("see")
-  #
-  # ggplot2::ggplot(data = attributes(x)$data) +
-  #   see::geoms_from_list(x, ...)
+  insight::check_if_installed("see")
 
-  "Plots are coming in the future version."
+  ggplot2::ggplot(data = attributes(x)$data) +
+    see::geoms_from_list(x, ...)
 }
 
 
