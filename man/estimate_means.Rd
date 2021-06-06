@@ -65,7 +65,7 @@ estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
-plot(means)  # which runs visualisation_recipe()
+plot(means) # which runs visualisation_recipe()
 effectsize::standardize(means)
 \donttest{
 if (require("lme4")) {

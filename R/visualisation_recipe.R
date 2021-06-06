@@ -67,21 +67,12 @@ print.visualisation_recipe <- function(x, ...) {
 
 #' @export
 plot.visualisation_recipe <- function(x, ...) {
-  insight::check_if_installed("see")
+  # insight::check_if_installed("see")
+  #
+  # ggplot2::ggplot(data = attributes(x)$data) +
+  #   see::geoms_from_list(x, ...)
 
-  if (utils::packageVersion("see") < "0.6.5") {
-    warning("Plotting requires the latest version of 'see'. Please run remotes::install_github('easystats/see')")
-    return()
-  }
-
-  # Additional checks so that it doesn't fail on windows
-  if (exists("geoms_from_list", where = asNamespace("see"), mode = "function")) {
-    out <- ggplot2::ggplot(data = attributes(x)$data) +
-      see::geoms_from_list(x, ...)
-  } else {
-    out <- "Plotting requires the latest version of 'see'. Please run remotes::install_github('easystats/see')"
-  }
-  out
+  "Plots are coming in the future version."
 }
 
 

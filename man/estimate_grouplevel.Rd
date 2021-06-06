@@ -26,24 +26,24 @@ Extract random parameters of each individual group in the context of mixed model
 \examples{
 if (require("lme4") && require("see")) {
 
-# Random intercept ------------
-model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
-random <- estimate_grouplevel(model)
-random
+  # Random intercept ------------
+  model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
+  random <- estimate_grouplevel(model)
+  random
 
-# Visualize random effects
-plot(random)
+  # Visualize random effects
+  plot(random)
 
-# Show group-specific effects
-estimate_grouplevel(model, deviation = FALSE)
+  # Show group-specific effects
+  estimate_grouplevel(model, deviation = FALSE)
 
-# Reshape to wide data so that it matches the original dataframe...
-reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+  # Reshape to wide data so that it matches the original dataframe...
+  reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 
-# ... and can be easily combined
-alldata <- cbind(mtcars, reshaped)
+  # ... and can be easily combined
+  alldata <- cbind(mtcars, reshaped)
 
-# Use summary() to remove duplicated rows
-summary(reshaped)
+  # Use summary() to remove duplicated rows
+  summary(reshaped)
 }
 }
