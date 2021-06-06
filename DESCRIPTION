@@ -64,9 +64,10 @@ Suggests:
     see (>= 0.6.5),
     testthat,
     spelling
-Remotes: 
+Remotes:
     easystats/see
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Language: en-US
+Encoding: UTF-8

@@ -33,7 +33,7 @@
 estimate_grouplevel <- function(model, type = "random", ...) {
 
   # Extract params
-  params <- parameters::model_parameters(model, group_level = TRUE, ...)
+  params <- parameters::model_parameters(model, effects = "all", group_level = TRUE, ...)
 
   # TODO: improve / add new printing that groups by group/level?
   random <- as.data.frame(params[params$Effects == "random", ])
@@ -75,4 +75,9 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 }
 
 
-# TODO (maybe) summary for estimate_grouplevel: keep only coefficient column
+.estimate_grouplevel_bayesian <- function(model, type = "random", ...) {
+  param_names <- insight::clean_parameters(model)
+  posteriors <- insight::get_parameters(model, effects = "all", component = "all", ...)
+
+
+}

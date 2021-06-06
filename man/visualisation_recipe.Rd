@@ -194,5 +194,21 @@ if (require("ggplot2")) {
   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
   plot(visualisation_recipe(x))
   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
+
+}
+\donttest{
+# Bayesian models ---------------------
+if (require("ggplot2") && require("rstanarm")) {
+
+  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
+
+  # Plot individual draws instead of regular ribbon
+  x <- estimate_relation(model, keep_iterations = TRUE)
+  layers <- visualisation_recipe(x, ribbon = list(color = "red"))
+  plot(layers)
+
+  model <- rstanarm::stan_glm(Sepal.Width ~ Species * Sepal.Length, data = iris, refresh = 0)
+  plot(estimate_relation(model, keep_iterations = TRUE))
+}
 }
 }

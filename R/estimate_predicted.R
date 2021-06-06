@@ -5,7 +5,7 @@
 #' @inheritParams estimate_means
 #' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
 #' @param ci The interval level (default \code{0.95}, i.e., 95\% CI).
-#' @param keep_iterations Only relevant for Bayesian models or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.
+#' @param keep_iterations Only relevant for Bayesian models, bootstrapped or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.
 #' @param ... You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.
 #'
 #' @examples
@@ -144,6 +144,7 @@ estimate_response <- estimate_prediction
 
   # Store relevant information
   attr(out, "ci") <- ci
+  attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- insight::find_response(model)
   attr(out, "model") <- model
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
