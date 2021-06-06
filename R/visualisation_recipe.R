@@ -24,22 +24,22 @@ print.visualisation_recipe <- function(x, ...) {
     elements <- names(l)[!sapply(l, is.null)]
 
     # Loop through all elements of list
-    for(element in elements[elements != "geom"]) {
+    for (element in elements[elements != "geom"]) {
 
       # Print element name
-      if (element == "aes"){
+      if (element == "aes") {
         cat("aes_string(\n")
       } else {
         cat(paste0(element, " = "))
       }
 
       # Print element
-      if(element == "data") {
+      if (element == "data") {
         cat(paste0("[", paste0(dim(l$data), collapse = " x "), "]"))
-      } else if (element == "aes"){
-        for(aes in names(l$aes)) {
-          if(!is.null(l$aes[[aes]])) {
-            if(is.character(l$aes[[aes]])) {
+      } else if (element == "aes") {
+        for (aes in names(l$aes)) {
+          if (!is.null(l$aes[[aes]])) {
+            if (is.character(l$aes[[aes]])) {
               cat(paste0("  ", aes, " = '", l$aes[[aes]], "'\n"))
             } else {
               cat(paste0("  ", aes, " = ", l$aes[[aes]], "\n"))
@@ -48,8 +48,8 @@ print.visualisation_recipe <- function(x, ...) {
         }
         cat(")")
       } else {
-        if(is.character(l[[element]]) || is.numeric(l[[element]]) || is.factor(l[[element]])) {
-          if(is.character(l[[element]])) {
+        if (is.character(l[[element]]) || is.numeric(l[[element]]) || is.factor(l[[element]])) {
+          if (is.character(l[[element]])) {
             cat(paste0("'", l[[element]], "'"))
           } else {
             cat(l[[element]])
@@ -69,13 +69,13 @@ print.visualisation_recipe <- function(x, ...) {
 plot.visualisation_recipe <- function(x, ...) {
   insight::check_if_installed("see")
 
-  if(utils::packageVersion("see") < "0.6.5") {
+  if (utils::packageVersion("see") < "0.6.5") {
     warning("Plotting requires the latest version of 'see'. Please run remotes::install_github('easystats/see')")
     return()
   }
 
   # Additional checks so that it doesn't fail on windows
-  if(exists('geoms_from_list', where = asNamespace('see'), mode='function')) {
+  if (exists("geoms_from_list", where = asNamespace("see"), mode = "function")) {
     out <- ggplot2::ggplot(data = attributes(x)$data) +
       see::geoms_from_list(x, ...)
   } else {
@@ -95,4 +95,3 @@ plot.visualisation_recipe <- function(x, ...) {
   if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model)
   rawdata
 }
-

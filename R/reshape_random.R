@@ -11,7 +11,7 @@ reshape_grouplevel <- function(x, indices = "all", ...) {
 reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
 
   # Find indices
-  if(any(indices == "all")) {
+  if (any(indices == "all")) {
     indices <- names(x)[!names(x) %in% c("Group", "Level", "Parameter", "CI")]
   }
   if ("Coefficient" %in% indices) {
@@ -45,15 +45,17 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
 
     # Reshape
     data_group$Parameter <- ifelse(data_group$Parameter == "(Intercept)",
-                                   "Intercept",
-                                   data_group$Parameter)
+      "Intercept",
+      data_group$Parameter
+    )
 
     data_wide <- insight::data_to_wide(
       data_group[c(group, newvars, "Parameter")],
       rows_from = group,
       values_from = newvars,
       colnames_from = "Parameter",
-      sep = "_")
+      sep = "_"
+    )
 
     # If nested, separate groups
     if (grepl(":", group)) {

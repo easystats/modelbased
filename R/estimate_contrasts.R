@@ -106,7 +106,7 @@ estimate_contrasts <- function(model,
     contrasts <- as.data.frame(merge(as.data.frame(estimated), stats::confint(estimated, level = ci, adjust = adjust)))
     contrasts <- .clean_names_frequentist(contrasts)
   }
-  contrasts$null <- NULL  # introduced in emmeans 1.6.1 (#115)
+  contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)
   contrasts <- insight::data_relocate(contrasts, c("CI_low", "CI_high"), after = c("Difference", "Odds_ratio", "Ratio"))
 
 

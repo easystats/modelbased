@@ -9,25 +9,25 @@
 #' @examples
 #' if (require("lme4") && require("see")) {
 #'
-#' # Random intercept ------------
-#' model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
-#' random <- estimate_grouplevel(model)
-#' random
+#'   # Random intercept ------------
+#'   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
+#'   random <- estimate_grouplevel(model)
+#'   random
 #'
-#' # Visualize random effects
-#' plot(random)
+#'   # Visualize random effects
+#'   plot(random)
 #'
-#' # Show group-specific effects
-#' estimate_grouplevel(model, deviation = FALSE)
+#'   # Show group-specific effects
+#'   estimate_grouplevel(model, deviation = FALSE)
 #'
-#' # Reshape to wide data so that it matches the original dataframe...
-#' reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+#'   # Reshape to wide data so that it matches the original dataframe...
+#'   reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 #'
-#' # ... and can be easily combined
-#' alldata <- cbind(mtcars, reshaped)
+#'   # ... and can be easily combined
+#'   alldata <- cbind(mtcars, reshaped)
 #'
-#' # Use summary() to remove duplicated rows
-#' summary(reshaped)
+#'   # Use summary() to remove duplicated rows
+#'   summary(reshaped)
 #' }
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {
@@ -43,15 +43,15 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 
   # Correct for fixed effect
   type <- match.arg(type, c("random", "total"))
-  if(type == "total") {
+  if (type == "total") {
     fixed <- as.data.frame(params[params$Effects == "fixed", ])
     cols <- intersect(c("Coefficient", "Median", "Mean", "MAP_Estimate"), names(random))
-    for(p in fixed$Parameter) {
+    for (p in fixed$Parameter) {
       random[random$Parameter == p, cols] <- random[random$Parameter == p, cols] + fixed[fixed$Parameter == p, cols[1]]
     }
     # Remove uncertainty indices
-    for(col in c("CI", "CI_low", "CI_high")) random[[col]] <- NULL
-    for(col in c("SE", "SD", "MAD")) random[[col]] <- NULL
+    for (col in c("CI", "CI_low", "CI_high")) random[[col]] <- NULL
+    for (col in c("SE", "SD", "MAD")) random[[col]] <- NULL
   }
 
   # Reorganize columns

@@ -5,36 +5,34 @@
 #' # estimate_grouplevel
 #' # ==============================================
 #' if (require("see") && require("lme4")) {
+#'   data <- lme4::sleepstudy
+#'   data <- rbind(data, data)
+#'   data$Newfactor <- rep(c("A", "B", "C", "D"))
 #'
-#' data <- lme4::sleepstudy
-#' data <- rbind(data, data)
-#' data$Newfactor <- rep(c("A", "B", "C", "D"))
+#'   # 1 random intercept
+#'   model <- lmer(Reaction ~ Days + (1 | Subject), data = data)
+#'   x <- estimate_grouplevel(model)
+#'   layers <- visualisation_recipe(x)
+#'   layers
+#'   plot(layers)
 #'
-#' # 1 random intercept
-#' model <- lmer(Reaction ~ Days + (1|Subject), data = data)
-#' x <- estimate_grouplevel(model)
-#' layers <- visualisation_recipe(x)
-#' layers
-#' plot(layers)
-#'
-#' # 2 random intercepts
-#' model <- lmer(Reaction ~ Days + (1|Subject) + (1|Newfactor), data = data)
-#' x <- estimate_grouplevel(model)
-#' plot(visualisation_recipe(x))
+#'   # 2 random intercepts
+#'   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
+#'   x <- estimate_grouplevel(model)
+#'   plot(visualisation_recipe(x))
 #'
 #'
-#' model <- lmer(Reaction ~ Days + (1 + Days|Subject) + (1|Newfactor), data = data)
-#' x <- estimate_grouplevel(model)
-#' plot(visualisation_recipe(x))
+#'   model <- lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
+#'   x <- estimate_grouplevel(model)
+#'   plot(visualisation_recipe(x))
 #' }
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,
-                                                 hline = NULL,
-                                                 pointrange = NULL,
-                                                 facet_wrap = NULL,
-                                                 labs = NULL,
-                                                 ...) {
-
+                                                     hline = NULL,
+                                                     pointrange = NULL,
+                                                     facet_wrap = NULL,
+                                                     labs = NULL,
+                                                     ...) {
   data <- as.data.frame(x)
   # Fix order so that it's plotted with sorted levels
   data$Level <- factor(data$Level, levels = sort(insight::to_numeric(unique(data$Level))))
@@ -43,7 +41,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
   # Main aesthetics -----------------
   color <- NULL
-  if(length(unique(data$Group)) > 1) color <- "Group"
+  if (length(unique(data$Group)) > 1) color <- "Group"
   y <- "Coefficient"
   x1 <- "Level"
 
@@ -59,7 +57,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
   layers[[paste0("l", l)]] <- list(geom = "coord_flip")
   l <- l + 1
   # Facet wrap
-  if(length(unique(data$Parameter)) > 1) {
+  if (length(unique(data$Parameter)) > 1) {
     layers[[paste0("l", l)]] <- .visualisation_random_facet_wrap(facet_wrap = facet_wrap)
     l <- l + 1
   }
@@ -79,7 +77,8 @@ visualisation_recipe.estimate_grouplevel <- function(x,
     geom = "hline",
     data = data,
     yintercept = 0,
-    linetype = "dashed")
+    linetype = "dashed"
+  )
 
   if (!is.null(hline)) out <- utils::modifyList(out, hline) # Update with additional args
   out

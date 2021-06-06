@@ -90,7 +90,7 @@ visualisation_recipe.estimate_means <- function(x,
     # Default changes for binomial models
     shape <- 16
     stroke <- 0
-    if(insight::model_info(info$model)$is_binomial) {
+    if (insight::model_info(info$model)$is_binomial) {
       shape <- "|"
       stroke <- 1
     }
@@ -206,8 +206,7 @@ visualisation_recipe.estimate_means <- function(x,
 # Layer - Labels --------------------------------------------------------------
 
 .visualisation_means_labs <- function(info, x1, y, labs = NULL) {
-
-  if(all(info$coef_name == "Probability")) {
+  if (all(info$coef_name == "Probability")) {
     title <- "Estimated Mean Probabilities"
   } else {
     title <- "Estimated Means"

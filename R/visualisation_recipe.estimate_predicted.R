@@ -143,7 +143,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     # Default changes for binomial models
     shape <- 16
     stroke <- 0
-    if(insight::model_info(info$model)$is_binomial && show_data %in% c("point", "points")) {
+    if (insight::model_info(info$model)$is_binomial && show_data %in% c("point", "points")) {
       shape <- "|"
       stroke <- 1
     }
@@ -184,8 +184,7 @@ visualisation_recipe.estimate_predicted <- function(x,
 # Layer - Points ------------------------------------------------------------
 
 .visualisation_predicted_points <- function(rawdata, x1, y, color, type = "point", shape = 16, stroke = 0, width = NULL, height = NULL, point = NULL) {
-
-  if(type == "points") type <- "point"  # Sanity fix
+  if (type == "points") type <- "point" # Sanity fix
 
   out <- list(
     data = as.data.frame(rawdata),
@@ -194,8 +193,8 @@ visualisation_recipe.estimate_predicted <- function(x,
     stroke = stroke,
     shape = shape
   )
-  if(!is.null(width)) out$width <- width
-  if(!is.null(height)) out$height <- height
+  if (!is.null(width)) out$width <- width
+  if (!is.null(height)) out$height <- height
   if (!is.null(point)) out <- utils::modifyList(out, point) # Update with additional args
   out
 }
@@ -216,7 +215,7 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 
 .visualisation_predicted_line <- function(data, info, x1, alpha, color, linetype, group = NULL, line = NULL) {
-  if(is.null(group)) group <- alpha
+  if (is.null(group)) group <- alpha
   if (!is.null(alpha) && !is.null(color)) {
     group <- paste0("interaction(", alpha, ", ", color, ")")
   }
