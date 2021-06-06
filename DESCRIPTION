@@ -33,14 +33,14 @@ License: GPL-3
 URL: https://easystats.github.io/modelbased/
 BugReports: https://github.com/easystats/modelbased/issues
 Imports:
-    bayestestR (>= 0.10.0),
     graphics,
-    insight (>= 0.14.1),
-    effectsize (>= 0.4.5),
-    parameters (>= 0.14.0),
-    performance,
     stats,
-    utils
+    utils,
+    bayestestR (>= 0.10.0),
+    effectsize (>= 0.4.5),
+    insight (>= 0.14.1),
+    parameters (>= 0.14.0),
+    performance
 Suggests:
     brms,
     coda,
