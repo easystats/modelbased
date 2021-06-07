@@ -24,9 +24,9 @@ reshape_grouplevel(x, indices = "all", ...)
 Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.
 }
 \examples{
+# lme4 model
 if (require("lme4") && require("see")) {
 
-  # Random intercept ------------
   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
   random <- estimate_grouplevel(model)
   random
@@ -45,5 +45,16 @@ if (require("lme4") && require("see")) {
 
   # Use summary() to remove duplicated rows
   summary(reshaped)
+
+  # Compute BLUPs
+  estimate_grouplevel(model, type = "total")
+}
+
+# Bayesian models
+\donttest{
+if (require("rstanarm")) {
+  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb), data = mtcars, refresh = 0)
+
+}
 }
 }

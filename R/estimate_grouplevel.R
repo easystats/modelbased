@@ -7,9 +7,9 @@
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @examples
+#' # lme4 model
 #' if (require("lme4") && require("see")) {
 #'
-#'   # Random intercept ------------
 #'   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
 #'   random <- estimate_grouplevel(model)
 #'   random
@@ -28,6 +28,17 @@
 #'
 #'   # Use summary() to remove duplicated rows
 #'   summary(reshaped)
+#'
+#'   # Compute BLUPs
+#'   estimate_grouplevel(model, type = "total")
+#' }
+#'
+#' # Bayesian models
+#' \donttest{
+#' if (require("rstanarm")) {
+#'   model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb), data = mtcars, refresh = 0)
+#'
+#' }
 #' }
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {

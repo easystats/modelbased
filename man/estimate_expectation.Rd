@@ -41,9 +41,12 @@ estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 
 \item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).}
 
-\item{ci}{The interval level (default \code{0.95}, i.e., 95\% CI).}
+\item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
 
-\item{keep_iterations}{Only relevant for Bayesian models, bootstrapped or simulated models. If \code{TRUE}, will keep all prediction iterations (draws). You can reshape them by running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named \code{iter_1, iter_2, ...}. You can reshape them to a long format by
+running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
