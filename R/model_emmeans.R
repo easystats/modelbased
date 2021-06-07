@@ -52,7 +52,7 @@ model_emmeans <- function(model,
   fixed <- c(args$fixed, args$modulate)
   fixed_vars <- .clean_argument(fixed)
 
-  # Remove factors from fixed
+  # Remove factors from fixed (separate fixed_vars and fixed_factors)
   fixed_factors <- NULL
   fixed_factors_vars <- NULL
   if (!is.null(fixed)) {
@@ -107,7 +107,6 @@ model_emmeans <- function(model,
 
   # Run emmeans
   means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)
-
   means
 }
 
