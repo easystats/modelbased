@@ -207,11 +207,14 @@
     </tr>
     <tr>
       <th>ci</th>
-      <td><p>The interval level (default <code>0.95</code>, i.e., 95% CI).</p></td>
+      <td><p>Uncertainty Interval (CI) level. Default to 95% (<code>0.95</code>).</p></td>
     </tr>
     <tr>
       <th>keep_iterations</th>
-      <td><p>Only relevant for Bayesian models, bootstrapped or simulated models. If <code>TRUE</code>, will keep all prediction iterations (draws). You can reshape them by running <code><a href='https://easystats.github.io/bayestestR/reference/reshape_iterations.html'>bayestestR::reshape_iterations()</a></code>.</p></td>
+      <td><p>If <code>TRUE</code>, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named <code>iter_1, iter_2, ...</code>. You can reshape them to a long format by
+running <code><a href='https://easystats.github.io/bayestestR/reference/reshape_iterations.html'>bayestestR::reshape_iterations()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
