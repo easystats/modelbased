@@ -76,7 +76,7 @@ estimate_contrasts <- function(model,
   insight::check_if_installed("emmeans")
 
   # Sanitize arguments
-  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
 
   # Run emmeans
   estimated <- model_emmeans(

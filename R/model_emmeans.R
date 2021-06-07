@@ -1,10 +1,10 @@
-#' Easy Creation of 'emmeans' Marginal Means Objects
+#' Easy Creation of 'emmeans' Objects
 #'
-#' The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()}, providing a somewhat simpler and smart API to find the variables of interest.
+#' The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler and smart API to find the variables of interest.
 #'
 #' @param model A statistical model.
 #' @param levels A character vector or formula specifying the names of the
-#'   predicting factors over which to estimate means or contrasts.
+#'   predicting factors over which to estimate the means, contrasts or slopes.
 #' @param fixed A character vector indicating the names of the predictors to be
 #'   "fixed" (i.e., maintained), so that the estimation is made at these values.
 #' @param modulate A character vector indicating the names of a numeric variable
@@ -19,6 +19,7 @@
 #'   expressed in log-odds (probabilities on logit scale) and \code{"response"}
 #'   in terms of probabilities.
 #' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
+#' @inheritParams parameters::model_parameters.default
 #'
 #' @return An \code{emmeans} object.
 #' @examples
@@ -40,7 +41,7 @@ model_emmeans <- function(model,
                           ...) {
 
   # Guess arguments
-  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   levels <- args$levels
 
   # check if available
@@ -118,8 +119,8 @@ model_emmeans <- function(model,
 
 #' @importFrom insight find_predictors get_data
 #' @keywords internal
-.guess_arguments <- function(model, levels = NULL, fixed = NULL, modulate = NULL) {
-  x <- .guess_arguments_levels(model, levels = levels)
+.guess_emmeans_arguments <- function(model, levels = NULL, fixed = NULL, modulate = NULL) {
+  x <- .guess_emmeans_levels(model, levels = levels)
   levels <- x$levels
 
   if (!is.null(fixed)) {
@@ -145,7 +146,7 @@ model_emmeans <- function(model,
 
 #' @importFrom utils tail
 #' @keywords internal
-.guess_arguments_levels <- function(model, levels = NULL) {
+.guess_emmeans_levels <- function(model, levels = NULL) {
 
   # Initialize a fixed part that might be modified below
   fixed <- NULL

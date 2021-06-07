@@ -3,13 +3,7 @@
 #' Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
 #' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
 #'
-#'
-#' @inheritParams estimate_contrasts
-#' @param trend A character vector indicating the name of the numeric variable
-#'   for which to compute the slopes.
-#' @param levels A character vector indicating the variables over which the
-#'   slope will be computed. If NULL (default), it will select all the remaining
-#'   predictors.
+#' @inheritParams model_emtrends
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -30,14 +24,11 @@ estimate_slopes <- function(model,
                             levels = NULL,
                             ci = 0.95,
                             ...) {
-  # check if available
-  insight::check_if_installed("emmeans")
 
-  # Guess specs arguments
-  args <- .estimate_slopes_guess_args(model, trend, levels, ...)
+  # Sanitize arguments
+  args <- .guess_emtrends_arguments(model, trend = trend, levels = levels)
 
-  # Run emtrends
-  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, ...)
+  estimated <- model_emtrends(model, trend = args$trend, levels = args$levels, ci = ci, ...)
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
@@ -73,37 +64,34 @@ estimate_slopes <- function(model,
 
 
 
+# DERIVATIVES -------------------------------------------------------------
 
 
-# Utilities ---------------------------------------------------------------
+# library(ggplot2)
+#
+#
+# model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+# model <- mgcv::gam(Petal.Length ~ s(Sepal.Width), data = iris)
+#
+# x <- modelbased::estimate_relation(model, length = 20)
+# plot(x)
+#
+# newdata <- as.data.frame(x[attributes(x)$target])
+#
+# # gratia
+# fd <- gratia::fderiv(model, newdata = newdata)
+# fd <- cbind(confint(fd, type = "confidence"), x = as.vector(fd[['eval']]))
+# fd <- cbind(confint(fd, type = "simultaneous"), x = as.vector(fd[['eval']]))
+#
+#
+# ggplot(fd, aes(x = Sepal.Width, y = est, group = term)) +
+#   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.3) +
+#   geom_line()  +
+#   geom_hline(yintercept = 0, linetype = "dashed")
 
 
-#' @keywords internal
-.estimate_slopes_guess_args <- function(model, trend, levels, ...) {
-  # Gather info
-  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
-  data <- insight::get_data(model)
 
-  # Guess arguments
-  if (is.null(trend)) {
-    trend <- predictors[sapply(data[predictors], is.numeric)][1]
-    if (!length(trend) || is.na(trend)) {
-      stop("Model contains no numeric predictor. Cannot estimate trend.")
-    }
-    message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
-  }
-  if (length(trend) > 1) {
-    message("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
-    trend <- trend[1]
-  }
 
-  if (is.null(levels)) {
-    levels <- predictors[!predictors %in% trend]
-  }
 
-  if (length(levels) == 0) {
-    stop("No suitable factor levels detected over which to estimate slopes.")
-  }
 
-  list(trend = trend, levels = levels)
-}
+

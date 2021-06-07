@@ -12,11 +12,10 @@ estimate_slopes(model, trend = NULL, levels = NULL, ci = 0.95, ...)
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
 
-\item{levels}{A character vector indicating the variables over which the
-slope will be computed. If NULL (default), it will select all the remaining
-predictors.}
+\item{levels}{A character vector or formula specifying the names of the
+predicting factors over which to estimate the means, contrasts or slopes.}
 
-\item{ci}{Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }

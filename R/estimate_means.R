@@ -4,7 +4,6 @@
 #' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams model_emmeans
-#' @param ci Uncertainty Interval (CI) level. Default to 95\% (\code{0.95}).
 #'
 #' @examples
 #' library(modelbased)
@@ -71,7 +70,7 @@ estimate_means <- function(model,
                            ...) {
 
   # Sanitize arguments
-  args <- .guess_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
 
   # Run emmeans
   estimated <- model_emmeans(
