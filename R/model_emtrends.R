@@ -33,10 +33,12 @@ model_emtrends <- function(model,
     for(i in args$modulate) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      args$levels[args$levels == i] <- var  # Overwrite the corresponding level
       values <- vizdata[[var]]
-
       cov.reduce[[var]] <- local({values; function(x) values})  # See #119
+
+      # Overwrite the corresponding names with clean names
+      args$levels[args$levels == i] <- var
+      args$modulate[args$modulate == i] <- var
     }
   }
 

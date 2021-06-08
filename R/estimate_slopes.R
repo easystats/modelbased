@@ -64,45 +64,4 @@ estimate_slopes <- function(model,
 }
 
 
-
-
-# DERIVATIVES -------------------------------------------------------------
-
-
-# library(ggplot2)
-#
-#
-# model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-# model <- mgcv::gam(Petal.Length ~ s(Sepal.Width), data = iris)
-#
-# x <- modelbased::estimate_relation(model, length = 20)
-# plot(x)
-#
-# newdata <- as.data.frame(x[attributes(x)$target])
-#
-# # gratia
-# fd <- gratia::fderiv(model, newdata = newdata)
-# fd <- cbind(confint(fd, type = "confidence"), x = as.vector(fd[['eval']]))
-# fd <- cbind(confint(fd, type = "simultaneous"), x = as.vector(fd[['eval']]))
-#
-#
-# ggplot(fd, aes(x = Sepal.Width, y = est, group = term)) +
-#   geom_ribbon(aes(ymin = lower, ymax = upper), alpha = 0.3) +
-#   geom_line()  +
-#   geom_hline(yintercept = 0, linetype = "dashed")
-
-
-# model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#
-# vizdata <- modelbased::estimate_relation(model, length = 20)
-#
-# plot(vizdata)
-#
-# cov.reduce <- list("Sepal.Width" = function(x) vizdata[["Sepal.Width"]])
-#
-# x <- emmeans::emtrends(model, ~Sepal.Width, "Sepal.Width", cov.reduce = cov.reduce)
-# emmeans::test(x)
-#
-
-
-
+# Add summary method that summarized by direction
