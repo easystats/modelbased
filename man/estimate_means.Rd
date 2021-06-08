@@ -18,7 +18,8 @@ estimate_means(
 \item{model}{A statistical model.}
 
 \item{levels}{A character vector or formula specifying the names of the
-predicting factors over which to estimate the means, contrasts or slopes.}
+factors over which levels to estimate the means, contrasts or slopes. If
+\code{NULL} (default), will automatically try to find it.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}

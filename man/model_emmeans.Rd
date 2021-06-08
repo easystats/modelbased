@@ -14,13 +14,14 @@ model_emmeans(
   ...
 )
 
-model_emtrends(model, trend = NULL, levels = NULL, ci = 0.95, ...)
+model_emtrends(model, trend = NULL, levels = NULL, modulate = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
 
 \item{levels}{A character vector or formula specifying the names of the
-predicting factors over which to estimate the means, contrasts or slopes.}
+factors over which levels to estimate the means, contrasts or slopes. If
+\code{NULL} (default), will automatically try to find it.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -42,8 +43,6 @@ in terms of probabilities.}
 
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
-
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 }
 \value{
 An \code{emmeans} object.
@@ -62,6 +61,10 @@ model_emmeans(model)
 # One can estimate marginal means at several values of a 'modulate' variable
 model_emmeans(model, modulate = "Petal.Width", length = 3)
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-model_emtrends(model)
 
+model_emtrends(model, levels = NULL)
+model_emtrends(model, levels = "Species")
+
+model <- lm(Sepal.Width ~ Petal.Length, data = iris)
+model_emtrends(model, modulate = "Petal.Length")
 }

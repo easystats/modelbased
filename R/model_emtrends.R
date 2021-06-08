@@ -4,24 +4,40 @@
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#' model_emtrends(model)
 #'
+#' model_emtrends(model, levels = NULL)
+#' model_emtrends(model, levels = "Species")
+#'
+#' model <- lm(Sepal.Width ~ Petal.Length, data = iris)
+#' model_emtrends(model, modulate = "Petal.Length")
 #' @export
 model_emtrends <- function(model,
                            trend = NULL,
                            levels = NULL,
-                           ci = 0.95,
+                           modulate = NULL,
                            ...) {
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emtrends_arguments(model, trend, levels, ...)
+  args <- .guess_emtrends_arguments(model, trend, levels, modulate, ...)
+
+  # Modulate
+  if(is.null(args$modulate)) {
+    cov.reduce <- TRUE
+  } else {
+    data <- insight::get_data(model)
+    cov.reduce <- list()
+    for(i in args$modulate) {
+      cov.reduce[[i]] <- function(x) visualisation_matrix(data[[i]], ...)
+    }
+  }
 
   # Run emtrends
-  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, ...)
+  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, cov.reduce = cov.reduce, ...)
 
+  attr(estimated, "args") <- args
   estimated
 }
 
@@ -36,9 +52,9 @@ model_emtrends <- function(model,
 
 
 #' @keywords internal
-.guess_emtrends_arguments <- function(model, trend = NULL, levels = NULL, ...) {
+.guess_emtrends_arguments <- function(model, trend = NULL, levels = NULL, modulate = NULL, ...) {
   # Gather info
-  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
+  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   data <- insight::get_data(model)
 
   # Guess arguments
@@ -54,13 +70,17 @@ model_emtrends <- function(model,
     trend <- trend[1]
   }
 
+  # Look if there are any factors
   if (is.null(levels)) {
-    levels <- predictors[!predictors %in% trend]
+    levels <- predictors[!sapply(data[predictors], is.numeric)]
   }
-
+  if (!is.null(modulate)) {
+    levels <- c(levels, modulate)
+  }
   if (length(levels) == 0) {
-    stop("No suitable factor levels detected over which to estimate slopes.")
+    levels <- predictors[predictors %in% trend][1]
   }
 
-  list(trend = trend, levels = levels)
+
+  list(trend = trend, levels = levels, modulate = modulate)
 }

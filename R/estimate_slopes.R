@@ -4,6 +4,7 @@
 #' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
 #'
 #' @inheritParams model_emtrends
+#' @inheritParams estimate_means
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -22,13 +23,13 @@
 estimate_slopes <- function(model,
                             trend = NULL,
                             levels = NULL,
+                            modulate = NULL,
                             ci = 0.95,
                             ...) {
 
   # Sanitize arguments
-  args <- .guess_emtrends_arguments(model, trend = trend, levels = levels)
-
-  estimated <- model_emtrends(model, trend = args$trend, levels = args$levels, ci = ci, ...)
+  estimated <- model_emtrends(model, trend, levels, modulate, ...)
+  args <- attributes(estimated)$args
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
@@ -54,6 +55,7 @@ estimate_slopes <- function(model,
   attr(trends, "ci") <- ci
   attr(trends, "levels") <- args$levels
   attr(trends, "trend") <- args$trend
+  attr(trends, "modulate") <- args$modulate
 
 
   # Output
@@ -90,8 +92,17 @@ estimate_slopes <- function(model,
 #   geom_hline(yintercept = 0, linetype = "dashed")
 
 
-
-
+# model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+#
+# vizdata <- modelbased::estimate_relation(model, length = 20)
+#
+# plot(vizdata)
+#
+# cov.reduce <- list("Sepal.Width" = function(x) vizdata[["Sepal.Width"]])
+#
+# x <- emmeans::emtrends(model, ~Sepal.Width, "Sepal.Width", cov.reduce = cov.reduce)
+# emmeans::test(x)
+#
 
 
 

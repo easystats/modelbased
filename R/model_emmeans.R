@@ -4,7 +4,8 @@
 #'
 #' @param model A statistical model.
 #' @param levels A character vector or formula specifying the names of the
-#'   predicting factors over which to estimate the means, contrasts or slopes.
+#'   factors over which levels to estimate the means, contrasts or slopes. If
+#'   \code{NULL} (default), will automatically try to find it.
 #' @param fixed A character vector indicating the names of the predictors to be
 #'   "fixed" (i.e., maintained), so that the estimation is made at these values.
 #' @param modulate A character vector indicating the names of a numeric variable
@@ -19,7 +20,6 @@
 #'   expressed in log-odds (probabilities on logit scale) and \code{"response"}
 #'   in terms of probabilities.
 #' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
-#' @inheritParams parameters::model_parameters.default
 #'
 #' @return An \code{emmeans} object.
 #' @examples
@@ -40,12 +40,12 @@ model_emmeans <- function(model,
                           transform = "response",
                           ...) {
 
+  # check if available
+  insight::check_if_installed("emmeans")
+
   # Guess arguments
   args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
   levels <- args$levels
-
-  # check if available
-  insight::check_if_installed("emmeans")
 
   data <- insight::get_data(model)
 
@@ -108,6 +108,7 @@ model_emmeans <- function(model,
 
   # Run emmeans
   means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)
+  attr(means, "args") <- args
   means
 }
 
@@ -157,7 +158,7 @@ model_emmeans <- function(model,
     levels <- levels[!sapply(insight::get_data(model)[levels], is.numeric)]
 
     # If levels is formula
-  } else if (class(levels) == "formula") {
+  } else if (inherits(levels, "formula")) {
 
     # Transform to string and keep predictors
     levels <- as.character(utils::tail(as.list(levels), 1))

@@ -4,7 +4,14 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, levels = NULL, ci = 0.95, ...)
+estimate_slopes(
+  model,
+  trend = NULL,
+  levels = NULL,
+  modulate = NULL,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -13,7 +20,13 @@ estimate_slopes(model, trend = NULL, levels = NULL, ci = 0.95, ...)
 for which to compute the slopes.}
 
 \item{levels}{A character vector or formula specifying the names of the
-predicting factors over which to estimate the means, contrasts or slopes.}
+factors over which levels to estimate the means, contrasts or slopes. If
+\code{NULL} (default), will automatically try to find it.}
+
+\item{modulate}{A character vector indicating the names of a numeric variable
+along which the means or the contrasts will be estimated. Other arguments
+from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
+number of data points.}
 
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 

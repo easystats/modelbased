@@ -4,6 +4,7 @@
 #' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams model_emmeans
+#' @inheritParams parameters::model_parameters.default
 #'
 #' @examples
 #' library(modelbased)
@@ -69,18 +70,9 @@ estimate_means <- function(model,
                            ci = 0.95,
                            ...) {
 
-  # Sanitize arguments
-  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-
   # Run emmeans
-  estimated <- model_emmeans(
-    model,
-    levels = args$levels,
-    fixed = args$fixed,
-    modulate = args$modulate,
-    transform = transform,
-    ...
-  )
+  estimated <- model_emmeans(model, levels, fixed, modulate, transform = transform, ...)
+  args <- attributes(estimated)$args
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {

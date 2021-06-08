@@ -72,23 +72,9 @@ estimate_contrasts <- function(model,
                                adjust = "holm",
                                ...) {
 
-  # check if available
-  insight::check_if_installed("emmeans")
-
-  # Sanitize arguments
-  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
-
   # Run emmeans
-  estimated <- model_emmeans(
-    model,
-    levels = args$levels,
-    fixed = args$fixed,
-    modulate = args$modulate,
-    transform = transform,
-    ...
-  )
-
-
+  estimated <- model_emmeans(model, levels, fixed, modulate, transform = transform, ...)
+  args <- attributes(estimated)$args
 
   # Compute pairwise contrasts
   estimated <- emmeans::contrast(estimated,
