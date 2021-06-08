@@ -17,3 +17,6 @@ plot.estimate_means <- plot.estimate_predicted
 
 #' @export
 plot.estimate_grouplevel <- plot.estimate_predicted
+
+#' @export
+plot.estimate_slopes <- plot.estimate_predicted

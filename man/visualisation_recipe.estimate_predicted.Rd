@@ -232,9 +232,9 @@ if (require("ggplot2")) {
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
   x <- estimate_slopes(model, modulate = "Sepal.Width", length = 20)
-  plot(visualisation_recipe(x, line = list(group = "Confidence")))
+  plot(visualisation_recipe(x))
 
-  model <- lm(Sepal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
+  model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
   x <- estimate_slopes(model, modulate = "Sepal.Width", levels = "Species")
   plot(visualisation_recipe(x))
 

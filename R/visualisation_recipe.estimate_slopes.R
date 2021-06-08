@@ -16,7 +16,7 @@
 #'   x <- estimate_slopes(model, modulate = "Sepal.Width", length = 20)
 #'   plot(visualisation_recipe(x))
 #'
-#'   model <- lm(Sepal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
+#'   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 #'   x <- estimate_slopes(model, modulate = "Sepal.Width", levels = "Species")
 #'   plot(visualisation_recipe(x))
 #'
@@ -35,25 +35,30 @@ visualisation_recipe.estimate_slopes <- function(x,
   # Main aesthetics -----------------
   data <- as.data.frame(x)
   data$Confidence <- ifelse((data$CI_high < 0 & data$CI_low < 0) | (data$CI_high > 0 & data$CI_low > 0), "Significant", "Uncertain")
+  data$Confidence <- factor(data$Confidence, levels = c("Uncertain", "Significant"))
 
   y <- info$trend
-  color <- NULL
+  color <- "Confidence"
   fill <- NULL
+  group <- NULL
+  alpha <- NULL
 
   if(is.null(info$modulate)) {
     x1 <- info$levels[1]
     if(length(info$levels) > 1) {
       warning("Cannot deal with more than 2 'levels' variables for now. Other ones will be omitted.")
     }
-    color <- "Confidence"
   } else {
     x1 <- info$modulate[1]
+    group <- 1
     if(length(info$modulate) > 1) {
       warning("Cannot deal with more than 2 'modulate' variables for now. Other ones will be omitted.")
     }
     if(!is.null(info$levels)) {
       color <- info$levels[1]
       fill <- info$levels[1]
+      group <- info$levels[1]
+      alpha <- "Confidence"
     }
   }
 
@@ -76,7 +81,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   } else if(x1 == info$modulate[1]) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon)
     l <- l + 1
-    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, line = line)
+    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group, alpha, line = line)
     l <- l + 1
   }
 
@@ -95,14 +100,16 @@ visualisation_recipe.estimate_slopes <- function(x,
 # Layer - Lines -------------------------------------------------------------
 
 
-.visualisation_slopes_line <- function(data, x1, color, line = NULL) {
+.visualisation_slopes_line <- function(data, x1, color, group, alpha, line = NULL) {
   out <- list(
     data = data,
     geom = "line",
     aes = list(
       y = "Coefficient",
       x = x1,
-      color = color
+      color = color,
+      group = group,
+      alpha = alpha
     )
   )
   if (!is.null(line)) out <- utils::modifyList(out, line) # Update with additional args
