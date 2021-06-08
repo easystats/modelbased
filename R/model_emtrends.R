@@ -33,7 +33,10 @@ model_emtrends <- function(model,
     for(i in args$modulate) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      cov.reduce[[var]] <- function(x) vizdata[[var]]
+
+      fix_values <- function(value) {force(value); function() {value}}
+
+      cov.reduce[[var]] <- fix_values(vizdata[[var]])
     }
   }
 
