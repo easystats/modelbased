@@ -36,19 +36,12 @@ number of data points.}
 A data.frame.
 }
 \description{
-Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
-related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
+Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels or alongside a numeric variable. See also other related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
 }
 \examples{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-slopes <- estimate_slopes(model, trend = "Petal.Length")
+slopes <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
 slopes
 effectsize::standardize(slopes)
-\dontrun{
-if (require("rstanarm")) {
-  model <- stan_glm(Sepal.Width ~ Species * Petal.Length, data = iris, refresh = 0)
-  estimate_slopes(model)
-}
-}
 
 }

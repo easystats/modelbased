@@ -48,6 +48,7 @@
   hline = NULL,
   line = NULL,
   pointrange = NULL,
+  ribbon = NULL,
   labs = NULL,
   ...
 )
@@ -223,11 +224,19 @@ if (require("ggplot2") && require("rstanarm")) {
 # ==============================================
 if (require("ggplot2")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-  x <- estimate_slopes(model, levels = "Species", trend = "Petal.Length")
+  x <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
 
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
+
+  model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+  x <- estimate_slopes(model, modulate = "Sepal.Width", length = 20)
+  plot(visualisation_recipe(x, line = list(group = "Confidence")))
+
+  model <- lm(Sepal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
+  x <- estimate_slopes(model, modulate = "Sepal.Width", levels = "Species")
+  plot(visualisation_recipe(x))
 
 }
 }

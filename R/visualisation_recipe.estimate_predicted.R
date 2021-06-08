@@ -188,7 +188,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     if("iter_1" %in% names(data)) {
       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
     } else {
-      layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, fill = color, ribbon = ribbon)
+      layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ribbon = ribbon)
     }
     l <- l + 1
   }
@@ -265,12 +265,12 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Ribbon -------------------------------------------------------------
 
-.visualisation_predicted_ribbon <- function(data, x1, fill, ribbon = NULL) {
+.visualisation_predicted_ribbon <- function(data, x1, y, fill, ribbon = NULL) {
   out <- list(
     geom = "ribbon",
     data = data,
     aes = list(
-      y = "Predicted",
+      y = y,
       x = x1,
       ymin = "CI_low",
       ymax = "CI_high",

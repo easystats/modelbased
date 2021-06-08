@@ -5,7 +5,9 @@
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
+#' model_emtrends(model)
 #' model_emtrends(model, levels = "Species")
+#' model_emtrends(model, modulate = "Petal.Length")
 #' model_emtrends(model, levels = "Species", modulate = "Petal.Length")
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
@@ -37,13 +39,12 @@ model_emtrends <- function(model,
       cov.reduce[[var]] <- local({values; function(x) values})  # See #119
 
       # Overwrite the corresponding names with clean names
-      args$levels[args$levels == i] <- var
       args$modulate[args$modulate == i] <- var
     }
   }
 
   # Run emtrends
-  estimated <- emmeans::emtrends(model, args$levels, var = args$trend, cov.reduce = cov.reduce, ...)
+  estimated <- emmeans::emtrends(model, c(args$levels, args$modulate), var = args$trend, cov.reduce = cov.reduce, ...)
 
   attr(estimated, "args") <- args
   estimated
@@ -79,16 +80,13 @@ model_emtrends <- function(model,
   }
 
   # Look if there are any factors
-  if (is.null(levels)) {
+  if (is.null(levels) && is.null(modulate)) {
     levels <- predictors[!sapply(data[predictors], is.numeric)]
+    if(length(levels) == 0) levels <- NULL
   }
-  if (!is.null(modulate)) {
-    levels <- c(levels, modulate)
-  }
-  if (length(levels) == 0) {
+  if (is.null(levels) && is.null(modulate)) {
     levels <- predictors[predictors %in% trend][1]
   }
-
 
   list(trend = trend, levels = levels, modulate = modulate)
 }
