@@ -281,22 +281,8 @@ for which to compute the slopes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 <span class='r-in'></span>
-<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span><span class='op'>)</span></span>
-<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>  Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.00             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.66             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.31             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.97             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          3.62             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.28             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.93             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          5.59             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.24             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.90             -0.106 0.0183 148   -0.142  -0.0695</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span>, <span class='fl'>4</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># model_emtrends(model, modulate = "Sepal.Width")</span></span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
