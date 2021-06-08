@@ -132,6 +132,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
 
   # Attributes
   attr(targets, "adjusted_for") <- ifelse(length(rest_vars) >= 1, rest_vars, NA)
+  attr(targets, "target_specs") <- specs
   attr(targets, "target") <- target
   attr(targets, "preserve_range") <- preserve_range
   attr(targets, "reference") <- reference

@@ -8,8 +8,8 @@
 #' model_emtrends(model, levels = NULL)
 #' model_emtrends(model, levels = "Species")
 #'
-#' model <- lm(Sepal.Width ~ Petal.Length, data = iris)
-#' model_emtrends(model, modulate = "Petal.Length")
+#' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+#' # model_emtrends(model, modulate = "Sepal.Width")
 #' @export
 model_emtrends <- function(model,
                            trend = NULL,
@@ -27,10 +27,13 @@ model_emtrends <- function(model,
   if(is.null(args$modulate)) {
     cov.reduce <- TRUE
   } else {
-    data <- insight::get_data(model)
     cov.reduce <- list()
+    data <- insight::get_data(model)
+
     for(i in args$modulate) {
-      cov.reduce[[i]] <- function(x) visualisation_matrix(data[[i]], ...)
+      vizdata <- visualisation_matrix(data, target = i, ...)
+      var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
+      cov.reduce[[var]] <- function(x) vizdata[[var]]
     }
   }
 
