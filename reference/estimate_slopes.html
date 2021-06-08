@@ -168,7 +168,14 @@ related functions such as estimate_contrasts and estimate_means." />
 related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and <code><a href='estimate_means.html'>estimate_means</a></code>.</p>
     </div>
 
-    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_slopes</span><span class='op'>(</span><span class='va'>model</span>, trend <span class='op'>=</span> <span class='cn'>NULL</span>, levels <span class='op'>=</span> <span class='cn'>NULL</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+    <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_slopes</span><span class='op'>(</span>
+  <span class='va'>model</span>,
+  trend <span class='op'>=</span> <span class='cn'>NULL</span>,
+  levels <span class='op'>=</span> <span class='cn'>NULL</span>,
+  modulate <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ci <span class='op'>=</span> <span class='fl'>0.95</span>,
+  <span class='va'>...</span>
+<span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,7 +192,15 @@ for which to compute the slopes.</p></td>
     <tr>
       <th>levels</th>
       <td><p>A character vector or formula specifying the names of the
-predicting factors over which to estimate the means, contrasts or slopes.</p></td>
+factors over which levels to estimate the means, contrasts or slopes. If
+<code>NULL</code> (default), will automatically try to find it.</p></td>
+    </tr>
+    <tr>
+      <th>modulate</th>
+      <td><p>A character vector indicating the names of a numeric variable
+along which the means or the contrasts will be estimated. Other arguments
+from <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>, such as <code>length</code> to adjust the
+number of data points.</p></td>
     </tr>
     <tr>
       <th>ci</th>

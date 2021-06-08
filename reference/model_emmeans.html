@@ -175,7 +175,7 @@
   <span class='va'>...</span>
 <span class='op'>)</span>
 
-<span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, trend <span class='op'>=</span> <span class='cn'>NULL</span>, levels <span class='op'>=</span> <span class='cn'>NULL</span>, ci <span class='op'>=</span> <span class='fl'>0.95</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
+<span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, trend <span class='op'>=</span> <span class='cn'>NULL</span>, levels <span class='op'>=</span> <span class='cn'>NULL</span>, modulate <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></code></pre></div>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -187,7 +187,8 @@
     <tr>
       <th>levels</th>
       <td><p>A character vector or formula specifying the names of the
-predicting factors over which to estimate the means, contrasts or slopes.</p></td>
+factors over which levels to estimate the means, contrasts or slopes. If
+<code>NULL</code> (default), will automatically try to find it.</p></td>
     </tr>
     <tr>
       <th>fixed</th>
@@ -219,10 +220,6 @@ in terms of probabilities.</p></td>
       <th>trend</th>
       <td><p>A character vector indicating the name of the numeric variable
 for which to compute the slopes.</p></td>
-    </tr>
-    <tr>
-      <th>ci</th>
-      <td><p>Confidence Interval (CI) level. Default to 0.95 (95%).</p></td>
     </tr>
     </table>
 
@@ -266,7 +263,16 @@ for which to compute the slopes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 <span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Species    Petal.Length.trend     SE  df lower.CL upper.CL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa                  0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica               0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  Species    Petal.Length.trend     SE  df lower.CL upper.CL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa                  0.388 0.2602 144  -0.1264    0.902</span>
@@ -275,6 +281,22 @@ for which to compute the slopes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 <span class='r-in'></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.00             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.66             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.31             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.97             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3.62             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.28             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.93             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          5.59             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.24             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.90             -0.106 0.0183 148   -0.142  -0.0695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
