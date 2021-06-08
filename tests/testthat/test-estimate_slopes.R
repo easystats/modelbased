@@ -8,8 +8,11 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_slopes(model, levels = "Species")
     expect_equal(dim(estim), c(3, 9))
 
-    # estim <- estimate_slopes(model, levels = "Petal.Length", modulate = "Petal.Length")
-    # expect_equal(dim(estim), c(3, 9))
+    estim <- estimate_slopes(model, levels = "Petal.Length", modulate = "Petal.Length")
+    expect_equal(dim(estim), c(10, 9))
+
+    estim <- estimate_slopes(model, levels = "Species", modulate = "Petal.Length")
+    expect_equal(dim(estim), c(30, 10))
 
     model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 

@@ -1,4 +1,4 @@
-#' @rdname visualisation_recipe
+#' @rdname visualisation_recipe.estimate_predicted
 #'
 #' @examples
 #' # ==============================================

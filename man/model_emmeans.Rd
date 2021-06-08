@@ -62,9 +62,9 @@ model_emmeans(model)
 model_emmeans(model, modulate = "Petal.Width", length = 3)
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-model_emtrends(model, levels = NULL)
 model_emtrends(model, levels = "Species")
+model_emtrends(model, levels = "Species", modulate = "Petal.Length")
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-# model_emtrends(model, modulate = "Sepal.Width")
+model_emtrends(model, modulate = "Sepal.Width")
 }

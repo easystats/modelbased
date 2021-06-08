@@ -5,8 +5,8 @@
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#' model_emtrends(model, levels = NULL)
 #' model_emtrends(model, levels = "Species")
+#' model_emtrends(model, levels = "Species", modulate = "Petal.Length")
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 #' model_emtrends(model, modulate = "Sepal.Width")
@@ -33,9 +33,10 @@ model_emtrends <- function(model,
     for(i in args$modulate) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
+      args$levels[args$levels == i] <- var  # Overwrite the corresponding level
       values <- vizdata[[var]]
-      cov.reduce[[var]] <- local({values; function(x) values})
-      args$levels[args$levels == i] <- var
+
+      cov.reduce[[var]] <- local({values; function(x) values})  # See #119
     }
   }
 
