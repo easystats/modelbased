@@ -123,6 +123,9 @@
       <a href="../articles/estimate_contrasts.html">Contrast analysis</a>
     </li>
     <li>
+      <a href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
+    </li>
+    <li>
       <a href="../articles/estimate_response.html">Use a model to make predictions</a>
     </li>
     <li>
@@ -377,13 +380,11 @@
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_expectation.html'>estimate_relation</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/glm.html'>glm</a></span><span class='op'>(</span><span class='va'>vs</span> <span class='op'>~</span> <span class='va'>mpg</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, family <span class='op'>=</span> <span class='st'>"binomial"</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='visualisation_recipe.html'>visualisation_recipe</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='visualisation_recipe.html'>visualisation_recipe</a></span><span class='op'>(</span><span class='va'>x</span>, show_data <span class='op'>=</span> <span class='st'>"jitter"</span>, point <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>height <span class='op'>=</span> <span class='fl'>0.03</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-plt'><img src='visualisation_recipe.estimate_predicted-3.png' alt='' width='700' height='433' /></span>
 <span class='r-in'><span class='co'># \donttest{</span></span>
 <span class='r-in'><span class='co'># Bayesian models ---------------------</span></span>
 <span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://ggplot2.tidyverse.org'>"ggplot2"</a></span><span class='op'>)</span> <span class='op'>&amp;&amp;</span> <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'></span>
 <span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>rstanarm</span><span class='fu'>::</span><span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span>, data <span class='op'>=</span> <span class='va'>mtcars</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
 <span class='r-in'></span>
 <span class='r-in'>  <span class='co'># Plot individual draws instead of regular ribbon</span></span>
@@ -414,7 +415,6 @@
 <span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span>, <span class='fl'>3</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='estimate_slopes.html'>estimate_slopes</a></span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Sepal.Width"</span>, levels <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span></span>
 <span class='r-in'>  <span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='fu'><a href='visualisation_recipe.html'>visualisation_recipe</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'></span>
 <span class='r-in'><span class='op'>}</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
