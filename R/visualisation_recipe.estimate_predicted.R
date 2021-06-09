@@ -160,15 +160,17 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Points
   if (!is.null(show_data) && all(show_data != "none")) {
 
+    rawdata <- .visualisation_recipe_getrawdata(x)
+
     # Default changes for binomial models
     shape <- 16
     stroke <- 0
     if (insight::model_info(info$model)$is_binomial && show_data %in% c("point", "points")) {
       shape <- "|"
       stroke <- 1
+      # TODO: adjust in the case of non 0-1 rawdata[[y]]
     }
 
-    rawdata <- .visualisation_recipe_getrawdata(x)
     for (i in show_data) {
       if (i %in% c("point", "points", "jitter")) {
         layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, shape = shape, stroke = stroke, type = i, point = point)
