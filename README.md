@@ -60,10 +60,16 @@ check-out these vignettes:
     means**](https://easystats.github.io/modelbased/articles/estimate_means.html)
 -   [**Contrast
     analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
+-   [**Marginal
+    effects**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
 -   [**Use a model to make
     predictions**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 -   [**Describe non-linear
     curves**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
+-   [**Estimate and re-use random
+    effects**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
+-   [**The modelisation
+    approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
 # Features
 
@@ -75,11 +81,9 @@ The package is built around 5 main functions:
     Estimates and tests contrasts between different factor levels
 -   [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html):
     Estimates the slopes of numeric predictors at different factor
-    levels
+    levels or alongside a numeric predictor
 -   [`estimate_response()`](https://easystats.github.io/modelbased/articles/estimate_response.html):
     Predict the response variable using the model
--   [`describe_nonlinear()`](https://easystats.github.io/modelbased/reference/describe_nonlinear.html):
-    Describes a non-linear term (*e.g.* in GAMs) by its linear parts
 
 These functions are powered by the
 [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html)
@@ -356,6 +360,34 @@ modelbased::estimate_grouplevel(model)
 
 <!-- TODO: add plotting example once 'see' on cran -->
 
+## Estimate derivative of non-linear relationships (e.g., in GAMs)
+
+-   **Problem**: You model a non-linear relationship using polynomials,
+    splines or GAMs. You want to know which parts of the curve are
+    significant positive or negative trends.
+-   **Solution**: You can estimate the *derivative* of smooth using
+    `estimate_slopes`.
+
+Check-out [**this
+vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
+for a detailed walkthrough on *marginal effects*.
+
+``` r
+# Fit a non-linear General Additive Model (GAM)
+model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
+
+# 1. Compute derivatives
+deriv <- estimate_slopes(model, 
+                         trend = "Petal.Length", 
+                         modulate = "Petal.Length",
+                         length = 30)
+
+# 2. Visualise
+plot(deriv)
+```
+
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
+
 ## Describe the smooth term by its linear parts
 
 -   **Problem**: You model a non-linear relationship using polynomials,
@@ -384,7 +416,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/unnamed-chunk-13-1.png)<!-- -->
 
 ``` r
 
