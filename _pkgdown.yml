@@ -23,6 +23,7 @@ reference:
 - title: "Data grids and Visualisation"
   contents:
   - visualisation_matrix
+  - visualisation_recipe.estimate_predicted
   - visualisation_recipe
 - title: "Miscellaenous"
   contents:
