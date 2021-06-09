@@ -72,4 +72,3 @@ plot.visualisation_recipe <- function(x, ...) {
   ggplot2::ggplot(data = attributes(x)$data) +
     see::geoms_from_list(x, ...)
 }
-

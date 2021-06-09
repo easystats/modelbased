@@ -1,0 +1,41 @@
+---
+title: "Marginal effects and derivatives"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    fig_width: 10.08
+    fig_height: 6
+tags: [r, estimate, estimate slopes, marginal effects]
+vignette: >
+  %\VignetteIndexEntry{Estimate marginal effects and derivatives}
+  \usepackage[utf8]{inputenc}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+bibliography: bibliography.bib
+---
+
+```{r message=FALSE, warning=FALSE, include=FALSE}
+library(knitr)
+options(knitr.kable.NA = "")
+knitr::opts_chunk$set(comment = ">", dpi = 450)
+options(digits = 2)
+
+if (!requireNamespace("ggplot2", quietly = TRUE) ||
+  !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("gganimate", quietly = TRUE) ||
+  !requireNamespace("rstanarm", quietly = TRUE) ||
+  !requireNamespace("dplyr", quietly = TRUE)) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+
+set.seed(333)
+```
+
+This vignette will present how to estimate marginal effects and derivatives using
+`estimate_slopes()`.
+
+**Marginal means *vs.* Marginal effects**. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they are eventually "average over" other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable (i.e., the y-axis is the outcome variable, which allows you to say for instance "the average reaction time in the C1 condition is 1366 ms"), marginal effects return averages of coefficients (i.e., the y-axis is the effect/slope/beta of a given numeric predictor).
+
+# References
+

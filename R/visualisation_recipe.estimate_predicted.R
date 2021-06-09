@@ -76,12 +76,10 @@
 #'   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
 #'   plot(visualisation_recipe(x))
 #'   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
-#'
 #' }
 #' \donttest{
 #' # Bayesian models ---------------------
 #' if (require("ggplot2") && require("rstanarm")) {
-#'
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
 #'
 #'   # Plot individual draws instead of regular ribbon
@@ -184,8 +182,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   }
 
   # Uncertainty
-  if (is.null(alpha) && is.null(linetype)) {  # If interaction, omit uncertainty
-    if("iter_1" %in% names(data)) {
+  if (is.null(alpha) && is.null(linetype)) { # If interaction, omit uncertainty
+    if ("iter_1" %in% names(data)) {
       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
     } else {
       layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ribbon = ribbon)
@@ -285,13 +283,12 @@ visualisation_recipe.estimate_predicted <- function(x,
 # Layer - Ribbon -------------------------------------------------------------
 
 .visualisation_predicted_iterations <- function(data, x1, fill, ribbon = NULL) {
-
   data <- bayestestR::reshape_iterations(data)
 
   # Decrease alpha depending on number of iterations
   alpha <- 1 / exp(log(max(data$iter_group), base = 6))
 
-  if(!is.null(fill)) {
+  if (!is.null(fill)) {
     data$iter_group <- paste0(data$iter_group, data[[fill]])
   }
 

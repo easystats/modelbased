@@ -9,7 +9,6 @@
 #' @examples
 #' # lme4 model
 #' if (require("lme4") && require("see")) {
-#'
 #'   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
 #'   random <- estimate_grouplevel(model)
 #'   random
@@ -37,7 +36,6 @@
 #' \donttest{
 #' if (require("rstanarm")) {
 #'   model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb), data = mtcars, refresh = 0)
-#'
 #' }
 #' }
 #' @export
@@ -89,6 +87,4 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 .estimate_grouplevel_bayesian <- function(model, type = "random", ...) {
   param_names <- insight::clean_parameters(model)
   posteriors <- insight::get_parameters(model, effects = "all", component = "all", ...)
-
-
 }

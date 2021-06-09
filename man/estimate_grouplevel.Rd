@@ -26,7 +26,6 @@ Extract random parameters of each individual group in the context of mixed model
 \examples{
 # lme4 model
 if (require("lme4") && require("see")) {
-
   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
   random <- estimate_grouplevel(model)
   random
@@ -54,7 +53,6 @@ if (require("lme4") && require("see")) {
 \donttest{
 if (require("rstanarm")) {
   model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb), data = mtcars, refresh = 0)
-
 }
 }
 }

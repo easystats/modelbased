@@ -9,8 +9,15 @@
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' slopes <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
 #' slopes
+#' plot(slopes)
 #' effectsize::standardize(slopes)
 #'
+#' if (require("mgcv")) {
+#'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
+#'   slopes <- estimate_slopes(model, modulate = "Petal.Length", length = 30)
+#'   summary(slopes)
+#'   plot(slopes)
+#' }
 #' @return A data.frame.
 #' @export
 estimate_slopes <- function(model,
@@ -57,4 +64,74 @@ estimate_slopes <- function(model,
 }
 
 
-# Add summary method that summarized by direction
+# Summary Method ----------------------------------------------------------
+
+
+#' @export
+summary.estimate_slopes <- function(object, ...) {
+  object$Confidence <- .estimate_slopes_sig(object, ...)
+
+  vars <- c(attributes(object)$levels, attributes(object)$modulate)
+
+  # TODO: deal with factors (group by levels)
+
+  # Loop through groups of "significance"
+  groups <- list()
+  group <- object[1, ] # First row
+  for (i in 2:nrow(object)) {
+    if (object$Confidence[i] == object$Confidence[i - 1]) {
+      group <- rbind(group, object[i, ])
+    } else {
+      groups[[length(groups) + 1]] <- group # Store current group
+      group <- object[i, ] # reset
+    }
+  }
+  # Summarize
+  groups <- lapply(groups, function(x) {
+    out <- data.frame(Confidence = unique(x$Confidence))
+
+    for (var in vars) {
+      if (is.numeric(object[[var]])) {
+        out[[paste0(var, "_Min")]] <- min(x[[var]], na.rm = TRUE)
+        out[[paste0(var, "_Max")]] <- max(x[[var]], na.rm = TRUE)
+      } else {
+        out[[var]] <- paste0(unique(x[[var]]), collapse = ", ")
+      }
+    }
+
+    out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
+    out$SE_Mean <- mean(x$SE, na.rm = TRUE)
+    out
+  })
+
+  groups <- do.call(rbind, groups)
+  groups
+}
+
+
+
+# Utilities ---------------------------------------------------------------
+
+.estimate_slopes_sig <- function(x, confidence = "auto", ...) {
+  if (confidence == "auto") {
+    # TODO: make sure all of these work
+    if ("BF" %in% names(x)) confidence <- "BF"
+    if ("p" %in% names(x)) confidence <- "p"
+    if ("pd" %in% names(x)) confidence <- "pd"
+  }
+
+
+
+  if (confidence == "p") {
+    sig <- tools::toTitleCase(effectsize::interpret_p(x$p, ...))
+  } else if (confidence == "BF") {
+    sig <- tools::toTitleCase(effectsize::interpret_bf(x$BF, ...))
+  } else if (confidence == "pd") {
+    sig <- tools::toTitleCase(effectsize::interpret_pd(x$pd, ...))
+  } else {
+    # Based on CI
+    sig <- ifelse((x$CI_high < 0 & x$CI_low < 0) | (x$CI_high > 0 & x$CI_low > 0), "Significant", "Uncertain")
+    sig <- factor(sig, levels = c("Uncertain", "Significant"))
+  }
+  sig
+}

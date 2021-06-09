@@ -42,6 +42,13 @@ Estimate the slopes (i.e., the coefficient) of a predictor over different factor
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 slopes <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
 slopes
+plot(slopes)
 effectsize::standardize(slopes)
 
+if (require("mgcv")) {
+  model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
+  slopes <- estimate_slopes(model, modulate = "Petal.Length", length = 30)
+  summary(slopes)
+  plot(slopes)
+}
 }

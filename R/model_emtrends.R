@@ -26,17 +26,20 @@ model_emtrends <- function(model,
   args <- .guess_emtrends_arguments(model, trend, levels, modulate, ...)
 
   # Modulate
-  if(is.null(args$modulate)) {
+  if (is.null(args$modulate)) {
     cov.reduce <- TRUE
   } else {
     cov.reduce <- list()
     data <- insight::get_data(model)
 
-    for(i in args$modulate) {
+    for (i in args$modulate) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
       values <- vizdata[[var]]
-      cov.reduce[[var]] <- local({values; function(x) values})  # See #119
+      cov.reduce[[var]] <- local({
+        values
+        function(x) values
+      }) # See #119
 
       # Overwrite the corresponding names with clean names
       args$modulate[args$modulate == i] <- var
@@ -82,7 +85,7 @@ model_emtrends <- function(model,
   # Look if there are any factors
   if (is.null(levels) && is.null(modulate)) {
     levels <- predictors[!sapply(data[predictors], is.numeric)]
-    if(length(levels) == 0) levels <- NULL
+    if (length(levels) == 0) levels <- NULL
   }
   if (is.null(levels) && is.null(modulate)) {
     levels <- predictors[predictors %in% trend][1]

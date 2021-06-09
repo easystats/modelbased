@@ -51,6 +51,8 @@ navbar:
         href: articles/estimate_means.html
       - text: 'Contrast analysis'
         href: articles/estimate_contrasts.html
+      - text: 'Marginal effects and derivatives'
+        href: articles/estimate_slopes.html
       - text: 'Use a model to make predictions'
         href: articles/estimate_response.html
       - text: 'Describe non-linear curves'
