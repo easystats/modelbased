@@ -147,8 +147,11 @@
 <li><a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html" class="external-link"><strong>Visualisation matrix</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html" class="external-link"><strong>Marginal means</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html" class="external-link"><strong>Contrast analysis</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html" class="external-link"><strong>Marginal effects</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><strong>Use a model to make predictions</strong></a></li>
 <li><a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html" class="external-link"><strong>Describe non-linear curves</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_grouplevel.html" class="external-link"><strong>Estimate and re-use random effects</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html" class="external-link"><strong>The modelisation approach</strong></a></li>
 </ul>
 </div>
 </div>
@@ -162,11 +165,9 @@
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html" class="external-link"><code>estimate_contrasts()</code></a>: Estimates and tests contrasts between different factor levels</li>
 <li>
-<a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html" class="external-link"><code>estimate_slopes()</code></a>: Estimates the slopes of numeric predictors at different factor levels</li>
+<a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html" class="external-link"><code>estimate_slopes()</code></a>: Estimates the slopes of numeric predictors at different factor levels or alongside a numeric predictor</li>
 <li>
 <a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
-<li>
-<a href="https://easystats.github.io/modelbased/reference/describe_nonlinear.html" class="external-link"><code>describe_nonlinear()</code></a>: Describes a non-linear term (<em>e.g.</em> in GAMs) by its linear parts</li>
 </ul>
 <p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html" class="external-link"><code>visualisation_matrix()</code></a> function, a smart tool for guessing the appropriate reference grid.</p>
 <div id="create-smart-grids-to-represent-complex-interactions" class="section level2">
@@ -408,6 +409,30 @@
 <span class="co">## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]</span></code></pre></div>
 <!-- TODO: add plotting example once 'see' on cran -->
 </div>
+<div id="estimate-derivative-of-non-linear-relationships-eg-in-gams" class="section level2">
+<h2 class="hasAnchor">
+<a href="#estimate-derivative-of-non-linear-relationships-eg-in-gams" class="anchor" aria-hidden="true"></a>Estimate derivative of non-linear relationships (e.g., in GAMs)</h2>
+<ul>
+<li>
+<strong>Problem</strong>: You model a non-linear relationship using polynomials, splines or GAMs. You want to know which parts of the curve are significant positive or negative trends.</li>
+<li>
+<strong>Solution</strong>: You can estimate the <em>derivative</em> of smooth using <code>estimate_slopes</code>.</li>
+</ul>
+<p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html" class="external-link"><strong>this vignette</strong></a> for a detailed walkthrough on <em>marginal effects</em>.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Fit a non-linear General Additive Model (GAM)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="co"># 1. Compute derivatives</span>
+<span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, 
+                         trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, 
+                         modulate <span class="op">=</span> <span class="st">"Petal.Length"</span>,
+                         length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
+
+<span class="co"># 2. Visualise</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-12-1.png"><!-- --></p>
+</div>
 <div id="describe-the-smooth-term-by-its-linear-parts" class="section level2">
 <h2 class="hasAnchor">
 <a href="#describe-the-smooth-term-by-its-linear-parts" class="anchor" aria-hidden="true"></a>Describe the smooth term by its linear parts</h2>
@@ -418,7 +443,7 @@
 <strong>Solution</strong>: You can apply <code>describe_nonlinear</code> on a predicted relationship that will return the different parts of increase and decrease.</li>
 </ul>
 <p>See <a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html" class="external-link"><strong>this vignette</strong></a> for more information.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="co"># 1. Visualize</span>
@@ -431,8 +456,8 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="co"># Aesthetics</span>
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-12-1.png"><!-- --></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p><img src="reference/figures/unnamed-chunk-13-1.png"><!-- --></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
 <span class="co"># 2. Describe smooth line</span>
 <span class="fu"><a href="reference/describe_nonlinear.html">describe_nonlinear</a></span><span class="op">(</span><span class="va">vizdata</span>, x <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span>
