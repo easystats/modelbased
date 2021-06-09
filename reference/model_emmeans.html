@@ -264,7 +264,7 @@ for which to compute the slopes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 <span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
 <span class='r-in'></span>
-<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  Species    Petal.Length.trend     SE  df lower.CL upper.CL</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa                  0.388 0.2602 144  -0.1264    0.902</span>
@@ -280,9 +280,75 @@ for which to compute the slopes.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica               0.234 0.0819 144   0.0725    0.396</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.00              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          1.66              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.31              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          2.97              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          3.62              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.28              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          4.93              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          5.59              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.24              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>          6.90              0.332 0.0964 144    0.142    0.523</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Results are averaged over the levels of: Species </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, levels <span class='op'>=</span> <span class='st'>"Species"</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Length"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Species    Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             1.00              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         1.00              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          1.00              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             1.66              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         1.66              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          1.66              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             2.31              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         2.31              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          2.31              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             2.97              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         2.97              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          2.97              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             3.62              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         3.62              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          3.62              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             4.28              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         4.28              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          4.28              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             4.93              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         4.93              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          4.93              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             5.59              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         5.59              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          5.59              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             6.24              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         6.24              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          6.24              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  setosa             6.90              0.388 0.2602 144  -0.1264    0.902</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  versicolor         6.90              0.374 0.0961 144   0.1843    0.564</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  virginica          6.90              0.234 0.0819 144   0.0725    0.396</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 <span class='r-in'></span>
 <span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Petal.Length</span> <span class='op'>~</span> <span class='fu'><a href='https://rdrr.io/r/stats/poly.html'>poly</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span>, <span class='fl'>4</span><span class='op'>)</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='co'># model_emtrends(model, modulate = "Sepal.Width")</span></span>
+<span class='r-in'><span class='fu'>model_emtrends</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Sepal.Width"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>  Sepal.Width Sepal.Width.trend    SE  df lower.CL upper.CL</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         2.00             7.484 5.418 145   -3.225   18.192</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         2.27             3.779 2.093 145   -0.358    7.916</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         2.53             0.831 0.765 145   -0.681    2.342</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         2.80            -1.337 0.706 145   -2.732    0.058</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         3.07            -2.699 0.543 145   -3.772   -1.626</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         3.33            -3.231 0.607 145   -4.430   -2.032</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         3.60            -2.909 0.838 145   -4.564   -1.254</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         3.87            -1.708 1.009 145   -3.702    0.287</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         4.13             0.398 2.392 145   -4.330    5.125</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>         4.40             3.431 5.798 145   -8.028   14.890</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Confidence level used: 0.95 </span>
 </code></pre></div>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

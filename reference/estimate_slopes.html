@@ -47,8 +47,7 @@
 
 
 <meta property="og:title" content="Estimate Marginal Effects — estimate_slopes" />
-<meta property="og:description" content="Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
-related functions such as estimate_contrasts and estimate_means." />
+<meta property="og:description" content="Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels or alongside a numeric variable. See also other related functions such as estimate_contrasts and estimate_means." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -164,8 +163,7 @@ related functions such as estimate_contrasts and estimate_means." />
     </div>
 
     <div class="ref-description">
-    <p>Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels. See also other
-related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and <code><a href='estimate_means.html'>estimate_means</a></code>.</p>
+    <p>Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels or alongside a numeric variable. See also other related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and <code><a href='estimate_means.html'>estimate_means</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_slopes</span><span class='op'>(</span>
@@ -218,7 +216,7 @@ number of data points.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <div class="ref-examples sourceCode"><pre class='sourceCode r'><code><span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>slopes</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_slopes</span><span class='op'>(</span><span class='va'>model</span>, trend <span class='op'>=</span> <span class='st'>"Petal.Length"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>slopes</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_slopes</span><span class='op'>(</span><span class='va'>model</span>, trend <span class='op'>=</span> <span class='st'>"Petal.Length"</span>, levels <span class='op'>=</span> <span class='st'>"Species"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>slopes</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Estimated Marginal Effects</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
@@ -237,12 +235,6 @@ number of data points.</p></td>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |        0.86 | 0.22 | [ 0.42, 1.29] |   3.89 | &lt; .001</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> virginica  |        0.54 | 0.19 | [ 0.17, 0.91] |   2.86 | 0.005 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal effects estimated for Petal.Length</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='st'><a href='https://mc-stan.org/rstanarm/'>"rstanarm"</a></span><span class='op'>)</span><span class='op'>)</span> <span class='op'>{</span></span>
-<span class='r-in'>  <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://mc-stan.org/rstanarm/reference/stan_glm.html'>stan_glm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span> <span class='op'>*</span> <span class='va'>Petal.Length</span>, data <span class='op'>=</span> <span class='va'>iris</span>, refresh <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span></span>
-<span class='r-in'>  <span class='fu'>estimate_slopes</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
-<span class='r-in'><span class='op'>}</span></span>
-<span class='r-in'><span class='op'>}</span></span>
 <span class='r-in'></span>
 </code></pre></div>
   </div>
