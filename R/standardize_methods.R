@@ -3,7 +3,6 @@
 
 
 
-#' @importFrom effectsize standardize
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
   x[names(x)] <- effectsize::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
@@ -55,7 +54,6 @@ standardize.estimate_means <- standardize.estimate_predicted
 
 
 
-#' @importFrom stats sd mad
 #' @export
 standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
   model <- attributes(x)$model
@@ -85,7 +83,6 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 # Unstandardize -------------------------------------------------------------
 
 #' @method unstandardize visualisation_matrix
-#' @importFrom effectsize unstandardize
 #' @export
 unstandardize.visualisation_matrix <- function(x, ...) {
   x[names(x)] <- effectsize::unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)

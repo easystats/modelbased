@@ -23,8 +23,6 @@
 #'
 #' describe_nonlinear(link_data, x = "x")
 #' @return A dataframe of linear description of non-linear terms.
-#' @importFrom insight find_predictors get_data find_random
-#' @importFrom stats mad median sd setNames predict loess
 #' @export
 describe_nonlinear <- function(data, ...) {
   UseMethod("describe_nonlinear")
@@ -136,7 +134,6 @@ estimate_smooth <- describe_nonlinear
 
 
 
-#' @importFrom stats lm
 #' @keywords internal
 .check_linearity <- function(y, x) {
   performance::r2(stats::lm(y ~ x))$R2

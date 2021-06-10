@@ -118,7 +118,6 @@ model_emmeans <- function(model,
 # =========================================================================
 
 
-#' @importFrom insight find_predictors get_data
 #' @keywords internal
 .guess_emmeans_arguments <- function(model, levels = NULL, fixed = NULL, modulate = NULL) {
   x <- .guess_emmeans_levels(model, levels = levels)
@@ -145,7 +144,6 @@ model_emmeans <- function(model,
   )
 }
 
-#' @importFrom utils tail
 #' @keywords internal
 .guess_emmeans_levels <- function(model, levels = NULL) {
 

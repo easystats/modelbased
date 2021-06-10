@@ -1,4 +1,3 @@
-#' @importFrom insight export_table
 #' @export
 print.estimate_contrasts <- function(x, ...) {
   cat(insight::export_table(format(x), ...))

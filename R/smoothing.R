@@ -22,7 +22,6 @@
 #' plot(x, type = "l")
 #' lines(smoothing(x, method = "smooth"), type = "l", col = "blue")
 #' lines(smoothing(x, method = "loess"), type = "l", col = "red")
-#' @importFrom stats predict loess smooth
 #' @return A smoothed vector or data frame.
 #' @export
 smoothing <- function(x, method = "loess", strength = 0.25, ...) {
@@ -30,7 +29,6 @@ smoothing <- function(x, method = "loess", strength = 0.25, ...) {
 }
 
 
-#' @importFrom stats predict loess smooth
 #' @export
 smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (strength == 0 | strength == FALSE | is.null(method)) {

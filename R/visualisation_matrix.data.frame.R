@@ -39,7 +39,6 @@
 #' # Standardize
 #' vizdata <- visualisation_matrix(data, target = "Sepal.Length")
 #' effectsize::standardize(vizdata)
-#' @importFrom stats na.omit
 #' @export
 visualisation_matrix <- function(x, ...) {
   UseMethod("visualisation_matrix")
@@ -160,7 +159,6 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
 
 # Utils -------------------------------------------------------------------
 
-#' @importFrom stats na.omit
 #' @keywords internal
 .visualisation_matrix_summary <- function(x, numerics = "mean", factors = "reference", na.rm = TRUE, ...) {
   if (na.rm == TRUE) x <- stats::na.omit(x)
@@ -275,14 +273,13 @@ visualisation_matrix.logical <- visualisation_matrix.character
 
 
 
-#' @importFrom stats quantile
 #' @keywords internal
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
   range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
 
   if (range == "iqr") {
-    mini <- quantile(x, (1 - ci) / 2, ...)
-    maxi <- quantile(x, (1 + ci) / 2, ...)
+    mini <- stats::quantile(x, (1 - ci) / 2, ...)
+    maxi <- stats::quantile(x, (1 + ci) / 2, ...)
   } else if (range == "ci") {
     out <- bayestestR::ci(x, ci = ci, ...)
     mini <- out$CI_low
