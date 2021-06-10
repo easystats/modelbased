@@ -168,7 +168,11 @@ visualisation_recipe.estimate_predicted <- function(x,
     if (insight::model_info(info$model)$is_binomial && show_data %in% c("point", "points")) {
       shape <- "|"
       stroke <- 1
-      # TODO: adjust in the case of non 0-1 rawdata[[y]]
+
+      # Change scale to 1-2 in case outcome is factor (see #120)
+      if(!all(unique(rawdata[[y]]) %in% c(0, 1))) {
+        data[c("Predicted", "CI_low", "CI_high")] <- data[c("Predicted", "CI_low", "CI_high")] + 1
+      }
     }
 
     for (i in show_data) {
