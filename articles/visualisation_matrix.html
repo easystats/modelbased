@@ -207,7 +207,7 @@
 &gt; Parameter               | Coefficient
 &gt; -------------------------------------
 &gt; SD (Intercept: Species) |        0.57
-&gt; SD (Residual)           |        0.54</code></pre>
+&gt; SD (Residual)           |        0.29</code></pre>
 <p>As we can see, when adjusting for the species, the relationship between the two variables <strong>has become positive</strong>!</p>
 <p>We can represent it using the same procedure as above, but note that instead of using the base R <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function, we will be using <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><em>get_predicted()</em></a>, from the <strong>insight</strong> package, which is a more robust and user-friendly version of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
