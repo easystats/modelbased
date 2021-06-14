@@ -24,24 +24,23 @@ Authors@R:
              email = "patilindrajeet.science@gmail.com",
              comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")))
 Maintainer: Dominique Makowski <dom.makowski@gmail.com>
-Description: Implements a general interface for model-based
-    estimations for a wide variety of models (see support list of insight;
-    Lüdecke, Waggoner & Makowski (2019) <doi:10.21105/joss.01412>), used
-    in the computation of marginal means, contrast analysis and
-    predictions.
+Description: Implements a general interface for model-based estimations
+    for a wide variety of models (see list of supported models using the
+    function 'insight::supported_models()'), used in the computation of
+    marginal means, contrast analysis and predictions.
 License: GPL-3
 URL: https://easystats.github.io/modelbased/
 BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 3.4)
 Imports:
-    stats,
-    utils,
     bayestestR (>= 0.10.0),
     effectsize (>= 0.4.5),
     insight (>= 0.14.1),
     parameters (>= 0.14.0),
-    performance
+    performance,
+    stats,
+    utils
 Suggests:
     brms,
     coda,
@@ -63,14 +62,14 @@ Suggests:
     rstanarm,
     rtdists,
     see (>= 0.6.5),
-    testthat,
-    spelling
+    spelling,
+    testthat
 Remotes:
-    easystats/see,
+    easystats/bayestestR,
     easystats/effectsize,
-    easystats/bayestestR
+    easystats/see
+Encoding: UTF-8
+Language: en-US
 RoxygenNote: 7.1.1.9001
 Config/testthat/edition: 3
 Config/testthat/parallel: true
-Language: en-US
-Encoding: UTF-8
