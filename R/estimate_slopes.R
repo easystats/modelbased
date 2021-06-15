@@ -86,6 +86,8 @@ summary.estimate_slopes <- function(object, ...) {
       group <- object[i, ] # reset
     }
   }
+  groups[[length(groups) + 1]] <- group  # Store last one
+
   # Summarize
   groups <- lapply(groups, function(x) {
     out <- data.frame(Confidence = unique(x$Confidence))
@@ -98,9 +100,10 @@ summary.estimate_slopes <- function(object, ...) {
         out[[var]] <- paste0(unique(x[[var]]), collapse = ", ")
       }
     }
-
-    out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
-    out$SE_Mean <- mean(x$SE, na.rm = TRUE)
+    if("Coefficient" %in% names(object)) out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
+    if("SE" %in% names(object)) out$SE_Mean <- mean(x$SE, na.rm = TRUE)
+    if("SD" %in% names(object)) out$SD_Mean <- mean(x$SD, na.rm = TRUE)
+    if("MAD" %in% names(object)) out$MAD_Mean <- mean(x$MAD, na.rm = TRUE)
     out
   })
 
