@@ -2,7 +2,8 @@
 
 
 
-
+#' @importFrom effectsize standardize
+#' @method standardize visualisation_matrix
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
   x[names(x)] <- effectsize::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
@@ -83,6 +84,7 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 # Unstandardize -------------------------------------------------------------
 
 #' @method unstandardize visualisation_matrix
+#' @importFrom effectsize unstandardize
 #' @export
 unstandardize.visualisation_matrix <- function(x, ...) {
   x[names(x)] <- effectsize::unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
@@ -92,6 +94,7 @@ unstandardize.visualisation_matrix <- function(x, ...) {
 
 
 #' @method unstandardize estimate_predicted
+#' @importFrom effectsize unstandardize
 #' @export
 unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
