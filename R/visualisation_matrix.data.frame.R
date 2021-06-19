@@ -115,6 +115,10 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
       targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
       row.names(targets) <- NULL # Reset row.names
     }
+
+    if(nrow(targets) == 0) {
+      stop("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
+    }
   }
 
   # Deal with the rest =========================================================

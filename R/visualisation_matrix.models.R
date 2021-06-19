@@ -31,7 +31,7 @@ visualisation_matrix.glm <- function(x,
     }
   }
 
-  data <- visualisation_matrix(
+  vm <- visualisation_matrix(
     data,
     target = target,
     factors = factors,
@@ -42,11 +42,11 @@ visualisation_matrix.glm <- function(x,
   )
 
   if (include_smooth == FALSE) {
-    data[names(data) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))] <- NULL
+    vm[names(vm) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))] <- NULL
   }
 
-  attr(data, "model") <- x
-  data
+  attr(vm, "model") <- x
+  vm
 }
 
 

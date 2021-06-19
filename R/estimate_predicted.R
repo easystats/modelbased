@@ -88,9 +88,12 @@ estimate_response <- estimate_prediction
 
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix")) {
+    data_original <- data
     data <- model
     if ("model" %in% names(attributes(model))) {
       model <- attributes(model)$model
+    } else if(insight::is_model(data_original)) {
+      model <- data_original
     } else {
       stop("A model must be passed to make predictions.")
     }
