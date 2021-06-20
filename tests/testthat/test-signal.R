@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("parameters")) {
+if (require("testthat") && require("modelbased") && require("datawizard")) {
   test_that("signal", {
     set.seed(333)
 
@@ -6,6 +6,6 @@ if (require("testthat") && require("modelbased") && require("parameters")) {
     s1 <- as.vector(smoothing(x, method = "loess"))
     s2 <- as.vector(smoothing(x, method = "smooth"))
 
-    expect_true(as.numeric(parameters::smoothness(s1)) > as.numeric(parameters::smoothness(s2)))
+    expect_true(as.numeric(datawizard::smoothness(s1)) > as.numeric(datawizard::smoothness(s2)))
   })
 }
