@@ -47,7 +47,16 @@
 
 
 <meta property="og:title" content="Generates predictions from models — estimate_expectation" />
-<meta property="og:description" content="estimate_link is a shortcut to estimate_response with data = &quot;grid&quot;. estimate_response would be used in the context of generating actual predictions for the existing or new data, whereas estimate_link is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  visualisation_matrix (used when data = &quot;grid&quot;) and from insight::get_predicted() (the function to compute predictions used internally). For plotting, check the examples in visualisation_recipe." />
+<meta property="og:description" content="estimate_link is a shortcut to estimate_response with
+data = &quot;grid&quot;. estimate_response would be used in the context
+of generating actual predictions for the existing or new data, whereas
+estimate_link is more relevant in the context of visualisation and
+plotting. There are many control parameters that are not listed here but can
+be used, such as the arguments from  visualisation_matrix (used
+when data = &quot;grid&quot;) and from
+insight::get_predicted() (the function
+to compute predictions used internally). For plotting, check the examples in
+visualisation_recipe." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -166,7 +175,16 @@
     </div>
 
     <div class="ref-description">
-    <p><code>estimate_link</code> is a shortcut to <code>estimate_response</code> with <code>data = "grid"</code>. <code>estimate_response</code> would be used in the context of generating actual predictions for the existing or new data, whereas <code>estimate_link</code> is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> (used when <code>data = "grid"</code>) and from <code><a href='https://easystats.github.io/insight/reference/get_predicted.html'>insight::get_predicted()</a></code> (the function to compute predictions used internally). For plotting, check the examples in <code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>.</p>
+    <p><code>estimate_link</code> is a shortcut to <code>estimate_response</code> with
+<code>data = "grid"</code>. <code>estimate_response</code> would be used in the context
+of generating actual predictions for the existing or new data, whereas
+<code>estimate_link</code> is more relevant in the context of visualisation and
+plotting. There are many control parameters that are not listed here but can
+be used, such as the arguments from  <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code> (used
+when <code>data = "grid"</code>) and from
+<code><a href='https://easystats.github.io/insight/reference/get_predicted.html'>insight::get_predicted()</a></code> (the function
+to compute predictions used internally). For plotting, check the examples in
+<code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_expectation</span><span class='op'>(</span>
@@ -206,7 +224,9 @@
     </tr>
     <tr>
       <th>data</th>
-      <td><p>A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>).</p></td>
+      <td><p>A data frame with model's predictors to estimate the response. If
+NULL, the model's data is used. If "grid", the model matrix is obtained
+(through <code><a href='visualisation_matrix.html'>visualisation_matrix</a></code>).</p></td>
     </tr>
     <tr>
       <th>ci</th>
@@ -303,7 +323,7 @@ running <code><a href='https://easystats.github.io/bayestestR/reference/reshape_
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Standardize predictions</span></span>
 <span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_relation</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>mpg</span> <span class='op'>~</span> <span class='va'>wt</span> <span class='op'>+</span> <span class='va'>am</span>, data <span class='op'>=</span> <span class='va'>mtcars</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>pred</span>, include_response <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/datawizard/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>pred</span>, include_response <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
 <span class='r-in'><span class='va'>z</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Model-based Expectation (standardized)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
@@ -412,7 +432,7 @@ running <code><a href='https://easystats.github.io/bayestestR/reference/reshape_
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Variable predicted: mpg</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Predictors modulated: wt, am</span></span>
-<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>unstandardize</a></span><span class='op'>(</span><span class='va'>z</span>, include_response <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/datawizard/reference/standardize.html'>unstandardize</a></span><span class='op'>(</span><span class='va'>z</span>, include_response <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Model-based Expectation (standardized)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> wt   |   am | Predicted |   SE |         95% CI</span>

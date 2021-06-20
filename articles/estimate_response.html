@@ -233,8 +233,9 @@
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/" class="external-link">rstanarm</a></span><span class="op">)</span>
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>,
-                  refresh <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">33</span>,
-                  data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></code></pre></div>
+  refresh <span class="op">=</span> <span class="fl">0</span>, seed <span class="op">=</span> <span class="fl">33</span>,
+  data <span class="op">=</span> <span class="va">iris</span>
+<span class="op">)</span></code></pre></div>
 <p>The <code>refresh</code> and <code>seed</code> arguments are included for reproducibility and readability, but they are not critical to the model.</p>
 <p>Instead (or in addition to) representing confidence intervals, one can also represent every individual <strong>posterior draw</strong>, which correspond to a random selection of all possible links compatible with the observed data. It is a nice insight into the “true” underlying probabilities.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
@@ -256,7 +257,7 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="co"># Bootstrap with n=50 iterations </span>
+<span class="co"># Bootstrap with n=50 iterations</span>
 <span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
 <span class="co"># Format draws for plotting</span>

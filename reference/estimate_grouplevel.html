@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="Group-specific parameters of mixed models random effects — estimate_grouplevel" />
-<meta property="og:description" content="Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data." />
+<meta property="og:description" content="Extract random parameters of each individual group in the context of mixed
+models. Can be reshaped to be of the same dimensions as the original data,
+which can be useful to add the random effects to the original data." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -166,7 +168,9 @@
     </div>
 
     <div class="ref-description">
-    <p>Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.</p>
+    <p>Extract random parameters of each individual group in the context of mixed
+models. Can be reshaped to be of the same dimensions as the original data,
+which can be useful to add the random effects to the original data.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_grouplevel</span><span class='op'>(</span><span class='va'>model</span>, type <span class='op'>=</span> <span class='st'>"random"</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -182,7 +186,17 @@
     </tr>
     <tr>
       <th>type</th>
-      <td><p>If <code>"random"</code> (default), the coefficients are the ones estimated natively by the model (as they are returned by, for instance, <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If "total", it will return the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions). This argument can be used to reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that BLUPs currently don't have uncertainty indices (such as SE and CI), as these are not computable.</p></td>
+      <td><p>If <code>"random"</code> (default), the coefficients are the ones
+estimated natively by the model (as they are returned by, for instance,
+<code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code>). They correspond to the deviation of each individual
+group from their fixed effect. As such, a coefficient close to 0 means that
+the participants' effect is the same as the population-level effect (in
+other words, it is "in the norm"). If "total", it will return the sum of
+the random effect and its corresponding fixed effects. These are known as
+BLUPs (Best Linear Unbiased Predictions). This argument can be used to
+reproduce the results given by <code><a href='https://rdrr.io/pkg/lme4/man/ranef.html'>lme4::ranef()</a></code> and <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code> (see
+<code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>?coef.merMod</a></code>). Note that BLUPs currently don't have uncertainty
+indices (such as SE and CI), as these are not computable.</p></td>
     </tr>
     <tr>
       <th>...</th>

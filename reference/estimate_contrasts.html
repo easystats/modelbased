@@ -47,8 +47,9 @@
 
 
 <meta property="og:title" content="Estimate Marginal Contrasts — estimate_contrasts" />
-<meta property="og:description" content="Run a contrast analysis by estimating the differences between each level of a factor. See also other
-related functions such as estimate_means and estimate_slopes." />
+<meta property="og:description" content="Run a contrast analysis by estimating the differences between each level of a
+factor. See also other related functions such as estimate_means
+and estimate_slopes." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -167,8 +168,9 @@ related functions such as estimate_means and estimate_slopes." />
     </div>
 
     <div class="ref-description">
-    <p>Run a contrast analysis by estimating the differences between each level of a factor. See also other
-related functions such as <code><a href='estimate_means.html'>estimate_means</a></code> and <code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
+    <p>Run a contrast analysis by estimating the differences between each level of a
+factor. See also other related functions such as <code><a href='estimate_means.html'>estimate_means</a></code>
+and <code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_contrasts</span><span class='op'>(</span>
@@ -209,13 +211,16 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
-<code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
-<code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
-predictors. <code>"response"</code> will transform them on scale of the response
-variable. Thus for a logistic model, <code>"none"</code> will give estimations
-expressed in log-odds (probabilities on logit scale) and <code>"response"</code>
-in terms of probabilities.</p></td>
+      <td><p>Is passed to the <code>type</code> argument in
+<code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See
+<a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this
+vignette</a>. Can be <code>"none"</code> (default for contrasts), <code>"response"</code>
+(default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>.
+<code>"none"</code> will leave the values on scale of the linear predictors.
+<code>"response"</code> will transform them on scale of the response variable.
+Thus for a logistic model, <code>"none"</code> will give estimations expressed in
+log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
+probabilities.</p></td>
     </tr>
     <tr>
       <th>ci</th>
@@ -223,10 +228,10 @@ in terms of probabilities.</p></td>
     </tr>
     <tr>
       <th>adjust</th>
-      <td><p>The p-values adjustment method for frequentist multiple comparisons. Can be
-one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
-"BY", "fdr" or "none". See the p-value adjustment section in the
-<code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>emmeans::test</a></code> documentation.</p></td>
+      <td><p>The p-values adjustment method for frequentist multiple
+comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
+"bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
+section in the <code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html'>emmeans::test</a></code> documentation.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -318,7 +323,7 @@ one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
 <span class='r-in'></span>
 <span class='r-in'><span class='co'># Standardized differences</span></span>
 <span class='r-in'><span class='va'>estimated</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>Sepal.Width</span> <span class='op'>~</span> <span class='va'>Species</span>, data <span class='op'>=</span> <span class='va'>iris</span><span class='op'>)</span><span class='op'>)</span></span>
-<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>estimated</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/datawizard/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>estimated</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal Contrasts Analysis (standardized)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>

@@ -47,8 +47,10 @@
 
 
 <meta property="og:title" content="Estimate Marginal Means (Model-based average at each factor level) — estimate_means" />
-<meta property="og:description" content="Estimate average value of response variable at each factor levels. For plotting, check the examples in visualisation_recipe. See also other
-related functions such as estimate_contrasts and estimate_slopes." />
+<meta property="og:description" content="Estimate average value of response variable at each factor levels. For
+plotting, check the examples in visualisation_recipe. See also
+other related functions such as estimate_contrasts and
+estimate_slopes." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -167,8 +169,10 @@ related functions such as estimate_contrasts and estimate_slopes." />
     </div>
 
     <div class="ref-description">
-    <p>Estimate average value of response variable at each factor levels. For plotting, check the examples in <code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>. See also other
-related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and <code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
+    <p>Estimate average value of response variable at each factor levels. For
+plotting, check the examples in <code><a href='visualisation_recipe.html'>visualisation_recipe</a></code>. See also
+other related functions such as <code><a href='estimate_contrasts.html'>estimate_contrasts</a></code> and
+<code><a href='estimate_slopes.html'>estimate_slopes</a></code>.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>estimate_means</span><span class='op'>(</span>
@@ -208,13 +212,16 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
-<code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
-<code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
-predictors. <code>"response"</code> will transform them on scale of the response
-variable. Thus for a logistic model, <code>"none"</code> will give estimations
-expressed in log-odds (probabilities on logit scale) and <code>"response"</code>
-in terms of probabilities.</p></td>
+      <td><p>Is passed to the <code>type</code> argument in
+<code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See
+<a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this
+vignette</a>. Can be <code>"none"</code> (default for contrasts), <code>"response"</code>
+(default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>.
+<code>"none"</code> will leave the values on scale of the linear predictors.
+<code>"response"</code> will transform them on scale of the response variable.
+Thus for a logistic model, <code>"none"</code> will give estimations expressed in
+log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
+probabilities.</p></td>
     </tr>
     <tr>
       <th>ci</th>
@@ -341,7 +348,7 @@ in terms of probabilities.</p></td>
 <span class='r-in'><span class='va'>means</span> <span class='op'>&lt;-</span> <span class='fu'>estimate_means</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Sepal.Width"</span><span class='op'>)</span></span>
 <span class='r-in'><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>means</span><span class='op'>)</span> <span class='co'># which runs visualisation_recipe()</span></span>
 <span class='r-plt'><img src='estimate_means-1.png' alt='' width='700' height='433' /></span>
-<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/effectsize/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>means</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>effectsize</span><span class='fu'>::</span><span class='fu'><a href='https://easystats.github.io/datawizard/reference/standardize.html'>standardize</a></span><span class='op'>(</span><span class='va'>means</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Estimated Marginal Means (standardized)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> Species    | Sepal.Width |  Mean |   SE |         95% CI</span>

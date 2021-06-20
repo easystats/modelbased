@@ -47,7 +47,9 @@
 
 
 <meta property="og:title" content="Easy Creation of 'emmeans' Objects — model_emmeans" />
-<meta property="og:description" content="The model_emmeans function is a wrapper to facilitate the usage of emmeans::emmeans() and emmeans::emtrends(), providing a somewhat simpler and smart API to find the variables of interest." />
+<meta property="og:description" content="The model_emmeans function is a wrapper to facilitate the usage of
+emmeans::emmeans() and emmeans::emtrends(), providing a
+somewhat simpler and smart API to find the variables of interest." />
 <meta property="og:image" content="/logo.png" />
 
 
@@ -166,7 +168,9 @@
     </div>
 
     <div class="ref-description">
-    <p>The <code>model_emmeans</code> function is a wrapper to facilitate the usage of <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code> and <code><a href='https://rdrr.io/pkg/emmeans/man/emtrends.html'>emmeans::emtrends()</a></code>, providing a somewhat simpler and smart API to find the variables of interest.</p>
+    <p>The <code>model_emmeans</code> function is a wrapper to facilitate the usage of
+<code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code> and <code><a href='https://rdrr.io/pkg/emmeans/man/emtrends.html'>emmeans::emtrends()</a></code>, providing a
+somewhat simpler and smart API to find the variables of interest.</p>
     </div>
 
     <div class="ref-usage sourceCode"><pre class='sourceCode r'><code><span class='fu'>model_emmeans</span><span class='op'>(</span>
@@ -207,13 +211,16 @@ number of data points.</p></td>
     </tr>
     <tr>
       <th>transform</th>
-      <td><p>Is passed to the <code>type</code> argument in <code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See <a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this vignette</a>. Can be <code>"none"</code> (default for contrasts),
-<code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>,
-<code>"log"</code>. <code>"none"</code> will leave the values on scale of the linear
-predictors. <code>"response"</code> will transform them on scale of the response
-variable. Thus for a logistic model, <code>"none"</code> will give estimations
-expressed in log-odds (probabilities on logit scale) and <code>"response"</code>
-in terms of probabilities.</p></td>
+      <td><p>Is passed to the <code>type</code> argument in
+<code><a href='https://rdrr.io/pkg/emmeans/man/emmeans.html'>emmeans::emmeans()</a></code>. See
+<a href='https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html'>this
+vignette</a>. Can be <code>"none"</code> (default for contrasts), <code>"response"</code>
+(default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>.
+<code>"none"</code> will leave the values on scale of the linear predictors.
+<code>"response"</code> will transform them on scale of the response variable.
+Thus for a logistic model, <code>"none"</code> will give estimations expressed in
+log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
+probabilities.</p></td>
     </tr>
     <tr>
       <th>...</th>
