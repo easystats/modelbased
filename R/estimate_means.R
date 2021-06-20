@@ -94,7 +94,7 @@ estimate_means <- function(model,
   }
 
   # Restore factor levels
-  means <- insight::data_restoretype(means, insight::get_data(model))
+  means <- datawizard::data_restoretype(means, insight::get_data(model))
 
 
   # Table formatting

@@ -96,8 +96,8 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
     facs_combinations <- expand.grid(facs)
     for (i in 1:nrow(facs_combinations)) {
       # Query subset of original dataset
-      subset <- x[insight::data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
-      idx <- insight::data_match(targets, to = facs_combinations[i, , drop = FALSE])
+      subset <- x[datawizard::data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
+      idx <- datawizard::data_match(targets, to = facs_combinations[i, , drop = FALSE])
 
       # Skip if no instance of factor combination, drop the chunk
       if (nrow(subset) == 0) {

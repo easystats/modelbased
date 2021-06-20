@@ -40,13 +40,13 @@ estimate_slopes <- function(model,
     trends <- cbind(estimated@grid, trends)
     trends$`.wgt.` <- NULL # Drop the weight column
     trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
-    trends <- insight::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
+    trends <- datawizard::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }
 
   # Restore factor levels
-  trends <- insight::data_restoretype(trends, insight::get_data(model))
+  trends <- datawizard::data_restoretype(trends, insight::get_data(model))
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
