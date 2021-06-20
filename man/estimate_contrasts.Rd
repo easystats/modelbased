@@ -30,20 +30,23 @@ along which the means or the contrasts will be estimated. Other arguments
 from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 number of data points.}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"} will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
+\item{transform}{Is passed to the \code{type} argument in
+\code{emmeans::emmeans()}. See
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
+vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+\code{"none"} will leave the values on scale of the linear predictors.
+\code{"response"} will transform them on scale of the response variable.
+Thus for a logistic model, \code{"none"} will give estimations expressed in
+log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
-\item{adjust}{The p-values adjustment method for frequentist multiple comparisons. Can be
-one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
-"BY", "fdr" or "none". See the p-value adjustment section in the
-\code{emmeans::test} documentation.}
+\item{adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
+"bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
+section in the \code{emmeans::test} documentation.}
 
 \item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
@@ -51,8 +54,9 @@ one of "holm" (default), "tukey", "hochberg", "hommel", "bonferroni", "BH",
 A data frame of estimated contrasts.
 }
 \description{
-Run a contrast analysis by estimating the differences between each level of a factor. See also other
-related functions such as \code{\link{estimate_means}} and \code{\link{estimate_slopes}}.
+Run a contrast analysis by estimating the differences between each level of a
+factor. See also other related functions such as \code{\link{estimate_means}}
+and \code{\link{estimate_slopes}}.
 }
 \examples{
 library(modelbased)

@@ -36,7 +36,10 @@ number of data points.}
 A data.frame.
 }
 \description{
-Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels or alongside a numeric variable. See also other related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
+Estimate the slopes (i.e., the coefficient) of a predictor over different
+factor levels or alongside a numeric variable. See also other related
+functions such as \code{\link{estimate_contrasts}} and
+\code{\link{estimate_means}}.
 }
 \examples{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

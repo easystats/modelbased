@@ -1,7 +1,9 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
-#' Estimate average value of response variable at each factor levels. For plotting, check the examples in \code{\link{visualisation_recipe}}. See also other
-#' related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
+#' Estimate average value of response variable at each factor levels. For
+#' plotting, check the examples in \code{\link{visualisation_recipe}}. See also
+#' other related functions such as \code{\link{estimate_contrasts}} and
+#' \code{\link{estimate_slopes}}.
 #'
 #' @inheritParams model_emmeans
 #' @inheritParams parameters::model_parameters.default
@@ -76,7 +78,12 @@ estimate_means <- function(model,
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    means <- bayestestR::describe_posterior(estimated, test = NULL, rope_range = NULL, ci = ci, ...)
+    means <- bayestestR::describe_posterior(estimated,
+      test = NULL,
+      rope_range = NULL,
+      ci = ci,
+      ...
+    )
     means <- cbind(estimated@grid, means)
     means$`.wgt.` <- NULL # Drop the weight column
     means <- .clean_names_bayesian(means, model, transform, type = "mean")

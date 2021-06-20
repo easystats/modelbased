@@ -116,7 +116,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
       row.names(targets) <- NULL # Reset row.names
     }
 
-    if(nrow(targets) == 0) {
+    if (nrow(targets) == 0) {
       stop("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
     }
   }

@@ -47,14 +47,17 @@ model_emtrends <- function(model,
   }
 
   # Run emtrends
-  estimated <- emmeans::emtrends(model, c(args$levels, args$modulate), var = args$trend, cov.reduce = cov.reduce, ...)
+  estimated <- emmeans::emtrends(
+    model,
+    c(args$levels, args$modulate),
+    var = args$trend,
+    cov.reduce = cov.reduce,
+    ...
+  )
 
   attr(estimated, "args") <- args
   estimated
 }
-
-
-
 
 
 
@@ -64,7 +67,12 @@ model_emtrends <- function(model,
 
 
 #' @keywords internal
-.guess_emtrends_arguments <- function(model, trend = NULL, levels = NULL, modulate = NULL, ...) {
+.guess_emtrends_arguments <- function(model,
+                                      trend = NULL,
+                                      levels = NULL,
+                                      modulate = NULL,
+                                      ...) {
+
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   data <- insight::get_data(model)

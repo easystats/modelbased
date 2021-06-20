@@ -15,10 +15,15 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r warning=FALSE, message=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  warning = FALSE,
+  message = FALSE,
+  dpi = 450
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -77,7 +82,7 @@ statistical modelisation.
 
 # The Empirical Approach (Classic)
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(dplyr)
 library(ggplot2)
 library(emmeans)
@@ -93,7 +98,7 @@ understand the hows and whys, as we will explain everything in due time.
 
 <details> <summary>Click here to see the code to generate the data.</summary>
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 generate_data <- function(effect = 5, noise = 0.5) {
   data <- data.frame()
   n <- 100
@@ -109,9 +114,9 @@ generate_data <- function(effect = 5, noise = 0.5) {
 }
 
 data <- generate_data(effect = rnorm(30, 2, 2), noise = rnorm(30, 0, 0.4))
-# 
+#
 # library(rtdists)
-# 
+#
 # data <- data.frame(
 #   Participant = paste0("S", speed_acc$id),
 #   Item = as.numeric(speed_acc$stim),
@@ -138,15 +143,15 @@ So we will take, for each participant, its 20...
 **TO DO: COMPLETE THIS VIGNETTE**.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data_anova <- data %>%
   mutate(Category = case_when(
     Experimental_Variable < -1.5 ~ "Low",
     Experimental_Variable > 1.5 ~ "High",
     TRUE ~ "Middle"
-  )) %>% 
-  mutate(Category = forcats::fct_relevel(Category, c("Low", "Middle", "High"))) %>% 
-  group_by(Participant, Condition, Category) %>% 
+  )) %>%
+  mutate(Category = forcats::fct_relevel(Category, c("Low", "Middle", "High"))) %>%
+  group_by(Participant, Condition, Category) %>%
   summarise(RT = mean(RT))
 
 results <- aov(RT ~ Condition * Category + Error(Participant), data = data_anova)
@@ -157,13 +162,13 @@ What can we conclude from that? Absolutely **nothing**! We need to investigate i
 
 ## Post-hoc comparison tests
 
-```{r message=FALSE, warning=FALSE}
-posthoc <- model_emmeans(results, ~ Condition * Category) %>% 
+```{r}
+posthoc <- model_emmeans(results, ~ Condition * Category) %>%
   pairs()
 parameters(posthoc)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data_anova %>%
   ggplot(aes(x = Category, y = RT, fill = Condition)) +
   geom_boxplot() +
@@ -182,7 +187,7 @@ of significance (which are abstract).
 
 We can use `geom_smooth()`, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data %>%
   group_by(Participant, Condition) %>%
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
@@ -206,4 +211,3 @@ data %>%
 # References
 
 <!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
-

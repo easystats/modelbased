@@ -1,6 +1,9 @@
 #' Estimate Marginal Effects
 #'
-#' Estimate the slopes (i.e., the coefficient) of a predictor over different factor levels or alongside a numeric variable. See also other related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_means}}.
+#' Estimate the slopes (i.e., the coefficient) of a predictor over different
+#' factor levels or alongside a numeric variable. See also other related
+#' functions such as \code{\link{estimate_contrasts}} and
+#' \code{\link{estimate_means}}.
 #'
 #' @inheritParams model_emtrends
 #' @inheritParams estimate_means
@@ -86,7 +89,7 @@ summary.estimate_slopes <- function(object, ...) {
       group <- object[i, ] # reset
     }
   }
-  groups[[length(groups) + 1]] <- group  # Store last one
+  groups[[length(groups) + 1]] <- group # Store last one
 
   # Summarize
   groups <- lapply(groups, function(x) {
@@ -100,10 +103,10 @@ summary.estimate_slopes <- function(object, ...) {
         out[[var]] <- paste0(unique(x[[var]]), collapse = ", ")
       }
     }
-    if("Coefficient" %in% names(object)) out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
-    if("SE" %in% names(object)) out$SE_Mean <- mean(x$SE, na.rm = TRUE)
-    if("SD" %in% names(object)) out$SD_Mean <- mean(x$SD, na.rm = TRUE)
-    if("MAD" %in% names(object)) out$MAD_Mean <- mean(x$MAD, na.rm = TRUE)
+    if ("Coefficient" %in% names(object)) out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
+    if ("SE" %in% names(object)) out$SE_Mean <- mean(x$SE, na.rm = TRUE)
+    if ("SD" %in% names(object)) out$SD_Mean <- mean(x$SD, na.rm = TRUE)
+    if ("MAD" %in% names(object)) out$MAD_Mean <- mean(x$MAD, na.rm = TRUE)
     out
   })
 
