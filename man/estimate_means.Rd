@@ -29,13 +29,16 @@ along which the means or the contrasts will be estimated. Other arguments
 from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 number of data points.}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"} will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
+\item{transform}{Is passed to the \code{type} argument in
+\code{emmeans::emmeans()}. See
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
+vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+\code{"none"} will leave the values on scale of the linear predictors.
+\code{"response"} will transform them on scale of the response variable.
+Thus for a logistic model, \code{"none"} will give estimations expressed in
+log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
@@ -45,8 +48,10 @@ in terms of probabilities.}
 A dataframe of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor levels. For plotting, check the examples in \code{\link{visualisation_recipe}}. See also other
-related functions such as \code{\link{estimate_contrasts}} and \code{\link{estimate_slopes}}.
+Estimate average value of response variable at each factor levels. For
+plotting, check the examples in \code{\link{visualisation_recipe}}. See also
+other related functions such as \code{\link{estimate_contrasts}} and
+\code{\link{estimate_slopes}}.
 }
 \examples{
 library(modelbased)

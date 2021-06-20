@@ -12,7 +12,17 @@ reshape_grouplevel(x, indices = "all", ...)
 \arguments{
 \item{model}{A mixed model with random effects.}
 
-\item{type}{If \code{"random"} (default), the coefficients are the ones estimated natively by the model (as they are returned by, for instance, \code{lme4::ranef()}). They correspond to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If "total", it will return the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions). This argument can be used to reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see \code{?coef.merMod}). Note that BLUPs currently don't have uncertainty indices (such as SE and CI), as these are not computable.}
+\item{type}{If \code{"random"} (default), the coefficients are the ones
+estimated natively by the model (as they are returned by, for instance,
+\code{lme4::ranef()}). They correspond to the deviation of each individual
+group from their fixed effect. As such, a coefficient close to 0 means that
+the participants' effect is the same as the population-level effect (in
+other words, it is "in the norm"). If "total", it will return the sum of
+the random effect and its corresponding fixed effects. These are known as
+BLUPs (Best Linear Unbiased Predictions). This argument can be used to
+reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see
+\code{?coef.merMod}). Note that BLUPs currently don't have uncertainty
+indices (such as SE and CI), as these are not computable.}
 
 \item{...}{Other arguments passed to or from other methods.}
 
@@ -21,7 +31,9 @@ reshape_grouplevel(x, indices = "all", ...)
 \item{indices}{A list containing the indices to extract.}
 }
 \description{
-Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.
+Extract random parameters of each individual group in the context of mixed
+models. Can be reshaped to be of the same dimensions as the original data,
+which can be useful to add the random effects to the original data.
 }
 \examples{
 # lme4 model

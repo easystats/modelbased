@@ -15,10 +15,15 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r warning=FALSE, message=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  warning = FALSE,
+  message = FALSE,
+  dpi = 450
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -42,7 +47,7 @@ one of them being visualisation. This can be achieved via the
 
 Let's start by fitting a linear regression.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(Petal.Length ~ Sepal.Length, data = iris)
 ```
 
@@ -50,7 +55,7 @@ model <- lm(Petal.Length ~ Sepal.Length, data = iris)
 We might be interested in comparing the values predicted by the model to the
 actual "true" values. This can be done by generating predictions:
 
-```{r message=FALSE, warning=FALSE,}
+```{r,}
 library(modelbased)
 
 pred_data <- estimate_response(model)
@@ -64,7 +69,7 @@ posterior distribution) for **each of the value of the original data frame**
 predicted data (on top of the identity line, representing the perfect
 relationship).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(ggplot2)
 library(dplyr)
 library(see)
@@ -82,7 +87,7 @@ pred_data %>%
 It seems like our model does not perform too bad. What if we added information
 about the `Species` in the model?
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
 
 pred_data$Predicted_2 <- estimate_response(model)$Predicted
@@ -92,7 +97,7 @@ pred_data$Predicted_2 <- estimate_response(model)$Predicted
 We could now plot the second observations, based on a more complex model, as a
 red overlay to the previous points:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 pred_data %>%
   ggplot() +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
@@ -117,7 +122,7 @@ of the model's data instead of the original dataset.
 We will do that to visualise the relationship between the response
 (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 predicted <- estimate_response(model, data = "grid")
 
 iris %>%
@@ -143,7 +148,7 @@ used in the context of generating actual predictions for the existing or new
 data, whereas `estimate_relation()` is more relevant in the context of visualization
 and plotting.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 predicted <- estimate_relation(model)
 
 iris %>%
@@ -161,7 +166,7 @@ to the estimation. In the Bayesian framework, the credible intervals are
 directly related to the shape of the posterior distribution. Thus, showing
 different CI levels (for instance, 69\%, 89\% and 99\%).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 predicted <- estimate_relation(model, ci = c(0.69, .89, 0.99))
 
 iris %>%
@@ -180,12 +185,13 @@ Let's now fit the same model under the Bayesian framework.
 
 **Note**: If you're not familiar with the Bayesian framework, we recommend starting with [**this gentle introduction**](https://easystats.github.io/bayestestR/articles/bayestestR.html).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(rstanarm)
 
 model <- stan_glm(Petal.Length ~ Sepal.Length * Species,
-                  refresh = 0, seed = 33,
-                  data = iris)
+  refresh = 0, seed = 33,
+  data = iris
+)
 ```
 
 The `refresh` and `seed` arguments are included for reproducibility and readability, but they are not critical to the model.
@@ -193,7 +199,7 @@ The `refresh` and `seed` arguments are included for reproducibility and readabil
 Instead (or in addition to) representing confidence intervals, one can also represent every individual **posterior draw**, which correspond to a random selection of all possible links compatible with the observed data. It is a nice insight into the "true" underlying probabilities.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Keep only 100 draws (keeping all the draws is slower)
 predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 100)
 
@@ -212,10 +218,10 @@ iris %>%
 
 Note that it is also possible to obtain similar plots without Bayesian models, by **bootstrapping** the predictions. This can be done by setting the iterations argument to some number (e.g., 50).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
 
-# Bootstrap with n=50 iterations 
+# Bootstrap with n=50 iterations
 predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 50)
 
 # Format draws for plotting
@@ -234,7 +240,7 @@ p
 Animated hypothetical outcome plots can also be easily created with
 `gganimate`:
 
-```{r message=FALSE, warning=FALSE, eval = FALSE}
+```{r, eval = FALSE}
 library(gganimate)
 
 p <- iris %>%
@@ -248,7 +254,7 @@ p <- iris %>%
 gganimate::animate(p)
 ```
 ```{r echo=FALSE, fig.align='center', out.width="80%"}
-# Save 
+# Save
 # anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
 
 if (knitr::is_html_output()) {
@@ -263,4 +269,3 @@ if (knitr::is_html_output()) {
 ```
 
 # References
-

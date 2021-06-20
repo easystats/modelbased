@@ -1,6 +1,8 @@
 #' Easy Creation of 'emmeans' Objects
 #'
-#' The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler and smart API to find the variables of interest.
+#' The \code{model_emmeans} function is a wrapper to facilitate the usage of
+#' \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
+#' somewhat simpler and smart API to find the variables of interest.
 #'
 #' @param model A statistical model.
 #' @param levels A character vector or formula specifying the names of the
@@ -12,13 +14,16 @@
 #'   along which the means or the contrasts will be estimated. Other arguments
 #'   from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 #'   number of data points.
-#' @param transform Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
-#'   \code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-#'   \code{"log"}. \code{"none"} will leave the values on scale of the linear
-#'   predictors. \code{"response"} will transform them on scale of the response
-#'   variable. Thus for a logistic model, \code{"none"} will give estimations
-#'   expressed in log-odds (probabilities on logit scale) and \code{"response"}
-#'   in terms of probabilities.
+#' @param transform Is passed to the \code{type} argument in
+#'   \code{emmeans::emmeans()}. See
+#'   \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
+#'   vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+#'   (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+#'   \code{"none"} will leave the values on scale of the linear predictors.
+#'   \code{"response"} will transform them on scale of the response variable.
+#'   Thus for a logistic model, \code{"none"} will give estimations expressed in
+#'   log-odds (probabilities on logit scale) and \code{"response"} in terms of
+#'   probabilities.
 #' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
 #'
 #' @return An \code{emmeans} object.
@@ -44,7 +49,11 @@ model_emmeans <- function(model,
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emmeans_arguments(model, levels = levels, fixed = fixed, modulate = modulate)
+  args <- .guess_emmeans_arguments(model,
+    levels = levels,
+    fixed = fixed,
+    modulate = modulate
+  )
   levels <- args$levels
 
   data <- insight::get_data(model)
@@ -107,7 +116,13 @@ model_emmeans <- function(model,
   ))
 
   # Run emmeans
-  means <- emmeans::emmeans(refgrid, levels_vars, by = fixed_vars, type = transform, ...)
+  means <- emmeans::emmeans(refgrid,
+    levels_vars,
+    by = fixed_vars,
+    type = transform,
+    ...
+  )
+
   attr(means, "args") <- args
   means
 }
@@ -119,7 +134,10 @@ model_emmeans <- function(model,
 
 
 #' @keywords internal
-.guess_emmeans_arguments <- function(model, levels = NULL, fixed = NULL, modulate = NULL) {
+.guess_emmeans_arguments <- function(model,
+                                     levels = NULL,
+                                     fixed = NULL,
+                                     modulate = NULL) {
   x <- .guess_emmeans_levels(model, levels = levels)
   levels <- x$levels
 

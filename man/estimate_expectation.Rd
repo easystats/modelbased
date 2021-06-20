@@ -39,7 +39,9 @@ estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 \arguments{
 \item{model}{A statistical model.}
 
-\item{data}{A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).}
+\item{data}{A data frame with model's predictors to estimate the response. If
+NULL, the model's data is used. If "grid", the model matrix is obtained
+(through \code{\link{visualisation_matrix}}).}
 
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
@@ -54,7 +56,16 @@ running \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iteration
 A dataframe of predicted values.
 }
 \description{
-\code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally). For plotting, check the examples in \code{\link{visualisation_recipe}}.
+\code{estimate_link} is a shortcut to \code{estimate_response} with
+\code{data = "grid"}. \code{estimate_response} would be used in the context
+of generating actual predictions for the existing or new data, whereas
+\code{estimate_link} is more relevant in the context of visualisation and
+plotting. There are many control parameters that are not listed here but can
+be used, such as the arguments from  \code{\link{visualisation_matrix}} (used
+when \code{data = "grid"}) and from
+\code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
+to compute predictions used internally). For plotting, check the examples in
+\code{\link{visualisation_recipe}}.
 }
 \examples{
 library(modelbased)

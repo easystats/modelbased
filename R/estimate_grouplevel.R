@@ -1,9 +1,21 @@
 #' Group-specific parameters of mixed models random effects
 #'
-#' Extract random parameters of each individual group in the context of mixed models. Can be reshaped to be of the same dimensions as the original data, which can be useful to add the random effects to the original data.
+#' Extract random parameters of each individual group in the context of mixed
+#' models. Can be reshaped to be of the same dimensions as the original data,
+#' which can be useful to add the random effects to the original data.
 #'
 #' @param model A mixed model with random effects.
-#' @param type If \code{"random"} (default), the coefficients are the ones estimated natively by the model (as they are returned by, for instance, \code{lme4::ranef()}). They correspond to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect (in other words, it is "in the norm"). If "total", it will return the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions). This argument can be used to reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see \code{?coef.merMod}). Note that BLUPs currently don't have uncertainty indices (such as SE and CI), as these are not computable.
+#' @param type If \code{"random"} (default), the coefficients are the ones
+#'   estimated natively by the model (as they are returned by, for instance,
+#'   \code{lme4::ranef()}). They correspond to the deviation of each individual
+#'   group from their fixed effect. As such, a coefficient close to 0 means that
+#'   the participants' effect is the same as the population-level effect (in
+#'   other words, it is "in the norm"). If "total", it will return the sum of
+#'   the random effect and its corresponding fixed effects. These are known as
+#'   BLUPs (Best Linear Unbiased Predictions). This argument can be used to
+#'   reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see
+#'   \code{?coef.merMod}). Note that BLUPs currently don't have uncertainty
+#'   indices (such as SE and CI), as these are not computable.
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @examples
@@ -42,7 +54,11 @@
 estimate_grouplevel <- function(model, type = "random", ...) {
 
   # Extract params
-  params <- parameters::model_parameters(model, effects = "all", group_level = TRUE, ...)
+  params <- parameters::model_parameters(model,
+    effects = "all",
+    group_level = TRUE,
+    ...
+  )
 
   # TODO: improve / add new printing that groups by group/level?
   random <- as.data.frame(params[params$Effects == "random", ])

@@ -7,8 +7,10 @@
 #' proportion, relative to the total size) trend (the linear regression
 #' coefficient) and linearity (the R2 of the linear regression).
 #'
-#' @param data The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.
-#' @param x,y The name of the responses variable (\code{y}) predicting variable (\code{x}).
+#' @param data The data containing the link, as for instance obtained by
+#'   \code{\link{estimate_relation}}.
+#' @param x,y The name of the responses variable (\code{y}) predicting variable
+#'   (\code{x}).
 #' @param ... Other arguments to be passed to or from.
 #'
 #' @examples
@@ -32,10 +34,12 @@ describe_nonlinear <- function(data, ...) {
 
 
 #' @export
-describe_nonlinear.estimate_predicted <- function(data, x = NULL, y = "Predicted", ...) {
+describe_nonlinear.estimate_predicted <- function(data,
+                                                  x = NULL,
+                                                  y = "Predicted",
+                                                  ...) {
   describe_nonlinear.data.frame(data, x = x, y = y, ...)
 }
-
 
 
 #' @export
@@ -76,17 +80,8 @@ estimate_smooth <- describe_nonlinear
 
 
 
-
-
-
-
-
-
-
-
-
-
 # Utils -------------------------------------------------------------------
+
 #' @keywords internal
 .describe_nonlinear_parts <- function(y, x) {
   n <- length(y)
@@ -126,11 +121,6 @@ estimate_smooth <- describe_nonlinear
   }
   out
 }
-
-
-
-
-
 
 
 

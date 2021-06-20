@@ -18,7 +18,12 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  warning = FALSE,
+  message = FALSE,
+  dpi = 450
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -41,25 +46,27 @@ Our hypotheses is that participants are **faster** (i.e., lower RT) in the speed
 
 In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 # easystats packages
 library(parameters)
 library(correlation)
 library(performance)
 library(modelbased)
 
-# other packages 
+# other packages
 library(tidyverse)
 library(rtdists)
 library(brms)
 library(lme4)
 
 
-data <- rtdists::speed_acc %>% 
-  # Remove outliers &  Keep only word condition 
-  filter(rt < 1.5,  
-         stim_cat == "word",
-         frequency == "low") %>% 
+data <- rtdists::speed_acc %>%
+  # Remove outliers &  Keep only word condition
+  filter(
+    rt < 1.5,
+    stim_cat == "word",
+    frequency == "low"
+  ) %>%
   # Add new 'error' column that is 1 if the response doesn't match the category
   mutate(error = ifelse(as.character(response) != as.character(stim_cat), 1, 0))
 ```
@@ -72,10 +79,10 @@ data <- rtdists::speed_acc %>%
 For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a "successful" cognitive process. Then, and we will plot the RT according to the condition and stimulus category.
 
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 data_rt <- filter(data, error == 0)
 
-ggplot(data = data_rt, aes(y = rt, condition)) + 
+ggplot(data = data_rt, aes(y = rt, condition)) +
   geom_violin()
 ```
 
@@ -83,16 +90,17 @@ The descriptive visualisation indeed seems to suggest that people are slower in 
 
 Let's verify that using the [**modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html).
 
-```{r warning=FALSE, message=FALSE}
-model_full <- lmer(rt ~ condition + (1 + condition | id) + (1 | stim), 
-                   data = data_rt)
+```{r}
+model_full <- lmer(rt ~ condition + (1 + condition | id) + (1 | stim),
+  data = data_rt
+)
 ```
 
 Let's unpack the formula of this model. We're tying to predict `rt` using different terms. These can be separated into two groups, the *fixed* effects and the *random* effects. Having `condition` as a fixed effect means that we are interested in estimating the **"general"** effect of the condition, across all subjects and items (i.e., at the ***population level***). On top of that effect of condition, a second 'fixed' parameter was implicitly specified and will be estimated, the **intercept** (as you might know, one has to explicitly remove it through `rt ~ 0 + condition`, otherwise it is added automatically).
 
 Let's investigate these two fixed parameters first:
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 parameters(model_full, effects = "fixed")
 ```
 
@@ -102,16 +110,16 @@ As we can see, this difference is significant, and people have, **in general**, 
 
 Let's visualize the [marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html) estimated by the model: 
 
-```{r warning=FALSE, message=FALSE}
-estimate_means(model_full) %>% 
-  plot(show_data = "violin") 
+```{r}
+estimate_means(model_full) %>%
+  plot(show_data = "violin")
 ```
 
 Now, what's up with the **random effects**. In the formula, we specified random intercepts (i.e., the right part of the bar `|` symbol) for `id` (the participants) and `stim`. That means that **each participant and each stimulus will have its own "Intercept" parameter** (which, as we've seen before, corresponds to the `rt` in the accuracy condition). Additionally, we've specified the random effect ("random slope" - the left side of the bar) of `condition` for each participant. That means that **each participant will have its own effect of condition** computed.
 
 But do we need such a complex model? Let's compare it to a model without specifying random intercepts for the stimuli.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 model <- lmer(rt ~ condition + (1 + condition | id), data = data_rt)
 
 performance::test_performance(model_full, model)
@@ -124,7 +132,7 @@ Mmmh, it seems that the simpler model performs **a lot worse** (the Bayes Factor
 
 That's nice to know, but how to actually **get access** to these group-level scores. We can use the `estimate_grouplevel()` function to retrieve them.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 random <- estimate_grouplevel(model)
 random
 ```
@@ -133,7 +141,7 @@ Each of our participant (the **Level** column), numbered from 1 to 17, has two r
 
 We can also use `reshape_grouplevel()` to select only the *Coefficient* column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: **it's a convenient way to re-incorporate the random effects into the data for further re-use**.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 reshaped <- reshape_grouplevel(random, indices = "Coefficient")
 
 head(reshaped)
@@ -141,14 +149,14 @@ head(reshaped)
 
 As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use `summary()` to remove all the duplicate rows. Let's add it to the original data.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 data_rt <- dplyr::full_join(data_rt, reshaped, by = "id")
 ```
 
 We can also visualize the random effects:
 
-```{r warning=FALSE, message=FALSE}
-plot(random) + 
+```{r}
+plot(random) +
   see::theme_lucid()
 ```
 
@@ -162,28 +170,28 @@ Nevertheless, let's compute some **empirical scores**, such as the condition ave
 
 We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
 
-```{r warning=FALSE, message=FALSE}
-data_sub <- data_rt %>% 
-  group_by(id, condition) %>% 
-  summarise(rt = mean(rt)) %>% 
+```{r}
+data_sub <- data_rt %>%
+  group_by(id, condition) %>%
+  summarise(rt = mean(rt)) %>%
   pivot_wider(names_from = "condition", values_from = "rt")
 
 data_sub <- data.frame(
   id = data_sub$id,
   empirical_accuracy = data_sub$accuracy,
   empirical_condition = data_sub$speed - data_sub$accuracy
-  )
+)
 ```
 
 Now, how to these **empirical scores** compare with the **random effects** estimated by the model? Let's merge the empirical scores with the random effects scores. For that, we will run `summary()` on the **reshaped** random effects to remove all the duplicate rows (and have only one row per participant, so that it matches the format of `data_sub`).
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 data_sub <- dplyr::full_join(data_sub, summary(reshaped), by = "id")
 ```
 
 Let's run a correlation between the model-based scores and the empirical scores.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 correlation::correlation(data_sub)
 ```
 
@@ -193,7 +201,7 @@ Then, the empirical scores for accuracy and condition, corresponding to the "raw
 
 Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 ggplot(data_sub, aes(x = id_Coefficient_Intercept, y = id_Coefficient_conditionspeed)) +
   geom_point() +
   geom_smooth(method = "lm") +
@@ -208,24 +216,25 @@ In this section, we will take interest in the accuracy - the probability of maki
 
 We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.
 
-```{r warning=FALSE, message=FALSE}
-model <- glmer(error ~ condition + (1 + condition | id), 
-               data = data, family = "binomial")
+```{r}
+model <- glmer(error ~ condition + (1 + condition | id),
+  data = data, family = "binomial"
+)
 
 parameters::parameters(model, effects = "fixed")
 ```
 
 The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the **marginal means**) of making errors in the two conditions. 
 
-```{r warning=FALSE, message=FALSE}
+```{r}
 plot(estimate_means(model), show_data = "none")
 ```
 
 
-Similarly, we can extract the group-level effects, clean them (rename the colums, otherwise it will be the same names as for the RT model), and merge them with the previous ones. 
+Similarly, we can extract the group-level effects, clean them (rename the columns, otherwise it will be the same names as for the RT model), and merge them with the previous ones. 
 
-```{r warning=FALSE, message=FALSE}
-random <- estimate_grouplevel(model) 
+```{r}
+random <- estimate_grouplevel(model)
 random
 plot(random)
 ```
@@ -240,4 +249,3 @@ plot(random)
 # Scale-Location Model
 
 # References
-

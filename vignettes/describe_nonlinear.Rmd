@@ -15,10 +15,15 @@ editor_options:
 bibliography: bibliography.bib
 ---
 
-```{r message=FALSE, warning=FALSE, include=FALSE}
+```{r, include=FALSE, message=FALSE, warning=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  dpi = 450,
+  warning = FALSE,
+  message = FALSE
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -56,13 +61,13 @@ curves in terms of linear segments**.
 
 Let's start by creating a very simple dataset:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data <- data.frame(x = -50:50) # Generate dataframe with one variable x
 data$y <- data$x^2 # Add a variable y
 data$y <- data$y + rnorm(nrow(data), mean = 0, sd = 100) # Add some gaussian noise
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(ggplot2) # For plotting
 library(see) # For nice themes
 
@@ -74,13 +79,13 @@ ggplot(data, aes(x = x, y = y)) +
 Looking nice! Now let's model this non-linear relationship using a
 **polynomial** term:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- glm(y ~ poly(x, 2), data = data)
 ```
 
 Let's continue with **visualising the fitted model**:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(modelbased)
 
 estim <- estimate_relation(model, length = 50)
@@ -94,7 +99,7 @@ ggplot(estim, aes(x = x, y = Predicted)) +
 Although a visual representation is usually recommended, how can we **verbally
 describe this relationship**?
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 describe_nonlinear(estim, x = "x", y = "Predicted")
 ```
 
@@ -112,7 +117,7 @@ few days after watching it at the theater (the **delay** variable). Let's
 visualize how the `Delay`, in days, influences the `Memory` score, by plotting
 the data points and a raw *loess* fit on this raw data.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(ggplot2)
 library(dplyr)
 library(see)
@@ -141,7 +146,7 @@ it a few other variables that could influence this curve, such as the
 **familiarity with the characters of the movie**, the **language of the movie**,
 the **immersion** (2D/3D).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(lme4)
 
 model <- lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1 | Movie_Language) + (1 | Immersion), data = df)
@@ -151,7 +156,7 @@ model <- lmer(Memory ~ poly(Delay, 2) * Characters_Familiarity + (1 | Movie_Lang
 We can visualize the link between the Delay and the Memory score by using the
 `estimate_relation`.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(modelbased)
 
 estim <- estimate_relation(model, target = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
@@ -174,9 +179,8 @@ such as discussions about the movie, watching of YouTube reviews and such).
 
 # Describing smooth
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 estimate_smooth(estim, x = "Delay")
 ```
 
 # References
-

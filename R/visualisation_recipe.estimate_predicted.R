@@ -159,7 +159,6 @@ visualisation_recipe.estimate_predicted <- function(x,
 
   # Points
   if (!is.null(show_data) && all(show_data != "none")) {
-
     rawdata <- .visualisation_recipe_getrawdata(x)
 
     # Default changes for binomial models
@@ -170,7 +169,7 @@ visualisation_recipe.estimate_predicted <- function(x,
       stroke <- 1
 
       # Change scale to 1-2 in case outcome is factor (see #120)
-      if(!all(unique(rawdata[[y]]) %in% c(0, 1))) {
+      if (!all(unique(rawdata[[y]]) %in% c(0, 1))) {
         data[c("Predicted", "CI_low", "CI_high")] <- data[c("Predicted", "CI_low", "CI_high")] + 1
       }
     }

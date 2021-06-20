@@ -23,10 +23,6 @@ zero_crossings <- function(x) {
 }
 
 
-
-
-
-
 #' Copied from rootSolve package
 #' @keywords internal
 .uniroot.all <- function(f,

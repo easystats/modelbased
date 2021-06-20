@@ -13,12 +13,6 @@ standardize.visualisation_matrix <- function(x, ...) {
 
 
 
-
-
-
-
-
-
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors

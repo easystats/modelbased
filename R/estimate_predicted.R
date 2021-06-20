@@ -1,10 +1,21 @@
 #' Generates predictions from models
 #'
-#' \code{estimate_link} is a shortcut to \code{estimate_response} with \code{data = "grid"}. \code{estimate_response} would be used in the context of generating actual predictions for the existing or new data, whereas \code{estimate_link} is more relevant in the context of visualisation and plotting. There are many control parameters that are not listed here but can be used, such as the arguments from  \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function to compute predictions used internally). For plotting, check the examples in \code{\link{visualisation_recipe}}.
+#' \code{estimate_link} is a shortcut to \code{estimate_response} with
+#' \code{data = "grid"}. \code{estimate_response} would be used in the context
+#' of generating actual predictions for the existing or new data, whereas
+#' \code{estimate_link} is more relevant in the context of visualisation and
+#' plotting. There are many control parameters that are not listed here but can
+#' be used, such as the arguments from  \code{\link{visualisation_matrix}} (used
+#' when \code{data = "grid"}) and from
+#' \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
+#' to compute predictions used internally). For plotting, check the examples in
+#' \code{\link{visualisation_recipe}}.
 #'
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
-#' @param data A data frame with model's predictors to estimate the response. If NULL, the model's data is used. If "grid", the model matrix is obtained (through \code{\link{visualisation_matrix}}).
+#' @param data A data frame with model's predictors to estimate the response. If
+#'   NULL, the model's data is used. If "grid", the model matrix is obtained
+#'   (through \code{\link{visualisation_matrix}}).
 #' @param ... You can add all the additional control arguments from \code{\link{visualisation_matrix}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.
 #'
 #' @examples
@@ -51,8 +62,20 @@
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-estimate_expectation <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
-  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "expectation", ...)
+
+estimate_expectation <- function(model,
+                                 data = "grid",
+                                 ci = 0.95,
+                                 keep_iterations = FALSE,
+                                 ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    ...
+  )
 }
 
 #' @rdname estimate_expectation
@@ -63,15 +86,37 @@ estimate_relation <- estimate_expectation
 
 #' @rdname estimate_expectation
 #' @export
-estimate_link <- function(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...) {
-  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "link", ...)
+estimate_link <- function(model,
+                          data = "grid",
+                          ci = 0.95,
+                          keep_iterations = FALSE,
+                          ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "link",
+    ...
+  )
 }
 
 
 #' @rdname estimate_expectation
 #' @export
-estimate_prediction <- function(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...) {
-  .estimate_predicted(model, data = data, ci = ci, keep_iterations = keep_iterations, predict = "prediction", ...)
+estimate_prediction <- function(model,
+                                data = NULL,
+                                ci = 0.95,
+                                keep_iterations = FALSE,
+                                ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "prediction",
+    ...
+  )
 }
 
 #' @rdname estimate_expectation
@@ -79,12 +124,16 @@ estimate_prediction <- function(model, data = NULL, ci = 0.95, keep_iterations =
 estimate_response <- estimate_prediction
 
 
-
-
 # Internal ----------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted <- function(model, data = "grid", predict = "expectation", ci = 0.95, keep_iterations = FALSE, ...) {
+.estimate_predicted <- function(model,
+                                data = "grid",
+                                predict = "expectation",
+                                ci = 0.95,
+                                keep_iterations = FALSE,
+                                ...) {
+
 
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix")) {
@@ -92,7 +141,7 @@ estimate_response <- estimate_prediction
     data <- model
     if ("model" %in% names(attributes(model))) {
       model <- attributes(model)$model
-    } else if(insight::is_model(data_original)) {
+    } else if (insight::is_model(data_original)) {
       model <- data_original
     } else {
       stop("A model must be passed to make predictions.")
@@ -158,7 +207,6 @@ estimate_response <- estimate_prediction
 
   out
 }
-
 
 
 

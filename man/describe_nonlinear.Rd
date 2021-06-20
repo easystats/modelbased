@@ -13,11 +13,13 @@ describe_nonlinear(data, ...)
 estimate_smooth(data, ...)
 }
 \arguments{
-\item{data}{The data containing the link, as for instance obtained by \code{\link{estimate_relation}}.}
+\item{data}{The data containing the link, as for instance obtained by
+\code{\link{estimate_relation}}.}
 
 \item{...}{Other arguments to be passed to or from.}
 
-\item{x, y}{The name of the responses variable (\code{y}) predicting variable (\code{x}).}
+\item{x, y}{The name of the responses variable (\code{y}) predicting variable
+(\code{x}).}
 }
 \value{
 A dataframe of linear description of non-linear terms.

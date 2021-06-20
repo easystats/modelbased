@@ -31,13 +31,16 @@ along which the means or the contrasts will be estimated. Other arguments
 from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
 number of data points.}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"},
-\code{"log"}. \code{"none"} will leave the values on scale of the linear
-predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations
-expressed in log-odds (probabilities on logit scale) and \code{"response"}
-in terms of probabilities.}
+\item{transform}{Is passed to the \code{type} argument in
+\code{emmeans::emmeans()}. See
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
+vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+\code{"none"} will leave the values on scale of the linear predictors.
+\code{"response"} will transform them on scale of the response variable.
+Thus for a logistic model, \code{"none"} will give estimations expressed in
+log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities.}
 
 \item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 
@@ -48,7 +51,9 @@ for which to compute the slopes.}
 An \code{emmeans} object.
 }
 \description{
-The \code{model_emmeans} function is a wrapper to facilitate the usage of \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler and smart API to find the variables of interest.
+The \code{model_emmeans} function is a wrapper to facilitate the usage of
+\code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
+somewhat simpler and smart API to find the variables of interest.
 }
 \examples{
 library(modelbased)

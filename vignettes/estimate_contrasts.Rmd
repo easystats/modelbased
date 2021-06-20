@@ -68,7 +68,7 @@ ggplot(means, aes(x = Species, y = Mean)) +
 **Contrast analysis** can be achieved through the `estimate_contrasts`
 function:
 
-```{r }
+```{r}
 estimate_contrasts(model)
 ```
 
@@ -79,7 +79,7 @@ We can conclude that all pairwise differences are statistically significant.
 Again, as contrast analysis is based on marginal means, it can be applied to
 more complex models:
 
-```{r }
+```{r}
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 contrasts <- estimate_contrasts(model)
 contrasts
@@ -92,7 +92,7 @@ even changes sign).
 Note that we can plot simple contrast analysis through **lighthouse plots** with
 the help of the `see` package:
 
-```{r }
+```{r}
 library(see)
 
 plot(contrasts, estimate_means(model)) +
