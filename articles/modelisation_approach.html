@@ -223,23 +223,23 @@
 <code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/model_emmeans.html">model_emmeans</a></span><span class="op">(</span><span class="va">results</span>, <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">posthoc</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; contrast            | Coefficient |   SE |           95% CI | t(145) |      p
-&gt; -----------------------------------------------------------------------------
-&gt; A Low - B Low       |       36.83 | 5.82 | [ 25.33,  48.32] |   6.33 | &lt; .001
-&gt; A Low - A Middle    |       46.52 | 5.82 | [ 35.02,  58.01] |   8.00 | &lt; .001
-&gt; A Low - B Middle    |       14.18 | 5.82 | [  2.69,  25.67] |   2.44 | 0.491 
-&gt; A Low - A High      |       -0.23 | 5.82 | [-11.73,  11.26] |  -0.04 | &gt; .999
-&gt; A Low - B High      |       -8.54 | 5.82 | [-20.04,   2.95] |  -1.47 | 0.979 
-&gt; B Low - A Middle    |        9.69 | 5.82 | [ -1.80,  21.18] |   1.67 | 0.940 
-&gt; B Low - B Middle    |      -22.65 | 5.82 | [-34.14, -11.15] |  -3.89 | 0.012 
-&gt; B Low - A High      |      -37.06 | 5.82 | [-48.55, -25.56] |  -6.37 | &lt; .001
-&gt; B Low - B High      |      -45.37 | 5.82 | [-56.86, -33.87] |  -7.80 | &lt; .001
-&gt; A Middle - B Middle |      -32.34 | 5.82 | [-43.83, -20.84] |  -5.56 | &lt; .001
-&gt; A Middle - A High   |      -46.75 | 5.82 | [-58.24, -35.25] |  -8.04 | &lt; .001
-&gt; A Middle - B High   |      -55.06 | 5.82 | [-66.55, -43.57] |  -9.47 | &lt; .001
-&gt; B Middle - A High   |      -14.41 | 5.82 | [-25.90,  -2.92] |  -2.48 | 0.463 
-&gt; B Middle - B High   |      -22.72 | 5.82 | [-34.21, -11.23] |  -3.91 | 0.012 
-&gt; A High - B High     |       -8.31 | 5.82 | [-19.80,   3.18] |  -1.43 | 0.983 
+<pre><code>&gt; contrast            | Coefficient |   SE |               95% CI | t(145) |      p
+&gt; ---------------------------------------------------------------------------------
+&gt; A Low - B Low       |       36.83 | 5.82 | [   25.33,    48.32] |   6.33 | &lt; .001
+&gt; A Low - A Middle    |       46.52 | 5.82 | [   35.02,    58.01] |   8.00 | &lt; .001
+&gt; A Low - B Middle    |       14.18 | 5.82 | [    2.69,    25.67] |   2.44 | 0.491 
+&gt; A Low - A High      |       -0.23 | 5.82 | [  -11.73,    11.26] |  -0.04 | &gt; .999
+&gt; A Low - B High      |       -8.54 | 5.82 | [  -20.04,     2.95] |  -1.47 | 0.979 
+&gt; B Low - A Middle    |        9.69 | 5.82 | [   -1.80,    21.18] |   1.67 | 0.940 
+&gt; B Low - B Middle    |      -22.65 | 5.82 | [  -34.14,   -11.15] |  -3.89 | 0.012 
+&gt; B Low - A High      |      -37.06 | 5.82 | [  -48.55,   -25.56] |  -6.37 | &lt; .001
+&gt; B Low - B High      |      -45.37 | 5.82 | [  -56.86,   -33.87] |  -7.80 | &lt; .001
+&gt; A Middle - B Middle |      -32.34 | 5.82 | [  -43.83,   -20.84] |  -5.56 | &lt; .001
+&gt; A Middle - A High   |      -46.75 | 5.82 | [  -58.24,   -35.25] |  -8.04 | &lt; .001
+&gt; A Middle - B High   |      -55.06 | 5.82 | [  -66.55,   -43.57] |  -9.47 | &lt; .001
+&gt; B Middle - A High   |      -14.41 | 5.82 | [  -25.90,    -2.92] |  -2.48 | 0.463 
+&gt; B Middle - B High   |      -22.72 | 5.82 | [  -34.21,   -11.23] |  -3.91 | 0.012 
+&gt; A High - B High     |       -8.31 | 5.82 | [  -19.80,     3.18] |  -1.43 | 0.983 
 &gt; 
 &gt; p-value adjustment method: Tukey</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">

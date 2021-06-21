@@ -266,42 +266,42 @@ section in the <code><a href='https://rdrr.io/pkg/emmeans/man/summary.emmGrid.ht
 <span class='r-msg co'><span class='r-pr'>#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal Contrasts Analysis</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Difference |            95% CI |   SE | t(144) |      p</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> ---------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |       1.59 | [ 0.64,     2.54] | 0.39 |   4.04 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |       1.77 | [ 0.77,     2.78] | 0.41 |   4.29 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |       0.18 | [-0.17,     0.54] | 0.15 |   1.27 | 0.413 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal contrasts estimated for Species</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>p-value adjustment method: Holm (1979)</span></span>
 <span class='r-in'><span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, fixed <span class='op'>=</span> <span class='st'>"Petal.Width"</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal Contrasts Analysis</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        1.20 |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        1.20 |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        1.20 |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |            95% CI |   SE | t(144) |      p</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        1.20 |       1.59 | [ 0.64,     2.54] | 0.39 |   4.04 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        1.20 |       1.77 | [ 0.77,     2.78] | 0.41 |   4.29 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        1.20 |       0.18 | [-0.17,     0.54] | 0.15 |   1.27 | 0.413 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal contrasts estimated for Species</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>p-value adjustment method: Holm (1979)</span></span>
 <span class='r-in'><span class='fu'>estimate_contrasts</span><span class='op'>(</span><span class='va'>model</span>, modulate <span class='op'>=</span> <span class='st'>"Petal.Width"</span>, length <span class='op'>=</span> <span class='fl'>4</span><span class='op'>)</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal Contrasts Analysis</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> -------------------------------------------------------------------------------------------</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        0.10 |       1.83 | [ 1.15, 2.50] | 0.28 |   6.55 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        0.90 |       1.65 | [ 0.96, 2.35] | 0.29 |   5.74 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        1.70 |       1.48 | [ 0.03, 2.94] | 0.60 |   2.47 | 0.039 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        2.50 |       1.31 | [-1.00, 3.62] | 0.95 |   1.37 | 0.359 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        0.10 |       1.55 | [ 0.79, 2.30] | 0.31 |   4.95 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        0.90 |       1.71 | [ 0.93, 2.50] | 0.32 |   5.28 | &lt; .001</span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        1.70 |       1.88 | [ 0.43, 3.32] | 0.60 |   3.14 | 0.006 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        2.50 |       2.04 | [-0.19, 4.28] | 0.92 |   2.21 | 0.072 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        0.10 |      -0.28 | [-1.26, 0.70] | 0.41 |  -0.69 | 0.770 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        0.90 |       0.06 | [-0.44, 0.56] | 0.21 |   0.28 | 0.958 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        1.70 |       0.40 | [ 0.12, 0.67] | 0.11 |   3.50 | 0.002 </span>
-<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        2.50 |       0.73 | [ 0.08, 1.39] | 0.27 |   2.70 | 0.021 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |            95% CI |   SE | t(144) |      p</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> -----------------------------------------------------------------------------------------------</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        0.10 |       1.83 | [ 1.15,     2.50] | 0.28 |   6.55 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        0.90 |       1.65 | [ 0.96,     2.35] | 0.29 |   5.74 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        1.70 |       1.48 | [ 0.03,     2.94] | 0.60 |   2.47 | 0.039 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     | versicolor |        2.50 |       1.31 | [-1.00,     3.62] | 0.95 |   1.37 | 0.359 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        0.10 |       1.55 | [ 0.79,     2.30] | 0.31 |   4.95 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        0.90 |       1.71 | [ 0.93,     2.50] | 0.32 |   5.28 | &lt; .001</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        1.70 |       1.88 | [ 0.43,     3.32] | 0.60 |   3.14 | 0.006 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> setosa     |  virginica |        2.50 |       2.04 | [-0.19,     4.28] | 0.92 |   2.21 | 0.072 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        0.10 |      -0.28 | [-1.26,     0.70] | 0.41 |  -0.69 | 0.770 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        0.90 |       0.06 | [-0.44,     0.56] | 0.21 |   0.28 | 0.958 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        1.70 |       0.40 | [ 0.12,     0.67] | 0.11 |   3.50 | 0.002 </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> versicolor |  virginica |        2.50 |       0.73 | [ 0.08,     1.39] | 0.27 |   2.70 | 0.021 </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>Marginal contrasts estimated for Species</span></span>
 <span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #0000BB;'>p-value adjustment method: Holm (1979)</span></span>

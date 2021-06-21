@@ -137,14 +137,14 @@
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_data</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; Model-based Prediction
 &gt; 
-&gt; Sepal.Length | Predicted |   SE |        95% CI | Residuals
-&gt; -----------------------------------------------------------
-&gt; 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98
-&gt; 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60
-&gt; 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33
-&gt; 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05
-&gt; 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79
-&gt; 5.40         |      2.93 | 0.87 | [ 1.21, 4.66] |      1.23
+&gt; Sepal.Length | Predicted |   SE |            95% CI | Residuals
+&gt; ---------------------------------------------------------------
+&gt; 5.10         |      2.38 | 0.87 | [ 0.65,     4.10] |      0.98
+&gt; 4.90         |      2.00 | 0.87 | [ 0.28,     3.73] |      0.60
+&gt; 4.70         |      1.63 | 0.88 | [-0.10,     3.36] |      0.33
+&gt; 4.60         |      1.45 | 0.88 | [-0.29,     3.18] |     -0.05
+&gt; 5.00         |      2.19 | 0.87 | [ 0.46,     3.92] |      0.79
+&gt; 5.40         |      2.93 | 0.87 | [ 1.21,     4.66] |      1.23
 &gt; 
 &gt; Variable predicted: Petal.Length</code></pre>
 <p>The output is a data frame containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original data frame</strong> (used for fitting the model). Hence, we can simply add the original response column (<code>Petal.Length</code>) to this data and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
