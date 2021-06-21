@@ -112,8 +112,10 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
         maxi <- max(subset[[num]], na.rm = TRUE)
         rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
       }
-      targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
-      row.names(targets) <- NULL # Reset row.names
+      if(length(rows_to_remove) > 0) {
+        targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
+        row.names(targets) <- NULL # Reset row.names
+      }
     }
 
     if (nrow(targets) == 0) {
