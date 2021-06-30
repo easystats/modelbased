@@ -35,10 +35,6 @@ knitr::opts_chunk$set(
 
 ---
 
-:warning: `estimate_link()` now does *not* transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new `estimate_relation()` instead. This follows a change in how predictions are made internally (which now relies on [`get_predicted()`](https://easystats.github.io/insight/reference/get_predicted.html), so more details can be found there). This will allow *modelbased* to be more robust and polyvalent. Apologies for the breaks.
-
----
-
 `modelbased` is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.
 
 
@@ -146,7 +142,7 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 # 2. Obtain estimated means
-means <- modelbased::estimate_means(model)
+means <- estimate_means(model)
 means
 
 # 3. Plot 
@@ -182,7 +178,7 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 # 2. Estimate marginal contrasts
-contrasts <- modelbased::estimate_contrasts(model)
+contrasts <- estimate_contrasts(model)
 contrasts
 ```
 
@@ -239,7 +235,7 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 ```{r message=FALSE, warning=FALSE}
 # Fit model 1 and predict the response variable
 model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
-pred1 <- modelbased::estimate_response(model1)
+pred1 <- estimate_response(model1)
 pred1$Petal.Length <- iris$Petal.Length  # Add true response
 
 # Print first 5 lines of output
@@ -247,7 +243,7 @@ head(pred1, n = 5)
 
 # Same for model 2
 model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
-pred2 <- modelbased::estimate_response(model2)
+pred2 <- estimate_response(model2)
 pred2$Petal.Length <- iris$Petal.Length 
 
 
@@ -264,7 +260,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-## Extract and Format Group-level Random Effects
+## Extract and format group-level random effects
 
 - **Problem**: You have a mixed model and you would like to easily access the random part, i.e., the group-level effects (e.g., the individuals scores).
 - **Solution**: You can apply `estimate_grouplevel` on a mixed model.
@@ -276,7 +272,10 @@ library(lme4)
 
 model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
 
-modelbased::estimate_grouplevel(model)
+random <- estimate_grouplevel(model)
+random
+
+plot(random)
 ```
 
 <!-- TODO: add plotting example once 'see' on cran -->
@@ -342,5 +341,56 @@ knitr::include_graphics("https://github.com/easystats/modelbased/raw/master/man/
 ```
 
 
+## Understand interactions between two continuous variables
+
+Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable.
+
+```{r message=FALSE, warning=FALSE}
+library(interactions)
+library(modelbased)
+
+model <- lm(mpg ~ hp * wt, data = mtcars)
+
+slopes <- estimate_slopes(model, trend = "hp", modulate = "wt")
+
+plot(slopes)
+```
+
+The plot shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (approx. < 4).
 
 
+## Visualize predictions with random effects
+
+Aside from plotting the coefficient of each random effect (as done [here](https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects)), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with `estimate_relation` and setting `include_random` to `TRUE`. 
+
+Let's model the reaction time with the number of days of sleep deprivation as fixed effect and the participants as random intercept.
+
+```{r message=FALSE, warning=FALSE}
+library(lme4)
+
+model <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
+
+preds <- estimate_relation(model, include_random = TRUE)
+
+plot(preds, ribbon = list(alpha = 0))  # Make CI ribbon transparent for clarity
+```
+
+As we can see, each participant has a different "intercept" (starting point on the y-axis), but all their slopes are the same: this is because the only slope is the "general" one estimated across all participants by the fixed effect. Let's address that and allow the slope to vary for each participant too.
+
+```{r message=FALSE, warning=FALSE}
+model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+
+preds <- estimate_relation(model, include_random = TRUE)
+
+plot(preds, ribbon = list(alpha = 0.1)) 
+```
+
+As we can see, all participants has now a different effect. Let's plot, on top of that, the "fixed" effect estimated across all these individual effects.
+
+```{r message=FALSE, warning=FALSE}
+fixed_pred <- estimate_relation(model)  # This time, include_random is FALSE (default)
+
+plot(preds, ribbon = list(alpha = 0)) + # Previous plot
+  geom_ribbon(data = fixed_pred, aes(x = Days, ymin = CI_low, ymax = CI_high), alpha = 0.4) +
+  geom_line(data = fixed_pred, aes(x = Days, y = Predicted), size = 2)
+```
