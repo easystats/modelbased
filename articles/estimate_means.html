@@ -170,11 +170,11 @@
 <span class="va">means</span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
-&gt; Species    | Mean |   SE |               95% CI
-&gt; -----------------------------------------------
-&gt; setosa     | 3.43 | 0.05 | [    3.33,     3.52]
-&gt; versicolor | 2.77 | 0.05 | [    2.68,     2.86]
-&gt; virginica  | 2.97 | 0.05 | [    2.88,     3.07]
+&gt; Species    | Mean |   SE |       95% CI
+&gt; ---------------------------------------
+&gt; setosa     | 3.43 | 0.05 | [3.33, 3.52]
+&gt; versicolor | 2.77 | 0.05 | [2.68, 2.86]
+&gt; virginica  | 2.97 | 0.05 | [2.88, 3.07]
 &gt; 
 &gt; Marginal means estimated for Species</code></pre>
 <p>Note that the means computed here are not that different than the raw means we created above. From which we can surmise that there are not many spurious influences that we need to worry about in the <code>iris</code> dataset. But this might not be the case for your dataset.</p>
@@ -202,11 +202,11 @@
 <span class="va">means_complex</span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
-&gt; Species    | Mean |   SE |               95% CI
-&gt; -----------------------------------------------
-&gt; setosa     | 4.23 | 0.39 | [    3.45,     5.00]
-&gt; versicolor | 2.64 | 0.05 | [    2.54,     2.74]
-&gt; virginica  | 2.45 | 0.14 | [    2.18,     2.72]
+&gt; Species    | Mean |   SE |       95% CI
+&gt; ---------------------------------------
+&gt; setosa     | 4.23 | 0.39 | [3.45, 5.00]
+&gt; versicolor | 2.64 | 0.05 | [2.54, 2.74]
+&gt; virginica  | 2.45 | 0.14 | [2.18, 2.72]
 &gt; 
 &gt; Marginal means estimated for Species</code></pre>
 <p>Now let’s plot the marginal means from the simple linear model (shown in white dots) we saw above and the marginal means from the more complex model (shown in yellow dots) next to each other, which should help us notice how the adjusted means change depending on the predictors.</p>

@@ -122,8 +122,6 @@
 
 <p><strong><em>Taking your models to new heights</em></strong></p>
 <hr>
-<p><span class="emoji" data-emoji="warning">⚠️</span> <code><a href="reference/estimate_expectation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="reference/estimate_expectation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there). This will allow <em>modelbased</em> to be more robust and polyvalent. Apologies for the breaks.</p>
-<hr>
 <p><code>modelbased</code> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -226,7 +224,7 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="co"># 2. Obtain estimated means</span>
-<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="va">means</span>
 <span class="co">## Estimated Marginal Means</span>
 <span class="co">## </span>
@@ -272,7 +270,7 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="co"># 2. Estimate marginal contrasts</span>
-<span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="va">contrasts</span>
 <span class="co">## Marginal Contrasts Analysis</span>
 <span class="co">## </span>
@@ -346,7 +344,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit model 1 and predict the response variable</span>
 <span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span>
+<span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span>
 <span class="va">pred1</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span>  <span class="co"># Add true response</span>
 
 <span class="co"># Print first 5 lines of output</span>
@@ -365,7 +363,7 @@
 
 <span class="co"># Same for model 2</span>
 <span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span>
+<span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span>
 <span class="va">pred2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span> 
 
 
@@ -384,7 +382,7 @@
 </div>
 <div id="extract-and-format-group-level-random-effects" class="section level2">
 <h2 class="hasAnchor">
-<a href="#extract-and-format-group-level-random-effects" class="anchor" aria-hidden="true"></a>Extract and Format Group-level Random Effects</h2>
+<a href="#extract-and-format-group-level-random-effects" class="anchor" aria-hidden="true"></a>Extract and format group-level random effects</h2>
 <ul>
 <li>
 <strong>Problem</strong>: You have a mixed model and you would like to easily access the random part, i.e., the group-level effects (e.g., the individuals scores).</li>
@@ -397,7 +395,8 @@
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">drat</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">|</span> <span class="va">cyl</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
 
-<span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">random</span>
 <span class="co">## Group | Level |   Parameter | Coefficient |   SE |         95% CI</span>
 <span class="co">## -----------------------------------------------------------------</span>
 <span class="co">## cyl   |     4 | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]</span>
@@ -405,7 +404,10 @@
 <span class="co">## cyl   |     6 | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]</span>
 <span class="co">## cyl   |     6 |        drat |       -0.09 | 0.54 | [-1.15,  0.98]</span>
 <span class="co">## cyl   |     8 | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]</span>
-<span class="co">## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]</span></code></pre></div>
+<span class="co">## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-11-1.png"><!-- --></p>
 <!-- TODO: add plotting example once 'see' on cran -->
 </div>
 <div id="estimate-derivative-of-non-linear-relationships-eg-in-gams" class="section level2">
@@ -470,6 +472,53 @@
 <a href="#plot-all-posterior-draws-for-bayesian-models-predictions" class="anchor" aria-hidden="true"></a>Plot all posterior draws for Bayesian models predictions</h2>
 <p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><strong>this vignette</strong></a> for a walkthrough on how to do that.</p>
 <p><img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
+</div>
+<div id="understand-interactions-between-two-continuous-variables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#understand-interactions-between-two-continuous-variables" class="anchor" aria-hidden="true"></a>Understand interactions between two continuous variables</h2>
+<p>Also referred to as <strong>Johnson-Neyman intervals</strong>, this plot shows how the effect (the “slope”) of one variable varies depending on another variable.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">interactions</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
+
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+
+<span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"hp"</span>, modulate <span class="op">=</span> <span class="st">"wt"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-15-1.png"><!-- --></p>
+<p>The plot shows that the effect of <code>hp</code> (the y-axis) is significantly negative only when <code>wt</code> is low (approx. &lt; 4).</p>
+</div>
+<div id="visualize-predictions-with-random-effects" class="section level2">
+<h2 class="hasAnchor">
+<a href="#visualize-predictions-with-random-effects" class="anchor" aria-hidden="true"></a>Visualize predictions with random effects</h2>
+<p>Aside from plotting the coefficient of each random effect (as done <a href="https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects" class="external-link">here</a>), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with <code>estimate_relation</code> and setting <code>include_random</code> to <code>TRUE</code>.</p>
+<p>Let’s model the reaction time with the number of days of sleep deprivation as fixed effect and the participants as random intercept.</p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
+
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
+
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span>  <span class="co"># Make CI ribbon transparent for clarity</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-16-1.png"><!-- --></p>
+<p>As we can see, each participant has a different “intercept” (starting point on the y-axis), but all their slopes are the same: this is because the only slope is the “general” one estimated across all participants by the fixed effect. Let’s address that and allow the slope to vary for each participant too.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
+
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> </code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-17-1.png"><!-- --></p>
+<p>As we can see, all participants has now a different effect. Let’s plot, on top of that, the “fixed” effect estimated across all these individual effects.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fixed_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>  <span class="co"># This time, include_random is FALSE (default)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Previous plot</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
+<p><img src="reference/figures/unnamed-chunk-18-1.png"><!-- --></p>
 </div>
 </div>
 
