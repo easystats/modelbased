@@ -66,7 +66,9 @@ Suggests:
     spelling,
     testthat
 Remotes:
+    easystats/datawizard,
     easystats/bayestestR,
+    easystats/parameters,
     easystats/effectsize,
     easystats/see
 Encoding: UTF-8
