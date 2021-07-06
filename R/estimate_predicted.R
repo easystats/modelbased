@@ -136,7 +136,7 @@ estimate_response <- estimate_prediction
 
 
   # If a visualisation_matrix is passed
-  if (inherits(model, "visualisation_matrix")) {
+  if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
     data_original <- data
     data <- model
     if ("model" %in% names(attributes(model))) {

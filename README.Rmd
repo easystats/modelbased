@@ -123,7 +123,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
-  scale_fill_viridis_c(guide = FALSE) +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern()
 ```
 
