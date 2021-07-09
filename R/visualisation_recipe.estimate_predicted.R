@@ -268,7 +268,8 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Ribbon -------------------------------------------------------------
 
-.visualisation_predicted_ribbon <- function(data, x1, y, fill, ribbon = NULL) {
+.visualisation_predicted_ribbon <- function(data, x1, y, fill, group = NULL, ribbon = NULL) {
+
   out <- list(
     geom = "ribbon",
     data = data,
@@ -277,7 +278,8 @@ visualisation_recipe.estimate_predicted <- function(x,
       x = x1,
       ymin = "CI_low",
       ymax = "CI_high",
-      fill = fill
+      fill = fill,
+      group = group
     ),
     alpha = 1 / 3
   )

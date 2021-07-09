@@ -34,6 +34,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   # Main aesthetics -----------------
   data <- as.data.frame(x)
   data$Confidence <- .estimate_slopes_sig(x, ...)
+  data$.group = {function(x) rep(seq_along(x$lengths), x$length)}(rle(data$Confidence))
 
   y <- info$trend
   color <- "Confidence"
@@ -48,15 +49,20 @@ visualisation_recipe.estimate_slopes <- function(x,
     }
   } else {
     x1 <- info$modulate[1]
-    group <- 1
     if (length(info$modulate) > 1) {
       warning("Cannot deal with more than 2 'modulate' variables for now. Other ones will be omitted.")
     }
     if (!is.null(info$levels)) {
       color <- info$levels[1]
       fill <- info$levels[1]
-      group <- info$levels[1]
+      group_ribbon <- info$levels[1]
+      group_line <- info$levels[1]
       alpha <- "Confidence"
+    } else {
+      group_ribbon <- ".group"
+      group_line <- 1
+      fill <- "Confidence"
+      color <- NULL
     }
   }
 
@@ -65,7 +71,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   l <- 1
 
   # Horizontal Line
-  layers[[paste0("l", l)]] <- .visualisation_random_hline(data, x1, hline = hline)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_hline(data, x1, hline = hline)
   l <- l + 1
 
   # Line + Point-range style
@@ -77,9 +83,9 @@ visualisation_recipe.estimate_slopes <- function(x,
 
     # Ribbon + line style
   } else if (x1 == info$modulate[1]) {
-    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon)
+    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon, group = group_ribbon)
     l <- l + 1
-    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group, alpha, line = line)
+    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
     l <- l + 1
   }
 

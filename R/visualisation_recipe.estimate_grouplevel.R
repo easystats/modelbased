@@ -48,21 +48,21 @@ visualisation_recipe.estimate_grouplevel <- function(x,
   # Layers -----------------------
   l <- 1
   # Horizontal Line
-  layers[[paste0("l", l)]] <- .visualisation_random_hline(data, x1, hline = hline)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_hline(data, x1, hline = hline)
   l <- l + 1
   # Point range
-  layers[[paste0("l", l)]] <- .visualisation_random_pointrange(data, x1, color, pointrange = pointrange)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_pointrange(data, x1, color, pointrange = pointrange)
   l <- l + 1
   # Flip coord
   layers[[paste0("l", l)]] <- list(geom = "coord_flip")
   l <- l + 1
   # Facet wrap
   if (length(unique(data$Parameter)) > 1) {
-    layers[[paste0("l", l)]] <- .visualisation_random_facet_wrap(facet_wrap = facet_wrap)
+    layers[[paste0("l", l)]] <- .visualisation_grouplevel_facet_wrap(facet_wrap = facet_wrap)
     l <- l + 1
   }
   # Labs
-  layers[[paste0("l", l)]] <- .visualisation_random_labs(labs = labs)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_labs(labs = labs)
 
   # Out
   class(layers) <- c("visualisation_recipe", class(layers))
@@ -72,7 +72,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
 # Layer - hline -------------------------------------------------------
 
-.visualisation_random_hline <- function(data, x1, hline = NULL) {
+.visualisation_grouplevel_hline <- function(data, x1, hline = NULL) {
   out <- list(
     geom = "hline",
     data = data,
@@ -87,7 +87,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
 # Layer - Pointrange -------------------------------------------------------
 
-.visualisation_random_pointrange <- function(data, x1, color, pointrange = NULL) {
+.visualisation_grouplevel_pointrange <- function(data, x1, color, pointrange = NULL) {
   out <- list(
     geom = "pointrange",
     data = data,
@@ -106,7 +106,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
 # Layer - facet_wrap -------------------------------------------------------
 
-.visualisation_random_facet_wrap <- function(facet_wrap = NULL) {
+.visualisation_grouplevel_facet_wrap <- function(facet_wrap = NULL) {
   out <- list(
     geom = "facet_wrap",
     facets = "~ Parameter",
@@ -121,7 +121,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
 # Layer - Labels --------------------------------------------------------------
 
-.visualisation_random_labs <- function(labs = NULL) {
+.visualisation_grouplevel_labs <- function(labs = NULL) {
   out <- list(geom = "labs", title = "Group-level Scores")
   if (!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
   out
