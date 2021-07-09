@@ -122,7 +122,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
-  scale_fill_viridis_c(guide = FALSE) +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern()
 ```
 
@@ -375,7 +375,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
                          modulate = "Petal.Length",
-                         length = 30)
+                         length = 100)
 
 # 2. Visualise
 plot(deriv)
@@ -435,10 +435,13 @@ for a walkthrough on how to do that.
 
 Also referred to as **Johnson-Neyman intervals**, this plot shows how
 the effect (the “slope”) of one variable varies depending on another
-variable.
+variable. It is useful in the case of complex interactions between
+continuous variables.
+
+For instance, the plot below shows that the effect of `hp` (the y-axis)
+is significantly negative only when `wt` is low (`< ~4`).
 
 ``` r
-library(interactions)
 library(modelbased)
 
 model <- lm(mpg ~ hp * wt, data = mtcars)
@@ -449,9 +452,6 @@ plot(slopes)
 ```
 
 ![](man/figures/unnamed-chunk-15-1.png)<!-- -->
-
-The plot shows that the effect of `hp` (the y-axis) is significantly
-negative only when `wt` is low (approx. &lt; 4).
 
 ## Visualize predictions with random effects
 

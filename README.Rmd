@@ -296,7 +296,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
                          modulate = "Petal.Length",
-                         length = 30)
+                         length = 100)
 
 # 2. Visualise
 plot(deriv)
@@ -343,10 +343,11 @@ knitr::include_graphics("https://github.com/easystats/modelbased/raw/master/man/
 
 ## Understand interactions between two continuous variables
 
-Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable.
+Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
+
+For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
 ```{r message=FALSE, warning=FALSE}
-library(interactions)
 library(modelbased)
 
 model <- lm(mpg ~ hp * wt, data = mtcars)
@@ -356,7 +357,7 @@ slopes <- estimate_slopes(model, trend = "hp", modulate = "wt")
 plot(slopes)
 ```
 
-The plot shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (approx. < 4).
+
 
 
 ## Visualize predictions with random effects

@@ -158,7 +158,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   l <- 1
 
   # Points
-  if (!is.null(show_data) && all(show_data != "none")) {
+  if (!is.null(show_data) && all(show_data != "none") && all(show_data == FALSE)) {
     rawdata <- .visualisation_recipe_getrawdata(x)
 
     # Default changes for binomial models
