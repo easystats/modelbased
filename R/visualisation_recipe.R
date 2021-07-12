@@ -64,7 +64,7 @@ print.visualisation_recipe <- function(x, ...) {
   }
 }
 
-
+#' @importFrom graphics plot
 #' @export
 plot.visualisation_recipe <- function(x, ...) {
   insight::check_if_installed("see")

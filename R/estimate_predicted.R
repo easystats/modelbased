@@ -1,15 +1,26 @@
-#' Generates predictions from models
+#' Generate predictions from models
 #'
-#' \code{estimate_link} is a shortcut to \code{estimate_response} with
-#' \code{data = "grid"}. \code{estimate_response} would be used in the context
-#' of generating actual predictions for the existing or new data, whereas
-#' \code{estimate_link} is more relevant in the context of visualisation and
-#' plotting. There are many control parameters that are not listed here but can
+#' Using models to generate "predictions" is useful for many reasons, from assessing the model's performance to visualizing the relationships estimated by the model. It is, however, a term covering a range of different statistical procedures.
+#' \cr\cr
+#' Making different types of predictions (usually for different goals) using \code{modelbased} can be achieved through 4 functions:
+#' \itemize{
+#'   \item{\strong{estimate_link}: Returns a \code{\link[=visualisation_matrix]{reference grid}} with predictions on the model's link-scale (with \emph{confidence} intervals)}.
+#'   \item{\strong{estimate_relation}: Returns a \code{\link[=visualisation_matrix]{reference grid}} with predictions on the response scale (with \emph{confidence} intervals)}.
+#'   \item{\strong{estimate_expectation}: Makes predictions on the data used for model fitting on the response scale (with \emph{confidence} intervals)}.
+#'   \item{\strong{estimate_response}: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with \emph{prediction} intervals)}.
+#' }
+#' You can see these 4 functions as placed on a gradient ranging from predictions "close to the model" to "close to the actual response data". The first two are typically used for visualizing the effects and relationships estimated by the model, whereas the last two are more likely to be used to visualize the performance of your model.
+#' \cr\cr
+#' These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}}, and correspond to different specifications of its parameters. It is very important to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, and in particular the description of its \code{predict} argument to get a better sense of concepts such as "expectation", "link" and "prediction".
+#' \cr\cr
+#' The 4 modelbased functions mentioned above differ first and foremost by their default parameters. \code{estimate_link} and \code{estimate_relation} have the \code{data} argument set to \code{\link[=visualisation_matrix]{"grid"}} by default. Their expected usage is for visualisation of the model's effects. \code{estimate_expectation} and \code{estimate_response} have the \code{data} argument set to \code{NULL} by default (which retrieves the data used for model's fitting). These functions' are useful in the context of generating actual predictions for the existing or new data, to assess the model's performance or make actual future predictions.
+#' \cr\cr
+#' There are many control parameters that are not listed here but can
 #' be used, such as the arguments from  \code{\link{visualisation_matrix}} (used
 #' when \code{data = "grid"}) and from
 #' \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
 #' to compute predictions used internally). For plotting, check the examples in
-#' \code{\link{visualisation_recipe}}.
+#' \code{\link{visualisation_recipe}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases
 #'
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
@@ -62,30 +73,6 @@
 #' }
 #' @return A dataframe of predicted values.
 #' @export
-
-estimate_expectation <- function(model,
-                                 data = "grid",
-                                 ci = 0.95,
-                                 keep_iterations = FALSE,
-                                 ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "expectation",
-    ...
-  )
-}
-
-#' @rdname estimate_expectation
-#' @export
-estimate_relation <- estimate_expectation
-
-
-
-#' @rdname estimate_expectation
-#' @export
 estimate_link <- function(model,
                           data = "grid",
                           ci = 0.95,
@@ -101,14 +88,68 @@ estimate_link <- function(model,
   )
 }
 
+#' @rdname estimate_link
+#' @export
+estimate_relation <- function(model,
+                              data = "grid",
+                              ci = 0.95,
+                              keep_iterations = FALSE,
+                              ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    ...
+  )
+}
 
-#' @rdname estimate_expectation
+#' @rdname estimate_link
+#' @export
+estimate_expectation <- function(model,
+                                 data = NULL,
+                                 ci = 0.95,
+                                 keep_iterations = FALSE,
+                                 ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    ...
+  )
+}
+
+
+#' @rdname estimate_link
+#' @export
+estimate_response <- function(model,
+                                data = NULL,
+                                ci = 0.95,
+                                keep_iterations = FALSE,
+                                ...) {
+
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "response",
+    ...
+  )
+}
+
+
+#' @rdname estimate_link
 #' @export
 estimate_prediction <- function(model,
                                 data = NULL,
                                 ci = 0.95,
                                 keep_iterations = FALSE,
                                 ...) {
+
   .estimate_predicted(
     model,
     data = data,
@@ -119,9 +160,9 @@ estimate_prediction <- function(model,
   )
 }
 
-#' @rdname estimate_expectation
-#' @export
-estimate_response <- estimate_prediction
+
+
+
 
 
 # Internal ----------------------------------------------------------------

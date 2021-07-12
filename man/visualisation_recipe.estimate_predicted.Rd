@@ -58,7 +58,7 @@
 
 \item{...}{Other arguments passed to other functions.}
 
-\item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_expectation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".}
+\item{show_data}{Display the "raw" data as a background to the model-based estimation. Can be set to \code{"none"} to remove it. When input is the result of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of \code{estimate_response} or \code{estimate_relation}, \code{show_data} can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".}
 
 \item{point, jitter, boxplot, violin, pointrange, density_2d, line, hline, ribbon, labs, facet_wrap}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
@@ -134,7 +134,7 @@ if (require("ggplot2")) {
   plot(visualisation_recipe(x))
 }
 # ==============================================
-# estimate_expectation, estimate_response, ...
+# estimate_relation, estimate_response, ...
 # ==============================================
 if (require("ggplot2")) {
 

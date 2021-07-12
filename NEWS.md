@@ -1,3 +1,8 @@
+# modelbased 0.8.0
+
+- `estimate_prediction()` deprecated in favour of `estimate_response()`.
+- `estimate_expectation()` now has `data=NULL` by default.
+
 # modelbased 0.7.0
 
 - General overhaul of the package. 
