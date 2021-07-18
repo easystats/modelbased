@@ -47,7 +47,7 @@ probabilities.}
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
 
-\item{at}{The variables at which to assess the slope of the variable specified in \code{trend}. Other predictors of the model that are not included will be collapsed and "averaged" over (the effect will be estimated across them).}
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 }
 \value{
 An \code{emmeans} object.

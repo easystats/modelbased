@@ -33,14 +33,13 @@ model_emtrends <- function(model,
     cov.reduce <- list()
     data <- insight::get_data(model)
 
+    # See #119
+    return_fixed_values <- function(value) {force(value); function(...) {value}}
+
     for (i in args$at) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      values <- vizdata[[var]]
-      cov.reduce[[var]] <- local({
-        values
-        function(x) values
-      }) # See #119
+      cov.reduce[[var]] <- return_fixed_values(vizdata[[var]])
 
       # Overwrite the corresponding names with clean names
       args$at[args$at == i] <- var

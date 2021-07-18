@@ -6,7 +6,7 @@
 #' # ==============================================
 #' if (require("ggplot2")) {
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   x <- estimate_slopes(model, trend = "Petal.Length", at = c("Petal.Length", "Species"))
+#'   x <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 #'
 #'   layers <- visualisation_recipe(x)
 #'   layers
@@ -42,25 +42,25 @@ visualisation_recipe.estimate_slopes <- function(x,
   group <- NULL
   alpha <- NULL
 
-  if (is.null(info$modulate)) {
-    x1 <- info$levels[1]
-    if (length(info$levels) > 1) {
-      warning("Cannot deal with more than 2 'levels' variables for now. Other ones will be omitted.")
+  # What are the fact
+  facs <- info$at[sapply(data[info$at], function(x) is.factor(x) | is.character(x))]
+  nums <- info$at[!info$at %in% facs]
+  if (length(facs) > 0 & length(nums) == 0) {
+    x1 <- facs[1]
+    if (length(facs) > 1) {
+      warning("Cannot deal with more than 2 'factors' variables for now. Selecting first and omitting the others.")
     }
   } else {
-    x1 <- info$modulate[1]
-    if (length(info$modulate) > 1) {
-      warning("Cannot deal with more than 2 'modulate' variables for now. Other ones will be omitted.")
+    x1 <- nums[1]
+    if (length(nums) > 1) {
+      warning("Cannot deal with more than 2 'numeric' variables for now. Selecting first and omitting the others.")
     }
-    if (!is.null(info$levels)) {
-      color <- info$levels[1]
-      fill <- info$levels[1]
-      group_ribbon <- info$levels[1]
-      group_line <- info$levels[1]
+    if (length(facs) > 0) {
+      color <- facs[1]
+      fill <- facs[1]
+      group_ribbon <- facs[1]
+      group_line <- facs[1]
       alpha <- "Confidence"
-
-      print(color)
-      print(y)
     } else {
       group_ribbon <- ".group"
       group_line <- 1
@@ -78,14 +78,14 @@ visualisation_recipe.estimate_slopes <- function(x,
   l <- l + 1
 
   # Line + Point-range style
-  if (!is.null(info$levels[1]) && x1 == info$levels[1]) {
+  if (length(facs) > 0 && x1 == facs[1]) {
     layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, y = "Coefficient", color = NULL, alpha = NULL, line = line)
     l <- l + 1
     layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, y = "Coefficient", color = color, alpha = NULL, pointrange = pointrange)
     l <- l + 1
 
     # Ribbon + line style
-  } else if (x1 == info$modulate[1]) {
+  } else if (x1 == nums[1]) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon, group = group_ribbon)
     l <- l + 1
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
