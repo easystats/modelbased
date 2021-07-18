@@ -76,7 +76,7 @@ be used, such as the arguments from  \code{\link{visualisation_matrix}} (used
 when \code{data = "grid"}) and from
 \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
 to compute predictions used internally). For plotting, check the examples in
-\code{\link{visualisation_recipe}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases
+\code{\link{visualisation_recipe}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 }
 \examples{
 library(modelbased)

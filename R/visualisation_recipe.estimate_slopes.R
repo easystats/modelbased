@@ -6,18 +6,18 @@
 #' # ==============================================
 #' if (require("ggplot2")) {
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   x <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
+#'   x <- estimate_slopes(model, trend = "Petal.Length", at = c("Petal.Length", "Species"))
 #'
 #'   layers <- visualisation_recipe(x)
 #'   layers
 #'   plot(layers)
 #'
 #'   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#'   x <- estimate_slopes(model, modulate = "Sepal.Width", length = 20)
+#'   x <- estimate_slopes(model, at = "Sepal.Width", length = 20)
 #'   plot(visualisation_recipe(x))
 #'
 #'   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-#'   x <- estimate_slopes(model, modulate = "Sepal.Width", levels = "Species")
+#'   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
 #' @export
@@ -58,6 +58,9 @@ visualisation_recipe.estimate_slopes <- function(x,
       group_ribbon <- info$levels[1]
       group_line <- info$levels[1]
       alpha <- "Confidence"
+
+      print(color)
+      print(y)
     } else {
       group_ribbon <- ".group"
       group_line <- 1

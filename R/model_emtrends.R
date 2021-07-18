@@ -1,38 +1,39 @@
 #' @rdname model_emmeans
 #' @param trend A character vector indicating the name of the numeric variable
 #'   for which to compute the slopes.
+#' @param at The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #' model_emtrends(model)
-#' model_emtrends(model, levels = "Species")
-#' model_emtrends(model, modulate = "Petal.Length")
-#' model_emtrends(model, levels = "Species", modulate = "Petal.Length")
+#' model_emtrends(model, at = "Species")
+#' model_emtrends(model, at = "Petal.Length")
+#' model_emtrends(model, at = c("Species", "Petal.Length"))
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#' model_emtrends(model, modulate = "Sepal.Width")
+#' model_emtrends(model)
+#' model_emtrends(model, at = "Sepal.Width")
 #' @export
 model_emtrends <- function(model,
                            trend = NULL,
-                           levels = NULL,
-                           modulate = NULL,
+                           at = NULL,
                            ...) {
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emtrends_arguments(model, trend, levels, modulate, ...)
+  args <- .guess_emtrends_arguments(model, trend, at, ...)
 
-  # Modulate
-  if (is.null(args$modulate)) {
+  if(is.null(args$at)) {
     cov.reduce <- TRUE
+    args$at <- ~1
   } else {
     cov.reduce <- list()
     data <- insight::get_data(model)
 
-    for (i in args$modulate) {
+    for (i in args$at) {
       vizdata <- visualisation_matrix(data, target = i, ...)
       var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
       values <- vizdata[[var]]
@@ -42,20 +43,21 @@ model_emtrends <- function(model,
       }) # See #119
 
       # Overwrite the corresponding names with clean names
-      args$modulate[args$modulate == i] <- var
+      args$at[args$at == i] <- var
     }
   }
 
   # Run emtrends
   estimated <- emmeans::emtrends(
     model,
-    c(args$levels, args$modulate),
+    args$at,
     var = args$trend,
     cov.reduce = cov.reduce,
     ...
   )
 
-  attr(estimated, "args") <- args
+  attr(estimated, "trend") <- args$trend
+  attr(estimated, "at") <- args$at
   estimated
 }
 
@@ -69,8 +71,7 @@ model_emtrends <- function(model,
 #' @keywords internal
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
-                                      levels = NULL,
-                                      modulate = NULL,
+                                      at = NULL,
                                       ...) {
 
   # Gather info
@@ -90,14 +91,5 @@ model_emtrends <- function(model,
     trend <- trend[1]
   }
 
-  # Look if there are any factors
-  if (is.null(levels) && is.null(modulate)) {
-    levels <- predictors[!sapply(data[predictors], is.numeric)]
-    if (length(levels) == 0) levels <- NULL
-  }
-  if (is.null(levels) && is.null(modulate)) {
-    levels <- predictors[predictors %in% trend][1]
-  }
-
-  list(trend = trend, levels = levels, modulate = modulate)
+  list(trend = trend, at = at)
 }

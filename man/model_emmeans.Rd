@@ -14,7 +14,7 @@ model_emmeans(
   ...
 )
 
-model_emtrends(model, trend = NULL, levels = NULL, modulate = NULL, ...)
+model_emtrends(model, trend = NULL, at = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -46,6 +46,8 @@ probabilities.}
 
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
+
+\item{at}{The variables at which to assess the slope of the variable specified in \code{trend}. Other predictors of the model that are not included will be collapsed and "averaged" over (the effect will be estimated across them).}
 }
 \value{
 An \code{emmeans} object.
@@ -68,10 +70,11 @@ model_emmeans(model, modulate = "Petal.Width", length = 3)
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 model_emtrends(model)
-model_emtrends(model, levels = "Species")
-model_emtrends(model, modulate = "Petal.Length")
-model_emtrends(model, levels = "Species", modulate = "Petal.Length")
+model_emtrends(model, at = "Species")
+model_emtrends(model, at = "Petal.Length")
+model_emtrends(model, at = c("Species", "Petal.Length"))
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-model_emtrends(model, modulate = "Sepal.Width")
+model_emtrends(model)
+model_emtrends(model, at = "Sepal.Width")
 }

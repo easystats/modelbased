@@ -8,6 +8,8 @@
 #' @inheritParams model_emmeans
 #' @inheritParams parameters::model_parameters.default
 #'
+#' @inherit estimate_slopes details
+#'
 #' @examples
 #' library(modelbased)
 #'
