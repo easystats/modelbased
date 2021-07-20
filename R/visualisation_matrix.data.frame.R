@@ -1,6 +1,6 @@
 #' Create a reference grid
 #'
-#' Create a reference matrix, useful for visualisation, with evenly spread and combined values.
+#' Create a reference matrix, useful for visualisation, with evenly spread and combined values. \code{data_matrix()} is an alternative name for \code{visualisation_matrix()}.
 #'
 #' @param x An object from which to construct the reference grid.
 #' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
@@ -44,8 +44,9 @@ visualisation_matrix <- function(x, ...) {
   UseMethod("visualisation_matrix")
 }
 
-
-
+#' @rdname visualisation_matrix
+#' @export
+data_matrix <- visualisation_matrix
 
 
 # -------------------------------------------------------------------------
@@ -56,79 +57,90 @@ visualisation_matrix <- function(x, ...) {
 #' @export
 visualisation_matrix.data.frame <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
 
-  # Valid target argument
-  if (all(target == "all") || ncol(x) == 1 || all(names(x) %in% c(target))) {
-    target <- names(x)
-  }
-
-  if (is.numeric(target)) {
-    target <- names(x)[target]
-  }
-
-  # Deal with targets ==========================================================
-
-  # Find eventual user-defined specifications for each target
-  specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
-  specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
-
-  # Create target list of factors -----------------------------------------
-  facs <- list()
-  for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-    facs[[fac]] <- visualisation_matrix(x[[fac]], target = specs[specs$varname == fac, "expression"])
-  }
-
-  # Create target list of numerics ----------------------------------------
-  nums <- list()
-  for (num in specs[specs$is_factor == FALSE, "varname"]) {
-    nums[[num]] <- visualisation_matrix(x[[num]],
-      target = specs[specs$varname == num, "expression"],
-      reference = reference[[num]],
-      ...
-    )
-  }
-  # Assemble the two
-  targets <- expand.grid(c(nums, facs))
-
-  # Preserve range ---------------------------------------------------------
-  if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
-
-    # Loop through the combinations of factors
-    facs_combinations <- expand.grid(facs)
-    for (i in 1:nrow(facs_combinations)) {
-      # Query subset of original dataset
-      subset <- x[datawizard::data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
-      idx <- datawizard::data_match(targets, to = facs_combinations[i, , drop = FALSE])
-
-      # Skip if no instance of factor combination, drop the chunk
-      if (nrow(subset) == 0) {
-        targets <- targets[-idx, ]
-        break
-      }
-
-      # Else, filter given the range of numerics
-      rows_to_remove <- c()
-      for (num in names(nums)) {
-        mini <- min(subset[[num]], na.rm = TRUE)
-        maxi <- max(subset[[num]], na.rm = TRUE)
-        rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
-      }
-      if(length(rows_to_remove) > 0) {
-        targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
-        row.names(targets) <- NULL # Reset row.names
-      }
+  if(is.null(target)) {
+    specs <- NULL
+    targets <- data.frame()
+  } else {
+    # Valid target argument
+    if (all(target == "all") || ncol(x) == 1 || all(names(x) %in% c(target))) {
+      target <- names(x)
     }
 
-    if (nrow(targets) == 0) {
-      stop("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
+    if (is.numeric(target)) {
+      target <- names(x)[target]
+    }
+
+    # Deal with targets ==========================================================
+
+    # Find eventual user-defined specifications for each target
+    specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
+    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+
+    # Create target list of factors -----------------------------------------
+    facs <- list()
+    for (fac in specs[specs$is_factor == TRUE, "varname"]) {
+      facs[[fac]] <- visualisation_matrix(x[[fac]], target = specs[specs$varname == fac, "expression"])
+    }
+
+    # Create target list of numerics ----------------------------------------
+    nums <- list()
+    for (num in specs[specs$is_factor == FALSE, "varname"]) {
+      nums[[num]] <- visualisation_matrix(x[[num]],
+                                          target = specs[specs$varname == num, "expression"],
+                                          reference = reference[[num]],
+                                          ...
+      )
+    }
+    # Assemble the two
+    targets <- expand.grid(c(nums, facs))
+
+    # Preserve range ---------------------------------------------------------
+    if (preserve_range == TRUE && length(facs) > 0 && length(nums) > 0) {
+
+      # Loop through the combinations of factors
+      facs_combinations <- expand.grid(facs)
+      for (i in 1:nrow(facs_combinations)) {
+        # Query subset of original dataset
+        subset <- x[datawizard::data_match(x, to = facs_combinations[i, , drop = FALSE]), , drop = FALSE]
+        idx <- datawizard::data_match(targets, to = facs_combinations[i, , drop = FALSE])
+
+        # Skip if no instance of factor combination, drop the chunk
+        if (nrow(subset) == 0) {
+          targets <- targets[-idx, ]
+          break
+        }
+
+        # Else, filter given the range of numerics
+        rows_to_remove <- c()
+        for (num in names(nums)) {
+          mini <- min(subset[[num]], na.rm = TRUE)
+          maxi <- max(subset[[num]], na.rm = TRUE)
+          rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
+        }
+        if(length(rows_to_remove) > 0) {
+          targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
+          row.names(targets) <- NULL # Reset row.names
+        }
+      }
+
+      if (nrow(targets) == 0) {
+        stop("No data left was left after range preservation. Try increasing `length` or setting `preserve_range` to FALSE.")
+      }
     }
   }
+
+
 
   # Deal with the rest =========================================================
   rest_vars <- names(x)[!names(x) %in% names(targets)]
   if (length(rest_vars) >= 1) {
     rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, ...)
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
-    targets <- merge(targets, rest_df, sort = FALSE)
+    if(nrow(targets) == 0) {
+      targets <- rest_df  # If target = NULL
+    } else {
+      targets <- merge(targets, rest_df, sort = FALSE)
+    }
   }
 
   # Prepare output =============================================================

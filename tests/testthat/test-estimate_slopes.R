@@ -8,7 +8,7 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_slopes(model, at = "Species")
     expect_equal(dim(estim), c(3, 9))
 
-    estim <- estimate_slopes(model, at = c("Petal.Length", "Petal.Length"))
+    estim <- estimate_slopes(model, at = "Petal.Length")
     expect_equal(dim(estim), c(10, 9))
 
     estim <- estimate_slopes(model, at = c("Species", "Petal.Length"))

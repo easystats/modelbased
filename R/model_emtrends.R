@@ -19,6 +19,7 @@
 model_emtrends <- function(model,
                            trend = NULL,
                            at = NULL,
+                           fixed = NULL,
                            levels = NULL,
                            modulate = NULL,
                            ...) {
@@ -33,7 +34,7 @@ model_emtrends <- function(model,
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emtrends_arguments(model, trend, at, ...)
+  args <- .guess_emtrends_arguments(model, trend, at, fixed, ...)
 
   # Run emtrends
   estimated <- emmeans::emtrends(
@@ -41,12 +42,12 @@ model_emtrends <- function(model,
     specs = args$emmeans_specs,
     var = args$trend,
     at = args$emmeans_at,
-    # cov.reduce = cov.reduce,
     ...
   )
 
   attr(estimated, "trend") <- args$trend
   attr(estimated, "at") <- args$at
+  attr(estimated, "fixed") <- args$fixed
   estimated
 }
 
@@ -58,23 +59,40 @@ model_emtrends <- function(model,
 
 #' @keywords internal
 .format_emmeans_arguments <- function(model, args, ...) {
+
+  # Create the data_matrix
+  # ---------------------------
+  data <- insight::get_data(model)
+
+  # Deal with 'at'
   if(is.null(args$at)) {
+    args$data_matrix <- NULL
+  } else {
+    grid <- visualisation_matrix(data, target = args$at, ...)
+    vars <- attributes(grid)$target_specs$varname
+    args$data_matrix <- as.data.frame(grid[vars])
+    args$at <- vars # Replace by cleaned varnames
+  }
+  # Deal with 'fixed'
+  if(!is.null(args$fixed)) {
+    fixed <- visualisation_matrix(data[args$fixed], target = NULL, ...)
+    if(is.null(args$data_matrix)) {
+      args$data_matrix <- fixed
+    } else {
+      args$data_matrix <- merge(args$data_matrix, fixed)
+    }
+  }
+
+  # Get 'specs' and 'at'
+  # --------------------
+  if(is.null(args$data_matrix)) {
     args$emmeans_specs <- ~1
     args$emmeans_at <- NULL
   } else {
-    args$emmeans_at <- list()
-    data <- insight::get_data(model)
-
-    for (i in args$at) {
-      vizdata <- visualisation_matrix(data, target = i, ...)
-      var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      args$emmeans_at[[var]] <- vizdata[[var]]
-
-      # Overwrite the corresponding names with clean names
-      args$at[args$at == i] <- var
-      args$emmeans_specs <- args$at
-    }
+    args$emmeans_specs <- names(args$data_matrix)
+    args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
   }
+
   args
 }
 
@@ -84,6 +102,7 @@ model_emtrends <- function(model,
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
                                       at = NULL,
+                                      fixed = NULL,
                                       ...) {
 
   # Gather info
@@ -103,6 +122,6 @@ model_emtrends <- function(model,
     trend <- trend[1]
   }
 
-  args <- list(trend = trend, at = at)
+  args <- list(trend = trend, at = at, fixed = fixed)
   .format_emmeans_arguments(model, args, ...)
 }

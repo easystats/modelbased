@@ -18,6 +18,7 @@ model_emtrends(
   model,
   trend = NULL,
   at = NULL,
+  fixed = NULL,
   levels = NULL,
   modulate = NULL,
   ...
