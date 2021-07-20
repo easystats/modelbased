@@ -1,4 +1,5 @@
 #' @rdname model_emmeans
+#'
 #' @param trend A character vector indicating the name of the numeric variable
 #'   for which to compute the slopes.
 #' @param at The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
@@ -18,7 +19,15 @@
 model_emtrends <- function(model,
                            trend = NULL,
                            at = NULL,
+                           levels = NULL,
+                           modulate = NULL,
                            ...) {
+
+  # Deprecation
+  if(!is.null(levels) | !is.null(modulate)) {
+    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+    at <- c(at, levels, modulate)
+  }
 
   # check if available
   insight::check_if_installed("emmeans")
@@ -26,32 +35,13 @@ model_emtrends <- function(model,
   # Guess arguments
   args <- .guess_emtrends_arguments(model, trend, at, ...)
 
-  if(is.null(args$at)) {
-    cov.reduce <- TRUE
-    args$at <- ~1
-  } else {
-    cov.reduce <- list()
-    data <- insight::get_data(model)
-
-    # See #119
-    return_fixed_values <- function(value) {force(value); function(...) {value}}
-
-    for (i in args$at) {
-      vizdata <- visualisation_matrix(data, target = i, ...)
-      var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      cov.reduce[[var]] <- return_fixed_values(vizdata[[var]])
-
-      # Overwrite the corresponding names with clean names
-      args$at[args$at == i] <- var
-    }
-  }
-
   # Run emtrends
   estimated <- emmeans::emtrends(
     model,
-    args$at,
+    specs = args$emmeans_specs,
     var = args$trend,
-    cov.reduce = cov.reduce,
+    at = args$emmeans_at,
+    # cov.reduce = cov.reduce,
     ...
   )
 
@@ -65,6 +55,29 @@ model_emtrends <- function(model,
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
+
+#' @keywords internal
+.format_emmeans_arguments <- function(model, args, ...) {
+  if(is.null(args$at)) {
+    args$emmeans_specs <- ~1
+    args$emmeans_at <- NULL
+  } else {
+    args$emmeans_at <- list()
+    data <- insight::get_data(model)
+
+    for (i in args$at) {
+      vizdata <- visualisation_matrix(data, target = i, ...)
+      var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
+      args$emmeans_at[[var]] <- vizdata[[var]]
+
+      # Overwrite the corresponding names with clean names
+      args$at[args$at == i] <- var
+      args$emmeans_specs <- args$at
+    }
+  }
+  args
+}
+
 
 
 #' @keywords internal
@@ -90,5 +103,6 @@ model_emtrends <- function(model,
     trend <- trend[1]
   }
 
-  list(trend = trend, at = at)
+  args <- list(trend = trend, at = at)
+  .format_emmeans_arguments(model, args, ...)
 }

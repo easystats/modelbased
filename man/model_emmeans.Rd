@@ -14,22 +14,22 @@ model_emmeans(
   ...
 )
 
-model_emtrends(model, trend = NULL, at = NULL, ...)
+model_emtrends(
+  model,
+  trend = NULL,
+  at = NULL,
+  levels = NULL,
+  modulate = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
 
-\item{levels}{A character vector or formula specifying the names of the
-factors over which levels to estimate the means, contrasts or slopes. If
-\code{NULL} (default), will automatically try to find it.}
+\item{levels, modulate}{Deprecated, use \code{at} instead.}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{modulate}{A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Other arguments
-from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-number of data points.}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See

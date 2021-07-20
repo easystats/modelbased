@@ -7,7 +7,7 @@
 #' \cr\cr
 #' See the \strong{Details} section below, and don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 #'
-#' @inheritParams model_emtrends
+#' @inheritParams model_emmeans
 #' @inheritParams estimate_means
 #'
 #' @details The \code{\link{estimate_slopes}}, \code{\link{estimate_means}} and \code{\link{estimate_contrasts}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans()}} and \code{\link[emmeans:emtrends]{emtrends()}}) is advised to understand the idea behind these types of procedures.
@@ -30,7 +30,7 @@
 #'
 #' if (require("mgcv")) {
 #'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-#'   slopes <- estimate_slopes(model, at = "Petal.Length", length = 30)
+#'   slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
 #'   summary(slopes)
 #'   plot(slopes)
 #' }

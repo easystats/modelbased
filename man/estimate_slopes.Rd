@@ -49,7 +49,7 @@ effectsize::standardize(slopes)
 
 if (require("mgcv")) {
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-  slopes <- estimate_slopes(model, at = "Petal.Length", length = 30)
+  slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
   summary(slopes)
   plot(slopes)
 }

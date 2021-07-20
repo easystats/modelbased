@@ -5,15 +5,8 @@
 #' somewhat simpler and smart API to find the variables of interest.
 #'
 #' @param model A statistical model.
-#' @param levels A character vector or formula specifying the names of the
-#'   factors over which levels to estimate the means, contrasts or slopes. If
-#'   \code{NULL} (default), will automatically try to find it.
 #' @param fixed A character vector indicating the names of the predictors to be
 #'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param modulate A character vector indicating the names of a numeric variable
-#'   along which the means or the contrasts will be estimated. Other arguments
-#'   from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-#'   number of data points.
 #' @param transform Is passed to the \code{type} argument in
 #'   \code{emmeans::emmeans()}. See
 #'   \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
@@ -24,6 +17,7 @@
 #'   Thus for a logistic model, \code{"none"} will give estimations expressed in
 #'   log-odds (probabilities on logit scale) and \code{"response"} in terms of
 #'   probabilities.
+#' @param levels,modulate Deprecated, use \code{at} instead.
 #' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
 #'
 #' @return An \code{emmeans} object.
@@ -44,6 +38,12 @@ model_emmeans <- function(model,
                           modulate = NULL,
                           transform = "response",
                           ...) {
+
+  # Deprecation
+  # if(!is.null(levels) | !is.null(modulate)) {
+  #   warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+  #   at <- c(at, levels, modulate)
+  # }
 
   # check if available
   insight::check_if_installed("emmeans")
