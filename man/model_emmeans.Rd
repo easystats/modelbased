@@ -3,14 +3,15 @@
 \name{model_emmeans}
 \alias{model_emmeans}
 \alias{model_emtrends}
-\title{Easy Creation of 'emmeans' Objects}
+\title{Easy 'emmeans' and 'emtrends'}
 \usage{
 model_emmeans(
   model,
-  levels = NULL,
+  at = "auto",
   fixed = NULL,
-  modulate = NULL,
   transform = "response",
+  levels = NULL,
+  modulate = NULL,
   ...
 )
 
@@ -27,7 +28,7 @@ model_emtrends(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{levels, modulate}{Deprecated, use \code{at} instead.}
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -43,15 +44,12 @@ Thus for a logistic model, \code{"none"} will give estimations expressed in
 log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
+\item{levels, modulate}{Deprecated, use \code{at} instead.}
+
 \item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 
 \item{trend}{A character vector indicating the name of the numeric variable
 for which to compute the slopes.}
-
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
-}
-\value{
-An \code{emmeans} object.
 }
 \description{
 The \code{model_emmeans} function is a wrapper to facilitate the usage of
@@ -59,15 +57,22 @@ The \code{model_emmeans} function is a wrapper to facilitate the usage of
 somewhat simpler and smart API to find the variables of interest.
 }
 \examples{
-library(modelbased)
-
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'levels' is set to "Species"
 model_emmeans(model)
 
+# Overall mean (close to 'mean(iris$Sepal.Length)')
+model_emmeans(model, at = NULL)
+
 # One can estimate marginal means at several values of a 'modulate' variable
-model_emmeans(model, modulate = "Petal.Width", length = 3)
+model_emmeans(model, at = "Petal.Width", length = 3)
+
+# Interactions
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+
+model_emmeans(model)
+model_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 model_emtrends(model)

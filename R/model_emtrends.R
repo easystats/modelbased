@@ -2,7 +2,6 @@
 #'
 #' @param trend A character vector indicating the name of the numeric variable
 #'   for which to compute the slopes.
-#' @param at The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -58,47 +57,6 @@ model_emtrends <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.format_emmeans_arguments <- function(model, args, ...) {
-
-  # Create the data_matrix
-  # ---------------------------
-  data <- insight::get_data(model)
-
-  # Deal with 'at'
-  if(is.null(args$at)) {
-    args$data_matrix <- NULL
-  } else {
-    grid <- visualisation_matrix(data, target = args$at, ...)
-    vars <- attributes(grid)$target_specs$varname
-    args$data_matrix <- as.data.frame(grid[vars])
-    args$at <- vars # Replace by cleaned varnames
-  }
-  # Deal with 'fixed'
-  if(!is.null(args$fixed)) {
-    fixed <- visualisation_matrix(data[args$fixed], target = NULL, ...)
-    if(is.null(args$data_matrix)) {
-      args$data_matrix <- fixed
-    } else {
-      args$data_matrix <- merge(args$data_matrix, fixed)
-    }
-  }
-
-  # Get 'specs' and 'at'
-  # --------------------
-  if(is.null(args$data_matrix)) {
-    args$emmeans_specs <- ~1
-    args$emmeans_at <- NULL
-  } else {
-    args$emmeans_specs <- names(args$data_matrix)
-    args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
-  }
-
-  args
-}
-
-
-
-#' @keywords internal
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
                                       at = NULL,
@@ -113,7 +71,7 @@ model_emtrends <- function(model,
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      stop("Model contains no numeric predictor. Cannot estimate trend.")
+      stop("Model contains no numeric predictor. Please specify 'trend'.")
     }
     message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }

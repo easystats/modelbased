@@ -18,12 +18,8 @@ estimate_contrasts(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{levels}{Deprecated, use \code{at} instead.}
-
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{modulate}{Deprecated, use \code{at} instead.}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See

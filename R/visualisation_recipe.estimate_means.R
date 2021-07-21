@@ -28,14 +28,14 @@
 #'   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
 #'   model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-#'   x <- estimate_means(model, levels = c("new_factor", "cyl"))
+#'   x <- estimate_means(model, at = c("new_factor", "cyl"))
 #'   plot(visualisation_recipe(x))
 #'
 #'   # Modulations --------------
-#'   x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+#'   x <- estimate_means(model, at = c("new_factor", "wt"))
 #'   plot(visualisation_recipe(x))
 #'
-#'   x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+#'   x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
 #'   plot(visualisation_recipe(x))
 #'
 #'   #'   # GLMs ---------------------
@@ -64,7 +64,8 @@ visualisation_recipe.estimate_means <- function(x,
   color <- NULL
   alpha <- NULL
 
-  levels <- info$levels
+  levels <- info$at[info$at %in% names(data[!sapply(data, is.numeric)])]
+  modulate <- info$at[info$at %in% names(data[sapply(data, is.numeric)])]
   x1 <- levels[1]
   if (length(levels) > 1) {
     color <- levels[2]
@@ -73,9 +74,9 @@ visualisation_recipe.estimate_means <- function(x,
       warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.")
     }
   }
-  if (!is.null(info$modulate)) {
-    alpha <- info$modulate[1]
-    if (length(info$modulate) > 1) {
+  if (!is.null(modulate) && length(modulate) > 0) {
+    alpha <- modulate[1]
+    if (length(modulate) > 1) {
       warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.")
     }
   }

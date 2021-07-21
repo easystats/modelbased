@@ -19,12 +19,12 @@
 #'
 #' estimate_means(model)
 #' estimate_means(model, fixed = "Sepal.Width")
-#' estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
-#' estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
-#' estimate_means(model, levels = "Sepal.Width=c(2, 4)")
-#' estimate_means(model, levels = c("Species", "Sepal.Width=0"))
-#' estimate_means(model, modulate = "Sepal.Width", length = 5)
-#' estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
+#' estimate_means(model, at = "Species=c('versicolor', 'setosa')")
+#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, at = c("Species", "Sepal.Width=0"))
+#' estimate_means(model, at = "Sepal.Width", length = 5)
+#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
@@ -37,7 +37,7 @@
 #'
 #'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #'   estimate_means(model)
-#'   estimate_means(model, modulate = "Sepal.Width", length = 3)
+#'   estimate_means(model, at = "Sepal.Width", length = 3)
 #' }
 #'
 #' # Bayesian models
@@ -52,7 +52,7 @@
 #'
 #'   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #'   estimate_means(model)
-#'   estimate_means(model, modulate = "wt")
+#'   estimate_means(model, at = "wt")
 #'   estimate_means(model, fixed = "wt")
 #' }
 #' }
@@ -67,16 +67,15 @@
 #' @return A dataframe of estimated marginal means.
 #' @export
 estimate_means <- function(model,
-                           levels = NULL,
+                           at = "auto",
                            fixed = NULL,
-                           modulate = NULL,
                            transform = "response",
                            ci = 0.95,
                            ...) {
 
   # Run emmeans
-  estimated <- model_emmeans(model, levels, fixed, modulate, transform = transform, ...)
-  args <- attributes(estimated)$args
+  estimated <- model_emmeans(model, at, fixed, transform = transform, ...)
+  info <- attributes(estimated)
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
@@ -94,6 +93,8 @@ estimate_means <- function(model,
     means$df <- NULL
     means <- .clean_names_frequentist(means)
   }
+  # Remove the "1 - overall" column that can appear in cases like at = NULL
+  means <- means[names(means) != "1"]
 
   # Restore factor levels
   means <- datawizard::data_restoretype(means, insight::get_data(model))
@@ -101,16 +102,15 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(means, args, type = "means")
+  attr(means, "table_footer") <- .estimate_means_footer(means, info$at, type = "means")
 
   # Add attributes
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "transform") <- transform
-  attr(means, "levels") <- args$levels
-  attr(means, "fixed") <- args$fixed
-  attr(means, "modulate") <- args$modulate
+  attr(means, "at") <- info$at
+  attr(means, "fixed") <- info$fixed
   attr(means, "coef_name") <- intersect(c("Mean", "Probability"), names(means))
 
 
@@ -178,17 +178,17 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, args = NULL, type = "means", adjust = NULL) {
+.estimate_means_footer <- function(x, at = NULL, type = "means", adjust = NULL) {
   table_footer <- ""
 
   # Levels
-  if (length(args$levels) > 0) {
+  if (length(at) > 0) {
     table_footer <- paste0(
       table_footer,
       "\nMarginal ",
       type,
       " estimated for ",
-      paste0(args$levels, collapse = ", ")
+      paste0(at, collapse = ", ")
     )
   }
 
