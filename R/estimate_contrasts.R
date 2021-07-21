@@ -10,6 +10,8 @@
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 #'   section in the \code{emmeans::test} documentation.
 #'
+#' @inherit estimate_slopes details
+#'
 #' @examples
 #' library(modelbased)
 #'

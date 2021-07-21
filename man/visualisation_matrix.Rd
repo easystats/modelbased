@@ -2,12 +2,15 @@
 % Please edit documentation in R/visualisation_matrix.data.frame.R
 \name{visualisation_matrix}
 \alias{visualisation_matrix}
+\alias{data_matrix}
 \alias{visualisation_matrix.data.frame}
 \alias{visualisation_matrix.numeric}
 \alias{visualisation_matrix.factor}
 \title{Create a reference grid}
 \usage{
 visualisation_matrix(x, ...)
+
+data_matrix(x, ...)
 
 \method{visualisation_matrix}{data.frame}(
   x,
@@ -46,7 +49,7 @@ visualisation_matrix(x, ...)
 Reference grid data frame.
 }
 \description{
-Create a reference matrix, useful for visualisation, with evenly spread and combined values.
+Create a reference matrix, useful for visualisation, with evenly spread and combined values. \code{data_matrix()} is an alternative name for \code{visualisation_matrix()}.
 }
 \examples{
 library(modelbased)

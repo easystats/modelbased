@@ -20,7 +20,7 @@
 #' when \code{data = "grid"}) and from
 #' \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
 #' to compute predictions used internally). For plotting, check the examples in
-#' \code{\link{visualisation_recipe}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases
+#' \code{\link{visualisation_recipe}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 #'
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
