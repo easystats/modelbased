@@ -74,8 +74,9 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
 
     # Find eventual user-defined specifications for each target
     specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
-    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+    specs$varname <- as.character(specs$varname)  # make sure it's a string not fac
 
+    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
     # Create target list of factors -----------------------------------------
     facs <- list()
     for (fac in specs[specs$is_factor == TRUE, "varname"]) {
@@ -397,5 +398,5 @@ visualisation_matrix.logical <- visualisation_matrix.character
       )
     }
   }
-  data.frame(varname = varname, expression = expression)
+  data.frame(varname = varname, expression = expression, stringsAsFactors = FALSE)
 }

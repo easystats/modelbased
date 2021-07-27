@@ -88,10 +88,18 @@ model_emmeans <- function(model,
   if(is.null(args$at)) {
     args$data_matrix <- NULL
   } else {
-    grid <- visualisation_matrix(data, target = args$at, ...)
-    vars <- attributes(grid)$target_specs$varname
-    args$data_matrix <- as.data.frame(grid[vars])
-    args$at <- vars # Replace by cleaned varnames
+    if(is.data.frame(args$at)){
+      args$data_matrix <- args$at
+      args$at <- names(args$at)
+    } else if(is.list(args$at)) {
+      args$data_matrix <- expand.grid(args$at)
+      args$at <- names(args$data_matrix)
+    } else {
+      grid <- visualisation_matrix(data, target = args$at, ...)
+      vars <- attributes(grid)$target_specs$varname
+      args$data_matrix <- as.data.frame(grid[vars])
+      args$at <- vars # Replace by cleaned varnames
+    }
   }
   # Deal with 'fixed'
   if(!is.null(args$fixed)) {
@@ -130,7 +138,7 @@ model_emmeans <- function(model,
   data <- insight::get_data(model)
 
   # Guess arguments
-  if (!is.null(at) && at == "auto") {
+  if (!is.null(at) && is.character(at) && at == "auto") {
     at <- predictors[!sapply(data[predictors], is.numeric)][1]
     if (!length(at) || is.na(at)) {
       stop("Model contains no categorical factor. Please specify 'at'.")
