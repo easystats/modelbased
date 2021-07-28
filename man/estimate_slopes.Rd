@@ -9,7 +9,7 @@ estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
 \arguments{
 \item{model}{A statistical model.}
 
-\item{trend}{A character vector indicating the name of the numeric variable
+\item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
 \item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}

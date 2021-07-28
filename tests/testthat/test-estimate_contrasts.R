@@ -6,7 +6,8 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
 
     estim <- estimate_contrasts(model)
     expect_equal(dim(estim), c(3, 9))
-    estim <- estimate_contrasts(model, levels = "Species=c('versicolor', 'virginica')")
+
+    estim <- estimate_contrasts(model, at = "Species=c('versicolor', 'virginica')")
     expect_equal(dim(estim), c(1, 9))
 
     # Two factors

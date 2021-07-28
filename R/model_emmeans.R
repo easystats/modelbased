@@ -2,7 +2,8 @@
 #'
 #' The \code{model_emmeans} function is a wrapper to facilitate the usage of
 #' \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
-#' somewhat simpler and smart API to find the variables of interest.
+#' somewhat simpler and intuitive API to find the specifications and variables of interest.
+#' It is meanly made to for the developpers to facilitate the organization and debugging, and end-users should rather use the \code{estimate_*} series of functions.
 #'
 #' @param model A statistical model.
 #' @param fixed A character vector indicating the names of the predictors to be
@@ -24,7 +25,7 @@
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
-#' # By default, 'levels' is set to "Species"
+#' # By default, 'at' is set to "Species"
 #' model_emmeans(model)
 #'
 #' # Overall mean (close to 'mean(iris$Sepal.Length)')
@@ -40,7 +41,7 @@
 #' model_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 #' @export
 model_emmeans <- function(model,
-                           at = "auto",
+                          at = "auto",
                            fixed = NULL,
                            transform = "response",
                            levels = NULL,
@@ -50,7 +51,7 @@ model_emmeans <- function(model,
   # Deprecation
   if(!is.null(levels) | !is.null(modulate)) {
     warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
-    at <- c(at, levels, modulate)
+    at <- c(levels, modulate)
   }
 
   # check if available
@@ -59,7 +60,7 @@ model_emmeans <- function(model,
   # Guess arguments
   args <- .guess_emmeans_arguments(model, at, fixed, ...)
 
-  # Run emtrends
+  # Run emmeans
   estimated <- emmeans::emmeans(
     model,
     specs = args$emmeans_specs,
@@ -83,9 +84,10 @@ model_emmeans <- function(model,
   # Create the data_matrix
   # ---------------------------
   data <- insight::get_data(model)
+  data <- data[, names(data) != insight::find_response(model), drop = FALSE]
 
   # Deal with 'at'
-  if(is.null(args$at)) {
+  if(is.null(args$at) && is.null(args$contrast)) {
     args$data_matrix <- NULL
   } else {
     if(is.data.frame(args$at)){
@@ -95,7 +97,13 @@ model_emmeans <- function(model,
       args$data_matrix <- expand.grid(args$at)
       args$at <- names(args$data_matrix)
     } else {
-      grid <- visualisation_matrix(data, target = args$at, ...)
+      if(all(args$at == "all")) {
+        target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+        target <- target[!target %in% args$fixed]
+      } else {
+        target <- c(args$at, args$contrast)
+      }
+      grid <- visualisation_matrix(data, target = target, ...)
       vars <- attributes(grid)$target_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars # Replace by cleaned varnames
@@ -139,11 +147,11 @@ model_emmeans <- function(model,
 
   # Guess arguments
   if (!is.null(at) && is.character(at) && at == "auto") {
-    at <- predictors[!sapply(data[predictors], is.numeric)][1]
+    at <- predictors[!sapply(data[predictors], is.numeric)]
     if (!length(at) || is.na(at)) {
       stop("Model contains no categorical factor. Please specify 'at'.")
     }
-    message('We selected `at = "', at, '"`.')
+    message('We selected `at = c(', paste0(paste0('"', at, '"'), collapse = ", "), ')`.')
   }
 
   args <- list(at = at, fixed = fixed)

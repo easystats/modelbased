@@ -118,14 +118,14 @@ if (require("ggplot2")) {
   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
   model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-  x <- estimate_means(model, levels = c("new_factor", "cyl"))
+  x <- estimate_means(model, at = c("new_factor", "cyl"))
   plot(visualisation_recipe(x))
 
   # Modulations --------------
-  x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+  x <- estimate_means(model, at = c("new_factor", "wt"))
   plot(visualisation_recipe(x))
 
-  x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+  x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
   plot(visualisation_recipe(x))
 
   #'   # GLMs ---------------------

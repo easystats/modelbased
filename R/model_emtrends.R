@@ -1,6 +1,6 @@
 #' @rdname model_emmeans
 #'
-#' @param trend A character vector indicating the name of the numeric variable
+#' @param trend A character indicating the name of the variable
 #'   for which to compute the slopes.
 #'
 #' @examples
@@ -26,7 +26,7 @@ model_emtrends <- function(model,
   # Deprecation
   if(!is.null(levels) | !is.null(modulate)) {
     warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
-    at <- c(at, levels, modulate)
+    at <- c(levels, modulate)
   }
 
   # check if available

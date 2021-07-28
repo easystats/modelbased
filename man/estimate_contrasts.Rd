@@ -6,9 +6,9 @@
 \usage{
 estimate_contrasts(
   model,
-  levels = NULL,
+  contrast = NULL,
+  at = NULL,
   fixed = NULL,
-  modulate = NULL,
   transform = "none",
   ci = 0.95,
   adjust = "holm",
@@ -17,6 +17,11 @@ estimate_contrasts(
 }
 \arguments{
 \item{model}{A statistical model.}
+
+\item{contrast}{A character vector indicating the name of the variable(s)
+for which to compute the contrasts.}
+
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -69,10 +74,16 @@ estimate_contrasts(model)
 
 # Dealing with interactions
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+# By default: selects first factor
 estimate_contrasts(model)
+# Can also run contrasts between points of numeric
+estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+# Or both
+estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+# Can fixate the numeric at a specific value
 estimate_contrasts(model, fixed = "Petal.Width")
-estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-estimate_contrasts(model, levels = "Petal.Width", length = 4)
+# Or modulate it
+estimate_contrasts(model, at = "Petal.Width", length = 4)
 
 # Standardized differences
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))

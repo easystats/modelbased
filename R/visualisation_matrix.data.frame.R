@@ -62,7 +62,7 @@ visualisation_matrix.data.frame <- function(x, target = "all", factors = "refere
     targets <- data.frame()
   } else {
     # Valid target argument
-    if (all(target == "all") || ncol(x) == 1 || all(names(x) %in% c(target))) {
+    if (all(target == "all") || all(names(x) %in% c(target))) {
       target <- names(x)
     }
 

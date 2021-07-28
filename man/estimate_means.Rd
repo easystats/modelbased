@@ -65,12 +65,12 @@ model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
 estimate_means(model, fixed = "Sepal.Width")
-estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
-estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
-estimate_means(model, levels = "Sepal.Width=c(2, 4)")
-estimate_means(model, levels = c("Species", "Sepal.Width=0"))
-estimate_means(model, modulate = "Sepal.Width", length = 5)
-estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
+estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
+estimate_means(model, at = "Species=c('versicolor', 'setosa')")
+estimate_means(model, at = "Sepal.Width=c(2, 4)")
+estimate_means(model, at = c("Species", "Sepal.Width=0"))
+estimate_means(model, at = "Sepal.Width", length = 5)
+estimate_means(model, at = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
@@ -83,7 +83,7 @@ if (require("lme4")) {
 
   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
   estimate_means(model)
-  estimate_means(model, modulate = "Sepal.Width", length = 3)
+  estimate_means(model, at = "Sepal.Width", length = 3)
 }
 
 # Bayesian models
@@ -98,7 +98,7 @@ if (require("rstanarm")) {
 
   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
   estimate_means(model)
-  estimate_means(model, modulate = "wt")
+  estimate_means(model, at = "wt")
   estimate_means(model, fixed = "wt")
 }
 }
