@@ -39,29 +39,6 @@
 #'   estimate_means(model)
 #'   estimate_means(model, at = "Sepal.Width", length = 3)
 #' }
-#'
-#' # Bayesian models
-#' # -------------------
-#' data <- mtcars
-#' data$cyl <- as.factor(data$cyl)
-#' data$am <- as.factor(data$am)
-#'
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#'   estimate_means(model)
-#'
-#'   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
-#'   estimate_means(model)
-#'   estimate_means(model, at = "wt")
-#'   estimate_means(model, fixed = "wt")
-#' }
-#' }
-#'
-#' \dontrun{
-#' if (require("brms")) {
-#'   model <- brm(mpg ~ cyl * am, data = data, refresh = 0)
-#'   estimate_means(model)
-#' }
 #' }
 #'
 #' @return A dataframe of estimated marginal means.

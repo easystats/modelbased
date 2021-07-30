@@ -97,7 +97,7 @@ model_emmeans <- function(model,
       args$data_matrix <- expand.grid(args$at)
       args$at <- names(args$data_matrix)
     } else {
-      if(all(args$at == "all")) {
+      if(!is.null(args$at) && all(args$at == "all")) {
         target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
         target <- target[!target %in% args$fixed]
       } else {
@@ -106,7 +106,7 @@ model_emmeans <- function(model,
       grid <- visualisation_matrix(data, target = target, ...)
       vars <- attributes(grid)$target_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
-      args$at <- vars # Replace by cleaned varnames
+      args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
     }
   }
   # Deal with 'fixed'
