@@ -111,7 +111,7 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, modulate = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(model, at = "Petal.Width", length = 100)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)

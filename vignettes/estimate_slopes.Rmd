@@ -98,7 +98,7 @@ library(modelbased)
 
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", modulate = "wt")
+slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 
 plot(slopes)
 ```
@@ -114,7 +114,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 # 1. Compute derivative
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
-                         modulate = "Petal.Length",
+                         at = "Petal.Length",
                          length = 100)
 
 # 2. Visualise
