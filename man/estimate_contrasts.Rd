@@ -110,16 +110,10 @@ if (require("rstanarm")) {
   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
   estimate_contrasts(model)
   estimate_contrasts(model, fixed = "wt")
-  estimate_contrasts(model, modulate = "wt", length = 4)
-  estimate_contrasts(model, levels = "wt", length = 4)
+  estimate_contrasts(model, at = "wt", length = 4)
 
   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-  estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
-}
-
-if (require("brms")) {
-  model <- brm(mpg ~ cyl * am, data = data, refresh = 0)
-  estimate_contrasts(model)
+  estimate_contrasts(model, at = "Petal.Length", test = "bf")
 }
 }
 

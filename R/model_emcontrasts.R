@@ -79,7 +79,7 @@ model_emcontrasts <- function(model,
     }
     message('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.')
   } else {
-    if(contrast == "all") {
+    if(all(contrast == "all")) {
       contrast <- predictors
     }
   }
