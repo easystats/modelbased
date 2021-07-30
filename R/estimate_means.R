@@ -156,7 +156,7 @@ estimate_means <- function(model,
 
 
 .estimate_means_footer <- function(x, at = NULL, type = "means", adjust = NULL) {
-  table_footer <- paste("\nMarginal ", type)
+  table_footer <- paste("\nMarginal", type)
 
   # Levels
   if (!is.null(at) && length(at) > 0) {
