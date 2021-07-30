@@ -156,7 +156,7 @@ means
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86]
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07]
 ## 
-## Marginal means estimated for Species
+## Marginal  means estimated for Species
 
 # 3. Plot 
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
@@ -207,7 +207,7 @@ contrasts
 ## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
 ## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
 ## 
-## Marginal contrasts estimated for Species
+## Marginal  contrasts estimated for Species
 ## p-value adjustment method: Holm (1979)
 ```
 
@@ -226,7 +226,7 @@ contrasts
 ``` r
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-estimate_contrasts(model, modulate = "Petal.Length", length = 3)
+estimate_contrasts(model, at = "Petal.Length", length = 3)
 ## Marginal Contrasts Analysis
 ## 
 ## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p
@@ -241,13 +241,13 @@ estimate_contrasts(model, modulate = "Petal.Length", length = 3)
 ## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.926 
 ## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.229 
 ## 
-## Marginal contrasts estimated for Species
+## Marginal  contrasts estimated for Species
 ## p-value adjustment method: Holm (1979)
 ```
 
 ``` r
 # Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
+contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
 
 # Add Contrast column by concatenating 
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -288,7 +288,7 @@ pred1$Petal.Length <- iris$Petal.Length  # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
-## Model-based Prediction
+## Model-based Response
 ## 
 ## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length
 ## --------------------------------------------------------------------------
@@ -374,7 +374,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 # 1. Compute derivatives
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
-                         modulate = "Petal.Length",
+                         at = "Petal.Length",
                          length = 100)
 
 # 2. Visualise
@@ -442,11 +442,9 @@ For instance, the plot below shows that the effect of `hp` (the y-axis)
 is significantly negative only when `wt` is low (`< ~4`).
 
 ``` r
-library(modelbased)
-
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", modulate = "wt")
+slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 
 plot(slopes)
 ```
