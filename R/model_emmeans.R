@@ -87,17 +87,17 @@ model_emmeans <- function(model,
   data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
-  if(is.null(args$at) && is.null(args$contrast)) {
+  if (is.null(args$at) && is.null(args$contrast)) {
     args$data_matrix <- NULL
   } else {
-    if(is.data.frame(args$at)){
+    if (is.data.frame(args$at)) {
       args$data_matrix <- args$at
       args$at <- names(args$at)
-    } else if(is.list(args$at)) {
+    } else if (is.list(args$at)) {
       args$data_matrix <- expand.grid(args$at)
       args$at <- names(args$data_matrix)
     } else {
-      if(!is.null(args$at) && all(args$at == "all")) {
+      if (!is.null(args$at) && all(args$at == "all")) {
         target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
         target <- target[!target %in% args$fixed]
       } else {
@@ -107,13 +107,13 @@ model_emmeans <- function(model,
       vars <- attributes(grid)$target_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
-      if(length(args$at) == 0) args$at <- NULL  # Post-clean
+      if (length(args$at) == 0) args$at <- NULL  # Post-clean
     }
   }
   # Deal with 'fixed'
-  if(!is.null(args$fixed)) {
+  if (!is.null(args$fixed)) {
     fixed <- visualisation_matrix(data[args$fixed], target = NULL, ...)
-    if(is.null(args$data_matrix)) {
+    if (is.null(args$data_matrix)) {
       args$data_matrix <- fixed
     } else {
       args$data_matrix <- merge(args$data_matrix, fixed)
@@ -122,7 +122,7 @@ model_emmeans <- function(model,
 
   # Get 'specs' and 'at'
   # --------------------
-  if(is.null(args$data_matrix)) {
+  if (is.null(args$data_matrix)) {
     args$emmeans_specs <- ~1
     args$emmeans_at <- NULL
   } else {
@@ -149,7 +149,7 @@ model_emmeans <- function(model,
   # Guess arguments
   if (!is.null(at) && length(at) == 1 && at == "auto") {
     at <- predictors[!sapply(data[predictors], is.numeric)]
-    if (!length(at) || is.na(at)) {
+    if (!length(at) || all(is.na(at))) {
       stop("Model contains no categorical factor. Please specify 'at'.")
     }
     message('We selected `at = c(', paste0(paste0('"', at, '"'), collapse = ", "), ')`.')
