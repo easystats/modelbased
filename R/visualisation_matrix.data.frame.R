@@ -3,8 +3,8 @@
 #' Create a reference matrix, useful for visualisation, with evenly spread and combined values. \code{data_matrix()} is an alternative name for \code{visualisation_matrix()}.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{target = "Sepal.Length = 2"} or \code{target = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.
-#' @param length Length of numeric target variables.
+#' @param at,target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (\code{target} is the deprecated name of that argument).
+#' @param length Length of numeric "at" variables.
 #' @param range Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.
 #' @param factors Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.
 #' @param numerics Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
@@ -23,21 +23,21 @@
 #' data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 #'
 #' # Single variable is of interest; all others are "fixed"
-#' visualisation_matrix(data, target = "Sepal.Length")
-#' visualisation_matrix(data, target = "Sepal.Length", length = 3)
-#' visualisation_matrix(data, target = "Sepal.Length", range = "ci", ci = 0.90)
-#' visualisation_matrix(data, target = "Sepal.Length", factors = "mode")
+#' visualisation_matrix(data, at = "Sepal.Length")
+#' visualisation_matrix(data, at = "Sepal.Length", length = 3)
+#' visualisation_matrix(data, at = "Sepal.Length", range = "ci", ci = 0.90)
+#' visualisation_matrix(data, at = "Sepal.Length", factors = "mode")
 #'
 #' # Multiple variables are of interest, creating a combination
-#' visualisation_matrix(data, target = c("Sepal.Length", "Species"), length = 3)
-#' visualisation_matrix(data, target = c(1, 3), length = 3)
-#' visualisation_matrix(data, target = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#' visualisation_matrix(data, target = c("Sepal.Length", "Species"), numerics = 0)
-#' visualisation_matrix(data, target = c("Sepal.Length = 3", "Species"))
-#' visualisation_matrix(data, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), length = 3)
+#' visualisation_matrix(data, at = c(1, 3), length = 3)
+#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), numerics = 0)
+#' visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
+#' visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
 #' # Standardize
-#' vizdata <- visualisation_matrix(data, target = "Sepal.Length")
+#' vizdata <- visualisation_matrix(data, at = "Sepal.Length")
 #' effectsize::standardize(vizdata)
 #' @export
 visualisation_matrix <- function(x, ...) {
@@ -55,7 +55,10 @@ data_matrix <- visualisation_matrix
 
 #' @rdname visualisation_matrix
 #' @export
-visualisation_matrix.data.frame <- function(x, target = "all", factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
+visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
+
+  if(!is.null(target)) at <- target
+  target <- at
 
   if(is.null(target)) {
     specs <- NULL

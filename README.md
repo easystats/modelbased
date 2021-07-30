@@ -103,7 +103,7 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
+vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
 
 # 3. Revert from expected SD to actual values
 vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
@@ -156,7 +156,7 @@ means
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86]
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07]
 ## 
-## Marginal  means estimated for Species
+## Marginal means estimated for Species
 
 # 3. Plot 
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
@@ -207,7 +207,7 @@ contrasts
 ## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
 ## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
 ## 
-## Marginal  contrasts estimated for Species
+## Marginal contrasts estimated for Species
 ## p-value adjustment method: Holm (1979)
 ```
 
@@ -241,7 +241,7 @@ estimate_contrasts(model, at = "Petal.Length", length = 3)
 ## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.926 
 ## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.229 
 ## 
-## Marginal  contrasts estimated for Species
+## Marginal contrasts estimated for Species
 ## p-value adjustment method: Holm (1979)
 ```
 

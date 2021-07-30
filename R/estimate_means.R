@@ -162,7 +162,7 @@ estimate_means <- function(model,
   if (!is.null(at) && length(at) > 0) {
     table_footer <- paste0(
       table_footer,
-      " estimated for ",
+      " estimated at ",
       paste0(at, collapse = ", ")
     )
   }

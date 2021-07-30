@@ -103,7 +103,7 @@ model_emmeans <- function(model,
       } else {
         target <- c(args$at, args$contrast)
       }
-      grid <- visualisation_matrix(data, target = target, ...)
+      grid <- visualisation_matrix(data, at = target, ...)
       vars <- attributes(grid)$target_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
@@ -112,7 +112,7 @@ model_emmeans <- function(model,
   }
   # Deal with 'fixed'
   if (!is.null(args$fixed)) {
-    fixed <- visualisation_matrix(data[args$fixed], target = NULL, ...)
+    fixed <- visualisation_matrix(data[args$fixed], at = NULL, ...)
     if (is.null(args$data_matrix)) {
       args$data_matrix <- fixed
     } else {
