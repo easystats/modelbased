@@ -147,7 +147,7 @@ model_emmeans <- function(model,
   data <- insight::get_data(model)
 
   # Guess arguments
-  if (!is.null(at) && is.character(at) && at == "auto") {
+  if (!is.null(at) && length(at) == 1 && at == "auto") {
     at <- predictors[!sapply(data[predictors], is.numeric)]
     if (!length(at) || is.na(at)) {
       stop("Model contains no categorical factor. Please specify 'at'.")

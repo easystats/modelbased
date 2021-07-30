@@ -19,7 +19,7 @@
 #'
 #' estimate_means(model)
 #' estimate_means(model, fixed = "Sepal.Width")
-#' estimate_means(model, at = c("Species", "Sepal.Width"), length = 3)
+#' estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
 #' estimate_means(model, at = "Species=c('versicolor', 'setosa')")
 #' estimate_means(model, at = "Sepal.Width=c(2, 4)")
 #' estimate_means(model, at = c("Species", "Sepal.Width=0"))
