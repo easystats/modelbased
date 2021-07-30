@@ -17,7 +17,7 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     model <- lm(Sepal.Width ~ Species * fac, data = data)
 
     estim <- estimate_contrasts(model)
-    expect_equal(dim(estim), c(15, 9))
+    expect_equal(dim(estim), c(3, 9))
     estim <- estimate_contrasts(model, levels = "Species")
     expect_equal(dim(estim), c(3, 9))
     estim <- estimate_contrasts(model, fixed = "fac")
@@ -29,16 +29,16 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_equal(dim(estim), c(3, 9))
     estim <- estimate_contrasts(model, fixed = "Petal.Width")
     expect_equal(dim(estim), c(3, 10))
-    estim <- estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+    estim <- estimate_contrasts(model, at = "Petal.Width", length = 4)
     expect_equal(dim(estim), c(12, 10))
 
 
     # Contrast between continuous
     model <- lm(Sepal.Width ~ Petal.Length, data = iris)
 
-    estim <- estimate_contrasts(model, levels = "Petal.Length=c(2.3, 3)")
+    estim <- estimate_contrasts(model, at = "Petal.Length=c(2.3, 3)")
     expect_equal(dim(estim), c(1, 9))
-    estim <- estimate_contrasts(model, levels = "Petal.Length=c(2, 3, 4)")
+    estim <- estimate_contrasts(model, at = "Petal.Length=c(2, 3, 4)")
     expect_equal(dim(estim), c(3, 9))
 
 
@@ -47,12 +47,12 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     data[c("gear", "vs", "am")] <- sapply(data[c("gear", "vs", "am")], as.factor)
     model <- lm(mpg ~ gear * vs * am, data = data)
 
-    estim <- estimate_contrasts(model)
-    expect_equal(dim(estim), c(66, 9))
-    estim <- estimate_contrasts(model, fixed = "gear")
+    estim <- estimate_contrasts(model, at = "all")
+    expect_equal(dim(estim), c(12, 11))
+    estim <- estimate_contrasts(model, contrast = c("vs", "am"), fixed = "gear")
     expect_equal(dim(estim), c(6, 10))
-    estim <- estimate_contrasts(model, fixed = "gear='5'")
-    expect_equal(dim(estim), c(6, 10))
+    estim <- estimate_contrasts(model, contrast = c("vs", "am"), at = "gear='5'")
+    expect_equal(dim(estim), c(1, 10))
 
 
     data <- iris
@@ -62,13 +62,13 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
 
     model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = data)
 
-    estim <- estimate_contrasts(model)
+    estim <- estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), at = "all")
     expect_equal(dim(estim), c(28, 9))
-    estim <- estimate_contrasts(model, fixed = "factor3")
+    estim <- estimate_contrasts(model, contrast = c("factor1", "factor2"), fixed = "factor3")
     expect_equal(dim(estim), c(6, 10))
-    estim <- estimate_contrasts(model, fixed = "factor3='F'")
+    estim <- estimate_contrasts(model, contrast = c("factor1", "factor2"), at = "factor3='F'")
     expect_equal(dim(estim), c(6, 10))
-    estim <- estimate_contrasts(model, modulate = "factor3")
+    estim <- estimate_contrasts(model, contrast = c("factor1", "factor2"), at = "factor3")
     expect_equal(dim(estim), c(12, 10))
 
 
@@ -104,14 +104,11 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
 
 
   test_that("estimate_contrasts - Bayesian", {
-    model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2), data = mtcars, iter = 200, refresh = 0))
-    expect_error(estimate_contrasts(model))
-
     data <- iris
     data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
     model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data, refresh = 0, iter = 200, chains = 2))
-    estim <- estimate_contrasts(model)
+    estim <- estimate_contrasts(model, contrast = "all")
     expect_equal(dim(estim), c(15, 7))
     estim <- estimate_contrasts(model, fixed = "Petal.Length_factor")
     expect_equal(dim(estim), c(3, 8))
@@ -121,7 +118,7 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_equal(dim(estim), c(3, 7))
     estim <- estimate_contrasts(model, fixed = "Petal.Width")
     expect_equal(dim(estim), c(3, 8))
-    estim <- estimate_contrasts(model, modulate = "Petal.Width", length = 4)
+    estim <- estimate_contrasts(model, at = "Petal.Width", length = 4)
     expect_equal(dim(estim), c(12, 8))
 
     # GLM

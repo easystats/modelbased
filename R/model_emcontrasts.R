@@ -44,10 +44,10 @@ model_emcontrasts <- function(model,
   )
 
   # Find by variables
-  by <- args$emmeans_specs[args$emmeans_specs != args$contrast]
+  by <- args$emmeans_specs[!args$emmeans_specs %in% args$contrast]
+  if(length(by) == 0) by <- NULL
 
   contrasts <- emmeans::contrast(estimated, by = by, method = "pairwise", ...)
-
 
   attr(contrasts, "contrast") <- args$contrast
   attr(contrasts, "at") <- args$at
@@ -75,9 +75,13 @@ model_emcontrasts <- function(model,
   if (is.null(contrast)) {
     contrast <- predictors[!sapply(data[predictors], is.numeric)][1]
     if (!length(contrast) || is.na(contrast)) {
-      stop("Model contains no numeric predictor. Please specify 'trend'.")
+      contrast <- predictors[1]
     }
     message('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.')
+  } else {
+    if(contrast == "all") {
+      contrast <- predictors
+    }
   }
 
   args <- list(contrast = contrast, at = at, fixed = fixed)

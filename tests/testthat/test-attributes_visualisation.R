@@ -21,7 +21,7 @@ if (require("testthat") && require("modelbased")) {
 
     estim <- estimate_contrasts(model)
     expect_equal(attributes(estim)$contrast, "Species")
-    expect_equal(attributes(estim)$at, "Sepal.Width")
+    expect_equal(attributes(estim)$at, NULL)
     expect_equal(attributes(estim)$fixed, NULL)
 
     estim <- estimate_contrasts(model, fixed = "Sepal.Width")

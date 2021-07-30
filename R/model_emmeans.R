@@ -84,7 +84,7 @@ model_emmeans <- function(model,
   # Create the data_matrix
   # ---------------------------
   data <- insight::get_data(model)
-  data <- data[, names(data) != insight::find_response(model), drop = FALSE]
+  data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
   if(is.null(args$at) && is.null(args$contrast)) {
@@ -107,6 +107,7 @@ model_emmeans <- function(model,
       vars <- attributes(grid)$target_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
+      if(length(args$at) == 0) args$at <- NULL  # Post-clean
     }
   }
   # Deal with 'fixed'
