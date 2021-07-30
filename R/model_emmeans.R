@@ -104,7 +104,7 @@ model_emmeans <- function(model,
         target <- c(args$at, args$contrast)
       }
       grid <- visualisation_matrix(data, at = target, ...)
-      vars <- attributes(grid)$target_specs$varname
+      vars <- attributes(grid)$at_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
       if (length(args$at) == 0) args$at <- NULL  # Post-clean

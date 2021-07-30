@@ -257,8 +257,8 @@ estimate_prediction <- function(model,
 .estimate_predicted_footer <- function(model, grid_specs) {
   footer <- paste0("\nVariable predicted: ", insight::find_response(model))
 
-  if ("target" %in% names(grid_specs)) {
-    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$target, collapse = ", "))
+  if ("at" %in% names(grid_specs)) {
+    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$at, collapse = ", "))
   }
 
   if ("adjusted_for" %in% names(grid_specs)) {
