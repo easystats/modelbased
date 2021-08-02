@@ -104,7 +104,7 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, target = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
+vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
 
 # 3. Revert from expected SD to actual values
 vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
@@ -203,12 +203,12 @@ plot(contrasts, estimate_means(model)) +
 ```{r message=FALSE, warning=FALSE}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-estimate_contrasts(model, modulate = "Petal.Length", length = 3)
+estimate_contrasts(model, at = "Petal.Length", length = 3)
 ```
 
 ```{r message=FALSE, warning=FALSE}
 # Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, modulate = "Petal.Length", length = 20)
+contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
 
 # Add Contrast column by concatenating 
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -295,7 +295,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 # 1. Compute derivatives
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
-                         modulate = "Petal.Length",
+                         at = "Petal.Length",
                          length = 100)
 
 # 2. Visualise
@@ -348,11 +348,9 @@ Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
 ```{r message=FALSE, warning=FALSE}
-library(modelbased)
-
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", modulate = "wt")
+slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 
 plot(slopes)
 ```

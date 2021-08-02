@@ -118,14 +118,14 @@ if (require("ggplot2")) {
   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
   model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-  x <- estimate_means(model, levels = c("new_factor", "cyl"))
+  x <- estimate_means(model, at = c("new_factor", "cyl"))
   plot(visualisation_recipe(x))
 
   # Modulations --------------
-  x <- estimate_means(model, levels = c("new_factor"), modulate = "wt")
+  x <- estimate_means(model, at = c("new_factor", "wt"))
   plot(visualisation_recipe(x))
 
-  x <- estimate_means(model, levels = c("new_factor", "cyl"), modulate = "wt")
+  x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
   plot(visualisation_recipe(x))
 
   #'   # GLMs ---------------------
@@ -222,18 +222,18 @@ if (require("ggplot2") && require("rstanarm")) {
 # ==============================================
 if (require("ggplot2")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-  x <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
+  x <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-  x <- estimate_slopes(model, modulate = "Sepal.Width", length = 20)
+  x <- estimate_slopes(model, at = "Sepal.Width", length = 20)
   plot(visualisation_recipe(x))
 
   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-  x <- estimate_slopes(model, modulate = "Sepal.Width", levels = "Species")
+  x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
   plot(visualisation_recipe(x))
 }
 }

@@ -4,7 +4,7 @@
 
 #' @export
 visualisation_matrix.glm <- function(x,
-                                     target = "all",
+                                     at = "all",
                                      factors = "reference",
                                      numerics = "mean",
                                      preserve_range = TRUE,
@@ -23,17 +23,17 @@ visualisation_matrix.glm <- function(x,
     data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
   }
 
-  if (all(target == "all")) target <- names(data)
+  if (all(at == "all")) at <- names(data)
   if (include_smooth == FALSE || include_smooth == "fixed") {
     s <- insight::find_smooth(x, flatten = TRUE)
     if (!is.null(s)) {
-      target <- names(data)[!names(data) %in% insight::clean_names(s)]
+      at <- names(data)[!names(data) %in% insight::clean_names(s)]
     }
   }
 
   vm <- visualisation_matrix(
     data,
-    target = target,
+    at = at,
     factors = factors,
     numerics = numerics,
     preserve_range = preserve_range,

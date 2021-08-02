@@ -6,9 +6,8 @@
 \usage{
 estimate_means(
   model,
-  levels = NULL,
+  at = "auto",
   fixed = NULL,
-  modulate = NULL,
   transform = "response",
   ci = 0.95,
   ...
@@ -17,17 +16,10 @@ estimate_means(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{levels}{A character vector or formula specifying the names of the
-factors over which levels to estimate the means, contrasts or slopes. If
-\code{NULL} (default), will automatically try to find it.}
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{modulate}{A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Other arguments
-from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-number of data points.}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See
@@ -53,6 +45,17 @@ plotting, check the examples in \code{\link{visualisation_recipe}}. See also
 other related functions such as \code{\link{estimate_contrasts}} and
 \code{\link{estimate_slopes}}.
 }
+\details{
+The \code{\link{estimate_slopes}}, \code{\link{estimate_means}} and \code{\link{estimate_contrasts}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans()}} and \code{\link[emmeans:emtrends]{emtrends()}}) is advised to understand the idea behind these types of procedures.
+
+\itemize{
+\item Model-based \strong{predictions} is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see \code{\link{estimate_link}}). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid}} is so important for direct predictions.
+\item \strong{Marginal "means"}, obtained via \code{\link{estimate_means}}, are an extension of such predictions, allowing to "average" (collapse) some of the predictors, to obtain the average response value at a specific predictors configuration. This is typically used when some of the predictors of interest are factors. Indeed, the parameters of the model will usually give you the intercept value and then the "effect" of each factor level (how different it is from the intercept). Marginal means can be used to directly give you the mean value of the response variable at all the levels of a factor. Moreover, it can also be used to control, or average over predictors, which is useful in the case of multiple predictors with or without interactions.
+\item \strong{Marginal contrasts}, obtained via \code{\link{estimate_contrasts}}, are themselves at extension of marginal means, in that they allow to investigate the difference (i.e., the contrast) between the marginal means. This is, again, often used to get all pairwise differences between all levels of a factor. It works also for continuous predictors, for instance one could also be interested in whether the difference at two extremes of a continuous predictor is significant.
+\item Finally, \strong{marginal effects}, obtained via \code{\link{estimate_slopes}}, are different in that their focus is not values on the response variable, but the model's parameters. The idea is to assess the effect of a predictor at a specific configuration of the other predictors. This is relevant in the case of interactions or non-linear relationships, when the effect of a predictor variable changes depending on the other predictors. Moreover, these effects can also be "averaged" over other predictors, to get for instance the "general trend" of a predictor over different factor levels.
+}
+\strong{Example:} let's imagine the following model \code{lm(y ~ condition * x)} where \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous variable (like age for example). One idea is to see how this model performs, and compare the actual response y to the one predicted by the model (using \code{\link{estimate_response}}). Another idea is evaluate the average mean at each of the condition's levels (using \code{\link{estimate_means}}), which can be useful to visualize them. Another possibility is to evaluate the difference between these levels (using \code{\link{estimate_contrasts}}). Finally, one could also estimate the effect of x averaged over all conditions, or instead within each condition (\code{using \link{estimate_slopes}}).
+}
 \examples{
 library(modelbased)
 
@@ -62,12 +65,12 @@ model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
 estimate_means(model, fixed = "Sepal.Width")
-estimate_means(model, levels = c("Species", "Sepal.Width"), length = 2)
-estimate_means(model, levels = "Species=c('versicolor', 'setosa')")
-estimate_means(model, levels = "Sepal.Width=c(2, 4)")
-estimate_means(model, levels = c("Species", "Sepal.Width=0"))
-estimate_means(model, modulate = "Sepal.Width", length = 5)
-estimate_means(model, modulate = "Sepal.Width=c(2, 4)")
+estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
+estimate_means(model, at = "Species=c('versicolor', 'setosa')")
+estimate_means(model, at = "Sepal.Width=c(2, 4)")
+estimate_means(model, at = c("Species", "Sepal.Width=0"))
+estimate_means(model, at = "Sepal.Width", length = 5)
+estimate_means(model, at = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
@@ -80,30 +83,7 @@ if (require("lme4")) {
 
   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
   estimate_means(model)
-  estimate_means(model, modulate = "Sepal.Width", length = 3)
-}
-
-# Bayesian models
-# -------------------
-data <- mtcars
-data$cyl <- as.factor(data$cyl)
-data$am <- as.factor(data$am)
-
-if (require("rstanarm")) {
-  model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-  estimate_means(model)
-
-  model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
-  estimate_means(model)
-  estimate_means(model, modulate = "wt")
-  estimate_means(model, fixed = "wt")
-}
-}
-
-\dontrun{
-if (require("brms")) {
-  model <- brm(mpg ~ cyl * am, data = data, refresh = 0)
-  estimate_means(model)
+  estimate_means(model, at = "Sepal.Width", length = 3)
 }
 }
 

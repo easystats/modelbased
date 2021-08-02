@@ -6,9 +6,9 @@
 \usage{
 estimate_contrasts(
   model,
-  levels = NULL,
+  contrast = NULL,
+  at = NULL,
   fixed = NULL,
-  modulate = NULL,
   transform = "none",
   ci = 0.95,
   adjust = "holm",
@@ -18,17 +18,13 @@ estimate_contrasts(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{levels}{A character vector or formula specifying the names of the
-factors over which levels to estimate the means, contrasts or slopes. If
-\code{NULL} (default), will automatically try to find it.}
+\item{contrast}{A character vector indicating the name of the variable(s)
+for which to compute the contrasts.}
+
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{modulate}{A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Other arguments
-from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-number of data points.}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See
@@ -58,6 +54,17 @@ Run a contrast analysis by estimating the differences between each level of a
 factor. See also other related functions such as \code{\link{estimate_means}}
 and \code{\link{estimate_slopes}}.
 }
+\details{
+The \code{\link{estimate_slopes}}, \code{\link{estimate_means}} and \code{\link{estimate_contrasts}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans()}} and \code{\link[emmeans:emtrends]{emtrends()}}) is advised to understand the idea behind these types of procedures.
+
+\itemize{
+\item Model-based \strong{predictions} is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see \code{\link{estimate_link}}). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid}} is so important for direct predictions.
+\item \strong{Marginal "means"}, obtained via \code{\link{estimate_means}}, are an extension of such predictions, allowing to "average" (collapse) some of the predictors, to obtain the average response value at a specific predictors configuration. This is typically used when some of the predictors of interest are factors. Indeed, the parameters of the model will usually give you the intercept value and then the "effect" of each factor level (how different it is from the intercept). Marginal means can be used to directly give you the mean value of the response variable at all the levels of a factor. Moreover, it can also be used to control, or average over predictors, which is useful in the case of multiple predictors with or without interactions.
+\item \strong{Marginal contrasts}, obtained via \code{\link{estimate_contrasts}}, are themselves at extension of marginal means, in that they allow to investigate the difference (i.e., the contrast) between the marginal means. This is, again, often used to get all pairwise differences between all levels of a factor. It works also for continuous predictors, for instance one could also be interested in whether the difference at two extremes of a continuous predictor is significant.
+\item Finally, \strong{marginal effects}, obtained via \code{\link{estimate_slopes}}, are different in that their focus is not values on the response variable, but the model's parameters. The idea is to assess the effect of a predictor at a specific configuration of the other predictors. This is relevant in the case of interactions or non-linear relationships, when the effect of a predictor variable changes depending on the other predictors. Moreover, these effects can also be "averaged" over other predictors, to get for instance the "general trend" of a predictor over different factor levels.
+}
+\strong{Example:} let's imagine the following model \code{lm(y ~ condition * x)} where \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous variable (like age for example). One idea is to see how this model performs, and compare the actual response y to the one predicted by the model (using \code{\link{estimate_response}}). Another idea is evaluate the average mean at each of the condition's levels (using \code{\link{estimate_means}}), which can be useful to visualize them. Another possibility is to evaluate the difference between these levels (using \code{\link{estimate_contrasts}}). Finally, one could also estimate the effect of x averaged over all conditions, or instead within each condition (\code{using \link{estimate_slopes}}).
+}
 \examples{
 library(modelbased)
 
@@ -67,10 +74,16 @@ estimate_contrasts(model)
 
 # Dealing with interactions
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+# By default: selects first factor
 estimate_contrasts(model)
+# Can also run contrasts between points of numeric
+estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+# Or both
+estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+# Can fixate the numeric at a specific value
 estimate_contrasts(model, fixed = "Petal.Width")
-estimate_contrasts(model, modulate = "Petal.Width", length = 4)
-estimate_contrasts(model, levels = "Petal.Width", length = 4)
+# Or modulate it
+estimate_contrasts(model, at = "Petal.Width", length = 4)
 
 # Standardized differences
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
@@ -97,16 +110,10 @@ if (require("rstanarm")) {
   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
   estimate_contrasts(model)
   estimate_contrasts(model, fixed = "wt")
-  estimate_contrasts(model, modulate = "wt", length = 4)
-  estimate_contrasts(model, levels = "wt", length = 4)
+  estimate_contrasts(model, at = "wt", length = 4)
 
   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-  estimate_contrasts(model, fixed = "Petal.Width", modulate = "Petal.Length", test = "bf")
-}
-
-if (require("brms")) {
-  model <- brm(mpg ~ cyl * am, data = data, refresh = 0)
-  estimate_contrasts(model)
+  estimate_contrasts(model, at = "Petal.Length", test = "bf")
 }
 }
 

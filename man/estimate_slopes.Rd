@@ -4,53 +4,52 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(
-  model,
-  trend = NULL,
-  levels = NULL,
-  modulate = NULL,
-  ci = 0.95,
-  ...
-)
+estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
 
-\item{trend}{A character vector indicating the name of the numeric variable
+\item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
-\item{levels}{A character vector or formula specifying the names of the
-factors over which levels to estimate the means, contrasts or slopes. If
-\code{NULL} (default), will automatically try to find it.}
-
-\item{modulate}{A character vector indicating the names of a numeric variable
-along which the means or the contrasts will be estimated. Other arguments
-from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-number of data points.}
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
 \item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
 }
 \value{
-A data.frame.
+A data.frame of class \code{estimate_slopes}.
 }
 \description{
-Estimate the slopes (i.e., the coefficient) of a predictor over different
-factor levels or alongside a numeric variable. See also other related
-functions such as \code{\link{estimate_contrasts}} and
+Estimate the slopes (i.e., the coefficient) of a predictor over or within different
+factor levels, or alongside a numeric variable . In other words, to assess the effect of a predictor \emph{at} specific configurations data. Other related
+functions based on marginal estimations includes \code{\link{estimate_contrasts}} and
 \code{\link{estimate_means}}.
+\cr\cr
+See the \strong{Details} section below, and don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
+}
+\details{
+The \code{\link{estimate_slopes}}, \code{\link{estimate_means}} and \code{\link{estimate_contrasts}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans()}} and \code{\link[emmeans:emtrends]{emtrends()}}) is advised to understand the idea behind these types of procedures.
+
+\itemize{
+\item Model-based \strong{predictions} is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see \code{\link{estimate_link}}). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid}} is so important for direct predictions.
+\item \strong{Marginal "means"}, obtained via \code{\link{estimate_means}}, are an extension of such predictions, allowing to "average" (collapse) some of the predictors, to obtain the average response value at a specific predictors configuration. This is typically used when some of the predictors of interest are factors. Indeed, the parameters of the model will usually give you the intercept value and then the "effect" of each factor level (how different it is from the intercept). Marginal means can be used to directly give you the mean value of the response variable at all the levels of a factor. Moreover, it can also be used to control, or average over predictors, which is useful in the case of multiple predictors with or without interactions.
+\item \strong{Marginal contrasts}, obtained via \code{\link{estimate_contrasts}}, are themselves at extension of marginal means, in that they allow to investigate the difference (i.e., the contrast) between the marginal means. This is, again, often used to get all pairwise differences between all levels of a factor. It works also for continuous predictors, for instance one could also be interested in whether the difference at two extremes of a continuous predictor is significant.
+\item Finally, \strong{marginal effects}, obtained via \code{\link{estimate_slopes}}, are different in that their focus is not values on the response variable, but the model's parameters. The idea is to assess the effect of a predictor at a specific configuration of the other predictors. This is relevant in the case of interactions or non-linear relationships, when the effect of a predictor variable changes depending on the other predictors. Moreover, these effects can also be "averaged" over other predictors, to get for instance the "general trend" of a predictor over different factor levels.
+}
+\strong{Example:} let's imagine the following model \code{lm(y ~ condition * x)} where \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous variable (like age for example). One idea is to see how this model performs, and compare the actual response y to the one predicted by the model (using \code{\link{estimate_response}}). Another idea is evaluate the average mean at each of the condition's levels (using \code{\link{estimate_means}}), which can be useful to visualize them. Another possibility is to evaluate the difference between these levels (using \code{\link{estimate_contrasts}}). Finally, one could also estimate the effect of x averaged over all conditions, or instead within each condition (\code{using \link{estimate_slopes}}).
 }
 \examples{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-slopes <- estimate_slopes(model, trend = "Petal.Length", levels = "Species")
+slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 slopes
 plot(slopes)
 effectsize::standardize(slopes)
 
 if (require("mgcv")) {
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-  slopes <- estimate_slopes(model, modulate = "Petal.Length", length = 30)
+  slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
   summary(slopes)
   plot(slopes)
 }

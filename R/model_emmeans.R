@@ -1,19 +1,13 @@
-#' Easy Creation of 'emmeans' Objects
+#' Easy 'emmeans' and 'emtrends'
 #'
 #' The \code{model_emmeans} function is a wrapper to facilitate the usage of
 #' \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
-#' somewhat simpler and smart API to find the variables of interest.
+#' somewhat simpler and intuitive API to find the specifications and variables of interest.
+#' It is meanly made to for the developpers to facilitate the organization and debugging, and end-users should rather use the \code{estimate_*} series of functions.
 #'
 #' @param model A statistical model.
-#' @param levels A character vector or formula specifying the names of the
-#'   factors over which levels to estimate the means, contrasts or slopes. If
-#'   \code{NULL} (default), will automatically try to find it.
 #' @param fixed A character vector indicating the names of the predictors to be
 #'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param modulate A character vector indicating the names of a numeric variable
-#'   along which the means or the contrasts will be estimated. Other arguments
-#'   from \code{\link{visualisation_matrix}}, such as \code{length} to adjust the
-#'   number of data points.
 #' @param transform Is passed to the \code{type} argument in
 #'   \code{emmeans::emmeans()}. See
 #'   \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
@@ -24,187 +18,143 @@
 #'   Thus for a logistic model, \code{"none"} will give estimations expressed in
 #'   log-odds (probabilities on logit scale) and \code{"response"} in terms of
 #'   probabilities.
+#' @param levels,modulate Deprecated, use \code{at} instead.
+#' @param at The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
 #' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
 #'
-#' @return An \code{emmeans} object.
 #' @examples
-#' library(modelbased)
-#'
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
-#' # By default, 'levels' is set to "Species"
+#' # By default, 'at' is set to "Species"
 #' model_emmeans(model)
 #'
+#' # Overall mean (close to 'mean(iris$Sepal.Length)')
+#' model_emmeans(model, at = NULL)
+#'
 #' # One can estimate marginal means at several values of a 'modulate' variable
-#' model_emmeans(model, modulate = "Petal.Width", length = 3)
+#' model_emmeans(model, at = "Petal.Width", length = 3)
+#'
+#' # Interactions
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#'
+#' model_emmeans(model)
+#' model_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 #' @export
 model_emmeans <- function(model,
-                          levels = NULL,
-                          fixed = NULL,
-                          modulate = NULL,
-                          transform = "response",
-                          ...) {
+                          at = "auto",
+                           fixed = NULL,
+                           transform = "response",
+                           levels = NULL,
+                           modulate = NULL,
+                           ...) {
+
+  # Deprecation
+  if(!is.null(levels) | !is.null(modulate)) {
+    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+    at <- c(levels, modulate)
+  }
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emmeans_arguments(model,
-    levels = levels,
-    fixed = fixed,
-    modulate = modulate
-  )
-  levels <- args$levels
-
-  data <- insight::get_data(model)
-
-  # Sanitize fixed
-  fixed <- c(args$fixed, args$modulate)
-  fixed_vars <- .clean_argument(fixed)
-
-  # Remove factors from fixed (separate fixed_vars and fixed_factors)
-  fixed_factors <- NULL
-  fixed_factors_vars <- NULL
-  if (!is.null(fixed)) {
-    isfactor <- !sapply(data[fixed_vars], is.numeric)
-    fixed_factors <- fixed[isfactor]
-    fixed_factors_vars <- fixed_vars[isfactor]
-    fixed_vars <- fixed_vars[!fixed_vars %in% fixed_factors_vars]
-    if (length(fixed_vars) == 0) fixed_vars <- NULL
-    if (length(fixed_factors_vars) == 0) fixed_factors_vars <- NULL
-  }
-
-  if (!is.null(fixed_factors_vars)) {
-    for (i in 1:length(fixed_factors_vars)) {
-      if (fixed_factors[i] != fixed_factors_vars[i]) {
-        fixed_factors_vars[i] <- fixed_factors[i]
-      } else {
-        fixed_factors_vars[i] <- paste0(fixed_factors_vars[i], "='", unique(data[[fixed_factors_vars[i]]])[1], "'")
-      }
-    }
-    levels <- c(levels, fixed_factors_vars)
-  }
-
-
-  # Sanitize levels
-  levels <- c(levels, modulate)
-  levels_vars <- .clean_argument(levels)
-
-
-  # Get refgrid for each variable separately
-  at <- list()
-  for (i in 1:length(levels)) {
-    at[[levels_vars[i]]] <- visualisation_matrix(data, levels[[i]], ...)[[levels_vars[i]]]
-  }
-
-
-  # Fix for some edgecases (https://github.com/easystats/modelbased/issues/60)
-  formula <- insight::find_terms(model, flatten = TRUE)
-  for (name in names(at)) {
-    if (any(grepl(paste0("as.factor(", name), formula, fixed = TRUE))) {
-      at[[name]] <- as.numeric(levels(at[[name]]))
-    }
-  }
-
-  # Get emmeans refgrid
-  suppressMessages(refgrid <- emmeans::ref_grid(
-    model,
-    at = at,
-    data = data,
-    nesting = NULL,
-    ...
-  ))
+  args <- .guess_emmeans_arguments(model, at, fixed, ...)
 
   # Run emmeans
-  means <- emmeans::emmeans(refgrid,
-    levels_vars,
-    by = fixed_vars,
+  estimated <- emmeans::emmeans(
+    model,
+    specs = args$emmeans_specs,
+    at = args$emmeans_at,
     type = transform,
     ...
   )
 
-  attr(means, "args") <- args
-  means
+  attr(estimated, "at") <- args$at
+  attr(estimated, "fixed") <- args$fixed
+  estimated
 }
-
 
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
 
+#' @keywords internal
+.format_emmeans_arguments <- function(model, args, ...) {
+
+  # Create the data_matrix
+  # ---------------------------
+  data <- insight::get_data(model)
+  data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
+
+  # Deal with 'at'
+  if (is.null(args$at) && is.null(args$contrast)) {
+    args$data_matrix <- NULL
+  } else {
+    if (is.data.frame(args$at)) {
+      args$data_matrix <- args$at
+      args$at <- names(args$at)
+    } else if (is.list(args$at)) {
+      args$data_matrix <- expand.grid(args$at)
+      args$at <- names(args$data_matrix)
+    } else {
+      if (!is.null(args$at) && all(args$at == "all")) {
+        target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+        target <- target[!target %in% args$fixed]
+      } else {
+        target <- c(args$at, args$contrast)
+      }
+      grid <- visualisation_matrix(data, at = target, ...)
+      vars <- attributes(grid)$at_specs$varname
+      args$data_matrix <- as.data.frame(grid[vars])
+      args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
+      if (length(args$at) == 0) args$at <- NULL  # Post-clean
+    }
+  }
+  # Deal with 'fixed'
+  if (!is.null(args$fixed)) {
+    fixed <- visualisation_matrix(data[args$fixed], at = NULL, ...)
+    if (is.null(args$data_matrix)) {
+      args$data_matrix <- fixed
+    } else {
+      args$data_matrix <- merge(args$data_matrix, fixed)
+    }
+  }
+
+  # Get 'specs' and 'at'
+  # --------------------
+  if (is.null(args$data_matrix)) {
+    args$emmeans_specs <- ~1
+    args$emmeans_at <- NULL
+  } else {
+    args$emmeans_specs <- names(args$data_matrix)
+    args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
+  }
+
+  args
+}
+
+
+
 
 #' @keywords internal
 .guess_emmeans_arguments <- function(model,
-                                     levels = NULL,
+                                     at = NULL,
                                      fixed = NULL,
-                                     modulate = NULL) {
-  x <- .guess_emmeans_levels(model, levels = levels)
-  levels <- x$levels
+                                     ...) {
 
-  if (!is.null(fixed)) {
-    fixed <- unique(c(fixed, x$fixed))
-    levels <- levels[!levels %in% c(fixed)]
-  }
+  # Gather info
+  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  data <- insight::get_data(model)
 
-
-  # Prevent repetitions
-  if (!is.null(modulate)) {
-    if (!is.null(fixed)) {
-      fixed <- fixed[!fixed %in% c(modulate)]
+  # Guess arguments
+  if (!is.null(at) && length(at) == 1 && at == "auto") {
+    at <- predictors[!sapply(data[predictors], is.numeric)]
+    if (!length(at) || all(is.na(at))) {
+      stop("Model contains no categorical factor. Please specify 'at'.")
     }
-    levels <- levels[!levels %in% c(modulate)]
+    message('We selected `at = c(', paste0(paste0('"', at, '"'), collapse = ", "), ')`.')
   }
 
-  list(
-    "levels" = levels,
-    "fixed" = fixed,
-    "modulate" = modulate
-  )
-}
-
-#' @keywords internal
-.guess_emmeans_levels <- function(model, levels = NULL) {
-
-  # Initialize a fixed part that might be modified below
-  fixed <- NULL
-
-  # If NULL: get predictors that are factors
-  if (is.null(levels)) {
-    levels <- insight::find_predictors(model)$conditional
-    levels <- levels[!sapply(insight::get_data(model)[levels], is.numeric)]
-
-    # If levels is formula
-  } else if (inherits(levels, "formula")) {
-
-    # Transform to string and keep predictors
-    levels <- as.character(utils::tail(as.list(levels), 1))
-    # Remove white spaces
-    levels <- gsub(" ", "", levels, fixed = TRUE)
-    # Separate fixed from interactions
-    components <- unlist(strsplit(levels, "+", fixed = TRUE))
-    interactions <- components[grepl("*", components, fixed = TRUE)]
-    fixed <- components[!grepl("*", components, fixed = TRUE)]
-
-    levels <- unlist(strsplit(interactions, c("*", ":", "/"), fixed = TRUE))
-  }
-
-  if (length(levels) == 0) {
-    stop("No suitable factor levels detected.")
-  }
-
-  list("levels" = levels, "fixed" = fixed)
-}
-
-
-
-# Cleaning ----------------------------------------------------------------
-
-
-#' @keywords internal
-.clean_argument <- function(arg) {
-  if (!is.null(arg)) {
-    unlist(lapply(strsplit(arg, "=", fixed = TRUE), function(i) i[[1]]))
-  } else {
-    arg
-  }
+  args <- list(at = at, fixed = fixed)
+  .format_emmeans_arguments(model, args, ...)
 }

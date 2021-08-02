@@ -1,61 +1,52 @@
 #' @rdname model_emmeans
-#' @param trend A character vector indicating the name of the numeric variable
+#'
+#' @param trend A character indicating the name of the variable
 #'   for which to compute the slopes.
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #' model_emtrends(model)
-#' model_emtrends(model, levels = "Species")
-#' model_emtrends(model, modulate = "Petal.Length")
-#' model_emtrends(model, levels = "Species", modulate = "Petal.Length")
+#' model_emtrends(model, at = "Species")
+#' model_emtrends(model, at = "Petal.Length")
+#' model_emtrends(model, at = c("Species", "Petal.Length"))
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#' model_emtrends(model, modulate = "Sepal.Width")
+#' model_emtrends(model)
+#' model_emtrends(model, at = "Sepal.Width")
 #' @export
 model_emtrends <- function(model,
                            trend = NULL,
+                           at = NULL,
+                           fixed = NULL,
                            levels = NULL,
                            modulate = NULL,
                            ...) {
+
+  # Deprecation
+  if(!is.null(levels) | !is.null(modulate)) {
+    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+    at <- c(levels, modulate)
+  }
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emtrends_arguments(model, trend, levels, modulate, ...)
-
-  # Modulate
-  if (is.null(args$modulate)) {
-    cov.reduce <- TRUE
-  } else {
-    cov.reduce <- list()
-    data <- insight::get_data(model)
-
-    for (i in args$modulate) {
-      vizdata <- visualisation_matrix(data, target = i, ...)
-      var <- attributes(vizdata)$target_specs$varname[1] # Retrieve cleaned varname
-      values <- vizdata[[var]]
-      cov.reduce[[var]] <- local({
-        values
-        function(x) values
-      }) # See #119
-
-      # Overwrite the corresponding names with clean names
-      args$modulate[args$modulate == i] <- var
-    }
-  }
+  args <- .guess_emtrends_arguments(model, trend, at, fixed, ...)
 
   # Run emtrends
   estimated <- emmeans::emtrends(
     model,
-    c(args$levels, args$modulate),
+    specs = args$emmeans_specs,
     var = args$trend,
-    cov.reduce = cov.reduce,
+    at = args$emmeans_at,
     ...
   )
 
-  attr(estimated, "args") <- args
+  attr(estimated, "trend") <- args$trend
+  attr(estimated, "at") <- args$at
+  attr(estimated, "fixed") <- args$fixed
   estimated
 }
 
@@ -65,12 +56,11 @@ model_emtrends <- function(model,
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
 
-
 #' @keywords internal
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
-                                      levels = NULL,
-                                      modulate = NULL,
+                                      at = NULL,
+                                      fixed = NULL,
                                       ...) {
 
   # Gather info
@@ -81,7 +71,7 @@ model_emtrends <- function(model,
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      stop("Model contains no numeric predictor. Cannot estimate trend.")
+      stop("Model contains no numeric predictor. Please specify 'trend'.")
     }
     message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }
@@ -90,14 +80,6 @@ model_emtrends <- function(model,
     trend <- trend[1]
   }
 
-  # Look if there are any factors
-  if (is.null(levels) && is.null(modulate)) {
-    levels <- predictors[!sapply(data[predictors], is.numeric)]
-    if (length(levels) == 0) levels <- NULL
-  }
-  if (is.null(levels) && is.null(modulate)) {
-    levels <- predictors[predictors %in% trend][1]
-  }
-
-  list(trend = trend, levels = levels, modulate = modulate)
+  args <- list(trend = trend, at = at, fixed = fixed)
+  .format_emmeans_arguments(model, args, ...)
 }

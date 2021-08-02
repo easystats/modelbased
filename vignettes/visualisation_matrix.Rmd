@@ -153,19 +153,19 @@ The above way of constructing the reference grid, i.e., by providing a single
 column of data to the function, is almost equivalent to the following:
 
 ```{r }
-vizdata <- visualisation_matrix(iris, target = "Sepal.Length")
+vizdata <- visualisation_matrix(iris, at = "Sepal.Length")
 vizdata
 ```
 
 However, the other variables (present in the dataframe but not selected as
-`target`) are "fixed", *i.e.*, they are maintained at specific values. This is
+`at`) are "fixed", *i.e.*, they are maintained at specific values. This is
 useful when we have other variables in the model in whose effect we are not
 interested.
 
 By default, **factors** are fixed by their **"reference" level** and **numeric variables** are fixed at their **mean**. However, this can be easily changed:
 
 ```{r }
-vizdata <- visualisation_matrix(iris, target = "Sepal.Length", numerics = "min")
+vizdata <- visualisation_matrix(iris, at = "Sepal.Length", numerics = "min")
 vizdata
 ```
 
@@ -181,7 +181,7 @@ Let's visualise the regression line for each of the levels of `Species`:
 ```{r }
 model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
 
-vizdata <- visualisation_matrix(iris, target = c("Sepal.Length", "Species"), length = 5)
+vizdata <- visualisation_matrix(iris, at = c("Sepal.Length", "Species"), length = 5)
 vizdata$Predicted <- insight::get_predicted(model, vizdata)
 vizdata
 
@@ -201,7 +201,7 @@ improve the precision toward the edges):
 
 ```{r }
 vizdata <- visualisation_matrix(iris,
-  target = c("Sepal.Length", "Species"),
+  at = c("Sepal.Length", "Species"),
   length = 100,
   preserve_range = TRUE
 )
@@ -327,7 +327,7 @@ Let's use the same model as above, and then obtain a data grid with specific val
 
 ```{r message=FALSE, warning=FALSE}
 vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>% 
-  visualisation_matrix(target = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>% 
+  visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>% 
   effectsize::unstandardize(vizdata, select = "Petal.Width") %>% 
   estimate_relation(vizdata) 
 
