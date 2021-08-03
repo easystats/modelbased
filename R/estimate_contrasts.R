@@ -1,15 +1,15 @@
 #' Estimate Marginal Contrasts
 #'
 #' Run a contrast analysis by estimating the differences between each level of a
-#' factor. See also other related functions such as \code{\link{estimate_means}}
-#' and \code{\link{estimate_slopes}}.
+#' factor. See also other related functions such as [estimate_means()]
+#' and [estimate_slopes()].
 #'
 #' @inheritParams estimate_means
 #' @inheritParams model_emcontrasts
 #' @param adjust The p-values adjustment method for frequentist multiple
 #'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
-#'   section in the \code{emmeans::test} documentation.
+#'   section in the `emmeans::test` documentation.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -78,10 +78,11 @@ estimate_contrasts <- function(model,
 
   # Run emmeans
   estimated <- model_emcontrasts(model,
-                               contrast = contrast,
-                               at = at,
-                               fixed = fixed,
-                               transform = "none", ...)
+    contrast = contrast,
+    at = at,
+    fixed = fixed,
+    transform = "none", ...
+  )
 
   info <- attributes(estimated)
 

@@ -6,8 +6,12 @@ McKoon
 Mmmh
 Modelisation
 Modelling
+Neyman
+README
 RTs
 Ratcliff
+Reproducibility
+Rescaling
 Setosa
 Versicolor
 Virginica
@@ -21,8 +25,12 @@ bonferroni
 codecov
 computable
 conditionspeed
+datawizard
 easystats
+effectsize
 emmeans
+emtrends
+favour
 fdr
 geoms
 glmmTMB
@@ -36,8 +44,9 @@ modelisation
 modelling
 natively
 nd
-polyvalent
 reproducibility
+rescaled
+rescales
 rootSolve
 spinoff
 summarised
@@ -46,6 +55,7 @@ tukey
 ultron
 uninformativeness
 unstandardizing
+usecases
 versicolor
 virginica
 visualisation

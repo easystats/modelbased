@@ -34,7 +34,9 @@ visualisation_recipe.estimate_slopes <- function(x,
   # Main aesthetics -----------------
   data <- as.data.frame(x)
   data$Confidence <- .estimate_slopes_sig(x, ...)
-  data$.group = {function(x) rep(seq_along(x$lengths), x$length)}(rle(data$Confidence))
+  data$.group <- {
+    function(x) rep(seq_along(x$lengths), x$length)
+  }(rle(data$Confidence))
 
   y <- info$trend
   color <- "Confidence"

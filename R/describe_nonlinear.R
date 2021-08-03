@@ -8,9 +8,9 @@
 #' coefficient) and linearity (the R2 of the linear regression).
 #'
 #' @param data The data containing the link, as for instance obtained by
-#'   \code{\link{estimate_relation}}.
-#' @param x,y The name of the responses variable (\code{y}) predicting variable
-#'   (\code{x}).
+#'   [estimate_relation()].
+#' @param x,y The name of the responses variable (`y`) predicting variable
+#'   (`x`).
 #' @param ... Other arguments to be passed to or from.
 #'
 #' @examples

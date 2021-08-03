@@ -28,7 +28,6 @@ if (require("testthat") && require("modelbased")) {
     expect_equal(attributes(estim)$contrast, "Species")
     expect_equal(attributes(estim)$fixed, "Sepal.Width")
     expect_equal(attributes(estim)$modulate, NULL)
-
   })
 
 

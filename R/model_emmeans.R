@@ -1,26 +1,26 @@
 #' Easy 'emmeans' and 'emtrends'
 #'
-#' The \code{model_emmeans} function is a wrapper to facilitate the usage of
-#' \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
+#' The `model_emmeans` function is a wrapper to facilitate the usage of
+#' `emmeans::emmeans()` and `emmeans::emtrends()`, providing a
 #' somewhat simpler and intuitive API to find the specifications and variables of interest.
-#' It is meanly made to for the developpers to facilitate the organization and debugging, and end-users should rather use the \code{estimate_*} series of functions.
+#' It is meanly made to for the developers to facilitate the organization and debugging, and end-users should rather use the `estimate_*` series of functions.
 #'
 #' @param model A statistical model.
 #' @param fixed A character vector indicating the names of the predictors to be
 #'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param transform Is passed to the \code{type} argument in
-#'   \code{emmeans::emmeans()}. See
-#'   \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
-#'   vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
-#'   (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-#'   \code{"none"} will leave the values on scale of the linear predictors.
-#'   \code{"response"} will transform them on scale of the response variable.
-#'   Thus for a logistic model, \code{"none"} will give estimations expressed in
-#'   log-odds (probabilities on logit scale) and \code{"response"} in terms of
+#' @param transform Is passed to the `type` argument in
+#'   `emmeans::emmeans()`. See
+#'   [this
+#'   vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html). Can be `"none"` (default for contrasts), `"response"`
+#'   (default for means), `"mu"`, `"unlink"`, `"log"`.
+#'   `"none"` will leave the values on scale of the linear predictors.
+#'   `"response"` will transform them on scale of the response variable.
+#'   Thus for a logistic model, `"none"` will give estimations expressed in
+#'   log-odds (probabilities on logit scale) and `"response"` in terms of
 #'   probabilities.
-#' @param levels,modulate Deprecated, use \code{at} instead.
-#' @param at The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
-#' @param ... Other arguments passed for instance to \code{\link{visualisation_matrix}}.
+#' @param levels,modulate Deprecated, use `at` instead.
+#' @param at The predictor variable(s) *at* which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).
+#' @param ... Other arguments passed for instance to [visualisation_matrix()].
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -42,14 +42,14 @@
 #' @export
 model_emmeans <- function(model,
                           at = "auto",
-                           fixed = NULL,
-                           transform = "response",
-                           levels = NULL,
-                           modulate = NULL,
-                           ...) {
+                          fixed = NULL,
+                          transform = "response",
+                          levels = NULL,
+                          modulate = NULL,
+                          ...) {
 
   # Deprecation
-  if(!is.null(levels) | !is.null(modulate)) {
+  if (!is.null(levels) | !is.null(modulate)) {
     warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
     at <- c(levels, modulate)
   }
@@ -107,7 +107,7 @@ model_emmeans <- function(model,
       vars <- attributes(grid)$at_specs$varname
       args$data_matrix <- as.data.frame(grid[vars])
       args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
-      if (length(args$at) == 0) args$at <- NULL  # Post-clean
+      if (length(args$at) == 0) args$at <- NULL # Post-clean
     }
   }
   # Deal with 'fixed'
@@ -152,7 +152,7 @@ model_emmeans <- function(model,
     if (!length(at) || all(is.na(at))) {
       stop("Model contains no categorical factor. Please specify 'at'.")
     }
-    message('We selected `at = c(', paste0(paste0('"', at, '"'), collapse = ", "), ')`.')
+    message("We selected `at = c(", paste0(paste0('"', at, '"'), collapse = ", "), ")`.")
   }
 
   args <- list(at = at, fixed = fixed)

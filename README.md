@@ -100,13 +100,13 @@ library(see)
 library(modelbased)
 
 # 1. Fit model and get visualization matrix
-model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) 
+model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)")) 
+vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
 
 # 3. Revert from expected SD to actual values
-vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width") 
+vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width")
 
 # 4. Add predicted relationship from the model
 vizdata <- modelbased::estimate_expectation(vizdata)
@@ -117,7 +117,7 @@ vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, refer
 # 6. Plot
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
-  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) + 
+  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
   # Add relationship lines
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   # Improve colors / themes
@@ -156,14 +156,14 @@ means
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86]
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07]
 ## 
-## Marginal means estimated for Species
+## Marginal means estimated at Species
 
-# 3. Plot 
+# 3. Plot
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
-  # Add base data 
+  # Add base data
   geom_violin(aes(fill = Species), color = "white") +
   geom_jitter2(width = 0.05, alpha = 0.5) +
-  
+
   # Add pointrange and line from means
   geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
   geom_pointrange(
@@ -207,7 +207,7 @@ contrasts
 ## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
 ## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
 ## 
-## Marginal contrasts estimated for Species
+## Marginal contrasts estimated at Species
 ## p-value adjustment method: Holm (1979)
 ```
 
@@ -241,7 +241,7 @@ estimate_contrasts(model, at = "Petal.Length", length = 3)
 ## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.926 
 ## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.229 
 ## 
-## Marginal contrasts estimated for Species
+## Marginal contrasts estimated at Species
 ## p-value adjustment method: Holm (1979)
 ```
 
@@ -249,14 +249,14 @@ estimate_contrasts(model, at = "Petal.Length", length = 3)
 # Recompute contrasts with a higher precision (for a smoother plot)
 contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
 
-# Add Contrast column by concatenating 
+# Add Contrast column by concatenating
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
 
 # Plot
-ggplot(contrasts, aes(x = Petal.Length, y = Difference,)) +
+ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   # Add line and CI band
   geom_line(aes(color = Contrast)) +
-  geom_ribbon(aes(ymin = CI_low, ymax=CI_high, fill = Contrast), alpha = 0.2) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = Contrast), alpha = 0.2) +
   # Add line at 0, indicating no difference
   geom_hline(yintercept = 0, linetype = "dashed") +
   # Colors
@@ -284,7 +284,7 @@ for a detailed walkthrough on *predictions*.
 # Fit model 1 and predict the response variable
 model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
 pred1 <- estimate_response(model1)
-pred1$Petal.Length <- iris$Petal.Length  # Add true response
+pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
@@ -303,7 +303,7 @@ head(pred1, n = 5)
 # Same for model 2
 model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
 pred2 <- estimate_response(model2)
-pred2$Petal.Length <- iris$Petal.Length 
+pred2$Petal.Length <- iris$Petal.Length
 
 
 # Initialize plot for model 1
@@ -372,10 +372,11 @@ for a detailed walkthrough on *marginal effects*.
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
 # 1. Compute derivatives
-deriv <- estimate_slopes(model, 
-                         trend = "Petal.Length", 
-                         at = "Petal.Length",
-                         length = 100)
+deriv <- estimate_slopes(model,
+  trend = "Petal.Length",
+  at = "Petal.Length",
+  length = 100
+)
 
 # 2. Visualise
 plot(deriv)
@@ -470,7 +471,7 @@ model <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
 
 preds <- estimate_relation(model, include_random = TRUE)
 
-plot(preds, ribbon = list(alpha = 0))  # Make CI ribbon transparent for clarity
+plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
 ![](man/figures/unnamed-chunk-16-1.png)<!-- -->
@@ -486,7 +487,7 @@ model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 preds <- estimate_relation(model, include_random = TRUE)
 
-plot(preds, ribbon = list(alpha = 0.1)) 
+plot(preds, ribbon = list(alpha = 0.1))
 ```
 
 ![](man/figures/unnamed-chunk-17-1.png)<!-- -->
@@ -496,7 +497,7 @@ on top of that, the “fixed” effect estimated across all these individual
 effects.
 
 ``` r
-fixed_pred <- estimate_relation(model)  # This time, include_random is FALSE (default)
+fixed_pred <- estimate_relation(model) # This time, include_random is FALSE (default)
 
 plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_ribbon(data = fixed_pred, aes(x = Days, ymin = CI_low, ymax = CI_high), alpha = 0.4) +

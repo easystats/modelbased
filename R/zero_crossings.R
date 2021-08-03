@@ -10,7 +10,7 @@
 #' plot(x)
 #' zero_crossings(x)
 #' @return Vector of zero crossings.
-#' @seealso Based on the \code{uniroot.all} function from the rootSolve package.
+#' @seealso Based on the `uniroot.all` function from the rootSolve package.
 #' @export
 zero_crossings <- function(x) {
 

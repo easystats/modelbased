@@ -44,7 +44,7 @@ data_matrix(x, ...)
 
 \item{length}{Length of numeric "at" variables.}
 
-\item{range}{Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.}
+\item{range}{Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is \verb{95\%} but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link[=IQR]{IQR()}} and \code{\link[bayestestR:ci]{bayestestR::ci()}}.}
 }
 \value{
 Reference grid data frame.
