@@ -23,5 +23,4 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     estim <- estimate_slopes(model, at = "Sepal.Width = c(1, 2, 3)")
     expect_equal(dim(estim), c(3, 9))
   })
-
 }

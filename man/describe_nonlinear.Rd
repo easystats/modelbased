@@ -14,7 +14,7 @@ estimate_smooth(data, ...)
 }
 \arguments{
 \item{data}{The data containing the link, as for instance obtained by
-\code{\link{estimate_relation}}.}
+\code{\link[=estimate_relation]{estimate_relation()}}.}
 
 \item{...}{Other arguments to be passed to or from.}
 

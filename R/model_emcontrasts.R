@@ -45,7 +45,7 @@ model_emcontrasts <- function(model,
 
   # Find by variables
   by <- args$emmeans_specs[!args$emmeans_specs %in% args$contrast]
-  if(length(by) == 0) by <- NULL
+  if (length(by) == 0) by <- NULL
 
   contrasts <- emmeans::contrast(estimated, by = by, method = "pairwise", ...)
 
@@ -62,10 +62,10 @@ model_emcontrasts <- function(model,
 
 #' @keywords internal
 .guess_emcontrasts_arguments <- function(model,
-                                      contrast = NULL,
-                                      at = NULL,
-                                      fixed = NULL,
-                                      ...) {
+                                         contrast = NULL,
+                                         at = NULL,
+                                         fixed = NULL,
+                                         ...) {
 
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
@@ -79,7 +79,7 @@ model_emcontrasts <- function(model,
     }
     message('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.')
   } else {
-    if(all(contrast == "all")) {
+    if (all(contrast == "all")) {
       contrast <- predictors
     }
   }

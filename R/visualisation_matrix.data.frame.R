@@ -1,15 +1,15 @@
 #' Create a reference grid
 #'
-#' Create a reference matrix, useful for visualisation, with evenly spread and combined values. \code{data_matrix()} is an alternative name for \code{visualisation_matrix()}.
+#' Create a reference matrix, useful for visualisation, with evenly spread and combined values. `data_matrix()` is an alternative name for `visualisation_matrix()`.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at,target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (\code{target} is the deprecated name of that argument).
+#' @param at,target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (`target` is the deprecated name of that argument).
 #' @param length Length of numeric "at" variables.
-#' @param range Can be one of \code{c("range", "iqr", "ci", "hdi", "eti")}. If \code{"range"} (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is 95\% but this can be changed by setting something else, e.g., \code{ci = 0.90}). See \code{\link{IQR}} and \code{\link[bayestestR]{ci}}.
+#' @param range Can be one of `c("range", "iqr", "ci", "hdi", "eti")`. If `"range"` (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is `95%` but this can be changed by setting something else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
 #' @param factors Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.
-#' @param numerics Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., \code{numerics = 0}).
-#' @param preserve_range In the case of combinations between numeric variables and factors, setting \code{preserve_range = TRUE} will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the \code{length} argument.
-#' @param ... Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).
+#' @param numerics Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., `numerics = 0`).
+#' @param preserve_range In the case of combinations between numeric variables and factors, setting `preserve_range = TRUE` will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the `length` argument.
+#' @param ... Arguments passed to or from other methods (for instance, `length` or `range` to control the spread of numeric variables.).
 #' @inheritParams effectsize::format_standardize
 #' @inheritParams estimate_response
 #'
@@ -56,16 +56,15 @@ data_matrix <- visualisation_matrix
 #' @rdname visualisation_matrix
 #' @export
 visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
-
-  if(!is.null(target)) at <- target
+  if (!is.null(target)) at <- target
   target <- at
 
-  if(is.null(target)) {
+  if (is.null(target)) {
     specs <- NULL
     targets <- data.frame()
   } else {
     # Valid target argument
-    if (all(target == "all")){
+    if (all(target == "all")) {
       target <- names(x)
     }
 
@@ -77,8 +76,8 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
 
     # Find eventual user-defined specifications for each target
     specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
-    specs$varname <- as.character(specs$varname)  # make sure it's a string not fac
-    specs <- specs[!duplicated(specs$varname), ]  # Drop duplicates
+    specs$varname <- as.character(specs$varname) # make sure it's a string not fac
+    specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
     specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
     # Create target list of factors -----------------------------------------
@@ -91,9 +90,9 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
     nums <- list()
     for (num in specs[specs$is_factor == FALSE, "varname"]) {
       nums[[num]] <- visualisation_matrix(x[[num]],
-                                          target = specs[specs$varname == num, "expression"],
-                                          reference = reference[[num]],
-                                          ...
+        target = specs[specs$varname == num, "expression"],
+        reference = reference[[num]],
+        ...
       )
     }
     # Assemble the two
@@ -122,7 +121,7 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
           maxi <- max(subset[[num]], na.rm = TRUE)
           rows_to_remove <- c(rows_to_remove, which(targets[[num]] < mini | targets[[num]] > maxi))
         }
-        if(length(rows_to_remove) > 0) {
+        if (length(rows_to_remove) > 0) {
           targets <- targets[-idx[idx %in% rows_to_remove], ] # Drop incompatible rows
           row.names(targets) <- NULL # Reset row.names
         }
@@ -141,8 +140,8 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
   if (length(rest_vars) >= 1) {
     rest_df <- lapply(x[rest_vars], .visualisation_matrix_summary, numerics = numerics, factors = factors, ...)
     rest_df <- expand.grid(rest_df, stringsAsFactors = FALSE)
-    if(nrow(targets) == 0) {
-      targets <- rest_df  # If target = NULL
+    if (nrow(targets) == 0) {
+      targets <- rest_df # If target = NULL
     } else {
       targets <- merge(targets, rest_df, sort = FALSE)
     }

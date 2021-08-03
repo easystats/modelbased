@@ -5,10 +5,10 @@
 #' within each factor level combination).
 #'
 #' @param x A numeric vector.
-#' @param method Can be \link[=loess]{"loess"} (default) or
-#'   \link[=smooth]{"smooth"}. A loess smoothing can be slow.
-#' @param strength This argument only applies when \code{method = "loess"}.
-#'   Degree of smoothing passed to \code{span} (see \code{\link{loess}}).
+#' @param method Can be ["loess"][loess] (default) or
+#'   ["smooth"][smooth]. A loess smoothing can be slow.
+#' @param strength This argument only applies when `method = "loess"`.
+#'   Degree of smoothing passed to `span` (see [loess()]).
 #' @param ... Arguments passed to or from other methods.
 #'
 #'

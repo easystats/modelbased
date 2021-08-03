@@ -49,8 +49,7 @@ for which to compute the contrasts.}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this
-vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
 (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
 \code{"none"} will leave the values on scale of the linear predictors.
 \code{"response"} will transform them on scale of the response variable.
@@ -58,7 +57,7 @@ Thus for a logistic model, \code{"none"} will give estimations expressed in
 log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
-\item{...}{Other arguments passed for instance to \code{\link{visualisation_matrix}}.}
+\item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
 
 \item{levels, modulate}{Deprecated, use \code{at} instead.}
 
@@ -69,7 +68,7 @@ for which to compute the slopes.}
 The \code{model_emmeans} function is a wrapper to facilitate the usage of
 \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
 somewhat simpler and intuitive API to find the specifications and variables of interest.
-It is meanly made to for the developpers to facilitate the organization and debugging, and end-users should rather use the \code{estimate_*} series of functions.
+It is meanly made to for the developers to facilitate the organization and debugging, and end-users should rather use the \verb{estimate_*} series of functions.
 }
 \examples{
 # Basic usage

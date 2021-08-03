@@ -1,5 +1,5 @@
 #' @rdname estimate_grouplevel
-#' @param x The output of \code{estimate_grouplevel()}.
+#' @param x The output of `estimate_grouplevel()`.
 #' @param indices A list containing the indices to extract.
 #' @export
 reshape_grouplevel <- function(x, indices = "all", ...) {

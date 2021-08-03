@@ -1,9 +1,9 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
 #' Estimate average value of response variable at each factor levels. For
-#' plotting, check the examples in \code{\link{visualisation_recipe}}. See also
-#' other related functions such as \code{\link{estimate_contrasts}} and
-#' \code{\link{estimate_slopes}}.
+#' plotting, check the examples in [visualisation_recipe()]. See also
+#' other related functions such as [estimate_contrasts()] and
+#' [estimate_slopes()].
 #'
 #' @inheritParams model_emmeans
 #' @inheritParams parameters::model_parameters.default
