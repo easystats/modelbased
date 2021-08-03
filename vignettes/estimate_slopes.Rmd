@@ -68,7 +68,7 @@ test_performance(model, model2)
 
 Although we are satisfied with our model and its performance, let say we are not interested in the effect of `Petal.Length` for different Species, but rather, in its **general trend** "across" all different species. We need to compute the **marginal effect** of the predictor, which corresponds to its slope *averaged* (it's a bit more complex than a simple averaging but the idea is there) over the different factor levels.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 slopes <- estimate_slopes(model, trend = "Petal.Length")
 
 slopes
