@@ -112,8 +112,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   group <- NULL
 
   # Retrieve predictors
-  if ("target" %in% names(info)) {
-    targets <- info$target
+  if ("at" %in% names(info)) {
+    targets <- info$at
   } else {
     targets <- insight::find_predictors(info$model, effects = "fixed", flatten = TRUE)
   }
