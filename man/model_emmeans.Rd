@@ -80,9 +80,11 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 model_emcontrasts(model)
 # Can also run contrasts between points of numeric
-model_emcontrasts(model, contrast = "Petal.Width", length = 4)
+model_emcontrasts(model, contrast = "Petal.Width", length = 3)
 # Or both
 model_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+# Or with custom specifications
+estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Can fixate the numeric at a specific value
 model_emcontrasts(model, fixed = "Petal.Width")
 # Or modulate it
@@ -103,6 +105,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 model_emmeans(model)
 model_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
+model_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 model_emtrends(model)

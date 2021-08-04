@@ -39,6 +39,7 @@
 #'
 #' model_emmeans(model)
 #' model_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
+#' model_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' @export
 model_emmeans <- function(model,
                           at = "auto",
@@ -88,7 +89,7 @@ model_emmeans <- function(model,
   data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
-  if (is.null(args$at) && is.null(args$contrast)) {
+  if (is.null(args$at)) {
     args$data_matrix <- NULL
   } else {
     if (is.data.frame(args$at)) {
@@ -105,15 +106,28 @@ model_emmeans <- function(model,
         target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
         target <- target[!target %in% args$fixed]
       } else {
-        target <- c(args$at, args$contrast)
+        target <- args$at
       }
       grid <- visualisation_matrix(data, at = target, ...)
-      vars <- attributes(grid)$at_specs$varname
-      args$data_matrix <- as.data.frame(grid[vars])
-      args$at <- vars[!vars %in% args$contrast] # Replace by cleaned varnames
+      args$at <- attributes(grid)$at_specs$varname
+      args$data_matrix <- as.data.frame(grid[args$at])
       if (length(args$at) == 0) args$at <- NULL # Post-clean
     }
   }
+
+  # Deal with 'contrast'
+  if(!is.null(args$contrast)) {
+    contrast <- visualisation_matrix(data, at = args$contrast, ...)
+    args$contrast <- attributes(contrast)$at_specs$varname
+    contrast <- as.data.frame(contrast[args$contrast])
+    if (is.null(args$data_matrix)) {
+      args$data_matrix <- contrast
+    } else {
+      contrast <- contrast[!names(contrast) %in% names(args$data_matrix)]
+      if(ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
+    }
+  }
+
   # Deal with 'fixed'
   if (!is.null(args$fixed)) {
     fixed <- visualisation_matrix(data[args$fixed], at = NULL, ...)

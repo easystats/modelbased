@@ -28,6 +28,8 @@
 #' estimate_contrasts(model, contrast = "Petal.Width", length = 4)
 #' # Or both
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+#' # Or with custom specifications
+#' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #' # Can fixate the numeric at a specific value
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #' # Or modulate it
