@@ -78,6 +78,7 @@ model_emmeans <- function(model,
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
 
+#' @importFrom stats model.frame
 #' @keywords internal
 .format_emmeans_arguments <- function(model, args, ...) {
 
@@ -95,6 +96,9 @@ model_emmeans <- function(model,
       args$at <- names(args$at)
     } else if (is.list(args$at)) {
       args$data_matrix <- expand.grid(args$at)
+      args$at <- names(args$data_matrix)
+    } else if (inherits(args$at, "formula")) {
+      args$data_matrix <- model.frame(args$at, data = data)
       args$at <- names(args$data_matrix)
     } else {
       if (!is.null(args$at) && all(args$at == "all")) {

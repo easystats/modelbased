@@ -31,7 +31,7 @@ Thus for a logistic model, \code{"none"} will give estimations expressed in
 log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
 }

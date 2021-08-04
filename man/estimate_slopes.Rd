@@ -14,7 +14,7 @@ for which to compute the slopes.}
 
 \item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
 
 \item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
 }
