@@ -43,7 +43,7 @@ estimate_prediction(
 NULL, the model's data is used. If "grid", the model matrix is obtained
 (through \code{\link[=visualisation_matrix]{visualisation_matrix()}}).}
 
-\item{ci}{Confidence Interval (CI) level. Default to 0.95 (95\%).}
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

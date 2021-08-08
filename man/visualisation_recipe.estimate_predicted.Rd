@@ -54,7 +54,7 @@
 )
 }
 \arguments{
-\item{x}{An easystats object.}
+\item{x}{A modelbased object.}
 
 \item{...}{Other arguments passed to other functions.}
 
