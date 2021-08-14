@@ -236,4 +236,16 @@ if (require("ggplot2")) {
   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
   plot(visualisation_recipe(x))
 }
+if (require("mgcv")) {
+  data <- iris
+  data$Petal.Length <- data$Petal.Length^2
+
+  model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
+  x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length"), length = 20)
+  plot(visualisation_recipe(x))
+
+  model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
+  x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
+  plot(visualisation_recipe(x))
+}
 }

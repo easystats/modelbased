@@ -20,6 +20,18 @@
 #'   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
+#' if (require("mgcv")) {
+#'   data <- iris
+#'   data$Petal.Length <- data$Petal.Length^2
+#'
+#'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
+#'   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length"), length = 20)
+#'   plot(visualisation_recipe(x))
+#'
+#'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
+#'   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
+#'   plot(visualisation_recipe(x))
+#' }
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,
                                                  hline = NULL,
@@ -43,6 +55,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   fill <- NULL
   group <- NULL
   alpha <- NULL
+  facet <- NULL
 
   # What are the fact
   facs <- info$at[sapply(data[info$at], function(x) is.factor(x) | is.character(x))]
@@ -55,19 +68,24 @@ visualisation_recipe.estimate_slopes <- function(x,
   } else {
     x1 <- nums[1]
     if (length(nums) > 1) {
-      warning("Cannot deal with more than 2 'numeric' variables for now. Selecting first and omitting the others.")
-    }
-    if (length(facs) > 0) {
-      color <- facs[1]
-      fill <- facs[1]
-      group_ribbon <- facs[1]
-      group_line <- facs[1]
-      alpha <- "Confidence"
+      alpha <- nums[2]
+      group_line <- nums[2]
+      if (length(facs) > 0) {
+        facet <- facs[1]
+      }
     } else {
-      group_ribbon <- ".group"
-      group_line <- 1
-      fill <- "Confidence"
-      color <- NULL
+      if (length(facs) > 0) {
+        color <- facs[1]
+        fill <- facs[1]
+        group_ribbon <- facs[1]
+        group_line <- facs[1]
+        alpha <- "Confidence"
+      } else {
+        group_ribbon <- ".group"
+        group_line <- 1
+        fill <- "Confidence"
+        color <- NULL
+      }
     }
   }
 
@@ -87,10 +105,15 @@ visualisation_recipe.estimate_slopes <- function(x,
     l <- l + 1
 
     # Ribbon + line style
-  } else if (x1 == nums[1]) {
+  } else if (x1 == nums[1] && length(nums) == 1) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon, group = group_ribbon)
     l <- l + 1
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
+    l <- l + 1
+  } else if(x1 == nums[1] && alpha == nums[2]) {
+    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
+    l <- l + 1
+    layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
     l <- l + 1
   }
 
