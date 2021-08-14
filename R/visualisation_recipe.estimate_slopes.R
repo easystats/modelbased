@@ -113,8 +113,10 @@ visualisation_recipe.estimate_slopes <- function(x,
   } else if(x1 == nums[1] && alpha == nums[2]) {
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
     l <- l + 1
-    layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
-    l <- l + 1
+    if(!is.null(facet)) {
+      layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
+      l <- l + 1
+    }
   }
 
 
