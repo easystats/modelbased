@@ -61,6 +61,7 @@ model_emmeans <- function(model,
   # Guess arguments
   args <- .guess_emmeans_arguments(model, at, fixed, ...)
 
+
   # Run emmeans
   estimated <- emmeans::emmeans(
     model,
@@ -69,6 +70,14 @@ model_emmeans <- function(model,
     type = transform,
     ...
   )
+
+  # Special behaviour for transformations #138 (see below)
+  if("retransform" %in% names(args) && length(args$retransform) > 0) {
+    for(var in names(args$retransform)) {
+      estimated@levels[[var]] <- levels(args$retransform[[var]])
+      estimated@grid[[var]] <- args$retransform[[var]]
+    }
+  }
 
   attr(estimated, "at") <- args$at
   attr(estimated, "fixed") <- args$fixed
@@ -146,6 +155,20 @@ model_emmeans <- function(model,
   } else {
     args$emmeans_specs <- names(args$data_matrix)
     args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
+  }
+
+  # Special behaviour for transformations #138
+  # It's annoying and an ugly fix, not sure how to address
+  if(!is.null(args$emmeans_at)) {
+    args$retransform <- list()
+    terms <- insight::find_terms(model)$conditional
+    for(var_at in names(args$emmeans_at)) {
+      term <- terms[grepl(var_at, terms, fixed = TRUE)]
+      if(grepl("as.factor", term, fixed = TRUE) || grepl("as.character", term, fixed = TRUE)) {
+        args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
+        args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
+      }
+    }
   }
 
   args
