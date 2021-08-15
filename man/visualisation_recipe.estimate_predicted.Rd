@@ -50,6 +50,7 @@
   pointrange = NULL,
   ribbon = NULL,
   labs = NULL,
+  facet_wrap = NULL,
   ...
 )
 }

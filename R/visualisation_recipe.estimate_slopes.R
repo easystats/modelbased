@@ -39,6 +39,7 @@ visualisation_recipe.estimate_slopes <- function(x,
                                                  pointrange = NULL,
                                                  ribbon = NULL,
                                                  labs = NULL,
+                                                 facet_wrap = NULL,
                                                  ...) {
   info <- attributes(x)
   layers <- list()
@@ -63,7 +64,10 @@ visualisation_recipe.estimate_slopes <- function(x,
   if (length(facs) > 0 & length(nums) == 0) {
     x1 <- facs[1]
     if (length(facs) > 1) {
-      warning("Cannot deal with more than 2 'factors' variables for now. Selecting first and omitting the others.")
+      facet <- facs[2]
+      if (length(facs) > 2) {
+        warning("Cannot deal with more than 2 'factors' variables for now. Keeping the two firsts.")
+      }
     }
   } else {
     x1 <- nums[1]
@@ -113,10 +117,12 @@ visualisation_recipe.estimate_slopes <- function(x,
   } else if(x1 == nums[1] && alpha == nums[2]) {
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
     l <- l + 1
-    if(!is.null(facet)) {
-      layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
-      l <- l + 1
-    }
+  }
+  # Facet
+  if(!is.null(facet)) {
+    layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
+    if(!is.null(facet_wrap)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet_wrap)
+    l <- l + 1
   }
 
 
