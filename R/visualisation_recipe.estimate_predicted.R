@@ -113,8 +113,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   group <- NULL
 
   # Retrieve predictors
-  if ("at" %in% names(info)) {
-    targets <- info$at
+  if ("at_specs" %in% names(info)) {
+    targets <- info$at_specs$varname
   } else {
     targets <- insight::find_predictors(info$model, effects = "fixed", flatten = TRUE)
   }
@@ -296,7 +296,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   alpha <- 1 / exp(log(max(data$iter_group), base = 6))
 
   if (!is.null(fill)) {
-    data$iter_group <- paste0(data$iter_group, data[[fill]])
+    data$iter_group <- paste0(data$iter_group, "_", data[[fill]])
   }
 
   out <- list(
