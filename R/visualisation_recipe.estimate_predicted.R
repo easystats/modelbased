@@ -77,6 +77,10 @@
 #'   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
 #'   plot(visualisation_recipe(x))
 #'   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
+#'
+#'   # Multiple CIs ---------------------
+#'   x <- estimate_relation(lm(mpg ~ disp, data = mtcars), ci = c(.50, .80, .95))
+#'   plot(x)
 #' }
 #' \donttest{
 #' # Bayesian models ---------------------
@@ -191,10 +195,16 @@ visualisation_recipe.estimate_predicted <- function(x,
   if (is.null(alpha) && is.null(linetype)) { # If interaction, omit uncertainty
     if ("iter_1" %in% names(data)) {
       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
+      l <- l + 1
     } else {
-      layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ribbon = ribbon)
+
+      ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
+      ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
+      for(i in 1:length(ci_lows)) {
+        layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ci_low = ci_lows[i], ci_high = ci_highs[i], ribbon = ribbon)
+        l <- l + 1
+      }
     }
-    l <- l + 1
   }
 
   # Line
@@ -269,15 +279,16 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Ribbon -------------------------------------------------------------
 
-.visualisation_predicted_ribbon <- function(data, x1, y, fill, group = NULL, ribbon = NULL) {
+.visualisation_predicted_ribbon <- function(data, x1, y, fill, group = NULL, ci_low = "CI_low", ci_high = "CI_high", ribbon = NULL) {
+
   out <- list(
     geom = "ribbon",
     data = data,
     aes = list(
       y = y,
       x = x1,
-      ymin = "CI_low",
-      ymax = "CI_high",
+      ymin = ci_low,
+      ymax = ci_high,
       fill = fill,
       group = group
     ),

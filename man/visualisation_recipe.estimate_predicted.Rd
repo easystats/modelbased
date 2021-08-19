@@ -203,6 +203,10 @@ if (require("ggplot2")) {
   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
   plot(visualisation_recipe(x))
   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
+
+  # Multiple CIs ---------------------
+  x <- estimate_relation(lm(mpg ~ disp, data = mtcars), ci = c(.50, .80, .95))
+  plot(x)
 }
 \donttest{
 # Bayesian models ---------------------
