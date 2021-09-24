@@ -2,9 +2,19 @@
 % Please edit documentation in R/estimate_means.R
 \name{estimate_means}
 \alias{estimate_means}
+\alias{est_means}
 \title{Estimate Marginal Means (Model-based average at each factor level)}
 \usage{
 estimate_means(
+  model,
+  at = "auto",
+  fixed = NULL,
+  transform = "response",
+  ci = 0.95,
+  ...
+)
+
+est_means(
   model,
   at = "auto",
   fixed = NULL,

@@ -133,3 +133,9 @@ estimate_contrasts <- function(model,
   class(contrasts) <- c("estimate_contrasts", "see_estimate_contrasts", class(contrasts))
   contrasts
 }
+
+# Alias -------------------------------------------------------------------
+
+#' @export
+#' @rdname estimate_contrasts
+est_contrasts <- estimate_contrasts

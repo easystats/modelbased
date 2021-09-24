@@ -6,6 +6,11 @@
 \alias{estimate_expectation}
 \alias{estimate_response}
 \alias{estimate_prediction}
+\alias{est_link}
+\alias{est_relat}
+\alias{est_expect}
+\alias{est_response}
+\alias{est_predict}
 \title{Generate predictions from models}
 \usage{
 estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
@@ -35,6 +40,16 @@ estimate_prediction(
   keep_iterations = FALSE,
   ...
 )
+
+est_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
+
+est_relat(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
+
+est_expect(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
+
+est_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
+
+est_predict(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -60,7 +75,7 @@ Using models to generate "predictions" is useful for many reasons, from assessin
 \cr\cr
 Making different types of predictions (usually for different goals) using \code{modelbased} can be achieved through 4 functions:
 \itemize{
-\item{\strong{estimate_link}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the model's link-scale (with \emph{confidence} intervals)}.
+\item{\strong{estimate_link}: Returns a \code{\link[=visualisation_matrix]{reference_grid()}} with predictions on the model's link-scale (with \emph{confidence} intervals)}.
 \item{\strong{estimate_relation}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the response scale (with \emph{confidence} intervals)}.
 \item{\strong{estimate_expectation}: Makes predictions on the data used for model fitting on the response scale (with \emph{confidence} intervals)}.
 \item{\strong{estimate_response}: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with \emph{prediction} intervals)}.
@@ -77,6 +92,17 @@ when \code{data = "grid"}) and from
 \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
 to compute predictions used internally). For plotting, check the examples in
 \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
+}
+\details{
+Aliases for the "estimate_" functions  with shorter norms are
+available for typing convenience:
+\itemize{
+\item \code{est_link()} is an alias for \code{estimate_link()}
+\item \code{est_relat()} is an alias for \code{estimate_relation()}
+\item \code{est_expect()} is an alias for \code{estimate_expectation()}
+\item \code{est_predict()} is an alias for \code{estimate_prediction()}
+\item \code{est_response()} is an alias for \code{estimate_response()}
+}
 }
 \examples{
 library(modelbased)

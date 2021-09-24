@@ -78,6 +78,11 @@ estimate_slopes <- function(model,
   trends
 }
 
+# Alias -------------------------------------------------------------------
+
+#' @export
+#' @rdname estimate_slopes
+est_slopes <- estimate_slopes
 
 # Summary Method ----------------------------------------------------------
 

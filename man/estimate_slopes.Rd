@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimate_slopes.R
 \name{estimate_slopes}
 \alias{estimate_slopes}
+\alias{est_slopes}
 \title{Estimate Marginal Effects}
 \usage{
 estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
+
+est_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A statistical model.}

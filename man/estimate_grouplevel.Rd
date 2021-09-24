@@ -2,10 +2,13 @@
 % Please edit documentation in R/estimate_grouplevel.R, R/reshape_grouplevel.R
 \name{estimate_grouplevel}
 \alias{estimate_grouplevel}
+\alias{est_grouplevel}
 \alias{reshape_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
 estimate_grouplevel(model, type = "random", ...)
+
+est_grouplevel(model, type = "random", ...)
 
 reshape_grouplevel(x, indices = "all", ...)
 }

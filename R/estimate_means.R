@@ -179,3 +179,9 @@ estimate_means <- function(model,
   if (table_footer == "") table_footer <- NULL
   c(table_footer, "blue")
 }
+
+# Alias -------------------------------------------------------------------
+
+#' @export
+#' @rdname estimate_means
+est_means <- estimate_means

@@ -104,3 +104,9 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   param_names <- insight::clean_parameters(model)
   posteriors <- insight::get_parameters(model, effects = "all", component = "all", ...)
 }
+
+# Alias -------------------------------------------------------------------
+
+#' @export
+#' @rdname estimate_grouplevel
+est_grouplevel <- estimate_grouplevel

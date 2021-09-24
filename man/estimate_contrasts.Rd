@@ -2,9 +2,21 @@
 % Please edit documentation in R/estimate_contrasts.R
 \name{estimate_contrasts}
 \alias{estimate_contrasts}
+\alias{est_contrasts}
 \title{Estimate Marginal Contrasts}
 \usage{
 estimate_contrasts(
+  model,
+  contrast = NULL,
+  at = NULL,
+  fixed = NULL,
+  transform = "none",
+  ci = 0.95,
+  adjust = "holm",
+  ...
+)
+
+est_contrasts(
   model,
   contrast = NULL,
   at = NULL,

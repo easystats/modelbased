@@ -4,7 +4,7 @@
 #' \cr\cr
 #' Making different types of predictions (usually for different goals) using `modelbased` can be achieved through 4 functions:
 #' \itemize{
-#'   \item{**estimate_link**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the model's link-scale (with *confidence* intervals)}.
+#'   \item{**estimate_link**: Returns a [`reference_grid()`][visualisation_matrix] with predictions on the model's link-scale (with *confidence* intervals)}.
 #'   \item{**estimate_relation**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the response scale (with *confidence* intervals)}.
 #'   \item{**estimate_expectation**: Makes predictions on the data used for model fitting on the response scale (with *confidence* intervals)}.
 #'   \item{**estimate_response**: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with *prediction* intervals)}.
@@ -28,6 +28,15 @@
 #'   NULL, the model's data is used. If "grid", the model matrix is obtained
 #'   (through [visualisation_matrix()]).
 #' @param ... You can add all the additional control arguments from [visualisation_matrix()] (used when `data = "grid"`) and [insight::get_predicted()].
+#'
+#' @details Aliases for the "estimate_" functions  with shorter norms are
+#'   available for typing convenience:
+#'
+#'   * `est_link()` is an alias for `estimate_link()`
+#'   * `est_relat()` is an alias for `estimate_relation()`
+#'   * `est_expect()` is an alias for `estimate_expectation()`
+#'   * `est_predict()` is an alias for `estimate_prediction()`
+#'   * `est_response()` is an alias for `estimate_response()`
 #'
 #' @examples
 #' library(modelbased)
@@ -247,6 +256,28 @@ estimate_prediction <- function(model,
   out
 }
 
+
+# Aliases -----------------------------------------------------------------
+
+#' @export
+#' @rdname estimate_link
+est_link <- estimate_link
+
+#' @export
+#' @rdname estimate_link
+est_relat <- estimate_relation
+
+#' @export
+#' @rdname estimate_link
+est_expect <- estimate_expectation
+
+#' @export
+#' @rdname estimate_link
+est_response <- estimate_response
+
+#' @export
+#' @rdname estimate_link
+est_predict <- estimate_prediction
 
 
 # Utils -------------------------------------------------------------------
