@@ -20,7 +20,11 @@ visualisation_matrix.glm <- function(x,
   }
 
   if (include_random == FALSE) {
-    data <- data[names(data) %in% insight::find_predictors(x, effects = "fixed", flatten = TRUE)]
+    keep <- insight::find_predictors(x, effects = "fixed", flatten = TRUE)
+    if(all(at != "all")) {
+      keep <- c(keep, at[at %in% insight::find_random(x, flatten = TRUE)])
+    }
+    data <- data[names(data) %in% keep]
   }
 
   if (all(at == "all")) at <- names(data)
