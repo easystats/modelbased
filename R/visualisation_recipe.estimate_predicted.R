@@ -200,7 +200,7 @@ visualisation_recipe.estimate_predicted <- function(x,
 
       ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
       ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
-      for(i in 1:length(ci_lows)) {
+      for (i in 1:length(ci_lows)) {
         layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ci_low = ci_lows[i], ci_high = ci_highs[i], ribbon = ribbon)
         l <- l + 1
       }
@@ -215,7 +215,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   layers[[paste0("l", l)]] <- .visualisation_predicted_labs(info, x1, y, labs = labs)
 
   # Out
-  class(layers) <- c("visualisation_recipe", class(layers))
+  class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
   layers
 }

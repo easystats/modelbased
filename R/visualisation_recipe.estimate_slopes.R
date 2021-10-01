@@ -114,14 +114,14 @@ visualisation_recipe.estimate_slopes <- function(x,
     l <- l + 1
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
     l <- l + 1
-  } else if(x1 == nums[1] && alpha == nums[2]) {
+  } else if (x1 == nums[1] && alpha == nums[2]) {
     layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
     l <- l + 1
   }
   # Facet
-  if(!is.null(facet)) {
+  if (!is.null(facet)) {
     layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
-    if(!is.null(facet_wrap)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet_wrap)
+    if (!is.null(facet_wrap)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet_wrap)
     l <- l + 1
   }
 
@@ -130,7 +130,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   layers[[paste0("l", l)]] <- .visualisation_slopes_labs(info, color, labs = labs)
 
   # Out
-  class(layers) <- c("visualisation_recipe", class(layers))
+  class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
   layers
 }

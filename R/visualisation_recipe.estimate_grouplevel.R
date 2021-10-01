@@ -65,7 +65,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
   layers[[paste0("l", l)]] <- .visualisation_grouplevel_labs(labs = labs)
 
   # Out
-  class(layers) <- c("visualisation_recipe", class(layers))
+  class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
   layers
 }

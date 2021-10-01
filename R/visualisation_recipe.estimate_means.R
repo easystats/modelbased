@@ -123,7 +123,7 @@ visualisation_recipe.estimate_means <- function(x,
   layers[[paste0("l", l)]] <- .visualisation_means_labs(info, x1, y, labs = labs)
 
   # Out
-  class(layers) <- c("visualisation_recipe", class(layers))
+  class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
   layers
 }
