@@ -27,7 +27,7 @@
 #'
 #' @section *modelbased* functions for estimating predicted values and uncertainty:
 #'
-#' *modelbased* provides 4 functions for generating different types of predictions and their uncertainty from models:
+#' *modelbased* provides 4 functions for generating different types of predictions and their uncertainty from models. The functions return different combinations of expected vs predicted values (and their uncertainty) and link vs response scales:
 #'
 #' - **`estimate_link()`**: Generates **expected values** (conditional average) on the **link scale**. The uncertainty interval is a *confidence interval*. By default, values are estimated using a reference grid spanning the observed range of predictor values (see [visualisation_matrix()]).
 #'
@@ -104,6 +104,7 @@
 #' }
 #' @return A data frame of predicted values and uncertainty intervals, with class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted] and [`plot()`][visualisation_recipe.estimate_predicted] are available.
 #'
+#' @rdname estimate_prediction
 #' @export
 estimate_link <- function(model,
                           data = "grid",
@@ -120,7 +121,7 @@ estimate_link <- function(model,
   )
 }
 
-#' @rdname estimate_link
+#' @rdname estimate_prediction
 #' @export
 estimate_relation <- function(model,
                               data = "grid",
@@ -137,7 +138,7 @@ estimate_relation <- function(model,
   )
 }
 
-#' @rdname estimate_link
+#' @rdname estimate_prediction
 #' @export
 estimate_expectation <- function(model,
                                  data = NULL,
@@ -155,7 +156,7 @@ estimate_expectation <- function(model,
 }
 
 
-#' @rdname estimate_link
+#' @rdname estimate_prediction
 #' @export
 estimate_response <- function(...) {
   message(insight::format_message(
@@ -166,7 +167,7 @@ estimate_response <- function(...) {
 }
 
 
-#' @rdname estimate_link
+#' @rdname estimate_prediction
 #' @export
 estimate_prediction <- function(model,
                                 data = NULL,

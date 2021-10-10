@@ -98,7 +98,7 @@ Various types of predictions also differ in the metric or scale the predictions 
 \section{\emph{modelbased} functions for estimating predicted values and uncertainty}{
 
 
-\emph{modelbased} provides 4 functions for generating different types of predictions and their uncertainty from models:
+\emph{modelbased} provides 4 functions for generating different types of predictions and their uncertainty from models. The functions return different combinations of expected vs predicted values (and their uncertainty) and link vs response scales:
 \itemize{
 \item \strong{\code{estimate_link()}}: Generates \strong{expected values} (conditional average) on the \strong{link scale}. The uncertainty interval is a \emph{confidence interval}. By default, values are estimated using a reference grid spanning the observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 \item \strong{\code{estimate_expectation()}}: Generates \strong{expected values} (conditional average) on the \strong{response scale}. The uncertainty interval is a \emph{confidence interval}. By default, values are estimated using the data used to fit the model.
