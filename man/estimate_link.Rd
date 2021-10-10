@@ -6,7 +6,7 @@
 \alias{estimate_expectation}
 \alias{estimate_response}
 \alias{estimate_prediction}
-\title{Generate predictions from models}
+\title{Estimate predicted values and uncertainty from models}
 \usage{
 estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
 
@@ -26,7 +26,7 @@ estimate_expectation(
   ...
 )
 
-estimate_response(model, data = NULL, ci = 0.95, keep_iterations = FALSE, ...)
+estimate_response(...)
 
 estimate_prediction(
   model,
@@ -40,7 +40,7 @@ estimate_prediction(
 \item{model}{A statistical model.}
 
 \item{data}{A data frame with model's predictors to estimate the response. If
-NULL, the model's data is used. If "grid", the model matrix is obtained
+\code{NULL}, the model's data is used. If "grid", the model matrix is obtained
 (through \code{\link[=visualisation_matrix]{visualisation_matrix()}}).}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
@@ -53,31 +53,65 @@ running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 \item{...}{You can add all the additional control arguments from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
-A dataframe of predicted values.
+A data frame of predicted values and uncertainty intervals, with class \code{"estimate_predicted"}. Methods for \code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe()}} and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available.
 }
 \description{
-Using models to generate "predictions" is useful for many reasons, from assessing the model's performance to visualizing the relationships estimated by the model. It is, however, a term covering a range of different statistical procedures.
+Using models to generate predictions and their uncertainty is useful for many purposes, including assessing model performance, visualizing relationships, making forecasts, or informing decisions.
 \cr\cr
-Making different types of predictions (usually for different goals) using \code{modelbased} can be achieved through 4 functions:
+There are several kinds of model "predictions" that are used for different goals. See belwo for details.
+}
+\details{
+
+}
+\note{
+These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond to different specifications of its parameters. It may be useful to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, in particular the description of the \code{predict} argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
+\cr\cr
+
+Additional control parameters can be used to control results from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to comptue predictions).
+\cr\cr
+
+For plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
+}
+\section{Expected (average) values versus individual predictions (forecasts)}{
+
+
+The most important way that various types of predictions differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
 \itemize{
-\item{\strong{estimate_link}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the model's link-scale (with \emph{confidence} intervals)}.
-\item{\strong{estimate_relation}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the response scale (with \emph{confidence} intervals)}.
-\item{\strong{estimate_expectation}: Makes predictions on the data used for model fitting on the response scale (with \emph{confidence} intervals)}.
-\item{\strong{estimate_response}: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with \emph{prediction} intervals)}.
+\item \strong{Expected} values refer the the fitted regression line---the estimated \strong{average} response value (i.e., the "expectation") for individuals with a specific set of predictor values. For example, in a linear model \emph{y_i} = 2 + 3\emph{x_i} + \emph{e_i}, the estimated average \emph{y} for individuals with \emph{x} = 2 is 8. For expected values, uncertainty intervals refer to uncertainty in the estimated \strong{conditional average} (where might the true regression line actually fall)? Uncertainty intervals for expected values are also called "confidence intervals". Expected values and their uncertainty intervals are useful for describing the general relationship between variables and for describing how precisely a model has been estimated.
+\item \strong{Predicted} values refer to forecasts or predictions for \strong{individual cases}. Predicted values are also called "posterior predictions". For predicted values, uncertainty intervals refer to uncertainty in the \strong{individual response values for each case} (where might any single case actually fall)? Uncertainty intervals for predicted values are also called "prediction intervals" and "posterior predictive intervals". Predicted values and their uncertainty intervals are useful for forecasting the range of values that might be observed in new data or for making decisions about individual cases.
 }
-You can see these 4 functions as placed on a gradient ranging from predictions "close to the model" to "close to the actual response data". The first two are typically used for visualizing the effects and relationships estimated by the model, whereas the last two are more likely to be used to visualize the performance of your model.
-\cr\cr
-These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}}, and correspond to different specifications of its parameters. It is very important to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, and in particular the description of its \code{predict} argument to get a better sense of concepts such as "expectation", "link" and "prediction".
-\cr\cr
-The 4 modelbased functions mentioned above differ first and foremost by their default parameters. \code{estimate_link} and \code{estimate_relation} have the \code{data} argument set to \code{\link[=visualisation_matrix]{"grid"()}} by default. Their expected usage is for visualisation of the model's effects. \code{estimate_expectation} and \code{estimate_response} have the \code{data} argument set to \code{NULL} by default (which retrieves the data used for model's fitting). These functions' are useful in the context of generating actual predictions for the existing or new data, to assess the model's performance or make actual future predictions.
-\cr\cr
-There are many control parameters that are not listed here but can
-be used, such as the arguments from  \code{\link[=visualisation_matrix]{visualisation_matrix()}} (used
-when \code{data = "grid"}) and from
-\code{\link[insight:get_predicted]{insight::get_predicted()}} (the function
-to compute predictions used internally). For plotting, check the examples in
-\code{\link[=visualisation_recipe]{visualisation_recipe()}}. Don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 }
+
+\section{Response metric}{
+
+
+Various types of predictions also differ in the metric or scale the predictions are expressed in.
+\itemize{
+\item The \strong{link scale} refers to scale of the fitted regression line. For linear models, this is the original response variable scale. However, for generalized linear models, it is the scale of the response after transformation by the link function (e.g., log-odds for logit binomial models, log-counts for log-linked Poisson models, log-probability for log-linked beta models).
+\item The \strong{response scale} refers to the original scale of the response variable (i.e., without any link function transformation). For linear models, this is the original response variable scale. However, for generalized linear models, expected values on the link scale are back-transformed to the original response variable metric (e.g., predicted probabilities for binomial models, counts for Poisson models, predicted probabilities for beta models).
+}
+}
+
+\section{\emph{modelbased} functions for estimating predicted values and uncertainty}{
+
+
+\emph{modelbased} provides 4 functions for generating different types of predictions and their uncertainty from models:
+\itemize{
+\item \strong{\code{estimate_link()}}: Generates \strong{expected values} (conditional average) on the \strong{link scale}. The uncertainty interval is a \emph{confidence interval}. By default, values are estimated using a reference grid spanning the observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+\item \strong{\code{estimate_expectation()}}: Generates \strong{expected values} (conditional average) on the \strong{response scale}. The uncertainty interval is a \emph{confidence interval}. By default, values are estimated using the data used to fit the model.
+\item \strong{\code{estimate_prediction()}}: Generates \strong{predicted values} (for individual cases) on the \strong{response scale}. The uncertainty interval is a \emph{prediction interval}. By default, values are estimated using the data used to fit the model.
+\item \strong{\code{estimate_relation()}}: Like \code{estimate_expectation()}. Generates \strong{expected values} (conditional average) on the \strong{response scale}. The uncertainty interval is a \emph{confidence interval}. By default, values are estimated using a reference grid spanning the observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+}
+
+\code{estimate_response()} is a deprecated alias for \code{estimate_expectation()}.
+}
+
+\section{Data for predictions}{
+
+
+If the \code{data = NULL}, values are estimated using the data used to fit the model. If \code{data = "grid"}, values are estimated a reference grid spanning the observed range of predictor values with \code{\link[=visualisation_matrix]{visualisation_matrix()}}. This can be useful for model visualization. The number of predictor values used for each variable can be controlled with the \code{length} argument. \code{data} can also be a data frame containing columns with names matching the model frame (see \code{\link[insight:get_data]{insight::get_data()}}). This can be used to generate model predictions for specific combinations of predictor values.
+}
+
 \examples{
 library(modelbased)
 

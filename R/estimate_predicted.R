@@ -1,31 +1,59 @@
-#' Generate predictions from models
+#' Estimate predicted values and uncertainty from models
 #'
-#' Using models to generate "predictions" is useful for many reasons, from assessing the model's performance to visualizing the relationships estimated by the model. It is, however, a term covering a range of different statistical procedures.
+#' Using models to generate predictions and their uncertainty is useful for many purposes, including assessing model performance, visualizing relationships, making forecasts, or informing decisions.
 #' \cr\cr
-#' Making different types of predictions (usually for different goals) using `modelbased` can be achieved through 4 functions:
-#' \itemize{
-#'   \item{**estimate_link**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the model's link-scale (with *confidence* intervals)}.
-#'   \item{**estimate_relation**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the response scale (with *confidence* intervals)}.
-#'   \item{**estimate_expectation**: Makes predictions on the data used for model fitting on the response scale (with *confidence* intervals)}.
-#'   \item{**estimate_response**: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with *prediction* intervals)}.
-#' }
-#' You can see these 4 functions as placed on a gradient ranging from predictions "close to the model" to "close to the actual response data". The first two are typically used for visualizing the effects and relationships estimated by the model, whereas the last two are more likely to be used to visualize the performance of your model.
+#' There are several kinds of model "predictions" that are used for different goals. See belwo for details.
+#'
+#' @details
+#'
+#' @section Expected (average) values versus individual predictions (forecasts):
+#'
+#' The most important way that various types of predictions differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
+#'
+#' - **Expected** values refer the the fitted regression line---the estimated **average** response value (i.e., the "expectation") for individuals with a specific set of predictor values. For example, in a linear model *y_i* = 2 + 3*x_i* + *e_i*, the estimated average *y* for individuals with *x* = 2 is 8. For expected values, uncertainty intervals refer to uncertainty in the estimated **conditional average** (where might the true regression line actually fall)? Uncertainty intervals for expected values are also called "confidence intervals". Expected values and their uncertainty intervals are useful for describing the general relationship between variables and for describing how precisely a model has been estimated.
+#'
+#' - **Predicted** values refer to forecasts or predictions for **individual cases**. Predicted values are also called "posterior predictions". For predicted values, uncertainty intervals refer to uncertainty in the **individual response values for each case** (where might any single case actually fall)? Uncertainty intervals for predicted values are also called "prediction intervals" and "posterior predictive intervals". Predicted values and their uncertainty intervals are useful for forecasting the range of values that might be observed in new data or for making decisions about individual cases.
+#'
+#' @section Response metric:
+#'
+#' Various types of predictions also differ in the metric or scale the predictions are expressed in.
+#'
+#' - The **link scale** refers to scale of the fitted regression line. For linear models, this is the original response variable scale. However, for generalized linear models, it is the scale of the response after transformation by the link function (e.g., log-odds for logit binomial models, log-counts for log-linked Poisson models, log-probability for log-linked beta models).
+#'
+#' - The **response scale** refers to the original scale of the response variable (i.e., without any link function transformation). For linear models, this is the original response variable scale. However, for generalized linear models, expected values on the link scale are back-transformed to the original response variable metric (e.g., predicted probabilities for binomial models, counts for Poisson models, predicted probabilities for beta models).
+#'
+#' @section *modelbased* functions for estimating predicted values and uncertainty:
+#'
+#' *modelbased* provides 4 functions for generating different types of predictions and their uncertainty from models:
+#'
+#' - **`estimate_link()`**: Generates **expected values** (conditional average) on the **link scale**. The uncertainty interval is a *confidence interval*. By default, values are estimated using a reference grid spanning the observed range of predictor values (see [visualisation_matrix()]).
+#'
+#' - **`estimate_expectation()`**: Generates **expected values** (conditional average) on the **response scale**. The uncertainty interval is a *confidence interval*. By default, values are estimated using the data used to fit the model.
+#'
+#' - **`estimate_prediction()`**: Generates **predicted values** (for individual cases) on the **response scale**. The uncertainty interval is a *prediction interval*. By default, values are estimated using the data used to fit the model.
+#'
+#' - **`estimate_relation()`**: Like `estimate_expectation()`. Generates **expected values** (conditional average) on the **response scale**. The uncertainty interval is a *confidence interval*. By default, values are estimated using a reference grid spanning the observed range of predictor values (see [visualisation_matrix()]).
+#'
+#' `estimate_response()` is a deprecated alias for `estimate_expectation()`.
+#'
+#' @section Data for predictions:
+#'
+#' If the `data = NULL`, values are estimated using the data used to fit the model. If `data = "grid"`, values are estimated a reference grid spanning the observed range of predictor values with [visualisation_matrix()]. This can be useful for model visualization. The number of predictor values used for each variable can be controlled with the `length` argument. `data` can also be a data frame containing columns with names matching the model frame (see [insight::get_data()]). This can be used to generate model predictions for specific combinations of predictor values.
+#'
+#' @note
+#'
+#' These functions are built on top of [insight::get_predicted()] and correspond to different specifications of its parameters. It may be useful to read its [documentation](https://easystats.github.io/insight/reference/get_predicted.html), in particular the description of the `predict` argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
 #' \cr\cr
-#' These functions are built on top of [insight::get_predicted()], and correspond to different specifications of its parameters. It is very important to read its [documentation](https://easystats.github.io/insight/reference/get_predicted.html), and in particular the description of its `predict` argument to get a better sense of concepts such as "expectation", "link" and "prediction".
+#'
+#' Additional control parameters can be used to control results from [visualisation_matrix()] (when `data = "grid"`) and from [insight::get_predicted()] (the function used internally to comptue predictions).
 #' \cr\cr
-#' The 4 modelbased functions mentioned above differ first and foremost by their default parameters. `estimate_link` and `estimate_relation` have the `data` argument set to [`"grid"()`][visualisation_matrix] by default. Their expected usage is for visualisation of the model's effects. `estimate_expectation` and `estimate_response` have the `data` argument set to `NULL` by default (which retrieves the data used for model's fitting). These functions' are useful in the context of generating actual predictions for the existing or new data, to assess the model's performance or make actual future predictions.
-#' \cr\cr
-#' There are many control parameters that are not listed here but can
-#' be used, such as the arguments from  [visualisation_matrix()] (used
-#' when `data = "grid"`) and from
-#' [insight::get_predicted()] (the function
-#' to compute predictions used internally). For plotting, check the examples in
-#' [visualisation_recipe()]. Don't forget to also check out the [Vignettes](https://easystats.github.io/modelbased/articles/) and [README examples](https://easystats.github.io/modelbased/index.html#features) for various examples, tutorials and usecases.
+#'
+#' For plotting, check the examples in [visualisation_recipe()]. Also check out the [Vignettes](https://easystats.github.io/modelbased/articles/) and [README examples](https://easystats.github.io/modelbased/index.html#features) for various examples, tutorials and usecases.
 #'
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
-#'   NULL, the model's data is used. If "grid", the model matrix is obtained
+#'   `NULL`, the model's data is used. If "grid", the model matrix is obtained
 #'   (through [visualisation_matrix()]).
 #' @param ... You can add all the additional control arguments from [visualisation_matrix()] (used when `data = "grid"`) and [insight::get_predicted()].
 #'
@@ -71,7 +99,8 @@
 #'   estimate_relation(model)
 #' }
 #' }
-#' @return A dataframe of predicted values.
+#' @return A data frame of predicted values and uncertainty intervals, with class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted] and [`plot()`][visualisation_recipe.estimate_predicted] are available.
+#'
 #' @export
 estimate_link <- function(model,
                           data = "grid",
@@ -125,19 +154,12 @@ estimate_expectation <- function(model,
 
 #' @rdname estimate_link
 #' @export
-estimate_response <- function(model,
-                              data = NULL,
-                              ci = 0.95,
-                              keep_iterations = FALSE,
-                              ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "response",
-    ...
-  )
+estimate_response <- function(...) {
+  message(insight::format_message(
+    "`estimate_response()` is deprecated.", "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead."
+  ))
+
+  estimate_expectation(...)
 }
 
 
