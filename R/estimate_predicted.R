@@ -1,12 +1,15 @@
-#' Estimate predicted values and uncertainty from models
+#' Model-based response estimates and uncertainty
 #'
-#' Using models to generate predictions and their uncertainty is useful for many purposes, including assessing model performance, visualizing relationships, making forecasts, or informing decisions.
+#' After fitting a model, it is useful generate model-based estimates of the response variables for different combinations of predictor values.
+#' Such estimates can be used to make inferences about relationships between variables and to make predictions about individual cases.
 #' \cr\cr
-#' There are several kinds of model "predictions" that are used for different goals. See belwo for details.
+#' Model-based estimates and uncertainty can be generated for both the conditional average response values (the regression line) and for predictions about individual cases.
+#' For generalized linear models, model-based estimates and uncertainty can also be reported on the original response scale or on the link scale.
+#' See below for details.
 #'
 #' @details
 #'
-#' @section Expected (average) values versus individual predictions (forecasts):
+#' @section Expected (average) values versus individual case predictions (forecasts):
 #'
 #' The most important way that various types of predictions differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
 #'

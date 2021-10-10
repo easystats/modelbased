@@ -6,7 +6,7 @@
 \alias{estimate_expectation}
 \alias{estimate_response}
 \alias{estimate_prediction}
-\title{Estimate predicted values and uncertainty from models}
+\title{Model-based response estimates and uncertainty}
 \usage{
 estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
 
@@ -56,9 +56,12 @@ running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 A data frame of predicted values and uncertainty intervals, with class \code{"estimate_predicted"}. Methods for \code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe()}} and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available.
 }
 \description{
-Using models to generate predictions and their uncertainty is useful for many purposes, including assessing model performance, visualizing relationships, making forecasts, or informing decisions.
+After fitting a model, it is useful generate model-based estimates of the response variables for different combinations of predictor values.
+Such estimates can be used to make inferences about relationships between variables and to make predictions about individual cases.
 \cr\cr
-There are several kinds of model "predictions" that are used for different goals. See belwo for details.
+Model-based estimates and uncertainty can be generated for both the conditional average response values (the regression line) and for predictions about individual cases.
+For generalized linear models, model-based estimates and uncertainty can also be reported on the original response scale or on the link scale.
+See below for details.
 }
 \details{
 
@@ -72,7 +75,7 @@ Additional control parameters can be used to control results from \code{\link[=v
 
 For plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 }
-\section{Expected (average) values versus individual predictions (forecasts)}{
+\section{Expected (average) values versus individual case predictions (forecasts)}{
 
 
 The most important way that various types of predictions differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
