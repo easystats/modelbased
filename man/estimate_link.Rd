@@ -62,8 +62,8 @@ Making different types of predictions (usually for different goals) using \code{
 \itemize{
 \item{\strong{estimate_link}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the model's link-scale (with \emph{confidence} intervals)}.
 \item{\strong{estimate_relation}: Returns a \code{\link[=visualisation_matrix]{reference grid()}} with predictions on the response scale (with \emph{confidence} intervals)}.
-\item{\strong{estimate_expectation}: Makes predictions on the data used for model fitting on the response scale (with \emph{confidence} intervals)}.
-\item{\strong{estimate_response}: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with \emph{prediction} intervals)}.
+\item{\strong{estimate_expectation}: Makes predictions (\code{\link[insight:get_predicted]{get_predicted(..., predict = "expectation")}}) on the data used for model fitting on the response scale (with \emph{confidence} intervals)}.
+\item{\strong{estimate_response}: Makes predictions (\code{\link[insight:get_predicted]{get_predicted(..., predict = "classification")}}) on the data used for model fitting on the response (transformed for binomial models) scale (with \emph{prediction} intervals)}.
 }
 You can see these 4 functions as placed on a gradient ranging from predictions "close to the model" to "close to the actual response data". The first two are typically used for visualizing the effects and relationships estimated by the model, whereas the last two are more likely to be used to visualize the performance of your model.
 \cr\cr

@@ -6,8 +6,8 @@
 #' \itemize{
 #'   \item{**estimate_link**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the model's link-scale (with *confidence* intervals)}.
 #'   \item{**estimate_relation**: Returns a [`reference grid()`][visualisation_matrix] with predictions on the response scale (with *confidence* intervals)}.
-#'   \item{**estimate_expectation**: Makes predictions on the data used for model fitting on the response scale (with *confidence* intervals)}.
-#'   \item{**estimate_response**: Makes predictions on the data used for model fitting on the response (transformed for binomial models) scale (with *prediction* intervals)}.
+#'   \item{**estimate_expectation**: Makes predictions ([`get_predicted(..., predict = "expectation")`][insight::get_predicted()]) on the data used for model fitting on the response scale (with *confidence* intervals)}.
+#'   \item{**estimate_response**: Makes predictions ([`get_predicted(..., predict = "classification")`][insight::get_predicted()]) on the data used for model fitting on the response (transformed for binomial models) scale (with *prediction* intervals)}.
 #' }
 #' You can see these 4 functions as placed on a gradient ranging from predictions "close to the model" to "close to the actual response data". The first two are typically used for visualizing the effects and relationships estimated by the model, whereas the last two are more likely to be used to visualize the performance of your model.
 #' \cr\cr
@@ -135,7 +135,7 @@ estimate_response <- function(model,
     data = data,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "response",
+    predict = "classification",
     ...
   )
 }

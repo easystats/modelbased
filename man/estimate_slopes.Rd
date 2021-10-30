@@ -30,7 +30,7 @@ functions based on marginal estimations includes \code{\link[=estimate_contrasts
 See the \strong{Details} section below, and don't forget to also check out the \href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 }
 \details{
-The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is advised to understand the idea behind these types of procedures.
+The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}} functions are forming a group, as they are all based on \emph{marginal} estimations (estimations based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for \code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is recommended to understand the idea behind these types of procedures.
 
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid()}} is so important for direct predictions.
@@ -41,7 +41,18 @@ The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_mea
 \strong{Example:} let's imagine the following model \code{lm(y ~ condition * x)} where \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous variable (like age for example). One idea is to see how this model performs, and compare the actual response y to the one predicted by the model (using \code{\link[=estimate_response]{estimate_response()}}). Another idea is evaluate the average mean at each of the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), which can be useful to visualize them. Another possibility is to evaluate the difference between these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate the effect of x averaged over all conditions, or instead within each condition (\code{using [estimate_slopes]}).
 }
 \examples{
+# Get an idea of the data
+if (require("ggplot2")) {
+  ggplot(iris, aes(x=Petal.Length, y=Sepal.Width)) +
+    geom_point(aes(color=Species)) +
+    geom_smooth(color = "black", se = FALSE) +
+    geom_smooth(aes(color=Species), linetype = "dotted", se = FALSE) +
+    geom_smooth(aes(color=Species), method = "lm", se = FALSE)
+}
+
+# Model it
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+# Compute the marginal effect of Petal.Length at each level of Species
 slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 slopes
 plot(slopes)
@@ -50,6 +61,12 @@ effectsize::standardize(slopes)
 if (require("mgcv")) {
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
   slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+  summary(slopes)
+  plot(slopes)
+
+  model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length",
+                            at = c("Petal.Length", "Species"), length = 20)
   summary(slopes)
   plot(slopes)
 }

@@ -10,7 +10,7 @@
 #' @inheritParams model_emmeans
 #' @inheritParams estimate_means
 #'
-#' @details The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()] functions are forming a group, as they are all based on *marginal* estimations (estimations about the model based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for [emmeans::emmeans()] and [emmeans::emtrends()]) is advised to understand the idea behind these types of procedures.
+#' @details The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()] functions are forming a group, as they are all based on *marginal* estimations (estimations based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for [emmeans::emmeans()] and [emmeans::emtrends()]) is recommended to understand the idea behind these types of procedures.
 #'
 #' \itemize{
 #' \item Model-based **predictions** is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see [estimate_link()]). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of [`reference grid()`][visualisation_matrix] is so important for direct predictions.
@@ -22,7 +22,18 @@
 #'
 #'
 #' @examples
+#' # Get an idea of the data
+#' if (require("ggplot2")) {
+#'   ggplot(iris, aes(x=Petal.Length, y=Sepal.Width)) +
+#'     geom_point(aes(color=Species)) +
+#'     geom_smooth(color = "black", se = FALSE) +
+#'     geom_smooth(aes(color=Species), linetype = "dotted", se = FALSE) +
+#'     geom_smooth(aes(color=Species), method = "lm", se = FALSE)
+#' }
+#'
+#' # Model it
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' # Compute the marginal effect of Petal.Length at each level of Species
 #' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 #' slopes
 #' plot(slopes)
@@ -31,6 +42,12 @@
 #' if (require("mgcv")) {
 #'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 #'   slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+#'   summary(slopes)
+#'   plot(slopes)
+#'
+#'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
+#'   slopes <- estimate_slopes(model, trend = "Petal.Length",
+#'                             at = c("Petal.Length", "Species"), length = 20)
 #'   summary(slopes)
 #'   plot(slopes)
 #' }
@@ -74,61 +91,81 @@ estimate_slopes <- function(model,
   attr(trends, "at") <- info$at
 
   # Output
-  class(trends) <- c("estimate_slopes", class(trends))
+  class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
   trends
 }
 
 
-# Summary Method ----------------------------------------------------------
+# Summary Method ===============================================================
 
 
 #' @export
 summary.estimate_slopes <- function(object, ...) {
-  object$Confidence <- .estimate_slopes_sig(object, ...)
+  data <- as.data.frame(object)
+  trend <- attributes(object)$trend
 
-  vars <- c(attributes(object)$levels, attributes(object)$modulate)
+  # Add "Confidence" col based on the sig index present in the data
+  data$Confidence <- .estimate_slopes_sig(data, ...)
 
-  # TODO: deal with factors (group by levels)
+  # Grouping variables
+  vars <- attributes(object)$at
+  vars <- vars[!vars %in% trend]
 
-  # Loop through groups of "significance"
-  groups <- list()
-  group <- object[1, ] # First row
-  for (i in 2:nrow(object)) {
-    if (object$Confidence[i] == object$Confidence[i - 1]) {
-      group <- rbind(group, object[i, ])
-    } else {
-      groups[[length(groups) + 1]] <- group # Store current group
-      group <- object[i, ] # reset
+  # If no grouping variables, summarize all
+  if(length(vars) == 0) {
+    out <- .estimate_slopes_summarize(data, trend = trend)
+  } else {
+    out <- data.frame()
+    # Create vizmatrix of grouping variables
+    groups <- as.data.frame(visualisation_matrix(data[vars], factors = "all", numerics = "all"))
+    # Summarize all of the chunks
+    for(i in 1:nrow(groups)) {
+      g <- data[datawizard::data_match(data, groups[i, , drop = FALSE]), , drop = FALSE]
+      out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
+    out <- datawizard::data_relocate(out, vars)
   }
-  groups[[length(groups) + 1]] <- group # Store last one
 
-  # Summarize
-  groups <- lapply(groups, function(x) {
-    out <- data.frame(Confidence = unique(x$Confidence))
-
-    for (var in vars) {
-      if (is.numeric(object[[var]])) {
-        out[[paste0(var, "_Min")]] <- min(x[[var]], na.rm = TRUE)
-        out[[paste0(var, "_Max")]] <- max(x[[var]], na.rm = TRUE)
-      } else {
-        out[[var]] <- paste0(unique(x[[var]]), collapse = ", ")
-      }
-    }
-    if ("Coefficient" %in% names(object)) out$Coefficient_Mean <- mean(x$Coefficient, na.rm = TRUE)
-    if ("SE" %in% names(object)) out$SE_Mean <- mean(x$SE, na.rm = TRUE)
-    if ("SD" %in% names(object)) out$SD_Mean <- mean(x$SD, na.rm = TRUE)
-    if ("MAD" %in% names(object)) out$MAD_Mean <- mean(x$MAD, na.rm = TRUE)
-    out
-  })
-
-  groups <- do.call(rbind, groups)
-  groups
+  # Clean and sanitize
+  out$Confidence <- NULL # Drop significance col
+  attributes(out) <- utils::modifyList(attributes(object), attributes(out))
+  class(out) <- c("estimate_slopes", class(out))
+  attr(out, "table_title") <- c("Average Marginal Effects", "blue")
+  out
 }
 
 
 
 # Utilities ---------------------------------------------------------------
+.estimate_slopes_summarize <- function(data, trend, ...) {
+
+  # Find beginnings and ends -----------------------
+  # First row - starting point
+  sig <- data$Confidence[1]
+  starts <- 1
+  ends <- nrow(data)
+  # Iterate through all rows to find blocks
+  for(i in 2:nrow(data)) {
+    if(data$Confidence[i] != sig) {
+      sig <- data$Confidence[i]
+      starts <- c(starts, i)
+      ends <- c(ends, i-1)
+    }
+  }
+  ends <- sort(ends)
+
+  # Summarize these groups -----------------------
+  out <- data.frame()
+  for(g in 1:length(starts)) {
+    dat <- data[starts[g]:ends[g], ]
+    dat <- as.data.frame(visualisation_matrix(dat, at = NULL, factors = "mode"))
+    dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)
+    out <- rbind(out, dat)
+  }
+  out
+}
+
+
 
 .estimate_slopes_sig <- function(x, confidence = "auto", ...) {
   if (confidence == "auto") {

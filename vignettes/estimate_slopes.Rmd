@@ -35,8 +35,9 @@ set.seed(333)
 This vignette will present how to estimate marginal effects and derivatives using
 `estimate_slopes()`.
 
-**Marginal means *vs.* Marginal effects**. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they can eventually be "averaged over" other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable (i.e., the y-axis is the outcome variable, which allows you to say for instance "the average reaction time in the C1 condition is 1366 ms"), marginal effects return averages of coefficients (i.e., the y-axis is the effect/slope/beta of a given numeric predictor).
+**Marginal means *vs.* Marginal effects**. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they can eventually be "averaged over" other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable, which allows you to say for instance "the average reaction time in the C1 condition is 1366 ms", marginal effects return **averages of coefficients**. This allows you to say, for instance, "the average *effect of x* in the C1 condition is 0.33". When you visualize marginal effects, the y-axis is the effect/slope/beta of a given numeric predictor.
 
+Let's see some examples.
 
 # Marginal effects over a factor's levels
 
@@ -66,13 +67,15 @@ model2 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 test_performance(model, model2)
 ```
 
-Although we are satisfied with our model and its performance, let say we are not interested in the effect of `Petal.Length` for different Species, but rather, in its **general trend** "across" all different species. We need to compute the **marginal effect** of the predictor, which corresponds to its slope *averaged* (it's a bit more complex than a simple averaging but the idea is there) over the different factor levels.
+Although we are satisfied with our model and its performance, imagine we are not interested in the effect of `Petal.Length` for different Species, but rather, in its **general trend** "across" all different species. We need to compute the **marginal effect** of the predictor, which corresponds to its slope *averaged* (it's a bit more complex than a simple averaging but that's the idea) over the different factor levels.
 
 ```{r message=FALSE, warning=FALSE}
 slopes <- estimate_slopes(model, trend = "Petal.Length")
 
 slopes
 ```
+
+We can see that the effect of `Petal.Length`, **marginalized over Species**, is positive and significant.
 
 # Effects for each factor's levels
 
@@ -87,7 +90,9 @@ plot(slopes)
 
 # Interactions between two continuous variables
 
-Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
+Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.
+
+Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
@@ -101,24 +106,55 @@ slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 plot(slopes)
 ```
 
-# Effect's Derivative
+# Describing and reporting non-linear relationships (e.g., in GAMs)
 
-You can also estimate the *derivative* of smooth using `estimate_slopes`.
+**Complex problems require modern solutions.**
+
+General Additive Models (GAMs) are a powerful class of models that extend the capabilities of traditional GLMs. In particular, they are able to parsimoniously model possibly non-linear relationship.
+
+Let's take for instance the following model:
 
 ```{r message=FALSE, warning=FALSE}
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
-# 1. Compute derivative
+plot(estimate_relation(model, length = 50))
+```
+
+The GAMs nicely models the complex relationship between the two variables (if we don't take into account the different species of course).
+
+But how to interpret and report in a manuscript such results? We can't simply paste the figure right? Right? Reviewers will want some statistics, some numbers between brackets, otherwise it doesn't look serious does it.
+
+```{r message=FALSE, warning=FALSE}
+parameters::parameters(model)
+```
+
+
+The problem with GAMs is that their parameters (i.e., the coefficients), are not easily interpretable. Here we can see one line corresponding to the smooth term. It's significant, great, but what does it mean? And if we run the GAM using other packages (e.g., `rstanarm` or `brms`), the parameters will not be the same. What to do!
+
+Because the meaning of these parameters is somewhat disconnected with our need for relationship understanding, another possibility is to compute the **marginal linear effect** of the smooth term, i.e., the "derivative", using `estimate_slopes`.
+
+```{r message=FALSE, warning=FALSE}
+# Compute derivative
 deriv <- estimate_slopes(model, 
                          trend = "Petal.Length", 
                          at = "Petal.Length",
                          length = 100)
 
-# 2. Visualise
+# Visualise
 plot(deriv)
 ```
 
+This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). **Margianl derivatives** allow us to make inferences at each point of point of the relationship!
+
+Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
+
+```{r message=FALSE, warning=FALSE}
+summary(deriv)
+```
+
+
+We can conclude that Petal.Length shares significantly negative relationship with the outcome variable between 2.01 and 3.15 (*average marginal effect* = -0.76, 95\% CI [-1.14, -0.37], p < .01) and significantly positive between 3.74 and 4.28 (*average marginal effect* = 0.54, 95\% CI [0.14,  0.93], p < .05).
 
 
 # References
