@@ -159,12 +159,12 @@ model_emmeans <- function(model,
 
   # Special behaviour for transformations #138
   # It's annoying and an ugly fix, not sure how to address
-  if(!is.null(args$emmeans_at)) {
+  if (!is.null(args$emmeans_at)) {
     args$retransform <- list()
     terms <- insight::find_terms(model)$conditional
-    for(var_at in names(args$emmeans_at)) {
+    for (var_at in names(args$emmeans_at)) {
       term <- terms[grepl(var_at, terms, fixed = TRUE)]
-      if(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE) || grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE)) {
+      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) || any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
         args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
         args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
       }
