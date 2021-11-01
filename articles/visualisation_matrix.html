@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0.1</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
       <h1 data-toc-skip>Data grids</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/visualisation_matrix.Rmd" class="external-link"><code>vignettes/visualisation_matrix.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/HEAD/vignettes/visualisation_matrix.Rmd" class="external-link"><code>vignettes/visualisation_matrix.Rmd</code></a></small>
       <div class="hidden name"><code>visualisation_matrix.Rmd</code></div>
 
     </div>
@@ -123,9 +123,9 @@
     
     
 <p>Sometimes, for instance for <strong>visualization</strong> purposes, we want to extract a <strong>reference grid</strong> (or <em>data grid</em>) of our dataset, that we will call a <strong>visualisation matrix</strong>. This reference grid usually contains the same variables than the original dataset, but reorganized in a particular, <strong>balanced</strong>, way. For instance, it might contain all the combinations of factors, or equally spread points of a continuous variable. These reference grids are often used as data for predictions of statistical models, to help us represent and understand them.</p>
-<div id="simple-linear-regression" class="section level1">
-<h1 class="hasAnchor">
-<a href="#simple-linear-regression" class="anchor" aria-hidden="true"></a>Simple linear regression</h1>
+<div class="section level1">
+<h1 id="simple-linear-regression">Simple linear regression<a class="anchor" aria-label="anchor" href="#simple-linear-regression"></a>
+</h1>
 <p>For instance, let’s fit a simple linear model that models the relationship between <code>Sepal.Width</code> and <code>Sepal.Length</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
@@ -186,9 +186,9 @@
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 <p>As we can see, it is quite similar to the previous plot. So, when can this be useful?</p>
 </div>
-<div id="mixed-models" class="section level1">
-<h1 class="hasAnchor">
-<a href="#mixed-models" class="anchor" aria-hidden="true"></a>Mixed models</h1>
+<div class="section level1">
+<h1 id="mixed-models">Mixed models<a class="anchor" aria-label="anchor" href="#mixed-models"></a>
+</h1>
 <p>Data grids are useful to represent more complex models. For instance, in the models above, the <strong>negative</strong> relationship between the length and width of the sepals is in fact biased by the presence of three different species. One way of adjusting the model for this grouping structure is to add it as a <strong>random effect</strong> in a <strong>mixed model</strong>. In the model below, the “fixed” effects (the parameters of interest) will be adjusted (“averaged over”) to the random effects.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
@@ -199,8 +199,8 @@
 &gt; 
 &gt; Parameter    | Coefficient |   SE |       95% CI | t(146) |      p
 &gt; ------------------------------------------------------------------
-&gt; (Intercept)  |        1.04 | 0.43 | [0.21, 1.88] |   2.45 | 0.014 
-&gt; Sepal Length |        0.34 | 0.05 | [0.25, 0.43] |   7.47 | &lt; .001
+&gt; (Intercept)  |        1.04 | 0.43 | [0.20, 1.89] |   2.45 | 0.015 
+&gt; Sepal Length |        0.34 | 0.05 | [0.25, 0.44] |   7.47 | &lt; .001
 &gt; 
 &gt; # Random Effects
 &gt; 
@@ -220,12 +220,12 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
 </div>
-<div id="fixed-variables" class="section level1">
-<h1 class="hasAnchor">
-<a href="#fixed-variables" class="anchor" aria-hidden="true"></a>Fixed variables</h1>
+<div class="section level1">
+<h1 id="fixed-variables">Fixed variables<a class="anchor" aria-label="anchor" href="#fixed-variables"></a>
+</h1>
 <p>The above way of constructing the reference grid, i.e., by providing a single column of data to the function, is almost equivalent to the following:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, target <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span>
 <span class="va">vizdata</span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
@@ -243,10 +243,10 @@
 &gt;         7.90 |        3.06 |         3.76 |        1.20 |  setosa
 &gt; 
 &gt; Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</code></pre>
-<p>However, the other variables (present in the dataframe but not selected as <code>target</code>) are “fixed”, <em>i.e.</em>, they are maintained at specific values. This is useful when we have other variables in the model in whose effect we are not interested.</p>
+<p>However, the other variables (present in the dataframe but not selected as <code>at</code>) are “fixed”, <em>i.e.</em>, they are maintained at specific values. This is useful when we have other variables in the model in whose effect we are not interested.</p>
 <p>By default, <strong>factors</strong> are fixed by their <strong>“reference” level</strong> and <strong>numeric variables</strong> are fixed at their <strong>mean</strong>. However, this can be easily changed:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, target <span class="op">=</span> <span class="st">"Sepal.Length"</span>, numerics <span class="op">=</span> <span class="st">"min"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, numerics <span class="op">=</span> <span class="st">"min"</span><span class="op">)</span>
 <span class="va">vizdata</span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
@@ -265,15 +265,15 @@
 &gt; 
 &gt; Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</code></pre>
 </div>
-<div id="target-variables" class="section level1">
-<h1 class="hasAnchor">
-<a href="#target-variables" class="anchor" aria-hidden="true"></a>Target variables</h1>
+<div class="section level1">
+<h1 id="target-variables">Target variables<a class="anchor" aria-label="anchor" href="#target-variables"></a>
+</h1>
 <p>If more than one target variable is selected, <code>visualisation_matrix</code> will return the <strong>combination</strong> of them (<em>i.e.</em>, all unique values crossed together). This can be useful in the case of an <strong>interaction</strong> between a numeric variable and a factor.</p>
 <p>Let’s visualise the regression line for each of the levels of <code>Species</code>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
 <span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu">insight</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span>
 <span class="va">vizdata</span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
@@ -304,13 +304,13 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
 </div>
-<div id="preserve-range" class="section level1">
-<h1 class="hasAnchor">
-<a href="#preserve-range" class="anchor" aria-hidden="true"></a>Preserve range</h1>
+<div class="section level1">
+<h1 id="preserve-range">Preserve range<a class="anchor" aria-label="anchor" href="#preserve-range"></a>
+</h1>
 <p>However, it is generally not a good practice to extend the regression lines beyond the range of its original data, as it is the case here for the <strong>red line</strong>. The <code>preserve_range</code> option allows to remove observations that are “outside” the original dataset (however, the length should be increased to improve the precision toward the edges):</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span><span class="va">iris</span>,
-  target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>,
+  at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>,
   length <span class="op">=</span> <span class="fl">100</span>,
   preserve_range <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
@@ -323,9 +323,9 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
 </div>
-<div id="visualising-an-interaction-between-two-numeric-variables-three-way-interaction" class="section level1">
-<h1 class="hasAnchor">
-<a href="#visualising-an-interaction-between-two-numeric-variables-three-way-interaction" class="anchor" aria-hidden="true"></a>Visualising an interaction between two numeric variables (three-way interaction)</h1>
+<div class="section level1">
+<h1 id="visualising-an-interaction-between-two-numeric-variables-three-way-interaction">Visualising an interaction between two numeric variables (three-way interaction)<a class="anchor" aria-label="anchor" href="#visualising-an-interaction-between-two-numeric-variables-three-way-interaction"></a>
+</h1>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
@@ -371,9 +371,10 @@
 <p><img src="visualisation_matrix_files/figure-html/unnamed-chunk-16-1.png" width="100%"></p>
 <p>As the <code>Petal.Width</code> increases (becomes yellow), the coefficient between <code>Petal.Length</code> and <code>Sepal.Length</code> increases (the slope is more steep). Although, as we can guess, this in fact captures the underlying effect of species… <strong>but we’ll leave discussing the meaningfulness of your models to you :)</strong></p>
 </div>
-<div id="visualization_matrix-also-runs-directly-on-model-objects" class="section level1">
-<h1 class="hasAnchor">
-<a href="#visualization_matrix-also-runs-directly-on-model-objects" class="anchor" aria-hidden="true"></a><code>visualization_matrix()</code> also runs directly on model objects</h1>
+<div class="section level1">
+<h1 id="visualization_matrix-also-runs-directly-on-model-objects">
+<code>visualization_matrix()</code> also runs directly on model objects<a class="anchor" aria-label="anchor" href="#visualization_matrix-also-runs-directly-on-model-objects"></a>
+</h1>
 <p>To illustrate this, let’s set up a <strong>general additive mixed model (GAMM)</strong>, where we are going to specify a <strong>smooth term</strong> (a non-linear relationship; specified by <code><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s()</a></code> function) and some <strong>random effects</strong> structure.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">gamm4</span><span class="op">)</span>
@@ -432,16 +433,16 @@
 &gt;        1.90 |         7.90 |  virginica
 &gt;        2.50 |         7.90 |  virginica</code></pre>
 </div>
-<div id="controlled-standardized-change" class="section level1">
-<h1 class="hasAnchor">
-<a href="#controlled-standardized-change" class="anchor" aria-hidden="true"></a>Controlled standardized change</h1>
+<div class="section level1">
+<h1 id="controlled-standardized-change">Controlled standardized change<a class="anchor" aria-label="anchor" href="#controlled-standardized-change"></a>
+</h1>
 <p>Although the plot above is nice, and all, we would like the standardized changes in SD to be smoother (e.g., by increments of 1 SD). This can be achieved by first requesting the values that we want, and then <strong>unstandardizing</strong> it.</p>
 <p>Let’s use the same model as above, and then obtain a data grid with specific values for <code>Petal.Width</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span>target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width = seq(-3, 3)"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
+  <span class="fu"><a href="../reference/visualisation_matrix.html">visualisation_matrix</a></span><span class="op">(</span>at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width = seq(-3, 3)"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
   <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">vizdata</span>, select <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span> 
+  <span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span> 
 
 <span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/format_standardize.html" class="external-link">format_standardize</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span>, reference <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Width</span><span class="op">)</span>
 
@@ -468,12 +469,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link external-link">Indrajeet Patil</a>.</p>
+<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0.1</span>
       </span>
     </div>
 
@@ -115,7 +115,7 @@
       <h1 data-toc-skip>Marginal effects and derivatives</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/estimate_slopes.Rmd" class="external-link"><code>vignettes/estimate_slopes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/HEAD/vignettes/estimate_slopes.Rmd" class="external-link"><code>vignettes/estimate_slopes.Rmd</code></a></small>
       <div class="hidden name"><code>estimate_slopes.Rmd</code></div>
 
     </div>
@@ -123,10 +123,148 @@
     
     
 <p>This vignette will present how to estimate marginal effects and derivatives using <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</p>
-<p><strong>Marginal means <em>vs.</em> Marginal effects</strong>. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they are eventually “average over” other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable (i.e., the y-axis is the outcome variable, which allows you to say for instance “the average reaction time in the C1 condition is 1366 ms”), marginal effects return averages of coefficients (i.e., the y-axis is the effect/slope/beta of a given numeric predictor).</p>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
+<p><strong>Marginal means <em>vs.</em> Marginal effects</strong>. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they can eventually be “averaged over” other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable, which allows you to say for instance “the average reaction time in the C1 condition is 1366 ms”, marginal effects return <strong>averages of coefficients</strong>. This allows you to say, for instance, “the average <em>effect of x</em> in the C1 condition is 0.33”. When you visualize marginal effects, the y-axis is the effect/slope/beta of a given numeric predictor.</p>
+<p>Let’s see some examples.</p>
+<div class="section level1">
+<h1 id="marginal-effects-over-a-factors-levels">Marginal effects over a factor’s levels<a class="anchor" aria-label="anchor" href="#marginal-effects-over-a-factors-levels"></a>
+</h1>
+<p>Let’s fit a linear model with a factor interacting with a continuous predictor and visualize it.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
+
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-2-1.png" width="3281.25"></p>
+<p>It seems like the slope of the effect is roughly similar (in the same direction) across the different factor levels.</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; Parameter                           | Coefficient |   SE |         95% CI | t(144) |      p
+&gt; -------------------------------------------------------------------------------------------
+&gt; (Intercept)                         |        4.21 | 0.41 | [ 3.41,  5.02] |  10.34 | &lt; .001
+&gt; Petal Length                        |        0.54 | 0.28 | [ 0.00,  1.09] |   1.96 | 0.052 
+&gt; Species [versicolor]                |       -1.81 | 0.60 | [-2.99, -0.62] |  -3.02 | 0.003 
+&gt; Species [virginica]                 |       -3.15 | 0.63 | [-4.41, -1.90] |  -4.97 | &lt; .001
+&gt; Petal Length * Species [versicolor] |        0.29 | 0.30 | [-0.30,  0.87] |   0.97 | 0.334 
+&gt; Petal Length * Species [virginica]  |        0.45 | 0.29 | [-0.12,  1.03] |   1.56 | 0.120</code></pre>
+<p>Moreover, the interaction is not significant. However, we see below that removing the interaction does not <em>substantially</em> improve the model’s performance. So, for the sake of the demonstration, let’s say we want to keep the maximal effect structure.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="fu"><a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link">test_performance</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">model2</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; Name   | Model |    BF
+&gt; ----------------------
+&gt; model  |    lm |      
+&gt; model2 |    lm | 26.52
+&gt; Models were detected as nested and are compared in sequential order.</code></pre>
+<p>Although we are satisfied with our model and its performance, imagine we are not interested in the effect of <code>Petal.Length</code> for different Species, but rather, in its <strong>general trend</strong> “across” all different species. We need to compute the <strong>marginal effect</strong> of the predictor, which corresponds to its slope <em>averaged</em> (it’s a bit more complex than a simple averaging but that’s the idea) over the different factor levels.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span>
+
+<span class="va">slopes</span></code></pre></div>
+<pre><code>&gt; Estimated Marginal Effects
+&gt; 
+&gt; Coefficient |   SE |       95% CI | t(144) |      p
+&gt; ---------------------------------------------------
+&gt; 0.79        | 0.10 | [0.59, 0.99] |   7.69 | &lt; .001
+&gt; Marginal effects estimated for Petal.Length</code></pre>
+<p>We can see that the effect of <code>Petal.Length</code>, <strong>marginalized over Species</strong>, is positive and significant.</p>
+</div>
+<div class="section level1">
+<h1 id="effects-for-each-factors-levels">Effects for each factor’s levels<a class="anchor" aria-label="anchor" href="#effects-for-each-factors-levels"></a>
+</h1>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>
+
+<span class="va">slopes</span></code></pre></div>
+<pre><code>&gt; Estimated Marginal Effects
+&gt; 
+&gt; Species    | Coefficient |   SE |        95% CI | t(144) |      p
+&gt; -----------------------------------------------------------------
+&gt; setosa     |        0.54 | 0.28 | [ 0.00, 1.09] |   1.96 | 0.052 
+&gt; versicolor |        0.83 | 0.10 | [ 0.63, 1.03] |   8.10 | &lt; .001
+&gt; virginica  |        1.00 | 0.09 | [ 0.82, 1.17] |  11.43 | &lt; .001
+&gt; Marginal effects estimated for Petal.Length</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
+</div>
+<div class="section level1">
+<h1 id="interactions-between-two-continuous-variables">Interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#interactions-between-two-continuous-variables"></a>
+</h1>
+<p>Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.</p>
+<p>Such plot, also referred to as <strong>Johnson-Neyman intervals</strong>, shows how the effect (the “slope”) of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.</p>
+<p>For instance, the plot below shows that the effect of <code>hp</code> (the y-axis) is significantly negative only when <code>wt</code> is low (<code>&lt; ~4</code>).</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
+
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>
+
+<span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"hp"</span>, at <span class="op">=</span> <span class="st">"wt"</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
+</div>
+<div class="section level1">
+<h1 id="describing-and-reporting-non-linear-relationships-e-g--in-gams">Describing and reporting non-linear relationships (e.g., in GAMs)<a class="anchor" aria-label="anchor" href="#describing-and-reporting-non-linear-relationships-e-g--in-gams"></a>
+</h1>
+<p><strong>Complex problems require modern solutions.</strong></p>
+<p>General Additive Models (GAMs) are a powerful class of models that extend the capabilities of traditional GLMs. In particular, they are able to parsimoniously model possibly non-linear relationship.</p>
+<p>Let’s take for instance the following model:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Fit a non-linear General Additive Model (GAM)</span>
+<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
+<p>The GAMs nicely models the complex relationship between the two variables (if we don’t take into account the different species of course).</p>
+<p>But how to interpret and report in a manuscript such results? We can’t simply paste the figure right? Right? Reviewers will want some statistics, some numbers between brackets, otherwise it doesn’t look serious does it.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; # Fixed Effects
+&gt; 
+&gt; Parameter   | Coefficient |   SE |       95% CI | t(142.33) |      p
+&gt; --------------------------------------------------------------------
+&gt; (Intercept) |        3.06 | 0.03 | [3.01, 3.11] |    118.31 | &lt; .001
+&gt; 
+&gt; # Smooth Terms
+&gt; 
+&gt; Parameter                  |     F |   df |      p
+&gt; --------------------------------------------------
+&gt; Smooth term (Petal Length) | 17.52 | 6.67 | &lt; .001</code></pre>
+<p>The problem with GAMs is that their parameters (i.e., the coefficients), are not easily interpretable. Here we can see one line corresponding to the smooth term. It’s significant, great, but what does it mean? And if we run the GAM using other packages (e.g., <code>rstanarm</code> or <code>brms</code>), the parameters will not be the same. What to do!</p>
+<p>Because the meaning of these parameters is somewhat disconnected with our need for relationship understanding, another possibility is to compute the <strong>marginal linear effect</strong> of the smooth term, i.e., the “derivative”, using <code>estimate_slopes</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Compute derivative</span>
+<span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, 
+                         trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, 
+                         at <span class="op">=</span> <span class="st">"Petal.Length"</span>,
+                         length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+
+<span class="co"># Visualise</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
+<p>This plot represents the “slope” of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). <strong>Margianl derivatives</strong> allow us to make inferences at each point of point of the relationship!</p>
+<p>Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the “average” linear trend of each chunk.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
+<pre><code>&gt; Average Marginal Effects
+&gt; 
+&gt; Start |  End | Petal.Length | Coefficient |   SE |         95% CI | t(142.33) |     p
+&gt; -------------------------------------------------------------------------------------
+&gt; 1.00  | 1.95 |         1.48 |        0.14 | 0.30 | [-0.45,  0.73] |      0.37 | 0.430
+&gt; 2.01  | 3.15 |         2.58 |       -0.76 | 0.19 | [-1.14, -0.37] |     -4.05 | 0.005
+&gt; 3.21  | 3.68 |         3.44 |       -0.03 | 0.26 | [-0.55,  0.48] |     -0.05 | 0.394
+&gt; 3.74  | 4.28 |         4.01 |        0.54 | 0.20 | [ 0.14,  0.93] |      2.71 | 0.011
+&gt; 4.34  | 6.90 |         5.62 |        0.08 | 0.23 | [-0.38,  0.53] |      0.59 | 0.427
+&gt; Marginal effects estimated for Petal.Length</code></pre>
+<p>We can conclude that Petal.Length shares significantly negative relationship with the outcome variable between 2.01 and 3.15 (<em>average marginal effect</em> = -0.76, 95% CI [-1.14, -0.37], p &lt; .01) and significantly positive between 3.74 and 4.28 (<em>average marginal effect</em> = 0.54, 95% CI [0.14, 0.93], p &lt; .05).</p>
+</div>
+<div class="section level1">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 </div>
   </div>
 
@@ -142,12 +280,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link external-link">Indrajeet Patil</a>.</p>
+<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>

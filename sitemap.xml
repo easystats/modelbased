@@ -40,6 +40,9 @@
     <loc>/articles/modelisation_approach.html</loc>
   </url>
   <url>
+    <loc>/articles/transformations.html</loc>
+  </url>
+  <url>
     <loc>/articles/visualisation_matrix.html</loc>
   </url>
   <url>
@@ -61,10 +64,10 @@
     <loc>/reference/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_expectation.html</loc>
+    <loc>/reference/estimate_grouplevel.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_grouplevel.html</loc>
+    <loc>/reference/estimate_link.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_means.html</loc>
@@ -82,6 +85,9 @@
     <loc>/reference/model_emmeans.html</loc>
   </url>
   <url>
+    <loc>/reference/reexports.html</loc>
+  </url>
+  <url>
     <loc>/reference/smoothing.html</loc>
   </url>
   <url>
@@ -89,9 +95,6 @@
   </url>
   <url>
     <loc>/reference/visualisation_recipe.estimate_predicted.html</loc>
-  </url>
-  <url>
-    <loc>/reference/visualisation_recipe.html</loc>
   </url>
   <url>
     <loc>/reference/zero_crossings.html</loc>

@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">modelbased</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.8.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.7.0.1</span>
       </span>
     </div>
 
@@ -115,16 +115,16 @@
       <h1 data-toc-skip>Contrast analysis</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/master/vignettes/estimate_contrasts.Rmd" class="external-link"><code>vignettes/estimate_contrasts.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/HEAD/vignettes/estimate_contrasts.Rmd" class="external-link"><code>vignettes/estimate_contrasts.Rmd</code></a></small>
       <div class="hidden name"><code>estimate_contrasts.Rmd</code></div>
 
     </div>
 
     
     
-<div id="testing-pairwise-differences" class="section level1">
-<h1 class="hasAnchor">
-<a href="#testing-pairwise-differences" class="anchor" aria-hidden="true"></a>Testing pairwise differences</h1>
+<div class="section level1">
+<h1 id="testing-pairwise-differences">Testing pairwise differences<a class="anchor" aria-label="anchor" href="#testing-pairwise-differences"></a>
+</h1>
 <p>In the <a href="https://easystats.github.io/estimate/articles/estimate_means.html" class="external-link"><strong>previous tutorial</strong></a>, we computed marginal means at the 3 different <code>Species</code> levels from the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set" class="external-link"><code>iris</code></a> dataset. However, one might also want to <strong>statistically test</strong> the differences between each levels, which can be achieved through <strong>contrast analysis</strong>. Although the procedure is much more powerful, its aim is analogous to the <strong><em>post hoc</em></strong> analysis (pretty much consisting of pairwise <em>t</em>-tests), which are heavily utilized in behavioral sciences as a way to follow up on hypotheses about global differences tested by ANOVAs with more specific hypotheses about pairwise differences.</p>
 <p>Let’s carry out contrast analysis on the simple model from the previous tutorial:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -151,13 +151,13 @@
 &gt; setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001
 &gt; versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.009 
 &gt; 
-&gt; Marginal contrasts estimated for Species
+&gt; Marginal contrasts estimated at Species
 &gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>We can conclude that all pairwise differences are statistically significant.</p>
 </div>
-<div id="complex-model" class="section level1">
-<h1 class="hasAnchor">
-<a href="#complex-model" class="anchor" aria-hidden="true"></a>Complex model</h1>
+<div class="section level1">
+<h1 id="complex-model">Complex model<a class="anchor" aria-label="anchor" href="#complex-model"></a>
+</h1>
 <p>Again, as contrast analysis is based on marginal means, it can be applied to more complex models:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -171,7 +171,7 @@
 &gt; setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
 &gt; versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.413 
 &gt; 
-&gt; Marginal contrasts estimated for Species
+&gt; Marginal contrasts estimated at Species
 &gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can see that the difference between <em>versicolor</em> and <em>virginica</em> becomes not significant (and even changes sign).</p>
 <p>Note that we can plot simple contrast analysis through <strong>lighthouse plots</strong> with the help of the <code>see</code> package:</p>
@@ -183,12 +183,12 @@
 <p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <p>These represent the estimated means and their CI range (in black), while the grey areas show the CI range of the difference (as compared to the point estimate).</p>
 </div>
-<div id="changes-in-difference" class="section level1">
-<h1 class="hasAnchor">
-<a href="#changes-in-difference" class="anchor" aria-hidden="true"></a>Changes in difference</h1>
+<div class="section level1">
+<h1 id="changes-in-difference">Changes in difference<a class="anchor" aria-label="anchor" href="#changes-in-difference"></a>
+</h1>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, modulate <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># Create a variable with the two levels concatenated</span>
 <span class="va">contrasts</span><span class="op">$</span><span class="va">Contrast</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste</a></span><span class="op">(</span><span class="va">contrasts</span><span class="op">$</span><span class="va">Level1</span>, <span class="st">"-"</span>, <span class="va">contrasts</span><span class="op">$</span><span class="va">Level2</span><span class="op">)</span>
@@ -203,14 +203,14 @@
 <p><img src="estimate_contrasts_files/figure-html/fig-1.png" width="100%"></p>
 <p>As we can see, the difference between <em>versicolor</em> and <em>virginica</em> increases as <code>Petal.Width</code> increases.</p>
 </div>
-<div id="conclusion" class="section level1">
-<h1 class="hasAnchor">
-<a href="#conclusion" class="anchor" aria-hidden="true"></a>Conclusion</h1>
+<div class="section level1">
+<h1 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h1>
 <p>Contrast analysis can be a powerful tool to interpret and understand statistical models.</p>
 </div>
-<div id="references" class="section level1">
-<h1 class="hasAnchor">
-<a href="#references" class="anchor" aria-hidden="true"></a>References</h1>
+<div class="section level1">
+<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h1>
 </div>
   </div>
 
@@ -226,12 +226,12 @@
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link external-link">Indrajeet Patil</a>.</p>
+<p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link external-link">pkgdown</a> 1.6.1.9001.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.9000.9000.9000.</p>
 </div>
 
       </footer>
