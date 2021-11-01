@@ -189,7 +189,7 @@ check_transformation(data, "x_exp3", color = "pink")
 - **Square**
 
 ```{r message=FALSE, warning=FALSE}
-data$x_2 <-data$x_positive^2
+data$x_2 <- data$x_positive^2
 
 check_transformation(data, "x_2", color = "darkblue")
 ```
@@ -197,7 +197,7 @@ check_transformation(data, "x_2", color = "darkblue")
 - **Cubic**
 
 ```{r message=FALSE, warning=FALSE}
-data$x_3 <-data$x_positive^3
+data$x_3 <- data$x_positive^3
 
 check_transformation(data, "x_3", color = "darkgreen")
 ```
@@ -209,7 +209,7 @@ Also know as the **inverse** transformation.
 ```{r message=FALSE, warning=FALSE}
 data$x_reciprocal <- 1 / (1 + data$x_positive)
 
-check_transformation(data, "x_reciprocical", color = "green")
+check_transformation(data, "x_reciprocal", color = "green")
 ```
 
 
