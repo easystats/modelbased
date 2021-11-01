@@ -29,6 +29,12 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("lme4", quietly = TRUE) ||
+  !requireNamespace("brms", quietly = TRUE) ||
+  !requireNamespace("rtdists", quietly = TRUE) ||
+  !requireNamespace("performance", quietly = TRUE) ||
+  !requireNamespace("datawizard", quietly = TRUE) ||
+  !requireNamespace("correlation", quietly = TRUE) ||
+  !requireNamespace("dplyr", quietly = TRUE) ||
   !requireNamespace("parameters", quietly = TRUE) ||
   !requireNamespace("dplyr", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -52,9 +58,12 @@ library(parameters)
 library(correlation)
 library(performance)
 library(modelbased)
+library(datawizard)
+library(see)
 
 # other packages
-library(tidyverse)
+library(ggplot2)
+library(dplyr)
 library(rtdists)
 library(brms)
 library(lme4)
@@ -122,7 +131,7 @@ But do we need such a complex model? Let's compare it to a model without specify
 ```{r}
 model <- lmer(rt ~ condition + (1 + condition | id), data = data_rt)
 
-performance::test_performance(model_full, model)
+test_performance(model_full, model)
 ```
 
 Mmmh, it seems that the simpler model performs **a lot worse** (the Bayes Factor is lower than 1). We could run `compare_performance()` to learn more details, but for this example we will go ahead and keep the **worse model** (for simplicity and conciseness when inspecting the random effects later, but keep in mind that in real life it's surely not the best thing to do).
@@ -150,14 +159,14 @@ head(reshaped)
 As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use `summary()` to remove all the duplicate rows. Let's add it to the original data.
 
 ```{r}
-data_rt <- dplyr::full_join(data_rt, reshaped, by = "id")
+data_rt <- full_join(data_rt, reshaped, by = "id")
 ```
 
 We can also visualize the random effects:
 
 ```{r}
 plot(random) +
-  see::theme_lucid()
+  theme_lucid()
 ```
 
 Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?
@@ -171,28 +180,26 @@ Nevertheless, let's compute some **empirical scores**, such as the condition ave
 We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
 
 ```{r}
-data_sub <- data_rt %>%
-  group_by(id, condition) %>%
-  summarise(rt = mean(rt)) %>%
-  pivot_wider(names_from = "condition", values_from = "rt")
+data_sub <- aggregate(rt ~ id + condition, data_rt, mean) %>% 
+  reshape_wider(names_from = "condition", values_from = "rt")
 
 data_sub <- data.frame(
   id = data_sub$id,
-  empirical_accuracy = data_sub$accuracy,
-  empirical_condition = data_sub$speed - data_sub$accuracy
+  empirical_accuracy = data_sub$rt_accuracy,
+  empirical_condition = data_sub$rt_speed - data_sub$rt_accuracy
 )
 ```
 
 Now, how to these **empirical scores** compare with the **random effects** estimated by the model? Let's merge the empirical scores with the random effects scores. For that, we will run `summary()` on the **reshaped** random effects to remove all the duplicate rows (and have only one row per participant, so that it matches the format of `data_sub`).
 
 ```{r}
-data_sub <- dplyr::full_join(data_sub, summary(reshaped), by = "id")
+data_sub <- full_join(data_sub, summary(reshaped), by = "id")
 ```
 
 Let's run a correlation between the model-based scores and the empirical scores.
 
 ```{r}
-correlation::correlation(data_sub)
+correlation(data_sub)
 ```
 
 First thing to notice is that **everything is significantly and strongly correlated**!. 
@@ -205,7 +212,7 @@ Finally, we can observe that there is a strong and negative correlation (which i
 ggplot(data_sub, aes(x = id_Coefficient_Intercept, y = id_Coefficient_conditionspeed)) +
   geom_point() +
   geom_smooth(method = "lm") +
-  see::theme_modern()
+  theme_modern()
 ```
 
 The slower they are in the accuracy condition, the bigger the difference with the speed condition.
@@ -221,7 +228,7 @@ model <- glmer(error ~ condition + (1 + condition | id),
   data = data, family = "binomial"
 )
 
-parameters::parameters(model, effects = "fixed")
+parameters(model, effects = "fixed")
 ```
 
 The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the **marginal means**) of making errors in the two conditions. 
