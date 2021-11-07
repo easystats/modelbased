@@ -17,14 +17,19 @@ visualisation_matrix.glm <- function(x,
 
   if (include_response == FALSE) {
     data <- data[!names(data) %in% insight::find_response(x)]
+    if (ncol(data) < 1) {
+      stop(insight::format_message("Model only seems to be an intercept-only model. Please use `include_response=TRUE` to calculate the visualization matrix."), call. = FALSE)
+    }
   }
 
   if (include_random == FALSE) {
     keep <- insight::find_predictors(x, effects = "fixed", flatten = TRUE)
-    if(all(at != "all")) {
-      keep <- c(keep, at[at %in% insight::find_random(x, flatten = TRUE)])
+    if (!is.null(keep)) {
+      if (all(at != "all")) {
+        keep <- c(keep, at[at %in% insight::find_random(x, flatten = TRUE)])
+      }
+      data <- data[names(data) %in% keep]
     }
-    data <- data[names(data) %in% keep]
   }
 
   if (all(at == "all")) at <- names(data)
