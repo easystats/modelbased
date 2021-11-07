@@ -115,16 +115,10 @@ estimate_smooth <- describe_nonlinear
     )
     segment$Slope <- segment$Change / (segment$End - segment$Start)
 
-    segment$R2 <- .check_linearity(y, x)
+    # Check linearity
+    segment$R2 <- performance::r2(stats::lm(y ~ x))$R2
 
     out <- rbind(out, segment)
   }
   out
-}
-
-
-
-#' @keywords internal
-.check_linearity <- function(y, x) {
-  performance::r2(stats::lm(y ~ x))$R2
 }

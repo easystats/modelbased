@@ -86,7 +86,7 @@ visualisation_recipe.estimate_means <- function(x,
   l <- 1
 
   # Show data (points, boxplot, violin, etc.)
-  if (!is.null(show_data) && all(show_data != "none") && show_data != FALSE) {
+  if (!is.null(show_data) && all(show_data != "none") && all(show_data != FALSE)) {
 
     # Default changes for binomial models
     shape <- 16

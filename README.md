@@ -4,6 +4,7 @@
 [![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
 [![downloads](http://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
+[![status](https://tinyverse.netlify.com/badge/modelbased)](https://CRAN.R-project.org/package=modelbased)
 
 ***Taking your models to new heights***
 
@@ -16,6 +17,8 @@ predictions.
 ## Installation
 
 [![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
+[![modelbased status
+badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
 ![Tests](https://github.com/easystats/modelbased/workflows/Tests/badge.svg)
 [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
 
@@ -288,7 +291,7 @@ pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
-## Model-based Response
+## Model-based Classification
 ## 
 ## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length
 ## --------------------------------------------------------------------------
