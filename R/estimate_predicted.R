@@ -74,8 +74,6 @@ estimate_relation <- function(model,
 #' Model-based response estimates and uncertainty can be generated for both the conditional average response values (the regression line or expectation) and for predictions about individual cases.
 #' See below for details.
 #'
-#' @details
-#'
 #' @section Expected (average) values:
 #'
 #' The most important way that various types of response estimates differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
