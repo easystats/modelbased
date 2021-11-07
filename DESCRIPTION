@@ -66,9 +66,6 @@ Suggests:
     see (>= 0.6.5),
     spelling,
     testthat
-Remotes:
-    easystats/effectsize,
-    easystats/see
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2
