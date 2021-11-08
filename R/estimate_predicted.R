@@ -42,7 +42,7 @@
 #' Predicted values and intervals are always on the scale of the original response variable (not the link scale).
 #'
 #'
-#' @section *modelbased* functions for estimating predicted values and uncertainty:
+#' @section Functions for estimating predicted values and uncertainty:
 #'
 #' *modelbased* provides 4 functions for generating model-based response estimates and their uncertainty:
 #'
@@ -78,7 +78,7 @@
 #'
 #' These functions are built on top of [insight::get_predicted()] and correspond to different specifications of its parameters. It may be useful to read its [documentation](https://easystats.github.io/insight/reference/get_predicted.html), in particular the description of the `predict` argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
 #'
-#' Additional control parameters can be used to control results from [visualisation_matrix()] (when `data = "grid"`) and from [insight::get_predicted()] (the function used internally to comptue predictions).
+#' Additional control parameters can be used to control results from [visualisation_matrix()] (when `data = "grid"`) and from [insight::get_predicted()] (the function used internally to compute predictions).
 #'
 #' For plotting, check the examples in [visualisation_recipe()]. Also check out the [Vignettes](https://easystats.github.io/modelbased/articles/) and [README examples](https://easystats.github.io/modelbased/index.html#features) for various examples, tutorials and usecases.
 #'

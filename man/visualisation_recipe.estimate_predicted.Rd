@@ -67,9 +67,6 @@
 
 \item{point, jitter, boxplot, violin, pointrange, density_2d, line, hline, ribbon, labs, facet_wrap}{Additional aesthetics and parameters for the geoms (see customization example).}
 }
-\description{
-Visualisation recipe for 'modelbased' objects.
-}
 \examples{
 # ==============================================
 # estimate_grouplevel

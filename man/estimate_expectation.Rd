@@ -65,7 +65,7 @@ See below for details.
 \note{
 These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond to different specifications of its parameters. It may be useful to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, in particular the description of the \code{predict} argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
 
-Additional control parameters can be used to control results from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to comptue predictions).
+Additional control parameters can be used to control results from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to compute predictions).
 
 For plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
 }
@@ -107,7 +107,7 @@ Predicted values and their uncertainty intervals are useful for forecasting the 
 Predicted values and intervals are always on the scale of the original response variable (not the link scale).
 }
 
-\section{\emph{modelbased} functions for estimating predicted values and uncertainty}{
+\section{Functions for estimating predicted values and uncertainty}{
 
 
 \emph{modelbased} provides 4 functions for generating model-based response estimates and their uncertainty:
