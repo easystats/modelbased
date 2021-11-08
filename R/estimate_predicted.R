@@ -1,71 +1,3 @@
-#' @rdname estimate_response
-#' @export
-estimate_expectation <- function(model,
-                                 data = NULL,
-                                 ci = 0.95,
-                                 keep_iterations = FALSE,
-                                 ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "expectation",
-    ...
-  )
-}
-
-#' @rdname estimate_response
-#' @export
-estimate_link <- function(model,
-                          data = "grid",
-                          ci = 0.95,
-                          keep_iterations = FALSE,
-                          ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "link",
-    ...
-  )
-}
-
-#' @rdname estimate_response
-#' @export
-estimate_prediction <- function(model,
-                                data = NULL,
-                                ci = 0.95,
-                                keep_iterations = FALSE,
-                                ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "prediction",
-    ...
-  )
-}
-
-#' @rdname estimate_response
-#' @export
-estimate_relation <- function(model,
-                              data = "grid",
-                              ci = 0.95,
-                              keep_iterations = FALSE,
-                              ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "expectation",
-    ...
-  )
-}
-
 #' Model-based response estimates and uncertainty
 #'
 #' After fitting a model, it is useful generate model-based estimates of the response variables for different combinations of predictor values.
@@ -200,16 +132,88 @@ estimate_relation <- function(model,
 #' }
 #' }
 #' @return A data frame of predicted values and uncertainty intervals, with class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted] and [`plot()`][visualisation_recipe.estimate_predicted] are available.
-#'
 #' @export
-#  TODO: If estimate_response() is removed, document `NULL` with this text.
+estimate_expectation <- function(model,
+                                 data = NULL,
+                                 ci = 0.95,
+                                 keep_iterations = FALSE,
+                                 ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    ...
+  )
+}
+
+
+#' @rdname estimate_expectation
+#' @export
 estimate_response <- function(...) {
+  #  TODO: If estimate_response() is removed, document `NULL` with this text.
   message(insight::format_message(
     "`estimate_response()` is deprecated.",
     "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead."
   ))
   estimate_expectation(...)
 }
+
+
+
+
+#' @rdname estimate_expectation
+#' @export
+estimate_link <- function(model,
+                          data = "grid",
+                          ci = 0.95,
+                          keep_iterations = FALSE,
+                          ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "link",
+    ...
+  )
+}
+
+#' @rdname estimate_expectation
+#' @export
+estimate_prediction <- function(model,
+                                data = NULL,
+                                ci = 0.95,
+                                keep_iterations = FALSE,
+                                ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "prediction",
+    ...
+  )
+}
+
+#' @rdname estimate_expectation
+#' @export
+estimate_relation <- function(model,
+                              data = "grid",
+                              ci = 0.95,
+                              keep_iterations = FALSE,
+                              ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    ...
+  )
+}
+
 
 
 # Internal ----------------------------------------------------------------

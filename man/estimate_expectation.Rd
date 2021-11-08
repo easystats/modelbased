@@ -2,10 +2,10 @@
 % Please edit documentation in R/estimate_predicted.R
 \name{estimate_expectation}
 \alias{estimate_expectation}
+\alias{estimate_response}
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
-\alias{estimate_response}
 \title{Model-based response estimates and uncertainty}
 \usage{
 estimate_expectation(
@@ -15,6 +15,8 @@ estimate_expectation(
   keep_iterations = FALSE,
   ...
 )
+
+estimate_response(...)
 
 estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
 
@@ -33,8 +35,6 @@ estimate_relation(
   keep_iterations = FALSE,
   ...
 )
-
-estimate_response(...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -61,9 +61,6 @@ Such estimates can be used to make inferences about relationships between variab
 \cr\cr
 Model-based response estimates and uncertainty can be generated for both the conditional average response values (the regression line or expectation) and for predictions about individual cases.
 See below for details.
-}
-\details{
-
 }
 \note{
 These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond to different specifications of its parameters. It may be useful to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, in particular the description of the \code{predict} argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
