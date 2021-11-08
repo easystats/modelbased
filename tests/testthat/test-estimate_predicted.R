@@ -108,10 +108,10 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
 
   test_that("estimate_response - Frequentist", {
     model <- lm(mpg ~ wt + cyl, data = mtcars)
-    estim <- estimate_response(model)
+    estim <- estimate_expectation(model)
     expect_equal(dim(estim), c(32, 7))
 
-    estim <- modelbased::estimate_response(model, ci = NULL)
+    estim <- estimate_expectation(model, ci = NULL)
     expect_equal(dim(estim), c(32, 5))
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
@@ -125,14 +125,14 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     model <- lme4::lmer(wt ~ cyl + (1 | gear), data = data)
     estim <- estimate_link(model)
     expect_equal(dim(estim), c(10, 5))
-    estim <- estimate_response(model)
+    estim <- estimate_expectation(model)
     expect_equal(dim(estim), c(32, 7))
 
     model <- lme4::glmer(vs ~ cyl + (1 | gear), data = data, family = "binomial")
     estim <- estimate_link(model)
     expect_equal(dim(estim), c(10, 5))
-    estim <- estimate_response(model)
-    expect_equal(dim(estim), c(32, 6))
+    estim <- estimate_expectation(model)
+    expect_equal(dim(estim), c(32, 7))
 
     # model <- MASS::polr(Species ~ Sepal.Width, data = iris)
     # estim <- estimate_link(model)

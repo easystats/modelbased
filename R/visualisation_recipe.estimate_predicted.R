@@ -1,6 +1,5 @@
 #' Visualisation Recipe for 'modelbased' Objects
 #'
-#' Visualisation recipe for 'modelbased' objects.
 #'
 #' @param x A modelbased object.
 #' @param show_data Display the "raw" data as a background to the model-based estimation. Can be set to `"none"` to remove it. When input is the result of `estimate_means`, `show_data` can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of `estimate_response` or `estimate_relation`, `show_data` can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".

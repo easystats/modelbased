@@ -32,8 +32,8 @@ reference:
   - find_inversions
   - zero_crossings
   - smoothing
-  
-  
+
+
 navbar:
   type: default
   left:
@@ -54,7 +54,7 @@ navbar:
       - text: 'Marginal effects and derivatives'
         href: articles/estimate_slopes.html
       - text: 'Use a model to make predictions'
-        href: articles/estimate_response.html
+        href: articles/estimate_expectation.html
       - text: 'Describe non-linear curves'
         href: articles/describe_nonlinear.html
       - text: 'Estimate and re-use Random Effects'
