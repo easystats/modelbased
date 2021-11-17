@@ -24,11 +24,11 @@
 #' @examples
 #' # Get an idea of the data
 #' if (require("ggplot2")) {
-#'   ggplot(iris, aes(x=Petal.Length, y=Sepal.Width)) +
-#'     geom_point(aes(color=Species)) +
+#'   ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
+#'     geom_point(aes(color = Species)) +
 #'     geom_smooth(color = "black", se = FALSE) +
-#'     geom_smooth(aes(color=Species), linetype = "dotted", se = FALSE) +
-#'     geom_smooth(aes(color=Species), method = "lm", se = FALSE)
+#'     geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
+#'     geom_smooth(aes(color = Species), method = "lm", se = FALSE)
 #' }
 #'
 #' # Model it
@@ -46,8 +46,10 @@
 #'   plot(slopes)
 #'
 #'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
-#'   slopes <- estimate_slopes(model, trend = "Petal.Length",
-#'                             at = c("Petal.Length", "Species"), length = 20)
+#'   slopes <- estimate_slopes(model,
+#'     trend = "Petal.Length",
+#'     at = c("Petal.Length", "Species"), length = 20
+#'   )
 #'   summary(slopes)
 #'   plot(slopes)
 #' }
@@ -112,14 +114,14 @@ summary.estimate_slopes <- function(object, ...) {
   vars <- vars[!vars %in% trend]
 
   # If no grouping variables, summarize all
-  if(length(vars) == 0) {
+  if (length(vars) == 0) {
     out <- .estimate_slopes_summarize(data, trend = trend)
   } else {
     out <- data.frame()
     # Create vizmatrix of grouping variables
     groups <- as.data.frame(visualisation_matrix(data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
-    for(i in 1:nrow(groups)) {
+    for (i in 1:nrow(groups)) {
       g <- data[datawizard::data_match(data, groups[i, , drop = FALSE]), , drop = FALSE]
       out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
@@ -145,18 +147,18 @@ summary.estimate_slopes <- function(object, ...) {
   starts <- 1
   ends <- nrow(data)
   # Iterate through all rows to find blocks
-  for(i in 2:nrow(data)) {
-    if(data$Confidence[i] != sig) {
+  for (i in 2:nrow(data)) {
+    if (data$Confidence[i] != sig) {
       sig <- data$Confidence[i]
       starts <- c(starts, i)
-      ends <- c(ends, i-1)
+      ends <- c(ends, i - 1)
     }
   }
   ends <- sort(ends)
 
   # Summarize these groups -----------------------
   out <- data.frame()
-  for(g in 1:length(starts)) {
+  for (g in 1:length(starts)) {
     dat <- data[starts[g]:ends[g], ]
     dat <- as.data.frame(visualisation_matrix(dat, at = NULL, factors = "mode"))
     dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)

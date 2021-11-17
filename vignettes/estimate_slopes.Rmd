@@ -145,7 +145,7 @@ deriv <- estimate_slopes(model,
 plot(deriv)
 ```
 
-This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). **Margianl derivatives** allow us to make inferences at each point of point of the relationship!
+This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). **Marginal derivatives** allow us to make inferences at each point of point of the relationship!
 
 Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
 

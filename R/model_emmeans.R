@@ -72,8 +72,8 @@ model_emmeans <- function(model,
   )
 
   # Special behaviour for transformations #138 (see below)
-  if("retransform" %in% names(args) && length(args$retransform) > 0) {
-    for(var in names(args$retransform)) {
+  if ("retransform" %in% names(args) && length(args$retransform) > 0) {
+    for (var in names(args$retransform)) {
       estimated@levels[[var]] <- levels(args$retransform[[var]])
       estimated@grid[[var]] <- args$retransform[[var]]
     }
@@ -125,7 +125,7 @@ model_emmeans <- function(model,
   }
 
   # Deal with 'contrast'
-  if(!is.null(args$contrast)) {
+  if (!is.null(args$contrast)) {
     contrast <- visualisation_matrix(data, at = args$contrast, ...)
     args$contrast <- attributes(contrast)$at_specs$varname
     contrast <- as.data.frame(contrast[args$contrast])
@@ -133,7 +133,7 @@ model_emmeans <- function(model,
       args$data_matrix <- contrast
     } else {
       contrast <- contrast[!names(contrast) %in% names(args$data_matrix)]
-      if(ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
+      if (ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
     }
   }
 
