@@ -53,7 +53,7 @@
       <a href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
     </li>
     <li>
-      <a href="../articles/estimate_response.html">Use a model to make predictions</a>
+      <a href="../articles/estimate_expectation.html">Use a model to make predictions</a>
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
@@ -90,24 +90,21 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.8.0" id="modelbased-080-1">modelbased 0.8.0<a class="anchor" aria-label="anchor" href="#modelbased-080-1"></a></h2>
-<ul><li>
-<code><a href="../reference/estimate_link.html">estimate_prediction()</a></code> deprecated in favour of <code><a href="../reference/estimate_link.html">estimate_response()</a></code>.</li>
-<li>
-<code><a href="../reference/estimate_link.html">estimate_expectation()</a></code> now has <code>data=NULL</code> by default.</li>
+<ul><li><p><code><a href="../reference/estimate_expectation.html">estimate_prediction()</a></code> deprecated in favour of <code><a href="../reference/estimate_expectation.html">estimate_response()</a></code>.</p></li>
+<li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> now has <code>data=NULL</code> by default.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.7.0" id="modelbased-070">modelbased 0.7.0<small>2021-06-06</small><a class="anchor" aria-label="anchor" href="#modelbased-070"></a></h2>
-<ul><li>General overhaul of the package.</li>
-<li>Entire refactoring of <code><a href="../reference/visualisation_matrix.html">visualisation_matrix()</a></code>.</li>
-<li>Option of standardizing/unstandardizing predictions, contrasts and means is now available via <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize()</a></code> instead of via options.</li>
-<li>Introduction of <code><a href="../reference/model_emmeans.html">model_emmeans()</a></code> as a wrapper to easily create <code>emmeans</code> objects.</li>
-<li>
-<code><a href="../reference/describe_nonlinear.html">estimate_smooth()</a></code> transformed into <code><a href="../reference/describe_nonlinear.html">describe_nonlinear()</a></code> and made more explicit.</li>
+<ul><li><p>General overhaul of the package.</p></li>
+<li><p>Entire refactoring of <code><a href="../reference/visualisation_matrix.html">visualisation_matrix()</a></code>.</p></li>
+<li><p>Option of standardizing/unstandardizing predictions, contrasts and means is now available via <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize()</a></code> instead of via options.</p></li>
+<li><p>Introduction of <code><a href="../reference/model_emmeans.html">model_emmeans()</a></code> as a wrapper to easily create <code>emmeans</code> objects.</p></li>
+<li><p><code><a href="../reference/describe_nonlinear.html">estimate_smooth()</a></code> transformed into <code><a href="../reference/describe_nonlinear.html">describe_nonlinear()</a></code> and made more explicit.</p></li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.6.0" id="modelbased-060">modelbased 0.6.0<small>2021-04-12</small><a class="anchor" aria-label="anchor" href="#modelbased-060"></a></h2>
 <ul><li>
-<code><a href="../reference/estimate_link.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="../reference/estimate_link.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there).</li>
+<code><a href="../reference/estimate_expectation.html">estimate_link()</a></code> now does <em>not</em> transform predictions on the response scale for GLMs. To keep the previous behaviour, use the new <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> instead. This follows a change in how predictions are made internally (which now relies on <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link"><code>get_predicted()</code></a>, so more details can be found there).</li>
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.5.1" id="modelbased-051">modelbased 0.5.1<small>2021-01-27</small><a class="anchor" aria-label="anchor" href="#modelbased-051"></a></h2>

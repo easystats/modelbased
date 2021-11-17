@@ -81,7 +81,7 @@
       <a href="articles/estimate_slopes.html">Marginal effects and derivatives</a>
     </li>
     <li>
-      <a href="articles/estimate_response.html">Use a model to make predictions</a>
+      <a href="articles/estimate_expectation.html">Use a model to make predictions</a>
     </li>
     <li>
       <a href="articles/describe_nonlinear.html">Describe non-linear curves</a>
@@ -191,7 +191,7 @@
 <span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">vizdata</span>, select <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span>
 
 <span class="co"># 4. Add predicted relationship from the model</span>
-<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_link.html">estimate_expectation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="reference/estimate_expectation.html">estimate_expectation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span>
 
 <span class="co"># 5. Express Petal.Width as z-score ("-1 SD", "+2 SD", etc.)</span>
 <span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span> <span class="op">&lt;-</span> <span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/effectsize/reference/format_standardize.html" class="external-link">format_standardize</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">$</span><span class="va">Petal.Width</span>, reference <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Width</span><span class="op">)</span>
@@ -343,7 +343,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Fit model 1 and predict the response variable</span>
 <span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span>
+<span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span>
 <span class="va">pred1</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="co"># Add true response</span>
 
 <span class="co"># Print first 5 lines of output</span>
@@ -362,7 +362,7 @@
 
 <span class="co"># Same for model 2</span>
 <span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span>
+<span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span>
 <span class="va">pred2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span>
 
 
@@ -448,7 +448,7 @@
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="co"># 1. Visualize</span>
-<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
+<span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span>
 
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vizdata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span> <span class="op">+</span>
@@ -496,7 +496,7 @@
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
 
-<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="co"># Make CI ribbon transparent for clarity</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-16-1.png"><!-- --></p>
@@ -504,13 +504,13 @@
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">Days</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">sleepstudy</span><span class="op">)</span>
 
-<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
+<span class="va">preds</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-17-1.png"><!-- --></p>
 <p>As we can see, all participants has now a different effect. Let’s plot, on top of that, the “fixed” effect estimated across all these individual effects.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fixed_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co"># This time, include_random is FALSE (default)</span>
+<code class="sourceCode R"><span class="va">fixed_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="co"># This time, include_random is FALSE (default)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">preds</span>, ribbon <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="co"># Previous plot</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">geom_ribbon</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>

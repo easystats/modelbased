@@ -78,7 +78,7 @@
       <a href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
     </li>
     <li>
-      <a href="../articles/estimate_response.html">Use a model to make predictions</a>
+      <a href="../articles/estimate_expectation.html">Use a model to make predictions</a>
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
@@ -136,7 +136,7 @@
 
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-2-1.png" width="3281.25"></p>
 <p>It seems like the slope of the effect is roughly similar (in the same direction) across the different factor levels.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
@@ -217,7 +217,7 @@
 <code class="sourceCode R"><span class="co"># Fit a non-linear General Additive Model (GAM)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 <p>The GAMs nicely models the complex relationship between the two variables (if we don’t take into account the different species of course).</p>
 <p>But how to interpret and report in a manuscript such results? We can’t simply paste the figure right? Right? Reviewers will want some statistics, some numbers between brackets, otherwise it doesn’t look serious does it.</p>
@@ -246,7 +246,7 @@
 <span class="co"># Visualise</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
-<p>This plot represents the “slope” of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). <strong>Margianl derivatives</strong> allow us to make inferences at each point of point of the relationship!</p>
+<p>This plot represents the “slope” of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). <strong>Marginal derivatives</strong> allow us to make inferences at each point of point of the relationship!</p>
 <p>Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the “average” linear trend of each chunk.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>

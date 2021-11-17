@@ -78,7 +78,7 @@
       <a href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
     </li>
     <li>
-      <a href="../articles/estimate_response.html">Use a model to make predictions</a>
+      <a href="../articles/estimate_expectation.html">Use a model to make predictions</a>
     </li>
     <li>
       <a href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
@@ -125,7 +125,7 @@
 <div class="section level1">
 <h1 id="prediction-against-original-data">Prediction against original data<a class="anchor" aria-label="anchor" href="#prediction-against-original-data"></a>
 </h1>
-<p>Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the <code><a href="../reference/estimate_link.html">estimate_response()</a></code> function and its visualisation spinoff, <code><a href="../reference/estimate_link.html">estimate_relation()</a></code>.</p>
+<p>Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the <code><a href="../reference/estimate_expectation.html">estimate_response()</a></code> function and its visualisation spinoff, <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code>.</p>
 <p>Let’s start by fitting a linear regression.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></code></pre></div>
@@ -133,18 +133,18 @@
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
 
-<span class="va">pred_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<span class="va">pred_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred_data</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Model-based Classification
+<pre><code>&gt; Model-based Expectation
 &gt; 
-&gt; Sepal.Length | Predicted |   SE |        95% CI | Residuals
-&gt; -----------------------------------------------------------
-&gt; 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98
-&gt; 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60
-&gt; 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33
-&gt; 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05
-&gt; 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79
-&gt; 5.40         |      2.93 | 0.87 | [ 1.21, 4.66] |      1.23
+&gt; Sepal.Length | Predicted |   SE |       95% CI | Residuals
+&gt; ----------------------------------------------------------
+&gt; 5.10         |      2.38 | 0.10 | [2.19, 2.57] |      0.98
+&gt; 4.90         |      2.00 | 0.11 | [1.79, 2.22] |      0.60
+&gt; 4.70         |      1.63 | 0.12 | [1.39, 1.87] |      0.33
+&gt; 4.60         |      1.45 | 0.13 | [1.19, 1.70] |     -0.05
+&gt; 5.00         |      2.19 | 0.10 | [1.99, 2.39] |      0.79
+&gt; 5.40         |      2.93 | 0.08 | [2.78, 3.09] |      1.23
 &gt; 
 &gt; Variable predicted: Petal.Length</code></pre>
 <p>The output is a data frame containing predicted values (the median and CI of the posterior distribution) for <strong>each of the value of the original data frame</strong> (used for fitting the model). Hence, we can simply add the original response column (<code>Petal.Length</code>) to this data and plot the original against the predicted data (on top of the identity line, representing the perfect relationship).</p>
@@ -166,7 +166,7 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
-<span class="va">pred_data</span><span class="op">$</span><span class="va">Predicted_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">Predicted</span></code></pre></div>
+<span class="va">pred_data</span><span class="op">$</span><span class="va">Predicted_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">$</span><span class="va">Predicted</span></code></pre></div>
 <p>We could now plot the second observations, based on a more complex model, as a red overlay to the previous points:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">pred_data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
@@ -185,7 +185,7 @@
 <p>Rather than visualizing the predictions made by a model, we are often interested in visualizing the <em>relation</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html" class="external-link"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span>
 
 <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -194,10 +194,10 @@
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">predicted</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Predicted</span>, color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
-<p>However, you might notice that the <strong>Credible Interval (CI) bands are quite big</strong>. This is where <code><a href="../reference/estimate_link.html">estimate_relation()</a></code> is coming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting <strong>the link</strong> (<em>i.e.</em>, the regression line and the uncertainty interval associated <em>with this line</em>).</p>
-<p>In order to facilitate visualization of links, we added <code><a href="../reference/estimate_link.html">estimate_relation()</a></code> as a shortcut to <code><a href="../reference/estimate_link.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_link.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_link.html">estimate_relation()</a></code> is more relevant in the context of visualization and plotting.</p>
+<p>However, you might notice that the <strong>Credible Interval (CI) bands are quite big</strong>. This is where <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> is coming in. In a traditional, frequentist, regression, the predictions are deterministic: they will always fall on the regression line. However, in a Bayesian framework, they are probabilistic. Hence here, predicting the response is not the same that predicting <strong>the link</strong> (<em>i.e.</em>, the regression line and the uncertainty interval associated <em>with this line</em>).</p>
+<p>In order to facilitate visualization of links, we added <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> as a shortcut to <code><a href="../reference/estimate_expectation.html">estimate_response()</a></code> with <code>data = "grid"</code> and, for Bayesian models, <code>predict = "link"</code> and some smoothing by default. <code><a href="../reference/estimate_expectation.html">estimate_response()</a></code> would be used in the context of generating actual predictions for the existing or new data, whereas <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> is more relevant in the context of visualization and plotting.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 
 <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -212,7 +212,7 @@
 </h1>
 <p>The purpose of CI bands is to provide information about the uncertainty related to the estimation. In the Bayesian framework, the credible intervals are directly related to the shape of the posterior distribution. Thus, showing different CI levels (for instance, 69%, 89% and 99%).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span>
+<code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
@@ -240,7 +240,7 @@
 <p>Instead (or in addition to) representing confidence intervals, one can also represent every individual <strong>posterior draw</strong>, which correspond to a random selection of all possible links compatible with the observed data. It is a nice insight into the “true” underlying probabilities.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Keep only 100 draws (keeping all the draws is slower)</span>
-<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
 
 <span class="co"># Format draws for plotting</span>
 <span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu">bayestestR</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/bayestestR/reference/reshape_iterations.html" class="external-link">reshape_iterations</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span>
@@ -258,7 +258,7 @@
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="co"># Bootstrap with n=50 iterations</span>
-<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_link.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
+<span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span>, iterations <span class="op">=</span> <span class="fl">50</span><span class="op">)</span>
 
 <span class="co"># Format draws for plotting</span>
 <span class="va">iterations</span> <span class="op">&lt;-</span> <span class="fu">bayestestR</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/bayestestR/reference/reshape_iterations.html" class="external-link">reshape_iterations</a></span><span class="op">(</span><span class="va">predicted</span><span class="op">)</span>

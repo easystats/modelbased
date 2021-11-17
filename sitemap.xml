@@ -64,10 +64,10 @@
     <loc>/reference/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_grouplevel.html</loc>
+    <loc>/reference/estimate_expectation.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_link.html</loc>
+    <loc>/reference/estimate_grouplevel.html</loc>
   </url>
   <url>
     <loc>/reference/estimate_means.html</loc>
@@ -83,9 +83,6 @@
   </url>
   <url>
     <loc>/reference/model_emmeans.html</loc>
-  </url>
-  <url>
-    <loc>/reference/reexports.html</loc>
   </url>
   <url>
     <loc>/reference/smoothing.html</loc>
