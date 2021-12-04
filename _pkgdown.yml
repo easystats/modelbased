@@ -22,16 +22,10 @@ template:
 reference:
 - title: "Model-based Estimations"
   contents:
-  - estimate_expectation
-  - estimate_means
-  - estimate_contrasts
-  - estimate_slopes
-  - estimate_grouplevel
+  - starts_with("estimate_")
 - title: "Data grids and Visualisation"
   contents:
-  - visualisation_matrix
-  - visualisation_recipe.estimate_predicted
-  - visualisation_recipe
+  - starts_with("visualisation_")
 - title: "Miscellaenous"
   contents:
   - describe_nonlinear
