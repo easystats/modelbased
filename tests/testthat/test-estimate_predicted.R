@@ -74,15 +74,15 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
 
   test_that("estimate_response - Bayesian", {
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2, raw = TRUE), data = mtcars, refresh = 0, iter = 200, chains = 2))
-    estim <- estimate_response(model, seed = 333)
+    estim <- estimate_prediction(model, seed = 333)
     expect_equal(nrow(estim), nrow(mtcars))
 
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt * as.factor(gear), data = mtcars, refresh = 0, iter = 200, chains = 2))
-    estim <- estimate_response(model, data = "grid", seed = 333, preserve_range = FALSE)
+    estim <- estimate_prediction(model, data = "grid", seed = 333, preserve_range = FALSE)
     expect_equal(dim(estim), c(30, 6))
 
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 200, chains = 2))
-    estim <- estimate_response(model)
+    estim <- estimate_prediction(model)
     expect_equal(dim(estim), c(32, 7))
 
     model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2))

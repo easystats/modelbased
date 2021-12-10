@@ -13,15 +13,21 @@ visualisation_matrix.glm <- function(x,
                                      include_random = FALSE,
                                      include_response = FALSE,
                                      ...) {
+  # Retrieve data from model
   data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
 
+  # Deal with factor transformations
+  # f <- insight::find_terms(model)
+
+  # Deal with intercept-only models
   if (include_response == FALSE) {
     data <- data[!names(data) %in% insight::find_response(x)]
     if (ncol(data) < 1) {
-      stop(insight::format_message("Model only seems to be an intercept-only model. Please use `include_response=TRUE` to calculate the visualization matrix."), call. = FALSE)
+      stop(insight::format_message("Model only seems to be an intercept-only model. Use `include_response=TRUE` to create the visualization matrix."), call. = FALSE)
     }
   }
 
+  # Drop random factors
   if (include_random == FALSE) {
     keep <- insight::find_predictors(x, effects = "fixed", flatten = TRUE)
     if (!is.null(keep)) {

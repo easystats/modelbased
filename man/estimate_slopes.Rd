@@ -43,11 +43,11 @@ The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_mea
 \examples{
 # Get an idea of the data
 if (require("ggplot2")) {
-  ggplot(iris, aes(x=Petal.Length, y=Sepal.Width)) +
-    geom_point(aes(color=Species)) +
+  ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
+    geom_point(aes(color = Species)) +
     geom_smooth(color = "black", se = FALSE) +
-    geom_smooth(aes(color=Species), linetype = "dotted", se = FALSE) +
-    geom_smooth(aes(color=Species), method = "lm", se = FALSE)
+    geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
+    geom_smooth(aes(color = Species), method = "lm", se = FALSE)
 }
 
 # Model it
@@ -65,8 +65,10 @@ if (require("mgcv")) {
   plot(slopes)
 
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
-  slopes <- estimate_slopes(model, trend = "Petal.Length",
-                            at = c("Petal.Length", "Species"), length = 20)
+  slopes <- estimate_slopes(model,
+    trend = "Petal.Length",
+    at = c("Petal.Length", "Species"), length = 20
+  )
   summary(slopes)
   plot(slopes)
 }
