@@ -79,6 +79,15 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
     specs$varname <- as.character(specs$varname) # make sure it's a string not fac
     specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
 
+    # Deal with factor transformations
+    x[] <- lapply(x, function(i) {
+      if (isTRUE(attributes(i)$factor)) {
+        as.factor(i)
+      } else {
+        i
+      }
+    })
+
     specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
     # Create target list of factors -----------------------------------------
     facs <- list()

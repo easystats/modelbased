@@ -18,6 +18,14 @@ visualisation_matrix.glm <- function(x,
 
   # Deal with factor transformations
   # f <- insight::find_terms(model)
+  data[] <- lapply(data, function(i) {
+    if (isTRUE(attributes(i)$factor)) {
+      as.factor(i)
+    } else {
+      i
+    }
+  })
+
 
   # Deal with intercept-only models
   if (include_response == FALSE) {
