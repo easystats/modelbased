@@ -20,7 +20,7 @@ predictions.
 [![modelbased status
 badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
 ![Tests](https://github.com/easystats/modelbased/workflows/Tests/badge.svg)
-[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://codecov.io/gh/easystats/modelbased)
+[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
 
 Run the following to install the stable release of **modelbased** from
 CRAN:
@@ -291,15 +291,15 @@ pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
-## Model-based Classification
+## Model-based Expectation
 ## 
-## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length
-## --------------------------------------------------------------------------
-## 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98 |         1.40
-## 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60 |         1.40
-## 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33 |         1.30
-## 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05 |         1.50
-## 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79 |         1.40
+## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length
+## -------------------------------------------------------------------------
+## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |      0.98 |         1.40
+## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |      0.60 |         1.40
+## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |      0.33 |         1.30
+## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |     -0.05 |         1.50
+## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |      0.79 |         1.40
 ## 
 ## Variable predicted: Petal.Length
 
