@@ -36,7 +36,9 @@
 #'   plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
 #'     scale_x_continuous(expand = c(0, 0)) +
 #'     scale_y_continuous(expand = c(0, 0))
-#'
+#' }
+#' \donttest{
+#' if (require("ggplot2")) {
 #'
 #'   # 2-ways interaction ------------
 #'
@@ -50,8 +52,8 @@
 #'   layers <- visualisation_recipe(x)
 #'   plot(layers)
 #'
-#'
 #'   # 3-ways interaction ------------
+#'
 #'   data <- mtcars
 #'   data$vs <- as.factor(data$vs)
 #'   data$cyl <- as.factor(data$cyl)
@@ -81,7 +83,7 @@
 #'   x <- estimate_relation(lm(mpg ~ disp, data = mtcars), ci = c(.50, .80, .95))
 #'   plot(x)
 #' }
-#' \donttest{
+#'
 #' # Bayesian models ---------------------
 #' if (require("ggplot2") && require("rstanarm")) {
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0)
