@@ -18,6 +18,10 @@
 #'   layers
 #'   plot(layers)
 #'
+#' }
+#' \donttest{
+#' if (require("ggplot2")) {
+#'
 #'   # Customize aesthetics
 #'   layers <- visualisation_recipe(x,
 #'     point = list(color = "red", alpha = 0.6, size = 3),
@@ -36,9 +40,6 @@
 #'   plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
 #'     scale_x_continuous(expand = c(0, 0)) +
 #'     scale_y_continuous(expand = c(0, 0))
-#' }
-#' \donttest{
-#' if (require("ggplot2")) {
 #'
 #'   # 2-ways interaction ------------
 #'
