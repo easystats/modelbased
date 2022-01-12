@@ -83,6 +83,10 @@ if (require("see") && require("lme4")) {
   layers
   plot(layers)
 
+}
+\donttest{
+if (require("see") && require("lme4")) {
+
   # 2 random intercepts
   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
   x <- estimate_grouplevel(model)
@@ -92,6 +96,7 @@ if (require("see") && require("lme4")) {
   model <- lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
   x <- estimate_grouplevel(model)
   plot(visualisation_recipe(x))
+}
 }
 # ==============================================
 # estimate_means
@@ -103,6 +108,10 @@ if (require("ggplot2")) {
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
+
+}
+\donttest{
+if (require("ggplot2")) {
 
   # Customize aesthetics
   layers <- visualisation_recipe(x,
@@ -134,6 +143,7 @@ if (require("ggplot2")) {
   data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
   x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"))
   plot(visualisation_recipe(x))
+}
 }
 # ==============================================
 # estimate_relation, estimate_response, ...
@@ -245,6 +255,7 @@ if (require("ggplot2")) {
   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
   plot(visualisation_recipe(x))
 }
+\donttest{
 if (require("mgcv")) {
   data <- iris
   data$Petal.Length <- data$Petal.Length^2
@@ -256,6 +267,7 @@ if (require("mgcv")) {
   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
   plot(visualisation_recipe(x))
+}
 }
 }
 \keyword{internal}

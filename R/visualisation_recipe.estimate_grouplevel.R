@@ -16,6 +16,10 @@
 #'   layers
 #'   plot(layers)
 #'
+#' }
+#' \donttest{
+#' if (require("see") && require("lme4")) {
+#'
 #'   # 2 random intercepts
 #'   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
 #'   x <- estimate_grouplevel(model)
@@ -25,6 +29,7 @@
 #'   model <- lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 #'   x <- estimate_grouplevel(model)
 #'   plot(visualisation_recipe(x))
+#' }
 #' }
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,

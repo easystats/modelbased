@@ -12,6 +12,10 @@
 #'   layers
 #'   plot(layers)
 #'
+#' }
+#' \donttest{
+#' if (require("ggplot2")) {
+#'
 #'   # Customize aesthetics
 #'   layers <- visualisation_recipe(x,
 #'     jitter = list(width = 0.03, color = "red"),
@@ -42,6 +46,7 @@
 #'   data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 #'   x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"))
 #'   plot(visualisation_recipe(x))
+#' }
 #' }
 #' @export
 visualisation_recipe.estimate_means <- function(x,
