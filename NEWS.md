@@ -3,7 +3,7 @@
 - API changes: `levels` in `estimate_contrasts` has been replaced by `contrast`.
   `levels` and `modulate` are in general aggregated under `at`.
 
-# modelbased 0.8.0
+# modelbased 0.7.1
 
 - `estimate_prediction()` deprecated in favour of `estimate_response()`.
 

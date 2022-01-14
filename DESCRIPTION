@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.7.1
+Version: 0.7.1.1
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -36,9 +36,9 @@ Depends:
 Imports:
     bayestestR (>= 0.11.5),
     effectsize (>= 0.5.0),
-    insight (>= 0.14.5),
-    datawizard (>= 0.2.1),
-    parameters (>= 0.15.0),
+    insight (>= 0.15.0),
+    datawizard (>= 0.2.2),
+    parameters (>= 0.16.0),
     performance,
     graphics,
     stats,
@@ -49,6 +49,7 @@ Suggests:
     correlation,
     dplyr,
     emmeans (>= 1.5.3),
+    forcats,
     gamm4,
     gganimate,
     ggplot2,

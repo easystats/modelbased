@@ -15,7 +15,6 @@
 #'   layers <- visualisation_recipe(x)
 #'   layers
 #'   plot(layers)
-#'
 #' }
 #' \donttest{
 #' if (require("see") && require("lme4")) {

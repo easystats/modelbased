@@ -17,7 +17,6 @@
 #'   layers <- visualisation_recipe(x)
 #'   layers
 #'   plot(layers)
-#'
 #' }
 #' \donttest{
 #' if (require("ggplot2")) {
