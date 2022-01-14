@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="describe_nonlinear_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Model and describe non-linear relationships</h1>
@@ -110,9 +113,9 @@
 <p><strong>Most of relationships present in nature are non-linear</strong>, consisting of quadratic curves or more complex shapes. In spite of that, scientists tend to model data through linear links. Reasons for that include <strong>technical and interpretation complexity</strong>.</p>
 <p>However, advances in software makes modeling of non-linear relationship very straightforward (<em>insert link to future blogpost</em>). Nevertheless, the added cost in terms of <strong>interpretation, report and communication</strong> often remain a barrier, as the human brain more easily understands linear relationships (<em>e.g.</em>, as this variable increases, that variable increases).</p>
 <p>The <code>estimate</code> package aims at easing this step by <strong>summarizing non-linear curves in terms of linear segments</strong>.</p>
-<div class="section level1">
-<h1 id="estimate_smooth">estimate_smooth<a class="anchor" aria-label="anchor" href="#estimate_smooth"></a>
-</h1>
+<div class="section level2">
+<h2 id="estimate_smooth">estimate_smooth<a class="anchor" aria-label="anchor" href="#estimate_smooth"></a>
+</h2>
 <p>Let’s start by creating a very simple dataset:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="op">-</span><span class="fl">50</span><span class="op">:</span><span class="fl">50</span><span class="op">)</span> <span class="co"># Generate dataframe with one variable x</span>
@@ -149,9 +152,9 @@
 &gt; -1.02  | 50.00 |   0.50 |  2492.80 |  48.86 | 4.90e-07</code></pre>
 <p><code>describe_nonlinear</code> will decompose this curve into linear parts, returning their size (the percentage of the curve of the segment), and the trend (positive or negative). We can now say that that the relationship can be summarised as one negative link and positive link, with a <strong>changing point</strong> located roughly around 0.</p>
 </div>
-<div class="section level1">
-<h1 id="real-application-effect-of-time-on-memory">Real application: Effect of time on memory<a class="anchor" aria-label="anchor" href="#real-application-effect-of-time-on-memory"></a>
-</h1>
+<div class="section level2">
+<h2 id="real-application-effect-of-time-on-memory">Real application: Effect of time on memory<a class="anchor" aria-label="anchor" href="#real-application-effect-of-time-on-memory"></a>
+</h2>
 <p>We will download and use a dataset where participants had to answer questions about the movie <strong>Avengers: Age of ultron</strong> (combined into a <strong>memory score</strong>) a few days after watching it at the theater (the <strong>delay</strong> variable). Let’s visualize how the <code>Delay</code>, in days, influences the <code>Memory</code> score, by plotting the data points and a raw <em>loess</em> fit on this raw data.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
@@ -173,9 +176,9 @@
 <p><img src="describe_nonlinear_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
 <p>Unsurprisingly, the forgetting curve appears to be non-linear, as supported by the literature suggesting a 2nd order polynomial curve <span class="citation">(Averell and Heathcote 2011)</span>.</p>
 </div>
-<div class="section level1">
-<h1 id="modelling-non-linear-curves">Modelling non-linear curves<a class="anchor" aria-label="anchor" href="#modelling-non-linear-curves"></a>
-</h1>
+<div class="section level2">
+<h2 id="modelling-non-linear-curves">Modelling non-linear curves<a class="anchor" aria-label="anchor" href="#modelling-non-linear-curves"></a>
+</h2>
 <p>We can fit a Bayesian linear mixed regression to model such relationship, adding it a few other variables that could influence this curve, such as the <strong>familiarity with the characters of the movie</strong>, the <strong>language of the movie</strong>, the <strong>immersion</strong> (2D/3D).</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span>
@@ -199,9 +202,9 @@
 <p><img src="describe_nonlinear_files/figure-html/unnamed-chunk-9-1.png" width="3281.25"></p>
 <p>It seems that the memory score starts by decreasing, up to a point where it stabilizes (and even increases, which might be related by some other factors, such as discussions about the movie, watching of YouTube reviews and such). <strong>But what is the point of change?</strong></p>
 </div>
-<div class="section level1">
-<h1 id="describing-smooth">Describing smooth<a class="anchor" aria-label="anchor" href="#describing-smooth"></a>
-</h1>
+<div class="section level2">
+<h2 id="describing-smooth">Describing smooth<a class="anchor" aria-label="anchor" href="#describing-smooth"></a>
+</h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/describe_nonlinear.html">estimate_smooth</a></span><span class="op">(</span><span class="va">estim</span>, x <span class="op">=</span> <span class="st">"Delay"</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; Start |   End | Length | Change | Slope |   R2
@@ -209,16 +212,17 @@
 &gt; 0.00  |  7.78 |   0.53 | -15.68 | -2.02 | 0.50
 &gt; 7.78  | 14.00 |   0.37 |   4.69 |  0.75 | 0.50</code></pre>
 </div>
-<div class="section level1 unnumbered">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <div id="refs" class="references">
 <div id="ref-Averell_2011">
 <p>Averell, Lee, and Andrew Heathcote. 2011. “The Form of the Forgetting Curve and the Fate of Memories.” <em>Journal of Mathematical Psychology</em> 55 (1): 25–35. <a href="https://doi.org/10.1016/j.jmp.2010.08.009" class="external-link">https://doi.org/10.1016/j.jmp.2010.08.009</a>.</p>
 </div>
 </div>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

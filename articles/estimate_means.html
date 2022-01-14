@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="estimate_means_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>What are, why use and how to get marginal means</h1>
@@ -106,9 +109,9 @@
     
     
 <p>This vignette will introduce the concept of <strong>marginal means</strong>.</p>
-<div class="section level1">
-<h1 id="raw-means">Raw Means<a class="anchor" aria-label="anchor" href="#raw-means"></a>
-</h1>
+<div class="section level2">
+<h2 id="raw-means">Raw Means<a class="anchor" aria-label="anchor" href="#raw-means"></a>
+</h2>
 <p>The <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set" class="external-link"><code>iris</code></a> dataset, available in base <code>R</code>, contains observations of 3 types of <em>iris</em> flowers (the <code>Species</code> variable); <em>Setosa</em>, <em>Versicolor</em> and <em>Virginica</em>, for which different features were measured, such as the length and width of the sepals and petals.</p>
 <p>A traditional starting point, when reporting such data, is to start by descriptive statistics. For instance, <strong>what is the mean <code>Sepal.Width</code> for each of the 3 species</strong>.</p>
 <p>We can compute the means very easily by grouping the observations by species, and then computing the mean and the SD:</p>
@@ -140,9 +143,9 @@
 <p>However, these <strong>raw means</strong> might be biased, as the number of observations in each group might be different. Moreover, there might be some hidden covariance or mediation with other variables in the dataset, creating a “spurious” influence on the means.</p>
 <p><strong>How can we take these influences into account while calculating means?</strong></p>
 </div>
-<div class="section level1">
-<h1 id="marginal-means">Marginal Means<a class="anchor" aria-label="anchor" href="#marginal-means"></a>
-</h1>
+<div class="section level2">
+<h2 id="marginal-means">Marginal Means<a class="anchor" aria-label="anchor" href="#marginal-means"></a>
+</h2>
 <p>Another way of analysing the means is to actually <strong>statistically model them</strong>, rather than simply describe them as they appear in the data. For instance, we could fit a simple Bayesian linear regression modelling the relationship between <code>Species</code> and <code>Sepal.Width</code>.</p>
 <p>Marginal means are basically means extracted from a statistical model, and represent average of response variable (here, <code>Sepal.Width</code>) for each level of predictor variable (here, <code>Species</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -174,9 +177,9 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_means_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 </div>
-<div class="section level1">
-<h1 id="complex-models">Complex Models<a class="anchor" aria-label="anchor" href="#complex-models"></a>
-</h1>
+<div class="section level2">
+<h2 id="complex-models">Complex Models<a class="anchor" aria-label="anchor" href="#complex-models"></a>
+</h2>
 <p>The power of marginal means resides in the fact that they can be estimated from much more complex models. For instance, we could fit a model that takes into account the interaction with the other variable, <code>Petal.Width</code>. The estimated means will be “adjusted” (or will take into account) for variations of these other components.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>,  data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -215,11 +218,12 @@
 <p><strong>But are these differences “significant”?</strong></p>
 <p>That’s where the contrast analysis comes into play! Click <a href="https://easystats.github.io/estimate/articles/contrast_analysis.html" class="external-link">here to read the tutorial on <strong>contrast analysis</strong></a>.</p>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

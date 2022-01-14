@@ -42,14 +42,14 @@
     
     <a class="navbar-brand me-2" href="index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="active nav-item">
   <a class="nav-link" href="index.html">
@@ -89,7 +89,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -113,7 +113,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p><a href="https://cran.r-project.org/package=modelbased" class="external-link"><img src="http://www.r-pkg.org/badges/version/modelbased" alt="CRAN"></a> <a href="https://easystats.r-universe.dev" class="external-link"><img src="https://easystats.r-universe.dev/badges/modelbased" alt="modelbased status badge"></a> <img src="https://github.com/easystats/modelbased/workflows/Tests/badge.svg" alt="Tests"><a href="https://codecov.io/gh/easystats/modelbased" class="external-link"><img src="https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg" alt="codecov"></a></p>
+<p><a href="https://cran.r-project.org/package=modelbased" class="external-link"><img src="http://www.r-pkg.org/badges/version/modelbased" alt="CRAN"></a> <a href="https://easystats.r-universe.dev" class="external-link"><img src="https://easystats.r-universe.dev/badges/modelbased" alt="modelbased status badge"></a> <img src="https://github.com/easystats/modelbased/workflows/Tests/badge.svg" alt="Tests"><a href="https://app.codecov.io/gh/easystats/modelbased" class="external-link"><img src="https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg" alt="codecov"></a></p>
 <p>Run the following to install the stable release of <strong>modelbased</strong> from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"modelbased"</span><span class="op">)</span></code></pre></div>
@@ -336,15 +336,15 @@
 
 <span class="co"># Print first 5 lines of output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred1</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span>
-<span class="co">## Model-based Classification</span>
+<span class="co">## Model-based Expectation</span>
 <span class="co">## </span>
-<span class="co">## Sepal.Length | Predicted |   SE |        95% CI | Residuals | Petal.Length</span>
-<span class="co">## --------------------------------------------------------------------------</span>
-<span class="co">## 5.10         |      2.38 | 0.87 | [ 0.65, 4.10] |      0.98 |         1.40</span>
-<span class="co">## 4.90         |      2.00 | 0.87 | [ 0.28, 3.73] |      0.60 |         1.40</span>
-<span class="co">## 4.70         |      1.63 | 0.88 | [-0.10, 3.36] |      0.33 |         1.30</span>
-<span class="co">## 4.60         |      1.45 | 0.88 | [-0.29, 3.18] |     -0.05 |         1.50</span>
-<span class="co">## 5.00         |      2.19 | 0.87 | [ 0.46, 3.92] |      0.79 |         1.40</span>
+<span class="co">## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length</span>
+<span class="co">## -------------------------------------------------------------------------</span>
+<span class="co">## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |      0.98 |         1.40</span>
+<span class="co">## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |      0.60 |         1.40</span>
+<span class="co">## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |      0.33 |         1.30</span>
+<span class="co">## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |     -0.05 |         1.50</span>
+<span class="co">## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |      0.79 |         1.40</span>
 <span class="co">## </span>
 <span class="co">## Variable predicted: Petal.Length</span>
 
@@ -459,7 +459,7 @@
 <h2 id="plot-all-posterior-draws-for-bayesian-models-predictions">Plot all posterior draws for Bayesian models predictions<a class="anchor" aria-label="anchor" href="#plot-all-posterior-draws-for-bayesian-models-predictions"></a>
 </h2>
 <p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html" class="external-link"><strong>this vignette</strong></a> for a walkthrough on how to do that.</p>
-<p><img src="https://github.com/easystats/modelbased/raw/master/reference/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level2">
 <h2 id="understand-interactions-between-two-continuous-variables">Understand interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#understand-interactions-between-two-continuous-variables"></a>

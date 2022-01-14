@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="estimate_response_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Use a model to make predictions</h1>
@@ -105,9 +108,9 @@
 
     
     
-<div class="section level1">
-<h1 id="prediction-against-original-data">Prediction against original data<a class="anchor" aria-label="anchor" href="#prediction-against-original-data"></a>
-</h1>
+<div class="section level2">
+<h2 id="prediction-against-original-data">Prediction against original data<a class="anchor" aria-label="anchor" href="#prediction-against-original-data"></a>
+</h2>
 <p>Generating prediction from the model can be used for a wide variety of reasons, one of them being visualisation. This can be achieved via the <code><a href="../reference/estimate_expectation.html">estimate_response()</a></code> function and its visualisation spinoff, <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code>.</p>
 <p>Let’s start by fitting a linear regression.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -162,9 +165,9 @@
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
 <p>The new model generated much more accurate predictions (closer from the underlying regression line).</p>
 </div>
-<div class="section level1">
-<h1 id="estimating-response-vs--relation">Estimating response <em>vs.</em> relation<a class="anchor" aria-label="anchor" href="#estimating-response-vs--relation"></a>
-</h1>
+<div class="section level2">
+<h2 id="estimating-response-vs--relation">Estimating response <em>vs.</em> relation<a class="anchor" aria-label="anchor" href="#estimating-response-vs--relation"></a>
+</h2>
 <p>Rather than visualizing the predictions made by a model, we are often interested in visualizing the <em>relation</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html" class="external-link"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -190,9 +193,9 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
 </div>
-<div class="section level1">
-<h1 id="different-ci-levels">Different CI levels<a class="anchor" aria-label="anchor" href="#different-ci-levels"></a>
-</h1>
+<div class="section level2">
+<h2 id="different-ci-levels">Different CI levels<a class="anchor" aria-label="anchor" href="#different-ci-levels"></a>
+</h2>
 <p>The purpose of CI bands is to provide information about the uncertainty related to the estimation. In the Bayesian framework, the credible intervals are directly related to the shape of the posterior distribution. Thus, showing different CI levels (for instance, 69%, 89% and 99%).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span>
@@ -207,9 +210,9 @@
   <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_response_files/figure-html/unnamed-chunk-9-1.png" width="3281.25"></p>
 </div>
-<div class="section level1">
-<h1 id="adding-individual-iterations">Adding individual iterations<a class="anchor" aria-label="anchor" href="#adding-individual-iterations"></a>
-</h1>
+<div class="section level2">
+<h2 id="adding-individual-iterations">Adding individual iterations<a class="anchor" aria-label="anchor" href="#adding-individual-iterations"></a>
+</h2>
 <p>Let’s now fit the same model under the Bayesian framework.</p>
 <p><strong>Note</strong>: If you’re not familiar with the Bayesian framework, we recommend starting with <a href="https://easystats.github.io/bayestestR/articles/bayestestR.html" class="external-link"><strong>this gentle introduction</strong></a>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
@@ -268,13 +271,14 @@
   <span class="fu"><a href="https://gganimate.com/reference/shadow_mark.html" class="external-link">shadow_mark</a></span><span class="op">(</span>past <span class="op">=</span> <span class="cn">TRUE</span>, future <span class="op">=</span> <span class="cn">TRUE</span>, alpha <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">20</span>, color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span>
 
 <span class="fu">gganimate</span><span class="fu">::</span><span class="fu"><a href="https://gganimate.com/reference/animate.html" class="external-link">animate</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
-<p><img src="https://github.com/easystats/estimate/raw/master/reference/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
+<p><img src="https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;"></p>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

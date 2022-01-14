@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="estimate_slopes_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Marginal effects and derivatives</h1>
@@ -108,9 +111,9 @@
 <p>This vignette will present how to estimate marginal effects and derivatives using <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <p><strong>Marginal means <em>vs.</em> Marginal effects</strong>. Marginal slopes are to numeric predictors what marginal means are to categorical predictors, in the sense that they can eventually be “averaged over” other predictors of the model. The key difference is that, while marginal means return averages of the outcome variable, which allows you to say for instance “the average reaction time in the C1 condition is 1366 ms”, marginal effects return <strong>averages of coefficients</strong>. This allows you to say, for instance, “the average <em>effect of x</em> in the C1 condition is 0.33”. When you visualize marginal effects, the y-axis is the effect/slope/beta of a given numeric predictor.</p>
 <p>Let’s see some examples.</p>
-<div class="section level1">
-<h1 id="marginal-effects-over-a-factors-levels">Marginal effects over a factor’s levels<a class="anchor" aria-label="anchor" href="#marginal-effects-over-a-factors-levels"></a>
-</h1>
+<div class="section level2">
+<h2 id="marginal-effects-over-a-factors-levels">Marginal effects over a factor’s levels<a class="anchor" aria-label="anchor" href="#marginal-effects-over-a-factors-levels"></a>
+</h2>
 <p>Let’s fit a linear model with a factor interacting with a continuous predictor and visualize it.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
@@ -155,9 +158,9 @@
 &gt; Marginal effects estimated for Petal.Length</code></pre>
 <p>We can see that the effect of <code>Petal.Length</code>, <strong>marginalized over Species</strong>, is positive and significant.</p>
 </div>
-<div class="section level1">
-<h1 id="effects-for-each-factors-levels">Effects for each factor’s levels<a class="anchor" aria-label="anchor" href="#effects-for-each-factors-levels"></a>
-</h1>
+<div class="section level2">
+<h2 id="effects-for-each-factors-levels">Effects for each factor’s levels<a class="anchor" aria-label="anchor" href="#effects-for-each-factors-levels"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span>
 
@@ -174,9 +177,9 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
 </div>
-<div class="section level1">
-<h1 id="interactions-between-two-continuous-variables">Interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#interactions-between-two-continuous-variables"></a>
-</h1>
+<div class="section level2">
+<h2 id="interactions-between-two-continuous-variables">Interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#interactions-between-two-continuous-variables"></a>
+</h2>
 <p>Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.</p>
 <p>Such plot, also referred to as <strong>Johnson-Neyman intervals</strong>, shows how the effect (the “slope”) of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.</p>
 <p>For instance, the plot below shows that the effect of <code>hp</code> (the y-axis) is significantly negative only when <code>wt</code> is low (<code>&lt; ~4</code>).</p>
@@ -190,9 +193,9 @@
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
 </div>
-<div class="section level1">
-<h1 id="describing-and-reporting-non-linear-relationships-e-g--in-gams">Describing and reporting non-linear relationships (e.g., in GAMs)<a class="anchor" aria-label="anchor" href="#describing-and-reporting-non-linear-relationships-e-g--in-gams"></a>
-</h1>
+<div class="section level2">
+<h2 id="describing-and-reporting-non-linear-relationships-e-g--in-gams">Describing and reporting non-linear relationships (e.g., in GAMs)<a class="anchor" aria-label="anchor" href="#describing-and-reporting-non-linear-relationships-e-g--in-gams"></a>
+</h2>
 <p><strong>Complex problems require modern solutions.</strong></p>
 <p>General Additive Models (GAMs) are a powerful class of models that extend the capabilities of traditional GLMs. In particular, they are able to parsimoniously model possibly non-linear relationship.</p>
 <p>Let’s take for instance the following model:</p>
@@ -245,11 +248,12 @@
 &gt; Marginal effects estimated for Petal.Length</code></pre>
 <p>We can conclude that Petal.Length shares significantly negative relationship with the outcome variable between 2.01 and 3.15 (<em>average marginal effect</em> = -0.76, 95% CI [-1.14, -0.37], p &lt; .01) and significantly positive between 3.74 and 4.28 (<em>average marginal effect</em> = 0.54, 95% CI [0.14, 0.93], p &lt; .05).</p>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

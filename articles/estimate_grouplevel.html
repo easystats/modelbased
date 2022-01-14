@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="estimate_grouplevel_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>How to use Mixed models to Estimate Individuals' Scores</h1>
@@ -135,12 +138,12 @@
   <span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="co"># Add new 'error' column that is 1 if the response doesn't match the category</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span> <span class="op">!=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">stim_cat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div class="section level1">
-<h1 id="speed-rt">Speed (RT)<a class="anchor" aria-label="anchor" href="#speed-rt"></a>
-</h1>
 <div class="section level2">
-<h2 id="population-level-effects">Population-level Effects<a class="anchor" aria-label="anchor" href="#population-level-effects"></a>
+<h2 id="speed-rt">Speed (RT)<a class="anchor" aria-label="anchor" href="#speed-rt"></a>
 </h2>
+<div class="section level3">
+<h3 id="population-level-effects">Population-level Effects<a class="anchor" aria-label="anchor" href="#population-level-effects"></a>
+</h3>
 <p>For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a “successful” cognitive process. Then, and we will plot the RT according to the condition and stimulus category.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">error</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>
@@ -184,9 +187,9 @@
 &gt; Models were detected as nested and are compared in sequential order.</code></pre>
 <p>Mmmh, it seems that the simpler model performs <strong>a lot worse</strong> (the Bayes Factor is lower than 1). We could run <code><a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link">compare_performance()</a></code> to learn more details, but for this example we will go ahead and keep the <strong>worse model</strong> (for simplicity and conciseness when inspecting the random effects later, but keep in mind that in real life it’s surely not the best thing to do).</p>
 </div>
-<div class="section level2">
-<h2 id="group-level-effects">Group-level Effects<a class="anchor" aria-label="anchor" href="#group-level-effects"></a>
-</h2>
+<div class="section level3">
+<h3 id="group-level-effects">Group-level Effects<a class="anchor" aria-label="anchor" href="#group-level-effects"></a>
+</h3>
 <p>That’s nice to know, but how to actually <strong>get access</strong> to these group-level scores. We can use the <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function to retrieve them.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
@@ -250,9 +253,9 @@
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-11-1.png" width="3281.25"></p>
 <p>Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?</p>
 </div>
-<div class="section level2">
-<h2 id="correlation-with-empirical-scores">Correlation with empirical scores<a class="anchor" aria-label="anchor" href="#correlation-with-empirical-scores"></a>
-</h2>
+<div class="section level3">
+<h3 id="correlation-with-empirical-scores">Correlation with empirical scores<a class="anchor" aria-label="anchor" href="#correlation-with-empirical-scores"></a>
+</h3>
 <p>We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the <strong>deviation from the fixed effect</strong>, so a coefficient close to 0 means that the participants’ effect is the same as the population-level effect. In other words, it’s <strong>“in the norm”</strong> (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by changing the <code>type</code> argument).</p>
 <p>Nevertheless, let’s compute some <strong>empirical scores</strong>, such as the condition averages for each participant.</p>
 <p>We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the <strong>accuracy</strong> condition, and the difference with the <strong>speed</strong> condition <em>(reminds you of something?)</em>.</p>
@@ -296,9 +299,9 @@
 <p>The slower they are in the accuracy condition, the bigger the difference with the speed condition.</p>
 </div>
 </div>
-<div class="section level1">
-<h1 id="accuracy">Accuracy<a class="anchor" aria-label="anchor" href="#accuracy"></a>
-</h1>
+<div class="section level2">
+<h2 id="accuracy">Accuracy<a class="anchor" aria-label="anchor" href="#accuracy"></a>
+</h2>
 <p>In this section, we will take interest in the accuracy - the probability of making errors, using <strong>logistic models</strong>. For this, we will use the dataset that still includes the errors (<code>data</code>, and not <code>data_rt</code> used in the previous section).</p>
 <p>We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
@@ -361,17 +364,17 @@
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-18-1.png" width="3281.25"></p>
 </div>
-<div class="section level1">
-<h1 id="log-shifted-model">Log-shifted Model<a class="anchor" aria-label="anchor" href="#log-shifted-model"></a>
-</h1>
+<div class="section level2">
+<h2 id="log-shifted-model">Log-shifted Model<a class="anchor" aria-label="anchor" href="#log-shifted-model"></a>
+</h2>
 </div>
-<div class="section level1">
-<h1 id="scale-location-model">Scale-Location Model<a class="anchor" aria-label="anchor" href="#scale-location-model"></a>
-</h1>
+<div class="section level2">
+<h2 id="scale-location-model">Scale-Location Model<a class="anchor" aria-label="anchor" href="#scale-location-model"></a>
+</h2>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -24,14 +24,14 @@ visualisation_recipe
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../index.html">
     <span class="fa fa-home fa-lg"></span>
@@ -67,7 +67,7 @@ visualisation_recipe
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -173,6 +173,11 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">layers</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-1.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"></span>
 <span class="r-in">  <span class="co"># 2 random intercepts</span></span>
 <span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Reaction</span> <span class="op">~</span> <span class="va">Days</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Subject</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Newfactor</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
@@ -183,7 +188,8 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-1.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-2.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"><span class="co"># ==============================================</span></span>
 <span class="r-in"><span class="co"># estimate_means</span></span>
 <span class="r-in"><span class="co"># ==============================================</span></span>
@@ -194,6 +200,12 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">layers</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-3.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Customize aesthetics</span></span>
 <span class="r-in">  <span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span>,</span>
@@ -226,11 +238,11 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">cyl</span>, data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("cyl")`.</span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-2.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-4.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"><span class="co"># ==============================================</span></span>
 <span class="r-in"><span class="co"># estimate_relation, estimate_response, ...</span></span>
 <span class="r-in"><span class="co"># ==============================================</span></span>
@@ -241,6 +253,11 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">layers</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span>
+<span class="r-in"></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-5.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Customize aesthetics</span></span>
 <span class="r-in">  <span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span>,</span>
@@ -261,7 +278,6 @@ below to see their documentation.</p>
 <span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span class="r-in">    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"></span>
 <span class="r-in">  <span class="co"># 2-ways interaction ------------</span></span>
 <span class="r-in"></span>
 <span class="r-in">  <span class="co"># Numeric * numeric</span></span>
@@ -274,8 +290,8 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">layers</span> <span class="op">&lt;-</span> <span class="fu">visualisation_recipe</span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">layers</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"></span>
 <span class="r-in">  <span class="co"># 3-ways interaction ------------</span></span>
+<span class="r-in"></span>
 <span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span>
 <span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">vs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">vs</span><span class="op">)</span></span>
 <span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span>
@@ -305,8 +321,8 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.50</span>, <span class="fl">.80</span>, <span class="fl">.95</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-3.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-6.png" alt="" width="700" height="433"></span>
+<span class="r-in"></span>
 <span class="r-in"><span class="co"># Bayesian models ---------------------</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/" class="external-link">"rstanarm"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
@@ -319,7 +335,7 @@ below to see their documentation.</p>
 <span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-4.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span class="co"># }</span></span>
 <span class="r-in"><span class="co"># ==============================================</span></span>
 <span class="r-in"><span class="co"># estimate_slopes</span></span>
@@ -343,7 +359,8 @@ below to see their documentation.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using alpha for a discrete variable is not advised.</span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-5.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-8.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># \donttest{</span></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"mgcv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in">  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span>
 <span class="r-in">  <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span><span class="op">^</span><span class="fl">2</span></span>
@@ -358,7 +375,8 @@ below to see their documentation.</p>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Width"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Width"`.</span>
-<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-6.png" alt="" width="700" height="433"></span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span class="co"># }</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

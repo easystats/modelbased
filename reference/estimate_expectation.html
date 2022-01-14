@@ -18,14 +18,14 @@ See below for details."><meta property="og:image" content="/reference/figures/ca
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item">
   <a class="nav-link" href="../index.html">
     <span class="fa fa-home fa-lg"></span>
@@ -61,7 +61,7 @@ See below for details."><meta property="og:image" content="/reference/figures/ca
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -608,12 +608,15 @@ Uncertainty intervals for predicted values are also called "prediction intervals
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.09, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> http://mc-stan.org/misc/warnings.html#bulk-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> http://mc-stan.org/misc/warnings.html#tail-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -621,16 +624,16 @@ Uncertainty intervals for predicted values are also called "prediction intervals
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.11 | 1.05 | [26.88, 31.53]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.79 | 0.87 | [25.10, 28.95]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.47 | 0.76 | [22.81, 25.92]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.14 | 0.63 | [21.09, 23.48]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.82 | 0.55 | [18.88, 20.87]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.50 | 0.66 | [16.37, 18.63]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.18 | 0.74 | [13.74, 16.62]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.86 | 0.86 | [11.10, 14.56]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.54 | 0.99 | [ 8.42, 12.60]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.21 | 1.20 | [ 5.49, 10.61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.20 | 1.04 | [27.00, 31.95]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.86 | 0.90 | [25.13, 29.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.53 | 0.74 | [22.99, 26.42]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.19 | 0.63 | [20.55, 23.36]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.86 | 0.62 | [18.54, 20.94]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.52 | 0.71 | [16.16, 19.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.19 | 0.81 | [13.62, 17.10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.85 | 0.95 | [10.40, 14.61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.52 | 1.13 | [ 7.80, 12.82]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.18 | 1.37 | [ 5.30, 11.02]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>

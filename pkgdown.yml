@@ -1,6 +1,6 @@
 pandoc: 2.7.3
 pkgdown: 2.0.1.9000
-pkgdown_sha: 1c2bedc10283fe39c5e539083021cb87f208903a
+pkgdown_sha: 6ab0c4e57f7eea0d6c76403dc2c873ab82089103
 articles:
   describe_nonlinear: describe_nonlinear.html
   estimate_contrasts: estimate_contrasts.html
@@ -12,5 +12,5 @@ articles:
   modelisation_approach: modelisation_approach.html
   transformations: transformations.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2021-12-10T03:16Z
+last_built: 2022-01-14T14:18Z
 

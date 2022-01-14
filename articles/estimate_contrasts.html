@@ -36,14 +36,14 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../index.html">
@@ -83,7 +83,7 @@
   </a>
 </li>
 <li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/easystats/bayestestR/" aria-label="GitHub">
+  <a class="external-link nav-link" href="https://github.com/easystats/modelbased/" aria-label="GitHub">
     <span class="fa fa-github"></span>
      
   </a>
@@ -94,6 +94,9 @@
     
   </div>
 </nav><div class="container template-article">
+
+
+
 <script src="estimate_contrasts_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <main id="main"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Contrast analysis</h1>
@@ -105,9 +108,9 @@
 
     
     
-<div class="section level1">
-<h1 id="testing-pairwise-differences">Testing pairwise differences<a class="anchor" aria-label="anchor" href="#testing-pairwise-differences"></a>
-</h1>
+<div class="section level2">
+<h2 id="testing-pairwise-differences">Testing pairwise differences<a class="anchor" aria-label="anchor" href="#testing-pairwise-differences"></a>
+</h2>
 <p>In the <a href="https://easystats.github.io/estimate/articles/estimate_means.html" class="external-link"><strong>previous tutorial</strong></a>, we computed marginal means at the 3 different <code>Species</code> levels from the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set" class="external-link"><code>iris</code></a> dataset. However, one might also want to <strong>statistically test</strong> the differences between each levels, which can be achieved through <strong>contrast analysis</strong>. Although the procedure is much more powerful, its aim is analogous to the <strong><em>post hoc</em></strong> analysis (pretty much consisting of pairwise <em>t</em>-tests), which are heavily utilized in behavioral sciences as a way to follow up on hypotheses about global differences tested by ANOVAs with more specific hypotheses about pairwise differences.</p>
 <p>Let’s carry out contrast analysis on the simple model from the previous tutorial:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -138,9 +141,9 @@
 &gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>We can conclude that all pairwise differences are statistically significant.</p>
 </div>
-<div class="section level1">
-<h1 id="complex-model">Complex model<a class="anchor" aria-label="anchor" href="#complex-model"></a>
-</h1>
+<div class="section level2">
+<h2 id="complex-model">Complex model<a class="anchor" aria-label="anchor" href="#complex-model"></a>
+</h2>
 <p>Again, as contrast analysis is based on marginal means, it can be applied to more complex models:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
@@ -166,9 +169,9 @@
 <p><img src="estimate_contrasts_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <p>These represent the estimated means and their CI range (in black), while the grey areas show the CI range of the difference (as compared to the point estimate).</p>
 </div>
-<div class="section level1">
-<h1 id="changes-in-difference">Changes in difference<a class="anchor" aria-label="anchor" href="#changes-in-difference"></a>
-</h1>
+<div class="section level2">
+<h2 id="changes-in-difference">Changes in difference<a class="anchor" aria-label="anchor" href="#changes-in-difference"></a>
+</h2>
 <p>Interestingly, we can also see how these differences are modulated by another continuous variable. Based on the model above (including the interaction with <code>Petal.Width</code>), we will compute the contrasts at 100 equally-spaced points of <code>Petal.Width</code>, that we will then visualise.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
@@ -186,16 +189,17 @@
 <p><img src="estimate_contrasts_files/figure-html/fig-1.png" width="100%"></p>
 <p>As we can see, the difference between <em>versicolor</em> and <em>virginica</em> increases as <code>Petal.Width</code> increases.</p>
 </div>
-<div class="section level1">
-<h1 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
-</h1>
+<div class="section level2">
+<h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
+</h2>
 <p>Contrast analysis can be a powerful tool to interpret and understand statistical models.</p>
 </div>
-<div class="section level1">
-<h1 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h1>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 </div>
-  </main>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
