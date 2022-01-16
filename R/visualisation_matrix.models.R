@@ -93,6 +93,16 @@ visualisation_matrix.glmerMod <- visualisation_matrix.glm
 #' @export
 visualisation_matrix.glmmTMB <- visualisation_matrix.glm
 #' @export
+visualisation_matrix.MixMod <- visualisation_matrix.glm
+#' @export
+visualisation_matrix.svyglm <- visualisation_matrix.glm
+#' @export
+visualisation_matrix.hurdle <- visualisation_matrix.glm
+#' @export
+visualisation_matrix.zeroinfl <- visualisation_matrix.glm
+#' @export
+visualisation_matrix.ivreg <- visualisation_matrix.glm
+#' @export
 visualisation_matrix.gamm <- visualisation_matrix.glm
 #' @export
 visualisation_matrix.list <- visualisation_matrix.glm # list is gamm4

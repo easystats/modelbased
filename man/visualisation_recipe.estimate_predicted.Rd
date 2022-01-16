@@ -82,7 +82,6 @@ if (require("see") && require("lme4")) {
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
-
 }
 \donttest{
 if (require("see") && require("lme4")) {
@@ -108,7 +107,6 @@ if (require("ggplot2")) {
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
-
 }
 \donttest{
 if (require("ggplot2")) {
@@ -155,7 +153,6 @@ if (require("ggplot2")) {
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
-
 }
 \donttest{
 if (require("ggplot2")) {
