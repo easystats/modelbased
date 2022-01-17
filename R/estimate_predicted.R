@@ -232,6 +232,9 @@ estimate_relation <- function(model,
   # call "find_response()" only once...
   model_response <- insight::find_response(model)
 
+  # check if vis.matrix is requested
+  is_grid <- identical(data, "grid")
+
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
     data_original <- data
@@ -250,7 +253,7 @@ estimate_relation <- function(model,
   if (is.null(data)) {
     data <- model_data
   } else if (!is.data.frame(data)) {
-    if (data == "grid") {
+    if (is_grid) {
       data <- visualisation_matrix(model, reference = model_data, ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
@@ -267,13 +270,12 @@ estimate_relation <- function(model,
     resid <- NULL
   }
 
-  # Keep only predictors, unless null model --------
-  if (insight::is_nullmodel(model)) {
-    # include response for null models
-    data <- model_data[model_response]
-  } else {
-    data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
+  # Keep only predictors (and response) --------
+  variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+  if (!is_grid || insight::is_nullmodel(model)) {
+    variables <- c(model_response, variables)
   }
+  data <- data[names(data) %in% variables]
 
   # Restore factor levels
   data <- datawizard::data_restoretype(data, model_data)
