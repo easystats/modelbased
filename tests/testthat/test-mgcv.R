@@ -23,7 +23,7 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
 
   test_that("estimate_response - mgcv gam", {
     estim <- estimate_response(model)
-    expect_equal(dim(estim), c(150, 7))
+    expect_equal(dim(estim), c(150, 8))
   })
 
   test_that("estimate_link - mgcv gam", {
@@ -39,7 +39,7 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
 
     test_that("estimate_response - mgcv gamm", {
       estim <- estimate_response(model)
-      expect_equal(dim(estim), c(150, 8))
+      expect_equal(dim(estim), c(150, 9))
     })
   }
 
