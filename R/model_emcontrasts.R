@@ -87,5 +87,5 @@ model_emcontrasts <- function(model,
   }
 
   args <- list(contrast = contrast, at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, ...)
+  .format_emmeans_arguments(model, args, data, ...)
 }

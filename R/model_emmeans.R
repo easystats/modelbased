@@ -90,11 +90,11 @@ model_emmeans <- function(model,
 
 #' @importFrom stats model.frame
 #' @keywords internal
-.format_emmeans_arguments <- function(model, args, ...) {
+.format_emmeans_arguments <- function(model, args, data, ...) {
 
   # Create the data_matrix
   # ---------------------------
-  data <- insight::get_data(model)
+  # data <- insight::get_data(model)
   data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
@@ -197,5 +197,5 @@ model_emmeans <- function(model,
   }
 
   args <- list(at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, ...)
+  .format_emmeans_arguments(model, args, data, ...)
 }

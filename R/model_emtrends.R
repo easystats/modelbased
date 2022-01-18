@@ -81,5 +81,5 @@ model_emtrends <- function(model,
   }
 
   args <- list(trend = trend, at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, ...)
+  .format_emmeans_arguments(model, args, data, ...)
 }
