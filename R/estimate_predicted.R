@@ -226,6 +226,23 @@ estimate_relation <- function(model,
                                 keep_iterations = FALSE,
                                 ...) {
 
+  # call "get_data()" only once...
+  model_data <- insight::get_data(model)
+
+  # model and data properties
+  if (insight::is_model(model)) {
+    # for models, get predictors, response etc.
+    variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+    model_response <- insight::find_response(model)
+    is_nullmodel <- insight::is_nullmodel(model)
+  } else {
+    # for stuff like data frame, no response and no null model
+    variables <- colnames(model_data)
+    model_response <- NULL
+    is_nullmodel <- FALSE
+  }
+
+  is_grid <- identical(data, "grid")
 
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
@@ -243,10 +260,10 @@ estimate_relation <- function(model,
 
   # Get data ----------------
   if (is.null(data)) {
-    data <- insight::get_data(model)
+    data <- model_data
   } else if (!is.data.frame(data)) {
-    if (data == "grid") {
-      data <- visualisation_matrix(model, reference = insight::get_data(model), ...)
+    if (is_grid) {
+      data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
       stop('The `data` argument must either NULL, "grid" or another data.frame.')
     }
@@ -256,17 +273,20 @@ estimate_relation <- function(model,
   grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
-  if (insight::find_response(model) %in% names(data)) {
-    resid <- data[[insight::find_response(model)]]
+  if (!is.null(model_response) && model_response %in% names(data)) {
+    resid <- data[[model_response]]
   } else {
     resid <- NULL
   }
 
-  # Keep only predictors --------
-  data <- data[names(data) %in% insight::find_predictors(model, effects = "all", flatten = TRUE)]
+  # Keep only predictors (and response) --------
+  if (!is_grid || is_nullmodel) {
+    variables <- c(model_response, variables)
+  }
+  data <- data[names(data) %in% variables]
 
   # Restore factor levels
-  data <- datawizard::data_restoretype(data, insight::get_data(model))
+  data <- datawizard::data_restoretype(data, model_data)
 
   # Get predicted ----------------
   predictions <- insight::get_predicted(model,
@@ -288,7 +308,7 @@ estimate_relation <- function(model,
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
-  attr(out, "response") <- insight::find_response(model)
+  attr(out, "response") <- model_response
   attr(out, "model") <- model
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
   attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
