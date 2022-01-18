@@ -229,12 +229,20 @@ estimate_relation <- function(model,
   # call "get_data()" only once...
   model_data <- insight::get_data(model)
 
-  # call "find_response()" only once...
-  model_response <- insight::find_response(model)
-
   # model and data properties
+  if (insight::is_model(model)) {
+    # for models, get predictors, response etc.
+    variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+    model_response <- insight::find_response(model)
+    is_nullmodel <- insight::is_nullmodel(model)
+  } else {
+    # for stuff like data frame, no response and no null model
+    variables <- colnames(model_data)
+    model_response <- NULL
+    is_nullmodel <- FALSE
+  }
+
   is_grid <- identical(data, "grid")
-  is_nullmodel <- insight::is_nullmodel(model)
 
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
@@ -265,14 +273,13 @@ estimate_relation <- function(model,
   grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
-  if (model_response %in% names(data)) {
+  if (!is.null(model_response) && model_response %in% names(data)) {
     resid <- data[[model_response]]
   } else {
     resid <- NULL
   }
 
   # Keep only predictors (and response) --------
-  variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
   if (!is_grid || is_nullmodel) {
     variables <- c(model_response, variables)
   }

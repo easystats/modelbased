@@ -31,11 +31,13 @@ if (!requireNamespace("parameters", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("lme4", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("dplyr", quietly = TRUE) ||
+  !requireNamespace("gamm4", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
+} else {
+  library(gamm4)
 }
 
-library(gamm4)
 set.seed(333)
 ```
 
