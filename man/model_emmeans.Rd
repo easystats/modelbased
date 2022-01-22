@@ -42,7 +42,10 @@ model_emtrends(
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect / mean / contrasts. Other predictors of the model that are not included here will be collapsed and "averaged" over (the effect will be estimated across them).}
+\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+/ mean / contrasts. Other predictors of the model that are not included
+here will be collapsed and "averaged" over (the effect will be estimated
+across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -66,9 +69,11 @@ for which to compute the slopes.}
 }
 \description{
 The \code{model_emmeans} function is a wrapper to facilitate the usage of
-\code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a
-somewhat simpler and intuitive API to find the specifications and variables of interest.
-It is meanly made to for the developers to facilitate the organization and debugging, and end-users should rather use the \verb{estimate_*} series of functions.
+\code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler
+and intuitive API to find the specifications and variables of interest. It is
+meanly made to for the developers to facilitate the organization and
+debugging, and end-users should rather use the \verb{estimate_*} series of
+functions.
 }
 \examples{
 # Basic usage

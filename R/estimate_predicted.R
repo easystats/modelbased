@@ -1,50 +1,75 @@
 #' Model-based response estimates and uncertainty
 #'
-#' After fitting a model, it is useful generate model-based estimates of the response variables for different combinations of predictor values.
-#' Such estimates can be used to make inferences about relationships between variables and to make predictions about individual cases.
+#' After fitting a model, it is useful generate model-based estimates of the
+#' response variables for different combinations of predictor values. Such
+#' estimates can be used to make inferences about relationships between
+#' variables and to make predictions about individual cases.
 #' \cr\cr
-#' Model-based response estimates and uncertainty can be generated for both the conditional average response values (the regression line or expectation) and for predictions about individual cases.
-#' See below for details.
+#' Model-based response estimates and uncertainty can be generated for both the
+#' conditional average response values (the regression line or expectation) and
+#' for predictions about individual cases. See below for details.
 #'
 #' @section Expected (average) values:
 #'
-#' The most important way that various types of response estimates differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
-#' The major choices are **expected values** for uncertainty in the regression line and **predicted values** for uncertainty in the individual case predictions.
+#' The most important way that various types of response estimates differ is in
+#' terms of what quantity is being estimated and the meaning of the uncertainty
+#' intervals. The major choices are **expected values** for uncertainty in the
+#' regression line and **predicted values** for uncertainty in the individual
+#' case predictions.
 #'
-#' **Expected values** refer the the fitted regression line---the estimated *average* response value (i.e., the "expectation") for individuals with specific predictor values.
-#' For example, in a linear model *y* = 2 + 3*x* + 4*z* + *e*, the estimated average *y* for individuals with *x* = 1 and *z* = 2 is 11.
+#' **Expected values** refer the the fitted regression line---the estimated
+#' *average* response value (i.e., the "expectation") for individuals with
+#' specific predictor values. For example, in a linear model *y* = 2 + 3*x* +
+#' 4*z* + *e*, the estimated average *y* for individuals with *x* = 1 and *z* =
+#' 2 is 11.
 #'
-#' For expected values, uncertainty intervals refer to uncertainty in the estimated **conditional average** (where might the true regression line actually fall)?
-#' Uncertainty intervals for expected values are also called "confidence intervals".
+#' For expected values, uncertainty intervals refer to uncertainty in the
+#' estimated **conditional average** (where might the true regression line
+#' actually fall)? Uncertainty intervals for expected values are also called
+#' "confidence intervals".
 #'
-#' Expected values and their uncertainty intervals are useful for describing the relationship between variables and for describing how precisely a model has been estimated.
+#' Expected values and their uncertainty intervals are useful for describing the
+#' relationship between variables and for describing how precisely a model has
+#' been estimated.
 #'
 #' For generalized linear models, expected values are reported on one of two scales:
 #'
-#'  - The **link scale** refers to scale of the fitted regression line, after transformation by the link function.
-#'    For example, for a logistic regression (logit binomial) model, the link scale gives expected log-odds.
-#'    For a log-link Poisson model, the link scale gives the expected log-count.
+#'  - The **link scale** refers to scale of the fitted regression line, after
+#'  transformation by the link function. For example, for a logistic regression
+#'  (logit binomial) model, the link scale gives expected log-odds. For a
+#'  log-link Poisson model, the link scale gives the expected log-count.
 #'
-#'  - The **response scale** refers to the original scale of the response variable (i.e., without any link function transformation).
-#'    Expected values on the link scale are back-transformed to the original response variable metric (e.g., expected probabilities for binomial models, expected counts for Poisson models).
+#'  - The **response scale** refers to the original scale of the response
+#'  variable (i.e., without any link function transformation). Expected values
+#'  on the link scale are back-transformed to the original response variable
+#'  metric (e.g., expected probabilities for binomial models, expected counts
+#'  for Poisson models).
 #'
 #'
 #' @section Individual case predictions:
 #'
-#' In contrast to expected values, **predicted values** refer to predictions for **individual cases**.
-#' Predicted values are also called "posterior predictions" or "posterior predictive draws".
+#' In contrast to expected values, **predicted values** refer to predictions for
+#' **individual cases**. Predicted values are also called "posterior
+#' predictions" or "posterior predictive draws".
 #'
-#' For predicted values, uncertainty intervals refer to uncertainty in the **individual response values for each case** (where might any single case actually fall)?
-#' Uncertainty intervals for predicted values are also called "prediction intervals" or "posterior predictive intervals".
+#' For predicted values, uncertainty intervals refer to uncertainty in the
+#' **individual response values for each case** (where might any single case
+#' actually fall)? Uncertainty intervals for predicted values are also called
+#' "prediction intervals" or "posterior predictive intervals".
 #'
-#' Predicted values and their uncertainty intervals are useful for forecasting the range of values that might be observed in new data, for making decisions about individual cases, and for checking if model predictions are reasonable ("posterior predictive checks").
+#' Predicted values and their uncertainty intervals are useful for forecasting
+#' the range of values that might be observed in new data, for making decisions
+#' about individual cases, and for checking if model predictions are reasonable
+#' ("posterior predictive checks").
 #'
-#' Predicted values and intervals are always on the scale of the original response variable (not the link scale).
+#' Predicted values and intervals are always on the scale of the original
+#' response variable (not the link scale).
 #'
 #'
 #' @section Functions for estimating predicted values and uncertainty:
 #'
-#' *modelbased* provides 4 functions for generating model-based response estimates and their uncertainty:
+#' *modelbased* provides 4 functions for generating model-based response
+#' estimates and their uncertainty:
 #'
 #' - **`estimate_expectation()`**:
 #'   - Generates **expected values** (conditional average) on the **response scale**.
@@ -54,7 +79,8 @@
 #' - **`estimate_link()`**:
 #'   - Generates **expected values** (conditional average) on the **link scale**.
 #'   - The uncertainty interval is a *confidence interval*.
-#'   - By default, values are computed using a reference grid spanning the observed range of predictor values (see [visualisation_matrix()]).
+#'   - By default, values are computed using a reference grid spanning the
+#'     observed range of predictor values (see [visualisation_matrix()]).
 #'
 #' - **`estimate_prediction()`**:
 #'   - Generates **predicted values** (for individual cases) on the **response scale**.
@@ -66,28 +92,49 @@
 #'   - Useful for visualizing a model.
 #'   - Generates **expected values** (conditional average) on the **response scale**.
 #'   - The uncertainty interval is a *confidence interval*.
-#'   - By default, values are computed using a reference grid spanning the observed range of predictor values (see [visualisation_matrix()]).
+#'   - By default, values are computed using a reference grid spanning the
+#'     observed range of predictor values (see [visualisation_matrix()]).
 #'
 #' `estimate_response()` is a deprecated alias for `estimate_expectation()`.
 #'
 #' @section Data for predictions:
 #'
-#' If the `data = NULL`, values are estimated using the data used to fit the model. If `data = "grid"`, values are computed using a reference grid spanning the observed range of predictor values with [visualisation_matrix()]. This can be useful for model visualization. The number of predictor values used for each variable can be controlled with the `length` argument. `data` can also be a data frame containing columns with names matching the model frame (see [insight::get_data()]). This can be used to generate model predictions for specific combinations of predictor values.
+#' If the `data = NULL`, values are estimated using the data used to fit the
+#' model. If `data = "grid"`, values are computed using a reference grid
+#' spanning the observed range of predictor values with
+#' [visualisation_matrix()]. This can be useful for model visualization. The
+#' number of predictor values used for each variable can be controlled with the
+#' `length` argument. `data` can also be a data frame containing columns with
+#' names matching the model frame (see [insight::get_data()]). This can be used
+#' to generate model predictions for specific combinations of predictor values.
 #'
 #' @note
 #'
-#' These functions are built on top of [insight::get_predicted()] and correspond to different specifications of its parameters. It may be useful to read its [documentation](https://easystats.github.io/insight/reference/get_predicted.html), in particular the description of the `predict` argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
+#' These functions are built on top of [insight::get_predicted()] and correspond
+#' to different specifications of its parameters. It may be useful to read its
+#' [documentation](https://easystats.github.io/insight/reference/get_predicted.html),
+#' in particular the description of the `predict` argument for additional
+#' details on the difference between expected vs. predicted values and link vs.
+#' response scales.
 #'
-#' Additional control parameters can be used to control results from [visualisation_matrix()] (when `data = "grid"`) and from [insight::get_predicted()] (the function used internally to compute predictions).
+#' Additional control parameters can be used to control results from
+#' [visualisation_matrix()] (when `data = "grid"`) and from
+#' [insight::get_predicted()] (the function used internally to compute
+#' predictions).
 #'
-#' For plotting, check the examples in [visualisation_recipe()]. Also check out the [Vignettes](https://easystats.github.io/modelbased/articles/) and [README examples](https://easystats.github.io/modelbased/index.html#features) for various examples, tutorials and usecases.
+#' For plotting, check the examples in [visualisation_recipe()]. Also check out
+#' the [Vignettes](https://easystats.github.io/modelbased/articles/) and [README
+#' examples](https://easystats.github.io/modelbased/index.html#features) for
+#' various examples, tutorials and usecases.
 #'
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
 #'   `NULL`, the model's data is used. If "grid", the model matrix is obtained
 #'   (through [visualisation_matrix()]).
-#' @param ... You can add all the additional control arguments from [visualisation_matrix()] (used when `data = "grid"`) and [insight::get_predicted()].
+#' @param ... You can add all the additional control arguments from
+#'   [visualisation_matrix()] (used when `data = "grid"`) and
+#'   [insight::get_predicted()].
 #'
 #' @examples
 #' library(modelbased)

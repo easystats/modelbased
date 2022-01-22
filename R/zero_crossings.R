@@ -19,6 +19,7 @@ zero_crossings <- function(x) {
   if (length(zerocrossings) == 0) {
     return(NA)
   }
+
   zerocrossings
 }
 

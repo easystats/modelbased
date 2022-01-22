@@ -1,24 +1,74 @@
 #' Estimate Marginal Effects
 #'
-#' Estimate the slopes (i.e., the coefficient) of a predictor over or within different
-#' factor levels, or alongside a numeric variable . In other words, to assess the effect of a predictor *at* specific configurations data. Other related
-#' functions based on marginal estimations includes [estimate_contrasts()] and
-#' [estimate_means()].
+#' Estimate the slopes (i.e., the coefficient) of a predictor over or within
+#' different factor levels, or alongside a numeric variable . In other words, to
+#' assess the effect of a predictor *at* specific configurations data. Other
+#' related functions based on marginal estimations includes
+#' [estimate_contrasts()] and [estimate_means()].
 #' \cr\cr
-#' See the **Details** section below, and don't forget to also check out the [Vignettes](https://easystats.github.io/modelbased/articles/estimate_slopes.html) and [README examples](https://easystats.github.io/modelbased/index.html#features) for various examples, tutorials and usecases.
+#'
+#' See the **Details** section below, and don't forget to also check out the
+#' [Vignettes](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
+#' and [README examples](https://easystats.github.io/modelbased/index.html#features) for
+#' various examples, tutorials and use cases.
 #'
 #' @inheritParams model_emmeans
 #' @inheritParams estimate_means
 #'
-#' @details The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()] functions are forming a group, as they are all based on *marginal* estimations (estimations based on a model). All three are also built on the \pkg{emmeans} package, so reading its documentation (for instance for [emmeans::emmeans()] and [emmeans::emtrends()]) is recommended to understand the idea behind these types of procedures.
+#' @details The [estimate_slopes()], [estimate_means()] and
+#'   [estimate_contrasts()] functions are forming a group, as they are all based
+#'   on *marginal* estimations (estimations based on a model). All three are
+#'   also built on the \pkg{emmeans} package, so reading its documentation (for
+#'   instance for [emmeans::emmeans()] and [emmeans::emtrends()]) is recommended
+#'   to understand the idea behind these types of procedures.
 #'
 #' \itemize{
-#' \item Model-based **predictions** is the basis for all that follows. Indeed, the first thing to understand is how models can be used to make predictions (see [estimate_link()]). This corresponds to the predicted response (or "outcome variable") given specific predictor values of the predictors (i.e., given a specific data configuration). This is why the concept of [`reference grid()`][visualisation_matrix] is so important for direct predictions.
-#' \item **Marginal "means"**, obtained via [estimate_means()], are an extension of such predictions, allowing to "average" (collapse) some of the predictors, to obtain the average response value at a specific predictors configuration. This is typically used when some of the predictors of interest are factors. Indeed, the parameters of the model will usually give you the intercept value and then the "effect" of each factor level (how different it is from the intercept). Marginal means can be used to directly give you the mean value of the response variable at all the levels of a factor. Moreover, it can also be used to control, or average over predictors, which is useful in the case of multiple predictors with or without interactions.
-#' \item **Marginal contrasts**, obtained via [estimate_contrasts()], are themselves at extension of marginal means, in that they allow to investigate the difference (i.e., the contrast) between the marginal means. This is, again, often used to get all pairwise differences between all levels of a factor. It works also for continuous predictors, for instance one could also be interested in whether the difference at two extremes of a continuous predictor is significant.
-#' \item Finally, **marginal effects**, obtained via [estimate_slopes()], are different in that their focus is not values on the response variable, but the model's parameters. The idea is to assess the effect of a predictor at a specific configuration of the other predictors. This is relevant in the case of interactions or non-linear relationships, when the effect of a predictor variable changes depending on the other predictors. Moreover, these effects can also be "averaged" over other predictors, to get for instance the "general trend" of a predictor over different factor levels.
+#' \item Model-based **predictions** is the basis for all that follows. Indeed,
+#' the first thing to understand is how models can be used to make predictions
+#' (see [estimate_link()]). This corresponds to the predicted response (or
+#' "outcome variable") given specific predictor values of the predictors (i.e.,
+#' given a specific data configuration). This is why the concept of [`reference
+#' grid()`][visualisation_matrix] is so important for direct predictions.
+#'
+#' \item **Marginal "means"**, obtained via [estimate_means()], are an extension
+#' of such predictions, allowing to "average" (collapse) some of the predictors,
+#' to obtain the average response value at a specific predictors configuration.
+#' This is typically used when some of the predictors of interest are factors.
+#' Indeed, the parameters of the model will usually give you the intercept value
+#' and then the "effect" of each factor level (how different it is from the
+#' intercept). Marginal means can be used to directly give you the mean value of
+#' the response variable at all the levels of a factor. Moreover, it can also be
+#' used to control, or average over predictors, which is useful in the case of
+#' multiple predictors with or without interactions.
+#'
+#' \item **Marginal contrasts**, obtained via [estimate_contrasts()], are
+#' themselves at extension of marginal means, in that they allow to investigate
+#' the difference (i.e., the contrast) between the marginal means. This is,
+#' again, often used to get all pairwise differences between all levels of a
+#' factor. It works also for continuous predictors, for instance one could also
+#' be interested in whether the difference at two extremes of a continuous
+#' predictor is significant.
+#'
+#' \item Finally, **marginal effects**, obtained via [estimate_slopes()], are
+#' different in that their focus is not values on the response variable, but the
+#' model's parameters. The idea is to assess the effect of a predictor at a
+#' specific configuration of the other predictors. This is relevant in the case
+#' of interactions or non-linear relationships, when the effect of a predictor
+#' variable changes depending on the other predictors. Moreover, these effects
+#' can also be "averaged" over other predictors, to get for instance the
+#' "general trend" of a predictor over different factor levels.
 #' }
-#' **Example:** let's imagine the following model `lm(y ~ condition * x)` where `condition` is a factor with 3 levels A, B and C and `x` a continuous variable (like age for example). One idea is to see how this model performs, and compare the actual response y to the one predicted by the model (using [estimate_response()]). Another idea is evaluate the average mean at each of the condition's levels (using [estimate_means()]), which can be useful to visualize them. Another possibility is to evaluate the difference between these levels (using [estimate_contrasts()]). Finally, one could also estimate the effect of x averaged over all conditions, or instead within each condition (`using [estimate_slopes]`).
+#'
+#' **Example:** let's imagine the following model `lm(y ~ condition * x)` where
+#' `condition` is a factor with 3 levels A, B and C and `x` a continuous
+#' variable (like age for example). One idea is to see how this model performs,
+#' and compare the actual response y to the one predicted by the model (using
+#' [estimate_response()]). Another idea is evaluate the average mean at each of
+#' the condition's levels (using [estimate_means()]), which can be useful to
+#' visualize them. Another possibility is to evaluate the difference between
+#' these levels (using [estimate_contrasts()]). Finally, one could also estimate
+#' the effect of x averaged over all conditions, or instead within each
+#' condition (`using [estimate_slopes]`).
 #'
 #'
 #' @examples

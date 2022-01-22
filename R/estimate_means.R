@@ -124,6 +124,7 @@ estimate_means <- function(model,
 #' @keywords internal
 .clean_names_bayesian <- function(means, model, transform, type = "mean") {
   vars <- names(means)[names(means) %in% c("Median", "Mean", "MAP")]
+
   if (length(vars) == 1) {
     if (type == "contrast") {
       if (insight::model_info(model)$is_logit & transform == "response") {
@@ -143,6 +144,7 @@ estimate_means <- function(model,
       names(means)[names(means) == vars] <- "Coefficient"
     }
   }
+
   means$CI <- NULL
   means$ROPE_CI <- NULL
   means$ROPE_low <- NULL

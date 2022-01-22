@@ -50,67 +50,104 @@ bootstrapped or Bayesian models. They will be added as additional columns
 named \verb{iter_1, iter_2, ...}. You can reshape them to a long format by
 running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 
-\item{...}{You can add all the additional control arguments from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (used when \code{data = "grid"}) and \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+\item{...}{You can add all the additional control arguments from
+\code{\link[=visualisation_matrix]{visualisation_matrix()}} (used when \code{data = "grid"}) and
+\code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
 A data frame of predicted values and uncertainty intervals, with class \code{"estimate_predicted"}. Methods for \code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe()}} and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available.
 }
 \description{
-After fitting a model, it is useful generate model-based estimates of the response variables for different combinations of predictor values.
-Such estimates can be used to make inferences about relationships between variables and to make predictions about individual cases.
+After fitting a model, it is useful generate model-based estimates of the
+response variables for different combinations of predictor values. Such
+estimates can be used to make inferences about relationships between
+variables and to make predictions about individual cases.
 \cr\cr
-Model-based response estimates and uncertainty can be generated for both the conditional average response values (the regression line or expectation) and for predictions about individual cases.
-See below for details.
+Model-based response estimates and uncertainty can be generated for both the
+conditional average response values (the regression line or expectation) and
+for predictions about individual cases. See below for details.
 }
 \note{
-These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond to different specifications of its parameters. It may be useful to read its \href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation}, in particular the description of the \code{predict} argument for additional details on the difference between expected vs. predicted values and link vs. response scales.
+These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond
+to different specifications of its parameters. It may be useful to read its
+\href{https://easystats.github.io/insight/reference/get_predicted.html}{documentation},
+in particular the description of the \code{predict} argument for additional
+details on the difference between expected vs. predicted values and link vs.
+response scales.
 
-Additional control parameters can be used to control results from \code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to compute predictions).
+Additional control parameters can be used to control results from
+\code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from
+\code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to compute
+predictions).
 
-For plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Also check out the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for various examples, tutorials and usecases.
+For plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. Also check out
+the \href{https://easystats.github.io/modelbased/articles/}{Vignettes} and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for
+various examples, tutorials and usecases.
 }
 \section{Expected (average) values}{
 
 
-The most important way that various types of response estimates differ is in terms of what quantity is being estimated and the meaning of the uncertainty intervals.
-The major choices are \strong{expected values} for uncertainty in the regression line and \strong{predicted values} for uncertainty in the individual case predictions.
+The most important way that various types of response estimates differ is in
+terms of what quantity is being estimated and the meaning of the uncertainty
+intervals. The major choices are \strong{expected values} for uncertainty in the
+regression line and \strong{predicted values} for uncertainty in the individual
+case predictions.
 
-\strong{Expected values} refer the the fitted regression line---the estimated \emph{average} response value (i.e., the "expectation") for individuals with specific predictor values.
-For example, in a linear model \emph{y} = 2 + 3\emph{x} + 4\emph{z} + \emph{e}, the estimated average \emph{y} for individuals with \emph{x} = 1 and \emph{z} = 2 is 11.
+\strong{Expected values} refer the the fitted regression line---the estimated
+\emph{average} response value (i.e., the "expectation") for individuals with
+specific predictor values. For example, in a linear model \emph{y} = 2 + 3\emph{x} +
+4\emph{z} + \emph{e}, the estimated average \emph{y} for individuals with \emph{x} = 1 and \emph{z} =
+2 is 11.
 
-For expected values, uncertainty intervals refer to uncertainty in the estimated \strong{conditional average} (where might the true regression line actually fall)?
-Uncertainty intervals for expected values are also called "confidence intervals".
+For expected values, uncertainty intervals refer to uncertainty in the
+estimated \strong{conditional average} (where might the true regression line
+actually fall)? Uncertainty intervals for expected values are also called
+"confidence intervals".
 
-Expected values and their uncertainty intervals are useful for describing the relationship between variables and for describing how precisely a model has been estimated.
+Expected values and their uncertainty intervals are useful for describing the
+relationship between variables and for describing how precisely a model has
+been estimated.
 
 For generalized linear models, expected values are reported on one of two scales:
 \itemize{
-\item The \strong{link scale} refers to scale of the fitted regression line, after transformation by the link function.
-For example, for a logistic regression (logit binomial) model, the link scale gives expected log-odds.
-For a log-link Poisson model, the link scale gives the expected log-count.
-\item The \strong{response scale} refers to the original scale of the response variable (i.e., without any link function transformation).
-Expected values on the link scale are back-transformed to the original response variable metric (e.g., expected probabilities for binomial models, expected counts for Poisson models).
+\item The \strong{link scale} refers to scale of the fitted regression line, after
+transformation by the link function. For example, for a logistic regression
+(logit binomial) model, the link scale gives expected log-odds. For a
+log-link Poisson model, the link scale gives the expected log-count.
+\item The \strong{response scale} refers to the original scale of the response
+variable (i.e., without any link function transformation). Expected values
+on the link scale are back-transformed to the original response variable
+metric (e.g., expected probabilities for binomial models, expected counts
+for Poisson models).
 }
 }
 
 \section{Individual case predictions}{
 
 
-In contrast to expected values, \strong{predicted values} refer to predictions for \strong{individual cases}.
-Predicted values are also called "posterior predictions" or "posterior predictive draws".
+In contrast to expected values, \strong{predicted values} refer to predictions for
+\strong{individual cases}. Predicted values are also called "posterior
+predictions" or "posterior predictive draws".
 
-For predicted values, uncertainty intervals refer to uncertainty in the \strong{individual response values for each case} (where might any single case actually fall)?
-Uncertainty intervals for predicted values are also called "prediction intervals" or "posterior predictive intervals".
+For predicted values, uncertainty intervals refer to uncertainty in the
+\strong{individual response values for each case} (where might any single case
+actually fall)? Uncertainty intervals for predicted values are also called
+"prediction intervals" or "posterior predictive intervals".
 
-Predicted values and their uncertainty intervals are useful for forecasting the range of values that might be observed in new data, for making decisions about individual cases, and for checking if model predictions are reasonable ("posterior predictive checks").
+Predicted values and their uncertainty intervals are useful for forecasting
+the range of values that might be observed in new data, for making decisions
+about individual cases, and for checking if model predictions are reasonable
+("posterior predictive checks").
 
-Predicted values and intervals are always on the scale of the original response variable (not the link scale).
+Predicted values and intervals are always on the scale of the original
+response variable (not the link scale).
 }
 
 \section{Functions for estimating predicted values and uncertainty}{
 
 
-\emph{modelbased} provides 4 functions for generating model-based response estimates and their uncertainty:
+\emph{modelbased} provides 4 functions for generating model-based response
+estimates and their uncertainty:
 \itemize{
 \item \strong{\code{estimate_expectation()}}:
 \itemize{
@@ -122,7 +159,8 @@ Predicted values and intervals are always on the scale of the original response 
 \itemize{
 \item Generates \strong{expected values} (conditional average) on the \strong{link scale}.
 \item The uncertainty interval is a \emph{confidence interval}.
-\item By default, values are computed using a reference grid spanning the observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+\item By default, values are computed using a reference grid spanning the
+observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 }
 \item \strong{\code{estimate_prediction()}}:
 \itemize{
@@ -136,7 +174,8 @@ Predicted values and intervals are always on the scale of the original response 
 \item Useful for visualizing a model.
 \item Generates \strong{expected values} (conditional average) on the \strong{response scale}.
 \item The uncertainty interval is a \emph{confidence interval}.
-\item By default, values are computed using a reference grid spanning the observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+\item By default, values are computed using a reference grid spanning the
+observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 }
 }
 
@@ -146,7 +185,14 @@ Predicted values and intervals are always on the scale of the original response 
 \section{Data for predictions}{
 
 
-If the \code{data = NULL}, values are estimated using the data used to fit the model. If \code{data = "grid"}, values are computed using a reference grid spanning the observed range of predictor values with \code{\link[=visualisation_matrix]{visualisation_matrix()}}. This can be useful for model visualization. The number of predictor values used for each variable can be controlled with the \code{length} argument. \code{data} can also be a data frame containing columns with names matching the model frame (see \code{\link[insight:get_data]{insight::get_data()}}). This can be used to generate model predictions for specific combinations of predictor values.
+If the \code{data = NULL}, values are estimated using the data used to fit the
+model. If \code{data = "grid"}, values are computed using a reference grid
+spanning the observed range of predictor values with
+\code{\link[=visualisation_matrix]{visualisation_matrix()}}. This can be useful for model visualization. The
+number of predictor values used for each variable can be controlled with the
+\code{length} argument. \code{data} can also be a data frame containing columns with
+names matching the model frame (see \code{\link[insight:get_data]{insight::get_data()}}). This can be used
+to generate model predictions for specific combinations of predictor values.
 }
 
 \examples{
