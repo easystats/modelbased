@@ -57,10 +57,10 @@ datawizard::standardize(c(4, 5, 2, 4, 42))
 datawizard::normalize(c(4, 5, 2, 4, 42))
 ```
 
-Normalization is, in fact, a special case of **Rescaling**. Any variable can be rescaled to a new range. In R, it can be achieved via the `change_scale()` function.
+Normalization is, in fact, a special case of **Rescaling**. Any variable can be rescaled to a new range. In R, it can be achieved via the `data_rescale()` function.
 
 ```{r message=FALSE, warning=FALSE}
-datawizard::change_scale(c(4, 5, 2, 4, 42), to = c(-1, 1))
+datawizard::data_rescale(c(4, 5, 2, 4, 42), to = c(-1, 1))
 ```
 
 
