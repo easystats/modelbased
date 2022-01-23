@@ -32,7 +32,7 @@ data_matrix(x, ...)
 
 \item{...}{Arguments passed to or from other methods (for instance, \code{length} or \code{range} to control the spread of numeric variables.).}
 
-\item{at, target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (\code{target} is the deprecated name of that argument).}
+\item{at, target}{Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. \code{at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))}, or as string, e.g. \code{at = "Sepal.Length = 2"} or \code{at = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (\code{target} is the deprecated name of that argument).}
 
 \item{factors}{Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.}
 
@@ -71,6 +71,9 @@ visualisation_matrix(data, at = c("Sepal.Length", "Species"), preserve_range = T
 visualisation_matrix(data, at = c("Sepal.Length", "Species"), numerics = 0)
 visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
 visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+
+# with list-style at-argument
+visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
 
 # Standardize
 vizdata <- visualisation_matrix(data, at = "Sepal.Length")
