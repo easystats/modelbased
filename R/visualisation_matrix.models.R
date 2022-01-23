@@ -3,21 +3,22 @@
 # -------------------------------------------------------------------------
 
 #' @export
-visualisation_matrix.glm <- function(x,
-                                     at = "all",
-                                     factors = "reference",
-                                     numerics = "mean",
-                                     preserve_range = TRUE,
-                                     reference = x,
-                                     include_smooth = TRUE,
-                                     include_random = FALSE,
-                                     include_response = FALSE,
-                                     ...) {
+visualisation_matrix.default <- function(x,
+                                         at = "all",
+                                         factors = "reference",
+                                         numerics = "mean",
+                                         preserve_range = TRUE,
+                                         reference = x,
+                                         include_smooth = TRUE,
+                                         include_random = FALSE,
+                                         include_response = FALSE,
+                                         ...) {
   # Retrieve data from model
   data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
 
   # Deal with factor transformations
   # f <- insight::find_terms(model)
+  numeric_factors <- attributes(data)$factors
   data[] <- lapply(data, function(i) {
     if (isTRUE(attributes(i)$factor)) {
       as.factor(i)
@@ -74,38 +75,6 @@ visualisation_matrix.glm <- function(x,
 
 
 
-
-
-#' @export
-visualisation_matrix.lm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.brmsfit <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.stanreg <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.polr <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.merMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.lmerMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.glmerMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.glmmTMB <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.MixMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.svyglm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.hurdle <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.zeroinfl <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.ivreg <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.gamm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.list <- visualisation_matrix.glm # list is gamm4
 
 
 
