@@ -119,8 +119,8 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
     } else if (is.list(target)) {
 
       # we have a list as at-values
-      facs <- target[sapply(target, is.factor)]
-      nums <- target[sapply(target, is.numeric)]
+      facs <- target[sapply(x[names(target)], is.factor)]
+      nums <- target[sapply(x[names(target)], is.numeric)]
     }
 
     # Assemble the two - the goal is to have two named lists, where variable
