@@ -59,6 +59,9 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
   if (!is.null(target)) at <- target
   target <- at
 
+  # find numerics that were coerced to factor in-formula
+  numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
+
   if (is.null(target)) {
     specs <- NULL
     targets <- data.frame()
@@ -159,6 +162,14 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
   # Prepare output =============================================================
   # Reset row names
   row.names(targets) <- NULL
+
+  # convert factors back to numeric, if these variables were actually
+  # numeric in the original data
+  if (!is.null(numeric_factors) && length(numeric_factors)) {
+    for (i in numeric_factors) {
+      targets[[i]] <- .factor_to_numeric(targets[[i]])
+    }
+  }
 
   # Attributes
   attr(targets, "adjusted_for") <- ifelse(length(rest_vars) >= 1, rest_vars, NA)

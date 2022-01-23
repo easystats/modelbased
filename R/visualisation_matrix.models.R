@@ -12,24 +12,12 @@ visualisation_matrix.default <- function(x,
                                          include_smooth = TRUE,
                                          include_random = FALSE,
                                          include_response = FALSE,
+                                         data = NULL,
                                          ...) {
   # Retrieve data from model
-  model_data <- insight::get_data(x)
-  data <- model_data[insight::find_variables(x, "all", flatten = TRUE)]
-
-  # find numerics that were coerced to factor in-formula
-  numeric_factors <- attributes(model_data)$factors
-  numeric_factors <- intersect(numeric_factors, colnames(data))
-
-  # Deal with factor transformations
-  data[] <- lapply(data, function(i) {
-    if (isTRUE(attributes(i)$factor)) {
-      as.factor(i)
-    } else {
-      i
-    }
-  })
-
+  if (is.null(data)) {
+    data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
+  }
 
   # Deal with intercept-only models
   if (include_response == FALSE) {
@@ -70,14 +58,6 @@ visualisation_matrix.default <- function(x,
 
   if (include_smooth == FALSE) {
     vm[names(vm) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))] <- NULL
-  }
-
-  # convert factors back to numeric, if these variables were actually
-  # numeric in the original data
-  if (!is.null(numeric_factors) && length(numeric_factors)) {
-    for (i in numeric_factors) {
-      vm[[i]] <- .factor_to_numeric(vm[[i]])
-    }
   }
 
   attr(vm, "model") <- x
