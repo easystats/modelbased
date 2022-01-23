@@ -71,7 +71,7 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
       target <- names(x)
     }
 
-    if (is.numeric(target)) {
+    if (is.numeric(target) || is.logical(target)) {
       target <- names(x)[target]
     }
 
