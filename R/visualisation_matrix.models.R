@@ -14,11 +14,14 @@ visualisation_matrix.default <- function(x,
                                          include_response = FALSE,
                                          ...) {
   # Retrieve data from model
-  data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
+  model_data <- insight::get_data(x)
+  data <- model_data[insight::find_variables(x, "all", flatten = TRUE)]
+
+  # find numerics that were coerced to factor in-formula
+  numeric_factors <- attributes(model_data)$factors
+  numeric_factors <- intersect(numeric_factors, colnames(data))
 
   # Deal with factor transformations
-  # f <- insight::find_terms(model)
-  numeric_factors <- attributes(data)$factors
   data[] <- lapply(data, function(i) {
     if (isTRUE(attributes(i)$factor)) {
       as.factor(i)
@@ -69,6 +72,14 @@ visualisation_matrix.default <- function(x,
     vm[names(vm) %in% insight::clean_names(insight::find_smooth(x, flatten = TRUE))] <- NULL
   }
 
+  # convert factors back to numeric, if these variables were actually
+  # numeric in the original data
+  if (!is.null(numeric_factors) && length(numeric_factors)) {
+    for (i in numeric_factors) {
+      vm[[i]] <- .factor_to_numeric(vm[[i]])
+    }
+  }
+
   attr(vm, "model") <- x
   vm
 }
@@ -91,4 +102,30 @@ visualisation_matrix.visualisation_matrix <- function(x, reference = attributes(
   }
 
   grid
+}
+
+
+
+# helpers -------------
+.factor_to_numeric <- function(x, lowest = NULL)
+{
+  if (is.numeric(x)) {
+    return(x)
+  }
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    if (is.character(x)) {
+      x <- as.factor(x)
+    }
+    x <- droplevels(x)
+    levels(x) <- 1:nlevels(x)
+  }
+  out <- as.numeric(as.character(x))
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+  out
 }
