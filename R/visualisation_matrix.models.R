@@ -3,29 +3,21 @@
 # -------------------------------------------------------------------------
 
 #' @export
-visualisation_matrix.glm <- function(x,
-                                     at = "all",
-                                     factors = "reference",
-                                     numerics = "mean",
-                                     preserve_range = TRUE,
-                                     reference = x,
-                                     include_smooth = TRUE,
-                                     include_random = FALSE,
-                                     include_response = FALSE,
-                                     ...) {
+visualisation_matrix.default <- function(x,
+                                         at = "all",
+                                         factors = "reference",
+                                         numerics = "mean",
+                                         preserve_range = TRUE,
+                                         reference = x,
+                                         include_smooth = TRUE,
+                                         include_random = FALSE,
+                                         include_response = FALSE,
+                                         data = NULL,
+                                         ...) {
   # Retrieve data from model
-  data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
-
-  # Deal with factor transformations
-  # f <- insight::find_terms(model)
-  data[] <- lapply(data, function(i) {
-    if (isTRUE(attributes(i)$factor)) {
-      as.factor(i)
-    } else {
-      i
-    }
-  })
-
+  if (is.null(data)) {
+    data <- insight::get_data(x)[insight::find_variables(x, "all", flatten = TRUE)]
+  }
 
   # Deal with intercept-only models
   if (include_response == FALSE) {
@@ -76,38 +68,6 @@ visualisation_matrix.glm <- function(x,
 
 
 
-#' @export
-visualisation_matrix.lm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.brmsfit <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.stanreg <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.polr <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.merMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.lmerMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.glmerMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.glmmTMB <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.MixMod <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.svyglm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.hurdle <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.zeroinfl <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.ivreg <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.gamm <- visualisation_matrix.glm
-#' @export
-visualisation_matrix.list <- visualisation_matrix.glm # list is gamm4
-
-
 
 # -------------------------------------------------------------------------
 # Below are visualisation_matrix functions that work on visualisation_matrix
@@ -122,4 +82,30 @@ visualisation_matrix.visualisation_matrix <- function(x, reference = attributes(
   }
 
   grid
+}
+
+
+
+# helpers -------------
+.factor_to_numeric <- function(x, lowest = NULL)
+{
+  if (is.numeric(x)) {
+    return(x)
+  }
+  if (is.logical(x)) {
+    return(as.numeric(x))
+  }
+  if (anyNA(suppressWarnings(as.numeric(as.character(stats::na.omit(x)))))) {
+    if (is.character(x)) {
+      x <- as.factor(x)
+    }
+    x <- droplevels(x)
+    levels(x) <- 1:nlevels(x)
+  }
+  out <- as.numeric(as.character(x))
+  if (!is.null(lowest)) {
+    difference <- min(out) - lowest
+    out <- out - difference
+  }
+  out
 }

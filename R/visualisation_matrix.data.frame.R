@@ -3,7 +3,7 @@
 #' Create a reference matrix, useful for visualisation, with evenly spread and combined values. `data_matrix()` is an alternative name for `visualisation_matrix()`.
 #'
 #' @param x An object from which to construct the reference grid.
-#' @param at,target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (e.g., `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (`target` is the deprecated name of that argument).
+#' @param at,target Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. `at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))`, or as string, e.g. `at = "Sepal.Length = 2"` or `at = c("Sepal.Length = 2", "Species = 'setosa'")` - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (`target` is the deprecated name of that argument).
 #' @param length Length of numeric "at" variables.
 #' @param range Can be one of `c("range", "iqr", "ci", "hdi", "eti")`. If `"range"` (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is `95%` but this can be changed by setting something else, e.g., `ci = 0.90`). See [IQR()] and [bayestestR::ci()].
 #' @param factors Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.
@@ -36,6 +36,9 @@
 #' visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
 #' visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
+#' # with list-style at-argument
+#' visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#'
 #' # Standardize
 #' vizdata <- visualisation_matrix(data, at = "Sepal.Length")
 #' effectsize::standardize(vizdata)
@@ -59,8 +62,12 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
   if (!is.null(target)) at <- target
   target <- at
 
+  # find numerics that were coerced to factor in-formula
+  numeric_factors <- colnames(x)[sapply(x, function(i) isTRUE(attributes(i)$factor))]
+
+  specs <- NULL
+
   if (is.null(target)) {
-    specs <- NULL
     targets <- data.frame()
   } else {
     # Valid target argument
@@ -68,18 +75,12 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
       target <- names(x)
     }
 
-    if (is.numeric(target)) {
+    if (is.numeric(target) || is.logical(target)) {
       target <- names(x)[target]
     }
 
-    # Deal with targets ==========================================================
+    # Deal with factor in-formula transformations ============================
 
-    # Find eventual user-defined specifications for each target
-    specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
-    specs$varname <- as.character(specs$varname) # make sure it's a string not fac
-    specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
-
-    # Deal with factor transformations
     x[] <- lapply(x, function(i) {
       if (isTRUE(attributes(i)$factor)) {
         as.factor(i)
@@ -88,23 +89,43 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
       }
     })
 
-    specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
-    # Create target list of factors -----------------------------------------
-    facs <- list()
-    for (fac in specs[specs$is_factor == TRUE, "varname"]) {
-      facs[[fac]] <- visualisation_matrix(x[[fac]], target = specs[specs$varname == fac, "expression"])
+    # Deal with targets ==========================================================
+
+    if (is.character(target)) {
+
+      # Find eventual user-defined specifications for each target
+      specs <- do.call(rbind, lapply(target, .visualisation_matrix_clean_target, x = x))
+      specs$varname <- as.character(specs$varname) # make sure it's a string not fac
+      specs <- specs[!duplicated(specs$varname), ] # Drop duplicates
+
+      specs$is_factor <- sapply(x[specs$varname], function(x) is.factor(x) || is.character(x))
+
+      # Create target list of factors -----------------------------------------
+      facs <- list()
+      for (fac in specs[specs$is_factor == TRUE, "varname"]) {
+        facs[[fac]] <- visualisation_matrix(x[[fac]],
+                                            target = specs[specs$varname == fac, "expression"])
+      }
+
+      # Create target list of numerics ----------------------------------------
+      nums <- list()
+      for (num in specs[specs$is_factor == FALSE, "varname"]) {
+        nums[[num]] <- visualisation_matrix(x[[num]],
+                                            target = specs[specs$varname == num, "expression"],
+                                            reference = reference[[num]],
+                                            ...
+        )
+      }
+    } else if (is.list(target)) {
+
+      # we have a list as at-values
+      facs <- target[sapply(x[names(target)], is.factor)]
+      nums <- target[sapply(x[names(target)], is.numeric)]
     }
 
-    # Create target list of numerics ----------------------------------------
-    nums <- list()
-    for (num in specs[specs$is_factor == FALSE, "varname"]) {
-      nums[[num]] <- visualisation_matrix(x[[num]],
-        target = specs[specs$varname == num, "expression"],
-        reference = reference[[num]],
-        ...
-      )
-    }
-    # Assemble the two
+    # Assemble the two - the goal is to have two named lists, where variable
+    # names are the names of the list-elements: one list contains elements of
+    # numeric variables, the other one factors.
     targets <- expand.grid(c(nums, facs))
 
     # Preserve range ---------------------------------------------------------
@@ -159,6 +180,14 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
   # Prepare output =============================================================
   # Reset row names
   row.names(targets) <- NULL
+
+  # convert factors back to numeric, if these variables were actually
+  # numeric in the original data
+  if (!is.null(numeric_factors) && length(numeric_factors)) {
+    for (i in numeric_factors) {
+      targets[[i]] <- .factor_to_numeric(targets[[i]])
+    }
+  }
 
   # Attributes
   attr(targets, "adjusted_for") <- ifelse(length(rest_vars) >= 1, rest_vars, NA)
