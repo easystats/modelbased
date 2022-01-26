@@ -3,6 +3,7 @@
 \docType{import}
 \name{reexports}
 \alias{reexports}
+\alias{visualisation_recipe}
 \alias{standardize}
 \alias{unstandardize}
 \title{Objects exported from other packages}
@@ -12,6 +13,6 @@ These objects are imported from other packages. Follow the links
 below to see their documentation.
 
 \describe{
-  \item{datawizard}{\code{\link[datawizard]{standardize}}, \code{\link[datawizard:standardize]{unstandardize}}}
+  \item{datawizard}{\code{\link[datawizard]{standardize}}, \code{\link[datawizard:standardize]{unstandardize}}, \code{\link[datawizard]{visualisation_recipe}}}
 }}
 
