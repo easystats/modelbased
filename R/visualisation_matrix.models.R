@@ -87,8 +87,7 @@ visualisation_matrix.visualisation_matrix <- function(x, reference = attributes(
 
 
 # helpers -------------
-.factor_to_numeric <- function(x, lowest = NULL)
-{
+.factor_to_numeric <- function(x, lowest = NULL) {
   if (is.numeric(x)) {
     return(x)
   }

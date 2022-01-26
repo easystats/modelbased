@@ -29,7 +29,7 @@
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
 #' plot(means) # which runs visualisation_recipe()
-#' effectsize::standardize(means)
+#' standardize(means)
 #' \donttest{
 #' if (require("lme4")) {
 #'   data <- iris

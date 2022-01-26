@@ -37,7 +37,7 @@
 #'
 #' # Standardized differences
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
-#' effectsize::standardize(estimated)
+#' standardize(estimated)
 #'
 #' # Other models (mixed, Bayesian, ...)
 #' if (require("lme4")) {

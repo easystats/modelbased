@@ -77,5 +77,5 @@ visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa")
 
 # Standardize
 vizdata <- visualisation_matrix(data, at = "Sepal.Length")
-effectsize::standardize(vizdata)
+standardize(vizdata)
 }
