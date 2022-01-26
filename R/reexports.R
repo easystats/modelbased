@@ -8,6 +8,6 @@ datawizard::visualisation_recipe
 datawizard::standardize
 
 #' @export
-#' @importFrom datawizard standardize
+#' @importFrom datawizard unstandardize
 datawizard::unstandardize
 
