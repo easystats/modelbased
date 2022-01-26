@@ -87,7 +87,7 @@
 #' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 #' slopes
 #' plot(slopes)
-#' effectsize::standardize(slopes)
+#' standardize(slopes)
 #'
 #' if (require("mgcv")) {
 #'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)

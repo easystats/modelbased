@@ -213,9 +213,9 @@ plot(pred)
 
 # Standardize predictions
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
-z <- effectsize::standardize(pred, include_response = FALSE)
+z <- standardize(pred, include_response = FALSE)
 z
-effectsize::unstandardize(z, include_response = FALSE)
+unstandardize(z, include_response = FALSE)
 
 # Logistic Models
 model <- glm(vs ~ wt, data = mtcars, family = "binomial")

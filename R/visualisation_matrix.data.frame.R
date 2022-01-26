@@ -41,7 +41,7 @@
 #'
 #' # Standardize
 #' vizdata <- visualisation_matrix(data, at = "Sepal.Length")
-#' effectsize::standardize(vizdata)
+#' standardize(vizdata)
 #' @export
 visualisation_matrix <- function(x, ...) {
   UseMethod("visualisation_matrix")

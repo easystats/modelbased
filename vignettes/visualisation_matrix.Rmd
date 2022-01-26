@@ -330,7 +330,7 @@ Let's use the same model as above, and then obtain a data grid with specific val
 ```{r message=FALSE, warning=FALSE}
 vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>% 
   visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>% 
-  effectsize::unstandardize(vizdata, select = "Petal.Width") %>% 
+  unstandardize(vizdata, select = "Petal.Width") %>% 
   estimate_relation(vizdata) 
 
 vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)

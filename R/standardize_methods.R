@@ -5,7 +5,7 @@
 #' @method standardize visualisation_matrix
 #' @export
 standardize.visualisation_matrix <- function(x, ...) {
-  x[names(x)] <- effectsize::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x[names(x)] <- datawizard::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
   x
 }
 
@@ -19,15 +19,15 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
-  x[names(data)] <- effectsize::standardize(as.data.frame(x)[names(data)], reference = data, ...)
+  x[names(data)] <- datawizard::standardize(as.data.frame(x)[names(data)], reference = data, ...)
 
   # Standardize response
   if (include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
-    disp <- attributes(effectsize::standardize(resp, ...))$scale
+    disp <- attributes(datawizard::standardize(resp, ...))$scale
     for (col in c("Predicted", "Mean", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
-        x[col] <- effectsize::standardize(x[[col]], reference = resp, ...)
+        x[col] <- datawizard::standardize(x[[col]], reference = resp, ...)
       }
     }
     for (col in c("SE", "MAD")) {
@@ -80,7 +80,7 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 #' @method unstandardize visualisation_matrix
 #' @export
 unstandardize.visualisation_matrix <- function(x, ...) {
-  x[names(x)] <- effectsize::unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
+  x[names(x)] <- datawizard::unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
   x
 }
 
@@ -93,15 +93,15 @@ unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
-  x[names(data)] <- effectsize::unstandardize(as.data.frame(x)[names(data)], reference = data, ...)
+  x[names(data)] <- datawizard::unstandardize(as.data.frame(x)[names(data)], reference = data, ...)
 
   # Standardize response
   if (include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
-    disp <- attributes(effectsize::standardize(resp, ...))$scale
+    disp <- attributes(datawizard::standardize(resp, ...))$scale
     for (col in c("Predicted", "Mean", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
-        x[col] <- effectsize::unstandardize(x[[col]], reference = resp, ...)
+        x[col] <- datawizard::unstandardize(x[[col]], reference = resp, ...)
       }
     }
     for (col in c("SE", "MAD")) {
