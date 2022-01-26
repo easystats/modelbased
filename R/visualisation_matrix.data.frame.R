@@ -104,16 +104,17 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
       facs <- list()
       for (fac in specs[specs$is_factor == TRUE, "varname"]) {
         facs[[fac]] <- visualisation_matrix(x[[fac]],
-                                            target = specs[specs$varname == fac, "expression"])
+          target = specs[specs$varname == fac, "expression"]
+        )
       }
 
       # Create target list of numerics ----------------------------------------
       nums <- list()
       for (num in specs[specs$is_factor == FALSE, "varname"]) {
         nums[[num]] <- visualisation_matrix(x[[num]],
-                                            target = specs[specs$varname == num, "expression"],
-                                            reference = reference[[num]],
-                                            ...
+          target = specs[specs$varname == num, "expression"],
+          reference = reference[[num]],
+          ...
         )
       }
     } else if (is.list(target)) {

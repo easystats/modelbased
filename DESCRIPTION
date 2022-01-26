@@ -35,9 +35,9 @@ Depends:
     R (>= 3.4)
 Imports:
     bayestestR (>= 0.11.5),
-    effectsize (>= 0.6.0),
+    effectsize (>= 0.6.0.1),
     insight (>= 0.15.0),
-    datawizard (>= 0.2.2),
+    datawizard (>= 0.2.3),
     parameters (>= 0.16.0),
     performance,
     graphics,
@@ -68,8 +68,6 @@ Suggests:
     see (>= 0.6.5),
     spelling,
     testthat
-Remotes:
-    easystats/datawizard
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2
