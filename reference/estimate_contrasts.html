@@ -325,7 +325,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span class="co"># Standardized differences</span></span>
 <span class="r-in"><span class="va">estimated</span> <span class="op">&lt;-</span> <span class="fu">estimate_contrasts</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-in"><span class="fu">effectsize</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis (standardized)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
