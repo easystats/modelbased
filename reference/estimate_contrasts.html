@@ -139,13 +139,12 @@ section in the <code><a href="https://rdrr.io/pkg/emmeans/man/summary.emmGrid.ht
 <a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html" class="external-link">Vignettes</a>
 and <a href="https://easystats.github.io/modelbased/index.html#features" class="external-link">README examples</a> for
 various examples, tutorials and use cases.</p>
-<p>The <code><a href="estimate_slopes.html">estimate_slopes()</a></code>, <code><a href="estimate_means.html">estimate_means()</a></code> and
-<code>estimate_contrasts()</code> functions are forming a group, as they are all based
-on <em>marginal</em> estimations (estimations based on a model). All three are
-also built on the <span class="pkg">emmeans</span> package, so reading its documentation (for
-instance for <code><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans::emmeans()</a></code> and <code><a href="https://rdrr.io/pkg/emmeans/man/emtrends.html" class="external-link">emmeans::emtrends()</a></code>) is recommended
-to understand the idea behind these types of procedures.</p>
-<ul><li><p>Model-based <strong>predictions</strong> is the basis for all that follows. Indeed,
+<p>The <code><a href="estimate_slopes.html">estimate_slopes()</a></code>, <code><a href="estimate_means.html">estimate_means()</a></code> and <code>estimate_contrasts()</code>
+functions are forming a group, as they are all based on <em>marginal</em>
+estimations (estimations based on a model). All three are also built on the
+<span class="pkg">emmeans</span> package, so reading its documentation (for instance for
+<code><a href="https://rdrr.io/pkg/emmeans/man/emmeans.html" class="external-link">emmeans::emmeans()</a></code> and <code><a href="https://rdrr.io/pkg/emmeans/man/emtrends.html" class="external-link">emmeans::emtrends()</a></code>) is recommended to understand
+the idea behind these types of procedures.</p><ul><li><p>Model-based <strong>predictions</strong> is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
 (see <code><a href="estimate_expectation.html">estimate_link()</a></code>). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors (i.e.,
@@ -175,7 +174,7 @@ of interactions or non-linear relationships, when the effect of a predictor
 variable changes depending on the other predictors. Moreover, these effects
 can also be "averaged" over other predictors, to get for instance the
 "general trend" of a predictor over different factor levels.</p></li>
-</ul><p><strong>Example:</strong> let's imagine the following model <code>lm(y ~ condition * x)</code> where
+</ul><p><strong>Example:</strong> Let's imagine the following model <code>lm(y ~ condition * x)</code> where
 <code>condition</code> is a factor with 3 levels A, B and C and <code>x</code> a continuous
 variable (like age for example). One idea is to see how this model performs,
 and compare the actual response y to the one predicted by the model (using
