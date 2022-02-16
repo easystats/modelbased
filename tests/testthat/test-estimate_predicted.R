@@ -111,8 +111,10 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     estim <- estimate_expectation(model)
     expect_equal(dim(estim), c(32, 8))
 
-    estim <- estimate_expectation(model, ci = NULL)
-    expect_equal(dim(estim), c(32, 5))
+    if (utils::packageVersion("insight") > "0.15.0") {
+      estim <- estimate_expectation(model, ci = NULL)
+      expect_equal(dim(estim), c(32, 5))
+    }
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
     estim <- estimate_link(model, target = "wt")
