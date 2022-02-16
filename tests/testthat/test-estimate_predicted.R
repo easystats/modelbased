@@ -34,12 +34,12 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
 
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-    expect_equal(nrow(modelbased::estimate_link(model, length = 5)), 5)
+    expect_equal(nrow(modelbased::estimate_link(model, length = 5, verbose = FALSE)), 5)
     expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
     # GLMMTMB
     model <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
-    expect_equal(nrow(modelbased::estimate_link(model, length = 5)), 5)
+    expect_equal(nrow(modelbased::estimate_link(model, length = 5, verbose = FALSE)), 5)
     expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
     # MGCV
@@ -53,8 +53,8 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
       random = ~ (1 | Species), data = iris
     )
-    expect_equal(nrow(modelbased::estimate_link(model, length = 3)), 9)
-    expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
+    expect_equal(nrow(modelbased::estimate_link(model, length = 3, verbose = FALSE)), 9)
+    expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3, verbose = FALSE)), c(3, 5))
 
 
     if (!osx) {
@@ -112,7 +112,7 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     expect_equal(dim(estim), c(32, 8))
 
     estim <- estimate_expectation(model, ci = NULL)
-    expect_equal(dim(estim), c(32, 6))
+    expect_equal(dim(estim), c(32, 5))
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
     estim <- estimate_link(model, target = "wt")
