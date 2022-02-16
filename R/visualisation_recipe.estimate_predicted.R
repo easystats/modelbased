@@ -177,6 +177,9 @@ visualisation_recipe.estimate_predicted <- function(x,
       # Change scale to 1-2 in case outcome is factor (see #120)
       if (!all(unique(rawdata[[y]]) %in% c(0, 1))) {
         data[c("Predicted", "CI_low", "CI_high")] <- data[c("Predicted", "CI_low", "CI_high")] + 1
+      } else {
+        # Else force to numeric and not factor
+        rawdata[[y]] <- as.numeric(as.character(rawdata[[y]]))
       }
     }
 

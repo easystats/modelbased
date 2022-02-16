@@ -109,7 +109,7 @@ model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
 
 # 3. Revert from expected SD to actual values
-vizdata <- effectsize::unstandardize(vizdata, select = "Petal.Width")
+vizdata <- unstandardize(vizdata, select = "Petal.Width")
 
 # 4. Add predicted relationship from the model
 vizdata <- modelbased::estimate_expectation(vizdata)
@@ -293,13 +293,13 @@ pred1$Petal.Length <- iris$Petal.Length # Add true response
 head(pred1, n = 5)
 ## Model-based Expectation
 ## 
-## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length
+## Petal.Length | Sepal.Length | Predicted |   SE |       95% CI | Residuals
 ## -------------------------------------------------------------------------
-## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |      0.98 |         1.40
-## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |      0.60 |         1.40
-## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |      0.33 |         1.30
-## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |     -0.05 |         1.50
-## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |      0.79 |         1.40
+## 1.40         |         5.10 |      2.38 | 0.10 | [2.19, 2.57] |      0.98
+## 1.40         |         4.90 |      2.00 | 0.11 | [1.79, 2.22] |      0.60
+## 1.30         |         4.70 |      1.63 | 0.12 | [1.39, 1.87] |      0.33
+## 1.50         |         4.60 |      1.45 | 0.13 | [1.19, 1.70] |     -0.05
+## 1.40         |         5.00 |      2.19 | 0.10 | [1.99, 2.39] |      0.79
 ## 
 ## Variable predicted: Petal.Length
 
@@ -366,6 +366,14 @@ plot(random)
 -   **Solution**: You can estimate the *derivative* of smooth using
     `estimate_slopes`.
 
+The two plots below represent the modeled (non-linear) effect estimated
+by the model, i.e., the relationship between the outcome and the
+predictor, as well as the “trend” (or slope) of that relationship at any
+given point. You can see that whenever the slope is negative, the effect
+is below 0, and vice versa, with some regions of the effect being
+significant (i.e., positive or negative with enough confidence) while
+the others denote regions where the relationship is rather flat.
+
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
 for a detailed walkthrough on *marginal effects*.
@@ -381,8 +389,11 @@ deriv <- estimate_slopes(model,
   length = 100
 )
 
-# 2. Visualise
-plot(deriv)
+# 2. Visualize predictions and derivative
+see::plots(
+  plot(estimate_relation(model)),
+  plot(deriv), n_rows = 2
+)
 ```
 
 ![](man/figures/unnamed-chunk-12-1.png)<!-- -->
