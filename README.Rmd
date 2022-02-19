@@ -18,6 +18,7 @@ editor_options:
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(dplyr)
+library(patchwork)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -285,9 +286,11 @@ plot(random)
 - **Problem**:  You model a non-linear relationship using polynomials, splines or GAMs. You want to know which parts of the curve are significant positive or negative trends.
 - **Solution**: You can estimate the *derivative* of smooth using `estimate_slopes`.
 
+The two plots below represent the modeled (non-linear) effect estimated by the model, i.e., the relationship between the outcome and the predictor, as well as the "trend" (or slope) of that relationship at any given point. You can see that whenever the slope is negative, the effect is below 0, and vice versa, with some regions of the effect being significant (i.e., positive or negative with enough confidence) while the others denote regions where the relationship is rather flat.  
+
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html) for a detailed walkthrough on *marginal effects*.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, fig.height=10, fig.width=8}
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
@@ -298,9 +301,13 @@ deriv <- estimate_slopes(model,
   length = 100
 )
 
-# 2. Visualise
-plot(deriv)
+# 2. Visualize predictions and derivative
+see::plots(
+  plot(estimate_relation(model)),
+  plot(deriv), n_rows = 2
+)
 ```
+
 
 
 ## Describe the smooth term by its linear parts
