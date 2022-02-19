@@ -143,7 +143,7 @@
 #' model <- lm(mpg ~ wt, data = mtcars)
 #'
 #' # Get predicted and prediction interval (see insight::get_predicted)
-#' estimate_response(model)
+#' estimate_expectation(model)
 #'
 #' # Get expected values with confidence interval
 #' pred <- estimate_relation(model)
@@ -160,13 +160,13 @@
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-#' estimate_response(model)
+#' estimate_expectation(model)
 #' estimate_relation(model)
 #'
 #' # Mixed models
 #' if (require("lme4")) {
 #'   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-#'   estimate_response(model)
+#'   estimate_expectation(model)
 #'   estimate_relation(model)
 #' }
 #'
@@ -174,7 +174,7 @@
 #' \donttest{
 #' if (require("rstanarm")) {
 #'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0, iter = 200)
-#'   estimate_response(model)
+#'   estimate_expectation(model)
 #'   estimate_relation(model)
 #' }
 #' }
