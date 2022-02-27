@@ -59,6 +59,7 @@ Suggests:
     logspline,
     MASS,
     Matrix,
+    marginaleffects,
     merTools,
     mgcv,
     patchwork,
