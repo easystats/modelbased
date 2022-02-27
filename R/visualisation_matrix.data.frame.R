@@ -299,41 +299,6 @@ visualisation_matrix.double <- visualisation_matrix.numeric
 
 
 
-
-
-# Factors & Characters ----------------------------------------------------
-
-
-#' @rdname visualisation_matrix
-#' @export
-visualisation_matrix.factor <- function(x, ...) {
-
-  # Check and clean the target argument
-  specs <- .visualisation_matrix_clean_target(x, ...)
-
-  if (is.na(specs$expression)) {
-
-    # Keep only unique levels
-    if (is.factor(x)) {
-      out <- factor(levels(droplevels(x)), levels = levels(droplevels(x)))
-    } else {
-      out <- unique(x)
-    }
-  } else {
-    # Run the expression cleaned from target
-    out <- eval(parse(text = specs$expression))
-  }
-  out
-}
-
-#' @export
-visualisation_matrix.character <- visualisation_matrix.factor
-
-#' @export
-visualisation_matrix.logical <- visualisation_matrix.character
-
-
-
 #' @keywords internal
 .create_spread <- function(x, length = 10, range = "range", ci = 0.95, ...) {
   range <- match.arg(tolower(range), c("range", "iqr", "ci", "hdi", "eti"))
@@ -359,6 +324,25 @@ visualisation_matrix.logical <- visualisation_matrix.character
   }
   seq(mini, maxi, length.out = length)
 }
+
+
+# Factors & Characters ----------------------------------------------------
+
+
+#' @rdname visualisation_matrix
+#' @export
+visualisation_matrix.factor <- function(x, ...) {
+  insight::get_datagrid(x, ...)
+}
+
+#' @export
+visualisation_matrix.character <- visualisation_matrix.factor
+
+#' @export
+visualisation_matrix.logical <- visualisation_matrix.character
+
+
+
 
 
 # Utilities -----------------------------------------------------------------
