@@ -29,10 +29,10 @@ if (require("testthat") && require("modelbased") && require("lme4") && require("
   test_that("estimate_expectation - data-grid", {
     model <- lmer(mpg ~ wt + factor(am) + (1 | cyl), data = mtcars)
     estim <- estimate_expectation(model, data = "grid")
-    expect_equal(dim(estim), c(12, 6))
+    expect_equal(dim(estim), c(12, 7))
     expect_equal(
       colnames(estim),
-      c("wt", "am", "Predicted", "SE", "CI_low", "CI_high")
+      c("wt", "am", "cyl", "Predicted", "SE", "CI_low", "CI_high")
     )
 
     m <- lm(mpg ~ 1, data = mtcars)

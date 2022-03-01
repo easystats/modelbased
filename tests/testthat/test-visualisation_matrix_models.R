@@ -12,12 +12,12 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
     expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = TRUE)), 2)
-    expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 1)
+    expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 2)
 
     # GLMMTMB
     model <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
     expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = TRUE)), 2)
-    expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 1)
+    expect_equal(ncol(modelbased::visualisation_matrix(model, include_random = FALSE)), 2)
 
     # MGCV
     model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
