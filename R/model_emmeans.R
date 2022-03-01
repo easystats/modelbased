@@ -122,7 +122,7 @@ model_emmeans <- function(model,
       } else {
         target <- args$at
       }
-      grid <- visualisation_matrix(data, at = target, ...)
+      grid <- insight::get_datagrid(data, at = target, ...)
       args$at <- attributes(grid)$at_specs$varname
       args$data_matrix <- as.data.frame(grid[args$at])
       if (length(args$at) == 0) args$at <- NULL # Post-clean
@@ -131,7 +131,7 @@ model_emmeans <- function(model,
 
   # Deal with 'contrast'
   if (!is.null(args$contrast)) {
-    contrast <- visualisation_matrix(data, at = args$contrast, ...)
+    contrast <- insight::get_datagrid(data, at = args$contrast, ...)
     args$contrast <- attributes(contrast)$at_specs$varname
     contrast <- as.data.frame(contrast[args$contrast])
     if (is.null(args$data_matrix)) {
@@ -144,7 +144,7 @@ model_emmeans <- function(model,
 
   # Deal with 'fixed'
   if (!is.null(args$fixed)) {
-    fixed <- visualisation_matrix(data[args$fixed], at = NULL, ...)
+    fixed <- insight::get_datagrid(data[args$fixed], at = NULL, ...)
     if (is.null(args$data_matrix)) {
       args$data_matrix <- fixed
     } else {

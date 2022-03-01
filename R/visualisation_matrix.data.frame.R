@@ -274,24 +274,7 @@ visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factor
 #' @rdname visualisation_matrix
 #' @export
 visualisation_matrix.numeric <- function(x, length = 10, range = "range", ...) {
-
-  # Sanity check
-  if (!is.numeric(length)) {
-    stop("`length` argument should be an number.")
-  }
-
-  # Check and clean the target argument
-  specs <- .visualisation_matrix_clean_target(x, ...)
-
-  if (is.na(specs$expression)) {
-    # Create a spread
-    out <- .create_spread(x, length = length, range = range, ...)
-  } else {
-    # Run the expression cleaned from target
-    out <- eval(parse(text = specs$expression))
-  }
-
-  out
+  insight::get_datagrid(x, ...)
 }
 
 #' @export
