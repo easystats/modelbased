@@ -36,18 +36,18 @@ if (require("testthat") && require("modelbased")) {
 
   test_that("visualisation_matrix - dataframes", {
     expect_equal(nrow(visualisation_matrix(iris, length = 2)), 48)
-    expect_equal(nrow(visualisation_matrix(iris, target = "Species", length = 2, numerics = 0)), 3)
-    expect_equal(nrow(visualisation_matrix(iris, target = "Sepal.Length", length = 3)), 3)
+    expect_equal(nrow(visualisation_matrix(iris, at = "Species", length = 2, numerics = 0)), 3)
+    expect_equal(nrow(visualisation_matrix(iris, at = "Sepal.Length", length = 3)), 3)
 
     expect_equal(nrow(visualisation_matrix(data.frame(
       X = c("A", "A", "B"),
       Y = c(1, 5, 2)
     ), target = "Y", factors = "mode", length = 5)), 5)
 
-    expect_equal(nrow(visualisation_matrix(iris, target = c("Sepal.Length = 3", "Species"))), 3)
-    expect_equal(nrow(visualisation_matrix(iris, target = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))), 2)
+    expect_equal(nrow(visualisation_matrix(iris, at = c("Sepal.Length = 3", "Species"))), 3)
+    expect_equal(nrow(visualisation_matrix(iris, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))), 2)
 
-    x1 <- visualisation_matrix(iris, target = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)
+    x1 <- visualisation_matrix(iris, at = c("Species", "Sepal.Length"), length = 30, preserve_range = TRUE)
     expect_equal(dim(x1), c(55, 5))
     x2 <- visualisation_matrix(iris[c("Species", "Sepal.Length")], length = 30, preserve_range = TRUE)
     expect_equal(dim(x2), c(55, 2))
