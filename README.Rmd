@@ -391,7 +391,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-As we can see, all participants has now a different effect. Let's plot, on top of that, the "fixed" effect estimated across all these individual effects.
+As we can see, the effect is now different for all participants. Let's plot, on top of that, the "fixed" effect estimated across all these individual effects.
 
 ```{r message=FALSE, warning=FALSE}
 fixed_pred <- estimate_relation(model) # This time, include_random is FALSE (default)
