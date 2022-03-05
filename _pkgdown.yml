@@ -30,6 +30,7 @@ reference:
   contents:
   - describe_nonlinear
   - model_emmeans
+  - model_marginaleffects
   - find_inversions
   - zero_crossings
   - smoothing
