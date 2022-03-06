@@ -506,9 +506,9 @@ plot(preds, ribbon = list(alpha = 0.1))
 
 ![](man/figures/unnamed-chunk-17-1.png)<!-- -->
 
-As we can see, all participants has now a different effect. Let’s plot,
-on top of that, the “fixed” effect estimated across all these individual
-effects.
+As we can see, the effect is now different for all participants. Let’s
+plot, on top of that, the “fixed” effect estimated across all these
+individual effects.
 
 ``` r
 fixed_pred <- estimate_relation(model) # This time, include_random is FALSE (default)
@@ -519,3 +519,10 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
 ```
 
 ![](man/figures/unnamed-chunk-18-1.png)<!-- -->
+
+## Code of Conduct
+
+Please note that the modelbased project is released with a [Contributor
+Code of
+Conduct](https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.

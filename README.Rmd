@@ -400,3 +400,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_ribbon(data = fixed_pred, aes(x = Days, ymin = CI_low, ymax = CI_high), alpha = 0.4) +
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), size = 2)
 ```
+
+## Code of Conduct
+
+Please note that the modelbased project is released with a [Contributor Code of Conduct](https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html). By contributing to this project, you agree to abide by its terms.
