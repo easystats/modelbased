@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,7 +66,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Create a reference grid</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/HEAD/R/visualisation_matrix.data.frame.R" class="external-link"><code>R/visualisation_matrix.data.frame.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/HEAD/R/visualisation_matrix.R" class="external-link"><code>R/visualisation_matrix.R</code></a></small>
       <div class="d-none name"><code>visualisation_matrix.Rd</code></div>
     </div>
 
@@ -77,8 +77,6 @@
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">data_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for data.frame</span>
 <span class="fu">visualisation_matrix</span><span class="op">(</span>
@@ -93,7 +91,7 @@
 <span class="op">)</span>
 
 <span class="co"># S3 method for numeric</span>
-<span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, length <span class="op">=</span> <span class="fl">10</span>, range <span class="op">=</span> <span class="st">"range"</span>, <span class="va">...</span><span class="op">)</span>
+<span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
 
 <span class="co"># S3 method for factor</span>
 <span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
@@ -105,20 +103,18 @@
 <dd><p>An object from which to construct the reference grid.</p></dd>
 <dt>...</dt>
 <dd><p>Arguments passed to or from other methods (for instance, <code>length</code> or <code>range</code> to control the spread of numeric variables.).</p></dd>
-<dt>at, target</dt>
-<dd><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>, or as string, e.g. <code>at = "Sepal.Length = 2"</code> or <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed. (<code>target</code> is the deprecated name of that argument).</p></dd>
+<dt>at</dt>
+<dd><p>Can be "all" or list of characters indicating columns of interest. Can also contain assignments (as named list, e.g. <code>at = list(c(Sepal.Length = c(2, 4), Species = "setosa"))</code>, or as string, e.g. <code>at = "Sepal.Length = 2"</code> or <code>at = c("Sepal.Length = 2", "Species = 'setosa'")</code> - note the usage of single and double quotes to assign strings within strings). The remaining variables will be fixed.</p></dd>
+<dt>target</dt>
+<dd><p>Deprecated name. Please use <code>at</code> instead.</p></dd>
 <dt>factors</dt>
-<dd><p>Type of summary for factors. Can be "reference" (set at the reference level), "mode" (set at the most common level) or "all" to keep all levels.</p></dd>
+<dd><p>Type of summary for factors. Can be <code>"reference"</code> (set at the reference level), <code>"mode"</code> (set at the most common level) or <code>"all"</code> to keep all levels.</p></dd>
 <dt>numerics</dt>
-<dd><p>Type of summary for numeric values. Can be "all" (will duplicate the grid for all unique values), any function ("mean", "median", ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
+<dd><p>Type of summary for numeric values. Can be <code>"all"</code> (will duplicate the grid for all unique values), any function (<code>"mean"</code>, <code>"median"</code>, ...) or a value (e.g., <code>numerics = 0</code>).</p></dd>
 <dt>preserve_range</dt>
 <dd><p>In the case of combinations between numeric variables and factors, setting <code>preserve_range = TRUE</code> will drop the observations where the value of the numeric variable is originally not present in the range of its factor level. This leads to an unbalanced grid. Also, if you want the minimum and the maximum to closely match the actual ranges, you should increase the <code>length</code> argument.</p></dd>
 <dt>reference</dt>
 <dd><p>The reference vector from which to compute the mean and SD.</p></dd>
-<dt>length</dt>
-<dd><p>Length of numeric "at" variables.</p></dd>
-<dt>range</dt>
-<dd><p>Can be one of <code>c("range", "iqr", "ci", "hdi", "eti")</code>. If <code>"range"</code> (default), will use the min and max of the original vector as end-points. If any other interval, will spread within the range (the default CI width is <code>95%</code> but this can be changed by setting something else, e.g., <code>ci = 0.90</code>). See <code><a href="https://rdrr.io/r/stats/IQR.html" class="external-link">IQR()</a></code> and <code><a href="https://easystats.github.io/bayestestR/reference/ci.html" class="external-link">bayestestR::ci()</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -346,11 +342,17 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
+  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique
+Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel
+Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S.
+Ben-Shachar</a>,
+<a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet
+Patil</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
     </footer></div>

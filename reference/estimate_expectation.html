@@ -24,7 +24,7 @@ for predictions about individual cases. See below for details."><meta property="
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.7.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -628,22 +628,20 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`include_random` was set to `TRUE`, but no random effects were found.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Setting `include_random = FALSE` now.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Expectation</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     28.56 | 1.37 | [25.75, 31.37]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.36 | 1.18 | [23.95, 28.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.17 | 1.03 | [22.07, 26.27]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     21.98 | 0.93 | [20.07, 23.89]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.79 | 0.92 | [17.91, 21.67]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.60 | 0.98 | [15.58, 19.61]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.40 | 1.12 | [13.11, 17.69]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.21 | 1.30 | [10.55, 15.87]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     11.02 | 1.51 | [ 7.93, 14.11]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.83 | 1.74 | [ 5.27, 12.39]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> wt   | gear | Predicted |   SE |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 | 0.00 |     28.56 | 1.37 | [25.75, 31.37]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 | 0.00 |     26.36 | 1.18 | [23.95, 28.78]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 | 0.00 |     24.17 | 1.03 | [22.07, 26.27]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 | 0.00 |     21.98 | 0.93 | [20.07, 23.89]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 | 0.00 |     19.79 | 0.92 | [17.91, 21.67]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 | 0.00 |     17.60 | 0.98 | [15.58, 19.61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 | 0.00 |     15.40 | 1.12 | [13.11, 17.69]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 | 0.00 |     13.21 | 1.30 | [10.55, 15.87]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 | 0.00 |     11.02 | 1.51 | [ 7.93, 14.11]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 | 0.00 |      8.83 | 1.74 | [ 5.27, 12.39]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
@@ -675,16 +673,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.22 | 1.12 | [26.85, 31.25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.88 | 0.94 | [25.12, 28.70]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.55 | 0.74 | [23.22, 26.02]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.22 | 0.56 | [20.99, 23.31]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.89 | 0.48 | [18.89, 20.93]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.56 | 0.58 | [16.41, 18.54]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.23 | 0.77 | [13.94, 16.68]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.90 | 0.92 | [11.18, 14.57]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.56 | 1.15 | [ 8.39, 12.72]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.23 | 1.41 | [ 6.07, 11.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.11 | 1.09 | [27.20, 31.28]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.80 | 0.93 | [25.01, 28.37]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.48 | 0.76 | [23.24, 25.94]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.17 | 0.58 | [21.02, 23.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.85 | 0.56 | [18.85, 20.81]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.61 | [16.42, 18.61]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.22 | 0.70 | [13.87, 16.70]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.91 | 0.81 | [10.85, 14.45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.59 | 1.05 | [ 8.19, 12.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.28 | 1.29 | [ 5.86, 11.09]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
@@ -696,11 +694,17 @@ to generate model predictions for specific combinations of predictor values.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
+  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique
+Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel
+Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S.
+Ben-Shachar</a>,
+<a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet
+Patil</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
+2.0.2.9000.</p>
 </div>
 
     </footer></div>
