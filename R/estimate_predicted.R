@@ -321,9 +321,9 @@ estimate_relation <- function(model,
 
   # Get response for later residuals -------------
   if (!is.null(model_response) && model_response %in% names(data)) {
-    resid <- data[[model_response]]
+    response <- data[[model_response]]
   } else {
-    resid <- NULL
+    response <- NULL
   }
 
   # Keep only predictors (and response) --------
@@ -348,8 +348,8 @@ estimate_relation <- function(model,
   out <- cbind(data, out)
 
   # Add residuals
-  if (!is.null(resid)) {
-    out$Residuals <- out$Predicted - resid
+  if (!is.null(response)) {
+    out$Residuals <- response - out$Predicted
   }
 
   # Store relevant information
