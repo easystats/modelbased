@@ -18,9 +18,6 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     expect_equal(attributes(estim)$ci, c(0.90, 0.95))
     expect_equal(dim(estim), c(10, 7))
 
-    # vizdata <- visualisation_matrix(model)
-    # insight::get_predicted(model, as.data.frame(vizdata), ci = c(0.90, .95))
-
     # Range
     model <- lm(Petal.Length ~ Petal.Width * Species, data = iris)
     estim <- modelbased::estimate_relation(model, length = 10)

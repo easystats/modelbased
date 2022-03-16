@@ -212,7 +212,7 @@ summary.estimate_slopes <- function(object, ...) {
   out <- data.frame()
   for (g in 1:length(starts)) {
     dat <- data[starts[g]:ends[g], ]
-    dat <- as.data.frame(visualisation_matrix(dat, at = NULL, factors = "mode"))
+    dat <- as.data.frame(insight::get_datagrid(dat, at = NULL, factors = "mode"))
     dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)
     out <- rbind(out, dat)
   }

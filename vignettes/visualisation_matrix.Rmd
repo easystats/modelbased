@@ -82,7 +82,7 @@ some values of of the predictor (`Sepal.Length`), and **predict** (using the
 base R `predict()` method for now) the response (`Sepal.Width`) using the model. 
 Using these *x* and *y* points, we can then create the regression line.
 
-Let's try the `visualisation_matrix` function from the `estimate` package.
+Let's try the `visualisation_matrix` function from the `modelbased` package (note that this function is the same as [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html), just with a different name).
 
 ```{r }
 library(modelbased)

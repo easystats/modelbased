@@ -118,7 +118,7 @@
 #' response scales.
 #'
 #' Additional control parameters can be used to control results from
-#' [visualisation_matrix()] (when `data = "grid"`) and from
+#' [insight::get_datagrid()] (when `data = "grid"`) and from
 #' [insight::get_predicted()] (the function used internally to compute
 #' predictions).
 #'
@@ -131,9 +131,9 @@
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
 #'   `NULL`, the model's data is used. If "grid", the model matrix is obtained
-#'   (through [visualisation_matrix()]).
+#'   (through [insight::get_datagrid()]).
 #' @param ... You can add all the additional control arguments from
-#'   [visualisation_matrix()] (used when `data = "grid"`) and
+#'   [insight::get_datagrid()] (used when `data = "grid"`) and
 #'   [insight::get_predicted()].
 #'
 #' @examples

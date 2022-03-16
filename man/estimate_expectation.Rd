@@ -41,7 +41,7 @@ estimate_relation(
 
 \item{data}{A data frame with model's predictors to estimate the response. If
 \code{NULL}, the model's data is used. If "grid", the model matrix is obtained
-(through \code{\link[=visualisation_matrix]{visualisation_matrix()}}).}
+(through \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -51,7 +51,7 @@ named \verb{iter_1, iter_2, ...}. You can reshape them to a long format by
 running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from
-\code{\link[=visualisation_matrix]{visualisation_matrix()}} (used when \code{data = "grid"}) and
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and
 \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
@@ -76,7 +76,7 @@ details on the difference between expected vs. predicted values and link vs.
 response scales.
 
 Additional control parameters can be used to control results from
-\code{\link[=visualisation_matrix]{visualisation_matrix()}} (when \code{data = "grid"}) and from
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} (when \code{data = "grid"}) and from
 \code{\link[insight:get_predicted]{insight::get_predicted()}} (the function used internally to compute
 predictions).
 
