@@ -5,7 +5,7 @@
 #' other related functions such as [estimate_contrasts()] and
 #' [estimate_slopes()].
 #'
-#' @inheritParams model_emmeans
+#' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
 #'
 #' @inherit estimate_slopes details
@@ -51,7 +51,7 @@ estimate_means <- function(model,
                            ...) {
 
   # Run emmeans
-  estimated <- model_emmeans(model, at, fixed, transform = transform, ...)
+  estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
   info <- attributes(estimated)
 
   # Summarize and clean

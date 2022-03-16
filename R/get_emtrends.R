@@ -1,4 +1,4 @@
-#' @rdname model_emmeans
+#' @rdname get_emmeans
 #'
 #' @param trend A character indicating the name of the variable
 #'   for which to compute the slopes.
@@ -6,16 +6,16 @@
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#' model_emtrends(model)
-#' model_emtrends(model, at = "Species")
-#' model_emtrends(model, at = "Petal.Length")
-#' model_emtrends(model, at = c("Species", "Petal.Length"))
+#' get_emtrends(model)
+#' get_emtrends(model, at = "Species")
+#' get_emtrends(model, at = "Petal.Length")
+#' get_emtrends(model, at = c("Species", "Petal.Length"))
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#' model_emtrends(model)
-#' model_emtrends(model, at = "Sepal.Width")
+#' get_emtrends(model)
+#' get_emtrends(model, at = "Sepal.Width")
 #' @export
-model_emtrends <- function(model,
+get_emtrends <- function(model,
                            trend = NULL,
                            at = NULL,
                            fixed = NULL,
@@ -50,7 +50,9 @@ model_emtrends <- function(model,
   estimated
 }
 
-
+#' @rdname get_emmeans
+#' @export
+model_emtrends <- get_emtrends
 
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------

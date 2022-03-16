@@ -12,7 +12,7 @@
 #' and [README examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and use cases.
 #'
-#' @inheritParams model_emmeans
+#' @inheritParams get_emmeans
 #' @inheritParams estimate_means
 #'
 #' @details
@@ -112,7 +112,7 @@ estimate_slopes <- function(model,
                             ...) {
 
   # Sanitize arguments
-  estimated <- model_emtrends(model, trend, at, ...)
+  estimated <- get_emtrends(model, trend, at, ...)
   info <- attributes(estimated)
 
   # Summarize and clean

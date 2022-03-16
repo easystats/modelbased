@@ -5,7 +5,7 @@
 #' and [estimate_slopes()].
 #'
 #' @inheritParams estimate_means
-#' @inheritParams model_emcontrasts
+#' @inheritParams get_emcontrasts
 #' @param adjust The p-values adjustment method for frequentist multiple
 #'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
@@ -79,7 +79,7 @@ estimate_contrasts <- function(model,
                                ...) {
 
   # Run emmeans
-  estimated <- model_emcontrasts(model,
+  estimated <- get_emcontrasts(model,
     contrast = contrast,
     at = at,
     fixed = fixed,

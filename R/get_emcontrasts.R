@@ -1,4 +1,4 @@
-#' @rdname model_emmeans
+#' @rdname get_emmeans
 #'
 #' @param contrast A character vector indicating the name of the variable(s)
 #'   for which to compute the contrasts.
@@ -6,24 +6,24 @@
 #' @examples
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
-#' model_emcontrasts(model)
+#' get_emcontrasts(model)
 #'
 #' # Dealing with interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' # By default: selects first factor
-#' model_emcontrasts(model)
+#' get_emcontrasts(model)
 #' # Can also run contrasts between points of numeric
-#' model_emcontrasts(model, contrast = "Petal.Width", length = 3)
+#' get_emcontrasts(model, contrast = "Petal.Width", length = 3)
 #' # Or both
-#' model_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+#' get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #' # Or with custom specifications
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #' # Can fixate the numeric at a specific value
-#' model_emcontrasts(model, fixed = "Petal.Width")
+#' get_emcontrasts(model, fixed = "Petal.Width")
 #' # Or modulate it
-#' model_emcontrasts(model, at = "Petal.Width", length = 4)
+#' get_emcontrasts(model, at = "Petal.Width", length = 4)
 #' @export
-model_emcontrasts <- function(model,
+get_emcontrasts <- function(model,
                               contrast = NULL,
                               at = NULL,
                               fixed = NULL,
@@ -56,6 +56,10 @@ model_emcontrasts <- function(model,
   attr(contrasts, "fixed") <- args$fixed
   contrasts
 }
+
+#' @rdname get_emmeans
+#' @export
+model_emcontrasts <- get_emcontrasts
 
 
 # =========================================================================

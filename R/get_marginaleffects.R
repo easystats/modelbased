@@ -2,18 +2,18 @@
 #'
 #' Modelbased-like API to create \pkg{marginaleffects} objects. This is Work-in-progress.
 #'
-#' @inheritParams model_emtrends
+#' @inheritParams get_emmeans
 #'
 #' @examples
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#' model_marginaleffects(model, trend = "Petal.Length", at = "Species")
-#' model_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
-#' model_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
+#' get_marginaleffects(model, trend = "Petal.Length", at = "Species")
+#' get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
+#' get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
 #'
 #'
 #' @export
-model_marginaleffects <- function(model,
+get_marginaleffects <- function(model,
                           trend = NULL,
                           at = NULL,
                           fixed = NULL,
