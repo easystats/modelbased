@@ -171,7 +171,7 @@ summary.estimate_slopes <- function(object, ...) {
   } else {
     out <- data.frame()
     # Create vizmatrix of grouping variables
-    groups <- as.data.frame(visualisation_matrix(data[vars], factors = "all", numerics = "all"))
+    groups <- as.data.frame(insight::get_datagrid(data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
     for (i in 1:nrow(groups)) {
       g <- data[datawizard::data_match(data, groups[i, , drop = FALSE]), , drop = FALSE]

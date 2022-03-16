@@ -50,6 +50,8 @@ factors, or equally spread points of a continuous variable. These reference
 grids are often used as data for predictions of statistical models, to help us
 represent and understand them.
 
+> NOTE: the `visualisation_matrix()` function showcased in this vignette is now an alias (another name) for the [`get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html) function in the *insight* package.
+
 # Simple linear regression
 
 For instance, let's fit a simple linear model that models the relationship
