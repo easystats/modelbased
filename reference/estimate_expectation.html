@@ -133,7 +133,7 @@ for predictions about individual cases. See below for details.</p>
 <dt>data</dt>
 <dd><p>A data frame with model's predictors to estimate the response. If
 <code>NULL</code>, the model's data is used. If "grid", the model matrix is obtained
-(through <code><a href="visualisation_matrix.html">visualisation_matrix()</a></code>).</p></dd>
+(through <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>).</p></dd>
 <dt>ci</dt>
 <dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
 <dt>keep_iterations</dt>
@@ -143,7 +143,7 @@ named <code>iter_1, iter_2, ...</code>. You can reshape them to a long format by
 running <code><a href="https://easystats.github.io/bayestestR/reference/reshape_iterations.html" class="external-link">reshape_iterations()</a></code>.</p></dd>
 <dt>...</dt>
 <dd><p>You can add all the additional control arguments from
-<code><a href="visualisation_matrix.html">visualisation_matrix()</a></code> (used when <code>data = "grid"</code>) and
+<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> (used when <code>data = "grid"</code>) and
 <code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">insight::get_predicted()</a></code>.</p></dd>
 </dl></div>
     <div class="section level2">
@@ -159,7 +159,7 @@ in particular the description of the <code>predict</code> argument for additiona
 details on the difference between expected vs. predicted values and link vs.
 response scales.</p>
 <p>Additional control parameters can be used to control results from
-<code><a href="visualisation_matrix.html">visualisation_matrix()</a></code> (when <code>data = "grid"</code>) and from
+<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> (when <code>data = "grid"</code>) and from
 <code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">insight::get_predicted()</a></code> (the function used internally to compute
 predictions).</p>
 <p>For plotting, check the examples in <code><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe()</a></code>. Also check out
@@ -660,9 +660,6 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.05, indicating chains have not mixed.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
@@ -676,16 +673,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.19 | 1.08 | [26.89, 31.00]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.87 | 0.85 | [25.05, 28.43]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.55 | 0.66 | [23.16, 25.86]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.23 | 0.53 | [20.99, 23.15]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.91 | 0.45 | [18.98, 20.82]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.60 | 0.57 | [16.62, 18.62]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.28 | 0.74 | [14.03, 16.50]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.96 | 0.99 | [11.31, 14.45]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.64 | 1.14 | [ 8.72, 12.52]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.32 | 1.41 | [ 5.81, 10.49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.17 | 1.03 | [26.88, 31.24]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.85 | 0.86 | [24.81, 28.48]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.53 | 0.70 | [22.86, 25.85]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.21 | 0.56 | [20.63, 23.12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.89 | 0.52 | [18.55, 20.73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.57 | 0.62 | [16.43, 18.75]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.25 | 0.76 | [13.70, 16.55]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.92 | 0.92 | [10.88, 14.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.60 | 1.09 | [ 8.36, 12.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.28 | 1.24 | [ 5.51, 10.50]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
