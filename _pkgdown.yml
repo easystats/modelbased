@@ -29,8 +29,8 @@ reference:
 - title: "Miscellaenous"
   contents:
   - describe_nonlinear
-  - model_emmeans
-  - model_marginaleffects
+  - get_emmeans
+  - get_marginaleffects
   - find_inversions
   - zero_crossings
   - smoothing
