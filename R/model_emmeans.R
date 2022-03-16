@@ -25,7 +25,7 @@
 #'   / mean / contrasts. Other predictors of the model that are not included
 #'   here will be collapsed and "averaged" over (the effect will be estimated
 #'   across them).
-#' @param ... Other arguments passed for instance to [visualisation_matrix()].
+#' @param ... Other arguments passed for instance to [insight::get_datagrid()].
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)

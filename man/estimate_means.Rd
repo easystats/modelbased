@@ -36,7 +36,7 @@ probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
+\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{
 A dataframe of estimated marginal means.

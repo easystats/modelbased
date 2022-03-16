@@ -20,7 +20,7 @@ across them).}
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
-\item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
+\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \description{
 Modelbased-like API to create \pkg{marginaleffects} objects. This is Work-in-progress.

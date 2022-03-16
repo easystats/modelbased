@@ -60,7 +60,7 @@ Thus for a logistic model, \code{"none"} will give estimations expressed in
 log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
-\item{...}{Other arguments passed for instance to \code{\link[=visualisation_matrix]{visualisation_matrix()}}.}
+\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
 \item{levels, modulate}{Deprecated, use \code{at} instead.}
 

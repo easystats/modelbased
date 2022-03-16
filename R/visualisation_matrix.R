@@ -1,6 +1,6 @@
 #' Create a reference grid
 #'
-#' See `insight::get_datagrid()`.
+#' This function is an alias (another name) for the [`insight::get_datagrid()`] function. Same arguments apply.
 #'
 #' @inheritParams insight::get_datagrid
 #' @param target Deprecated name. Please use `at` instead.
