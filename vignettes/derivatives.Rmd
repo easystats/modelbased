@@ -216,10 +216,33 @@ But, if you've been attentive up to this point, you might wonder: **why bother w
 ```{r}
 model_gam2 <- mgcv::gam(y2 ~ s(x), data = data)
 
-plot(modelbased::estimate_relation(model_gam2, length = 30), line = list(color = "blue")) 
+plot(modelbased::estimate_relation(model_gam2, length = 100), line = list(color = "blue")) 
 
-deriv <- modelbased::estimate_slopes(model_poly, trend = "x", at = "x")
+# Increase precision
+deriv <- modelbased::estimate_slopes(model_gam2, trend = "x", at = "x", length = 100)
+
+plot(deriv, line = list(color = "blue")) +
+  geom_hline(yintercept = 0, linetype = "dashed") 
+
+summary(deriv)
+```
+
+
+The conclusion is very similar, it shows a significant effect that goes from negative to positive and becomes flat (i.e., non-significant) around 0.
+
+What about *3rd-degree-type* relationships? It works just the same:
+
+```{r}
+data$y3 <- data$x^3 + rnorm(nrow(data), sd = 1)
+
+model_gam3 <- mgcv::gam(y3 ~ s(x), data = data)
+
+plot(modelbased::estimate_relation(model_gam3, length = 100), line = list(color = "blue")) 
+
+deriv <- modelbased::estimate_slopes(model_gam3, trend = "x", at = "x", length = 100)
 
 plot(deriv, line = list(color = "blue")) +
   geom_hline(yintercept = 0, linetype = "dashed") 
 ```
+
+Again, the GAM nicely recovered the shape of the relationship. In summary, effects derivatives can be used to leverage the power of GAMs.
