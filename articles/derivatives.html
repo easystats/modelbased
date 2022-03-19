@@ -178,9 +178,9 @@ parameters.</p>
 &gt; (Intercept) |      100.00 | 0.25 | [99.51, 100.49] | 400.00 | &lt; .001
 &gt; x           |       12.75 | 0.25 | [12.26,  13.24] |  50.97 | &lt; .001</code></pre>
 <p>So the parameters table shows us that the <strong>effect of
-x</strong> is <code>12.75</code>. For every increase of 1 on <em>x</em>,
-<em>y</em> increases by <em>12.75</em>. Congrats, we’ve answered our
-question!</p>
+x</strong> is <code>12.75</code>. For every increase of 1 on
+<code>x</code>, <code>y</code> increases by <code>12.75</code>.
+Congrats, we’ve answered our question!</p>
 </div>
 <div class="section level2">
 <h2 id="gams-can-be-used-for-linear-relationships-too">GAMs can be used for linear relationships too!<a class="anchor" aria-label="anchor" href="#gams-can-be-used-for-linear-relationships-too"></a>
@@ -191,10 +191,10 @@ question!</p>
 <p>You might have heard of <strong>General Additive Models</strong>, aka
 <strong>GAMs</strong>, that extend general linear models (GLMs) by
 enabling a natural modelization of non-linear relationships. But we can
-also use them <strong>even if it’s linear</strong>, or in general if we
-are not sure about the exact shape of the relationship: a GAM usually
-penalizes wiggly patterns, so if the relationship is linear, it will
-approximate it nicely.</p>
+also use them <strong>for linear links</strong>, or in general if we are
+not sure about the exact shape of the relationship. Because GAMs usually
+penalize wiggly patterns, they have no problems with approximating
+linear relationship with this is what the data indicates.</p>
 <p>GAMs can be fitted using the <code>mgcv</code> package, and the only
 change is that we need to specify as <strong>smooth</strong> term
 (<code><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s()</a></code>) for the variable that we want to estimate the
