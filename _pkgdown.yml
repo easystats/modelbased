@@ -66,6 +66,8 @@ navbar:
         href: articles/estimate_expectation.html
       - text: 'Describe non-linear curves'
         href: articles/describe_nonlinear.html
+      - text: 'Interpret models using Effect Derivatives'
+        href: articles/derivatives.html
       - text: 'Estimate and re-use Random Effects'
         href: articles/estimate_grouplevel.html
       - text: 'The modelisation approach'
