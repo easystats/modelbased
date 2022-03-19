@@ -55,7 +55,8 @@ range of its factor level. This leads to an unbalanced grid. Also, if you
 want the minimum and the maximum to closely match the actual ranges, you
 should increase the \code{length} argument.}
 
-\item{reference}{The reference vector from which to compute the mean and SD.}
+\item{reference}{The reference vector from which to compute the mean and SD.
+Used when standardizing or unstandardizing the grid using \code{effectsize::standardize}.}
 }
 \value{
 Reference grid data frame.

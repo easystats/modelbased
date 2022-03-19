@@ -1,17 +1,6 @@
 # Standardize -------------------------------------------------------------
 
 
-#' @importFrom datawizard standardize
-#' @method standardize visualisation_matrix
-#' @export
-standardize.visualisation_matrix <- function(x, ...) {
-  x[names(x)] <- datawizard::standardize(as.data.frame(x), reference = attributes(x)$data, ...)
-  x
-}
-
-
-
-
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
@@ -76,13 +65,6 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 
 # Unstandardize -------------------------------------------------------------
 
-#' @importFrom datawizard unstandardize
-#' @method unstandardize visualisation_matrix
-#' @export
-unstandardize.visualisation_matrix <- function(x, ...) {
-  x[names(x)] <- datawizard::unstandardize(as.data.frame(x), reference = attributes(x)$data, ...)
-  x
-}
 
 
 #' @method unstandardize estimate_predicted
