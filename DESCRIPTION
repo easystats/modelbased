@@ -63,6 +63,7 @@ Suggests:
     merTools,
     mgcv,
     patchwork,
+    report,
     rmarkdown,
     rstanarm,
     rtdists,
