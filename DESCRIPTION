@@ -70,7 +70,7 @@ Suggests:
     spelling,
     testthat
 Remotes:
-    easystats/insight
+    easystats/insight,
     easystats/datawizard
 Encoding: UTF-8
 Language: en-US
