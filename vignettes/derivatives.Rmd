@@ -90,13 +90,13 @@ plot(modelbased::estimate_relation(model_lm))
 parameters::parameters(model_lm)
 ```
 
-So the parameters table shows us that the **effect of x** is `12.75`. For every increase of 1 on *x*, *y* increases by *12.75*. Congrats, we've answered our question!
+So the parameters table shows us that the **effect of x** is `12.75`. For every increase of 1 on `x`, `y` increases by `12.75`. Congrats, we've answered our question!
 
 # GAMs can be used for linear relationships too!
 
 > *A new player has entered the game.*
 
-You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling a natural modelization of non-linear relationships. But we can also use them **even if it's linear**, or in general if we are not sure about the exact shape of the relationship: a GAM usually penalizes wiggly patterns, so if the relationship is linear, it will approximate it nicely.
+You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling a natural modelization of non-linear relationships. But we can also use them **for linear links**, or in general if we are not sure about the exact shape of the relationship. Because GAMs usually penalize wiggly patterns, they have no problems with approximating linear relationship with this is what the data indicates.
 
 GAMs can be fitted using the `mgcv` package, and the only change is that we need to specify as **smooth** term (`s()`) for the variable that we want to estimate the (non-necessarily linear) relationship for.
 
