@@ -2,6 +2,7 @@ pandoc: 2.17.1.1
 pkgdown: 2.0.2.9000
 pkgdown_sha: 9aae87398abdbe1cd5af5ff6f168d2e142d531c9
 articles:
+  derivatives: derivatives.html
   describe_nonlinear: describe_nonlinear.html
   estimate_contrasts: estimate_contrasts.html
   estimate_grouplevel: estimate_grouplevel.html
@@ -12,5 +13,5 @@ articles:
   modelisation_approach: modelisation_approach.html
   transformations: transformations.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2022-03-16T15:08Z
+last_built: 2022-03-19T02:31Z
 
