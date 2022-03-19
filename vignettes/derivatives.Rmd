@@ -69,7 +69,7 @@ ggplot(data, aes(x, y)) + geom_point()
 
 Upon visualizing the data, some people might go: "well the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further in this walkthrough). Let's do that:
 
-```{r}
+```{r, results='asis'}
 rez <- cor.test(data$y, data$x)
 report::report(rez)
 ```
