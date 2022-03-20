@@ -218,7 +218,7 @@ change is that we need to specify as <strong>smooth</strong> term
 &gt; -----------------------------------------
 &gt; Smooth term (x) | 2598.40 | 1.00 | &lt; .001</code></pre>
 <p>Wow, the GAM-based modeled relationship is near-exactly the same as
-that of the GLM! <strong>GAMs are powerful</strong> :sunglasses:</p>
+that of the GLM! <strong>GAMs are powerful</strong> 😎</p>
 <p>Okay, but there’s one <em>slight</em> issue. If you look at the
 parameters table, there is indeed one line for the “smooth term”, but it
 has… no coefficient! Indeed, because GAM doesn’t model straight lines,
@@ -227,7 +227,7 @@ consider GAMs complicated to discuss statistically, as their parameters
 are not easily interpretable.</p>
 <blockquote>
 <p>Owww, so this is problematic considering our question about the
-effect of <em>x</em> on <em>y</em> :confused:</p>
+effect of <em>x</em> on <em>y</em> 😕</p>
 </blockquote>
 <p>Or <strong>is it?</strong></p>
 </div>
@@ -354,12 +354,13 @@ the “linear slope” at every point of the curve.</p>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-12-1.png" width="3281.25"></p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span>  <span class="co"># TODO: fix this to group by sign</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; Average Marginal Effects
 &gt; 
-&gt; Start |  End |     x | Coefficient |   SE |        95% CI | t(997) |      p
-&gt; ---------------------------------------------------------------------------
-&gt; -3.38 | 3.28 | -0.05 |       -0.07 | 0.05 | [-0.17, 0.02] |  -1.56 | &lt; .001
+&gt; Start |   End |     x | Coefficient |   SE |         95% CI | t(997) |      p
+&gt; -----------------------------------------------------------------------------
+&gt; -3.38 | -0.42 | -1.90 |       -3.76 | 0.05 | [-3.85, -3.67] | -74.58 | &lt; .001
+&gt; 0.32  |  3.28 |  1.80 |        3.61 | 0.05 | [ 3.52,  3.70] |  71.46 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>If you know a bit theory about derivatives, you won’t be suprised to
 find out that the derivative of a 2nd order polynomial
@@ -393,7 +394,8 @@ trick?</strong></p>
 &gt; Start |   End |     x | Coefficient |   SE |         95% CI | t(991.26) |      p
 &gt; --------------------------------------------------------------------------------
 &gt; -3.38 | -0.08 | -1.73 |       -3.25 | 0.20 | [-3.63, -2.86] |    -16.61 | &lt; .001
-&gt; -0.01 |  0.05 |  0.02 |   -1.86e-03 | 0.11 | [-0.22,  0.22] | -7.76e-03 | 0.446 
+&gt; -0.01 | -0.01 | -0.01 |       -0.09 | 0.11 | [-0.31,  0.14] |     -0.77 | 0.441 
+&gt; 0.05  |  0.05 |  0.05 |        0.08 | 0.11 | [-0.14,  0.31] |      0.76 | 0.450 
 &gt; 0.12  |  3.28 |  1.70 |        3.39 | 0.20 | [ 3.01,  3.78] |     17.37 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>The conclusion is very similar, it shows a significant effect that
@@ -415,7 +417,7 @@ same:</p>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> </code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-14-2.png" width="3281.25"></p>
 <p>Again, the GAM nicely recovered the shape of the relationship. In
-summary, effects derivatives can be used to leverage the power of
+summary, effects derivatives can be used to easily leverage the power of
 GAMs.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
