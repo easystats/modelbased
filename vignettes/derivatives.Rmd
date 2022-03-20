@@ -68,12 +68,12 @@ ggplot(data, aes(x, y)) + geom_point()
 
 Upon visualizing the data, some people might go: "well the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further in this walkthrough). Let's do that:
 
-```{r eval=FALSE, include=FALSE}
+```{r eval=FALSE}
 rez <- cor.test(data$y, data$x)
 report::report(rez)
 ```
 ```{r echo=FALSE, results='markup'}
-print(report::report(cor.test(data$y, data$x)), width = 100)
+print(report::report(cor.test(data$y, data$x)), width = 80)
 ```
 
 Great, we know there is a significant correlation between the two variables! :partying_face: But what we would like to know is **for every increase of 1 on *x*, how much does *y* increase?** In other words, what is the **slope** of the relationship?
