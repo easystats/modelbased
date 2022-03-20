@@ -21,6 +21,7 @@ options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   comment = ">",
   dpi = 450,
+  out.width = "100%",
   warning = FALSE,
   message = FALSE
 )
