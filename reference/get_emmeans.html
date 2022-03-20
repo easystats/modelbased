@@ -98,6 +98,7 @@ functions.</p>
   at <span class="op">=</span> <span class="cn">NULL</span>,
   fixed <span class="op">=</span> <span class="cn">NULL</span>,
   transform <span class="op">=</span> <span class="st">"none"</span>,
+  method <span class="op">=</span> <span class="st">"pairwise"</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -107,6 +108,7 @@ functions.</p>
   at <span class="op">=</span> <span class="cn">NULL</span>,
   fixed <span class="op">=</span> <span class="cn">NULL</span>,
   transform <span class="op">=</span> <span class="st">"none"</span>,
+  method <span class="op">=</span> <span class="st">"pairwise"</span>,
   <span class="va">...</span>
 <span class="op">)</span>
 
@@ -176,6 +178,8 @@ across them).</p></dd>
 Thus for a logistic model, <code>"none"</code> will give estimations expressed in
 log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
 probabilities.</p></dd>
+<dt>method</dt>
+<dd><p>Contrast method. See same argument in <a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">emmeans::contrast</a>.</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments passed for instance to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>.</p></dd>
 <dt>levels, modulate</dt>

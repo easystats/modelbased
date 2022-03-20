@@ -91,6 +91,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
   transform <span class="op">=</span> <span class="st">"none"</span>,
   ci <span class="op">=</span> <span class="fl">0.95</span>,
   adjust <span class="op">=</span> <span class="st">"holm"</span>,
+  method <span class="op">=</span> <span class="st">"pairwise"</span>,
   <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
@@ -127,6 +128,8 @@ probabilities.</p></dd>
 comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 section in the <code><a href="https://rdrr.io/pkg/emmeans/man/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation.</p></dd>
+<dt>method</dt>
+<dd><p>Contrast method. See same argument in <a href="https://rdrr.io/pkg/emmeans/man/contrast.html" class="external-link">emmeans::contrast</a>.</p></dd>
 <dt>...</dt>
 <dd><p>Other arguments passed for instance to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>.</p></dd>
 </dl></div>
