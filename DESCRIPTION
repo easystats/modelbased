@@ -73,6 +73,7 @@ Suggests:
 Remotes:
     easystats/insight,
     easystats/datawizard,
+    easystats/bayestestR,
     easystats/effectsize
 Encoding: UTF-8
 Language: en-US
