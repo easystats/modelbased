@@ -16,6 +16,7 @@ get_emcontrasts(
   at = NULL,
   fixed = NULL,
   transform = "none",
+  method = "pairwise",
   ...
 )
 
@@ -25,6 +26,7 @@ model_emcontrasts(
   at = NULL,
   fixed = NULL,
   transform = "none",
+  method = "pairwise",
   ...
 )
 
@@ -91,6 +93,8 @@ across them).}
 Thus for a logistic model, \code{"none"} will give estimations expressed in
 log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
+
+\item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 

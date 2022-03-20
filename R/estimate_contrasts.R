@@ -76,6 +76,7 @@ estimate_contrasts <- function(model,
                                transform = "none",
                                ci = 0.95,
                                adjust = "holm",
+                               method = "pairwise",
                                ...) {
 
   # Run emmeans
@@ -83,7 +84,9 @@ estimate_contrasts <- function(model,
     contrast = contrast,
     at = at,
     fixed = fixed,
-    transform = "none", ...
+    transform = "none",
+    method = method,
+    ...
   )
 
   info <- attributes(estimated)

@@ -2,6 +2,7 @@
 #'
 #' @param contrast A character vector indicating the name of the variable(s)
 #'   for which to compute the contrasts.
+#' @param method Contrast method. See same argument in [emmeans::contrast].
 #'
 #' @examples
 #' # Basic usage
@@ -24,10 +25,11 @@
 #' get_emcontrasts(model, at = "Petal.Width", length = 4)
 #' @export
 get_emcontrasts <- function(model,
-                              contrast = NULL,
-                              at = NULL,
-                              fixed = NULL,
-                              transform = "none",
+                            contrast = NULL,
+                            at = NULL,
+                            fixed = NULL,
+                            transform = "none",
+                            method = "pairwise",
                               ...) {
 
   # check if available
@@ -49,7 +51,7 @@ get_emcontrasts <- function(model,
   by <- args$emmeans_specs[!args$emmeans_specs %in% args$contrast]
   if (length(by) == 0) by <- NULL
 
-  contrasts <- emmeans::contrast(estimated, by = by, method = "pairwise", ...)
+  contrasts <- emmeans::contrast(estimated, by = by, method = method, ...)
 
   attr(contrasts, "contrast") <- args$contrast
   attr(contrasts, "at") <- args$at
