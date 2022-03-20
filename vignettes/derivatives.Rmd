@@ -109,12 +109,12 @@ parameters::parameters(model_gam)
 ```
 
 
-Wow, the GAM-based modeled relationship is near-exactly the same as that of the GLM! **GAMs are powerful** :sunglasses:
+Wow, the GAM-based modeled relationship is near-exactly the same as that of the GLM! **GAMs are powerful** 😎
 
 Okay, but there's one *slight* issue. If you look at the parameters table, there is indeed one line for the "smooth term", but it has... no coefficient! Indeed, because GAM doesn't model straight lines, it doesn't return the value of the slope. That's why some people consider GAMs complicated to discuss statistically, as their parameters are not easily interpretable.
 
 
-> Owww, so this is problematic considering our question about the effect of *x* on *y* :confused:
+> Owww, so this is problematic considering our question about the effect of *x* on *y* 😕
 
 Or **is it?**
 
@@ -205,7 +205,7 @@ deriv <- modelbased::estimate_slopes(model_poly, trend = "x", at = "x")
 plot(deriv) +
   geom_hline(yintercept = 0, linetype = "dashed")
 
-summary(deriv)  # TODO: fix this to group by sign
+summary(deriv)
 ```
 
 If you know a bit theory about derivatives, you won't be suprised to find out that the derivative of a 2nd order polynomial (`x + x^2`) is actually a linear line. We can see conclude from this plot that the slope is (**significantly**, because the confidence interval does not cover 0) negative until 0, and then becomes positive. 0 corresponds indeed to the point of inversion of the curve.
@@ -247,4 +247,4 @@ plot(deriv, line = list(color = "blue")) +
   geom_hline(yintercept = 0, linetype = "dashed") 
 ```
 
-Again, the GAM nicely recovered the shape of the relationship. In summary, effects derivatives can be used to leverage the power of GAMs.
+Again, the GAM nicely recovered the shape of the relationship. In summary, effects derivatives can be used to easily leverage the power of GAMs.

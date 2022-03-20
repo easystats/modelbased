@@ -195,12 +195,15 @@ summary.estimate_slopes <- function(object, ...) {
 
   # Find beginnings and ends -----------------------
   # First row - starting point
+  signs <- sign(data[[datawizard::data_findcols(data, c("Coefficient", "Median", "Mean", "MAP_Estimate"))]])
+  sign <- signs[1]
   sig <- data$Confidence[1]
   starts <- 1
   ends <- nrow(data)
   # Iterate through all rows to find blocks
   for (i in 2:nrow(data)) {
-    if (data$Confidence[i] != sig) {
+    if (data$Confidence[i] != sig | signs[i] != sign) {
+      sign <- signs[i]
       sig <- data$Confidence[i]
       starts <- c(starts, i)
       ends <- c(ends, i - 1)
@@ -228,8 +231,6 @@ summary.estimate_slopes <- function(object, ...) {
     if ("p" %in% names(x)) confidence <- "p"
     if ("pd" %in% names(x)) confidence <- "pd"
   }
-
-
 
   if (confidence == "p") {
     sig <- tools::toTitleCase(effectsize::interpret_p(x$p, ...))
