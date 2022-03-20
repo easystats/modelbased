@@ -174,7 +174,7 @@ summary.estimate_slopes <- function(object, ...) {
     groups <- as.data.frame(insight::get_datagrid(data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
     for (i in 1:nrow(groups)) {
-      g <- data[datawizard::data_match(data, groups[i, , drop = FALSE]), , drop = FALSE]
+      g <- datawizard::data_match(data, groups[i, , drop = FALSE])
       out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
     out <- datawizard::data_relocate(out, vars)
