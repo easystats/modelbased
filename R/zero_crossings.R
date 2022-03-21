@@ -39,6 +39,7 @@ zero_crossings <- function(x) {
   if (!missing(interval) && length(interval) != 2) {
     stop("'interval' must be a vector of length 2")
   }
+
   if (!is.numeric(lower) || !is.numeric(upper) || lower >=
     upper) {
     stop("lower < upper  is not fulfilled")

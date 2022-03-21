@@ -47,12 +47,12 @@
 #' get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' @export
 get_emmeans <- function(model,
-                          at = "auto",
-                          fixed = NULL,
-                          transform = "response",
-                          levels = NULL,
-                          modulate = NULL,
-                          ...) {
+                        at = "auto",
+                        fixed = NULL,
+                        transform = "response",
+                        levels = NULL,
+                        modulate = NULL,
+                        ...) {
 
   # Deprecation
   if (!is.null(levels) | !is.null(modulate)) {

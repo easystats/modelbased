@@ -62,7 +62,8 @@ Used when standardizing or unstandardizing the grid using \code{effectsize::stan
 Reference grid data frame.
 }
 \description{
-This function is an alias (another name) for the \code{\link[insight:get_datagrid]{insight::get_datagrid()}} function. Same arguments apply.
+This function is an alias (another name) for the \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
+function. Same arguments apply.
 }
 \examples{
 library(modelbased)

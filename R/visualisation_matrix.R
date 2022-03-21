@@ -1,10 +1,10 @@
 #' Create a reference grid
 #'
-#' This function is an alias (another name) for the [`insight::get_datagrid()`] function. Same arguments apply.
+#' This function is an alias (another name) for the [`insight::get_datagrid()`]
+#' function. Same arguments apply.
 #'
 #' @inheritParams insight::get_datagrid
 #' @param target Deprecated name. Please use `at` instead.
-#'
 #'
 #' @return Reference grid data frame.
 #'
@@ -45,18 +45,27 @@ visualisation_matrix <- function(x, ...) {
 
 #' @rdname visualisation_matrix
 #' @export
-visualisation_matrix.data.frame <- function(x, at = "all", target = NULL, factors = "reference", numerics = "mean", preserve_range = FALSE, reference = x, ...) {
+visualisation_matrix.data.frame <- function(x,
+                                            at = "all",
+                                            target = NULL,
+                                            factors = "reference",
+                                            numerics = "mean",
+                                            preserve_range = FALSE,
+                                            reference = x,
+                                            ...) {
   if (!is.null(target)) {
     warning("The 'target' argument name is deprecated in favour of 'at'. Please replace 'target' with 'at'.")
     at <- target
   }
+
   insight::get_datagrid(x,
-                        at = at,
-                        factors = factors,
-                        numerics = numerics,
-                        preserve_range = preserve_range,
-                        reference = reference,
-                        ...)
+    at = at,
+    factors = factors,
+    numerics = numerics,
+    preserve_range = preserve_range,
+    reference = reference,
+    ...
+  )
 }
 
 
@@ -89,5 +98,3 @@ visualisation_matrix.default <- visualisation_matrix.numeric
 
 #' @export
 visualisation_matrix.visualisation_matrix <- visualisation_matrix.numeric
-
-

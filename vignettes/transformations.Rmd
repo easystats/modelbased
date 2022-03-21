@@ -77,12 +77,12 @@ data$y <- data$x^2 + rnorm(500, sd = 100)
 check_transformation <- function(data, x = "x", color = "blue") {
   ggplot(bayestestR::estimate_density(data[[x]]), aes(x = x, y = y)) +
     geom_area(fill = color) +
-    ggtitle("Distribution of x") + 
+    ggtitle("Distribution of x") +
     see::theme_modern() +
     ggplot(data, aes_string(x = x, y = "y")) +
     geom_point() +
     geom_smooth(color = color, se = FALSE, method = "loess", formula = "y ~ x") +
-    ggtitle("Relationship with y") + 
+    ggtitle("Relationship with y") +
     see::theme_modern()
 }
 ```
@@ -99,12 +99,12 @@ check_transformation(data, color = "blue")
 ```{r message=FALSE, warning=FALSE}
 data$x_standardized <- datawizard::standardize(data$x)
 
-check_transformation(data, x = "x_standardized", color = "red") + 
+check_transformation(data, x = "x_standardized", color = "red") +
   plot_annotation("After Standardization")
 
 data$x_normalized <- datawizard::normalize(data$x)
 
-check_transformation(data, x = "x_normalized", color = "orange") + 
+check_transformation(data, x = "x_normalized", color = "orange") +
   plot_annotation("After Normalization")
 ```
 
@@ -154,7 +154,7 @@ check_transformation(data, "x_sqrt", color = "cyan")
 - **Cubic root**
 
 ```{r message=FALSE, warning=FALSE}
-data$x_cbrt <- data$x_positive^(1/3)
+data$x_cbrt <- data$x_positive^(1 / 3)
 
 check_transformation(data, "x_cbrt", color = "purple")
 ```
@@ -220,8 +220,8 @@ Actually, all of the previous shape-transformations are part of two categories, 
 
 ```{r message=FALSE, warning=FALSE, eval = FALSE}
 data$x_reciprocical == (1 + data$x_positive)^(-1)
-data$x_cbrt == data$x_positive^(1/3)
-data$x_sqrt == data$x_positive^(1/2)
+data$x_cbrt == data$x_positive^(1 / 3)
+data$x_sqrt == data$x_positive^(1 / 2)
 data$x_2 == data$x_positive^(2)
 data$x_2 == data$x_positive^(3)
 ```

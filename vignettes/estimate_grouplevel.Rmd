@@ -180,7 +180,7 @@ Nevertheless, let's compute some **empirical scores**, such as the condition ave
 We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
 
 ```{r}
-data_sub <- aggregate(rt ~ id + condition, data_rt, mean) %>% 
+data_sub <- aggregate(rt ~ id + condition, data_rt, mean) %>%
   reshape_wider(names_from = "condition", values_from = "rt")
 
 data_sub <- data.frame(

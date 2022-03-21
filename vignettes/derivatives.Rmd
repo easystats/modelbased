@@ -64,7 +64,8 @@ set.seed(333)
 # Generate data
 data <- bayestestR::simulate_correlation(r = 0.85, n = 1000, names = c("y", "x"), mean = c(100, 0), sd = c(15, 1))
 
-ggplot(data, aes(x, y)) + geom_point()
+ggplot(data, aes(x, y)) +
+  geom_point()
 ```
 
 Upon visualizing the data, some people might go: "well the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further in this walkthrough). Let's do that:
@@ -104,7 +105,7 @@ GAMs can be fitted using the `mgcv` package, and the only change is that we need
 ```{r}
 model_gam <- mgcv::gam(y ~ s(x), data = data)
 
-plot(modelbased::estimate_relation(model_gam), line = list(color = "blue")) 
+plot(modelbased::estimate_relation(model_gam), line = list(color = "blue"))
 
 parameters::parameters(model_gam)
 ```
@@ -181,7 +182,8 @@ However, it is **very common to have difficult-to-interpret parameters in normal
 ```{r}
 data$y2 <- data$x^2 + rnorm(nrow(data), sd = 0.5)
 
-ggplot(data, aes(x, y2)) + geom_point()
+ggplot(data, aes(x, y2)) +
+  geom_point()
 ```
 
 Let us fit a polynomial regression:
@@ -190,7 +192,7 @@ Let us fit a polynomial regression:
 model_poly <- lm(y2 ~ poly(x, 2), data = data)
 
 # Length is increased to have a smoother line
-plot(modelbased::estimate_relation(model_poly, length = 30)) 
+plot(modelbased::estimate_relation(model_poly, length = 30))
 
 parameters::parameters(model_poly)
 ```
@@ -219,13 +221,13 @@ But, if you've been attentive up to this point, you might wonder: **why bother w
 ```{r}
 model_gam2 <- mgcv::gam(y2 ~ s(x), data = data)
 
-plot(modelbased::estimate_relation(model_gam2, length = 100), line = list(color = "blue")) 
+plot(modelbased::estimate_relation(model_gam2, length = 100), line = list(color = "blue"))
 
 # Increase precision
 deriv <- modelbased::estimate_slopes(model_gam2, trend = "x", at = "x", length = 100)
 
 plot(deriv, line = list(color = "blue")) +
-  geom_hline(yintercept = 0, linetype = "dashed") 
+  geom_hline(yintercept = 0, linetype = "dashed")
 
 summary(deriv)
 ```
@@ -240,12 +242,12 @@ data$y3 <- data$x^3 + rnorm(nrow(data), sd = 1)
 
 model_gam3 <- mgcv::gam(y3 ~ s(x), data = data)
 
-plot(modelbased::estimate_relation(model_gam3, length = 100), line = list(color = "blue")) 
+plot(modelbased::estimate_relation(model_gam3, length = 100), line = list(color = "blue"))
 
 deriv <- modelbased::estimate_slopes(model_gam3, trend = "x", at = "x", length = 100)
 
 plot(deriv, line = list(color = "blue")) +
-  geom_hline(yintercept = 0, linetype = "dashed") 
+  geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
 Again, the GAM nicely recovered the shape of the relationship. In summary, effects derivatives can be used to easily leverage the power of GAMs.

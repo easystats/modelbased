@@ -136,10 +136,11 @@ Because the meaning of these parameters is somewhat disconnected with our need f
 
 ```{r message=FALSE, warning=FALSE}
 # Compute derivative
-deriv <- estimate_slopes(model, 
-                         trend = "Petal.Length", 
-                         at = "Petal.Length",
-                         length = 100)
+deriv <- estimate_slopes(model,
+  trend = "Petal.Length",
+  at = "Petal.Length",
+  length = 100
+)
 
 # Visualise
 plot(deriv)

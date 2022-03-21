@@ -330,16 +330,16 @@ Although the plot above is nice, and all, we would like the standardized changes
 Let's use the same model as above, and then obtain a data grid with specific values for `Petal.Width`.
 
 ```{r message=FALSE, warning=FALSE}
-vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>% 
-  visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>% 
-  unstandardize(vizdata, select = "Petal.Width") %>% 
-  estimate_relation(vizdata) 
+vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>%
+  visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>%
+  unstandardize(vizdata, select = "Petal.Width") %>%
+  estimate_relation(vizdata)
 
 vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
 
 # 6. Plot
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) + 
+  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = FALSE) +

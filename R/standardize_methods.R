@@ -1,6 +1,5 @@
 # Standardize -------------------------------------------------------------
 
-
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
@@ -14,17 +13,20 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   if (include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
+
     for (col in c("Predicted", "Mean", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
         x[col] <- datawizard::standardize(x[[col]], reference = resp, ...)
       }
     }
+
     for (col in c("SE", "MAD")) {
       if (col %in% names(x)) {
         x[col] <- x[[col]] / disp
       }
     }
   }
+
   attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
   x
 }
@@ -34,12 +36,10 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
 standardize.estimate_means <- standardize.estimate_predicted
 
 
-
-
-
 #' @export
 standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
   model <- attributes(x)$model
+
   if (insight::model_info(model)$is_linear) {
     # Get dispersion scaling factor
     if (robust) {
@@ -47,6 +47,7 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
     } else {
       disp <- stats::sd(insight::get_response(model), na.rm = TRUE)
     }
+
     # Standardize relevant cols
     for (col in c("Difference", "Coefficient", "SE", "MAD", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
@@ -54,6 +55,7 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
       }
     }
   }
+
   attr(x, "table_title") <- c(paste(attributes(x)$table_title[1], " (standardized)"), "blue")
   x
 }
@@ -62,10 +64,7 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
 standardize.estimate_slopes <- standardize.estimate_contrasts
 
 
-
 # Unstandardize -------------------------------------------------------------
-
-
 
 #' @method unstandardize estimate_predicted
 #' @export
@@ -81,11 +80,13 @@ unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   if (include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
+
     for (col in c("Predicted", "Mean", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
         x[col] <- datawizard::unstandardize(x[[col]], reference = resp, ...)
       }
     }
+
     for (col in c("SE", "MAD")) {
       if (col %in% names(x)) {
         x[col] <- x[[col]] * disp

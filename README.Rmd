@@ -305,7 +305,8 @@ deriv <- estimate_slopes(model,
 # 2. Visualize predictions and derivative
 see::plots(
   plot(estimate_relation(model)),
-  plot(deriv), n_rows = 2
+  plot(deriv),
+  n_rows = 2
 )
 ```
 

@@ -30,7 +30,7 @@ get_emcontrasts <- function(model,
                             fixed = NULL,
                             transform = "none",
                             method = "pairwise",
-                              ...) {
+                            ...) {
 
   # check if available
   insight::check_if_installed("emmeans")

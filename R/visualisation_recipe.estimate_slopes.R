@@ -105,25 +105,74 @@ visualisation_recipe.estimate_slopes <- function(x,
 
   # Line + Point-range style
   if (length(facs) > 0 && x1 == facs[1]) {
-    layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, y = "Coefficient", color = NULL, alpha = NULL, line = line)
+    layers[[paste0("l", l)]] <-
+      .visualisation_means_line(
+        data,
+        x1,
+        y = "Coefficient",
+        color = NULL,
+        alpha = NULL,
+        line = line
+      )
+
     l <- l + 1
-    layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, y = "Coefficient", color = color, alpha = NULL, pointrange = pointrange)
+
+    layers[[paste0("l", l)]] <- .visualisation_means_pointrange(
+      data,
+      x1,
+      y = "Coefficient",
+      color = color,
+      alpha = NULL,
+      pointrange = pointrange
+    )
+
     l <- l + 1
 
     # Ribbon + line style
   } else if (x1 == nums[1] && length(nums) == 1) {
-    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Coefficient", fill = fill, ribbon = ribbon, group = group_ribbon)
+    layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
+      data,
+      x1,
+      y = "Coefficient",
+      fill = fill,
+      ribbon = ribbon,
+      group = group_ribbon
+    )
+
     l <- l + 1
-    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
+
+    layers[[paste0("l", l)]] <- .visualisation_slopes_line(
+      data,
+      x1,
+      color,
+      group_line,
+      alpha,
+      line = line
+    )
+
     l <- l + 1
   } else if (x1 == nums[1] && alpha == nums[2]) {
-    layers[[paste0("l", l)]] <- .visualisation_slopes_line(data, x1, color, group_line, alpha, line = line)
+    layers[[paste0("l", l)]] <- .visualisation_slopes_line(
+      data,
+      x1,
+      color,
+      group_line,
+      alpha,
+      line = line
+    )
+
     l <- l + 1
   }
+
   # Facet
   if (!is.null(facet)) {
     layers[[paste0("l", l)]] <- list(geom = "facet_wrap", facets = facet)
-    if (!is.null(facet_wrap)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet_wrap)
+
+    if (!is.null(facet_wrap)) {
+      layers[[paste0("l", l)]] <-
+        utils::modifyList(layers[[paste0("l", l)]], facet_wrap)
+    }
+
     l <- l + 1
   }
 
@@ -153,7 +202,9 @@ visualisation_recipe.estimate_slopes <- function(x,
       alpha = alpha
     )
   )
+
   if (!is.null(line)) out <- utils::modifyList(out, line) # Update with additional args
+
   out
 }
 

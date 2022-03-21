@@ -16,12 +16,12 @@
 #' get_emtrends(model, at = "Sepal.Width")
 #' @export
 get_emtrends <- function(model,
-                           trend = NULL,
-                           at = NULL,
-                           fixed = NULL,
-                           levels = NULL,
-                           modulate = NULL,
-                           ...) {
+                         trend = NULL,
+                         at = NULL,
+                         fixed = NULL,
+                         levels = NULL,
+                         modulate = NULL,
+                         ...) {
 
   # Deprecation
   if (!is.null(levels) | !is.null(modulate)) {

@@ -23,7 +23,8 @@ across them).}
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \description{
-Modelbased-like API to create \pkg{marginaleffects} objects. This is Work-in-progress.
+Modelbased-like API to create \pkg{marginaleffects} objects. This is
+Work-in-progress.
 }
 \examples{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -31,6 +32,5 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_marginaleffects(model, trend = "Petal.Length", at = "Species")
 get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
 get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
-
 
 }

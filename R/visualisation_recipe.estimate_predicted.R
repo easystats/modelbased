@@ -2,7 +2,14 @@
 #'
 #'
 #' @param x A modelbased object.
-#' @param show_data Display the "raw" data as a background to the model-based estimation. Can be set to `"none"` to remove it. When input is the result of `estimate_means`, `show_data` can be "points" (the jittered observation points), "boxplot", "violin" a combination of them (see examples). When input is the result of `estimate_response` or `estimate_relation`, `show_data` can be "points" (the points of the original data corresponding to the x and y axes), "density_2d", "density_2d_filled", "density_2d_polygon" or "density_2d_raster".
+#' @param show_data Display the "raw" data as a background to the model-based
+#'   estimation. Can be set to `"none"` to remove it. When input is the result
+#'   of `estimate_means`, `show_data` can be "points" (the jittered observation
+#'   points), "boxplot", "violin" a combination of them (see examples). When
+#'   input is the result of `estimate_response` or `estimate_relation`,
+#'   `show_data` can be "points" (the points of the original data corresponding
+#'   to the x and y axes), "density_2d", "density_2d_filled",
+#'   "density_2d_polygon" or "density_2d_raster".
 #' @param point,jitter,boxplot,violin,pointrange,density_2d,line,hline,ribbon,labs,facet_wrap Additional aesthetics and parameters for the geoms (see customization example).
 #' @param ... Other arguments passed to other functions.
 #'
@@ -185,9 +192,24 @@ visualisation_recipe.estimate_predicted <- function(x,
 
     for (i in show_data) {
       if (i %in% c("point", "points", "jitter")) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, shape = shape, stroke = stroke, type = i, point = point)
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(
+          rawdata,
+          x1,
+          y,
+          color,
+          shape = shape,
+          stroke = stroke,
+          type = i,
+          point = point
+        )
       } else if (i %in% c("density_2d", "density_2d_filled", "density_2d_polygon", "density_2d_raster")) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_density2d(rawdata, x1, y, type = i, density_2d = density_2d)
+        layers[[paste0("l", l)]] <- .visualisation_predicted_density2d(
+          rawdata,
+          x1,
+          y,
+          type = i,
+          density_2d = density_2d
+        )
       } else {
         stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.")
       }
@@ -203,15 +225,31 @@ visualisation_recipe.estimate_predicted <- function(x,
     } else {
       ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
       ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
+
       for (i in 1:length(ci_lows)) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(data, x1, y = "Predicted", fill = color, ci_low = ci_lows[i], ci_high = ci_highs[i], ribbon = ribbon)
+        layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
+          data,
+          x1,
+          y = "Predicted",
+          fill = color,
+          ci_low = ci_lows[i],
+          ci_high = ci_highs[i],
+          ribbon = ribbon
+        )
         l <- l + 1
       }
     }
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data, x1, alpha, color, linetype, group = group, line = line)
+  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data,
+    x1,
+    alpha,
+    color,
+    linetype,
+    group = group,
+    line = line
+  )
   l <- l + 1
 
   # Labs
@@ -226,7 +264,16 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Points ------------------------------------------------------------
 
-.visualisation_predicted_points <- function(rawdata, x1, y, color, type = "point", shape = 16, stroke = 0, width = NULL, height = NULL, point = NULL) {
+.visualisation_predicted_points <- function(rawdata,
+                                            x1,
+                                            y,
+                                            color,
+                                            type = "point",
+                                            shape = 16,
+                                            stroke = 0,
+                                            width = NULL,
+                                            height = NULL,
+                                            point = NULL) {
   if (type == "points") type <- "point" # Sanity fix
 
   out <- list(
@@ -244,20 +291,30 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Density 2D ------------------------------------------------------------
 
-.visualisation_predicted_density2d <- function(rawdata, x1, y, type = "density_2d", density_2d = NULL) {
+.visualisation_predicted_density2d <- function(rawdata,
+                                               x1,
+                                               y,
+                                               type = "density_2d",
+                                               density_2d = NULL) {
   out <- list(
     data = as.data.frame(rawdata),
     geom = type,
     aes = list(x = x1, y = y)
   )
+
   if (!is.null(density_2d)) out <- utils::modifyList(out, density_2d) # Update with additional args
   out
 }
 
 # Layer - Lines -------------------------------------------------------------
 
-
-.visualisation_predicted_line <- function(data, x1, alpha, color, linetype, group = NULL, line = NULL) {
+.visualisation_predicted_line <- function(data,
+                                          x1,
+                                          alpha,
+                                          color,
+                                          linetype,
+                                          group = NULL,
+                                          line = NULL) {
   if (is.null(group)) group <- alpha
   if (!is.null(alpha) && !is.null(color)) {
     group <- paste0("interaction(", alpha, ", ", color, ")")
@@ -282,7 +339,14 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 # Layer - Ribbon -------------------------------------------------------------
 
-.visualisation_predicted_ribbon <- function(data, x1, y, fill, group = NULL, ci_low = "CI_low", ci_high = "CI_high", ribbon = NULL) {
+.visualisation_predicted_ribbon <- function(data,
+                                            x1,
+                                            y,
+                                            fill,
+                                            group = NULL,
+                                            ci_low = "CI_low",
+                                            ci_high = "CI_high",
+                                            ribbon = NULL) {
   out <- list(
     geom = "ribbon",
     data = data,
@@ -347,8 +411,6 @@ visualisation_recipe.estimate_predicted <- function(x,
 
 
 # Utilities ---------------------------------------------------------------
-
-
 
 .visualisation_recipe_getrawdata <- function(x, ...) {
   rawdata <- insight::get_data(attributes(x)$model)
