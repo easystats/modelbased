@@ -274,10 +274,11 @@ compute the <strong>marginal linear effect</strong> of the smooth term,
 i.e., the “derivative”, using <code>estimate_slopes</code>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Compute derivative</span>
-<span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, 
-                         trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, 
-                         at <span class="op">=</span> <span class="st">"Petal.Length"</span>,
-                         length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>
+<span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>,
+  trend <span class="op">=</span> <span class="st">"Petal.Length"</span>,
+  at <span class="op">=</span> <span class="st">"Petal.Length"</span>,
+  length <span class="op">=</span> <span class="fl">100</span>
+<span class="op">)</span>
 
 <span class="co"># Visualise</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
