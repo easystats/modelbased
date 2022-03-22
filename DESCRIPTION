@@ -72,8 +72,7 @@ Suggests:
     testthat
 Remotes:
     easystats/insight,
-    easystats/datawizard,
-    easystats/bayestestR
+    easystats/datawizard
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2
