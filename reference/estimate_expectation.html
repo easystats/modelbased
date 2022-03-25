@@ -3,14 +3,12 @@
 response variables for different combinations of predictor values. Such
 estimates can be used to make inferences about relationships between
 variables and to make predictions about individual cases.
-
 Model-based response estimates and uncertainty can be generated for both the
 conditional average response values (the regression line or expectation) and
 for predictions about individual cases. See below for details."><title>Model-based response estimates and uncertainty — estimate_expectation • modelbased</title><!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="../favicon-16x16.png"><link rel="icon" type="image/png" sizes="32x32" href="../favicon-32x32.png"><link rel="apple-touch-icon" type="image/png" sizes="180x180" href="../apple-touch-icon.png"><link rel="apple-touch-icon" type="image/png" sizes="120x120" href="../apple-touch-icon-120x120.png"><link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png"><link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png"><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Model-based response estimates and uncertainty — estimate_expectation"><meta property="og:description" content="After fitting a model, it is useful generate model-based estimates of the
 response variables for different combinations of predictor values. Such
 estimates can be used to make inferences about relationships between
 variables and to make predictions about individual cases.
-
 Model-based response estimates and uncertainty can be generated for both the
 conditional average response values (the regression line or expectation) and
 for predictions about individual cases. See below for details."><meta property="og:image" content="/reference/figures/card.png"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:creator" content="@easystats4u"><meta name="twitter:site" content="@easystats4u"><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -89,9 +87,8 @@ for predictions about individual cases. See below for details."><meta property="
     <p>After fitting a model, it is useful generate model-based estimates of the
 response variables for different combinations of predictor values. Such
 estimates can be used to make inferences about relationships between
-variables and to make predictions about individual cases.
-<br><br>
-Model-based response estimates and uncertainty can be generated for both the
+variables and to make predictions about individual cases.</p>
+<p>Model-based response estimates and uncertainty can be generated for both the
 conditional average response values (the regression line or expectation) and
 for predictions about individual cases. See below for details.</p>
     </div>
@@ -177,7 +174,7 @@ terms of what quantity is being estimated and the meaning of the uncertainty
 intervals. The major choices are <strong>expected values</strong> for uncertainty in the
 regression line and <strong>predicted values</strong> for uncertainty in the individual
 case predictions.</p>
-<p><strong>Expected values</strong> refer the the fitted regression line---the estimated
+<p><strong>Expected values</strong> refer to the fitted regression line - the estimated
 <em>average</em> response value (i.e., the "expectation") for individuals with
 specific predictor values. For example, in a linear model <em>y</em> = 2 + 3<em>x</em> +
 4<em>z</em> + <em>e</em>, the estimated average <em>y</em> for individuals with <em>x</em> = 1 and <em>z</em> =
@@ -661,12 +658,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.12, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Markov chains did not converge! Do not analyze results!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -674,16 +675,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.26 | 0.94 | [27.24, 31.50]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.95 | 0.77 | [25.34, 28.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.63 | 0.58 | [23.07, 25.85]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.32 | 0.48 | [21.21, 23.47]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     20.00 | 0.51 | [18.81, 20.94]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.68 | 0.62 | [16.65, 19.00]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.37 | 0.74 | [13.90, 16.79]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.05 | 0.95 | [11.15, 14.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.74 | 1.12 | [ 8.62, 13.26]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.42 | 1.34 | [ 5.90, 11.45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.10 | 1.12 | [26.89, 31.64]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.79 | 0.91 | [24.84, 28.68]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.48 | 0.78 | [22.90, 26.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.16 | 0.66 | [20.75, 23.45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.85 | 0.60 | [18.38, 20.86]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.64 | [16.13, 18.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.22 | 0.70 | [13.70, 16.82]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.91 | 0.87 | [10.87, 14.54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.60 | 1.07 | [ 8.10, 12.57]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.28 | 1.26 | [ 5.70, 11.05]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
