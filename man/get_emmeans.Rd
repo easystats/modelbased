@@ -104,11 +104,11 @@ probabilities.}
 for which to compute the slopes.}
 }
 \description{
-The \code{get_emmeans} function is a wrapper to facilitate the usage of
+The \code{get_emmeans()} function is a wrapper to facilitate the usage of
 \code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler
 and intuitive API to find the specifications and variables of interest. It is
 meanly made to for the developers to facilitate the organization and
-debugging, and end-users should rather use the \verb{estimate_*} series of
+debugging, and end-users should rather use the \verb{estimate_*()} series of
 functions.
 }
 \examples{

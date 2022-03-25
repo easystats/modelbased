@@ -1,10 +1,11 @@
 #' Model-based response estimates and uncertainty
 #'
+#' @description
 #' After fitting a model, it is useful generate model-based estimates of the
 #' response variables for different combinations of predictor values. Such
 #' estimates can be used to make inferences about relationships between
 #' variables and to make predictions about individual cases.
-#' \cr\cr
+#'
 #' Model-based response estimates and uncertainty can be generated for both the
 #' conditional average response values (the regression line or expectation) and
 #' for predictions about individual cases. See below for details.
@@ -17,7 +18,7 @@
 #' regression line and **predicted values** for uncertainty in the individual
 #' case predictions.
 #'
-#' **Expected values** refer the the fitted regression line---the estimated
+#' **Expected values** refer to the fitted regression line - the estimated
 #' *average* response value (i.e., the "expectation") for individuals with
 #' specific predictor values. For example, in a linear model *y* = 2 + 3*x* +
 #' 4*z* + *e*, the estimated average *y* for individuals with *x* = 1 and *z* =

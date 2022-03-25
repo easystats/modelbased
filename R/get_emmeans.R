@@ -1,10 +1,10 @@
 #' Easy 'emmeans' and 'emtrends'
 #'
-#' The `get_emmeans` function is a wrapper to facilitate the usage of
+#' The `get_emmeans()` function is a wrapper to facilitate the usage of
 #' `emmeans::emmeans()` and `emmeans::emtrends()`, providing a somewhat simpler
 #' and intuitive API to find the specifications and variables of interest. It is
 #' meanly made to for the developers to facilitate the organization and
-#' debugging, and end-users should rather use the `estimate_*` series of
+#' debugging, and end-users should rather use the `estimate_*()` series of
 #' functions.
 #'
 #' @param model A statistical model.
