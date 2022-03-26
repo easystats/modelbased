@@ -78,7 +78,9 @@ report::report(rez)
 print(report::report(cor.test(data$y, data$x)), width = 80)
 ```
 
-Great, we know there is a significant correlation between the two variables! :partying_face: But what we would like to know is **for every increase of 1 on *x*, how much does *y* increase?** In other words, what is the **slope** of the relationship?
+Great, we know there is a significant correlation between the two variables! 🥳 
+
+But what we would like to know is **for every increase of 1 on *x*, how much does *y* increase?** In other words, what is the **slope** of the relationship?
 
 The traditional approach to this is to fit a **linear model** and assess its **parameters**. Indeed, the slope of linear relationship between a predictor and its outcome is actually what the **effects** observed in the regression correspond to.
 
@@ -98,9 +100,9 @@ So the parameters table shows us that the **effect of x** is `12.75`. For every 
 
 > *A new player has entered the game.*
 
-You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling a natural modelization of non-linear relationships. But we can also use them **for linear links**, or in general if we are not sure about the exact shape of the relationship. Because GAMs usually penalize wiggly patterns, they have no problems with approximating linear relationship with this is what the data indicates.
+You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling a way to model non-linear relationships. But we can also use them **for linear links**, or, in general, if we are not sure about the exact shape of the relationship. Because GAMs usually penalize wiggly patterns, they have no problems with approximating linear relationship with this is what the data indicates.
 
-GAMs can be fitted using the `mgcv` package, and the only change is that we need to specify as **smooth** term (`s()`) for the variable that we want to estimate the (non-necessarily linear) relationship for.
+GAMs can be fitted using the `mgcv` package, and the only change is that we need to specify a **smooth** term (`s()`) for the variable for which we want to estimate the (non-necessarily linear) relationship.
 
 ```{r}
 model_gam <- mgcv::gam(y ~ s(x), data = data)
@@ -109,7 +111,6 @@ plot(modelbased::estimate_relation(model_gam), line = list(color = "blue"))
 
 parameters::parameters(model_gam)
 ```
-
 
 Wow, the GAM-based modeled relationship is near-exactly the same as that of the GLM! **GAMs are powerful** 😎
 
@@ -130,32 +131,30 @@ knitr::include_graphics("../man/figures/derivative.png")
 ```
 
 
-In the figure above, the above plot shows a non-linear relationship between the variables, and the below-plot shows its **1st order derivative**, i.e., the evolution of the slope of that curve. It might take a bit of time to mentally wrap your head around this transformation, but once you get it it will become very easy to think in terms of derivatives.
+In the figure above, the above plot shows a non-linear relationship between the variables, and the below-plot shows its **1st order derivative**, i.e., the evolution of the slope of that curve. It might take a bit of time to mentally wrap your head around this transformation, but once you get it, it will become very easy to think in terms of derivatives.
 
 You can see that the derivative peaks when the slope of the relationship is at its highest (when it is the steepest), and then decrease again until reaching 0. A zero-crossing of the derivative means an inversion of the the trend; it is when the relationship starts to be negative.
 
 Derivatives can be computed for statistical models, including simple ones such as linear regressions. Before you look at the answer below, try to think and imagine what would the derivative plot of our previously computed linear model would look like? 
 
-We know that the slope is `12.75` (from our parameters analysis). Does it change accross the course of the relationship? No, because it is a straight line, so the slope is constant. If the slope is constant, then the derivative should be... a constant line too, right? Let's verify this.
+We know that the slope is `12.75` (from our parameters analysis). Does it change across the course of the relationship? No, because it is a straight line, so the slope is constant. If the slope is constant, then the derivative should be... a constant line too, right? Let's verify this.
 
-
-To compute the derivative, we can use the `estimate_slopes()` function, and specify that we want to know the trend of *x* **over the course of** ("at") itself.
+To compute the derivative, we can use the `estimate_slopes()` function, and specify that we want to know: the trend of *x* **over the course of** ("at") itself.
 
 ```{r}
 deriv <- modelbased::estimate_slopes(model_lm, trend = "x", at = "x")
 
-plot(deriv) +
-  geom_hline(yintercept = 0, linetype = "dashed") # add a dashed line at 0 to show absence of effect
+plot(deriv) + # add a dashed line at 0 to show absence of effect
+  geom_hline(yintercept = 0, linetype = "dashed") 
 
 summary(deriv)
 ```
 
-The plot shows a straight horizontal line at 12.75, with a fixed confidence interval (the same as in the parameter table). That is expected, by definition, a linaer model models a straight line with a fixed slope.
+The plot shows a straight horizontal line at 12.75, with a fixed confidence interval (the same as in the parameter table). That is expected, by definition, a linear model models a straight line with a fixed slope.
 
 By running `summary()` on the derivative, we obtain a summary by "segments" (positive, flat, negative). Here, there is only one segment, which average coefficient corresponds to the regression parameter.
 
-
-**This means that we don't really need the parameters table.** Indeed, all the information about the slope can be retrieved from the effect derivative. And guess what... it can be applied to **any model**...
+**This means that we don't really need the parameters table.** Indeed, all the information about the slope can be retrieved from the effect derivative. And guess what... it can be applied to **any model**!
 
 Such as GAMs. Lets' to the same for our GAM model:
 
@@ -211,7 +210,7 @@ plot(deriv) +
 summary(deriv)
 ```
 
-If you know a bit theory about derivatives, you won't be suprised to find out that the derivative of a 2nd order polynomial (`x + x^2`) is actually a linear line. We can see conclude from this plot that the slope is (**significantly**, because the confidence interval does not cover 0) negative until 0, and then becomes positive. 0 corresponds indeed to the point of inversion of the curve.
+If you know a bit theory about derivatives, you won't be suprised to find out that the derivative of a 2nd order polynomial (`x + x^2`) is actually a linear line. We can conclude from this plot that the slope is (**significantly**, because the confidence interval does not cover 0) negative until 0, and then becomes positive. 0 corresponds indeed to the point of inversion of the curve.
 
 Moral of the story? **Derivatives can be used to easily interpret and draw conclusions about relationships from models in which parameters are not straightforward to interpret.**
 
@@ -235,7 +234,7 @@ summary(deriv)
 
 The conclusion is very similar, it shows a significant effect that goes from negative to positive and becomes flat (i.e., non-significant) around 0.
 
-What about *3rd-degree-type* relationships? It works just the same:
+What about *3rd-degree-type* relationships? It works the same way:
 
 ```{r}
 data$y3 <- data$x^3 + rnorm(nrow(data), sd = 1)
@@ -250,4 +249,6 @@ plot(deriv, line = list(color = "blue")) +
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-Again, the GAM nicely recovered the shape of the relationship. In summary, effects derivatives can be used to easily leverage the power of GAMs.
+Again, the GAM nicely recovered the shape of the relationship. 
+
+**In summary, effects derivatives can be used to easily leverage the power of GAMs.**
