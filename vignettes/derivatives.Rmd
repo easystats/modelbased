@@ -38,7 +38,7 @@ set.seed(333)
 ```
 
 
-One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...) and simple models are enough for simple tasks. Why shoot a fly with a bazooka? In this vignette, we are going to show that sometimes the bazooka is actually so versatile that is works just as easily on a fly. In particular, we will investigate how the combination **GAM + Effect Derivative** can be used even in simple contexts to make your data analysis easier.
+One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...) and simple models are enough for simple tasks. Why shoot a fly with a bazooka? In this vignette, we are going to show that sometimes the bazooka is actually so versatile that it works just as easily on a fly. In particular, we will investigate how the combination **GAM + Effect Derivative** can be used even in simple contexts to make your data analysis easier.
 
 # The Traditional Approach
 
