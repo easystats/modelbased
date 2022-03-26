@@ -658,16 +658,12 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.12, indicating chains have not mixed.</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Tail Effective Samples Size (ESS) is too low, indicating posterior variances and tail quantiles may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#tail-ess</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Markov chains did not converge! Do not analyze results!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -675,16 +671,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.10 | 1.12 | [26.89, 31.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.79 | 0.91 | [24.84, 28.68]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.48 | 0.78 | [22.90, 26.00]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.16 | 0.66 | [20.75, 23.45]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.85 | 0.60 | [18.38, 20.86]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.64 | [16.13, 18.77]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.22 | 0.70 | [13.70, 16.82]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.91 | 0.87 | [10.87, 14.54]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.60 | 1.07 | [ 8.10, 12.57]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.28 | 1.26 | [ 5.70, 11.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.22 | 1.08 | [27.18, 31.72]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.88 | 0.91 | [25.27, 28.99]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.54 | 0.75 | [23.25, 26.11]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.21 | 0.65 | [20.88, 23.34]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.87 | 0.60 | [18.90, 21.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.64 | [16.45, 18.99]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.20 | 0.76 | [13.79, 16.91]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.87 | 0.87 | [11.24, 15.17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.53 | 1.09 | [ 8.35, 13.10]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.20 | 1.28 | [ 5.71, 11.23]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>

@@ -158,10 +158,10 @@ say we want to keep the maximal effect structure.</p>
 <code class="sourceCode R"><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">+</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="fu"><a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link">test_performance</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">model2</span><span class="op">)</span></code></pre></div>
-<pre><code>&gt; Name   | Model |    BF
-&gt; ----------------------
-&gt; model  |    lm |      
-&gt; model2 |    lm | 26.52
+<pre><code>&gt; Name   | Model |    BF | df | df_diff | Chi2 |     p
+&gt; ----------------------------------------------------
+&gt; model  |    lm |       |  7 |         |      |      
+&gt; model2 |    lm | 26.52 |  5 |   -2.00 | 3.47 | 0.177
 &gt; Models were detected as nested and are compared in sequential order.</code></pre>
 <p>Although we are satisfied with our model and its performance, imagine
 we are not interested in the effect of <code>Petal.Length</code> for
