@@ -658,6 +658,9 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.06, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
@@ -671,16 +674,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.22 | 1.08 | [27.18, 31.72]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.88 | 0.91 | [25.27, 28.99]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.54 | 0.75 | [23.25, 26.11]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.21 | 0.65 | [20.88, 23.34]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.87 | 0.60 | [18.90, 21.00]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.64 | [16.45, 18.99]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.20 | 0.76 | [13.79, 16.91]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.87 | 0.87 | [11.24, 15.17]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.53 | 1.09 | [ 8.35, 13.10]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.20 | 1.28 | [ 5.71, 11.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.17 | 1.08 | [26.86, 31.49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.84 | 0.88 | [24.69, 28.40]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.52 | 0.70 | [23.28, 26.09]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.19 | 0.57 | [21.15, 23.16]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.87 | 0.50 | [19.09, 20.71]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.55 | [16.47, 18.48]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.22 | 0.67 | [13.80, 16.46]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.89 | 0.88 | [10.99, 14.41]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.57 | 1.07 | [ 8.31, 12.49]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.24 | 1.32 | [ 5.56, 10.57]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
