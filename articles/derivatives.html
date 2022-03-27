@@ -111,18 +111,19 @@
     
     
 <p>One floating assumption that can be encountered is that “complex
-models” should be used for “complex” stuff (data, designs, …) and simple
-models are enough for simple tasks. Why shoot a fly with a bazooka? In
-this vignette, we are going to show that sometimes the bazooka is
-actually so versatile that it works just as easily on a fly. In
-particular, we will investigate how the combination <strong>GAM + Effect
-Derivative</strong> can be used even in simple contexts to make your
-data analysis easier.</p>
+models” should be used for “complex” stuff (data, designs, …), and that
+simple models are enough for simple tasks. <strong>Why shoot a fly with
+a bazooka?</strong> In this vignette, we are going to show that,
+sometimes, the bazooka can be so versatile that it works just as easily
+on a fly as a flyswatter. In particular, we will investigate how the
+combination <strong>GAM + Effect Derivative</strong> can be used, even
+in simple contexts, to <strong>make your data analysis
+easier</strong>.</p>
 <div class="section level2">
 <h2 id="the-traditional-approach">The Traditional Approach<a class="anchor" aria-label="anchor" href="#the-traditional-approach"></a>
 </h2>
-<p>We are interested in the relationship between <em>y</em> and
-<em>x</em> in the following dataset:</p>
+<p>Let’s say we are interested in the relationship between <em>y</em>
+and <em>x</em> in the following dataset:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Package to fit GAMs</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">mgcv</span><span class="op">)</span>
@@ -146,11 +147,10 @@ data analysis easier.</p>
 <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-2-1.png" width="100%"></p>
-<p>Upon visualizing the data, some people might go: “well the most
+<p>Upon visualizing the data, some people might say: “well, the most
 straightforward thing to do is to run a <strong>correlation
 analysis</strong>” (they might not be wrong, but for the sake of the
-demonstration, we will push things further in this walkthrough). Let’s
-do that:</p>
+demonstration, we will push things further here). Let’s do that:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">rez</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">y</span>, <span class="va">data</span><span class="op">$</span><span class="va">x</span><span class="op">)</span>
 <span class="fu">report</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/report/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="va">rez</span><span class="op">)</span></code></pre></div>
@@ -165,9 +165,9 @@ variables! 🥳</p>
 <em>x</em>, how much does <em>y</em> increase?</strong> In other words,
 what is the <strong>slope</strong> of the relationship?</p>
 <p>The traditional approach to this is to fit a <strong>linear
-model</strong> and assess its <strong>parameters</strong>. Indeed, the
-slope of linear relationship between a predictor and its outcome is
-actually what the <strong>effects</strong> observed in the regression
+model</strong>, and assess its <strong>parameters</strong>. Indeed, the
+slope of the linear relationship between a predictor and its outcome is
+actually what the <strong>effects</strong> estimated by the regression
 correspond to.</p>
 <p>Let’s fit a linear regression model, visualize it, and describe its
 parameters.</p>
@@ -182,10 +182,10 @@ parameters.</p>
 &gt; --------------------------------------------------------------------
 &gt; (Intercept) |      100.00 | 0.25 | [99.51, 100.49] | 400.00 | &lt; .001
 &gt; x           |       12.75 | 0.25 | [12.26,  13.24] |  50.97 | &lt; .001</code></pre>
-<p>So the parameters table shows us that the <strong>effect of
-x</strong> is <code>12.75</code>. For every increase of 1 on
-<code>x</code>, <code>y</code> increases by <code>12.75</code>.
-Congrats, we’ve answered our question!</p>
+<p>The parameters table shows us that the <strong>effect of x</strong>
+is <code>12.75</code>. This means that for every increase of 1 on
+<code>x</code>, <code>y</code> increases by <code>12.75</code>.</p>
+<p>Congrats, we’ve answered our question!</p>
 </div>
 <div class="section level2">
 <h2 id="gams-can-be-used-for-linear-relationships-too">GAMs can be used for linear relationships too!<a class="anchor" aria-label="anchor" href="#gams-can-be-used-for-linear-relationships-too"></a>
@@ -195,11 +195,13 @@ Congrats, we’ve answered our question!</p>
 </blockquote>
 <p>You might have heard of <strong>General Additive Models</strong>, aka
 <strong>GAMs</strong>, that extend general linear models (GLMs) by
-enabling a way to model non-linear relationships. But we can also use
-them <strong>for linear links</strong>, or, in general, if we are not
-sure about the exact shape of the relationship. Because GAMs usually
-penalize wiggly patterns, they have no problems with approximating
-linear relationship with this is what the data indicates.</p>
+enabling an elegant and robust way of modelling non-linear
+relationships. But it’s not because they are good with curvy
+relationships that they cannot do simple stuff too! We can even use them
+<strong>for linear links</strong>, or, in general, when we are not sure
+about the exact shape of the relationship. Because GAMs usually penalize
+wiggly patterns, they have no problems with approximating linear
+relationship, if this is what the data indicates.</p>
 <p>GAMs can be fitted using the <code>mgcv</code> package, and the only
 change is that we need to specify a <strong>smooth</strong> term
 (<code><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s()</a></code>) for the variable for which we want to estimate the
@@ -224,15 +226,15 @@ change is that we need to specify a <strong>smooth</strong> term
 &gt; Smooth term (x) | 2598.40 | 1.00 | &lt; .001</code></pre>
 <p>Wow, the GAM-based modeled relationship is near-exactly the same as
 that of the GLM! <strong>GAMs are powerful</strong> 😎</p>
-<p>Okay, but there’s one <em>slight</em> issue. If you look at the
-parameters table, there is indeed one line for the “smooth term”, but it
-has… no coefficient! Indeed, because GAM doesn’t model straight lines,
-it doesn’t return the value of the slope. That’s why some people
-consider GAMs complicated to discuss statistically, as their parameters
-are not easily interpretable.</p>
+<p>Okay, that’s cool, but there’s one <em>slight</em> issue. If you look
+at the parameters table, there is indeed one line for the “smooth term”,
+but it has… <strong>no coefficient!</strong> Indeed, because GAMs don’t
+model straight lines, it doesn’t return the value of the slope. That’s
+why some people consider GAMs complicated to discuss statistically, as
+their parameters are not easily interpretable.</p>
 <blockquote>
-<p>Owww, so this is problematic considering our question about the
-effect of <em>x</em> on <em>y</em> 😕</p>
+<p>Owww, so it is an issue considering our question about the effect of
+<em>x</em> on <em>y</em> 😕</p>
 </blockquote>
 <p>Or <strong>is it?</strong></p>
 </div>
@@ -240,10 +242,10 @@ effect of <em>x</em> on <em>y</em> 😕</p>
 <h2 id="effect-derivatives">Effect Derivatives<a class="anchor" aria-label="anchor" href="#effect-derivatives"></a>
 </h2>
 <p>Let us introduce another concept that is likely to get very popular
-in regression-modelling in the near future.
+in the near future within the world of regressions.
 <strong>Derivatives</strong>. You might remember from your math class in
 high school that derivatives are basically the <em>pattern of the slope
-of a pattern</em>.</p>
+of a pattern</em> <sub>(pattern-ception much)</sub>.</p>
 <p><img src="../reference/figures/derivative.png" width="66%" style="display: block; margin: auto;"></p>
 <p>In the figure above, the above plot shows a non-linear relationship
 between the variables, and the below-plot shows its <strong>1st order
@@ -311,9 +313,9 @@ to <strong>any model</strong>!</p>
 &gt; -3.38 | 3.28 | -0.05 |       12.75 | 0.25 | [12.26, 13.24] |     50.97 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>Isn’t that amazing, the results are <em>identical</em>. The moral of
-the story is that GAMs can be used in a wide variety of contexts, even
-for simple cases, and that derivatives are an easy way of interpreting
-them.</p>
+the story is that <strong>GAMs can be used in a wide variety of
+contexts, even for simple cases</strong>, and that derivatives are an
+easy way of interpreting them.</p>
 <p>Let’s jump to another example!</p>
 </div>
 <div class="section level2">
@@ -363,10 +365,9 @@ the “linear slope” at every point of the curve.</p>
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; Average Marginal Effects
 &gt; 
-&gt; Start |   End |     x | Coefficient |   SE |         95% CI | t(997) |      p
-&gt; -----------------------------------------------------------------------------
-&gt; -3.38 | -0.42 | -1.90 |       -3.76 | 0.05 | [-3.85, -3.67] | -74.58 | &lt; .001
-&gt; 0.32  |  3.28 |  1.80 |        3.61 | 0.05 | [ 3.52,  3.70] |  71.46 | &lt; .001
+&gt; Start |  End |     x | Coefficient |   SE |        95% CI | t(997) |      p
+&gt; ---------------------------------------------------------------------------
+&gt; -3.38 | 3.28 | -0.05 |       -0.07 | 0.05 | [-0.17, 0.02] |  -1.56 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>If you know a bit theory about derivatives, you won’t be suprised to
 find out that the derivative of a 2nd order polynomial
@@ -400,8 +401,7 @@ trick?</strong></p>
 &gt; Start |   End |     x | Coefficient |   SE |         95% CI | t(991.26) |      p
 &gt; --------------------------------------------------------------------------------
 &gt; -3.38 | -0.08 | -1.73 |       -3.25 | 0.20 | [-3.63, -2.86] |    -16.61 | &lt; .001
-&gt; -0.01 | -0.01 | -0.01 |       -0.09 | 0.11 | [-0.31,  0.14] |     -0.77 | 0.441 
-&gt; 0.05  |  0.05 |  0.05 |        0.08 | 0.11 | [-0.14,  0.31] |      0.76 | 0.450 
+&gt; -0.01 |  0.05 |  0.02 |   -1.86e-03 | 0.11 | [-0.22,  0.22] | -7.76e-03 | 0.446 
 &gt; 0.12  |  3.28 |  1.70 |        3.39 | 0.20 | [ 3.01,  3.78] |     17.37 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>The conclusion is very similar, it shows a significant effect that
