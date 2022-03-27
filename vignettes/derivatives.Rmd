@@ -38,11 +38,11 @@ set.seed(333)
 ```
 
 
-One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...) and simple models are enough for simple tasks. Why shoot a fly with a bazooka? In this vignette, we are going to show that sometimes the bazooka is actually so versatile that it works just as easily on a fly. In particular, we will investigate how the combination **GAM + Effect Derivative** can be used even in simple contexts to make your data analysis easier.
+One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...), and that simple models are enough for simple tasks. **Why shoot a fly with a bazooka?** In this vignette, we are going to show that, sometimes, the bazooka can be so versatile that it works just as easily on a fly as a flyswatter. In particular, we will investigate how the combination **GAM + Effect Derivative** can be used, even in simple contexts, to **make your data analysis easier**.
 
 # The Traditional Approach
 
-We are interested in the relationship between *y* and *x* in the following dataset:
+Let's say we are interested in the relationship between *y* and *x* in the following dataset:
 
 ```{r}
 # Package to fit GAMs
@@ -68,7 +68,7 @@ ggplot(data, aes(x, y)) +
   geom_point()
 ```
 
-Upon visualizing the data, some people might go: "well the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further in this walkthrough). Let's do that:
+Upon visualizing the data, some people might say: "well, the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further here). Let's do that:
 
 ```{r eval=FALSE}
 rez <- cor.test(data$y, data$x)
@@ -82,7 +82,7 @@ Great, we know there is a significant correlation between the two variables! �
 
 But what we would like to know is **for every increase of 1 on *x*, how much does *y* increase?** In other words, what is the **slope** of the relationship?
 
-The traditional approach to this is to fit a **linear model** and assess its **parameters**. Indeed, the slope of linear relationship between a predictor and its outcome is actually what the **effects** observed in the regression correspond to.
+The traditional approach to this is to fit a **linear model**, and assess its **parameters**. Indeed, the slope of the linear relationship between a predictor and its outcome is actually what the **effects** estimated by the regression correspond to.
 
 Let's fit a linear regression model, visualize it, and describe its parameters.
 
@@ -94,13 +94,15 @@ plot(modelbased::estimate_relation(model_lm))
 parameters::parameters(model_lm)
 ```
 
-So the parameters table shows us that the **effect of x** is `12.75`. For every increase of 1 on `x`, `y` increases by `12.75`. Congrats, we've answered our question!
+The parameters table shows us that the **effect of x** is `12.75`. This means that for every increase of 1 on `x`, `y` increases by `12.75`. 
+
+Congrats, we've answered our question!
 
 # GAMs can be used for linear relationships too!
 
 > *A new player has entered the game.*
 
-You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling a way to model non-linear relationships. But we can also use them **for linear links**, or, in general, if we are not sure about the exact shape of the relationship. Because GAMs usually penalize wiggly patterns, they have no problems with approximating linear relationship with this is what the data indicates.
+You might have heard of **General Additive Models**, aka **GAMs**, that extend general linear models (GLMs) by enabling an elegant and robust way of modelling non-linear relationships. But it's not because they are good with curvy relationships that they cannot do simple stuff too! We can even use them **for linear links**, or, in general, when we are not sure about the exact shape of the relationship. Because GAMs usually penalize wiggly patterns, they have no problems with approximating linear relationship, if this is what the data indicates.
 
 GAMs can be fitted using the `mgcv` package, and the only change is that we need to specify a **smooth** term (`s()`) for the variable for which we want to estimate the (non-necessarily linear) relationship.
 
@@ -114,17 +116,17 @@ parameters::parameters(model_gam)
 
 Wow, the GAM-based modeled relationship is near-exactly the same as that of the GLM! **GAMs are powerful** 😎
 
-Okay, but there's one *slight* issue. If you look at the parameters table, there is indeed one line for the "smooth term", but it has... no coefficient! Indeed, because GAM doesn't model straight lines, it doesn't return the value of the slope. That's why some people consider GAMs complicated to discuss statistically, as their parameters are not easily interpretable.
+Okay, that's cool, but there's one *slight* issue. If you look at the parameters table, there is indeed one line for the "smooth term", but it has... **no coefficient!** Indeed, because GAMs don't model straight lines, it doesn't return the value of the slope. That's why some people consider GAMs complicated to discuss statistically, as their parameters are not easily interpretable.
 
 
-> Owww, so this is problematic considering our question about the effect of *x* on *y* 😕
+> Owww, so it is an issue considering our question about the effect of *x* on *y* 😕
 
 Or **is it?**
 
 
 # Effect Derivatives
 
-Let us introduce another concept that is likely to get very popular in regression-modelling in the near future. **Derivatives**. You might remember from your math class in high school that derivatives are basically the *pattern of the slope of a pattern*.
+Let us introduce another concept that is likely to get very popular in the near future within the world of regressions. **Derivatives**. You might remember from your math class in high school that derivatives are basically the *pattern of the slope of a pattern* <sub>(pattern-ception much)</sub>.
 
 ```{r echo=FALSE, fig.align='center', out.width="66%"}
 knitr::include_graphics("../man/figures/derivative.png")
@@ -167,7 +169,7 @@ plot(deriv, line = list(color = "blue")) +
 summary(deriv)
 ```
 
-Isn't that amazing, the results are *identical*. The moral of the story is that GAMs can be used in a wide variety of contexts, even for simple cases, and that derivatives are an easy way of interpreting them.
+Isn't that amazing, the results are *identical*. The moral of the story is that **GAMs can be used in a wide variety of contexts, even for simple cases**, and that derivatives are an easy way of interpreting them.
 
 Let's jump to another example!
 

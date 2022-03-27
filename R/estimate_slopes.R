@@ -202,7 +202,7 @@ summary.estimate_slopes <- function(object, ...) {
   ends <- nrow(data)
   # Iterate through all rows to find blocks
   for (i in 2:nrow(data)) {
-    if (data$Confidence[i] != sig | signs[i] != sign) {
+    if ((data$Confidence[i] != sig) | ((signs[i] != sign) & data$Confidence[i] == "Uncertain")) {
       sign <- signs[i]
       sig <- data$Confidence[i]
       starts <- c(starts, i)
