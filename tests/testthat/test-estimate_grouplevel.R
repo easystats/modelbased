@@ -1,5 +1,5 @@
 if (require("testthat") && require("modelbased") && require("lme4")) {
-  test_that("estimate_grouplevel", {
+  test_that("estimate_grouplevel - lme4", {
     set.seed(333)
     data <- lme4::sleepstudy
 
@@ -41,3 +41,18 @@ if (require("testthat") && require("modelbased") && require("lme4")) {
     all(reshaped$subgrp == ref$subgrp)
   })
 }
+
+
+# if (require("testthat") && require("modelbased") && require("brms")) {
+#   test_that("estimate_grouplevel - brms", {
+#
+#     skip_on_cran()
+#     set.seed(333)
+#
+#     # Reaction ~ Days + (1 + Days | Subject)
+#     model <- insight::download_model("brms_mixed_2")
+#     random <- estimate_grouplevel(model)
+#     head(as.data.frame(random))
+#
+#   })
+# }
