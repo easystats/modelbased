@@ -71,8 +71,8 @@ Suggests:
     spelling,
     testthat
 Remotes:
-    easystats/insight,
-    easystats/datawizard
+    easystats/datawizard,
+    easystats/performance
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.1.2
