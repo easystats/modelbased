@@ -44,20 +44,18 @@ knitr::opts_chunk$set(
 [![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased) [![modelbased status badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev) ![Tests](https://github.com/easystats/modelbased/workflows/Tests/badge.svg)
 [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
 
+The *modelbased* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
-Run the following to install the stable release of **modelbased** from CRAN:
+Type | Source | Command
+---|---|---
+  Release | CRAN | `install.packages("modelbased")`
+Development | R-universe | `install.packages("modelbased", repos = "https://easystats.r-universe.dev")`
 
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("modelbased")
+Once you have downloaded the package, you can then load it using:
+  
+  ```{r, eval=FALSE}
+library("modelbased")
 ```
-
-Or this one to install the latest development version:
-
-```{r, warning=FALSE, message=FALSE, eval=FALSE}
-install.packages("remotes")
-remotes::install_github("easystats/modelbased")
-```
-
 
 ## Documentation
 

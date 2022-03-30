@@ -22,18 +22,18 @@ badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-
 ![Tests](https://github.com/easystats/modelbased/workflows/Tests/badge.svg)
 [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
 
-Run the following to install the stable release of **modelbased** from
-CRAN:
+The *modelbased* package is available on CRAN, while its latest
+development version is available on R-universe (from *rOpenSci*).
+
+| Type        | Source     | Command                                                                      |
+|-------------|------------|------------------------------------------------------------------------------|
+| Release     | CRAN       | `install.packages("modelbased")`                                             |
+| Development | R-universe | `install.packages("modelbased", repos = "https://easystats.r-universe.dev")` |
+
+Once you have downloaded the package, you can then load it using:
 
 ``` r
-install.packages("modelbased")
-```
-
-Or this one to install the latest development version:
-
-``` r
-install.packages("remotes")
-remotes::install_github("easystats/modelbased")
+library("modelbased")
 ```
 
 ## Documentation
@@ -59,6 +59,8 @@ check-out these vignettes:
     predictions**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 -   [**Describe non-linear
     curves**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
+-   [**Interpret models using Effect
+    Derivatives**](https://easystats.github.io/modelbased/articles/derivatives.html)
 -   [**Estimate and re-use random
     effects**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 -   [**The modelisation
@@ -129,7 +131,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-4-1.png)<!-- -->
+![](man/figures/unnamed-chunk-3-1.png)<!-- -->
 
 ## Estimate marginal means
 
@@ -180,7 +182,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-5-1.png)<!-- -->
+![](man/figures/unnamed-chunk-4-1.png)<!-- -->
 
 ## Contrast analysis
 
@@ -214,7 +216,7 @@ contrasts
 ## p-value adjustment method: Holm (1979)
 ```
 
-![](man/figures/unnamed-chunk-7-1.png)<!-- -->
+![](man/figures/unnamed-chunk-6-1.png)<!-- -->
 
 ## Check the contrasts at different points of another linear predictor
 
@@ -266,7 +268,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-9-1.png)<!-- -->
+![](man/figures/unnamed-chunk-8-1.png)<!-- -->
 
 ## Generate predictions from your model to compare it with original data
 
@@ -295,11 +297,11 @@ head(pred1, n = 5)
 ## 
 ## Petal.Length | Sepal.Length | Predicted |   SE |       95% CI | Residuals
 ## -------------------------------------------------------------------------
-## 1.40         |         5.10 |      2.38 | 0.10 | [2.19, 2.57] |      0.98
-## 1.40         |         4.90 |      2.00 | 0.11 | [1.79, 2.22] |      0.60
-## 1.30         |         4.70 |      1.63 | 0.12 | [1.39, 1.87] |      0.33
-## 1.50         |         4.60 |      1.45 | 0.13 | [1.19, 1.70] |     -0.05
-## 1.40         |         5.00 |      2.19 | 0.10 | [1.99, 2.39] |      0.79
+## 1.40         |         5.10 |      2.38 | 0.10 | [2.19, 2.57] |     -0.98
+## 1.40         |         4.90 |      2.00 | 0.11 | [1.79, 2.22] |     -0.60
+## 1.30         |         4.70 |      1.63 | 0.12 | [1.39, 1.87] |     -0.33
+## 1.50         |         4.60 |      1.45 | 0.13 | [1.19, 1.70] |      0.05
+## 1.40         |         5.00 |      2.19 | 0.10 | [1.99, 2.39] |     -0.79
 ## 
 ## Variable predicted: Petal.Length
 
@@ -322,7 +324,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-10-1.png)<!-- -->
+![](man/figures/unnamed-chunk-9-1.png)<!-- -->
 
 ## Extract and format group-level random effects
 
@@ -354,7 +356,7 @@ random
 plot(random)
 ```
 
-![](man/figures/unnamed-chunk-11-1.png)<!-- -->
+![](man/figures/unnamed-chunk-10-1.png)<!-- -->
 
 <!-- TODO: add plotting example once 'see' on cran -->
 
@@ -392,11 +394,12 @@ deriv <- estimate_slopes(model,
 # 2. Visualize predictions and derivative
 see::plots(
   plot(estimate_relation(model)),
-  plot(deriv), n_rows = 2
+  plot(deriv),
+  n_rows = 2
 )
 ```
 
-![](man/figures/unnamed-chunk-12-1.png)<!-- -->
+![](man/figures/unnamed-chunk-11-1.png)<!-- -->
 
 ## Describe the smooth term by its linear parts
 
@@ -426,7 +429,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-13-1.png)<!-- -->
+![](man/figures/unnamed-chunk-12-1.png)<!-- -->
 
 ``` r
 
@@ -464,7 +467,7 @@ slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 plot(slopes)
 ```
 
-![](man/figures/unnamed-chunk-15-1.png)<!-- -->
+![](man/figures/unnamed-chunk-14-1.png)<!-- -->
 
 ## Visualize predictions with random effects
 
@@ -488,7 +491,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-![](man/figures/unnamed-chunk-16-1.png)<!-- -->
+![](man/figures/unnamed-chunk-15-1.png)<!-- -->
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -504,7 +507,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-![](man/figures/unnamed-chunk-17-1.png)<!-- -->
+![](man/figures/unnamed-chunk-16-1.png)<!-- -->
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -518,7 +521,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), size = 2)
 ```
 
-![](man/figures/unnamed-chunk-18-1.png)<!-- -->
+![](man/figures/unnamed-chunk-17-1.png)<!-- -->
 
 ## Code of Conduct
 
