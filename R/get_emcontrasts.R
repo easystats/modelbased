@@ -5,6 +5,7 @@
 #' @param method Contrast method. See same argument in [emmeans::contrast].
 #'
 #' @examples
+#' if (require("emmeans", quietly = TRUE)) {
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' get_emcontrasts(model)
@@ -23,6 +24,7 @@
 #' get_emcontrasts(model, fixed = "Petal.Width")
 #' # Or modulate it
 #' get_emcontrasts(model, at = "Petal.Width", length = 4)
+#' }
 #' @export
 get_emcontrasts <- function(model,
                             contrast = NULL,

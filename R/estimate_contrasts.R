@@ -15,7 +15,7 @@
 #'
 #' @examples
 #' library(modelbased)
-#'
+#' if (require("emmeans", quietly = TRUE)) {
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
@@ -64,6 +64,7 @@
 #'
 #'   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
 #'   estimate_contrasts(model, at = "Petal.Length", test = "bf")
+#' }
 #' }
 #' }
 #'

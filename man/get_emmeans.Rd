@@ -112,6 +112,7 @@ debugging, and end-users should rather use the \verb{estimate_*()} series of
 functions.
 }
 \examples{
+if (require("emmeans", quietly = TRUE)) {
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 get_emcontrasts(model)
@@ -130,6 +131,7 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 get_emcontrasts(model, fixed = "Petal.Width")
 # Or modulate it
 get_emcontrasts(model, at = "Petal.Width", length = 4)
+}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'at' is set to "Species"
