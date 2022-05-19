@@ -209,7 +209,9 @@ pred <- estimate_relation(model)
 pred
 
 # Visualisation (see visualisation_recipe())
-plot(pred)
+if (require("see")) {
+  plot(pred)
+}
 
 # Standardize predictions
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
