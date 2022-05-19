@@ -105,6 +105,7 @@ condition (\code{using [estimate_slopes]}).
 }
 \examples{
 library(modelbased)
+if (require("emmeans")) {
 
 # Frequentist models
 # -------------------
@@ -121,7 +122,9 @@ estimate_means(model, at = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
-plot(means) # which runs visualisation_recipe()
+if (require("see")) {
+  plot(means) # which runs visualisation_recipe()
+}
 standardize(means)
 \donttest{
 if (require("lme4")) {
@@ -133,5 +136,5 @@ if (require("lme4")) {
   estimate_means(model, at = "Sepal.Width", length = 3)
 }
 }
-
+}
 }

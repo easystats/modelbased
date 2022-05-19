@@ -12,6 +12,7 @@
 #'
 #' @examples
 #' library(modelbased)
+#' if (require("emmeans")) {
 #'
 #' # Frequentist models
 #' # -------------------
@@ -28,7 +29,9 @@
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
-#' plot(means) # which runs visualisation_recipe()
+#' if (require("see")) {
+#'   plot(means) # which runs visualisation_recipe()
+#' }
 #' standardize(means)
 #' \donttest{
 #' if (require("lme4")) {
@@ -40,7 +43,7 @@
 #'   estimate_means(model, at = "Sepal.Width", length = 3)
 #' }
 #' }
-#'
+#' }
 #' @return A dataframe of estimated marginal means.
 #' @export
 estimate_means <- function(model,
