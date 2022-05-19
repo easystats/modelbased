@@ -30,6 +30,7 @@
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
+#' if (require("emmeans", quietly = TRUE)) {
 #' # By default, 'at' is set to "Species"
 #' get_emmeans(model)
 #'
@@ -45,6 +46,7 @@
 #' get_emmeans(model)
 #' get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 #' get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' }
 #' @export
 get_emmeans <- function(model,
                         at = "auto",

@@ -134,6 +134,7 @@ get_emcontrasts(model, at = "Petal.Width", length = 4)
 }
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
+if (require("emmeans", quietly = TRUE)) {
 # By default, 'at' is set to "Species"
 get_emmeans(model)
 
@@ -149,6 +150,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_emmeans(model)
 get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_emtrends(model)
