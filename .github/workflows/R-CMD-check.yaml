@@ -29,7 +29,7 @@ jobs:
           - {os: ubuntu-18.04,   r: 'devel'}
           - {os: ubuntu-18.04,   r: 'release'}
           - {os: ubuntu-18.04,   r: 'oldrel'}
-          - {os: ubuntu-18.04,   r: '3.6.0'}
+          #- {os: ubuntu-18.04,   r: '3.6.0'}
 
     env:
       R_REMOTES_NO_ERRORS_FROM_WARNINGS: true
@@ -86,7 +86,7 @@ jobs:
         env:
           _R_CHECK_CRAN_INCOMING_: false
           _R_CHECK_FORCE_SUGGESTS_: false
-          _R_CHECK_DEPENDS_ONLY_: true
+          # _R_CHECK_DEPENDS_ONLY_: true
         run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), error_on = "warning", check_dir = "check")
         shell: Rscript {0}
 
