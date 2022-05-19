@@ -151,6 +151,7 @@ get_emmeans(model)
 get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
 get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
+if (require("emmeans")) {
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_emtrends(model)
@@ -161,4 +162,5 @@ get_emtrends(model, at = c("Species", "Petal.Length"))
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 get_emtrends(model)
 get_emtrends(model, at = "Sepal.Width")
+}
 }

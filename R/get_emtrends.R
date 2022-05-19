@@ -4,6 +4,7 @@
 #'   for which to compute the slopes.
 #'
 #' @examples
+#' if (require("emmeans")) {
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #' get_emtrends(model)
@@ -14,6 +15,7 @@
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 #' get_emtrends(model)
 #' get_emtrends(model, at = "Sepal.Width")
+#' }
 #' @export
 get_emtrends <- function(model,
                          trend = NULL,
