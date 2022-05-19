@@ -195,7 +195,7 @@ summary.estimate_slopes <- function(object, ...) {
 
   # Find beginnings and ends -----------------------
   # First row - starting point
-  signs <- sign(data[[datawizard::data_findcols(data, c("Coefficient", "Median", "Mean", "MAP_Estimate"))]])
+  signs <- sign(data[[datawizard::data_find(data, c("Coefficient", "Median", "Mean", "MAP_Estimate"), verbose = FALSE)]])
   sign <- signs[1]
   sig <- data$Confidence[1]
   starts <- 1
