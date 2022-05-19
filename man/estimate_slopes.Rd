@@ -89,7 +89,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-
+if (require("emmeans")) {
 # Get an idea of the data
 if (require("ggplot2")) {
   ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -104,10 +104,12 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 # Compute the marginal effect of Petal.Length at each level of Species
 slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 slopes
-plot(slopes)
+if (require("see")) {
+  plot(slopes)
+}
 standardize(slopes)
 
-if (require("mgcv")) {
+if (require("mgcv") && require("see")) {
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
   slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
   summary(slopes)
@@ -120,5 +122,6 @@ if (require("mgcv")) {
   )
   summary(slopes)
   plot(slopes)
+}
 }
 }

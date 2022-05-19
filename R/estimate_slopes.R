@@ -71,7 +71,7 @@
 #' condition (`using [estimate_slopes]`).
 #'
 #' @examples
-#'
+#' if (require("emmeans")) {
 #' # Get an idea of the data
 #' if (require("ggplot2")) {
 #'   ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -86,10 +86,12 @@
 #' # Compute the marginal effect of Petal.Length at each level of Species
 #' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 #' slopes
-#' plot(slopes)
+#' if (require("see")) {
+#'   plot(slopes)
+#' }
 #' standardize(slopes)
 #'
-#' if (require("mgcv")) {
+#' if (require("mgcv") && require("see")) {
 #'   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 #'   slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
 #'   summary(slopes)
@@ -102,6 +104,7 @@
 #'   )
 #'   summary(slopes)
 #'   plot(slopes)
+#' }
 #' }
 #' @return A data.frame of class `estimate_slopes`.
 #' @export
