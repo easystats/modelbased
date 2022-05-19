@@ -6,12 +6,13 @@
 #' @inheritParams get_emmeans
 #'
 #' @examples
-#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' if (require("marginaleffects")) {
+#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#' get_marginaleffects(model, trend = "Petal.Length", at = "Species")
-#' get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
-#' get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
-#'
+#'   get_marginaleffects(model, trend = "Petal.Length", at = "Species")
+#'   get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
+#'   get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
+#' }
 #' @export
 get_marginaleffects <- function(model,
                                 trend = NULL,
