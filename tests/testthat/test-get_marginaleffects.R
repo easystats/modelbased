@@ -2,7 +2,7 @@ if (require("testthat") && require("modelbased") && require("marginaleffects") &
   test_that("get_marginaleffects", {
     model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-    expect_equal(dim(get_marginaleffects(model, trend = "Petal.Length", at = "Species")), c(3, 7))
+    expect_equal(dim(get_marginaleffects(model, trend = "Petal.Length", at = "Species")), c(3, 11))
 
     # get_marginaleffects(model, trend = "Petal.Length", at = "Species", length = 10)
   })
