@@ -191,95 +191,31 @@ for which to compute the slopes.</p></dd>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="co"># Basic usage</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in"><span class="co"># Basic usage</span></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate     SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       0.658 0.0679 147   9.685  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        0.454 0.0679 147   6.683  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica   -0.204 0.0679 147  -3.003  0.0088</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Dealing with interactions</span></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="co"># By default: selects first factor</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       1.590 0.394 144   4.039  0.0003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        1.774 0.413 144   4.293  0.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica    0.184 0.145 144   1.272  0.4131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"><span class="co"># Can also run contrasts between points of numeric</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast  estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1 - 1.3    -1.01 0.195 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  0.1 - 2.5    -2.02 0.390 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1.3 - 2.5    -1.01 0.195 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"><span class="co"># Or both</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast                        estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 0.1 - versicolor 0.1       1.8275 0.279 144   6.550  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 0.1 - virginica 0.1        1.5479 0.312 144   4.955  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 0.1 - setosa 2.5          -2.0093 0.977 144  -2.057  0.3158</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 0.1 - versicolor 2.5      -0.7012 0.268 144  -2.614  0.1005</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 0.1 - virginica 2.5        0.0325 0.112 144   0.289  0.9997</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor 0.1 - virginica 0.1   -0.2797 0.406 144  -0.689  0.9829</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor 0.1 - setosa 2.5      -3.8368 0.957 144  -4.009  0.0013</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor 0.1 - versicolor 2.5  -2.5288 0.521 144  -4.858  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor 0.1 - virginica 2.5   -1.7951 0.282 144  -6.355  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica 0.1 - setosa 2.5       -3.5571 0.967 144  -3.678  0.0044</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica 0.1 - versicolor 2.5   -2.2491 0.399 144  -5.642  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica 0.1 - virginica 2.5    -1.5154 0.375 144  -4.043  0.0012</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 2.5 - versicolor 2.5       1.3080 0.954 144   1.371  0.7441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa 2.5 - virginica 2.5        2.0417 0.922 144   2.214  0.2379</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor 2.5 - virginica 2.5    0.7337 0.272 144   2.699  0.0817</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 6 estimates </span>
 <span class="r-in"><span class="co"># Or with custom specifications</span></span>
 <span class="r-in"><span class="fu"><a href="estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1       |       Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 1     |     setosa 2 |      -0.84 | [-2.05,  0.38] | 0.41 |  -2.06 | 0.316 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 1     | versicolor 1 |       1.63 | [ 0.68,  2.59] | 0.32 |   5.09 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 1     | versicolor 2 |       0.58 | [-0.45,  1.61] | 0.35 |   1.68 | 0.549 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 1     |  virginica 1 |       1.73 | [ 0.68,  2.78] | 0.35 |   4.93 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 1     |  virginica 2 |       1.10 | [ 0.17,  2.04] | 0.31 |   3.52 | 0.007 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 2     | versicolor 2 |       1.42 | [-0.77,  3.60] | 0.73 |   1.94 | 0.384 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa 2     |  virginica 2 |       1.94 | [-0.20,  4.08] | 0.72 |   2.71 | 0.080 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor 1 |     setosa 2 |      -2.47 | [-4.62, -0.32] | 0.72 |  -3.43 | 0.010 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor 1 | versicolor 2 |      -1.05 | [-1.70, -0.41] | 0.22 |  -4.86 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor 1 |  virginica 1 |       0.10 | [-0.45,  0.65] | 0.19 |   0.54 | 0.994 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor 1 |  virginica 2 |      -0.53 | [-0.81, -0.25] | 0.09 |  -5.72 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor 2 |  virginica 2 |       0.52 | [ 0.05,  0.99] | 0.16 |   3.31 | 0.015 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica 1  |     setosa 2 |      -2.57 | [-4.76, -0.38] | 0.73 |  -3.50 | 0.008 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica 1  | versicolor 2 |      -1.15 | [-1.83, -0.48] | 0.23 |  -5.13 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica 1  |  virginica 2 |      -0.63 | [-1.10, -0.17] | 0.16 |  -4.04 | 0.001 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species, Petal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span class="co"># Can fixate the numeric at a specific value</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width = 1.2:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       1.590 0.394 144   4.039  0.0003</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        1.774 0.413 144   4.293  0.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica    0.184 0.145 144   1.272  0.4131</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"><span class="co"># Or modulate it</span></span>
 <span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width = 0.1:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
@@ -308,57 +244,26 @@ for which to compute the slopes.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="co"># By default, 'at' is set to "Species"</span></span>
 <span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Species    emmean     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa       5.88 0.1969 146     5.49     6.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor   5.82 0.0723 146     5.68     5.96</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica    5.83 0.1741 146     5.49     6.17</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Overall mean (close to 'mean(iris$Sepal.Length)')</span></span>
 <span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1       emmean     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  overall   5.84 0.0393 146     5.77     5.92</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># One can estimate marginal means at several values of a 'modulate' variable</span></span>
 <span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Width emmean     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          0.1   4.84 0.2167 146     4.41     5.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.3   5.94 0.0439 146     5.85     6.02</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2.5   7.04 0.2552 146     6.53     7.54</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Interactions</span></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length = c(1, 3, 5)"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Species    emmean     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa       4.32 0.5990 144     3.13     5.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor   2.58 0.0658 144     2.45     2.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica    2.55 0.1535 144     2.25     2.86</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Species    Petal.Length emmean    SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa              1.0   3.25 0.128 144    2.995     3.50</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor          1.0   1.55 0.317 144    0.924     2.18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica           1.0   1.91 0.375 144    1.165     2.65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa              6.9   5.54 1.415 144    2.739     8.34</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor          6.9   3.76 0.258 144    3.249     4.27</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica           6.9   3.29 0.119 144    3.055     3.53</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length = c(1, 3, 5)"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Species    Petal.Length emmean     SE  df lower.CL upper.CL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa                1   3.25 0.1282 144    2.995     3.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor            1   1.55 0.3166 144    0.924     2.18</span>
@@ -371,84 +276,24 @@ for which to compute the slopes.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica             5   2.84 0.0636 144    2.719     2.97</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1       Petal.Length.trend     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  overall              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Species    Petal.Length.trend     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa                  0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica               0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.00              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.66              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2.31              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          2.97              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3.62              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          4.28              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          4.93              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          5.59              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          6.24              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          6.90              0.332 0.0964 144    0.142    0.523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Species    Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             1.00              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         1.00              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          1.00              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             1.66              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         1.66              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          1.66              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             2.31              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         2.31              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          2.31              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             2.97              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         2.97              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          2.97              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             3.62              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         3.62              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          3.62              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             4.28              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         4.28              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          4.28              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             4.93              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         4.93              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          4.93              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             5.59              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         5.59              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          5.59              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             6.24              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         6.24              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          6.24              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             6.90              0.388 0.2602 144  -0.1264    0.902</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         6.90              0.374 0.0961 144   0.1843    0.564</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          6.90              0.234 0.0819 144   0.0725    0.396</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="fl">4</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  1       Sepal.Width.trend    SE  df lower.CL upper.CL</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  overall             -2.67 0.548 145    -3.75    -1.58</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Sepal.Width"</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Sepal.Width Sepal.Width.trend    SE  df lower.CL upper.CL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         2.00             7.484 5.418 145   -3.225   18.192</span>
@@ -470,17 +315,11 @@ for which to compute the slopes.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique
-Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel
-Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S.
-Ben-Shachar</a>,
-<a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet
-Patil</a>.</p>
+  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
     </footer></div>

@@ -331,7 +331,10 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Visualisation (see visualisation_recipe())</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span>
+<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span>
+<span class="r-in"><span class="op">}</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: see</span>
 <span class="r-plt img"><img src="estimate_expectation-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># Standardize predictions</span></span>
@@ -653,11 +656,14 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: rstanarm</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Rcpp</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> This is rstanarm version 2.21.1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This is rstanarm version 2.21.3</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.09, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
@@ -671,16 +677,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.20 | 1.16 | [26.99, 31.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.90 | 0.95 | [25.13, 28.51]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.59 | 0.74 | [23.33, 26.01]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.29 | 0.55 | [21.21, 23.40]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.98 | 0.53 | [19.06, 21.08]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.68 | 0.58 | [16.50, 18.87]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.37 | 0.77 | [13.80, 16.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.07 | 0.96 | [11.24, 15.00]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.76 | 1.20 | [ 8.08, 12.68]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.46 | 1.44 | [ 5.29, 10.76]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.24 | 1.21 | [26.97, 31.56]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.93 | 0.94 | [25.07, 29.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.62 | 0.73 | [22.94, 26.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.30 | 0.58 | [21.07, 23.94]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.99 | 0.51 | [18.80, 21.55]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.68 | 0.59 | [16.54, 19.40]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.37 | 0.76 | [13.76, 17.18]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.05 | 1.01 | [11.10, 15.11]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.74 | 1.27 | [ 8.20, 12.95]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.43 | 1.54 | [ 5.66, 11.16]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
@@ -692,17 +698,11 @@ to generate model predictions for specific combinations of predictor values.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique
-Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel
-Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S.
-Ben-Shachar</a>,
-<a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet
-Patil</a>.</p>
+  <p></p><p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://github.com/mattansb" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
 </div>
 
     </footer></div>
