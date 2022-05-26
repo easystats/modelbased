@@ -171,7 +171,7 @@
 <div class="section level2">
 <h2 id="estimating-response-vs--relation">Estimating response <em>vs.</em> relation<a class="anchor" aria-label="anchor" href="#estimating-response-vs--relation"></a>
 </h2>
-<p>Rather than visualizing the predictions made by a model, we are often interested in visualizing the <em>relation</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/estimate/articles/visualisation_matrix.html" class="external-link"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
+<p>Rather than visualizing the predictions made by a model, we are often interested in visualizing the <em>relation</em>. In the model above, this would be the relationship between the response and the two predictors. This can be achieved by generating the predictions on the <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html" class="external-link"><strong>data grid</strong></a> of the model’s data instead of the original dataset.</p>
 <p>We will do that to visualise the relationship between the response (<code>Petal.Length</code>) and the predictors (<code>Sepal.Length</code> and <code>Species</code>).</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span>
