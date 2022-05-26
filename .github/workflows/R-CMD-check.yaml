@@ -56,9 +56,9 @@ jobs:
           install.packages('rtdists', repos = NULL, type = 'binary')
         with:
           extra-packages: |
-              any::rcmdcheck
-              any::rtdists
-              local::.
+            any::rcmdcheck
+            any::rtdists
+            local::.
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
