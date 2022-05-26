@@ -1,3 +1,7 @@
+# modelbased 0.8.1
+
+- Maintenance release to fix failing tests in CRAN checks.
+
 # modelbased 0.8.0
 
 - `visualisation_matrix()` has now become an alias (alternative name) for the [`get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html) function, which is implemented in the [`insight`](https://easystats.github.io/insight/) package.
