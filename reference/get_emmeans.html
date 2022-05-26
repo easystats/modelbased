@@ -20,7 +20,7 @@ functions."><meta property="og:image" content="/reference/figures/card.png"><met
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -193,24 +193,24 @@ for which to compute the slopes.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># Basic usage</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Basic usage</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Dealing with interactions</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># By default: selects first factor</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Can also run contrasts between points of numeric</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Or both</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Or with custom specifications</span></span>
-<span class="r-in"><span class="fu"><a href="estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Can fixate the numeric at a specific value</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Or modulate it</span></span>
-<span class="r-in"><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Dealing with interactions</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># By default: selects first factor</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Can also run contrasts between points of numeric</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Or both</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Or with custom specifications</span></span>
+<span class="r-in">  <span class="fu"><a href="estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Can fixate the numeric at a specific value</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Or modulate it</span></span>
+<span class="r-in">  <span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
@@ -246,21 +246,21 @@ for which to compute the slopes.</p></dd>
 <span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">+</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="co"># By default, 'at' is set to "Species"</span></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># By default, 'at' is set to "Species"</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Overall mean (close to 'mean(iris$Sepal.Length)')</span></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Overall mean (close to 'mean(iris$Sepal.Length)')</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># One can estimate marginal means at several values of a 'modulate' variable</span></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># One can estimate marginal means at several values of a 'modulate' variable</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="co"># Interactions</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in">  <span class="co"># Interactions</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length = c(1, 3, 5)"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length = c(1, 3, 5)"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `at = c("Species")`.</span>
@@ -278,16 +278,16 @@ for which to compute the slopes.</p></dd>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
 <span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/rvlenth/emmeans" class="external-link">"emmeans"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span><span class="op">)</span></span>
 <span class="r-in"></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="fl">4</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Sepal.Width"</span><span class="op">)</span></span>
+<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Sepal.Width</span>, <span class="fl">4</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in">  <span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Sepal.Width"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">}</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Length"`.</span>
