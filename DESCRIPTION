@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.0
+Version: 0.8.1
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -34,11 +34,11 @@ BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 3.4)
 Imports:
-    bayestestR (>= 0.11.5),
+    bayestestR (>= 0.12.1),
     effectsize (>= 0.6.0.1),
-    insight (>= 0.17.0),
-    datawizard (>= 0.4.0),
-    parameters (>= 0.17.0),
+    insight (>= 0.17.1),
+    datawizard (>= 0.4.1),
+    parameters (>= 0.18.0),
     performance (>= 0.8.0),
     graphics,
     stats,
@@ -67,9 +67,11 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
-    see (>= 0.6.5),
+    see (>= 0.7.0),
     spelling,
     testthat
+VignetteBuilder: 
+    knitr
 Encoding: UTF-8
 Language: en-US
 RoxygenNote: 7.2.0

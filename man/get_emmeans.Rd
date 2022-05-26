@@ -113,54 +113,54 @@ functions.
 }
 \examples{
 if (require("emmeans", quietly = TRUE)) {
-# Basic usage
-model <- lm(Sepal.Width ~ Species, data = iris)
-get_emcontrasts(model)
+  # Basic usage
+  model <- lm(Sepal.Width ~ Species, data = iris)
+  get_emcontrasts(model)
 
-# Dealing with interactions
-model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-# By default: selects first factor
-get_emcontrasts(model)
-# Can also run contrasts between points of numeric
-get_emcontrasts(model, contrast = "Petal.Width", length = 3)
-# Or both
-get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
-# Or with custom specifications
-estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
-# Can fixate the numeric at a specific value
-get_emcontrasts(model, fixed = "Petal.Width")
-# Or modulate it
-get_emcontrasts(model, at = "Petal.Width", length = 4)
+  # Dealing with interactions
+  model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+  # By default: selects first factor
+  get_emcontrasts(model)
+  # Can also run contrasts between points of numeric
+  get_emcontrasts(model, contrast = "Petal.Width", length = 3)
+  # Or both
+  get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+  # Or with custom specifications
+  estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+  # Can fixate the numeric at a specific value
+  get_emcontrasts(model, fixed = "Petal.Width")
+  # Or modulate it
+  get_emcontrasts(model, at = "Petal.Width", length = 4)
 }
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 if (require("emmeans", quietly = TRUE)) {
-# By default, 'at' is set to "Species"
-get_emmeans(model)
+  # By default, 'at' is set to "Species"
+  get_emmeans(model)
 
-# Overall mean (close to 'mean(iris$Sepal.Length)')
-get_emmeans(model, at = NULL)
+  # Overall mean (close to 'mean(iris$Sepal.Length)')
+  get_emmeans(model, at = NULL)
 
-# One can estimate marginal means at several values of a 'modulate' variable
-get_emmeans(model, at = "Petal.Width", length = 3)
+  # One can estimate marginal means at several values of a 'modulate' variable
+  get_emmeans(model, at = "Petal.Width", length = 3)
 
-# Interactions
-model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  # Interactions
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-get_emmeans(model)
-get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
-get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+  get_emmeans(model)
+  get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
+  get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 if (require("emmeans")) {
-model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-get_emtrends(model)
-get_emtrends(model, at = "Species")
-get_emtrends(model, at = "Petal.Length")
-get_emtrends(model, at = c("Species", "Petal.Length"))
+  get_emtrends(model)
+  get_emtrends(model, at = "Species")
+  get_emtrends(model, at = "Petal.Length")
+  get_emtrends(model, at = c("Species", "Petal.Length"))
 
-model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-get_emtrends(model)
-get_emtrends(model, at = "Sepal.Width")
+  model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+  get_emtrends(model)
+  get_emtrends(model, at = "Sepal.Width")
 }
 }
