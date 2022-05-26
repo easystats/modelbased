@@ -54,6 +54,8 @@ navbar:
     href: reference/index.html
   - text: Tutorials
     menu:
+      - text: 'Overview of Vignettes'
+        href: articles/overview_of_vignettes.html
       - text: 'Data grids'
         href: articles/visualisation_matrix.html
       - text: 'Marginal means'
@@ -72,5 +74,3 @@ navbar:
         href: articles/estimate_grouplevel.html
       - text: 'The modelisation approach'
         href: articles/modelisation_approach.html
-
-
