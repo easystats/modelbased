@@ -175,6 +175,6 @@ characteristics, the differences between `Species` seems to be even bigger!
 **But are these differences "significant"?** 
 
 That's where the contrast analysis comes into play! Click [here to read the tutorial on **contrast
-analysis**](https://easystats.github.io/estimate/articles/contrast_analysis.html).
+analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html).
 
 # References

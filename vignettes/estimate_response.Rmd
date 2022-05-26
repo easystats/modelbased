@@ -116,7 +116,7 @@ Rather than visualizing the predictions made by a model, we are often interested
 in visualizing the *relation*. In the model above, this would be the relationship
 between the response and the two predictors. This can be achieved by generating
 the predictions on the [**data
-grid**](https://easystats.github.io/estimate/articles/visualisation_matrix.html)
+grid**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 of the model's data instead of the original dataset.
 
 We will do that to visualise the relationship between the response
