@@ -29,12 +29,12 @@ jobs:
           - {os: windows-latest, r: 'oldrel'}
 
           # Use older ubuntu to maximise backward compatibility
-          - {os: ubuntu-18.04,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-18.04,   r: 'release'}
-          - {os: ubuntu-18.04,   r: 'oldrel'}
-          - {os: ubuntu-18.04,   r: '3.6.0'}
-          - {os: ubuntu-18.04,   r: '3.5.0'}
-          - {os: ubuntu-18.04,   r: '3.4.0'}
+          - {os: ubuntu-20.04,   r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-20.04,   r: 'release'}
+          - {os: ubuntu-20.04,   r: 'oldrel'}
+          - {os: ubuntu-20.04,   r: '3.6.0'}
+          - {os: ubuntu-20.04,   r: '3.5.0'}
+          - {os: ubuntu-20.04,   r: '3.4.0'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -52,10 +52,13 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
+        run: |
+          install.packages('rtdists', repos = NULL, type = 'binary')
         with:
           extra-packages: |
               any::rcmdcheck
-              gsl=?rtdists
+              any::rtdists
+              local::.
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
