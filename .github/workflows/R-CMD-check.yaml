@@ -51,6 +51,13 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - name: Install GSL on Ubuntu
+        if: runner.os == 'ubuntu'
+        run: |
+          sudo add-apt-repository ppa:dns/gnu
+          sudo apt-get update
+          sudo apt install libgsl-dev
+
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
           extra-packages: |
@@ -62,6 +69,7 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         env:
+          _R_CHECK_CRAN_INCOMING_: false
           _R_CHECK_FORCE_SUGGESTS_: false
         with:
           upload-snapshots: true
