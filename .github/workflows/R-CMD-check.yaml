@@ -52,11 +52,10 @@ jobs:
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
-        run: |
-          install.packages('rtdists', repos = NULL, type = 'binary')
         with:
           extra-packages: |
             any::rcmdcheck
+            any::gsl
             any::rtdists
             local::.
           needs: check
