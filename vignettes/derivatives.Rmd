@@ -212,7 +212,7 @@ plot(deriv) +
 summary(deriv)
 ```
 
-If you know a bit theory about derivatives, you won't be suprised to find out that the derivative of a 2nd order polynomial (`x + x^2`) is actually a linear line. We can conclude from this plot that the slope is (**significantly**, because the confidence interval does not cover 0) negative until 0, and then becomes positive. 0 corresponds indeed to the point of inversion of the curve.
+If you know a bit theory about derivatives, you won't be surprised to find out that the derivative of a 2nd order polynomial (`x + x^2`) is actually a linear line. We can conclude from this plot that the slope is (**significantly**, because the confidence interval does not cover 0) negative until 0, and then becomes positive. 0 corresponds indeed to the point of inversion of the curve.
 
 Moral of the story? **Derivatives can be used to easily interpret and draw conclusions about relationships from models in which parameters are not straightforward to interpret.**
 
