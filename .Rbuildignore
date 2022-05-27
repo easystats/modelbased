@@ -7,11 +7,11 @@
 ^LICENSE
 ^data/.
 ^docs/.
-^vignettes/.d
-^vignettes/.e
-^vignettes/.m
-^vignettes/.t
-^vignettes/.v
+^vignettes/d.
+^vignettes/e.
+^vignettes/m.
+^vignettes/t.
+^vignettes/v.
 ^logo.png
 ^README.Rmd
 ^logo.png
