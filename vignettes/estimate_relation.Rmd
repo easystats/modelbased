@@ -55,7 +55,7 @@ head(visualization_data)
 library(ggplot2)
 library(see)
 
-visualization_data |>|
+visualization_data |>
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
@@ -73,8 +73,8 @@ approximations using
 ### Polynomial
 
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
-glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) |>|
-  modelbased::estimate_relation(length = 50) |>|
+glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) |>
+  modelbased::estimate_relation(length = 50) |>
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
@@ -86,8 +86,8 @@ glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) |>|
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(mgcv)
 
-mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |>|
-  modelbased::estimate_relation(length = 50) |>|
+mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |>
+  modelbased::estimate_relation(length = 50) |>
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
   geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line() +
