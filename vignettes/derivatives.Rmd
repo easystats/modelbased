@@ -20,7 +20,7 @@ library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   comment = ">",
-  dpi = 450,
+  dpi = 300,
   out.width = "100%",
   warning = FALSE,
   message = FALSE
@@ -30,6 +30,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
+  !requireNamespace("emmeans", quietly = TRUE) ||
   !requireNamespace("dplyr", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -147,7 +148,7 @@ To compute the derivative, we can use the `estimate_slopes()` function, and spec
 deriv <- modelbased::estimate_slopes(model_lm, trend = "x", at = "x")
 
 plot(deriv) + # add a dashed line at 0 to show absence of effect
-  geom_hline(yintercept = 0, linetype = "dashed") 
+  geom_hline(yintercept = 0, linetype = "dashed")
 
 summary(deriv)
 ```

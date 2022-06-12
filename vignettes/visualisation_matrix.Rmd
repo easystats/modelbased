@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   warning = FALSE,
   out.width = "100%",
-  dpi = 450
+  dpi = 300
 )
 options(digits = 2)
 

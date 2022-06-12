@@ -18,13 +18,20 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(
+  comment = ">",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  out.width = "100%"
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
+  !requireNamespace("patchwork", quietly = TRUE) ||
   !requireNamespace("dplyr", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -36,30 +43,29 @@ Although the *easystats* packages, such as **effectsize** and **modelbased**, ma
 
 In the following article, we will demonstrate and discuss some of the possible and commonly used transformations that you can consider applying to your variables. They can usually be grouped into two categories: transformations that **changes only the scale**, and transformation that **changes also the shape**.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(datawizard)
 library(ggplot2)
-library(patchwork)
 ```
 
 # Scale Transformations
 
 **Standardization** (also known as **Z-scoring**) refers to the centering and scaling of variable so that it is expressed in terms of deviation from some centrality index. Usually it is the *mean* and *SD* (where 0 corresponds to mean and the values represent deviations in SD from it), but it could be other indices, such as the *median* and the *MAD*. In R, it can be achieved via the [`standardize()`](https://easystats.github.io/datawizard/articles/standardize_data.html) function in the [**datawizard**](https://github.com/easystats/datawizard) package. 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 datawizard::standardize(c(4, 5, 2, 4, 42))
 ```
 
 
 **Normalization** rescales the variable so that the minimum and the maximum are 0 and 1. In R, it can be achieved via the `normalize()` function. However, note that it is a bit **of a misnomer**, as it doesn't actually **normalize** the *distribution* (i.e., make "more Gaussian") of the data (as shown below). Instead, it makes the *range* of the data within an expected range of [0, 1].
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 datawizard::normalize(c(4, 5, 2, 4, 42))
 ```
 
 Normalization is, in fact, a special case of **Rescaling**. Any variable can be rescaled to a new range. In R, it can be achieved via the `data_rescale()` function.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 datawizard::data_rescale(c(4, 5, 2, 4, 42), to = c(-1, 1))
 ```
 
@@ -68,7 +74,9 @@ Importantly, these transformations change only the scale (i.e., the "unit"); it 
 
 Let's start by generating some random data and creating a convenience function to check the distribution of one of the variable and its relationship with another variable. 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
+library(patchwork)
+
 # Create dataset
 data <- data.frame(x = bayestestR::distribution_normal(500, mean = 30, sd = 20))
 data$y <- data$x^2 + rnorm(500, sd = 100)
@@ -90,22 +98,22 @@ check_transformation <- function(data, x = "x", color = "blue") {
 **Before Transformation**:
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 check_transformation(data, color = "blue")
 ```
 
 **After Transformation**:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_standardized <- datawizard::standardize(data$x)
 
 check_transformation(data, x = "x_standardized", color = "red") +
-  plot_annotation("After Standardization")
+  patchwork::plot_annotation("After Standardization")
 
 data$x_normalized <- datawizard::normalize(data$x)
 
 check_transformation(data, x = "x_normalized", color = "orange") +
-  plot_annotation("After Normalization")
+  patchwork::plot_annotation("After Normalization")
 ```
 
 As you can see, although the unit of `x` has changed, scale-transformation have no impact on the distribution of the variable and on their relationship with other variables.
@@ -113,6 +121,7 @@ As you can see, although the unit of `x` has changed, scale-transformation have 
 - **Pros**:
   - Interpretation (standardized effect sizes)
   - Computation (some models can converge more more efficiently)
+
 - **Cons**:
   - Interpretation (when the variable values have meaning)
   - Reproducibility (values have different meaning depending on the sample's characteristics - only for transformations that depend on properties of the variable like standardization)
@@ -131,7 +140,7 @@ http://fmwww.bc.edu/repec/bocode/t/transint.html
 
 Most of the traditional transformation work best (i.e., are more easily explainable) with positively defined data. In the case where variables also have negative values, it is fairly common practice to shift the scale towards the positive range by adding the minimum. We can do that as follows:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_positive <- data$x - min(data$x)
 
 check_transformation(data, "x_positive", color = "yellow")
@@ -145,7 +154,7 @@ The following transformations have in common that smaller values are inflated a 
 
 - **Square root**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_sqrt <- sqrt(data$x_positive)
 
 check_transformation(data, "x_sqrt", color = "cyan")
@@ -153,7 +162,7 @@ check_transformation(data, "x_sqrt", color = "cyan")
 
 - **Cubic root**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_cbrt <- data$x_positive^(1 / 3)
 
 check_transformation(data, "x_cbrt", color = "purple")
@@ -161,7 +170,7 @@ check_transformation(data, "x_cbrt", color = "purple")
 
 - **Logarithmic**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_log <- log(1 + data$x_positive)
 
 check_transformation(data, "x_log", color = "maroon")
@@ -175,12 +184,12 @@ The following transformations have in common that the bigger a number is, the bi
 
 - **Exponential**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_exp <- exp(normalize(data$x_positive))
 
 check_transformation(data, "x_exp", color = "purple")
 ```
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_exp3 <- exp(3 * normalize(data$x_positive))
 
 check_transformation(data, "x_exp3", color = "pink")
@@ -188,7 +197,7 @@ check_transformation(data, "x_exp3", color = "pink")
 
 - **Square**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_2 <- data$x_positive^2
 
 check_transformation(data, "x_2", color = "darkblue")
@@ -196,7 +205,7 @@ check_transformation(data, "x_2", color = "darkblue")
 
 - **Cubic**
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_3 <- data$x_positive^3
 
 check_transformation(data, "x_3", color = "darkgreen")
@@ -206,7 +215,7 @@ check_transformation(data, "x_3", color = "darkgreen")
 
 Also know as the **inverse** transformation.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 data$x_reciprocal <- 1 / (1 + data$x_positive)
 
 check_transformation(data, "x_reciprocal", color = "green")
@@ -218,7 +227,7 @@ check_transformation(data, "x_reciprocal", color = "green")
 
 Actually, all of the previous shape-transformations are part of two categories, the exponential/log family, and the power family. Indeed, the square root, cubic root, square and even inverse are all values to the power of something.
 
-```{r message=FALSE, warning=FALSE, eval = FALSE}
+```{r , eval = FALSE}
 data$x_reciprocical == (1 + data$x_positive)^(-1)
 data$x_cbrt == data$x_positive^(1 / 3)
 data$x_sqrt == data$x_positive^(1 / 2)
@@ -228,7 +237,7 @@ data$x_2 == data$x_positive^(3)
 
 <!-- ## Assess the Linearity -->
 
-<!-- ```{r message=FALSE, warning=FALSE} -->
+<!-- ```{r} -->
 <!-- # check_linearity : loess - lm -->
 <!-- check_linearity <- function(y, x) { -->
 <!--   m <- lm(y ~ x, data = data.frame(x = x, y = y)) -->
@@ -245,4 +254,3 @@ data$x_2 == data$x_positive^(3)
 <!-- ``` -->
 
 # References
-

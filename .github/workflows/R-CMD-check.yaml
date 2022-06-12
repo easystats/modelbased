@@ -66,6 +66,8 @@ jobs:
             any::gsl
             any::rtdists
             local::.
+            emmeans=?ignore-before-r=3.5.0
+            marginaleffects=?ignore-before-r=3.5.0
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
