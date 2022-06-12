@@ -7,7 +7,15 @@ osx <- tryCatch({
   }
 })
 
-if (require("testthat") && require("modelbased") && require("gamm4") && require("rstanarm") && require("lme4") && require("glmmTMB") && require("mgcv") && require("MASS") && require("brms") && require("testthat")) {
+if (require("testthat") &&
+  require("modelbased") &&
+  require("gamm4") &&
+  require("rstanarm") &&
+  require("lme4") &&
+  require("glmmTMB") &&
+  require("mgcv") &&
+  require("brms") &&
+  require("testthat")) {
   test_that("estimate_relation - shape", {
 
     # CI
@@ -64,10 +72,6 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
       expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
     }
   })
-
-
-
-
 
   test_that("estimate_response - Bayesian", {
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2, raw = TRUE), data = mtcars, refresh = 0, iter = 200, chains = 2))
@@ -132,10 +136,5 @@ if (require("testthat") && require("modelbased") && require("gamm4") && require(
     expect_equal(dim(estim), c(10, 6))
     estim <- estimate_expectation(model)
     expect_equal(dim(estim), c(32, 8))
-
-    # model <- MASS::polr(Species ~ Sepal.Width, data = iris)
-    # estim <- estimate_link(model)
-    # # TODO: why no CI?
-    # expect_equal(dim(estim), c(10, 1))
   })
 }
