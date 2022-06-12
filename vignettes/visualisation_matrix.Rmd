@@ -237,8 +237,8 @@ We can obtain the right reference grid quite easily by chaining two
 `visualisation_matrix` together as follows:
 
 ```{r }
-vizdata <- iris |>
-  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) |>
+vizdata <- iris %>%
+  visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 5, numerics = "all")
 ```
 
@@ -254,7 +254,7 @@ We can then visualise it as follows:
 ```{r }
 vizdata$Predicted <- insight::get_predicted(model, vizdata)
 
-iris |>
+iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length, color = Petal.Width)) +
   geom_point() +
   geom_line(data = vizdata, aes(y = Predicted, group = Petal.Width), size = 1) +
@@ -269,7 +269,7 @@ deviations from the mean (as a standardized variable).
 # Express values in an abstract way
 vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
 
-iris |>
+iris %>%
   ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
   geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
@@ -327,9 +327,9 @@ Although the plot above is nice, and all, we would like the standardized changes
 Let's use the same model as above, and then obtain a data grid with specific values for `Petal.Width`.
 
 ```{r message=FALSE, warning=FALSE}
-vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) |>
-  visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) |>
-  unstandardize(vizdata, select = "Petal.Width") |>
+vizdata <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris) %>%
+  visualisation_matrix(at = c("Petal.Length", "Petal.Width = seq(-3, 3)")) %>%
+  unstandardize(vizdata, select = "Petal.Width") %>%
   estimate_relation(vizdata)
 
 vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
