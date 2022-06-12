@@ -66,6 +66,7 @@ jobs:
             any::gsl
             any::rtdists
             local::.
+            poorman=?ignore-before-r=3.5.0
             emmeans=?ignore-before-r=3.5.0
             marginaleffects=?ignore-before-r=3.5.0
           needs: check
