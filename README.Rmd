@@ -18,7 +18,6 @@ editor_options:
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
 library(dplyr)
-library(patchwork)
 
 knitr::opts_chunk$set(
   collapse = TRUE,

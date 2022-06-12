@@ -62,7 +62,6 @@ Suggests:
     marginaleffects,
     merTools,
     mgcv,
-    patchwork,
     report,
     rmarkdown,
     rstanarm,

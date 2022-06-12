@@ -39,7 +39,6 @@ In the following article, we will demonstrate and discuss some of the possible a
 ```{r message=FALSE, warning=FALSE}
 library(datawizard)
 library(ggplot2)
-library(patchwork)
 ```
 
 # Scale Transformations
