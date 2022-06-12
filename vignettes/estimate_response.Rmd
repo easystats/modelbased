@@ -29,8 +29,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -71,12 +70,11 @@ relationship).
 
 ```{r}
 library(ggplot2)
-library(dplyr)
 library(see)
 
 pred_data$Petal.Length <- iris$Petal.Length
 
-pred_data %>%
+pred_data |>
   ggplot(aes(x = Petal.Length, y = Predicted)) +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point() +
@@ -98,7 +96,7 @@ We could now plot the second observations, based on a more complex model, as a
 red overlay to the previous points:
 
 ```{r}
-pred_data %>%
+pred_data |>
   ggplot() +
   geom_line(aes(x = Petal.Length, y = Petal.Length), linetype = "dashed") +
   geom_point(aes(x = Petal.Length, y = Predicted), color = "grey") +
@@ -125,7 +123,7 @@ We will do that to visualise the relationship between the response
 ```{r}
 predicted <- estimate_response(model, data = "grid")
 
-iris %>%
+iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
@@ -151,7 +149,7 @@ and plotting.
 ```{r}
 predicted <- estimate_relation(model)
 
-iris %>%
+iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
@@ -169,7 +167,7 @@ different CI levels (for instance, 69\%, 89\% and 99\%).
 ```{r}
 predicted <- estimate_relation(model, ci = c(0.69, .89, 0.99))
 
-iris %>%
+iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low_0.99, ymax = CI_high_0.99, fill = Species), alpha = 0.2) +
@@ -207,7 +205,7 @@ predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 100)
 iterations <- bayestestR::reshape_iterations(predicted)
 iterations$group <- paste0(iterations$iter_group, iterations$Species)
 
-iris %>%
+iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.05) +
@@ -228,7 +226,7 @@ predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 50)
 iterations <- bayestestR::reshape_iterations(predicted)
 iterations$group <- paste0(iterations$iter_group, iterations$Species)
 
-p <- iris %>%
+p <- iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.1) +
@@ -243,7 +241,7 @@ Animated hypothetical outcome plots can also be easily created with
 ```{r, eval = FALSE}
 library(gganimate)
 
-p <- iris %>%
+p <- iris |>
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group)) +
@@ -260,7 +258,7 @@ gganimate::animate(p)
 if (knitr::is_html_output()) {
   knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
 } else {
-  iris %>%
+  iris |>
     ggplot(aes(x = Sepal.Length)) +
     geom_point(aes(y = Petal.Length, color = Species)) +
     geom_line(data = iterations, aes(y = iter_value, color = Species, group = group)) +

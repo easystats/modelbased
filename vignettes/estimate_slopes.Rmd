@@ -24,8 +24,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 

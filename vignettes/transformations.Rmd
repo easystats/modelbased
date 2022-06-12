@@ -31,8 +31,7 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("patchwork", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("patchwork", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 

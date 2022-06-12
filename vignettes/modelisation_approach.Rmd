@@ -30,14 +30,11 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("poorman", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
 set.seed(333)
-
-library(dplyr)
-library(ggplot2)
 ```
 
 For a long time, applied statistics, especially in psychology, revolved around
@@ -83,7 +80,7 @@ statistical modelisation.
 # The Empirical Approach (Classic)
 
 ```{r}
-library(dplyr)
+library(poorman)
 library(ggplot2)
 library(emmeans)
 library(parameters)
@@ -150,7 +147,7 @@ data_anova <- data %>%
     Experimental_Variable > 1.5 ~ "High",
     TRUE ~ "Middle"
   )) %>%
-  mutate(Category = forcats::fct_relevel(Category, c("Low", "Middle", "High"))) %>%
+  mutate(Category = relevel(as.factor(Category), "Low", "Middle", "High")) %>%
   group_by(Participant, Condition, Category) %>%
   summarise(RT = mean(RT))
 

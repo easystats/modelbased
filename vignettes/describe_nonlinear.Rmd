@@ -28,8 +28,8 @@ options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("datawizard", quietly = TRUE) ||
+  !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -118,13 +118,13 @@ visualize how the `Delay`, in days, influences the `Memory` score, by plotting
 the data points and a raw *loess* fit on this raw data.
 
 ```{r}
+library(datawizard)
 library(ggplot2)
-library(dplyr)
 library(see)
 
 # Load the data and filter out outliers
 df <- read.csv("https://raw.githubusercontent.com/DominiqueMakowski/2017being/master/data/data.csv")
-df <- dplyr::filter(df, Delay <= 14, Memory >= 20)
+df <- data_filter(df, Delay <= 14 & Memory >= 20)
 
 
 # Plot the density of the point and a loess smooth line
