@@ -30,8 +30,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("emmeans", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("emmeans", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -50,7 +49,6 @@ Let's say we are interested in the relationship between *y* and *x* in the follo
 library(mgcv)
 
 # Tidyverse
-library(dplyr)
 library(ggplot2)
 
 # Easystats

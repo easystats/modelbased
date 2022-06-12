@@ -28,10 +28,10 @@ knitr::opts_chunk$set(
 options(digits = 2)
 
 if (!requireNamespace("parameters", quietly = TRUE) ||
+    !requireNamespace("poorman", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("lme4", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE) ||
   !requireNamespace("gamm4", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 } else {
@@ -70,6 +70,7 @@ add the regression line using the `geom_smooth` function from `ggplot2`:
 ```{r }
 library(ggplot2)
 library(see)
+library(poorman)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point() +
@@ -238,8 +239,6 @@ We can obtain the right reference grid quite easily by chaining two
 `visualisation_matrix` together as follows:
 
 ```{r }
-library(dplyr)
-
 vizdata <- iris %>%
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 5, numerics = "all")

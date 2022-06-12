@@ -30,7 +30,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("dplyr", quietly = TRUE)) {
+  !requireNamespace("poorman", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -54,7 +54,7 @@ We can compute the means very easily by grouping the observations by species,
 and then computing the mean and the SD:
 
 ```{r}
-library(dplyr)
+library(poorman)
 
 iris %>%
   group_by(Species) %>%

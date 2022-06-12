@@ -433,7 +433,6 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
 
 ``` r
 
-
 # 2. Describe smooth line
 describe_nonlinear(vizdata, x = "Petal.Length")
 ## Start |  End | Length | Change | Slope |   R2

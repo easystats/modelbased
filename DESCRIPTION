@@ -46,9 +46,7 @@ Imports:
 Suggests:
     brms,
     correlation,
-    dplyr,
     emmeans (>= 1.5.3),
-    forcats,
     gamm4,
     gganimate,
     ggplot2,
@@ -60,6 +58,7 @@ Suggests:
     marginaleffects,
     mgcv,
     patchwork,
+    poorman,
     report,
     rmarkdown,
     rstanarm,
