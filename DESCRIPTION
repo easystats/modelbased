@@ -45,7 +45,6 @@ Imports:
     utils
 Suggests:
     brms,
-    coda,
     correlation,
     dplyr,
     emmeans (>= 1.5.3),
