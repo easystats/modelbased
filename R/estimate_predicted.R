@@ -277,7 +277,7 @@ estimate_relation <- function(model,
                                 ...) {
 
   # call "get_data()" only once...
-  model_data <- insight::get_data(model)[, c("period", "herd", "incidence", "size")]
+  model_data <- insight::get_data(model)
 
   # model and data properties
   if (insight::is_model(model)) {
