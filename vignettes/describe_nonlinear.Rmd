@@ -20,7 +20,7 @@ library(knitr)
 options(knitr.kable.NA = "")
 knitr::opts_chunk$set(
   comment = ">",
-  dpi = 450,
+  dpi = 300,
   warning = FALSE,
   message = FALSE
 )

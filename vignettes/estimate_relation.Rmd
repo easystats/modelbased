@@ -18,7 +18,7 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 450)
+knitr::opts_chunk$set(comment = ">", dpi = 300)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
