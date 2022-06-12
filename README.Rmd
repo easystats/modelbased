@@ -22,7 +22,10 @@ library(dplyr)
 knitr::opts_chunk$set(
   collapse = TRUE,
   dpi = 450,
-  fig.path = "man/figures/"
+  fig.path = "man/figures/",
+  warning = FALSE,
+  message = FALSE,
+  out.width = "100%"
 )
 ```
 
@@ -93,7 +96,7 @@ These functions are powered by the [`visualisation_matrix()`](https://easystats.
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a detailed walkthrough on *visualisation matrices*.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(ggplot2)
 library(see)
 library(modelbased)
@@ -135,7 +138,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
  
-```{r message=FALSE, warning=FALSE}
+```{r}
 # 1. The model
 model <- lm(Sepal.Width ~ Species, data = iris)
 
@@ -171,7 +174,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) for a detailed walkthrough on *contrast analysis*.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # 1. The model
 model <- lm(Sepal.Width ~ Species, data = iris)
 
@@ -181,7 +184,7 @@ contrasts
 ```
 
 
-```{r message=FALSE, warning=FALSE, echo = FALSE}
+```{r, echo = FALSE}
 library(see)
 
 plot(contrasts, estimate_means(model)) +
@@ -198,13 +201,13 @@ plot(contrasts, estimate_means(model)) +
 - **Solution**: You can estimate the marginal contrasts at different values of a continuous variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 estimate_contrasts(model, at = "Petal.Length", length = 3)
 ```
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Recompute contrasts with a higher precision (for a smoother plot)
 contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
 
@@ -230,7 +233,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a detailed walkthrough on *predictions*.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Fit model 1 and predict the response variable
 model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
 pred1 <- estimate_response(model1)
@@ -265,7 +268,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
 
 See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html) for more information.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(lme4)
 
 model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
@@ -288,7 +291,7 @@ The two plots below represent the modeled (non-linear) effect estimated by the m
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html) for a detailed walkthrough on *marginal effects*.
 
-```{r message=FALSE, warning=FALSE, fig.height=10, fig.width=8}
+```{r, fig.height=10, fig.width=8}
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
@@ -317,7 +320,7 @@ see::plots(
 See [**this vignette**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html) for more information.
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
 
 # 1. Visualize
@@ -353,7 +356,7 @@ Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
 slopes <- estimate_slopes(model, trend = "hp", at = "wt")
@@ -370,7 +373,7 @@ Aside from plotting the coefficient of each random effect (as done [here](https:
 
 Let's model the reaction time with the number of days of sleep deprivation as fixed effect and the participants as random intercept.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(lme4)
 
 model <- lmer(Reaction ~ Days + (1 | Subject), data = sleepstudy)
@@ -382,7 +385,7 @@ plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 
 As we can see, each participant has a different "intercept" (starting point on the y-axis), but all their slopes are the same: this is because the only slope is the "general" one estimated across all participants by the fixed effect. Let's address that and allow the slope to vary for each participant too.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model <- lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
 preds <- estimate_relation(model, include_random = TRUE)
@@ -392,7 +395,7 @@ plot(preds, ribbon = list(alpha = 0.1))
 
 As we can see, the effect is now different for all participants. Let's plot, on top of that, the "fixed" effect estimated across all these individual effects.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 fixed_pred <- estimate_relation(model) # This time, include_random is FALSE (default)
 
 plot(preds, ribbon = list(alpha = 0)) + # Previous plot

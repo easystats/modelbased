@@ -108,12 +108,12 @@ check_transformation(data, color = "blue")
 data$x_standardized <- datawizard::standardize(data$x)
 
 check_transformation(data, x = "x_standardized", color = "red") +
-  plot_annotation("After Standardization")
+  patchwork::plot_annotation("After Standardization")
 
 data$x_normalized <- datawizard::normalize(data$x)
 
 check_transformation(data, x = "x_normalized", color = "orange") +
-  plot_annotation("After Normalization")
+  patchwork::plot_annotation("After Normalization")
 ```
 
 As you can see, although the unit of `x` has changed, scale-transformation have no impact on the distribution of the variable and on their relationship with other variables.
@@ -121,6 +121,7 @@ As you can see, although the unit of `x` has changed, scale-transformation have 
 - **Pros**:
   - Interpretation (standardized effect sizes)
   - Computation (some models can converge more more efficiently)
+
 - **Cons**:
   - Interpretation (when the variable values have meaning)
   - Reproducibility (values have different meaning depending on the sample's characteristics - only for transformations that depend on properties of the variable like standardization)

@@ -131,7 +131,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-3-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-3-1.png" width="100%" />
 
 ## Estimate marginal means
 
@@ -182,7 +182,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-4-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-4-1.png" width="100%" />
 
 ## Contrast analysis
 
@@ -216,7 +216,7 @@ contrasts
 ## p-value adjustment method: Holm (1979)
 ```
 
-![](man/figures/unnamed-chunk-6-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-6-1.png" width="100%" />
 
 ## Check the contrasts at different points of another linear predictor
 
@@ -268,7 +268,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-8-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-8-1.png" width="100%" />
 
 ## Generate predictions from your model to compare it with original data
 
@@ -324,7 +324,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-9-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-9-1.png" width="100%" />
 
 ## Extract and format group-level random effects
 
@@ -356,7 +356,7 @@ random
 plot(random)
 ```
 
-![](man/figures/unnamed-chunk-10-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-10-1.png" width="100%" />
 
 <!-- TODO: add plotting example once 'see' on cran -->
 
@@ -399,7 +399,7 @@ see::plots(
 )
 ```
 
-![](man/figures/unnamed-chunk-11-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-11-1.png" width="100%" />
 
 ## Describe the smooth term by its linear parts
 
@@ -429,9 +429,10 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-![](man/figures/unnamed-chunk-12-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-12-1.png" width="100%" />
 
 ``` r
+
 
 # 2. Describe smooth line
 describe_nonlinear(vizdata, x = "Petal.Length")
@@ -467,7 +468,7 @@ slopes <- estimate_slopes(model, trend = "hp", at = "wt")
 plot(slopes)
 ```
 
-![](man/figures/unnamed-chunk-14-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
 
 ## Visualize predictions with random effects
 
@@ -491,7 +492,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-![](man/figures/unnamed-chunk-15-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -507,7 +508,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-![](man/figures/unnamed-chunk-16-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -521,7 +522,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), size = 2)
 ```
 
-![](man/figures/unnamed-chunk-17-1.png)<!-- -->
+<img src="man/figures/unnamed-chunk-17-1.png" width="100%" />
 
 ## Code of Conduct
 

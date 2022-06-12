@@ -147,7 +147,7 @@ To compute the derivative, we can use the `estimate_slopes()` function, and spec
 deriv <- modelbased::estimate_slopes(model_lm, trend = "x", at = "x")
 
 plot(deriv) + # add a dashed line at 0 to show absence of effect
-  geom_hline(yintercept = 0, linetype = "dashed") 
+  geom_hline(yintercept = 0, linetype = "dashed")
 
 summary(deriv)
 ```
