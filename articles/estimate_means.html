@@ -119,15 +119,16 @@
 <p>A traditional starting point, when reporting such data, is to start by descriptive statistics. For instance, <strong>what is the mean <code>Sepal.Width</code> for each of the 3 species</strong>.</p>
 <p>We can compute the means very easily by grouping the observations by species, and then computing the mean and the SD:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span><span class="op">)</span>
 
-<span class="va">iris</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
+<span class="va">iris</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
     Mean_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span>,
     SD_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span>
   <span class="op">)</span></code></pre></div>
 <pre><code>&gt;  [38;5;246m# A tibble: 3 × 3 [39m
+&gt;  [38;5;246m# Groups:   Species [3] [39m
 &gt;   Species    Mean_Sepal.Width SD_Sepal.Width
 &gt;    [3m [38;5;246m&lt;fct&gt; [39m [23m                  [3m [38;5;246m&lt;dbl&gt; [39m [23m           [3m [38;5;246m&lt;dbl&gt; [39m [23m
 &gt;  [38;5;250m1 [39m setosa                 3.43          0.379

@@ -126,7 +126,7 @@
 <h2 id="the-empirical-approach-classic">The Empirical Approach (Classic)<a class="anchor" aria-label="anchor" href="#the-empirical-approach-classic"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org" class="external-link">dplyr</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rvlenth/emmeans" class="external-link">emmeans</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span>
@@ -176,15 +176,15 @@ Click here to see the code to generate the data.
 <p>So we will take, for each participant, its 20…</p>
 <p><strong>TO DO: COMPLETE THIS VIGNETTE</strong>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_anova</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span>
+<code class="sourceCode R"><span class="va">data_anova</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/case_when.html" class="external-link">case_when</a></span><span class="op">(</span>
     <span class="va">Experimental_Variable</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fl">1.5</span> <span class="op">~</span> <span class="st">"Low"</span>,
     <span class="va">Experimental_Variable</span> <span class="op">&gt;</span> <span class="fl">1.5</span> <span class="op">~</span> <span class="st">"High"</span>,
     <span class="cn">TRUE</span> <span class="op">~</span> <span class="st">"Middle"</span>
-  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu">forcats</span><span class="fu">::</span><span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_relevel.html" class="external-link">fct_relevel</a></span><span class="op">(</span><span class="va">Category</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span>, <span class="va">Category</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>RT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">RT</span><span class="op">)</span><span class="op">)</span>
+  <span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>Category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/relevel.html" class="external-link">relevel</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">Category</span><span class="op">)</span>, <span class="st">"Low"</span>, <span class="st">"Middle"</span>, <span class="st">"High"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span>, <span class="va">Category</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>RT <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">RT</span><span class="op">)</span><span class="op">)</span>
 
 <span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">aov</a></span><span class="op">(</span><span class="va">RT</span> <span class="op">~</span> <span class="va">Condition</span> <span class="op">*</span> <span class="va">Category</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/aov.html" class="external-link">Error</a></span><span class="op">(</span><span class="va">Participant</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_anova</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">results</span><span class="op">)</span></code></pre></div>
@@ -210,30 +210,30 @@ Click here to see the code to generate the data.
 <h3 id="post-hoc-comparison-tests">Post-hoc comparison tests<a class="anchor" aria-label="anchor" href="#post-hoc-comparison-tests"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_emmeans.html">model_emmeans</a></span><span class="op">(</span><span class="va">results</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Condition"</span>, <span class="st">"Category"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_emmeans.html">model_emmeans</a></span><span class="op">(</span><span class="va">results</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Condition"</span>, <span class="st">"Category"</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="op">)</span>
 <span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">posthoc</span><span class="op">)</span></code></pre></div>
 <pre><code>&gt; contrast            | Coefficient |   SE |           95% CI | t(145) |      p
 &gt; -----------------------------------------------------------------------------
 &gt; A Low - B Low       |       36.83 | 5.82 | [ 25.33,  48.32] |   6.33 | &lt; .001
-&gt; A Low - A Middle    |       46.52 | 5.82 | [ 35.02,  58.01] |   8.00 | &lt; .001
-&gt; A Low - B Middle    |       14.18 | 5.82 | [  2.69,  25.67] |   2.44 | 0.491 
 &gt; A Low - A High      |       -0.23 | 5.82 | [-11.73,  11.26] |  -0.04 | &gt; .999
 &gt; A Low - B High      |       -8.54 | 5.82 | [-20.04,   2.95] |  -1.47 | 0.979 
-&gt; B Low - A Middle    |        9.69 | 5.82 | [ -1.80,  21.18] |   1.67 | 0.940 
-&gt; B Low - B Middle    |      -22.65 | 5.82 | [-34.14, -11.15] |  -3.89 | 0.012 
+&gt; A Low - A Middle    |       46.52 | 5.82 | [ 35.02,  58.01] |   8.00 | &lt; .001
+&gt; A Low - B Middle    |       14.18 | 5.82 | [  2.69,  25.67] |   2.44 | 0.491 
 &gt; B Low - A High      |      -37.06 | 5.82 | [-48.55, -25.56] |  -6.37 | &lt; .001
 &gt; B Low - B High      |      -45.37 | 5.82 | [-56.86, -33.87] |  -7.80 | &lt; .001
-&gt; A Middle - B Middle |      -32.34 | 5.82 | [-43.83, -20.84] |  -5.56 | &lt; .001
-&gt; A Middle - A High   |      -46.75 | 5.82 | [-58.24, -35.25] |  -8.04 | &lt; .001
-&gt; A Middle - B High   |      -55.06 | 5.82 | [-66.55, -43.57] |  -9.47 | &lt; .001
-&gt; B Middle - A High   |      -14.41 | 5.82 | [-25.90,  -2.92] |  -2.48 | 0.463 
-&gt; B Middle - B High   |      -22.72 | 5.82 | [-34.21, -11.23] |  -3.91 | 0.012 
+&gt; B Low - A Middle    |        9.69 | 5.82 | [ -1.80,  21.18] |   1.67 | 0.940 
+&gt; B Low - B Middle    |      -22.65 | 5.82 | [-34.14, -11.15] |  -3.89 | 0.012 
 &gt; A High - B High     |       -8.31 | 5.82 | [-19.80,   3.18] |  -1.43 | 0.983 
+&gt; A High - A Middle   |       46.75 | 5.82 | [ 35.25,  58.24] |   8.04 | &lt; .001
+&gt; A High - B Middle   |       14.41 | 5.82 | [  2.92,  25.90] |   2.48 | 0.463 
+&gt; B High - A Middle   |       55.06 | 5.82 | [ 43.57,  66.55] |   9.47 | &lt; .001
+&gt; B High - B Middle   |       22.72 | 5.82 | [ 11.23,  34.21] |   3.91 | 0.012 
+&gt; A Middle - B Middle |      -32.34 | 5.82 | [-43.83, -20.84] |  -5.56 | &lt; .001
 &gt; 
 &gt; p-value adjustment method: Tukey</code></pre>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data_anova</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">data_anova</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Category</span>, y <span class="op">=</span> <span class="va">RT</span>, fill <span class="op">=</span> <span class="va">Condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html" class="external-link">geom_boxplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">see</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
@@ -253,8 +253,8 @@ Click here to see the code to generate the data.
 </h3>
 <p>We can use <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth()</a></code>, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
+<code class="sourceCode R"><span class="va">data</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
+  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Participant</span>, <span class="va">Condition</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Experimental_Variable</span>, y <span class="op">=</span> <span class="va">RT</span>, color <span class="op">=</span> <span class="va">Condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html" class="external-link">geom_jitter</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"loess"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
