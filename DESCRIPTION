@@ -60,6 +60,7 @@ Suggests:
     Matrix,
     marginaleffects,
     mgcv,
+    patchwork,
     report,
     rmarkdown,
     rstanarm,
