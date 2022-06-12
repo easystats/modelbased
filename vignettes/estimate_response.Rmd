@@ -57,6 +57,7 @@ actual "true" values. This can be done by generating predictions:
 
 ```{r,}
 library(modelbased)
+library(poorman)
 
 pred_data <- estimate_response(model)
 head(pred_data)

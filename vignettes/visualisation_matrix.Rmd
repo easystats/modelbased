@@ -70,6 +70,7 @@ add the regression line using the `geom_smooth` function from `ggplot2`:
 ```{r }
 library(ggplot2)
 library(see)
+library(poorman)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point() +

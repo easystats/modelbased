@@ -55,6 +55,7 @@ head(visualization_data)
 ```{r message=FALSE, warning=FALSE, eval=FALSE}
 library(ggplot2)
 library(see)
+library(poorman)
 
 visualization_data %>%
   ggplot(aes(x = Sepal.Width, y = Predicted)) +
