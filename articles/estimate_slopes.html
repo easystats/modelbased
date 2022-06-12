@@ -101,7 +101,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Marginal effects and derivatives</h1>
             
       
@@ -126,7 +126,7 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-2-1.png" width="3281.25"></p>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-2-1.png" width="2187.5"></p>
 <p>It seems like the slope of the effect is roughly similar (in the same direction) across the different factor levels.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
@@ -178,7 +178,7 @@
 &gt; Marginal effects estimated for Petal.Length</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-6-1.png" width="3281.25"></p>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-6-1.png" width="2187.5"></p>
 </div>
 <div class="section level2">
 <h2 id="interactions-between-two-continuous-variables">Interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#interactions-between-two-continuous-variables"></a>
@@ -194,7 +194,7 @@
 <span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"hp"</span>, at <span class="op">=</span> <span class="st">"wt"</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-7-1.png" width="3281.25"></p>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-7-1.png" width="2187.5"></p>
 </div>
 <div class="section level2">
 <h2 id="describing-and-reporting-non-linear-relationships-e-g--in-gams">Describing and reporting non-linear relationships (e.g., in GAMs)<a class="anchor" aria-label="anchor" href="#describing-and-reporting-non-linear-relationships-e-g--in-gams"></a>
@@ -207,7 +207,7 @@
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
 
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-8-1.png" width="3281.25"></p>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-8-1.png" width="2187.5"></p>
 <p>The GAMs nicely models the complex relationship between the two variables (if we don’t take into account the different species of course).</p>
 <p>But how to interpret and report in a manuscript such results? We can’t simply paste the figure right? Right? Reviewers will want some statistics, some numbers between brackets, otherwise it doesn’t look serious does it.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -235,7 +235,7 @@
 
 <span class="co"># Visualise</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></code></pre></div>
-<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="3281.25"></p>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="2187.5"></p>
 <p>This plot represents the “slope” of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). <strong>Marginal derivatives</strong> allow us to make inferences at each point of point of the relationship!</p>
 <p>Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the “average” linear trend of each chunk.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -269,7 +269,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
 </div>
 
     </footer>
