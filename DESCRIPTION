@@ -32,14 +32,14 @@ License: GPL-3
 URL: https://easystats.github.io/modelbased/
 BugReports: https://github.com/easystats/modelbased/issues
 Depends:
-    R (>= 3.4)
+    R (>= 3.5)
 Imports:
     bayestestR (>= 0.12.1),
-    effectsize (>= 0.6.0.1),
+    effectsize (>= 0.7.0),
     insight (>= 0.17.1),
     datawizard (>= 0.4.1),
     parameters (>= 0.18.0),
-    performance (>= 0.8.0),
+    performance (>= 0.9.0),
     graphics,
     stats,
     utils
@@ -64,7 +64,6 @@ Suggests:
     rstanarm,
     rtdists,
     see (>= 0.7.0),
-    spelling,
     testthat
 VignetteBuilder: 
     knitr
