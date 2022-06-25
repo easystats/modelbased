@@ -40,7 +40,7 @@ function. Same arguments apply."><meta property="og:image" content="/reference/f
     <a class="dropdown-item" href="../articles/estimate_means.html">Marginal means</a>
     <a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a>
     <a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
-    <a class="dropdown-item" href="../articles/estimate_expectation.html">Use a model to make predictions</a>
+    <a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a>
     <a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     <a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a>
     <a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a>
@@ -81,25 +81,25 @@ function. Same arguments apply.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for data.frame</span>
-<span class="fu">visualisation_matrix</span><span class="op">(</span>
-  <span class="va">x</span>,
-  at <span class="op">=</span> <span class="st">"all"</span>,
-  target <span class="op">=</span> <span class="cn">NULL</span>,
-  factors <span class="op">=</span> <span class="st">"reference"</span>,
-  numerics <span class="op">=</span> <span class="st">"mean"</span>,
-  preserve_range <span class="op">=</span> <span class="cn">FALSE</span>,
-  reference <span class="op">=</span> <span class="va">x</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="co"># S3 method for numeric</span>
-<span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="co"># S3 method for factor</span>
-<span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for data.frame</span></span>
+<span><span class="fu">visualisation_matrix</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  at <span class="op">=</span> <span class="st">"all"</span>,</span>
+<span>  target <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  factors <span class="op">=</span> <span class="st">"reference"</span>,</span>
+<span>  numerics <span class="op">=</span> <span class="st">"mean"</span>,</span>
+<span>  preserve_range <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  reference <span class="op">=</span> <span class="va">x</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for numeric</span></span>
+<span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for factor</span></span>
+<span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -162,13 +162,13 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Add one row to change the "mode" of Species</span></span>
-<span class="r-in"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">iris</span><span class="op">[</span><span class="fl">149</span>, <span class="op">]</span>, make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Single variable is of interest; all others are "fixed"</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Add one row to change the "mode" of Species</span></span></span>
+<span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">iris</span>, <span class="va">iris</span><span class="op">[</span><span class="fl">149</span>, <span class="op">]</span>, make.row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Single variable is of interest; all others are "fixed"</span></span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species</span>
@@ -185,7 +185,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |        3.06 |         3.77 |        1.21 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species</span>
@@ -195,7 +195,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |        3.06 |         3.77 |        1.21 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, range <span class="op">=</span> <span class="st">"ci"</span>, ci <span class="op">=</span> <span class="fl">0.90</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species</span>
@@ -212,7 +212,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.25 |        3.06 |         3.77 |        1.21 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, factors <span class="op">=</span> <span class="st">"mode"</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span>, factors <span class="op">=</span> <span class="st">"mode"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width |   Species</span>
@@ -229,9 +229,9 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |        3.06 |         3.77 |        1.21 | virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Multiple variables are of interest, creating a combination</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Multiple variables are of interest, creating a combination</span></span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -247,7 +247,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |  virginica |        3.06 |         3.77 |        1.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Petal.Length | Sepal.Width | Petal.Width | Species</span>
@@ -263,7 +263,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |         6.90 |        3.06 |        1.21 |  setosa</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Width, Species</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, preserve_range <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, preserve_range <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -287,7 +287,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |  virginica |        3.06 |         3.77 |        1.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, numerics <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, numerics <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -324,7 +324,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>         7.90 |  virginica |           0 |            0 |           0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = 3"</span>, <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = 3"</span>, <span class="st">"Species"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -334,7 +334,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>            3 |  virginica |        3.06 |         3.77 |        1.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = c(3, 1)"</span>, <span class="st">"Species = 'setosa'"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length = c(3, 1)"</span>, <span class="st">"Species = 'setosa'"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -343,9 +343,9 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>            1 |  setosa |        3.06 |         3.77 |        1.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># with list-style at-argument</span></span>
-<span class="r-in"><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># with list-style at-argument</span></span></span>
+<span class="r-in"><span><span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, Species <span class="op">=</span> <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Species | Sepal.Width | Petal.Length | Petal.Width</span>
@@ -354,10 +354,10 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 <span class="r-out co"><span class="r-pr">#&gt;</span>            3 |  setosa |        3.06 |         3.77 |        1.21</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Maintained constant: Sepal.Width, Petal.Length, Petal.Width</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Standardize</span></span>
-<span class="r-in"><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Standardize</span></span></span>
+<span class="r-in"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">visualisation_matrix</span><span class="op">(</span><span class="va">data</span>, at <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Visualisation Grid</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species</span>
@@ -385,7 +385,7 @@ Used when standardizing or unstandardizing the grid using <code><a href="https:/
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
     </footer></div>

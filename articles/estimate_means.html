@@ -65,7 +65,7 @@
     <a class="dropdown-item" href="../articles/estimate_means.html">Marginal means</a>
     <a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a>
     <a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
-    <a class="dropdown-item" href="../articles/estimate_expectation.html">Use a model to make predictions</a>
+    <a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a>
     <a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     <a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a>
     <a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a>
@@ -119,14 +119,14 @@
 <p>A traditional starting point, when reporting such data, is to start by descriptive statistics. For instance, <strong>what is the mean <code>Sepal.Width</code> for each of the 3 species</strong>.</p>
 <p>We can compute the means very easily by grouping the observations by species, and then computing the mean and the SD:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span><span class="op">)</span>
-
-<span class="va">iris</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span>
-    Mean_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span>,
-    SD_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span>
-  <span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://nathaneastwood.github.io/poorman/" class="external-link">poorman</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">iris</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">Species</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/summarise.html" class="external-link">summarise</a></span><span class="op">(</span></span>
+<span>    Mean_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span>,</span>
+<span>    SD_Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Sepal.Width</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
 <pre><code>&gt;  [38;5;246m# A tibble: 3 × 3 [39m
 &gt;  [38;5;246m# Groups:   Species [3] [39m
 &gt;   Species    Mean_Sepal.Width SD_Sepal.Width
@@ -136,13 +136,13 @@
 &gt;  [38;5;250m3 [39m virginica              2.97          0.322</code></pre>
 <p>We can also provide a plot:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span>
-
-<span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_means_files/figure-html/unnamed-chunk-3-1.png" width="100%"></p>
 <p>However, these <strong>raw means</strong> might be biased, as the number of observations in each group might be different. Moreover, there might be some hidden covariance or mediation with other variables in the dataset, creating a “spurious” influence on the means.</p>
 <p><strong>How can we take these influences into account while calculating means?</strong></p>
@@ -153,11 +153,11 @@
 <p>Another way of analysing the means is to actually <strong>statistically model them</strong>, rather than simply describe them as they appear in the data. For instance, we could fit a simple Bayesian linear regression modelling the relationship between <code>Species</code> and <code>Sepal.Width</code>.</p>
 <p>Marginal means are basically means extracted from a statistical model, and represent average of response variable (here, <code>Sepal.Width</code>) for each level of predictor variable (here, <code>Species</code>).</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span>
-
-<span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-<span class="va">means</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="va">means</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
 &gt; Species    | Mean |   SE |       95% CI
@@ -170,17 +170,17 @@
 <p>Note that the means computed here are not that different than the raw means we created above. From which we can surmise that there are not many spurious influences that we need to worry about in the <code>iris</code> dataset. But this might not be the case for your dataset.</p>
 <p>We can now add these means, as well as the <a href="https://easystats.github.io/bayestestR/articles/credible_interval.html" class="external-link"><strong>credible interval (CI)</strong></a> representing the uncertainty of the estimation, as an overlay on the previous plot:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">means</span>,
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,
-    size <span class="op">=</span> <span class="fl">1</span>,
-    color <span class="op">=</span> <span class="st">"white"</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">means</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"white"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_means_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 </div>
 <div class="section level2">
@@ -188,10 +188,10 @@
 </h2>
 <p>The power of marginal means resides in the fact that they can be estimated from much more complex models. For instance, we could fit a model that takes into account the interaction with the other variable, <code>Petal.Width</code>. The estimated means will be “adjusted” (or will take into account) for variations of these other components.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span>
-<span class="va">means_complex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
-
-<span class="va">means_complex</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
+<span><span class="va">means_complex</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">means_complex</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
 &gt; Species    | Mean |   SE |       95% CI
@@ -205,24 +205,24 @@
 <!-- The following figure is really difficult to make sense of -->
 <!-- We need to think of a simpler way to visualize these -->
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">means</span>,
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,
-    size <span class="op">=</span> <span class="fl">1</span>,
-    color <span class="op">=</span> <span class="st">"white"</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means_complex</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">means_complex</span>,
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,
-    size <span class="op">=</span> <span class="fl">1</span>,
-    color <span class="op">=</span> <span class="st">"orange"</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Species</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, fill <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/geom_point2.html" class="external-link">geom_jitter2</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.05</span>, alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span>, alpha <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">means</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"white"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">means_complex</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, group <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_linerange.html" class="external-link">geom_pointrange</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">means_complex</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">Mean</span>, ymin <span class="op">=</span> <span class="va">CI_low</span>, ymax <span class="op">=</span> <span class="va">CI_high</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"orange"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_means_files/figure-html/unnamed-chunk-7-1.png" width="100%"></p>
 <p>That’s interesting! It seems that after adjusting the model for petal characteristics, the differences between <code>Species</code> seems to be even bigger!</p>
 <p><strong>But are these differences “significant”?</strong></p>
@@ -245,7 +245,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
     </footer>

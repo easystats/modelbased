@@ -50,7 +50,7 @@ for predictions about individual cases. See below for details."><meta property="
     <a class="dropdown-item" href="../articles/estimate_means.html">Marginal means</a>
     <a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a>
     <a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a>
-    <a class="dropdown-item" href="../articles/estimate_expectation.html">Use a model to make predictions</a>
+    <a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a>
     <a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a>
     <a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a>
     <a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a>
@@ -96,33 +96,33 @@ for predictions about individual cases. See below for details.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">estimate_expectation</span><span class="op">(</span>
-  <span class="va">model</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">estimate_response</span><span class="op">(</span><span class="va">...</span><span class="op">)</span>
-
-<span class="fu">estimate_link</span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="st">"grid"</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span>
-
-<span class="fu">estimate_prediction</span><span class="op">(</span>
-  <span class="va">model</span>,
-  data <span class="op">=</span> <span class="cn">NULL</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span>
-
-<span class="fu">estimate_relation</span><span class="op">(</span>
-  <span class="va">model</span>,
-  data <span class="op">=</span> <span class="st">"grid"</span>,
-  ci <span class="op">=</span> <span class="fl">0.95</span>,
-  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_expectation</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">estimate_response</span><span class="op">(</span><span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">estimate_link</span><span class="op">(</span><span class="va">model</span>, data <span class="op">=</span> <span class="st">"grid"</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">estimate_prediction</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">estimate_relation</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  data <span class="op">=</span> <span class="st">"grid"</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -272,13 +272,13 @@ to generate model predictions for specific combinations of predictor values.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Linear Models</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Get predicted and prediction interval (see insight::get_predicted)</span></span>
-<span class="r-in"><span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/" class="external-link">modelbased</a></span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Linear Models</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get predicted and prediction interval (see insight::get_predicted)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -320,10 +320,10 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 21.40 | 2.78 |     22.43 | 0.59 | [21.22, 23.64] |     -1.03</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Get expected values with confidence interval</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">pred</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Get expected values with confidence interval</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Expectation</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
@@ -341,18 +341,18 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Visualisation (see visualisation_recipe())</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Visualisation (see visualisation_recipe())</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://easystats.github.io/see/" class="external-link">"see"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: see</span>
 <span class="r-plt img"><img src="estimate_expectation-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Standardize predictions</span></span>
-<span class="r-in"><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">am</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">pred</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">z</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Standardize predictions</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">am</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">pred</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Expectation (standardized)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt    |    am | Predicted |   SE |         95% CI</span>
@@ -460,7 +460,7 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt, am</span></span>
-<span class="r-in"><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">z</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">z</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Expectation (standardized)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   |   am | Predicted |   SE |         95% CI</span>
@@ -568,10 +568,10 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt, am</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Logistic Models</span></span>
-<span class="r-in"><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Logistic Models</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">vs</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -613,7 +613,7 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1.00 | 2.78 |      0.60 | 0.12 | [0.36, 0.80] |      0.40</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: vs</span></span>
-<span class="r-in"><span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span class="r-in"><span><span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Expectation</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |       95% CI</span>
@@ -631,13 +631,13 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: vs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Mixed models</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Mixed models</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/lme4/lme4/" class="external-link">"lme4"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> `estimate_response()` is deprecated.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   Please use `estimate_expectation()` (for conditional expected values) or</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   `estimate_prediction()` (for individual case predictions) instead.</span>
@@ -658,14 +658,14 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Bayesian models</span></span>
-<span class="r-in"><span class="co"># \donttest{</span></span>
-<span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/" class="external-link">"rstanarm"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, refresh <span class="op">=</span> <span class="fl">0</span>, iter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in">  <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Bayesian models</span></span></span>
+<span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://mc-stan.org/rstanarm/" class="external-link">"rstanarm"</a></span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span>, refresh <span class="op">=</span> <span class="fl">0</span>, iter <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">estimate_response</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: rstanarm</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Rcpp</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> This is rstanarm version 2.21.3</span>
@@ -686,20 +686,20 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.12 | 1.11 | [26.91, 31.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.82 | 0.94 | [25.03, 28.67]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.52 | 0.77 | [23.08, 25.95]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.22 | 0.63 | [21.09, 23.41]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.91 | 0.61 | [18.89, 21.01]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.61 | 0.66 | [16.34, 18.81]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.31 | 0.79 | [13.69, 16.73]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.01 | 0.97 | [10.99, 14.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.71 | 1.21 | [ 8.16, 12.84]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.40 | 1.44 | [ 5.65, 11.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.16 | 1.06 | [27.00, 31.62]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.84 | 0.84 | [25.09, 28.78]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.53 | 0.67 | [23.02, 26.02]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.21 | 0.53 | [21.04, 23.45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.90 | 0.49 | [18.70, 20.84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.59 | 0.58 | [16.28, 18.75]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.27 | 0.71 | [13.78, 16.94]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.96 | 0.96 | [10.87, 14.86]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.65 | 1.19 | [ 8.27, 13.03]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.33 | 1.48 | [ 5.55, 11.24]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: wt</span></span>
-<span class="r-in"><span class="co"># }</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -711,7 +711,7 @@ to generate model predictions for specific combinations of predictor values.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.9000.</p>
 </div>
 
     </footer></div>
