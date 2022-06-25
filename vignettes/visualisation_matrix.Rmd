@@ -28,7 +28,7 @@ knitr::opts_chunk$set(
 options(digits = 2)
 
 if (!requireNamespace("parameters", quietly = TRUE) ||
-    !requireNamespace("poorman", quietly = TRUE) ||
+  !requireNamespace("poorman", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("lme4", quietly = TRUE) ||

@@ -44,7 +44,6 @@ Imports:
     stats,
     utils
 Suggests:
-    brms,
     correlation,
     emmeans (>= 1.5.3),
     gamm4,

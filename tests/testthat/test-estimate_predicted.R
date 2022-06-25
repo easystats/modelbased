@@ -14,10 +14,8 @@ if (require("testthat") &&
   require("lme4") &&
   require("glmmTMB") &&
   require("mgcv") &&
-  require("brms") &&
   require("testthat")) {
   test_that("estimate_relation - shape", {
-
     # CI
     model <- lm(Petal.Length ~ Petal.Width, data = iris)
     estim <- modelbased::estimate_relation(model, ci = 0.90)
@@ -36,7 +34,6 @@ if (require("testthat") &&
 
 
   test_that("estimate_link", {
-
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
     expect_equal(nrow(modelbased::estimate_link(model, length = 5, verbose = FALSE)), 5)
@@ -100,10 +97,6 @@ if (require("testthat") &&
     model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh = 0)
     estim <- estimate_link(model, keep_iterations = TRUE)
     expect_equal(dim(estim), c(10, 1005))
-
-    # model <- brms::brm(mpg ~ drat, data = mtcars, algorithm = "meanfield", refresh=0)
-    # estim <- estimate_link(model, keep_iterations = TRUE)
-    # expect_equal(dim(estim), c(25, 1004))
   })
 
 

@@ -33,7 +33,6 @@ get_emcontrasts <- function(model,
                             transform = "none",
                             method = "pairwise",
                             ...) {
-
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -76,7 +75,6 @@ model_emcontrasts <- get_emcontrasts
                                          at = NULL,
                                          fixed = NULL,
                                          ...) {
-
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   data <- insight::get_data(model)

@@ -55,7 +55,6 @@ get_emmeans <- function(model,
                         levels = NULL,
                         modulate = NULL,
                         ...) {
-
   # Deprecation
   if (!is.null(levels) | !is.null(modulate)) {
     warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
@@ -103,7 +102,6 @@ model_emmeans <- get_emmeans
 #' @importFrom stats model.frame
 #' @keywords internal
 .format_emmeans_arguments <- function(model, args, data, ...) {
-
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model)
@@ -194,7 +192,6 @@ model_emmeans <- get_emmeans
                                      at = NULL,
                                      fixed = NULL,
                                      ...) {
-
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   data <- insight::get_data(model)

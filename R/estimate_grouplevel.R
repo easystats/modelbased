@@ -52,7 +52,6 @@
 #' }
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {
-
   # Extract params
   params <- parameters::model_parameters(model,
     effects = "all",

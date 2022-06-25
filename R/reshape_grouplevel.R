@@ -9,7 +9,6 @@ reshape_grouplevel <- function(x, indices = "all", ...) {
 
 #' @export
 reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
-
   # Find indices
   if (any(indices == "all")) {
     indices <- names(x)[!names(x) %in% c("Group", "Level", "Parameter", "CI")]
@@ -31,7 +30,6 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
 
   # Loop through all groups
   for (group in groups) {
-
     # Subset coefficients
     data_group <- x[x$Group == group, ]
 

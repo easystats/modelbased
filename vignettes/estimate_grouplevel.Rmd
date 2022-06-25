@@ -29,7 +29,6 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("lme4", quietly = TRUE) ||
-  !requireNamespace("brms", quietly = TRUE) ||
   !requireNamespace("rtdists", quietly = TRUE) ||
   !requireNamespace("performance", quietly = TRUE) ||
   !requireNamespace("datawizard", quietly = TRUE) ||
@@ -64,9 +63,7 @@ library(see)
 library(ggplot2)
 library(poorman)
 library(rtdists)
-library(brms)
 library(lme4)
-
 
 data <- rtdists::speed_acc %>%
   # Remove outliers &  Keep only word condition

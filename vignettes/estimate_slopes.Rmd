@@ -18,7 +18,12 @@ bibliography: bibliography.bib
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 library(knitr)
 options(knitr.kable.NA = "")
-knitr::opts_chunk$set(comment = ">", dpi = 300)
+knitr::opts_chunk$set(
+  comment = ">",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE
+)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
@@ -42,7 +47,7 @@ Let's see some examples.
 
 Let's fit a linear model with a factor interacting with a continuous predictor and visualize it. 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(parameters)
 library(performance)
 library(modelbased)
@@ -54,13 +59,13 @@ plot(estimate_relation(model))
 
 It seems like the slope of the effect is roughly similar (in the same direction) across the different factor levels.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 parameters(model)
 ```
 
 Moreover, the interaction is not significant. However, we see below that removing the interaction does not *substantially* improve the model's performance. So, for the sake of the demonstration, let's say we want to keep the maximal effect structure.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 model2 <- lm(Sepal.Length ~ Petal.Length + Species, data = iris)
 
 test_performance(model, model2)
@@ -68,7 +73,7 @@ test_performance(model, model2)
 
 Although we are satisfied with our model and its performance, imagine we are not interested in the effect of `Petal.Length` for different Species, but rather, in its **general trend** "across" all different species. We need to compute the **marginal effect** of the predictor, which corresponds to its slope *averaged* (it's a bit more complex than a simple averaging but that's the idea) over the different factor levels.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 slopes <- estimate_slopes(model, trend = "Petal.Length")
 
 slopes
@@ -79,7 +84,7 @@ We can see that the effect of `Petal.Length`, **marginalized over Species**, is 
 # Effects for each factor's levels
 
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 
 slopes
@@ -95,7 +100,7 @@ Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effec
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 library(modelbased)
 
 model <- lm(mpg ~ hp * wt, data = mtcars)
@@ -113,7 +118,7 @@ General Additive Models (GAMs) are a powerful class of models that extend the ca
 
 Let's take for instance the following model:
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
@@ -124,16 +129,16 @@ The GAMs nicely models the complex relationship between the two variables (if we
 
 But how to interpret and report in a manuscript such results? We can't simply paste the figure right? Right? Reviewers will want some statistics, some numbers between brackets, otherwise it doesn't look serious does it.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 parameters::parameters(model)
 ```
 
 
-The problem with GAMs is that their parameters (i.e., the coefficients), are not easily interpretable. Here we can see one line corresponding to the smooth term. It's significant, great, but what does it mean? And if we run the GAM using other packages (e.g., `rstanarm` or `brms`), the parameters will not be the same. What to do!
+The problem with GAMs is that their parameters (i.e., the coefficients), are not easily interpretable. Here we can see one line corresponding to the smooth term. It's significant, great, but what does it mean? And if we run the GAM using other packages (e.g., `{rstanarm}` or `{brms}`), the parameters will not be the same. What to do!
 
 Because the meaning of these parameters is somewhat disconnected with our need for relationship understanding, another possibility is to compute the **marginal linear effect** of the smooth term, i.e., the "derivative", using `estimate_slopes`.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 # Compute derivative
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
@@ -149,7 +154,7 @@ This plot represents the "slope" of the curve at each point of the curve. As you
 
 Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
 
-```{r message=FALSE, warning=FALSE}
+```{r}
 summary(deriv)
 ```
 

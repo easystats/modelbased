@@ -13,7 +13,6 @@
 #' @seealso Based on the `uniroot.all` function from the rootSolve package.
 #' @export
 zero_crossings <- function(x) {
-
   # Estimate gradient
   zerocrossings <- .uniroot.all(stats::approxfun(1:length(x), x), interval = range(1:length(x)))
   if (length(zerocrossings) == 0) {
@@ -34,7 +33,6 @@ zero_crossings <- function(x) {
                          maxiter = 1000,
                          n = 100,
                          ...) {
-
   ## error checking as in uniroot...
   if (!missing(interval) && length(interval) != 2) {
     stop("'interval' must be a vector of length 2")

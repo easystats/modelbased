@@ -1,6 +1,5 @@
 if (require("testthat") && require("modelbased") && require("logspline") && require("rstanarm") && require("insight") && require("lme4")) {
   test_that("estimate_contrasts - Frequentist", {
-
     # One factor
     model <- lm(Sepal.Width ~ Species, data = iris)
 

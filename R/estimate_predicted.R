@@ -275,7 +275,6 @@ estimate_relation <- function(model,
                                 ci = 0.95,
                                 keep_iterations = FALSE,
                                 ...) {
-
   # call "get_data()" only once...
   model_data <- insight::get_data(model)
 

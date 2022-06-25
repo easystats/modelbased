@@ -113,7 +113,6 @@ estimate_slopes <- function(model,
                             at = NULL,
                             ci = 0.95,
                             ...) {
-
   # Sanitize arguments
   estimated <- get_emtrends(model, trend, at, ...)
   info <- attributes(estimated)
@@ -195,7 +194,6 @@ summary.estimate_slopes <- function(object, ...) {
 
 # Utilities ---------------------------------------------------------------
 .estimate_slopes_summarize <- function(data, trend, ...) {
-
   # Find beginnings and ends -----------------------
   # First row - starting point
   signs <- sign(data[[datawizard::data_find(data, c("Coefficient", "Median", "Mean", "MAP_Estimate"), verbose = FALSE)]])

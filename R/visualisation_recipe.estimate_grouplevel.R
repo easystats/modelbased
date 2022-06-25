@@ -18,7 +18,6 @@
 #' }
 #' \donttest{
 #' if (require("see") && require("lme4")) {
-#'
 #'   # 2 random intercepts
 #'   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
 #'   x <- estimate_grouplevel(model)

@@ -18,7 +18,6 @@
 #' # estimate_relation, estimate_response, ...
 #' # ==============================================
 #' if (require("ggplot2")) {
-#'
 #'   # Simple Model ---------------
 #'   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
 #'   layers <- visualisation_recipe(x)
@@ -27,7 +26,6 @@
 #' }
 #' \donttest{
 #' if (require("ggplot2")) {
-#'
 #'   # Customize aesthetics
 #'   layers <- visualisation_recipe(x,
 #'     point = list(color = "red", alpha = 0.6, size = 3),
@@ -218,7 +216,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   }
 
   # Uncertainty
-  if (is.null(alpha) && is.null(linetype)) { # If interaction, omit uncertainty
+  if (is.null(alpha) && is.null(linetype)) {
+    # If interaction, omit uncertainty
     if ("iter_1" %in% names(data)) {
       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
       l <- l + 1

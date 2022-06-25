@@ -5,7 +5,6 @@
 #' # estimate_means
 #' # ==============================================
 #' if (require("ggplot2")) {
-#'
 #'   # Simple Model ---------------
 #'   x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
 #'   layers <- visualisation_recipe(x)
@@ -14,7 +13,6 @@
 #' }
 #' \donttest{
 #' if (require("ggplot2")) {
-#'
 #'   # Customize aesthetics
 #'   layers <- visualisation_recipe(x,
 #'     jitter = list(width = 0.03, color = "red"),
@@ -91,7 +89,6 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Show data (points, boxplot, violin, etc.)
   if (!is.null(show_data) && all(show_data != "none") && all(show_data != FALSE)) {
-
     # Default changes for binomial models
     shape <- 16
     stroke <- 0

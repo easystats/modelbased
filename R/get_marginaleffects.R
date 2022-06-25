@@ -19,7 +19,6 @@ get_marginaleffects <- function(model,
                                 at = NULL,
                                 fixed = NULL,
                                 ...) {
-
   # check if available
   insight::check_if_installed("marginaleffects")
 
