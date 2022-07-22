@@ -1,6 +1,6 @@
 pandoc: 2.14.2
-pkgdown: 2.0.5.9000
-pkgdown_sha: b4096aa376773d7dee98a267fd0b5a025975a3dc
+pkgdown: 2.0.6.9000
+pkgdown_sha: 956f076f661eb2de9413f64ea24a580cf444466d
 articles:
   derivatives: derivatives.html
   describe_nonlinear: describe_nonlinear.html
@@ -14,5 +14,5 @@ articles:
   overview_of_vignettes: overview_of_vignettes.html
   transformations: transformations.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2022-07-05T21:26Z
+last_built: 2022-07-22T23:21Z
 
