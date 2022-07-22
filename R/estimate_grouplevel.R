@@ -83,7 +83,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- random[c("Group", "Level", names(random)[!names(random) %in% c("Group", "Level")])]
 
   # Sort
-  random <- random[order(random$Group, datawizard::to_numeric(random$Level), random$Parameter), ]
+  random <- random[order(random$Group, .to_numeric(random$Level), random$Parameter), ]
 
   # Clean
   row.names(random) <- NULL
