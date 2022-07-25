@@ -51,7 +51,7 @@ jobs:
           use-public-rspm: true
 
       - name: Install GSL on Ubuntu
-        if: runner.os == 'ubuntu'
+        if: runner.os == 'Linux'
         run: |
           sudo add-apt-repository ppa:dns/gnu
           sudo apt-get update
