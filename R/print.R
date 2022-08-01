@@ -25,8 +25,12 @@ print.estimate_grouplevel <- print.estimate_contrasts
 # Format ------------------------------------------------------------------
 
 #' @export
-format.estimate_contrasts <- function(x, ...) {
-  insight::format_table(x, ...)
+format.estimate_contrasts <- function(x, format = NULL, ...) {
+  if (!is.null(format) && format %in% c("md", "markdown", "html")) {
+    insight::format_table(x, ci_brackets = c("(", ")"), ...)
+  } else {
+    insight::format_table(x, ...)
+  }
 }
 
 #' @export

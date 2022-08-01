@@ -91,7 +91,6 @@ if (require("see") && require("lme4")) {
 }
 \donttest{
 if (require("see") && require("lme4")) {
-
   # 2 random intercepts
   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
   x <- estimate_grouplevel(model)
@@ -107,7 +106,6 @@ if (require("see") && require("lme4")) {
 # estimate_means
 # ==============================================
 if (require("ggplot2")) {
-
   # Simple Model ---------------
   x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
   layers <- visualisation_recipe(x)
@@ -116,7 +114,6 @@ if (require("ggplot2")) {
 }
 \donttest{
 if (require("ggplot2")) {
-
   # Customize aesthetics
   layers <- visualisation_recipe(x,
     jitter = list(width = 0.03, color = "red"),
@@ -153,7 +150,6 @@ if (require("ggplot2")) {
 # estimate_relation, estimate_response, ...
 # ==============================================
 if (require("ggplot2")) {
-
   # Simple Model ---------------
   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
   layers <- visualisation_recipe(x)
@@ -162,7 +158,6 @@ if (require("ggplot2")) {
 }
 \donttest{
 if (require("ggplot2")) {
-
   # Customize aesthetics
   layers <- visualisation_recipe(x,
     point = list(color = "red", alpha = 0.6, size = 3),
