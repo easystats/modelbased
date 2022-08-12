@@ -21,3 +21,5 @@
 ^WIP/.
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+\.code-workspace$
+^\.lintr$
