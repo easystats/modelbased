@@ -102,7 +102,11 @@ estimate_contrasts <- function(model,
     contrasts <- .clean_names_frequentist(contrasts)
   }
   contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  contrasts <- datawizard::data_relocate(contrasts, c("CI_low", "CI_high"), after = c("Difference", "Odds_ratio", "Ratio"))
+  contrasts <- datawizard::data_relocate(
+    contrasts,
+    c("CI_low", "CI_high"),
+    after = c("Difference", "Odds_ratio", "Ratio")
+  )
 
 
   # Format contrasts names
@@ -120,7 +124,12 @@ estimate_contrasts <- function(model,
 
   # Table formatting
   attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(contrasts, "table_footer") <- .estimate_means_footer(contrasts, info$contrast, type = "contrasts", adjust = adjust)
+  attr(contrasts, "table_footer") <- .estimate_means_footer(
+    contrasts,
+    info$contrast,
+    type = "contrasts",
+    adjust = adjust
+  )
 
   # Add attributes
   attr(contrasts, "model") <- model

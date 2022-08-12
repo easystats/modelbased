@@ -25,7 +25,7 @@ get_emtrends <- function(model,
                          modulate = NULL,
                          ...) {
   # Deprecation
-  if (!is.null(levels) | !is.null(modulate)) {
+  if (!is.null(levels) || !is.null(modulate)) {
     warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
     at <- c(levels, modulate)
   }

@@ -175,7 +175,7 @@ summary.estimate_slopes <- function(object, ...) {
     # Create vizmatrix of grouping variables
     groups <- as.data.frame(insight::get_datagrid(data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
-    for (i in 1:nrow(groups)) {
+    for (i in seq_len(nrow(groups))) {
       g <- datawizard::data_match(data, groups[i, , drop = FALSE])
       out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
@@ -203,7 +203,7 @@ summary.estimate_slopes <- function(object, ...) {
   ends <- nrow(data)
   # Iterate through all rows to find blocks
   for (i in 2:nrow(data)) {
-    if ((data$Confidence[i] != sig) | ((signs[i] != sign) & data$Confidence[i] == "Uncertain")) {
+    if ((data$Confidence[i] != sig) || ((signs[i] != sign) && data$Confidence[i] == "Uncertain")) {
       sign <- signs[i]
       sig <- data$Confidence[i]
       starts <- c(starts, i)
@@ -214,7 +214,7 @@ summary.estimate_slopes <- function(object, ...) {
 
   # Summarize these groups -----------------------
   out <- data.frame()
-  for (g in 1:length(starts)) {
+  for (g in seq_len(length(starts))) {
     dat <- data[starts[g]:ends[g], ]
     dat <- as.data.frame(insight::get_datagrid(dat, at = NULL, factors = "mode"))
     dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)

@@ -181,7 +181,9 @@
 #'   estimate_relation(model)
 #' }
 #' }
-#' @return A data frame of predicted values and uncertainty intervals, with class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted] and [`plot()`][visualisation_recipe.estimate_predicted] are available.
+#' @return A data frame of predicted values and uncertainty intervals, with
+#' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
+#' and [`plot()`][visualisation_recipe.estimate_predicted] are available.
 #' @export
 estimate_expectation <- function(model,
                                  data = NULL,

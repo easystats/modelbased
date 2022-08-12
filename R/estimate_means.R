@@ -130,15 +130,15 @@ estimate_means <- function(model,
 
   if (length(vars) == 1) {
     if (type == "contrast") {
-      if (insight::model_info(model)$is_logit & transform == "response") {
+      if (insight::model_info(model)$is_logit && transform == "response") {
         names(means)[names(means) == vars] <- "Odds_ratio"
-      } else if (insight::model_info(model)$is_poisson & transform == "response") {
+      } else if (insight::model_info(model)$is_poisson && transform == "response") {
         names(means)[names(means) == vars] <- "Ratio"
       } else {
         names(means)[names(means) == vars] <- "Difference"
       }
     } else if (type == "mean") {
-      if (insight::model_info(model)$is_logit & transform == "response") {
+      if (insight::model_info(model)$is_logit && transform == "response") {
         names(means)[names(means) == vars] <- "Probability"
       } else {
         names(means)[names(means) == vars] <- "Mean"

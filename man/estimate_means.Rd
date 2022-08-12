@@ -26,7 +26,8 @@ across them).}
 
 \item{transform}{Is passed to the \code{type} argument in
 \code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}. Can be \code{"none"} (default for contrasts), \code{"response"}
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"none"} (default for contrasts), \code{"response"}
 (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
 \code{"none"} will leave the values on scale of the linear predictors.
 \code{"response"} will transform them on scale of the response variable.

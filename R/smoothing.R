@@ -31,7 +31,7 @@ smoothing <- function(x, method = "loess", strength = 0.25, ...) {
 
 #' @export
 smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
-  if (strength == 0 | strength == FALSE | is.null(method)) {
+  if (strength == 0 || strength == FALSE || is.null(method)) {
     return(x)
   }
 
@@ -39,11 +39,11 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (method == "loess") {
     smoothed <- tryCatch(
       {
-        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       },
       warning = function(w) {
         warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
-        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = 1:length(x)), span = strength))
+        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       }
     )
   } else if (method == "smooth") {
@@ -68,7 +68,7 @@ smoothing.data.frame <- function(x, method = "loess", strength = 0.25, ...) {
     row.names(combinations) <- NULL
     x$temp <- apply(x[names(combinations)], 1, paste, collapse = "_")
 
-    for (i in 1:nrow(combinations)) {
+    for (i in seq_len(nrow(combinations))) {
       current_row <- paste0(t(combinations[i, ]), collapse = "_")
       x[x$temp == current_row, nums] <- sapply(x[x$temp == current_row, nums], smoothing, method = method, strength = strength, ...)
     }

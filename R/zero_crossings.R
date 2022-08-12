@@ -14,7 +14,7 @@
 #' @export
 zero_crossings <- function(x) {
   # Estimate gradient
-  zerocrossings <- .uniroot.all(stats::approxfun(1:length(x), x), interval = range(1:length(x)))
+  zerocrossings <- .uniroot.all(stats::approxfun(seq_len(length(x)), x), interval = range(seq_len(length(x))))
   if (length(zerocrossings) == 0) {
     return(NA)
   }

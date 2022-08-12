@@ -45,7 +45,7 @@ describe_nonlinear.estimate_predicted <- function(data,
 #' @export
 describe_nonlinear.numeric <- function(data, x = NULL, ...) {
   if (is.null(x)) {
-    x <- 1:length(data)
+    x <- seq_len(length(data))
   }
 
   describe_nonlinear(data.frame(x = x, y = data), x = "x", y = "y")

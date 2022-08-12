@@ -55,7 +55,9 @@ running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 }
 \value{
-A data frame of predicted values and uncertainty intervals, with class \code{"estimate_predicted"}. Methods for \code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe()}} and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available.
+A data frame of predicted values and uncertainty intervals, with
+class \code{"estimate_predicted"}. Methods for \code{\link[=visualisation_recipe.estimate_predicted]{visualisation_recipe()}}
+and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available.
 }
 \description{
 After fitting a model, it is useful generate model-based estimates of the
