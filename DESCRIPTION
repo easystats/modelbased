@@ -36,8 +36,8 @@ Depends:
 Imports:
     bayestestR (>= 0.12.1),
     effectsize (>= 0.7.0),
-    insight (>= 0.17.1),
-    datawizard (>= 0.4.1),
+    insight (>= 0.18.0),
+    datawizard (>= 0.5.0),
     parameters (>= 0.18.0),
     performance (>= 0.9.0),
     graphics,
@@ -73,4 +73,3 @@ RoxygenNote: 7.2.1
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
-Remotes: easystats/datawizard
