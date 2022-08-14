@@ -320,7 +320,6 @@ estimate_relation <- function(model,
     }
   }
 
-
   # Get data ----------------
   if (is.null(data)) {
     data <- model_data
@@ -363,6 +362,11 @@ estimate_relation <- function(model,
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
+  # remove response variable from data frame, as this variable is predicted
+  if (model_response %in% colnames(out)) {
+    out[[model_response]] <- NULL
+  }
+
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted
@@ -374,7 +378,7 @@ estimate_relation <- function(model,
   attr(out, "response") <- model_response
   attr(out, "model") <- model
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
-  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
+  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
 
   # Class
@@ -388,7 +392,7 @@ estimate_relation <- function(model,
 # Utils -------------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted_footer <- function(model, grid_specs) {
+.estimate_predicted_footer <- function(model, grid_specs, predictions) {
   footer <- paste0("\nVariable predicted: ", insight::find_response(model))
 
   if ("at" %in% names(grid_specs)) {
@@ -396,8 +400,16 @@ estimate_relation <- function(model,
   }
 
   if ("adjusted_for" %in% names(grid_specs)) {
-    if (length(grid_specs$adjusted_for) >= 1 && 
-        !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
+    if (length(grid_specs$adjusted_for) >= 1 && !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
+      # if we have values of adjusted terms, add these here
+      if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
+        # get values at which non-focal terms are hold constant
+        adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
+          predictions[[i]][1]
+        })
+        # at values to names of non-focal terms (footer)
+        grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
+      }
       footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
     }
   }
