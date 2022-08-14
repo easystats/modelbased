@@ -279,9 +279,10 @@ estimate_relation <- function(model,
                                 ...) {
   # call "get_data()" only once...
   model_data <- insight::get_data(model)
+  is_model <- insight::is_model(model)
 
   # model and data properties
-  if (insight::is_model(model)) {
+  if (is_model) {
     # for models, get predictors, response etc.
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
@@ -294,6 +295,17 @@ estimate_relation <- function(model,
   }
 
   is_grid <- identical(data, "grid")
+
+  # check for correct attributes - a data frame of class `datagrid` may
+  # contain all variables of that data frame as "adjusted-for" attribute,
+  # which does not necessarily match with actual model predictors. Make sure
+  # "adjusted_for" attribute only contains valid variable names
+  if (inherits(data, "datagrid") && is_model) {
+    adjusted_for <- attr(data, "adjusted_for", exact = TRUE)
+    if (!is.null(adjusted_for)) {
+      attr(data, "adjusted_for") <- intersect(variables, adjusted_for)
+    }
+  }
 
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
