@@ -384,7 +384,8 @@ estimate_relation <- function(model,
   }
 
   if ("adjusted_for" %in% names(grid_specs)) {
-    if (!is.na(grid_specs$adjusted_for)) {
+    if (length(grid_specs$adjusted_for) >= 1 && 
+        !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
       footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
     }
   }
