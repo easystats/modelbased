@@ -393,10 +393,10 @@ estimate_relation <- function(model,
 
 #' @keywords internal
 .estimate_predicted_footer <- function(model, grid_specs, predictions) {
-  footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+  footer <- paste0("\nVariable predicted: ", insight::find_response(model), "\n")
 
   if ("at" %in% names(grid_specs)) {
-    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$at, collapse = ", "))
+    footer <- paste0(footer, "Predictors modulated: ", paste0(grid_specs$at, collapse = ", "), "\n")
   }
 
   if ("adjusted_for" %in% names(grid_specs)) {
@@ -410,7 +410,7 @@ estimate_relation <- function(model,
         # at values to names of non-focal terms (footer)
         grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
       }
-      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "), "\n")
+      footer <- paste0(footer, "Predictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "), "\n")
     }
   }
 
