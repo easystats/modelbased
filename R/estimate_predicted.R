@@ -410,7 +410,7 @@ estimate_relation <- function(model,
         # at values to names of non-focal terms (footer)
         grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
       }
-      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
+      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "), "\n")
     }
   }
 
