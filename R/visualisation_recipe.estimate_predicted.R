@@ -128,12 +128,9 @@ visualisation_recipe.estimate_predicted <- function(x,
   } else {
     targets <- insight::find_predictors(info$model, effects = "fixed", flatten = TRUE)
   }
-  # Find which one is the linear one (if none, then pick the first factor)
-  x1 <- targets[sapply(data[targets], is.numeric)][1]
-  if (length(x1) == 0 || is.na(x1)) {
-    x1 <- targets[1]
-    group <- 1
-  }
+  
+  # first at-value along x-axis  
+  x1 <- targets[1]
   targets <- targets[targets != x1]
 
   # Deal with more than one target
