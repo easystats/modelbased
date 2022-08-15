@@ -64,7 +64,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   # What are the fact
   facs <- info$at[sapply(data[info$at], function(x) is.factor(x) | is.character(x))]
   nums <- info$at[!info$at %in% facs]
-  if (length(facs) > 0 & length(nums) == 0) {
+  if (length(facs) > 0 && length(nums) == 0) {
     x1 <- facs[1]
     if (length(facs) > 1) {
       facet <- facs[2]
