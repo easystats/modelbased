@@ -23,7 +23,7 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
 
   test_that("estimate_response - mgcv gam", {
     estim <- estimate_response(model)
-    expect_equal(dim(estim), c(150, 8))
+    expect_equal(dim(estim), c(150, 7))
   })
 
   test_that("estimate_link - mgcv gam", {
@@ -31,17 +31,15 @@ if (require("testthat") && require("modelbased") && require("mgcv") && require("
     expect_equal(dim(estim), c(30, 6))
   })
 
-  model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)
+  # model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)
   # estim <- modelbased::estimate_link(model)
 
-  if (packageVersion("insight") > "0.11.1") {
-    model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
+  model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
 
-    test_that("estimate_response - mgcv gamm", {
-      estim <- estimate_response(model)
-      expect_equal(dim(estim), c(150, 9))
-    })
-  }
+  test_that("estimate_response - mgcv gamm", {
+    estim <- estimate_response(model)
+    expect_equal(dim(estim), c(150, 8))
+  })
 
   if (!osx) {
     test_that("estimate_link - mgcv gamm", {
