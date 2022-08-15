@@ -1,111 +1,111 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://easystats.github.io/modelbased/404.html</loc>
   </url>
   <url>
-    <loc>/CODE_OF_CONDUCT.html</loc>
+    <loc>https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>/CONTRIBUTING.html</loc>
+    <loc>https://easystats.github.io/modelbased/CONTRIBUTING.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://easystats.github.io/modelbased/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/derivatives.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/derivatives.html</loc>
   </url>
   <url>
-    <loc>/articles/describe_nonlinear.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/describe_nonlinear.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_contrasts.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_grouplevel.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_grouplevel.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_means.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_means.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_relation.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_relation.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_response.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_response.html</loc>
   </url>
   <url>
-    <loc>/articles/estimate_slopes.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/estimate_slopes.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/modelisation_approach.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/modelisation_approach.html</loc>
   </url>
   <url>
-    <loc>/articles/overview_of_vignettes.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/overview_of_vignettes.html</loc>
   </url>
   <url>
-    <loc>/articles/transformations.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/transformations.html</loc>
   </url>
   <url>
-    <loc>/articles/visualisation_matrix.html</loc>
+    <loc>https://easystats.github.io/modelbased/articles/visualisation_matrix.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://easystats.github.io/modelbased/authors.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://easystats.github.io/modelbased/index.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://easystats.github.io/modelbased/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/describe_nonlinear.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/describe_nonlinear.html</loc>
   </url>
   <url>
-    <loc>/reference/dot-uniroot.all.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/dot-uniroot.all.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_contrasts.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/estimate_contrasts.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_expectation.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/estimate_expectation.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_grouplevel.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/estimate_grouplevel.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_means.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/estimate_means.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate_slopes.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/estimate_slopes.html</loc>
   </url>
   <url>
-    <loc>/reference/find_inversions.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/find_inversions.html</loc>
   </url>
   <url>
-    <loc>/reference/get_emmeans.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/get_emmeans.html</loc>
   </url>
   <url>
-    <loc>/reference/get_marginaleffects.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/get_marginaleffects.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/reexports.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/reexports.html</loc>
   </url>
   <url>
-    <loc>/reference/smoothing.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/smoothing.html</loc>
   </url>
   <url>
-    <loc>/reference/visualisation_matrix.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/visualisation_matrix.html</loc>
   </url>
   <url>
-    <loc>/reference/visualisation_recipe.estimate_predicted.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/visualisation_recipe.estimate_predicted.html</loc>
   </url>
   <url>
-    <loc>/reference/zero_crossings.html</loc>
+    <loc>https://easystats.github.io/modelbased/reference/zero_crossings.html</loc>
   </url>
 </urlset>
