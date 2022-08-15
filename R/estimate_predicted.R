@@ -363,7 +363,7 @@ estimate_relation <- function(model,
   out <- cbind(data, out)
 
   # remove response variable from data frame, as this variable is predicted
-  if (model_response %in% colnames(out)) {
+  if (!is.null(model_response) && model_response %in% colnames(out)) {
     out[[model_response]] <- NULL
   }
 
