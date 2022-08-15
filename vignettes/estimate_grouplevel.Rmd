@@ -177,7 +177,7 @@ We will group the data by participant and condition, get the mean RT, and then r
 
 ```{r}
 data_sub <- aggregate(rt ~ id + condition, data_rt, mean) %>%
-  reshape_wider(names_from = "condition", values_from = "rt")
+  reshape_wider(names_from = "condition", values_from = "rt", names_prefix = "rt_")
 
 data_sub <- data.frame(
   id = data_sub$id,
@@ -205,7 +205,7 @@ Then, the empirical scores for accuracy and condition, corresponding to the "raw
 Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:
 
 ```{r}
-ggplot(data_sub, aes(x = id_Coefficient_Intercept, y = id_Coefficient_conditionspeed)) +
+ggplot(data_sub, aes(x = Intercept, y = conditionspeed)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_modern()
