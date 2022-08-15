@@ -120,7 +120,7 @@ if (require("testthat") &&
     estim <- estimate_link(model)
     expect_equal(dim(estim), c(10, 6))
     estim <- estimate_expectation(model)
-    expect_equal(dim(estim), c(32, 8))
+    expect_equal(dim(estim), c(32, 7))
 
     model <- lme4::glmer(vs ~ cyl + (1 | gear), data = data, family = "binomial")
     estim <- estimate_link(model)
