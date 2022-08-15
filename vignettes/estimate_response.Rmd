@@ -42,7 +42,7 @@ set.seed(333)
 
 Generating prediction from the model can be used for a wide variety of reasons,
 one of them being visualisation. This can be achieved via the
-`estimate_response()` function and its visualisation spinoff,
+`estimate_expectation()` function and its visualisation spinoff,
 `estimate_relation()`.
 
 Let's start by fitting a linear regression.
@@ -59,7 +59,7 @@ actual "true" values. This can be done by generating predictions:
 library(modelbased)
 library(poorman)
 
-pred_data <- estimate_response(model)
+pred_data <- estimate_expectation(model)
 head(pred_data)
 ```
 
@@ -90,7 +90,7 @@ about the `Species` in the model?
 ```{r}
 model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
 
-pred_data$Predicted_2 <- estimate_response(model)$Predicted
+pred_data$Predicted_2 <- estimate_expectation(model)$Predicted
 ```
 
 
@@ -123,7 +123,7 @@ We will do that to visualise the relationship between the response
 (`Petal.Length`) and the predictors (`Sepal.Length` and `Species`).
 
 ```{r}
-predicted <- estimate_response(model, data = "grid")
+predicted <- estimate_expectation(model, data = "grid")
 
 iris %>%
   ggplot(aes(x = Sepal.Length)) +
@@ -142,8 +142,8 @@ predicting **the link** (*i.e.*, the regression line and the uncertainty
 interval associated *with this line*).
 
 In order to facilitate visualization of links, we added `estimate_relation()` as a
-shortcut to `estimate_response()` with `data = "grid"` and, for Bayesian models,
-`predict = "link"` and some smoothing by default. `estimate_response()` would be
+shortcut to `estimate_expectation()` with `data = "grid"` and, for Bayesian models,
+`predict = "link"` and some smoothing by default. `estimate_expectation()` would be
 used in the context of generating actual predictions for the existing or new
 data, whereas `estimate_relation()` is more relevant in the context of visualization
 and plotting.
