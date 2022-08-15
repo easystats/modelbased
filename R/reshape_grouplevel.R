@@ -49,10 +49,10 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", ...) {
 
     data_wide <- datawizard::data_to_wide(
       data_group[c(group, newvars, "Parameter")],
-      rows_from = group,
+      id_cols = group,
       values_from = newvars,
-      colnames_from = "Parameter",
-      sep = "_"
+      names_from = "Parameter",
+      names_sep = "_"
     )
 
     # If nested, separate groups
