@@ -39,6 +39,7 @@
   density_2d = NULL,
   line = NULL,
   ribbon = NULL,
+  errorbar = NULL,
   labs = NULL,
   ...
 )

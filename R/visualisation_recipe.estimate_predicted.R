@@ -109,6 +109,8 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     density_2d = NULL,
                                                     line = NULL,
                                                     ribbon = NULL,
+                                                    errorbar = NULL,
+                                                    jitter = 0.2,
                                                     labs = NULL,
                                                     ...) {
   info <- attributes(x)
@@ -121,6 +123,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   color <- NULL
   linetype <- NULL
   group <- NULL
+  facets <- NULL
 
   # Retrieve predictors
   if ("at_specs" %in% names(info)) {
@@ -128,8 +131,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   } else {
     targets <- insight::find_predictors(info$model, effects = "fixed", flatten = TRUE)
   }
-  
-  # first at-value along x-axis  
+
+  # first at-value along x-axis
   x1 <- targets[1]
   targets <- targets[targets != x1]
 
@@ -138,29 +141,37 @@ visualisation_recipe.estimate_predicted <- function(x,
     # 2-way interaction
     x2 <- targets[1]
     targets <- targets[targets != x2]
-    if (is.numeric(data[[x2]])) {
+    if (is.numeric(data[[x2]]) && insight::n_unique(data[[x2]]) > 5) {
       alpha <- x2
     } else {
       color <- x2
+      data[[x2]] <- as.factor(data[[x2]])
+      ## TODO: fix me later
+      # currently, when we treat 2nd numeric variable as factor, we can't
+      # add data points, because numeric x2 may contain values (mean, sd) that
+      # are *not* in the data, which is difficult when showing data points by
+      # "numeric group".
+      show_data <- NULL
     }
 
     # 3-way interaction
     if (length(targets) == 1) {
       x3 <- targets[1]
-      if (!is.numeric(data[[x2]]) && !is.numeric(data[[x3]])) {
-        linetype <- x3
+      if (is.null(alpha) && is.numeric(data[[x3]]) && insight::n_unique(data[[x3]]) > 5) {
+        alpha <- x3
       } else {
-        if (is.null(alpha)) {
-          alpha <- x3
-        } else {
-          color <- x3
-        }
+        facets <- TRUE
       }
     } else if (length(targets) > 1) {
-      warning("It seems like more than 3 interaction terms are present. Not sure how to plot it, keeping only the 3 first variables (might not be a good visualisation of your model).")
+      warning("It seems like more than 3 focal terms are present. Not sure how to plot it, keeping only the 3 first variables (might not be a good visualisation of your model).")
     }
   }
 
+  # if we have groups, and first target is a factor (i.e. error bars)
+  # we might want to add some jitter, else we don't
+  if (length(targets) == 1 || is.numeric(data[[x1]])) {
+    jitter <- NULL
+  }
 
   # Layers -----------------------
   l <- 1
@@ -212,40 +223,74 @@ visualisation_recipe.estimate_predicted <- function(x,
     }
   }
 
-  # Uncertainty
+
+  # Uncertainty -----------------------------------
+
   if (is.null(alpha) && is.null(linetype)) {
     # If interaction, omit uncertainty
     if ("iter_1" %in% names(data)) {
       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
       l <- l + 1
     } else {
+      # CI data
       ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
       ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
-
-      for (i in seq_len(length(ci_lows))) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
-          data,
-          x1,
-          y = "Predicted",
-          fill = color,
-          ci_low = ci_lows[i],
-          ci_high = ci_highs[i],
-          ribbon = ribbon
-        )
-        l <- l + 1
+      
+      # if numeric along x, use ribbons
+      if (is.numeric(data[[x1]])) {
+        for (i in seq_len(length(ci_lows))) {
+          layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
+            data,
+            x1,
+            y = "Predicted",
+            fill = color,
+            ci_low = ci_lows[i],
+            ci_high = ci_highs[i],
+            ribbon = ribbon
+          )
+          l <- l + 1
+        }
+      } else {
+        # if factors along x, use error bars
+        for (i in seq_len(length(ci_lows))) {
+          layers[[paste0("l", l)]] <- .visualisation_predicted_errorbar(
+            data,
+            x1,
+            color = color,
+            ci_low = ci_lows[i],
+            ci_high = ci_highs[i],
+            jitter = jitter,
+            errorbar = errorbar
+          )
+          l <- l + 1
+        }
       }
     }
   }
 
-  # Line
-  layers[[paste0("l", l)]] <- .visualisation_predicted_line(data,
-    x1,
-    alpha,
-    color,
-    linetype,
-    group = group,
-    line = line
-  )
+
+  # Point estimates (predictions) -----------------------------------
+
+  if (!is.numeric(data[[x1]])) {
+    # Points
+    layers[[paste0("l", l)]] <- .visualisation_predicted_points(
+      data,
+      x1,
+      y = "Predicted",
+      color,
+      jitter = jitter
+    )
+  } else {
+    # Line
+    layers[[paste0("l", l)]] <- .visualisation_predicted_line(data,
+      x1,
+      alpha,
+      color,
+      linetype,
+      group = group,
+      line = line
+    )
+  }
   l <- l + 1
 
   # Labs
@@ -269,7 +314,8 @@ visualisation_recipe.estimate_predicted <- function(x,
                                             stroke = 0,
                                             width = NULL,
                                             height = NULL,
-                                            point = NULL) {
+                                            point = NULL,
+                                            jitter = NULL) {
   if (type == "points") type <- "point" # Sanity fix
 
   out <- list(
@@ -281,6 +327,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   )
   if (!is.null(width)) out$width <- width
   if (!is.null(height)) out$height <- height
+  if (!is.null(jitter)) out$position <- ggplot2::position_jitter(width = jitter)
   if (!is.null(point)) out <- utils::modifyList(out, point) # Update with additional args
   out
 }
@@ -357,6 +404,34 @@ visualisation_recipe.estimate_predicted <- function(x,
     alpha = 1 / 3
   )
   if (!is.null(ribbon)) out <- utils::modifyList(out, ribbon) # Update with additional args
+  out
+}
+
+# Layer - Error Bars ----------------------------------------------------------
+
+.visualisation_predicted_errorbar <- function(data,
+                                              x1,
+                                              color,
+                                              group = NULL,
+                                              ci_low = "CI_low",
+                                              ci_high = "CI_high",
+                                              jitter = NULL,
+                                              errorbar = NULL) {
+  out <- list(
+    geom = "errorbar",
+    data = data,
+    aes = list(
+      x = x1,
+      y = "Predicted",
+      ymin = ci_low,
+      ymax = ci_high,
+      color = color,
+      group = group
+    ),
+    width = 0
+  )
+  if (!is.null(errorbar)) out <- utils::modifyList(out, errorbar) # Update with additional args
+  if (!is.null(jitter)) out$position <- ggplot2::position_jitter(width = jitter)
   out
 }
 
