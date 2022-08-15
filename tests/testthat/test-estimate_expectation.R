@@ -10,7 +10,7 @@ if (require("testthat") && require("modelbased") && require("lme4") && require("
 
     m <- lm(mpg ~ 1, data = mtcars)
     estim <- estimate_expectation(m)
-    expect_equal(dim(estim), c(32, 6))
+    expect_equal(dim(estim), c(32, 5))
     expect_equal(
       colnames(estim),
       c("Predicted", "SE", "CI_low", "CI_high", "Residuals")
