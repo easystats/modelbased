@@ -276,7 +276,7 @@ iris %>%
   geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   scale_color_viridis_d(direction = -1) +
-  scale_fill_viridis_c(guide = FALSE) +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern()
 ```
 
@@ -341,7 +341,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   scale_color_viridis_d(direction = -1) +
-  scale_fill_viridis_c(guide = FALSE) +
+  scale_fill_viridis_c(guide = "none") +
   theme_modern()
 ```
 

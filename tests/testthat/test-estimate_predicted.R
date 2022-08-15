@@ -128,4 +128,17 @@ if (require("testthat") &&
     estim <- estimate_expectation(model)
     expect_equal(dim(estim), c(32, 7))
   })
+
+
+  test_that("estimate_response - VisMatrix", {
+    m <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
+    vm <- visualisation_matrix(m, at = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
+    estim <- estimate_relation(vm)
+    expect_equal(dim(estim), c(70, 6))
+    expect_equal(colnames(estim), c(
+      "Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low",
+      "CI_high"
+    ))
+  })
+
 }

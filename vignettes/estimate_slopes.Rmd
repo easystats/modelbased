@@ -138,7 +138,9 @@ The problem with GAMs is that their parameters (i.e., the coefficients), are not
 
 Because the meaning of these parameters is somewhat disconnected with our need for relationship understanding, another possibility is to compute the **marginal linear effect** of the smooth term, i.e., the "derivative", using `estimate_slopes`.
 
-```{r}
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+
+```{r, eval=FALSE}
 # Compute derivative
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
@@ -154,7 +156,7 @@ This plot represents the "slope" of the curve at each point of the curve. As you
 
 Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
 
-```{r}
+```{r, eval=FALSE}
 summary(deriv)
 ```
 
