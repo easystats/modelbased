@@ -109,6 +109,8 @@ if (require("emmeans")) {
   }
   standardize(slopes)
 
+  \dontrun{
+  # TODO: fails with latest emmeans (1.8.0)
   if (require("mgcv") && require("see")) {
     model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
     slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
@@ -122,6 +124,6 @@ if (require("emmeans")) {
     )
     summary(slopes)
     plot(slopes)
-  }
+  }}
 }
 }

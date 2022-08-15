@@ -81,7 +81,7 @@ if (require("testthat") &&
 
     model <- suppressWarnings(rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 200, chains = 2))
     estim <- estimate_prediction(model)
-    expect_equal(dim(estim), c(32, 8))
+    expect_equal(dim(estim), c(32, 7))
 
     model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2))
     estim <- estimate_link(model, keep_iterations = TRUE)
@@ -103,12 +103,10 @@ if (require("testthat") &&
   test_that("estimate_response - Frequentist", {
     model <- lm(mpg ~ wt + cyl, data = mtcars)
     estim <- estimate_expectation(model)
-    expect_equal(dim(estim), c(32, 8))
+    expect_equal(dim(estim), c(32, 7))
 
-    if (utils::packageVersion("insight") > "0.15.0") {
-      estim <- estimate_expectation(model, ci = NULL)
-      expect_equal(dim(estim), c(32, 5))
-    }
+    estim <- estimate_expectation(model, ci = NULL)
+    expect_equal(dim(estim), c(32, 4))
 
     model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
     estim <- estimate_link(model, at = "wt")
@@ -122,12 +120,12 @@ if (require("testthat") &&
     estim <- estimate_link(model)
     expect_equal(dim(estim), c(10, 6))
     estim <- estimate_expectation(model)
-    expect_equal(dim(estim), c(32, 8))
+    expect_equal(dim(estim), c(32, 7))
 
     model <- lme4::glmer(vs ~ cyl + (1 | gear), data = data, family = "binomial")
     estim <- estimate_link(model)
     expect_equal(dim(estim), c(10, 6))
     estim <- estimate_expectation(model)
-    expect_equal(dim(estim), c(32, 8))
+    expect_equal(dim(estim), c(32, 7))
   })
 }

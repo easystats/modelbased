@@ -225,7 +225,7 @@ visualisation_recipe.estimate_predicted <- function(x,
       ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
       ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
 
-      for (i in 1:length(ci_lows)) {
+      for (i in seq_len(length(ci_lows))) {
         layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
           data,
           x1,

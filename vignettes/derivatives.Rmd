@@ -159,7 +159,9 @@ By running `summary()` on the derivative, we obtain a summary by "segments" (pos
 
 Such as GAMs. Lets' to the same for our GAM model:
 
-```{r}
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+
+```{r, eval=FALSE}
 deriv <- modelbased::estimate_slopes(model_gam, trend = "x", at = "x")
 
 plot(deriv, line = list(color = "blue")) +
@@ -218,7 +220,9 @@ Moral of the story? **Derivatives can be used to easily interpret and draw concl
 But, if you've been attentive up to this point, you might wonder: **why bother with polynomials at all when GAMs can do the trick?**
 
 
-```{r}
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+
+```{r, eval=FALSE}
 model_gam2 <- mgcv::gam(y2 ~ s(x), data = data)
 
 plot(modelbased::estimate_relation(model_gam2, length = 100), line = list(color = "blue"))
@@ -237,7 +241,9 @@ The conclusion is very similar, it shows a significant effect that goes from neg
 
 What about *3rd-degree-type* relationships? It works the same way:
 
-```{r}
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+
+```{r, eval=FALSE}
 data$y3 <- data$x^3 + rnorm(nrow(data), sd = 1)
 
 model_gam3 <- mgcv::gam(y3 ~ s(x), data = data)

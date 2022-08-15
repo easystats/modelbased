@@ -83,7 +83,7 @@ The package is built around 5 main functions:
 - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.html): Estimates the average values at each factor levels
 - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels or alongside a numeric predictor
-- [`estimate_response()`](https://easystats.github.io/modelbased/articles/estimate_response.html): Predict the response variable using the model
+- [`estimate_expectation()`](https://easystats.github.io/modelbased/articles/estimate_response.html): Predict the response variable using the model
 
 These functions are powered by the [`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html) function, a smart tool for guessing the appropriate reference grid.
 
@@ -235,7 +235,7 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 ```{r}
 # Fit model 1 and predict the response variable
 model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
-pred1 <- estimate_response(model1)
+pred1 <- estimate_expectation(model1)
 pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
@@ -243,7 +243,7 @@ head(pred1, n = 5)
 
 # Same for model 2
 model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
-pred2 <- estimate_response(model2)
+pred2 <- estimate_expectation(model2)
 pred2$Petal.Length <- iris$Petal.Length
 
 
@@ -290,7 +290,8 @@ The two plots below represent the modeled (non-linear) effect estimated by the m
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html) for a detailed walkthrough on *marginal effects*.
 
-```{r, fig.height=10, fig.width=8}
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+```{r, fig.height=10, fig.width=8, eval=FALSE}
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 

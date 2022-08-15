@@ -1,5 +1,9 @@
 # modelbased 0.8.1.1
 
+- Fixed issues with printing-methods.
+
+- Maintenance release to fix failing tests in CRAN checks.
+
 # modelbased 0.8.1
 
 - Maintenance release to fix failing tests in CRAN checks.

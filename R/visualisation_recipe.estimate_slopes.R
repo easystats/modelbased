@@ -20,7 +20,8 @@
 #'   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
-#' \donttest{
+#' \dontrun{
+#' # TODO: fails with latest emmeans (1.8.0)
 #' if (require("mgcv")) {
 #'   data <- iris
 #'   data$Petal.Length <- data$Petal.Length^2
@@ -63,7 +64,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   # What are the fact
   facs <- info$at[sapply(data[info$at], function(x) is.factor(x) | is.character(x))]
   nums <- info$at[!info$at %in% facs]
-  if (length(facs) > 0 & length(nums) == 0) {
+  if (length(facs) > 0 && length(nums) == 0) {
     x1 <- facs[1]
     if (length(facs) > 1) {
       facet <- facs[2]

@@ -279,9 +279,10 @@ estimate_relation <- function(model,
                                 ...) {
   # call "get_data()" only once...
   model_data <- insight::get_data(model)
+  is_model <- insight::is_model(model)
 
   # model and data properties
-  if (insight::is_model(model)) {
+  if (is_model) {
     # for models, get predictors, response etc.
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
@@ -295,6 +296,17 @@ estimate_relation <- function(model,
 
   is_grid <- identical(data, "grid")
 
+  # check for correct attributes - a data frame of class `datagrid` may
+  # contain all variables of that data frame as "adjusted-for" attribute,
+  # which does not necessarily match with actual model predictors. Make sure
+  # "adjusted_for" attribute only contains valid variable names
+  if (inherits(data, "datagrid") && is_model) {
+    adjusted_for <- attr(data, "adjusted_for", exact = TRUE)
+    if (!is.null(adjusted_for)) {
+      attr(data, "adjusted_for") <- intersect(variables, adjusted_for)
+    }
+  }
+
   # If a visualisation_matrix is passed
   if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
     data_original <- data
@@ -307,7 +319,6 @@ estimate_relation <- function(model,
       stop("A model must be passed to make predictions.")
     }
   }
-
 
   # Get data ----------------
   if (is.null(data)) {
@@ -351,6 +362,11 @@ estimate_relation <- function(model,
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
+  # remove response variable from data frame, as this variable is predicted
+  if (model_response %in% colnames(out)) {
+    out[[model_response]] <- NULL
+  }
+
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted
@@ -362,7 +378,7 @@ estimate_relation <- function(model,
   attr(out, "response") <- model_response
   attr(out, "model") <- model
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
-  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs)
+  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
 
   # Class
@@ -376,17 +392,25 @@ estimate_relation <- function(model,
 # Utils -------------------------------------------------------------------
 
 #' @keywords internal
-.estimate_predicted_footer <- function(model, grid_specs) {
-  footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+.estimate_predicted_footer <- function(model, grid_specs, predictions) {
+  footer <- paste0("\nVariable predicted: ", insight::find_response(model), "\n")
 
   if ("at" %in% names(grid_specs)) {
-    footer <- paste0(footer, "\nPredictors modulated: ", paste0(grid_specs$at, collapse = ", "))
+    footer <- paste0(footer, "Predictors modulated: ", paste0(grid_specs$at, collapse = ", "), "\n")
   }
 
   if ("adjusted_for" %in% names(grid_specs)) {
-    if (length(grid_specs$adjusted_for) >= 1 && 
-        !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
-      footer <- paste0(footer, "\nPredictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "))
+    if (length(grid_specs$adjusted_for) >= 1 && !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
+      # if we have values of adjusted terms, add these here
+      if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
+        # get values at which non-focal terms are hold constant
+        adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
+          predictions[[i]][1]
+        })
+        # at values to names of non-focal terms (footer)
+        grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
+      }
+      footer <- paste0(footer, "Predictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "), "\n")
     }
   }
 
