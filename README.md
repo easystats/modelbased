@@ -77,7 +77,7 @@ The package is built around 5 main functions:
 -   [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html):
     Estimates the slopes of numeric predictors at different factor
     levels or alongside a numeric predictor
--   [`estimate_response()`](https://easystats.github.io/modelbased/articles/estimate_response.html):
+-   [`estimate_expectation()`](https://easystats.github.io/modelbased/articles/estimate_response.html):
     Predict the response variable using the model
 
 These functions are powered by the
@@ -288,26 +288,26 @@ for a detailed walkthrough on *predictions*.
 ``` r
 # Fit model 1 and predict the response variable
 model1 <- lm(Petal.Length ~ Sepal.Length, data = iris)
-pred1 <- estimate_response(model1)
+pred1 <- estimate_expectation(model1)
 pred1$Petal.Length <- iris$Petal.Length # Add true response
 
 # Print first 5 lines of output
 head(pred1, n = 5)
 ## Model-based Expectation
 ## 
-## Petal.Length | Sepal.Length | Predicted |   SE |       95% CI | Residuals
+## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length
 ## -------------------------------------------------------------------------
-## 1.40         |         5.10 |      2.38 | 0.10 | [2.19, 2.57] |     -0.98
-## 1.40         |         4.90 |      2.00 | 0.11 | [1.79, 2.22] |     -0.60
-## 1.30         |         4.70 |      1.63 | 0.12 | [1.39, 1.87] |     -0.33
-## 1.50         |         4.60 |      1.45 | 0.13 | [1.19, 1.70] |      0.05
-## 1.40         |         5.00 |      2.19 | 0.10 | [1.99, 2.39] |     -0.79
+## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40
+## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |     -0.60 |         1.40
+## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30
+## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50
+## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40
 ## 
 ## Variable predicted: Petal.Length
 
 # Same for model 2
 model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
-pred2 <- estimate_response(model2)
+pred2 <- estimate_expectation(model2)
 pred2$Petal.Length <- iris$Petal.Length
 
 
@@ -380,6 +380,8 @@ Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
 for a detailed walkthrough on *marginal effects*.
 
+<!-- TODO: currently fails with emmeans 1.8.0 //-->
+
 ``` r
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
@@ -398,8 +400,6 @@ see::plots(
   n_rows = 2
 )
 ```
-
-<img src="man/figures/unnamed-chunk-11-1.png" width="100%" />
 
 ## Describe the smooth term by its linear parts
 
@@ -432,6 +432,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
 <img src="man/figures/unnamed-chunk-12-1.png" width="100%" />
 
 ``` r
+
 
 # 2. Describe smooth line
 describe_nonlinear(vizdata, x = "Petal.Length")
