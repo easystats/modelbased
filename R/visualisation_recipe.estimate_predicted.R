@@ -26,7 +26,8 @@
 #' }
 #' \donttest{
 #' if (require("ggplot2")) {
-#'   # Customize aesthetics
+#'   # Customize aesthetics ----------
+#'
 #'   layers <- visualisation_recipe(x,
 #'     point = list(color = "red", alpha = 0.6, size = 3),
 #'     line = list(color = "blue", size = 3),
@@ -36,7 +37,8 @@
 #'   layers
 #'   plot(layers)
 #'
-#'   # Customize raw data
+#'   # Customize raw data -------------
+#'
 #'   plot(visualisation_recipe(x, show_data = "none"))
 #'   plot(visualisation_recipe(x, show_data = c("density_2d", "points")))
 #'   plot(visualisation_recipe(x, show_data = "density_2d_filled"))
@@ -131,8 +133,6 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     ...) {
   info <- attributes(x)
   layers <- list()
-
-  # Main aesthetics -----------------
   data <- as.data.frame(x)
   y <- info$response
   alpha <- NULL
@@ -144,6 +144,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   jitter <- FALSE
   skip_line <- FALSE
   group <- 1
+
+  # x-axis -----------------
 
   # Retrieve predictors
   if ("at_specs" %in% names(info)) {
@@ -324,63 +326,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     l <- l + 1
   }
 
-
-
-
-  #   if (is.null(alpha) && is.null(linetype)) {
-  #     # If interaction, omit uncertainty
-  #     if ("iter_1" %in% names(data)) {
-  #       layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
-  #       l <- l + 1
-  #     } else {
-  #       # CI data
-  #       ci_lows <- names(data)[grepl("CI_low", names(data), fixed = TRUE)]
-  #       ci_highs <- names(data)[grepl("CI_high", names(data), fixed = TRUE)]
-  #
-  #       # if numeric along x, use ribbons
-  #       if (is.numeric(data[[x1]])) {
-  #         for (i in seq_len(length(ci_lows))) {
-  #           layers[[paste0("l", l)]] <- .visualisation_predicted_ribbon(
-  #             data,
-  #             x1,
-  #             y = "Predicted",
-  #             fill = color,
-  #             ci_low = ci_lows[i],
-  #             ci_high = ci_highs[i],
-  #             ribbon = ribbon,
-  #             group = group
-  #           )
-  #           l <- l + 1
-  #         }
-  #       } else {
-  #         # if factors along x, use error bars
-  #         for (i in seq_len(length(ci_lows))) {
-  #           layers[[paste0("l", l)]] <- .visualisation_predicted_pointrange(
-  #             data,
-  #             x1,
-  #             color = color,
-  #             ci_low = ci_lows[i],
-  #             ci_high = ci_highs[i]
-  #           )
-  #           l <- l + 1
-  #         }
-  #       }
-  #     }
-  #   }
-  #
-  #
-  #   # Point estimates (predictions) -----------------------------------
-  #
-  #   # Line
-  #   layers[[paste0("l", l)]] <- .visualisation_predicted_line(data,
-  #     x1,
-  #     alpha,
-  #     color,
-  #     linetype,
-  #     group = group,
-  #     line = line
-  #   )
-  #   l <- l + 1
+  # Ornaments -----------------------------------
 
   # Labs
   layers[[paste0("l", l)]] <- .visualisation_predicted_labs(info, x1, y, labs = labs)
