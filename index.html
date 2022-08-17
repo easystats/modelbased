@@ -200,7 +200,7 @@
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_slopes.html"><code>estimate_slopes()</code></a>: Estimates the slopes of numeric predictors at different factor levels or alongside a numeric predictor</li>
 <li>
-<a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><code>estimate_response()</code></a>: Predict the response variable using the model</li>
+<a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><code>estimate_expectation()</code></a>: Predict the response variable using the model</li>
 </ul>
 <p>These functions are powered by the <a href="https://easystats.github.io/modelbased/reference/visualisation_matrix.html"><code>visualisation_matrix()</code></a> function, a smart tool for guessing the appropriate reference grid.</p>
 <div class="section level2">
@@ -380,26 +380,26 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit model 1 and predict the response variable</span></span>
 <span><span class="va">model1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span><span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
+<span><span class="va">pred1</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_expectation</a></span><span class="op">(</span><span class="va">model1</span><span class="op">)</span></span>
 <span><span class="va">pred1</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="co"># Add true response</span></span>
 <span></span>
 <span><span class="co"># Print first 5 lines of output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred1</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="co">## Model-based Expectation</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Petal.Length | Sepal.Length | Predicted |   SE |       95% CI | Residuals</span></span>
+<span><span class="co">## Sepal.Length | Predicted |   SE |       95% CI | Residuals | Petal.Length</span></span>
 <span><span class="co">## -------------------------------------------------------------------------</span></span>
-<span><span class="co">## 1.40         |         5.10 |      2.38 | 0.10 | [2.19, 2.57] |     -0.98</span></span>
-<span><span class="co">## 1.40         |         4.90 |      2.00 | 0.11 | [1.79, 2.22] |     -0.60</span></span>
-<span><span class="co">## 1.30         |         4.70 |      1.63 | 0.12 | [1.39, 1.87] |     -0.33</span></span>
-<span><span class="co">## 1.50         |         4.60 |      1.45 | 0.13 | [1.19, 1.70] |      0.05</span></span>
-<span><span class="co">## 1.40         |         5.00 |      2.19 | 0.10 | [1.99, 2.39] |     -0.79</span></span>
+<span><span class="co">## 5.10         |      2.38 | 0.10 | [2.19, 2.57] |     -0.98 |         1.40</span></span>
+<span><span class="co">## 4.90         |      2.00 | 0.11 | [1.79, 2.22] |     -0.60 |         1.40</span></span>
+<span><span class="co">## 4.70         |      1.63 | 0.12 | [1.39, 1.87] |     -0.33 |         1.30</span></span>
+<span><span class="co">## 4.60         |      1.45 | 0.13 | [1.19, 1.70] |      0.05 |         1.50</span></span>
+<span><span class="co">## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Petal.Length</span></span>
 <span></span>
 <span><span class="co"># Same for model 2</span></span>
 <span><span class="va">model2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
-<span><span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_response</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
+<span><span class="va">pred2</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_expectation.html">estimate_expectation</a></span><span class="op">(</span><span class="va">model2</span><span class="op">)</span></span>
 <span><span class="va">pred2</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;-</span> <span class="va">iris</span><span class="op">$</span><span class="va">Petal.Length</span></span>
 <span></span>
 <span></span>
@@ -457,7 +457,7 @@
 </ul>
 <p>The two plots below represent the modeled (non-linear) effect estimated by the model, i.e., the relationship between the outcome and the predictor, as well as the “trend” (or slope) of that relationship at any given point. You can see that whenever the slope is negative, the effect is below 0, and vice versa, with some regions of the effect being significant (i.e., positive or negative with enough confidence) while the others denote regions where the relationship is rather flat.</p>
 <p>Check-out <a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>marginal effects</em>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<!-- TODO: currently fails with emmeans 1.8.0 //--><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit a non-linear General Additive Model (GAM)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
@@ -474,7 +474,6 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span>,</span>
 <span>  n_rows <span class="op">=</span> <span class="fl">2</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="reference/figures/unnamed-chunk-11-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="describe-the-smooth-term-by-its-linear-parts">Describe the smooth term by its linear parts<a class="anchor" aria-label="anchor" href="#describe-the-smooth-term-by-its-linear-parts"></a>
@@ -502,6 +501,7 @@
 <p><img src="reference/figures/unnamed-chunk-12-1.png" width="100%"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
+<span></span>
 <span><span class="co"># 2. Describe smooth line</span></span>
 <span><span class="fu"><a href="reference/describe_nonlinear.html">describe_nonlinear</a></span><span class="op">(</span><span class="va">vizdata</span>, x <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span>
 <span><span class="co">## Start |  End | Length | Change | Slope |   R2</span></span>
