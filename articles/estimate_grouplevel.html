@@ -287,7 +287,7 @@
 <p>We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the <strong>accuracy</strong> condition, and the difference with the <strong>speed</strong> condition <em>(reminds you of something?)</em>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">id</span> <span class="op">+</span> <span class="va">condition</span>, <span class="va">data_rt</span>, <span class="va">mean</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/datawizard/man/data_to_wide.html" class="external-link">reshape_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"condition"</span>, values_from <span class="op">=</span> <span class="st">"rt"</span>, names_prefix <span class="op">=</span> <span class="st">"rt_"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_to_wide.html" class="external-link">reshape_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"condition"</span>, values_from <span class="op">=</span> <span class="st">"rt"</span>, names_prefix <span class="op">=</span> <span class="st">"rt_"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">id</span>,</span>
@@ -340,7 +340,7 @@
 &gt; 
 &gt; Parameter         | Log-Odds |   SE |         95% CI |      z |      p
 &gt; ----------------------------------------------------------------------
-&gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.16 | &lt; .001
+&gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.15 | &lt; .001
 &gt; condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.73 | &lt; .001</code></pre>
 <p>The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the <strong>marginal means</strong>) of making errors in the two conditions.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">

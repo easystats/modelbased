@@ -198,7 +198,7 @@ response scales.</p>
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> (when <code>data = "grid"</code>) and from
 <code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">insight::get_predicted()</a></code> (the function used internally to compute
 predictions).</p>
-<p>For plotting, check the examples in <code><a href="https://rdrr.io/pkg/datawizard/man/visualisation_recipe.html" class="external-link">visualisation_recipe()</a></code>. Also check out
+<p>For plotting, check the examples in <code><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe()</a></code>. Also check out
 the <a href="https://easystats.github.io/modelbased/articles/">Vignettes</a> and <a href="https://easystats.github.io/modelbased/index.html#features">README examples</a> for
 various examples, tutorials and usecases.</p>
     </div>
@@ -377,7 +377,7 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Standardize predictions</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">am</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/datawizard/man/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">pred</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">pred</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">z</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model-based Expectation (standardized)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -486,7 +486,7 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable predicted: mpg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Predictors modulated: wt, am</span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/datawizard/man/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">z</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">z</span>, include_response <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Model-based Expectation (standardized)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   |   am | Predicted |   SE |         95% CI</span>
@@ -712,16 +712,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.27 | 1.07 | [27.12, 31.32]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.93 | 0.90 | [25.28, 28.67]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.59 | 0.67 | [23.26, 25.93]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.25 | 0.54 | [21.11, 23.30]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.92 | 0.55 | [18.89, 20.79]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.58 | 0.64 | [16.48, 18.72]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.24 | 0.76 | [13.82, 16.74]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.90 | 0.92 | [11.15, 14.72]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.57 | 1.09 | [ 8.34, 12.76]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.23 | 1.31 | [ 5.51, 10.87]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.17 | 1.17 | [27.25, 31.81]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.84 | 1.01 | [25.12, 28.84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.52 | 0.82 | [22.98, 26.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.19 | 0.71 | [20.80, 23.32]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.87 | 0.62 | [18.61, 20.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.54 | 0.67 | [16.21, 18.66]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.22 | 0.76 | [13.72, 16.72]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.89 | 0.95 | [11.24, 14.90]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.57 | 1.13 | [ 8.67, 13.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.24 | 1.34 | [ 5.88, 11.14]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable predicted: mpg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Predictors modulated: wt</span>
