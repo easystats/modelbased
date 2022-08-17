@@ -65,13 +65,13 @@ jobs:
             any::rtdists
             local::.
             poorman=?ignore-before-r=3.5.0
-            emmeans=?ignore-before-r=3.5.0
+            emmeans=?ignore-before-r=4.1.0
             marginaleffects=?ignore-before-r=3.5.0
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         env:
           _R_CHECK_CRAN_INCOMING_: false
-          _R_CHECK_FORCE_SUGGESTS_: false
+          _R_CHECK_FORCE_SUGGESTS_: true
         with:
           upload-snapshots: true
