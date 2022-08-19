@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.0/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -136,15 +136,32 @@
 
     
     
-<p>Although the <em>easystats</em> packages, such as <strong>effectsize</strong> and <strong>modelbased</strong>, make it easier to assess, investigate and interpret complex models with <a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html">non-linear relationships</a>. However, transforming variables can still be useful in some instances.</p>
-<p>In the following article, we will demonstrate and discuss some of the possible and commonly used transformations that you can consider applying to your variables. They can usually be grouped into two categories: transformations that <strong>changes only the scale</strong>, and transformation that <strong>changes also the shape</strong>.</p>
+<p>Although the <em>easystats</em> packages, such as
+<strong>effectsize</strong> and <strong>modelbased</strong>, make it
+easier to assess, investigate and interpret complex models with <a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html">non-linear
+relationships</a>. However, transforming variables can still be useful
+in some instances.</p>
+<p>In the following article, we will demonstrate and discuss some of the
+possible and commonly used transformations that you can consider
+applying to your variables. They can usually be grouped into two
+categories: transformations that <strong>changes only the
+scale</strong>, and transformation that <strong>changes also the
+shape</strong>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="scale-transformations">Scale Transformations<a class="anchor" aria-label="anchor" href="#scale-transformations"></a>
 </h2>
-<p><strong>Standardization</strong> (also known as <strong>Z-scoring</strong>) refers to the centering and scaling of variable so that it is expressed in terms of deviation from some centrality index. Usually it is the <em>mean</em> and <em>SD</em> (where 0 corresponds to mean and the values represent deviations in SD from it), but it could be other indices, such as the <em>median</em> and the <em>MAD</em>. In R, it can be achieved via the <a href="https://easystats.github.io/datawizard/articles/standardize_data.html" class="external-link"><code>standardize()</code></a> function in the <a href="https://github.com/easystats/datawizard" class="external-link"><strong>datawizard</strong></a> package.</p>
+<p><strong>Standardization</strong> (also known as
+<strong>Z-scoring</strong>) refers to the centering and scaling of
+variable so that it is expressed in terms of deviation from some
+centrality index. Usually it is the <em>mean</em> and <em>SD</em> (where
+0 corresponds to mean and the values represent deviations in SD from
+it), but it could be other indices, such as the <em>median</em> and the
+<em>MAD</em>. In R, it can be achieved via the <a href="https://easystats.github.io/datawizard/articles/standardize_data.html" class="external-link"><code>standardize()</code></a>
+function in the <a href="https://github.com/easystats/datawizard" class="external-link"><strong>datawizard</strong></a>
+package.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">42</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; [1] -0.43 -0.37 -0.55 -0.43  1.79
@@ -154,7 +171,13 @@
 &gt; [1] 17
 &gt; attr(,"robust")
 &gt; [1] FALSE</code></pre>
-<p><strong>Normalization</strong> rescales the variable so that the minimum and the maximum are 0 and 1. In R, it can be achieved via the <code><a href="https://easystats.github.io/datawizard/reference/normalize.html" class="external-link">normalize()</a></code> function. However, note that it is a bit <strong>of a misnomer</strong>, as it doesn’t actually <strong>normalize</strong> the <em>distribution</em> (i.e., make “more Gaussian”) of the data (as shown below). Instead, it makes the <em>range</em> of the data within an expected range of [0, 1].</p>
+<p><strong>Normalization</strong> rescales the variable so that the
+minimum and the maximum are 0 and 1. In R, it can be achieved via the
+<code><a href="https://easystats.github.io/datawizard/reference/normalize.html" class="external-link">normalize()</a></code> function. However, note that it is a bit
+<strong>of a misnomer</strong>, as it doesn’t actually
+<strong>normalize</strong> the <em>distribution</em> (i.e., make “more
+Gaussian”) of the data (as shown below). Instead, it makes the
+<em>range</em> of the data within an expected range of [0, 1].</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/normalize.html" class="external-link">normalize</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">42</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; [1] 0.050 0.075 0.000 0.050 1.000
@@ -164,7 +187,10 @@
 &gt; [1] 2
 &gt; attr(,"range_difference")
 &gt; [1] 40</code></pre>
-<p>Normalization is, in fact, a special case of <strong>Rescaling</strong>. Any variable can be rescaled to a new range. In R, it can be achieved via the <code>data_rescale()</code> function.</p>
+<p>Normalization is, in fact, a special case of
+<strong>Rescaling</strong>. Any variable can be rescaled to a new range.
+In R, it can be achieved via the <code>data_rescale()</code>
+function.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/rescale.html" class="external-link">rescale</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">5</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">42</span><span class="op">)</span>, to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; [1] -0.90 -0.85 -1.00 -0.90  1.00
@@ -174,8 +200,13 @@
 &gt; [1] 40
 &gt; attr(,"to_range")
 &gt; [1] -1  1</code></pre>
-<p>Importantly, these transformations change only the scale (i.e., the “unit”); it does not impact the distribution of the variable. As such, it does not either impact the relationship that it has with other variables.</p>
-<p>Let’s start by generating some random data and creating a convenience function to check the distribution of one of the variable and its relationship with another variable.</p>
+<p>Importantly, these transformations change only the scale (i.e., the
+“unit”); it does not impact the distribution of the variable. As such,
+it does not either impact the relationship that it has with other
+variables.</p>
+<p>Let’s start by generating some random data and creating a convenience
+function to check the distribution of one of the variable and its
+relationship with another variable.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://patchwork.data-imaginist.com" class="external-link">patchwork</a></span><span class="op">)</span></span>
 <span></span>
@@ -212,7 +243,9 @@
 <span><span class="fu">check_transformation</span><span class="op">(</span><span class="va">data</span>, x <span class="op">=</span> <span class="st">"x_normalized"</span>, color <span class="op">=</span> <span class="st">"orange"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">patchwork</span><span class="fu">::</span><span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_annotation.html" class="external-link">plot_annotation</a></span><span class="op">(</span><span class="st">"After Normalization"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transformations_files/figure-html/unnamed-chunk-8-2.png" width="100%"></p>
-<p>As you can see, although the unit of <code>x</code> has changed, scale-transformation have no impact on the distribution of the variable and on their relationship with other variables.</p>
+<p>As you can see, although the unit of <code>x</code> has changed,
+scale-transformation have no impact on the distribution of the variable
+and on their relationship with other variables.</p>
 <ul>
 <li>
 <strong>Pros</strong>:
@@ -225,7 +258,9 @@
 <strong>Cons</strong>:
 <ul>
 <li>Interpretation (when the variable values have meaning)</li>
-<li>Reproducibility (values have different meaning depending on the sample’s characteristics - only for transformations that depend on properties of the variable like standardization)</li>
+<li>Reproducibility (values have different meaning depending on the
+sample’s characteristics - only for transformations that depend on
+properties of the variable like standardization)</li>
 </ul>
 </li>
 </ul>
@@ -235,25 +270,40 @@
 </h2>
 <p><a href="http://fmwww.bc.edu/repec/bocode/t/transint.html" class="external-link uri">http://fmwww.bc.edu/repec/bocode/t/transint.html</a></p>
 <blockquote>
-<p>“I see that this is a clever trick that works nicely. But how do I know when this trick will work with some other data, or if another trick is needed, or if no transformation is needed?”</p>
+<p>“I see that this is a clever trick that works nicely. But how do I
+know when this trick will work with some other data, or if another trick
+is needed, or if no transformation is needed?”</p>
 </blockquote>
 <blockquote>
-<p>“Transformations are needed because there is no guarantee that the world works on the scales it happens to be measured on.”</p>
+<p>“Transformations are needed because there is no guarantee that the
+world works on the scales it happens to be measured on.”</p>
 </blockquote>
 <blockquote>
-<p>“Transformations are most appropriate when they match a scientific view of how a variable behaves.”</p>
+<p>“Transformations are most appropriate when they match a scientific
+view of how a variable behaves.”</p>
 </blockquote>
-<p>Most of the traditional transformation work best (i.e., are more easily explainable) with positively defined data. In the case where variables also have negative values, it is fairly common practice to shift the scale towards the positive range by adding the minimum. We can do that as follows:</p>
+<p>Most of the traditional transformation work best (i.e., are more
+easily explainable) with positively defined data. In the case where
+variables also have negative values, it is fairly common practice to
+shift the scale towards the positive range by adding the minimum. We can
+do that as follows:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">x_positive</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">check_transformation</span><span class="op">(</span><span class="va">data</span>, <span class="st">"x_positive"</span>, color <span class="op">=</span> <span class="st">"yellow"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="transformations_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
-<p>As we now know, this “scale-transformation” does not affect the variable’s distribution or the shape of the relationship. But beware, the next procedures will!</p>
+<p>As we now know, this “scale-transformation” does not affect the
+variable’s distribution or the shape of the relationship. But beware,
+the next procedures will!</p>
 <div class="section level3">
 <h3 id="pull-the-right-edge-up">Pull the right edge “up”<a class="anchor" aria-label="anchor" href="#pull-the-right-edge-up"></a>
 </h3>
-<p>The following transformations have in common that smaller values are inflated a lot, while larger values are less affected. You can imagine this as tightening the x-axis, and pushing all big values on the right towards the left, but leaving out closer values. As a result, a linear relationship will became curved and will straighten up at the right edge.</p>
+<p>The following transformations have in common that smaller values are
+inflated a lot, while larger values are less affected. You can imagine
+this as tightening the x-axis, and pushing all big values on the right
+towards the left, but leaving out closer values. As a result, a linear
+relationship will became curved and will straighten up at the right
+edge.</p>
 <ul>
 <li><strong>Square root</strong></li>
 </ul>
@@ -282,7 +332,11 @@
 <div class="section level3">
 <h3 id="bring-the-right-edges-down">Bring the right edges “down”<a class="anchor" aria-label="anchor" href="#bring-the-right-edges-down"></a>
 </h3>
-<p>The following transformations have in common that the bigger a number is, the bigger it will get. It is as if you pulled the x-axis towards the right, ever faster for the values closer to the right edge. As a result, the sharply vertical relationships will tend do smooth up as they lean towards the right.</p>
+<p>The following transformations have in common that the bigger a number
+is, the bigger it will get. It is as if you pulled the x-axis towards
+the right, ever faster for the values closer to the right edge. As a
+result, the sharply vertical relationships will tend do smooth up as
+they lean towards the right.</p>
 <ul>
 <li><strong>Exponential</strong></li>
 </ul>
@@ -325,7 +379,10 @@
 <div class="section level3">
 <h3 id="generalization">Generalization<a class="anchor" aria-label="anchor" href="#generalization"></a>
 </h3>
-<p>Actually, all of the previous shape-transformations are part of two categories, the exponential/log family, and the power family. Indeed, the square root, cubic root, square and even inverse are all values to the power of something.</p>
+<p>Actually, all of the previous shape-transformations are part of two
+categories, the exponential/log family, and the power family. Indeed,
+the square root, cubic root, square and even inverse are all values to
+the power of something.</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">x_reciprocical</span> <span class="op">==</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">data</span><span class="op">$</span><span class="va">x_positive</span><span class="op">)</span><span class="op">^</span><span class="op">(</span><span class="op">-</span><span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">data</span><span class="op">$</span><span class="va">x_cbrt</span> <span class="op">==</span> <span class="va">data</span><span class="op">$</span><span class="va">x_positive</span><span class="op">^</span><span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="fl">3</span><span class="op">)</span></span>

@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.2.0/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.0/bootstrap.bundle.min.js"></script><link href="../deps/Roboto-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/JetBrains_Mono-0.4.2/font.css" rel="stylesheet">
 <link href="../deps/Roboto_Slab-0.4.2/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
@@ -136,10 +136,26 @@
 
     
     
-<p>Mixed models are powerful tools that can be used for a variety of interesting purposes. Indeed, while they are typically used to be more accurate and resilient in estimating population-level effects (aka the “fixed” effects), they can also be used to gain insight into group-level effects (e.g., individuals’ scores, if the random factors are individuals).</p>
-<p>For this practical walkthrough on <strong>advanced mixed model analysis</strong>, we will use the <strong>Speed-Accuracy Data</strong> (Wagenmakers, Ratcliff, Gomez, &amp; McKoon, 2008) from the <code>rtdists</code> package, in which <strong>17 participants</strong> (the <strong>id</strong> variable) performed some reaction time (RT) task under two conditions, speed and accuracy (the <strong>condition</strong> variable).</p>
-<p>Our hypotheses is that participants are <strong>faster</strong> (i.e., lower RT) in the speed condition as compared to the accuracy condition. On the other hand, they will make less <strong>errors</strong> in the accuracy condition as compared to the speed condition.</p>
-<p>In the following, we will load the necessary packages and clean the data by removing outliers and out-of-scope data.</p>
+<p>Mixed models are powerful tools that can be used for a variety of
+interesting purposes. Indeed, while they are typically used to be more
+accurate and resilient in estimating population-level effects (aka the
+“fixed” effects), they can also be used to gain insight into group-level
+effects (e.g., individuals’ scores, if the random factors are
+individuals).</p>
+<p>For this practical walkthrough on <strong>advanced mixed model
+analysis</strong>, we will use the <strong>Speed-Accuracy Data</strong>
+(Wagenmakers, Ratcliff, Gomez, &amp; McKoon, 2008) from the
+<code>rtdists</code> package, in which <strong>17 participants</strong>
+(the <strong>id</strong> variable) performed some reaction time (RT)
+task under two conditions, speed and accuracy (the
+<strong>condition</strong> variable).</p>
+<p>Our hypotheses is that participants are <strong>faster</strong>
+(i.e., lower RT) in the speed condition as compared to the accuracy
+condition. On the other hand, they will make less
+<strong>errors</strong> in the accuracy condition as compared to the
+speed condition.</p>
+<p>In the following, we will load the necessary packages and clean the
+data by removing outliers and out-of-scope data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># easystats packages</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span></span>
@@ -170,20 +186,37 @@
 <div class="section level3">
 <h3 id="population-level-effects">Population-level Effects<a class="anchor" aria-label="anchor" href="#population-level-effects"></a>
 </h3>
-<p>For the reaction time, we will start by removing all the incorrect responses, since they are not reflective of a “successful” cognitive process. Then, and we will plot the RT according to the condition and stimulus category.</p>
+<p>For the reaction time, we will start by removing all the incorrect
+responses, since they are not reflective of a “successful” cognitive
+process. Then, and we will plot the RT according to the condition and
+stimulus category.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">error</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_rt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">rt</span>, <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-3-1.png" width="2187.5"></p>
-<p>The descriptive visualisation indeed seems to suggest that people are slower in the <strong>accuracy</strong> condition as compared to the <strong>speed</strong> condition. And there could also be a slight effect of <strong>frequency</strong>.</p>
-<p>Let’s verify that using the <a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html"><strong>modelisation approach</strong></a>.</p>
+<p>The descriptive visualisation indeed seems to suggest that people are
+slower in the <strong>accuracy</strong> condition as compared to the
+<strong>speed</strong> condition. And there could also be a slight
+effect of <strong>frequency</strong>.</p>
+<p>Let’s verify that using the <a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html"><strong>modelisation
+approach</strong></a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">stim</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">data_rt</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Let’s unpack the formula of this model. We’re tying to predict <code>rt</code> using different terms. These can be separated into two groups, the <em>fixed</em> effects and the <em>random</em> effects. Having <code>condition</code> as a fixed effect means that we are interested in estimating the <strong>“general”</strong> effect of the condition, across all subjects and items (i.e., at the <strong><em>population level</em></strong>). On top of that effect of condition, a second ‘fixed’ parameter was implicitly specified and will be estimated, the <strong>intercept</strong> (as you might know, one has to explicitly remove it through <code>rt ~ 0 + condition</code>, otherwise it is added automatically).</p>
+<p>Let’s unpack the formula of this model. We’re tying to predict
+<code>rt</code> using different terms. These can be separated into two
+groups, the <em>fixed</em> effects and the <em>random</em> effects.
+Having <code>condition</code> as a fixed effect means that we are
+interested in estimating the <strong>“general”</strong> effect of the
+condition, across all subjects and items (i.e., at the
+<strong><em>population level</em></strong>). On top of that effect of
+condition, a second ‘fixed’ parameter was implicitly specified and will
+be estimated, the <strong>intercept</strong> (as you might know, one has
+to explicitly remove it through <code>rt ~ 0 + condition</code>,
+otherwise it is added automatically).</p>
 <p>Let’s investigate these two fixed parameters first:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model_full</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
@@ -193,15 +226,34 @@
 &gt; --------------------------------------------------------------------------
 &gt; (Intercept)       |        0.69 | 0.02 | [ 0.65,  0.74] |   30.44 | &lt; .001
 &gt; condition [speed] |       -0.16 | 0.02 | [-0.19, -0.12] |   -8.53 | &lt; .001</code></pre>
-<p>Because <code>condition</code> is a factor with two levels, these parameters are easily interpretable. The <em>intercept</em> corresponds to the <code>rt</code> at the baseline level of the factor (accuracy), and the effect of condition corresponds to the change in <code>rt</code> between the intercept and the speed condition. In other words, the effect of <code>condition</code> refers to the difference between the two conditions, <code>speed - accuracy</code>.</p>
-<p>As we can see, this difference is significant, and people have, <strong>in general</strong>, a lower <code>rt</code> (the sign is negative) in the speed condition.</p>
-<p>Let’s visualize the <a href="https://easystats.github.io/modelbased/articles/estimate_means.html">marginal means</a> estimated by the model:</p>
+<p>Because <code>condition</code> is a factor with two levels, these
+parameters are easily interpretable. The <em>intercept</em> corresponds
+to the <code>rt</code> at the baseline level of the factor (accuracy),
+and the effect of condition corresponds to the change in <code>rt</code>
+between the intercept and the speed condition. In other words, the
+effect of <code>condition</code> refers to the difference between the
+two conditions, <code>speed - accuracy</code>.</p>
+<p>As we can see, this difference is significant, and people have,
+<strong>in general</strong>, a lower <code>rt</code> (the sign is
+negative) in the speed condition.</p>
+<p>Let’s visualize the <a href="https://easystats.github.io/modelbased/articles/estimate_means.html">marginal
+means</a> estimated by the model:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model_full</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>show_data <span class="op">=</span> <span class="st">"violin"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-6-1.png" width="2187.5"></p>
-<p>Now, what’s up with the <strong>random effects</strong>. In the formula, we specified random intercepts (i.e., the right part of the bar <code>|</code> symbol) for <code>id</code> (the participants) and <code>stim</code>. That means that <strong>each participant and each stimulus will have its own “Intercept” parameter</strong> (which, as we’ve seen before, corresponds to the <code>rt</code> in the accuracy condition). Additionally, we’ve specified the random effect (“random slope” - the left side of the bar) of <code>condition</code> for each participant. That means that <strong>each participant will have its own effect of condition</strong> computed.</p>
-<p>But do we need such a complex model? Let’s compare it to a model without specifying random intercepts for the stimuli.</p>
+<p>Now, what’s up with the <strong>random effects</strong>. In the
+formula, we specified random intercepts (i.e., the right part of the bar
+<code>|</code> symbol) for <code>id</code> (the participants) and
+<code>stim</code>. That means that <strong>each participant and each
+stimulus will have its own “Intercept” parameter</strong> (which, as
+we’ve seen before, corresponds to the <code>rt</code> in the accuracy
+condition). Additionally, we’ve specified the random effect (“random
+slope” - the left side of the bar) of <code>condition</code> for each
+participant. That means that <strong>each participant will have its own
+effect of condition</strong> computed.</p>
+<p>But do we need such a complex model? Let’s compare it to a model
+without specifying random intercepts for the stimuli.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_rt</span><span class="op">)</span></span>
 <span></span>
@@ -211,12 +263,20 @@
 &gt; model_full | lmerMod |          |  7 |         |       |       
 &gt; model      | lmerMod | 6.92e-07 |  6 |   -1.00 | 36.78 | &lt; .001
 &gt; Models were detected as nested and are compared in sequential order.</code></pre>
-<p>Mmmh, it seems that the simpler model performs <strong>a lot worse</strong> (the Bayes Factor is lower than 1). We could run <code><a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link">compare_performance()</a></code> to learn more details, but for this example we will go ahead and keep the <strong>worse model</strong> (for simplicity and conciseness when inspecting the random effects later, but keep in mind that in real life it’s surely not the best thing to do).</p>
+<p>Mmmh, it seems that the simpler model performs <strong>a lot
+worse</strong> (the Bayes Factor is lower than 1). We could run
+<code><a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link">compare_performance()</a></code> to learn more details, but for this
+example we will go ahead and keep the <strong>worse model</strong> (for
+simplicity and conciseness when inspecting the random effects later, but
+keep in mind that in real life it’s surely not the best thing to
+do).</p>
 </div>
 <div class="section level3">
 <h3 id="group-level-effects">Group-level Effects<a class="anchor" aria-label="anchor" href="#group-level-effects"></a>
 </h3>
-<p>That’s nice to know, but how to actually <strong>get access</strong> to these group-level scores. We can use the <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function to retrieve them.</p>
+<p>That’s nice to know, but how to actually <strong>get access</strong>
+to these group-level scores. We can use the
+<code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> function to retrieve them.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="va">random</span></span></code></pre></div>
@@ -256,8 +316,17 @@
 &gt; id    |    16 | conditionspeed |       -0.01 | 0.02 | [-0.05,  0.02]
 &gt; id    |    17 |    (Intercept) |        0.06 | 0.01 | [ 0.03,  0.08]
 &gt; id    |    17 | conditionspeed |       -0.05 | 0.02 | [-0.08, -0.02]</code></pre>
-<p>Each of our participant (the <strong>Level</strong> column), numbered from 1 to 17, has two rows, corresponding to its own deviation from the main effect of the <strong>intercept</strong> and <strong>condition effect</strong>.</p>
-<p>We can also use <code><a href="../reference/estimate_grouplevel.html">reshape_grouplevel()</a></code> to select only the <em>Coefficient</em> column (and skip the information about the uncertainty - which in real life is equally important!) and make it match the original data. The resulting table has the same length as the original dataset and can be merged with it: <strong>it’s a convenient way to re-incorporate the random effects into the data for further re-use</strong>.</p>
+<p>Each of our participant (the <strong>Level</strong> column), numbered
+from 1 to 17, has two rows, corresponding to its own deviation from the
+main effect of the <strong>intercept</strong> and <strong>condition
+effect</strong>.</p>
+<p>We can also use <code><a href="../reference/estimate_grouplevel.html">reshape_grouplevel()</a></code> to select only the
+<em>Coefficient</em> column (and skip the information about the
+uncertainty - which in real life is equally important!) and make it
+match the original data. The resulting table has the same length as the
+original dataset and can be merged with it: <strong>it’s a convenient
+way to re-incorporate the random effects into the data for further
+re-use</strong>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reshaped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">reshape_grouplevel</a></span><span class="op">(</span><span class="va">random</span>, indices <span class="op">=</span> <span class="st">"Coefficient"</span><span class="op">)</span></span>
 <span></span>
@@ -269,7 +338,10 @@
 &gt; 4  1    -0.097          0.094
 &gt; 5  1    -0.097          0.094
 &gt; 6  1    -0.097          0.094</code></pre>
-<p>As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to remove all the duplicate rows. Let’s add it to the original data.</p>
+<p>As you can see, the first row is repeated as it corresponds to the
+same participant (so the random effects are the same). Note that we can
+use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to remove all the duplicate rows. Let’s add
+it to the original data.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/mutate_joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
 <p>We can also visualize the random effects:</p>
@@ -277,14 +349,30 @@
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-11-1.png" width="2187.5"></p>
-<p>Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?</p>
+<p>Wow! As we can see, there is a lot of between-participants
+variability. But what do these random parameters correspond to?</p>
 </div>
 <div class="section level3">
 <h3 id="correlation-with-empirical-scores">Correlation with empirical scores<a class="anchor" aria-label="anchor" href="#correlation-with-empirical-scores"></a>
 </h3>
-<p>We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the <strong>deviation from the fixed effect</strong>, so a coefficient close to 0 means that the participants’ effect is the same as the population-level effect. In other words, it’s <strong>“in the norm”</strong> (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by changing the <code>type</code> argument).</p>
-<p>Nevertheless, let’s compute some <strong>empirical scores</strong>, such as the condition averages for each participant.</p>
-<p>We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the <strong>accuracy</strong> condition, and the difference with the <strong>speed</strong> condition <em>(reminds you of something?)</em>.</p>
+<p>We said above that the random effects are the group-level (the group
+unit is, in this model, the participants) version of the
+population-level effects (the fixed effects). One important thing to
+note is that they represent the <strong>deviation from the fixed
+effect</strong>, so a coefficient close to 0 means that the
+participants’ effect is the same as the population-level effect. In
+other words, it’s <strong>“in the norm”</strong> (note that we can also
+obtain the group-specific effect corresponding to the sum of the fixed
+and random by changing the <code>type</code> argument).</p>
+<p>Nevertheless, let’s compute some <strong>empirical scores</strong>,
+such as the condition averages for each participant.</p>
+<p>We will group the data by participant and condition, get the mean RT,
+and then reshape the data so that we have, for each participant, the two
+means as two columns. Then, we will create a new dataframe (we will use
+the same - and overwrite it - to keep it concise), in which we will only
+keep the mean RT in the <strong>accuracy</strong> condition, and the
+difference with the <strong>speed</strong> condition <em>(reminds you of
+something?)</em>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">id</span> <span class="op">+</span> <span class="va">condition</span>, <span class="va">data_rt</span>, <span class="va">mean</span><span class="op">)</span> <span class="op"><a href="https://nathaneastwood.github.io/poorman/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_to_wide.html" class="external-link">reshape_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="st">"condition"</span>, values_from <span class="op">=</span> <span class="st">"rt"</span>, names_prefix <span class="op">=</span> <span class="st">"rt_"</span><span class="op">)</span></span>
@@ -294,10 +382,16 @@
 <span>  empirical_accuracy <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_accuracy</span>,</span>
 <span>  empirical_condition <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_speed</span> <span class="op">-</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_accuracy</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p>Now, how to these <strong>empirical scores</strong> compare with the <strong>random effects</strong> estimated by the model? Let’s merge the empirical scores with the random effects scores. For that, we will run <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> on the <strong>reshaped</strong> random effects to remove all the duplicate rows (and have only one row per participant, so that it matches the format of <code>data_sub</code>).</p>
+<p>Now, how to these <strong>empirical scores</strong> compare with the
+<strong>random effects</strong> estimated by the model? Let’s merge the
+empirical scores with the random effects scores. For that, we will run
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> on the <strong>reshaped</strong> random effects
+to remove all the duplicate rows (and have only one row per participant,
+so that it matches the format of <code>data_sub</code>).</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://nathaneastwood.github.io/poorman/reference/mutate_joins.html" class="external-link">full_join</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">reshaped</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
-<p>Let’s run a correlation between the model-based scores and the empirical scores.</p>
+<p>Let’s run a correlation between the model-based scores and the
+empirical scores.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/correlation/reference/correlation.html" class="external-link">correlation</a></span><span class="op">(</span><span class="va">data_sub</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; # Correlation Matrix (pearson-method)
@@ -313,23 +407,40 @@
 &gt; 
 &gt; p-value adjustment method: Holm (1979)
 &gt; Observations: 17</code></pre>
-<p>First thing to notice is that <strong>everything is significantly and strongly correlated</strong>!.</p>
-<p>Then, the empirical scores for accuracy and condition, corresponding to the “raw” average of RT, correlate <strong>almost perfectly with their model-based counterpart</strong> (<span class="math inline">\(r_{empirical\_accuracy/Coefficient\_Intercept} = 1\)</span>; <span class="math inline">\(r_{empirical\_condition/Coefficient\_conditionspeed} &gt; .99\)</span>). That’s reassuring, it means that our model has managed to estimate some intuitive parameters!</p>
-<p>Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:</p>
+<p>First thing to notice is that <strong>everything is significantly and
+strongly correlated</strong>!.</p>
+<p>Then, the empirical scores for accuracy and condition, corresponding
+to the “raw” average of RT, correlate <strong>almost perfectly with
+their model-based counterpart</strong> (<span class="math inline">\(r_{empirical\_accuracy/Coefficient\_Intercept} =
+1\)</span>; <span class="math inline">\(r_{empirical\_condition/Coefficient\_conditionspeed}
+&gt; .99\)</span>). That’s reassuring, it means that our model has
+managed to estimate some intuitive parameters!</p>
+<p>Finally, we can observe that there is a strong and negative
+correlation (which is even more salient with model-based indices)
+between the RT in the accuracy condition and the effect of the speed
+condition:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Intercept</span>, y <span class="op">=</span> <span class="va">conditionspeed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-15-1.png" width="2187.5"></p>
-<p>The slower they are in the accuracy condition, the bigger the difference with the speed condition.</p>
+<p>The slower they are in the accuracy condition, the bigger the
+difference with the speed condition.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="accuracy">Accuracy<a class="anchor" aria-label="anchor" href="#accuracy"></a>
 </h2>
-<p>In this section, we will take interest in the accuracy - the probability of making errors, using <strong>logistic models</strong>. For this, we will use the dataset that still includes the errors (<code>data</code>, and not <code>data_rt</code> used in the previous section).</p>
-<p>We will fit a logistic mixed model to predict the likelihood of making error depending on the condition. Similarly, we specified a random intercept and random effect of condition for the participants.</p>
+<p>In this section, we will take interest in the accuracy - the
+probability of making errors, using <strong>logistic models</strong>.
+For this, we will use the dataset that still includes the errors
+(<code>data</code>, and not <code>data_rt</code> used in the previous
+section).</p>
+<p>We will fit a logistic mixed model to predict the likelihood of
+making error depending on the condition. Similarly, we specified a
+random intercept and random effect of condition for the
+participants.</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span><span class="va">error</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">data</span>, family <span class="op">=</span> <span class="st">"binomial"</span></span>
@@ -342,11 +453,16 @@
 &gt; ----------------------------------------------------------------------
 &gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.16 | &lt; .001
 &gt; condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.73 | &lt; .001</code></pre>
-<p>The parameters suggest that in general, participants indeed make more errors in the speed condition as compared to the accuracy condition. We can visualize the average probability (i.e., the <strong>marginal means</strong>) of making errors in the two conditions.</p>
+<p>The parameters suggest that in general, participants indeed make more
+errors in the speed condition as compared to the accuracy condition. We
+can visualize the average probability (i.e., the <strong>marginal
+means</strong>) of making errors in the two conditions.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, show_data <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-17-1.png" width="2187.5"></p>
-<p>Similarly, we can extract the group-level effects, clean them (rename the columns, otherwise it will be the same names as for the RT model), and merge them with the previous ones.</p>
+<p>Similarly, we can extract the group-level effects, clean them (rename
+the columns, otherwise it will be the same names as for the RT model),
+and merge them with the previous ones.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="va">random</span></span></code></pre></div>
