@@ -316,7 +316,7 @@ estimate_relation <- function(model,
     } else if (insight::is_model(data_original)) {
       model <- data_original
     } else {
-      stop("A model must be passed to make predictions.")
+      stop("A model must be passed to make predictions.", call. = FALSE)
     }
   }
 
@@ -327,7 +327,7 @@ estimate_relation <- function(model,
     if (is_grid) {
       data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
-      stop('The `data` argument must either NULL, "grid" or another data.frame.')
+      stop('The `data` argument must either NULL, "grid" or another data.frame.', call. = FALSE)
     }
   }
 

@@ -203,7 +203,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   # 4+ interaction
   if (length(targets) > 0) {
     # TODO: We could add the fourth term as facets
-    warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).")
+    warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).", call. = FALSE)
   }
 
 
@@ -260,7 +260,7 @@ visualisation_recipe.estimate_predicted <- function(x,
           density_2d = density_2d
         )
       } else {
-        stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.")
+        stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.", call. = FALSE)
       }
       l <- l + 1
     }

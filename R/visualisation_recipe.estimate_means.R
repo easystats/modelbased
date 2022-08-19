@@ -73,13 +73,13 @@ visualisation_recipe.estimate_means <- function(x,
     color <- levels[2]
     if (length(levels) > 2) {
       # TODO: add facetting (needs updating see::geom_from_list to work with facets)
-      warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.")
+      warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.", call. = FALSE)
     }
   }
   if (!is.null(modulate) && length(modulate) > 0) {
     alpha <- modulate[1]
     if (length(modulate) > 1) {
-      warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.")
+      warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.", call. = FALSE)
     }
   }
 
@@ -106,7 +106,7 @@ visualisation_recipe.estimate_means <- function(x,
       } else if (i == "violin") {
         layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin", boxplot = violin)
       } else {
-        stop("'show_data' can only be some of 'points', 'boxplot', 'violin'. Check spelling.")
+        stop("'show_data' can only be some of 'points', 'boxplot', 'violin'. Check spelling.", call. = FALSE)
       }
       l <- l + 1
     }

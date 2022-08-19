@@ -35,12 +35,12 @@ zero_crossings <- function(x) {
                          ...) {
   ## error checking as in uniroot...
   if (!missing(interval) && length(interval) != 2) {
-    stop("'interval' must be a vector of length 2")
+    stop("'interval' must be a vector of length 2", call. = FALSE)
   }
 
   if (!is.numeric(lower) || !is.numeric(upper) || lower >=
     upper) {
-    stop("lower < upper  is not fulfilled")
+    stop("lower < upper  is not fulfilled", call. = FALSE)
   }
 
   ## subdivide interval in n subintervals and estimate the function values
