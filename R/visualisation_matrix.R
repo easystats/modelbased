@@ -54,7 +54,7 @@ visualisation_matrix.data.frame <- function(x,
                                             reference = x,
                                             ...) {
   if (!is.null(target)) {
-    warning("The 'target' argument name is deprecated in favour of 'at'. Please replace 'target' with 'at'.")
+    warning("The 'target' argument name is deprecated in favour of 'at'. Please replace 'target' with 'at'.", call. = FALSE)
     at <- target
   }
 

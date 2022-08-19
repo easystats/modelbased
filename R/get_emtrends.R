@@ -26,7 +26,7 @@ get_emtrends <- function(model,
                          ...) {
   # Deprecation
   if (!is.null(levels) || !is.null(modulate)) {
-    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.", call. = FALSE)
     at <- c(levels, modulate)
   }
 
@@ -73,7 +73,7 @@ model_emtrends <- get_emtrends
   if (is.null(trend)) {
     trend <- predictors[sapply(data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      stop("Model contains no numeric predictor. Please specify 'trend'.")
+      stop("Model contains no numeric predictor. Please specify 'trend'.", call. = FALSE)
     }
     message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }
