@@ -75,3 +75,4 @@ jobs:
           _R_CHECK_FORCE_SUGGESTS_: false
         with:
           upload-snapshots: true
+          error-on: '"note"'
