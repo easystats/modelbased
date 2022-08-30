@@ -57,7 +57,7 @@ get_emmeans <- function(model,
                         ...) {
   # Deprecation
   if (!is.null(levels) || !is.null(modulate)) {
-    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
+    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.", call. = FALSE)
     at <- c(levels, modulate)
   }
 
@@ -200,7 +200,7 @@ model_emmeans <- get_emmeans
   if (!is.null(at) && length(at) == 1 && at == "auto") {
     at <- predictors[!sapply(data[predictors], is.numeric)]
     if (!length(at) || all(is.na(at))) {
-      stop("Model contains no categorical factor. Please specify 'at'.")
+      stop("Model contains no categorical factor. Please specify 'at'.", call. = FALSE)
     }
     message("We selected `at = c(", paste0(paste0('"', at, '"'), collapse = ", "), ")`.")
   }

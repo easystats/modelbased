@@ -69,7 +69,7 @@ visualisation_recipe.estimate_slopes <- function(x,
     if (length(facs) > 1) {
       facet <- facs[2]
       if (length(facs) > 2) {
-        warning("Cannot deal with more than 2 'factors' variables for now. Keeping the two firsts.")
+        warning("Cannot deal with more than 2 'factors' variables for now. Keeping the two firsts.", call. = FALSE)
       }
     }
   } else {

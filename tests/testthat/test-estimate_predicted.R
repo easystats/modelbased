@@ -140,5 +140,4 @@ if (require("testthat") &&
       "CI_high"
     ))
   })
-
 }

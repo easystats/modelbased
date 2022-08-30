@@ -316,7 +316,7 @@ estimate_relation <- function(model,
     } else if (insight::is_model(data_original)) {
       model <- data_original
     } else {
-      stop("A model must be passed to make predictions.")
+      stop("A model must be passed to make predictions.", call. = FALSE)
     }
   }
 

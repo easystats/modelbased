@@ -42,14 +42,14 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
         stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       },
       warning = function(w) {
-        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
+        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."), call. = FALSE)
         stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       }
     )
   } else if (method == "smooth") {
     smoothed <- stats::smooth(x, ...)
   } else {
-    stop('method must be one of c("loess", "smooth")')
+    stop('method must be one of c("loess", "smooth")', call. = FALSE)
   }
   smoothed
 }

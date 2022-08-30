@@ -77,7 +77,7 @@
 #'   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
 #'   # Numeric * numeric * numeric
-#'   x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length=c(5, 3, 20))
+#'   x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length = c(5, 3, 20))
 #'   layers <- visualisation_recipe(x)
 #'   plot(layers)
 #'
@@ -95,7 +95,7 @@
 #'   x <- estimate_relation(lm(mpg ~ cyl * qsec * hp, data = data))
 #'   layers <- visualisation_recipe(x)
 #'   plot(layers) +
-#'     scale_size_continuous(range=c(0.2, 1))
+#'     scale_size_continuous(range = c(0.2, 1))
 #'
 #'   # GLMs ---------------------
 #'   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
@@ -104,9 +104,11 @@
 #'
 #'   # Multiple CIs ---------------------
 #'   plot(estimate_relation(lm(mpg ~ disp, data = mtcars),
-#'        ci = c(.50, .80, .95)))
+#'     ci = c(.50, .80, .95)
+#'   ))
 #'   plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris),
-#'        ci = c(0.5, 0.7, 0.95)))
+#'     ci = c(0.5, 0.7, 0.95)
+#'   ))
 #' }
 #'
 #' # Bayesian models ---------------------
@@ -175,7 +177,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     data[[".group"]] <- paste0(data[[x2]])
     group <- ".group"
     # If x-axis is a factor, then we cannot add the line + we need to jitter the pointrnage
-    if(!is.numeric(data[[x1]])) {
+    if (!is.numeric(data[[x1]])) {
       jitter <- TRUE
       skip_line <- TRUE
     }
@@ -185,8 +187,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   if (length(targets) > 0) {
     x3 <- targets[1]
     targets <- targets[targets != x3]
-    if(is.numeric(data[[x1]])) {
-      if(is.numeric(data[[x3]])) {
+    if (is.numeric(data[[x1]])) {
+      if (is.numeric(data[[x3]])) {
         alpha <- x3
       } else {
         linetype <- x3
@@ -201,7 +203,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   # 4+ interaction
   if (length(targets) > 0) {
     # TODO: We could add the fourth term as facets
-    warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).")
+    warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).", call. = FALSE)
   }
 
 
@@ -214,7 +216,7 @@ visualisation_recipe.estimate_predicted <- function(x,
 
     # Nicer points
 
-    if(is.numeric(data[[x1]])) {
+    if (is.numeric(data[[x1]])) {
       stroke <- 0
       shape <- 16
     } else {
@@ -258,7 +260,7 @@ visualisation_recipe.estimate_predicted <- function(x,
           density_2d = density_2d
         )
       } else {
-        stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.")
+        stop("'show_data' can only be some of 'points', 'density_2d', 'density_2d_filled', density_2d_polygon', 'density_2d_raster'. Check spelling.", call. = FALSE)
       }
       l <- l + 1
     }
@@ -300,11 +302,11 @@ visualisation_recipe.estimate_predicted <- function(x,
         x1,
         y = "Predicted",
         color = color,
-        size=size,
+        size = size,
         ci_low = ci_lows[i],
         ci_high = ci_highs[i],
         alpha = i / length(ci_lows),
-        jitter=jitter
+        jitter = jitter
       )
       l <- l + 1
     }
@@ -313,7 +315,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Predicted -----------------------------------
 
   # Line
-  if(skip_line == FALSE) {
+  if (skip_line == FALSE) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_line(
       data,
       x1,
@@ -454,7 +456,7 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                 size = NULL,
                                                 ci_low = "CI_low",
                                                 ci_high = "CI_high",
-                                                jitter=FALSE) {
+                                                jitter = FALSE) {
   out <- list(
     geom = "pointrange",
     data = data,
@@ -464,10 +466,10 @@ visualisation_recipe.estimate_predicted <- function(x,
       ymin = ci_low,
       ymax = ci_high,
       color = color,
-      size=size,
+      size = size,
       group = group
     ),
-    alpha=alpha
+    alpha = alpha
   )
 
   if (jitter == TRUE) {
