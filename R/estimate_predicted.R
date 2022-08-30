@@ -327,7 +327,9 @@ estimate_relation <- function(model,
     if (is_grid) {
       data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
-      stop('The `data` argument must either NULL, "grid" or another data.frame.')
+      stop(insight::format_message(
+        "The `data` argument must either NULL, \"grid\" or another data frame."
+      ), call. = FALSE)
     }
   }
 
