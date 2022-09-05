@@ -1,4 +1,10 @@
-if (require("testthat") && require("modelbased") && require("logspline") && require("rstanarm") && require("insight") && require("lme4")) {
+if (require("testthat") &&
+  require("modelbased") &&
+  require("logspline") &&
+  require("rstanarm") &&
+  require("insight") &&
+  require("lme4") &&
+  require("emmeans")) {
   test_that("estimate_contrasts - Frequentist", {
     # One factor
     model <- lm(Sepal.Width ~ Species, data = iris)
@@ -106,13 +112,29 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     data <- iris
     data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-    model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Species * Petal.Length_factor, data = data, refresh = 0, iter = 200, chains = 2))
+    model <- suppressWarnings(
+      rstanarm::stan_glm(
+        Sepal.Width ~ Species * Petal.Length_factor,
+        data = data,
+        refresh = 0,
+        iter = 200,
+        chains = 2
+      )
+    )
     estim <- estimate_contrasts(model, contrast = "all")
     expect_equal(dim(estim), c(15, 7))
     estim <- estimate_contrasts(model, fixed = "Petal.Length_factor")
     expect_equal(dim(estim), c(3, 8))
 
-    model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Species * Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2))
+    model <- suppressWarnings(
+      rstanarm::stan_glm(
+        Sepal.Width ~ Species * Petal.Width,
+        data = iris,
+        refresh = 0,
+        iter = 200,
+        chains = 2
+      )
+    )
     estim <- estimate_contrasts(model)
     expect_equal(dim(estim), c(3, 7))
     estim <- estimate_contrasts(model, fixed = "Petal.Width")
@@ -151,16 +173,14 @@ if (require("testthat") && require("modelbased") && require("logspline") && requ
     expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
   })
 
-  # TODO: Not sure why the below test fails on GH; re-activate next time to try again
+  test_that("estimate_contrasts - dfs", {
+    data <- iris
+    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+    model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  # test_that("estimate_contrasts - dfs", {
-  #   data <- iris
-  #   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-  #   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
-  #
-  #   estim1 <- estimate_contrasts(model, lmer.df = "satterthwaite")
-  #   estim2 <- estimate_contrasts(model, lmer.df = "kenward-roger")
-  #
-  #   expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
-  # })
+    estim1 <- estimate_contrasts(model, lmer.df = "satterthwaite")
+    estim2 <- estimate_contrasts(model, lmer.df = "kenward-roger")
+
+    expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
+  })
 }

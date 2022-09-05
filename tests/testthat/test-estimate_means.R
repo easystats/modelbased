@@ -1,4 +1,8 @@
-if (require("testthat") && require("modelbased") && require("rstanarm") && require("insight")) {
+if (require("testthat") &&
+    require("modelbased") &&
+    require("rstanarm") &&
+    require("insight") &&
+    require("emmeans")) {
   test_that("estimate_means", {
     data <- mtcars
     data$gear <- as.factor(data$gear)
@@ -53,8 +57,6 @@ if (require("testthat") && require("modelbased") && require("rstanarm") && requi
     # model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
     # estim <- estimate_means(model)
     # expect_equal(dim(estim), c(3, 5))
-
-
 
     # One continuous and one factor
     model <- lm(Petal.Length ~ Species * Sepal.Width, data = iris)
