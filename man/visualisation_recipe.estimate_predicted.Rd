@@ -209,7 +209,7 @@ if (require("ggplot2")) {
   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
   # Numeric * numeric * numeric
-  x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length=c(5, 3, 20))
+  x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length = c(5, 3, 20))
   layers <- visualisation_recipe(x)
   plot(layers)
 
@@ -227,7 +227,7 @@ if (require("ggplot2")) {
   x <- estimate_relation(lm(mpg ~ cyl * qsec * hp, data = data))
   layers <- visualisation_recipe(x)
   plot(layers) +
-    scale_size_continuous(range=c(0.2, 1))
+    scale_size_continuous(range = c(0.2, 1))
 
   # GLMs ---------------------
   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
@@ -236,9 +236,11 @@ if (require("ggplot2")) {
 
   # Multiple CIs ---------------------
   plot(estimate_relation(lm(mpg ~ disp, data = mtcars),
-       ci = c(.50, .80, .95)))
+    ci = c(.50, .80, .95)
+  ))
   plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris),
-       ci = c(0.5, 0.7, 0.95)))
+    ci = c(0.5, 0.7, 0.95)
+  ))
 }
 
 # Bayesian models ---------------------

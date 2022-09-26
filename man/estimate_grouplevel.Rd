@@ -7,7 +7,7 @@
 \usage{
 estimate_grouplevel(model, type = "random", ...)
 
-reshape_grouplevel(x, indices = "all", ...)
+reshape_grouplevel(x, indices = "all", group = "all", ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
@@ -28,7 +28,9 @@ indices (such as SE and CI), as these are not computable.}
 
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
-\item{indices}{A list containing the indices to extract.}
+\item{indices}{A list containing the indices to extract (e.g., "Coefficient").}
+
+\item{group}{A list containing the random factors to select.}
 }
 \description{
 Extract random parameters of each individual group in the context of mixed
@@ -64,7 +66,8 @@ if (require("lme4") && require("see")) {
 # Bayesian models
 \donttest{
 if (require("rstanarm")) {
-  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb), data = mtcars, refresh = 0)
+  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb) + (1|gear), data = mtcars, refresh = 0)
+  # Broken estimate_grouplevel(model)
 }
 }
 }
