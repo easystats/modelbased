@@ -1,3 +1,9 @@
+# modelbased (development version)
+
+## Breaking Changes
+
+- The minimum needed R version has been bumped to `3.6`.
+
 # modelbased 0.8.5
 
 - Fixed issues with printing-methods.
