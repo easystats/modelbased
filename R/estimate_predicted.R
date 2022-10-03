@@ -357,8 +357,6 @@ estimate_relation <- function(model,
     data = data,
     predict = predict,
     ci = ci,
-    dispersion_method = "mad",
-    ci_method = "hdi",
     ...
   )
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
