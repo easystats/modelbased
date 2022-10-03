@@ -6,10 +6,11 @@
 #'
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
-#' @param adjust The p-values adjustment method for frequentist multiple
+#' @param p_adjust The p-values adjustment method for frequentist multiple
 #'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 #'   section in the `emmeans::test` documentation.
+#' @param adjust Deprecated in favour of `p_adjust`.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -76,9 +77,16 @@ estimate_contrasts <- function(model,
                                fixed = NULL,
                                transform = "none",
                                ci = 0.95,
-                               adjust = "holm",
+                               p_adjust = "holm",
                                method = "pairwise",
+                               adjust = NULL,
                                ...) {
+
+  # Deprecation
+  if (!is.null(adjust)) {
+    warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.", call. = FALSE)
+    p_adjust <- adjust
+  }
 
   # Run emmeans
   estimated <- get_emcontrasts(model,
@@ -99,7 +107,7 @@ estimate_contrasts <- function(model,
     contrasts <- cbind(estimated@grid, contrasts)
     contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
   } else {
-    contrasts <- as.data.frame(merge(as.data.frame(estimated), stats::confint(estimated, level = ci, adjust = adjust)))
+    contrasts <- as.data.frame(merge(as.data.frame(estimated), stats::confint(estimated, level = ci, adjust = p_adjust)))
     contrasts <- .clean_names_frequentist(contrasts)
   }
   contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)
@@ -129,7 +137,7 @@ estimate_contrasts <- function(model,
     contrasts,
     info$contrast,
     type = "contrasts",
-    adjust = adjust
+    p_adjust = p_adjust
   )
 
   # Add attributes
@@ -140,7 +148,7 @@ estimate_contrasts <- function(model,
   attr(contrasts, "at") <- info$at
   attr(contrasts, "fixed") <- info$fixed
   attr(contrasts, "contrast") <- info$contrast
-  attr(contrasts, "adjust") <- adjust
+  attr(contrasts, "p_adjust") <- p_adjust
 
 
   # Output
