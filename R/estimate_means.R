@@ -160,7 +160,7 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, at = NULL, type = "means", adjust = NULL) {
+.estimate_means_footer <- function(x, at = NULL, type = "means", p_adjust = NULL) {
   table_footer <- paste("\nMarginal", type)
 
   # Levels
@@ -173,8 +173,8 @@ estimate_means <- function(model,
   }
 
   # P-value adjustment footer
-  if (!is.null(adjust) && "p" %in% names(x)) {
-    if (adjust == "none") {
+  if (!is.null(p_adjust) && "p" %in% names(x)) {
+    if (p_adjust == "none") {
       table_footer <- paste0(table_footer, "\np-values are uncorrected.")
     } else {
       table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(adjust))
