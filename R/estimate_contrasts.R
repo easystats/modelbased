@@ -95,7 +95,7 @@ estimate_contrasts <- function(model,
     fixed = fixed,
     transform = transform,
     method = method,
-    adjust = adjust,
+    adjust = p_adjust,
     ...
   )
 

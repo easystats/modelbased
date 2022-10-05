@@ -177,7 +177,7 @@ estimate_means <- function(model,
     if (p_adjust == "none") {
       table_footer <- paste0(table_footer, "\np-values are uncorrected.")
     } else {
-      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(adjust))
+      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(p_adjust))
     }
   }
 
