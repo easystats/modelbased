@@ -54,17 +54,20 @@ Development | R-universe | `install.packages("modelbased", repos = "https://easy
 
 Once you have downloaded the package, you can then load it using:
   
-  ```{r, eval=FALSE}
+```{r, eval=FALSE}
 library("modelbased")
 ```
 
+> **Tip**
+>
+> **Instead of `library(datawizard)`, use `library(easystats)`.**
+> **This will make all features of the  easystats-ecosystem available.**
+>
+> **To stay updated, use `easystats::install_latest()`.**
+
 ## Documentation
 
-[![Documentation](https://img.shields.io/badge/documentation-modelbased-orange.svg?colorB=E91E63)](https://easystats.github.io/modelbased/)
-[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
-[![Features](https://img.shields.io/badge/features-modelbased-orange.svg?colorB=2196F3)](https://easystats.github.io/modelbased/reference/index.html)
-
-Click on the buttons above to access the package [**documentation**](https://easystats.github.io/modelbased/) and the [**easystats blog**](https://easystats.github.io/blog/posts/), and check-out these vignettes:
+Access the package [**documentation**](https://easystats.github.io/modelbased/), and check-out these vignettes:
 
 - [**Visualisation matrix**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 - [**Marginal means**](https://easystats.github.io/modelbased/articles/estimate_means.html)

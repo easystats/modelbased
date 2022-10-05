@@ -1,8 +1,8 @@
 if (require("testthat") &&
-    require("modelbased") &&
-    require("rstanarm") &&
-    require("insight") &&
-    require("emmeans")) {
+  require("modelbased") &&
+  require("rstanarm") &&
+  require("insight") &&
+  require("emmeans")) {
   test_that("estimate_means", {
     data <- mtcars
     data$gear <- as.factor(data$gear)
