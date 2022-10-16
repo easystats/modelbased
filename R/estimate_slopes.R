@@ -121,11 +121,10 @@ estimate_slopes <- function(model,
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    trends <- bayestestR::describe_posterior(estimated, ci = ci, ...)
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+    trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
     trends <- cbind(estimated@grid, trends)
     trends$`.wgt.` <- NULL # Drop the weight column
-    trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
-    trends <- datawizard::data_relocate(trends, c("CI_low", "CI_high"), after = "Coefficient")
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }

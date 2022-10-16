@@ -11,8 +11,9 @@ estimate_contrasts(
   fixed = NULL,
   transform = "none",
   ci = 0.95,
-  adjust = "holm",
+  p_adjust = "holm",
   method = "pairwise",
+  adjust = NULL,
   ...
 )
 }
@@ -43,12 +44,14 @@ probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{adjust}{The p-values adjustment method for frequentist multiple
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 section in the \code{emmeans::test} documentation.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
+
+\item{adjust}{Deprecated in favour of \code{p_adjust}.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

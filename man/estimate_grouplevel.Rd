@@ -66,7 +66,7 @@ if (require("lme4") && require("see")) {
 # Bayesian models
 \donttest{
 if (require("rstanarm")) {
-  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb) + (1|gear), data = mtcars, refresh = 0)
+  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb) + (1 | gear), data = mtcars, refresh = 0)
   # Broken estimate_grouplevel(model)
 }
 }

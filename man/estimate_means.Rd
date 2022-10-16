@@ -10,6 +10,7 @@ estimate_means(
   fixed = NULL,
   transform = "response",
   ci = 0.95,
+  backend = "emmeans",
   ...
 )
 }
@@ -36,6 +37,9 @@ log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
+The latter is experimental and some features might not work.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

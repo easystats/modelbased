@@ -7,7 +7,8 @@
 #'
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
-#'
+#' @param backend Whether to use 'emmeans' or 'marginaleffects' as a backend.
+#'  The latter is experimental and some features might not work.
 #' @inherit estimate_slopes details
 #'
 #' @examples
@@ -51,23 +52,23 @@ estimate_means <- function(model,
                            fixed = NULL,
                            transform = "response",
                            ci = 0.95,
+                           backend = "emmeans",
                            ...) {
 
-  # Run emmeans
-  estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
+  # Compute means
+  if (backend == "emmeans") {
+    estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
+  } else {
+    estimated <- .get_marginalmeans(model, at, fixed, transform = transform, ...)
+  }
   info <- attributes(estimated)
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    means <- bayestestR::describe_posterior(estimated,
-      test = NULL,
-      rope_range = NULL,
-      ci = ci,
-      ...
-    )
+    means <- parameters::parameters(estimated, ci = ci, ...)
+    means <- .clean_names_bayesian(means, model, transform, type = "mean")
     means <- cbind(estimated@grid, means)
     means$`.wgt.` <- NULL # Drop the weight column
-    means <- .clean_names_bayesian(means, model, transform, type = "mean")
   } else {
     means <- as.data.frame(stats::confint(estimated, level = ci))
     means$df <- NULL
