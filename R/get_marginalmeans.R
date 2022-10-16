@@ -32,5 +32,12 @@
   names(means)[names(means) %in% c("value")] <- term  # Replace 'value' col by var name
   means$term <- NULL
 
+  # Drop stats
+  means$p <- NULL
+  means$t <- NULL
+
+  # Store attributes
+  attr(means, "at") <- args$at
+
   means
 }

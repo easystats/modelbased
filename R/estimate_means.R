@@ -58,30 +58,34 @@ estimate_means <- function(model,
   # Compute means
   if (backend == "emmeans") {
     estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
-  } else {
-    estimated <- .get_marginalmeans(model, at, fixed, transform = transform, ...)
-  }
-  info <- attributes(estimated)
 
-  # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
-    means <- parameters::parameters(estimated, ci = ci, ...)
-    means <- .clean_names_bayesian(means, model, transform, type = "mean")
-    means <- cbind(estimated@grid, means)
-    means$`.wgt.` <- NULL # Drop the weight column
+    # Summarize and clean
+    if (insight::model_info(model)$is_bayesian) {
+      means <- parameters::parameters(estimated, ci = ci, ...)
+      means <- .clean_names_bayesian(means, model, transform, type = "mean")
+      means <- cbind(estimated@grid, means)
+      means$`.wgt.` <- NULL # Drop the weight column
+    } else {
+      means <- as.data.frame(stats::confint(estimated, level = ci))
+      means$df <- NULL
+      means <- .clean_names_frequentist(means)
+    }
+    # Remove the "1 - overall" column that can appear in cases like at = NULL
+    means <- means[names(means) != "1"]
+
+    info <- attributes(estimated)
   } else {
-    means <- as.data.frame(stats::confint(estimated, level = ci))
-    means$df <- NULL
-    means <- .clean_names_frequentist(means)
+    means <- .get_marginalmeans(model, at, fixed, transform = transform, ...)
+
+    info <- attributes(means)
   }
-  # Remove the "1 - overall" column that can appear in cases like at = NULL
-  means <- means[names(means) != "1"]
 
   # Restore factor levels
   means <- datawizard::data_restoretype(means, insight::get_data(model))
 
 
   # Table formatting
+
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(means, info$at, type = "means")
 

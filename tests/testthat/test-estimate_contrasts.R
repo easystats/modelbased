@@ -181,6 +181,6 @@ if (require("testthat") &&
     estim1 <- estimate_contrasts(model, lmer.df = "satterthwaite")
     estim2 <- estimate_contrasts(model, lmer.df = "kenward-roger")
 
-    expect_true(any(as.data.frame(estim1) != as.data.frame(estim2)))
+    expect_true(any(estim1$CI_low != estim2$CI_low))
   })
 }
