@@ -43,6 +43,8 @@ Imports:
     graphics,
     stats,
     utils
+Remotes:
+    easystats/insight, easystats/parameters
 Suggests:
     brms,
     correlation,

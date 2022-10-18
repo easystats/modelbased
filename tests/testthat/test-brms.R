@@ -8,7 +8,7 @@ osx <- tryCatch({
 })
 
 if (require("testthat") && require("modelbased") && require("brms") && require("emmeans")) {
-  model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh=0, iter=1000)
+  model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
 
   test_that("estimate_means - brms", {
     estim <- estimate_means(model)
@@ -16,7 +16,7 @@ if (require("testthat") && require("modelbased") && require("brms") && require("
   })
 
   test_that("estimate_relation - brms", {
-    estim <- estimate_relation(model, preserve_range=FALSE)
+    estim <- estimate_relation(model, preserve_range = FALSE)
     expect_equal(dim(estim), c(30, 6))
 
     # estim <- estimate_relation(model, preserve_range=FALSE, iterations = 10)
