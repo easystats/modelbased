@@ -699,6 +699,9 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>The largest R-hat is 1.09, indicating chains have not mixed.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#r-hat</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Bulk Effective Samples Size (ESS) is too low, indicating posterior means and medians may be unreliable.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> Running the chains for more iterations may help. See</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> https://mc-stan.org/misc/warnings.html#bulk-ess</span>
@@ -712,16 +715,16 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.12 | 1.16 | [26.66, 31.45]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.79 | 0.94 | [24.84, 28.50]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.47 | 0.74 | [23.02, 25.85]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.15 | 0.59 | [21.00, 23.35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.82 | 0.53 | [18.91, 20.86]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.50 | 0.59 | [16.31, 18.63]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.18 | 0.74 | [13.61, 16.53]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.86 | 0.94 | [10.69, 14.57]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.53 | 1.17 | [ 7.87, 12.61]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.21 | 1.40 | [ 5.00, 10.74]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     29.26 | 1.22 | [26.76, 31.57]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.92 | 1.01 | [24.92, 29.02]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.59 | 0.83 | [23.03, 26.48]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.26 | 0.69 | [20.87, 23.87]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.93 | 0.64 | [18.62, 21.32]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.59 | 0.68 | [16.19, 18.87]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.26 | 0.80 | [13.66, 16.73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     12.93 | 0.98 | [10.88, 14.75]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.60 | 1.19 | [ 8.08, 12.84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.26 | 1.41 | [ 5.38, 10.96]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Variable predicted: mpg</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Predictors modulated: wt</span>
