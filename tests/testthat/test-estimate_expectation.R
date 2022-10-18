@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("lme4") && require("insight")) {
+if (require("lme4") && require("insight")) {
   test_that("estimate_expectation", {
     model <- lmer(mpg ~ wt + factor(am) + (1 | cyl), data = mtcars)
     estim <- estimate_expectation(model)

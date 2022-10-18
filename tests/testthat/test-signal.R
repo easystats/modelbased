@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("datawizard")) {
+if (require("datawizard")) {
   test_that("signal", {
     set.seed(333)
 

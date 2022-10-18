@@ -35,7 +35,7 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.0),
-    effectsize (>= 0.8.0),
+    effectsize (>= 0.8.1),
     insight (>= 0.18.5),
     datawizard (>= 0.6.2),
     parameters (>= 0.19.0),
@@ -43,8 +43,6 @@ Imports:
     graphics,
     stats,
     utils
-Remotes:
-    easystats/insight, easystats/parameters
 Suggests:
     brms,
     correlation,

@@ -1,6 +1,4 @@
-if (require("testthat") &&
-  require("modelbased") &&
-  require("logspline") &&
+if (require("logspline") &&
   require("rstanarm") &&
   require("insight") &&
   require("lme4") &&

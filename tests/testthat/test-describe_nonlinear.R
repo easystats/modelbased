@@ -1,4 +1,4 @@
-# if (require("testthat") && require("modelbased") && require("rstanarm")) {
+# if (  require("rstanarm")) {
 #   test_that("estimate_smooth", {
 #     skip_on_cran()
 #     set.seed(333)

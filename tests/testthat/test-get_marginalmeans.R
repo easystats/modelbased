@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("marginaleffects") && require("lme4")) {
+if (require("marginaleffects") && require("lme4")) {
   test_that("get_marginaleffects", {
     model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 

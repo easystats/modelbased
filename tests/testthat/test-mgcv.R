@@ -7,7 +7,7 @@ osx <- tryCatch({
   }
 })
 
-if (require("testthat") && require("modelbased") && require("mgcv") && require("gamm4") && require("emmeans")) {
+if (require("mgcv") && require("gamm4") && require("emmeans")) {
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
 

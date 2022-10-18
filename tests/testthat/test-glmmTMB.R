@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("glmmTMB") && require("emmeans")) {
+if (require("glmmTMB") && require("emmeans")) {
   # skip_on_cran()
 
   data <- glmmTMB::Salamanders

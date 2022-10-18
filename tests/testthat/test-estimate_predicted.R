@@ -7,14 +7,14 @@ osx <- tryCatch({
   }
 })
 
-if (require("testthat") &&
-  require("modelbased") &&
+if (
+
   require("gamm4") &&
-  require("rstanarm") &&
-  require("lme4") &&
-  require("glmmTMB") &&
-  require("mgcv") &&
-  require("testthat")) {
+    require("rstanarm") &&
+    require("lme4") &&
+    require("glmmTMB") &&
+    require("mgcv") &&
+    require("testthat")) {
   test_that("estimate_relation - shape", {
     # CI
     model <- lm(Petal.Length ~ Petal.Width, data = iris)

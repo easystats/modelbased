@@ -1,4 +1,4 @@
-if (require("testthat") && require("modelbased") && require("lme4")) {
+if (require("lme4")) {
   test_that("estimate_grouplevel - lme4", {
     set.seed(333)
     data <- lme4::sleepstudy
