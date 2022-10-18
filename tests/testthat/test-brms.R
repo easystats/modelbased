@@ -1,12 +1,3 @@
-osx <- tryCatch({
-  si <- Sys.info()
-  if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-  } else {
-    FALSE
-  }
-})
-
 if (require("brms") && require("emmeans")) {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
 

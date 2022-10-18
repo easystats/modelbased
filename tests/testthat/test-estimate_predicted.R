@@ -7,28 +7,25 @@ osx <- tryCatch({
   }
 })
 
-if (
-
-  require("gamm4") &&
-    require("rstanarm") &&
-    require("lme4") &&
-    require("glmmTMB") &&
-    require("mgcv") &&
-    require("testthat")) {
+if (require("gamm4") &&
+  require("rstanarm") &&
+  require("lme4") &&
+  require("glmmTMB") &&
+  require("mgcv")) {
   test_that("estimate_relation - shape", {
     # CI
     model <- lm(Petal.Length ~ Petal.Width, data = iris)
-    estim <- modelbased::estimate_relation(model, ci = 0.90)
+    estim <- estimate_relation(model, ci = 0.90)
     expect_equal(attributes(estim)$ci, 0.9)
-    estim <- modelbased::estimate_relation(model, ci = c(0.90, .95))
+    estim <- estimate_relation(model, ci = c(0.90, .95))
     expect_equal(attributes(estim)$ci, c(0.90, 0.95))
     expect_equal(dim(estim), c(10, 7))
 
     # Range
     model <- lm(Petal.Length ~ Petal.Width * Species, data = iris)
-    estim <- modelbased::estimate_relation(model, length = 10)
+    estim <- estimate_relation(model, length = 10)
     expect_equal(dim(estim), c(10, 6))
-    estim <- modelbased::estimate_relation(model, length = 10, preserve_range = FALSE)
+    estim <- estimate_relation(model, length = 10, preserve_range = FALSE)
     expect_equal(dim(estim), c(30, 6))
   })
 
@@ -36,18 +33,18 @@ if (
   test_that("estimate_link", {
     # LMER4
     model <- lme4::lmer(Petal.Length ~ Petal.Width + (1 | Species), data = iris)
-    expect_equal(nrow(modelbased::estimate_link(model, length = 5, verbose = FALSE)), 5)
-    expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
+    expect_equal(nrow(estimate_link(model, length = 5, verbose = FALSE)), 5)
+    expect_equal(nrow(estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
     # GLMMTMB
     model <- suppressWarnings(glmmTMB::glmmTMB(Petal.Length ~ Petal.Width + (1 | Species), data = iris))
-    expect_equal(nrow(modelbased::estimate_link(model, length = 5, verbose = FALSE)), 5)
-    expect_equal(nrow(modelbased::estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
+    expect_equal(nrow(estimate_link(model, length = 5, verbose = FALSE)), 5)
+    expect_equal(nrow(estimate_link(model, include_random = TRUE, preserve_range = FALSE, length = 5)), 15)
 
     # MGCV
     model <- mgcv::gam(Petal.Length ~ Petal.Width + s(Sepal.Length), data = iris)
-    expect_equal(dim(modelbased::estimate_link(model, length = 3)), c(9, 6))
-    expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
+    expect_equal(dim(estimate_link(model, length = 3)), c(9, 6))
+    expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
 
     model <- mgcv::gamm(Petal.Length ~ Petal.Width + s(Sepal.Length), random = list(Species = ~1), data = iris)
 
@@ -55,8 +52,8 @@ if (
     model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
       random = ~ (1 | Species), data = iris
     )
-    expect_equal(nrow(modelbased::estimate_link(model, length = 3, verbose = FALSE)), 9)
-    expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3, verbose = FALSE)), c(3, 5))
+    expect_equal(nrow(estimate_link(model, length = 3, verbose = FALSE)), 9)
+    expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3, verbose = FALSE)), c(3, 5))
 
 
     if (!osx) {
@@ -65,8 +62,8 @@ if (
         random = ~ (1 | Species), data = iris,
         iter = 100, chains = 2, refresh = 0
       ))
-      expect_equal(nrow(modelbased::estimate_relation(model, length = 3)), 9)
-      expect_equal(dim(modelbased::estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
+      expect_equal(nrow(estimate_relation(model, length = 3)), 9)
+      expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
     }
   })
 
@@ -135,9 +132,9 @@ if (
     vm <- visualisation_matrix(m, at = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
     estim <- estimate_relation(vm)
     expect_equal(dim(estim), c(70, 6))
-    expect_equal(colnames(estim), c(
-      "Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low",
-      "CI_high"
-    ))
+    expect_equal(
+      colnames(estim),
+      c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high")
+    )
   })
 }

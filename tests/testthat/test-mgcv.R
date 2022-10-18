@@ -32,7 +32,7 @@ if (require("mgcv") && require("gamm4") && require("emmeans")) {
   })
 
   # model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)
-  # estim <- modelbased::estimate_link(model)
+  # estim <- estimate_link(model)
 
   model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
 

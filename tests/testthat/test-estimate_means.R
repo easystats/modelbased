@@ -1,7 +1,7 @@
 if (
 
   require("rstanarm") &&
-    require("insight") &&
+
     require("emmeans")) {
   test_that("estimate_means", {
     data <- mtcars

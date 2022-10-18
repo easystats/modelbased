@@ -1,8 +1,4 @@
-if (require("logspline") &&
-  require("rstanarm") &&
-  require("insight") &&
-  require("lme4") &&
-  require("emmeans")) {
+if (require("logspline") && require("rstanarm") && require("lme4") && require("emmeans")) {
   test_that("estimate_contrasts - Frequentist", {
     # One factor
     model <- lm(Sepal.Width ~ Species, data = iris)
@@ -165,8 +161,8 @@ if (require("logspline") &&
   test_that("estimate_contrasts - p.adjust", {
     model <- lm(Petal.Width ~ Species, data = iris)
 
-    p_none <- modelbased::estimate_contrasts(model, adjust = "none")
-    p_tuk <- modelbased::estimate_contrasts(model, adjust = "tukey")
+    p_none <- estimate_contrasts(model, p_adjust = "none")
+    p_tuk <- estimate_contrasts(model, p_adjust = "tukey")
 
     expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
   })
