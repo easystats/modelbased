@@ -69,17 +69,17 @@ visualisation_recipe.estimate_means <- function(x,
   levels <- info$at[info$at %in% names(data[!sapply(data, is.numeric)])]
   modulate <- info$at[info$at %in% names(data[sapply(data, is.numeric)])]
   x1 <- levels[1]
-  if (length(levels) > 1) {
+  if (length(levels) > 1L) {
     color <- levels[2]
-    if (length(levels) > 2) {
+    if (length(levels) > 2L) {
       # TODO: add facetting (needs updating see::geom_from_list to work with facets)
-      warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.", call. = FALSE)
+      insight::format_warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.")
     }
   }
-  if (!is.null(modulate) && length(modulate) > 0) {
+  if (!is.null(modulate) && length(modulate) > 0L) {
     alpha <- modulate[1]
-    if (length(modulate) > 1) {
-      warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.", call. = FALSE)
+    if (length(modulate) > 1L) {
+      insight::format_warning("Cannot deal with more than 2 modulate variables for now. Other ones will be omitted.")
     }
   }
 
@@ -100,24 +100,51 @@ visualisation_recipe.estimate_means <- function(x,
     rawdata <- .visualisation_recipe_getrawdata(x)
     for (i in show_data) {
       if (i %in% c("point", "points", "jitter")) {
-        layers[[paste0("l", l)]] <- .visualisation_predicted_points(rawdata, x1, y, color, shape = shape, stroke = stroke, type = i, width = 0.1, height = 0, point = jitter)
+        layers[[paste0("l", l)]] <- .visualisation_predicted_points(
+          rawdata,
+          x1,
+          y,
+          color,
+          shape = shape,
+          stroke = stroke,
+          type = i,
+          width = 0.1,
+          height = 0,
+          point = jitter
+        )
       } else if (i == "boxplot") {
-        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot", boxplot = boxplot)
+        layers[[paste0("l", l)]] <-
+          .visualisation_means_boxplot(rawdata, x1, y, color, type = "boxplot", boxplot = boxplot)
       } else if (i == "violin") {
-        layers[[paste0("l", l)]] <- .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin", boxplot = violin)
+        layers[[paste0("l", l)]] <-
+          .visualisation_means_boxplot(rawdata, x1, y, color, type = "violin", boxplot = violin)
       } else {
-        stop("'show_data' can only be some of 'points', 'boxplot', 'violin'. Check spelling.", call. = FALSE)
+        insight::format_error("`show_data` can only be some of 'points', 'boxplot', 'violin'. Check spelling.")
       }
       l <- l + 1
     }
   }
 
   # Line
-  layers[[paste0("l", l)]] <- .visualisation_means_line(data, x1, y = info$coef_name[1], color = color, alpha = alpha, line = line)
+  layers[[paste0("l", l)]] <- .visualisation_means_line(
+    data,
+    x1,
+    y = info$coef_name[1],
+    color = color,
+    alpha = alpha,
+    line = line
+  )
   l <- l + 1
 
   # Pointrange
-  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(data, x1, y = info$coef_name[1], color = color, alpha = alpha, pointrange = pointrange)
+  layers[[paste0("l", l)]] <- .visualisation_means_pointrange(
+    data,
+    x1,
+    y = info$coef_name[1],
+    color = color,
+    alpha = alpha,
+    pointrange = pointrange
+  )
   l <- l + 1
 
   # Labs
@@ -218,12 +245,7 @@ visualisation_recipe.estimate_means <- function(x,
     geom = "labs",
     x = x1,
     y = y,
-    title = paste0(
-      title,
-      " (",
-      format(insight::find_formula(info$model)),
-      ")"
-    )
+    title = paste0(title, " (", format(insight::find_formula(info$model)), ")")
   )
   if (!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
   out
