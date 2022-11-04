@@ -14,25 +14,29 @@
 #'
 #' @inherit estimate_slopes details
 #'
-#' @examples
-#' library(modelbased)
-#' if (require("emmeans", quietly = TRUE)) {
+#' @examplesIf requireNamespace("emmeans", quietly = TRUE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
 #'
 #' # Dealing with interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+#'
 #' # By default: selects first factor
 #' estimate_contrasts(model)
+#'
 #' # Can also run contrasts between points of numeric
 #' estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+#'
 #' # Or both
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+#'
 #' # Or with custom specifications
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+#'
 #' # Can fixate the numeric at a specific value
 #' estimate_contrasts(model, fixed = "Petal.Width")
+#'
 #' # Or modulate it
 #' estimate_contrasts(model, at = "Petal.Width", length = 4)
 #'
@@ -40,33 +44,30 @@
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #' standardize(estimated)
 #'
+#' @examplesIf requireNamespace("lme4", quietly = TRUE)
 #' # Other models (mixed, Bayesian, ...)
-#' if (require("lme4")) {
-#'   data <- iris
-#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#' data <- iris
+#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#'   model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
-#'   estimate_contrasts(model)
-#' }
+#' model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+#' estimate_contrasts(model)
 #'
+#' @examplesIf requireNamespace("rstanarm", quietly = TRUE)
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
 #' \dontrun{
-#' if (require("rstanarm")) {
-#'   model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#'   estimate_contrasts(model)
-#'   estimate_contrasts(model, fixed = "am")
+#' model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
+#' estimate_contrasts(model)
+#' estimate_contrasts(model, fixed = "am")
 #'
-#'   model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
-#'   estimate_contrasts(model)
-#'   estimate_contrasts(model, fixed = "wt")
-#'   estimate_contrasts(model, at = "wt", length = 4)
+#' model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
+#' estimate_contrasts(model)
+#' estimate_contrasts(model, fixed = "wt")
+#' estimate_contrasts(model, at = "wt", length = 4)
 #'
-#'   model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-#'   estimate_contrasts(model, at = "Petal.Length", test = "bf")
-#' }
-#' }
+#' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
+#' estimate_contrasts(model, at = "Petal.Length", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
@@ -81,7 +82,6 @@ estimate_contrasts <- function(model,
                                method = "pairwise",
                                adjust = NULL,
                                ...) {
-
   # Deprecation
   if (!is.null(adjust)) {
     warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.", call. = FALSE)
