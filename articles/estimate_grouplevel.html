@@ -258,10 +258,10 @@ without specifying random intercepts for the stimuli.</p>
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_rt</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link">test_performance</a></span><span class="op">(</span><span class="va">model_full</span>, <span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Name       |   Model |       BF | df | df_diff |  Chi2 |      p
-&gt; ---------------------------------------------------------------
-&gt; model_full | lmerMod |          |  7 |         |       |       
-&gt; model      | lmerMod | 6.92e-07 |  6 |   -1.00 | 36.78 | &lt; .001
+<pre><code>&gt; Name       |   Model |       BF
+&gt; -------------------------------
+&gt; model_full | lmerMod |         
+&gt; model      | lmerMod | 6.92e-07
 &gt; Models were detected as nested and are compared in sequential order.</code></pre>
 <p>Mmmh, it seems that the simpler model performs <strong>a lot
 worse</strong> (the Bayes Factor is lower than 1). We could run
@@ -451,7 +451,7 @@ participants.</p>
 &gt; 
 &gt; Parameter         | Log-Odds |   SE |         95% CI |      z |      p
 &gt; ----------------------------------------------------------------------
-&gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.16 | &lt; .001
+&gt; (Intercept)       |    -2.91 | 0.19 | [-3.28, -2.53] | -15.15 | &lt; .001
 &gt; condition [speed] |     1.32 | 0.15 | [ 1.02,  1.61] |   8.73 | &lt; .001</code></pre>
 <p>The parameters suggest that in general, participants indeed make more
 errors in the speed condition as compared to the accuracy condition. We
