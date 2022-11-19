@@ -244,7 +244,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------</span>
@@ -252,8 +252,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Dealing with interactions</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
@@ -262,7 +262,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
@@ -270,13 +270,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can also run contrasts between points of numeric</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1         |         Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------</span>
@@ -287,12 +287,12 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or both</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1                    |                    Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------------------------------</span>
@@ -312,12 +312,12 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | versicolor Petal.Width2.5 |      -2.25 | [-3.44, -1.06] | 0.40 |  -5.64 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  |  virginica Petal.Width2.5 |      -1.52 | [-2.63, -0.40] | 0.37 |  -4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species, Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species, Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or with custom specifications</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1                  |                  Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------------------------</span>
@@ -337,13 +337,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | versicolor Petal.Width2 |      -1.15 | [-1.83, -0.48] | 0.23 |  -5.13 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  |  virginica Petal.Width2 |      -0.63 | [-1.10, -0.17] | 0.16 |  -4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species, Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species, Petal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can fixate the numeric at a specific value</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------</span>
@@ -351,13 +351,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        1.20 |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        1.20 |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or modulate it</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------------------</span>
@@ -374,14 +374,14 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        1.70 |       0.40 | [ 0.12, 0.67] | 0.11 |   3.50 | 0.002 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        2.50 |       0.73 | [ 0.08, 1.39] | 0.27 |   2.70 | 0.023 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Standardized differences</span></span></span>
 <span class="r-in"><span><span class="va">estimated</span> <span class="op">&lt;-</span> <span class="fu">estimate_contrasts</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">estimated</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis (standardized)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis (standardized)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------</span>
@@ -389,8 +389,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.04 | [ 0.66,  1.42] | 0.16 |   6.68 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.47 | [-0.85, -0.09] | 0.16 |  -3.00 | 0.003 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;</span> <span class="fl">4.2</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
@@ -400,7 +400,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast = "Species"`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal Contrasts Analysis</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
@@ -408,8 +408,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Marginal contrasts estimated at Species</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> p-value adjustment method: Holm (1979)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">cyl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">cyl</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">am</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">am</span><span class="op">)</span></span></span>
