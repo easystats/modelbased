@@ -49,10 +49,12 @@
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+#' model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
 #'
 #' @examplesIf requireNamespace("rstanarm", quietly = TRUE)
+#' library(rstanarm)
+#'
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)

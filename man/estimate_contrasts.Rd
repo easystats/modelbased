@@ -155,10 +155,12 @@ standardize(estimated)
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-model <- lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
 \dontshow{\}) # examplesIf}
 \dontshow{if (requireNamespace("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(rstanarm)
+
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
