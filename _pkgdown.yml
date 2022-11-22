@@ -5,20 +5,20 @@ template:
   package: easystatstemplate
 
 reference:
-- title: "Model-based Estimations"
-  contents:
-  - starts_with("estimate_")
-- title: "Data grids and Visualisation"
-  contents:
-  - starts_with("visualisation_")
-- title: "Miscellaenous"
-  contents:
-  - describe_nonlinear
-  - get_emmeans
-  - get_marginaleffects
-  - find_inversions
-  - zero_crossings
-  - smoothing
+  - title: "Model-based Estimations"
+    contents:
+      - starts_with("estimate_")
+  - title: "Data grids and Visualisation"
+    contents:
+      - starts_with("visualisation_")
+  - title: "Miscellaenous"
+    contents:
+      - describe_nonlinear
+      - get_emmeans
+      - get_marginaleffects
+      - find_inversions
+      - zero_crossings
+      - smoothing
 
 # Keep articles organized
 navbar:
@@ -28,26 +28,26 @@ navbar:
       href: reference/index.html
     - text: "Articles"
       menu:
-      - text: 'Overview of Vignettes'
-        href: articles/overview_of_vignettes.html
-      - text: 'Data grids'
-        href: articles/visualisation_matrix.html
-      - text: 'Marginal means'
-        href: articles/estimate_means.html
-      - text: 'Contrast analysis'
-        href: articles/estimate_contrasts.html
-      - text: 'Marginal effects and derivatives'
-        href: articles/estimate_slopes.html
-      - text: 'Use a model to make predictions'
-        href: articles/estimate_response.html
-      - text: 'Describe non-linear curves'
-        href: articles/describe_nonlinear.html
-      - text: 'Interpret models using Effect Derivatives'
-        href: articles/derivatives.html
-      - text: 'Estimate and re-use Random Effects'
-        href: articles/estimate_grouplevel.html
-      - text: 'The modelisation approach'
-        href: articles/modelisation_approach.html
+        - text: "Overview of Vignettes"
+          href: articles/overview_of_vignettes.html
+        - text: "Data grids"
+          href: articles/visualisation_matrix.html
+        - text: "Marginal means"
+          href: articles/estimate_means.html
+        - text: "Contrast analysis"
+          href: articles/estimate_contrasts.html
+        - text: "Marginal effects and derivatives"
+          href: articles/estimate_slopes.html
+        - text: "Use a model to make predictions"
+          href: articles/estimate_response.html
+        - text: "Describe non-linear curves"
+          href: articles/describe_nonlinear.html
+        - text: "Interpret models using Effect Derivatives"
+          href: articles/derivatives.html
+        - text: "Estimate and re-use Random Effects"
+          href: articles/estimate_grouplevel.html
+        - text: "The modelisation approach"
+          href: articles/modelisation_approach.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html
