@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.5.1
+Version: 0.8.5.2
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -46,7 +46,7 @@ Imports:
 Suggests:
     brms,
     correlation,
-    emmeans (>= 1.5.3),
+    emmeans (>= 1.8.3),
     gamm4,
     gganimate,
     ggplot2,
@@ -54,7 +54,6 @@ Suggests:
     knitr,
     lme4,
     logspline,
-    Matrix,
     marginaleffects,
     mgcv,
     patchwork,
@@ -69,9 +68,8 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 Language: en-US
-RoxygenNote: 7.2.2
+RoxygenNote: 7.2.3
 Config/testthat/edition: 3
-Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
 Config/Needs/website:
     rstudio/bslib,
