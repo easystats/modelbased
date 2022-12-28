@@ -4,15 +4,16 @@ if (
 
     require("emmeans")) {
   test_that("estimate_means", {
-    data <- mtcars
-    data$gear <- as.factor(data$gear)
+    dat <- mtcars
+    dat$gear <- as.factor(dat$gear)
+    dat$cyl <- as.factor(dat$cyl)
+    dat <<- dat
 
-    model <- lm(mpg ~ wt * gear, data = data)
+    model <- lm(mpg ~ wt * gear, data = dat)
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(3, 5))
 
-    data$cyl <- as.factor(data$cyl)
-    model <- lm(vs ~ cyl, data = data)
+    model <- lm(vs ~ cyl, data = dat)
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(3, 5))
 
@@ -20,10 +21,11 @@ if (
     estim <- estimate_means(model, at = "Species=c('versicolor', 'virginica')")
     expect_equal(dim(estim), c(2, 5))
 
-    data <- iris
-    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+    dat <- iris
+    dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
+    dat <<- dat
 
-    model <- lm(Sepal.Width ~ Species * Petal.Length_factor, data = data)
+    model <- lm(Sepal.Width ~ Species * Petal.Length_factor, data = dat)
     estim <- estimate_means(model, at = "all")
     expect_equal(dim(estim), c(6, 6))
 
@@ -34,9 +36,10 @@ if (
     estim <- estimate_means(model, at = "Sepal.Width")
     expect_equal(dim(estim), c(10, 5))
 
-    df <- iris
-    df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))) - 1
-    model <- glm(y ~ Species, family = "binomial", data = df)
+    dat <- iris
+    dat$y <- as.numeric(as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))) - 1
+    dat <<- dat
+    model <- glm(y ~ Species, family = "binomial", data = dat)
 
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(3, 5))
@@ -79,9 +82,10 @@ if (
     expect_equal(dim(estim), c(2, 5))
 
     # Two factors
-    data <- iris
-    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
-    model <- lm(Petal.Length ~ Species * Petal.Length_factor, data = data)
+    dat <- iris
+    dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
+    dat <<- dat
+    model <- lm(Petal.Length ~ Species * Petal.Length_factor, data = dat)
 
     estim <- estimate_means(model, at = "all")
     expect_equal(dim(estim), c(6, 6))
@@ -92,9 +96,10 @@ if (
 
 
     # Three factors
-    data <- mtcars
-    data[c("gear", "vs", "am")] <- sapply(data[c("gear", "vs", "am")], as.factor)
-    model <- lm(mpg ~ gear * vs * am, data = data)
+    dat <- mtcars
+    dat[c("gear", "vs", "am")] <- sapply(dat[c("gear", "vs", "am")], as.factor)
+    dat <<- dat
+    model <- lm(mpg ~ gear * vs * am, data = dat)
 
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(12, 7))
@@ -103,12 +108,13 @@ if (
     estim <- estimate_means(model, at = c("gear='5'", "vs"))
     expect_equal(dim(estim), c(2, 7))
 
-    data <- iris
-    data$factor1 <- ifelse(data$Sepal.Width > 3, "A", "B")
-    data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
-    data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
+    dat <- iris
+    dat$factor1 <- ifelse(dat$Sepal.Width > 3, "A", "B")
+    dat$factor2 <- ifelse(dat$Petal.Length > 3.5, "C", "D")
+    dat$factor3 <- ifelse(dat$Sepal.Length > 5, "E", "F")
+    dat <<- dat
 
-    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = data)
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = dat)
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(8, 7))
     estim <- estimate_means(model, fixed = "factor3")
@@ -117,24 +123,26 @@ if (
 
     # Mixed models
     if (require("lme4")) {
-      data <- iris
-      data$Petal.Length_factor <- as.factor(ifelse(data$Petal.Length < 4.2, "A", "B"))
+      dat <- iris
+      dat$Petal.Length_factor <- as.factor(ifelse(dat$Petal.Length < 4.2, "A", "B"))
+      dat <<- dat
 
-      model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
+      model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat)
 
       estim <- estimate_means(model)
       expect_equal(dim(estim), c(3, 5))
 
-      model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data, family = "Gamma")
+      model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat, family = "Gamma")
 
       estim <- estimate_means(model)
       expect_equal(dim(estim), c(3, 5))
     }
 
     # GLM
-    data <- iris
-    data$Petal.Length_factor <- as.factor(ifelse(data$Petal.Length < 4.2, "A", "B"))
-    model <- glm(Petal.Length_factor ~ Species, data = data, family = "binomial")
+    dat <- iris
+    dat$Petal.Length_factor <- as.factor(ifelse(dat$Petal.Length < 4.2, "A", "B"))
+    dat <<- dat
+    model <- glm(Petal.Length_factor ~ Species, data = dat, family = "binomial")
 
     estim <- estimate_means(model)
     expect_equal(dim(estim), c(3, 5))
