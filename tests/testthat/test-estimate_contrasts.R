@@ -1,7 +1,8 @@
 if (require("logspline") && require("rstanarm") && require("lme4") && require("emmeans")) {
   test_that("estimate_contrasts - Frequentist", {
     # One factor
-    model <- lm(Sepal.Width ~ Species, data = iris)
+    dat <<- iris
+    model <- lm(Sepal.Width ~ Species, data = dat)
 
     estim <- estimate_contrasts(model)
     expect_equal(dim(estim), c(3, 9))
@@ -10,10 +11,11 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
     expect_equal(dim(estim), c(1, 9))
 
     # Two factors
-    data <- iris
-    data$fac <- ifelse(data$Sepal.Length < 5.8, "A", "B")
+    dat <- iris
+    dat$fac <- ifelse(dat$Sepal.Length < 5.8, "A", "B")
+    dat <<- dat
 
-    model <- lm(Sepal.Width ~ Species * fac, data = data)
+    model <- lm(Sepal.Width ~ Species * fac, data = dat)
 
     estim <- estimate_contrasts(model)
     expect_equal(dim(estim), c(3, 9))
@@ -42,9 +44,10 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
 
 
     # Three factors
-    data <- mtcars
-    data[c("gear", "vs", "am")] <- sapply(data[c("gear", "vs", "am")], as.factor)
-    model <- lm(mpg ~ gear * vs * am, data = data)
+    dat <- mtcars
+    dat[c("gear", "vs", "am")] <- sapply(dat[c("gear", "vs", "am")], as.factor)
+    dat <<- dat
+    model <- lm(mpg ~ gear * vs * am, data = dat)
 
     estim <- estimate_contrasts(model, at = "all")
     expect_equal(dim(estim), c(12, 11))
@@ -54,12 +57,13 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
     expect_equal(dim(estim), c(1, 10))
 
 
-    data <- iris
-    data$factor1 <- ifelse(data$Sepal.Width > 3, "A", "B")
-    data$factor2 <- ifelse(data$Petal.Length > 3.5, "C", "D")
-    data$factor3 <- ifelse(data$Sepal.Length > 5, "E", "F")
+    dat <- iris
+    dat$factor1 <- ifelse(dat$Sepal.Width > 3, "A", "B")
+    dat$factor2 <- ifelse(dat$Petal.Length > 3.5, "C", "D")
+    dat$factor3 <- ifelse(dat$Sepal.Length > 5, "E", "F")
+    dat <<- dat
 
-    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = data)
+    model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = dat)
 
     estim <- estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), at = "all")
     expect_equal(dim(estim), c(28, 9))
@@ -81,9 +85,10 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
 
 
     # GLM - binomial
-    df <- iris
-    df$y <- as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))
-    model <- glm(y ~ Species, family = "binomial", data = df)
+    dat <- iris
+    dat$y <- as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))
+    dat <<- dat
+    model <- glm(y ~ Species, family = "binomial", data = dat)
 
     estim <- estimate_contrasts(model)
     expect_equal(dim(estim), c(3, 9))
@@ -91,11 +96,12 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
     expect_equal(dim(estim), c(3, 9))
 
     # GLM - poisson
-    data <- data.frame(
+    dat <- data.frame(
       counts = c(18, 17, 15, 20, 10, 20, 25, 13, 12),
       treatment = gl(3, 3)
     )
-    model <- glm(counts ~ treatment, data = data, family = poisson())
+    dat <<- dat
+    model <- glm(counts ~ treatment, data = dat, family = poisson())
 
     estim <- estimate_contrasts(model, transform = "response")
     expect_equal(dim(estim), c(3, 9))
@@ -103,13 +109,14 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
 
 
   test_that("estimate_contrasts - Bayesian", {
-    data <- iris
-    data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+    dat <- iris
+    dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
+    dat <<- dat
 
     model <- suppressWarnings(
       rstanarm::stan_glm(
         Sepal.Width ~ Species * Petal.Length_factor,
-        data = data,
+        data = dat,
         refresh = 0,
         iter = 200,
         chains = 2
@@ -137,10 +144,11 @@ if (require("logspline") && require("rstanarm") && require("lme4") && require("e
     expect_equal(dim(estim), c(12, 8))
 
     # GLM
-    df <- iris
-    df$y <- as.numeric(as.factor(ifelse(df$Sepal.Width > 3, "A", "B"))) - 1
+    dat <- iris
+    dat$y <- as.numeric(as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))) - 1
+    dat <<- dat
     model <- suppressWarnings(rstanarm::stan_glm(y ~ Species,
-      family = "binomial", data = df, refresh = 0,
+      family = "binomial", data = dat, refresh = 0,
       prior = rstanarm::normal(scale = 0.5)
     ))
 
