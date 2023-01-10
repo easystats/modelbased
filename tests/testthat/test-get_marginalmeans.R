@@ -3,7 +3,7 @@ if (require("marginaleffects") && require("lme4")) {
     model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
     estimated <- estimate_means(model, backend = "marginaleffects")
-    
+
     expect_equal(nrow(estimated), 3)
     expect_true(ncol(estimated) >= 5)
 

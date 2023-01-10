@@ -8,11 +8,4 @@
 library(testthat)
 library(modelbased)
 
-library(bayestestR)
-library(datawizard)
-library(effectsize)
-library(insight)
-library(parameters)
-library(performance)
-
 test_check("modelbased")
