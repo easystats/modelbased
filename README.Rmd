@@ -20,7 +20,7 @@ library(ggplot2)
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  dpi = 300,
+  dpi = 150,
   fig.path = "man/figures/",
   warning = FALSE,
   message = FALSE,
