@@ -5,7 +5,7 @@ requiet <- function(package) {
   )
 }
 
-# load all hard deps
+# load all hard dependencies
 library(bayestestR)
 library(datawizard)
 library(effectsize)
