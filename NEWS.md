@@ -1,5 +1,7 @@
 # modelbased (development version)
 
+# modelbased 0.8.6
+
 ## Breaking Changes
 
 - The minimum needed R version has been bumped to `3.6`.
