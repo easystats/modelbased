@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.6</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.6.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -393,7 +393,7 @@ to the x and y axes), "density_2d", "density_2d_filled",
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Sepal.Width"`.</span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Using alpha for a discrete variable is not advised.</span>
 <span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-8.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># TODO: fails with latest emmeans (1.8.0)</span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st">"mgcv"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
@@ -407,7 +407,10 @@ to the x and y axes), "density_2d", "density_2d_filled",
 <span class="r-in"><span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>, <span class="st">"Petal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Width"`.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend = "Petal.Width"`.</span>
+<span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-9.png" alt="" width="700" height="433"></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
