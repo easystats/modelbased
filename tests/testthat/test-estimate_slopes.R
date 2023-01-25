@@ -1,8 +1,8 @@
 if (
 
-  require("rstanarm") &&
+  requiet("rstanarm") &&
 
-    require("emmeans")) {
+    requiet("emmeans")) {
   test_that("estimate_slopes", {
     model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 

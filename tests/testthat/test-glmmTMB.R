@@ -1,4 +1,4 @@
-if (require("glmmTMB") && require("emmeans")) {
+if (requiet("glmmTMB") && requiet("emmeans")) {
   # skip_on_cran()
 
   data <- glmmTMB::Salamanders

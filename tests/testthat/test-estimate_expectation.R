@@ -1,4 +1,4 @@
-if (require("lme4") && require("insight")) {
+if (requiet("lme4")) {
   test_that("estimate_expectation", {
     model <- lmer(mpg ~ wt + factor(am) + (1 | cyl), data = mtcars)
     estim <- estimate_expectation(model)

@@ -1,17 +1,8 @@
-osx <- tryCatch({
-  si <- Sys.info()
-  if (!is.null(si["sysname"])) {
-    si["sysname"] == "Darwin" || grepl("^darwin", R.version$os)
-  } else {
-    FALSE
-  }
-})
-
-if (require("gamm4") &&
-  require("rstanarm") &&
-  require("lme4") &&
-  require("glmmTMB") &&
-  require("mgcv")) {
+if (requiet("gamm4") &&
+  requiet("rstanarm") &&
+  requiet("lme4") &&
+  requiet("glmmTMB") &&
+  requiet("mgcv")) {
   test_that("estimate_relation - shape", {
     # CI
     model <- lm(Petal.Length ~ Petal.Width, data = iris)
@@ -55,16 +46,14 @@ if (require("gamm4") &&
     expect_equal(nrow(estimate_link(model, length = 3, verbose = FALSE)), 9)
     expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3, verbose = FALSE)), c(3, 5))
 
-
-    if (!osx) {
-      # STAN_GAMM4
-      model <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
-        random = ~ (1 | Species), data = iris,
-        iter = 100, chains = 2, refresh = 0
-      ))
-      expect_equal(nrow(estimate_relation(model, length = 3)), 9)
-      expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
-    }
+    # STAN_GAMM4
+    skip_if_not(.Platform$OS.type == "windows")
+    model <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
+      random = ~ (1 | Species), data = iris,
+      iter = 100, chains = 2, refresh = 0
+    ))
+    expect_equal(nrow(estimate_relation(model, length = 3)), 9)
+    expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
   })
 
   test_that("estimate_response - Bayesian", {

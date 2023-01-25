@@ -1,4 +1,4 @@
-if (require("emmeans")) {
+if (requiet("emmeans")) {
   test_that("attributes_means", {
     model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 

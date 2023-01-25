@@ -1,8 +1,4 @@
-if (
-
-  require("rstanarm") &&
-
-    require("emmeans")) {
+if (requiet("rstanarm") && requiet("emmeans")) {
   test_that("estimate_means", {
     dat <- mtcars
     dat$gear <- as.factor(dat$gear)
@@ -122,7 +118,7 @@ if (
 
 
     # Mixed models
-    if (require("lme4")) {
+    if (requiet("lme4")) {
       dat <- iris
       dat$Petal.Length_factor <- as.factor(ifelse(dat$Petal.Length < 4.2, "A", "B"))
       dat <<- dat

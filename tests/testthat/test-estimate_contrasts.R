@@ -1,4 +1,4 @@
-if (require("logspline") && require("rstanarm") && require("lme4") && require("emmeans")) {
+if (requiet("logspline") && requiet("rstanarm") && requiet("lme4") && requiet("emmeans")) {
   test_that("estimate_contrasts - Frequentist", {
     # One factor
     dat <<- iris

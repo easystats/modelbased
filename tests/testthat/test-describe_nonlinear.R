@@ -1,4 +1,4 @@
-# if (require("rstanarm")) {
+# if (requiet("rstanarm")) {
 #   test_that("estimate_smooth", {
 #     skip_on_cran()
 #     set.seed(333)

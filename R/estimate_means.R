@@ -11,9 +11,8 @@
 #'  The latter is experimental and some features might not work.
 #' @inherit estimate_slopes details
 #'
-#' @examples
+#' @examplesIf require("emmeans")
 #' library(modelbased)
-#' if (require("emmeans")) {
 #'
 #' # Frequentist models
 #' # -------------------
@@ -30,20 +29,20 @@
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
-#' if (require("see")) {
-#'   plot(means) # which runs visualisation_recipe()
-#' }
-#' standardize(means)
-#' \donttest{
-#' if (require("lme4")) {
-#'   data <- iris
-#'   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#'   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
-#'   estimate_means(model)
-#'   estimate_means(model, at = "Sepal.Width", length = 3)
-#' }
-#' }
+#' @examplesIf require("see")
+#' plot(means) # which runs visualisation_recipe()
+#'
+#' standardize(means)
+#'
+#' @examplesIf require("lme4")
+#' \donttest{
+#' data <- iris
+#' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+#'
+#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+#' estimate_means(model)
+#' estimate_means(model, at = "Sepal.Width", length = 3)
 #' }
 #' @return A dataframe of estimated marginal means.
 #' @export
@@ -54,7 +53,6 @@ estimate_means <- function(model,
                            ci = 0.95,
                            backend = "emmeans",
                            ...) {
-
   # Compute means
   if (backend == "emmeans") {
     estimated <- get_emmeans(model, at, fixed, transform = transform, ...)

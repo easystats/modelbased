@@ -408,7 +408,7 @@ estimate_relation <- function(model,
           predictions[[i]][1]
         })
         # at values to names of non-focal terms (footer)
-        if(is.numeric(adjusted_values)) {
+        if (is.numeric(adjusted_values)) {
           grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
         } else {
           grid_specs$adjusted_for <- sprintf("%s (%s)", grid_specs$adjusted_for, adjusted_values)

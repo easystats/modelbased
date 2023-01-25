@@ -109,8 +109,8 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
+\dontshow{if (require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
-if (require("emmeans")) {
 
 # Frequentist models
 # -------------------
@@ -127,19 +127,20 @@ estimate_means(model, at = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
-if (require("see")) {
-  plot(means) # which runs visualisation_recipe()
-}
-standardize(means)
-\donttest{
-if (require("lme4")) {
-  data <- iris
-  data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+\dontshow{\}) # examplesIf}
+\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+plot(means) # which runs visualisation_recipe()
 
-  model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
-  estimate_means(model)
-  estimate_means(model, at = "Sepal.Width", length = 3)
+standardize(means)
+\dontshow{\}) # examplesIf}
+\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\donttest{
+data <- iris
+data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
+
+model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+estimate_means(model)
+estimate_means(model, at = "Sepal.Width", length = 3)
 }
-}
-}
+\dontshow{\}) # examplesIf}
 }

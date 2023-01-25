@@ -1,4 +1,4 @@
-if (require("brms") && require("emmeans")) {
+if (requiet("brms") && requiet("emmeans")) {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
 
   test_that("estimate_means - brms", {

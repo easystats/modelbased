@@ -70,44 +70,39 @@
 #' the effect of x averaged over all conditions, or instead within each
 #' condition (`using [estimate_slopes]`).
 #'
-#' @examples
-#' if (require("emmeans")) {
-#'   # Get an idea of the data
-#'   if (require("ggplot2")) {
-#'     ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
-#'       geom_point(aes(color = Species)) +
-#'       geom_smooth(color = "black", se = FALSE) +
-#'       geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
-#'       geom_smooth(aes(color = Species), method = "lm", se = FALSE)
-#'   }
+#' @examplesIf require("emmeans") && require("ggplot2")
+#' # Get an idea of the data
+#' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
+#'   geom_point(aes(color = Species)) +
+#'   geom_smooth(color = "black", se = FALSE) +
+#'   geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
+#'   geom_smooth(aes(color = Species), method = "lm", se = FALSE)
 #'
-#'   # Model it
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   # Compute the marginal effect of Petal.Length at each level of Species
-#'   slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
-#'   slopes
-#'   if (require("see")) {
-#'     plot(slopes)
-#'   }
-#'   standardize(slopes)
 #'
-#'   \dontrun{
-#'   # TODO: fails with latest emmeans (1.8.0)
-#'   if (require("mgcv") && require("see")) {
-#'     model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-#'     slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
-#'     summary(slopes)
-#'     plot(slopes)
+#' # Model it
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' # Compute the marginal effect of Petal.Length at each level of Species
+#' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+#' slopes
 #'
-#'     model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
-#'     slopes <- estimate_slopes(model,
-#'       trend = "Petal.Length",
-#'       at = c("Petal.Length", "Species"), length = 20
-#'     )
-#'     summary(slopes)
-#'     plot(slopes)
-#'   }}
-#' }
+#' @examplesIf require("see")
+#' plot(slopes)
+#'
+#' standardize(slopes)
+#'
+#' @examplesIf require("mgcv") && require("see")
+#' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
+#' slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+#' summary(slopes)
+#' plot(slopes)
+#'
+#' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
+#' slopes <- estimate_slopes(model,
+#'   trend = "Petal.Length",
+#'   at = c("Petal.Length", "Species"), length = 20
+#' )
+#' summary(slopes)
+#' plot(slopes)
 #' @return A data.frame of class `estimate_slopes`.
 #' @export
 estimate_slopes <- function(model,
