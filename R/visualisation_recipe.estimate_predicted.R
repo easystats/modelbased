@@ -161,10 +161,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   targets <- targets[targets != x1] # Remove from target list
 
   # if x-axis a factor, we jitter the points
-  if (!is.numeric(data[[x1]])) {
-    if (show_data %in% c("point", "points")) {
-      show_data <- "jitter"
-    }
+  if (!is.numeric(data[[x1]]) && show_data %in% c("point", "points")) {
+    show_data <- "jitter"
   }
 
 
@@ -203,7 +201,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   # 4+ interaction
   if (length(targets) > 0) {
     # TODO: We could add the fourth term as facets
-    warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).", call. = FALSE)
+    insight::format_warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).")
   }
 
 
@@ -211,7 +209,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   l <- 1
 
   # Raw data ---------------------
-  if (!is.null(show_data) && all(show_data != "none") && !all(show_data == FALSE)) {
+  if (!is.null(show_data) && all(show_data != "none") && !all(isFALSE(show_data))) {
     rawdata <- .visualisation_recipe_getrawdata(x)
 
     # Nicer points
@@ -269,8 +267,8 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Uncertainty -----------------------------------
 
   # Get CIs (reverse so that larger CIs are first)
-  ci_lows <- rev(names(data)[grepl("CI_low", names(data), fixed = TRUE)])
-  ci_highs <- rev(names(data)[grepl("CI_high", names(data), fixed = TRUE)])
+  ci_lows <- rev(grep("CI_low", names(data), fixed = TRUE, value = TRUE))
+  ci_highs <- rev(grep("CI_high", names(data), fixed = TRUE, value = TRUE))
 
   # Ribbon
   if (is.numeric(data[[x1]]) && (is.null(x3) || !is.numeric(data[[x2]])) && is.null(x3)) {
@@ -315,7 +313,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Predicted -----------------------------------
 
   # Line
-  if (skip_line == FALSE) {
+  if (isFALSE(skip_line)) {
     layers[[paste0("l", l)]] <- .visualisation_predicted_line(
       data,
       x1,
@@ -472,7 +470,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     alpha = alpha
   )
 
-  if (jitter == TRUE) {
+  if (isTRUE(jitter)) {
     insight::check_if_installed("ggplot2")
     out$position <- ggplot2::position_dodge2(width = 0.25)
   }

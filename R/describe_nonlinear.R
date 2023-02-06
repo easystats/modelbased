@@ -57,10 +57,10 @@ describe_nonlinear.numeric <- function(data, x = NULL, ...) {
 describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
   # Sanity check
   if (is.null(x) || !x %in% names(data)) {
-    stop("The name of the predictor variable (`x`) must be correctly supplied.", call. = FALSE)
+    insight::format_error("The name of the predictor variable (`x`) must be correctly supplied.")
   }
   if (is.null(y) || !y %in% names(data)) {
-    stop("The name of the response variable (`y`) must be correctly supplied.", call. = FALSE)
+    insight::format_error("The name of the response variable (`y`) must be correctly supplied.")
   }
 
   # Verify that the x-axis is sorted

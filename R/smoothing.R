@@ -31,7 +31,7 @@ smoothing <- function(x, method = "loess", strength = 0.25, ...) {
 
 #' @export
 smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
-  if (strength == 0 || strength == FALSE || is.null(method)) {
+  if (strength == 0 || isFALSE(strength) || is.null(method)) {
     return(x)
   }
 
@@ -42,7 +42,7 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
         stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       },
       warning = function(w) {
-        warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."), call. = FALSE)
+        insight::format_warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
         stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
       }
     )
@@ -58,10 +58,10 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
 
 #' @export
 smoothing.data.frame <- function(x, method = "loess", strength = 0.25, ...) {
-  nums <- names(x)[sapply(x, is.numeric)]
+  nums <- names(x)[vapply(x, is.numeric, TRUE)]
 
   # Stratify by factor levels
-  factors <- names(x)[sapply(x, is.factor)]
+  factors <- names(x)[vapply(x, is.factor, TRUE)]
 
   if (length(factors) > 0) {
     combinations <- unique(x[factors])

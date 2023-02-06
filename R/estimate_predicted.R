@@ -205,10 +205,10 @@ estimate_expectation <- function(model,
 #' @export
 estimate_response <- function(...) {
   #  TODO: If estimate_response() is removed, document `NULL` with this text.
-  message(insight::format_message(
+  insight::format_alert(
     "`estimate_response()` is deprecated.",
     "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead."
-  ))
+  )
   estimate_expectation(...)
 }
 

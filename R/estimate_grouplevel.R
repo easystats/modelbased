@@ -69,7 +69,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
-  random[sapply(random, function(x) all(is.na(x)))] <- NULL
+  random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
   # Correct for fixed effect
   type <- match.arg(type, c("random", "total"))

@@ -113,11 +113,7 @@ estimate_means <- function(model,
 
   # Levels
   if (!is.null(at) && length(at) > 0) {
-    table_footer <- paste0(
-      table_footer,
-      " estimated at ",
-      paste0(at, collapse = ", ")
-    )
+    table_footer <- paste0(table_footer, " estimated at ", toString(at))
   }
 
   # P-value adjustment footer

@@ -86,7 +86,7 @@ estimate_contrasts <- function(model,
                                ...) {
   # Deprecation
   if (!is.null(adjust)) {
-    warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.", call. = FALSE)
+    insight::format_warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.")
     p_adjust <- adjust
   }
 
@@ -125,8 +125,8 @@ estimate_contrasts <- function(model,
   level_cols <- strsplit(as.character(contrasts$contrast), " - |\\/")
   level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
   names(level_cols) <- c("Level1", "Level2")
-  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1)
-  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2)
+  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
+  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
 
   # Merge levels and rest
   contrasts$contrast <- NULL

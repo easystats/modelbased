@@ -16,12 +16,12 @@
 
   # TODO: this should be replaced by parameters::parameters(means)
   # Format names
-  names(means)[names(means) %in% c("conf.low")] <- "CI_low"
-  names(means)[names(means) %in% c("conf.high")] <- "CI_high"
-  names(means)[names(means) %in% c("std.error")] <- "SE"
-  names(means)[names(means) %in% c("marginalmean")] <- "Mean"
-  names(means)[names(means) %in% c("p.value")] <- "p"
-  names(means)[names(means) %in% c("statistic")] <- ifelse(insight::find_statistic(model) == "t-statistic", "t", "statistic")
+  names(means)[names(means) %in% "conf.low"] <- "CI_low"
+  names(means)[names(means) %in% "conf.high"] <- "CI_high"
+  names(means)[names(means) %in% "std.error"] <- "SE"
+  names(means)[names(means) %in% "marginalmean"] <- "Mean"
+  names(means)[names(means) %in% "p.value"] <- "p"
+  names(means)[names(means) %in% "statistic"] <- ifelse(insight::find_statistic(model) == "t-statistic", "t", "statistic")
 
   # Format terms
   term <- unique(means$term) # Get name of variable
