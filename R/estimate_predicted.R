@@ -308,7 +308,7 @@ estimate_relation <- function(model,
   }
 
   # If a visualisation_matrix is passed
-  if (inherits(model, "visualisation_matrix") || all(class(model) == "data.frame")) {
+  if (inherits(model, "visualisation_matrix") || all(inherits(model, "data.frame"))) {
     data_original <- data
     data <- model
     if ("model" %in% names(attributes(model))) {
@@ -316,7 +316,7 @@ estimate_relation <- function(model,
     } else if (insight::is_model(data_original)) {
       model <- data_original
     } else {
-      stop("A model must be passed to make predictions.", call. = FALSE)
+      insight::format_error("A model must be passed to make predictions.")
     }
   }
 
@@ -327,9 +327,9 @@ estimate_relation <- function(model,
     if (is_grid) {
       data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
-      stop(insight::format_message(
+      insight::format_error(
         "The `data` argument must either NULL, \"grid\" or another data frame."
-      ), call. = FALSE)
+      )
     }
   }
 
@@ -396,26 +396,26 @@ estimate_relation <- function(model,
   footer <- paste0("\nVariable predicted: ", insight::find_response(model), "\n")
 
   if ("at" %in% names(grid_specs)) {
-    footer <- paste0(footer, "Predictors modulated: ", paste0(grid_specs$at, collapse = ", "), "\n")
+    footer <- paste0(footer, "Predictors modulated: ", toString(grid_specs$at), "\n")
   }
 
-  if ("adjusted_for" %in% names(grid_specs)) {
-    if (length(grid_specs$adjusted_for) >= 1 && !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
-      # if we have values of adjusted terms, add these here
-      if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
-        # get values at which non-focal terms are hold constant
-        adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
-          predictions[[i]][1]
-        })
-        # at values to names of non-focal terms (footer)
-        if (is.numeric(adjusted_values)) {
-          grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
-        } else {
-          grid_specs$adjusted_for <- sprintf("%s (%s)", grid_specs$adjusted_for, adjusted_values)
-        }
+  if ("adjusted_for" %in% names(grid_specs) &&
+        length(grid_specs$adjusted_for) >= 1 &&
+        !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
+    # if we have values of adjusted terms, add these here
+    if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
+      # get values at which non-focal terms are hold constant
+      adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
+        predictions[[i]][1]
+      })
+      # at values to names of non-focal terms (footer)
+      if (is.numeric(adjusted_values)) {
+        grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
+      } else {
+        grid_specs$adjusted_for <- sprintf("%s (%s)", grid_specs$adjusted_for, adjusted_values)
       }
-      footer <- paste0(footer, "Predictors controlled: ", paste0(grid_specs$adjusted_for, collapse = ", "), "\n")
     }
+    footer <- paste0(footer, "Predictors controlled: ", toString(grid_specs$adjusted_for), "\n")
   }
 
   c(footer, "blue")
