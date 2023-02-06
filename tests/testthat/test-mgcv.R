@@ -43,8 +43,8 @@ if (requiet("mgcv") && requiet("gamm4") && requiet("emmeans")) {
 
   if (!osx) {
     test_that("estimate_link - mgcv gamm", {
-      estim <- estimate_link(model, length = 4)
-      expect_equal(dim(estim), c(16, 6))
+      estim <- estimate_link(model, length = 4, verbose = FALSE)
+      expect_identical(dim(estim), as.integer(c(16, 6)))
     })
   }
 
