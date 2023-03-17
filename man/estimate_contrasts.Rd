@@ -150,7 +150,7 @@ estimate_contrasts(model, at = "Petal.Width", length = 4)
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 standardize(estimated)
 \dontshow{\}) # examplesIf}
-\dontshow{if (requireNamespace("lme4", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("lme4", quietly = TRUE) && requireNamespace("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Other models (mixed, Bayesian, ...)
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -158,7 +158,7 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
 \dontshow{\}) # examplesIf}
-\dontshow{if (requireNamespace("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("rstanarm", quietly = TRUE) && requireNamespace("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(rstanarm)
 
 data <- mtcars
