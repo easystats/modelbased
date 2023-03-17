@@ -109,7 +109,10 @@ estimate_contrasts <- function(model,
     contrasts <- cbind(estimated@grid, contrasts)
     contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
   } else {
-    contrasts <- as.data.frame(merge(as.data.frame(estimated), stats::confint(estimated, level = ci, adjust = p_adjust)))
+    contrasts <- as.data.frame(merge(
+      as.data.frame(estimated),
+      stats::confint(estimated, level = ci, adjust = p_adjust)
+    ))
     contrasts <- .clean_names_frequentist(contrasts)
   }
   contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)

@@ -39,11 +39,25 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   if (method == "loess") {
     smoothed <- tryCatch(
       {
-        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
+        stats::predict(stats::loess(
+          paste0("y ~ x"),
+          data = data.frame(y = x, x = seq_len(length(x))),
+          span = strength
+        ))
       },
       warning = function(w) {
-        insight::format_warning(paste0("Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ", strength, ")."))
-        stats::predict(stats::loess(paste0("y ~ x"), data = data.frame(y = x, x = seq_len(length(x))), span = strength))
+        insight::format_warning(
+          paste0(
+            "Smoothing had some difficulties. Try tweaking the smoothing strength (currently at ",
+            strength,
+            ")."
+          )
+        )
+        stats::predict(stats::loess(
+          paste0("y ~ x"),
+          data = data.frame(y = x, x = seq_len(length(x))),
+          span = strength
+        ))
       }
     )
   } else if (method == "smooth") {

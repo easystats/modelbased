@@ -10,7 +10,8 @@
 #'   `show_data` can be "points" (the points of the original data corresponding
 #'   to the x and y axes), "density_2d", "density_2d_filled",
 #'   "density_2d_polygon" or "density_2d_raster".
-#' @param point,jitter,boxplot,violin,pointrange,density_2d,line,hline,ribbon,labs,facet_wrap Additional aesthetics and parameters for the geoms (see customization example).
+#' @param point,jitter,boxplot,violin,pointrange,density_2d,line,hline,ribbon,labs,facet_wrap Additional
+#' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Other arguments passed to other functions.
 #'
 #' @examples
@@ -199,7 +200,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   }
 
   # 4+ interaction
-  if (length(targets) > 0) {
+  if (length(targets) > 0L) {
     # TODO: We could add the fourth term as facets
     insight::format_warning("It seems like more than 4 focal terms are present. Not sure how to plot it, so keeping only the 3 first variables (however, this might not be a good visualisation of your model).")
   }
@@ -273,7 +274,12 @@ visualisation_recipe.estimate_predicted <- function(x,
   # Ribbon
   if (is.numeric(data[[x1]]) && (is.null(x3) || !is.numeric(data[[x2]])) && is.null(x3)) {
     if ("iter_1" %in% names(data)) {
-      layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(data, x1, fill = color, ribbon = ribbon)
+      layers[[paste0("l", l)]] <- .visualisation_predicted_iterations(
+        data,
+        x1,
+        fill = color,
+        ribbon = ribbon
+      )
       l <- l + 1
     } else {
       for (i in seq_len(length(ci_lows))) {

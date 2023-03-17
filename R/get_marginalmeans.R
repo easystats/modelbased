@@ -25,7 +25,7 @@
 
   # Format terms
   term <- unique(means$term) # Get name of variable
-  if (length(term) > 1) {
+  if (length(term) > 1L) {
     insight::format_error("marignalmeans backend can currently only deal with one 'at' variable.")
   }
   names(means)[names(means) %in% c("value")] <- term # Replace 'value' col by var name

@@ -174,7 +174,8 @@ model_emmeans <- get_emmeans
     terms <- insight::find_terms(model)$conditional
     for (var_at in names(args$emmeans_at)) {
       term <- terms[grepl(var_at, terms, fixed = TRUE)]
-      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) || any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
+      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
+        any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
         args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
         args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
       }

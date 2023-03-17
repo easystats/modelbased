@@ -57,19 +57,49 @@ if (requiet("gamm4") &&
   })
 
   test_that("estimate_response - Bayesian", {
-    model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt + poly(cyl, 2, raw = TRUE), data = mtcars, refresh = 0, iter = 200, chains = 2))
+    model <- suppressWarnings(rstanarm::stan_glm(
+      mpg ~ wt + poly(cyl, 2, raw = TRUE),
+      data = mtcars,
+      refresh = 0,
+      iter = 200,
+      chains = 2
+    ))
     estim <- estimate_prediction(model, seed = 333)
     expect_equal(nrow(estim), nrow(mtcars))
 
-    model <- suppressWarnings(rstanarm::stan_glm(mpg ~ wt * as.factor(gear), data = mtcars, refresh = 0, iter = 200, chains = 2))
-    estim <- estimate_prediction(model, data = "grid", seed = 333, preserve_range = FALSE)
+    model <- suppressWarnings(rstanarm::stan_glm(
+      mpg ~ wt * as.factor(gear),
+      data = mtcars,
+      refresh = 0,
+      iter = 200,
+      chains = 2
+    ))
+    estim <- estimate_prediction(model,
+      data = "grid",
+      seed = 333,
+      preserve_range = FALSE
+    )
     expect_equal(dim(estim), c(30, 6))
 
-    model <- suppressWarnings(rstanarm::stan_glm(mpg ~ as.factor(gear) / wt, data = mtcars, refresh = 0, iter = 200, chains = 2))
+    model <- suppressWarnings(rstanarm::stan_glm(
+      mpg ~ as.factor(gear) / wt,
+      data = mtcars,
+      refresh = 0,
+      iter = 200,
+      chains = 2
+    ))
     estim <- estimate_prediction(model)
     expect_equal(dim(estim), c(32, 7))
 
-    model <- suppressWarnings(rstanarm::stan_glm(Sepal.Width ~ Petal.Width, data = iris, refresh = 0, iter = 200, chains = 2))
+    model <- suppressWarnings(
+      rstanarm::stan_glm(
+        Sepal.Width ~ Petal.Width,
+        data = iris,
+        refresh = 0,
+        iter = 200,
+        chains = 2
+      )
+    )
     estim <- estimate_link(model, keep_iterations = TRUE)
     draws <- bayestestR::reshape_iterations(estim)
     expect_equal(c(nrow(draws), ncol(draws)), c(2000, 8))

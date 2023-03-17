@@ -400,8 +400,8 @@ estimate_relation <- function(model,
   }
 
   if ("adjusted_for" %in% names(grid_specs) &&
-        length(grid_specs$adjusted_for) >= 1 &&
-        !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
+    length(grid_specs$adjusted_for) >= 1 &&
+    !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
       # get values at which non-focal terms are hold constant
