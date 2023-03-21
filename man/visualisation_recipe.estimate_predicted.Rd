@@ -68,7 +68,8 @@ input is the result of \code{estimate_response} or \code{estimate_relation},
 to the x and y axes), "density_2d", "density_2d_filled",
 "density_2d_polygon" or "density_2d_raster".}
 
-\item{point, jitter, boxplot, violin, pointrange, density_2d, line, hline, ribbon, labs, facet_wrap}{Additional aesthetics and parameters for the geoms (see customization example).}
+\item{point, jitter, boxplot, violin, pointrange, density_2d, line, hline, ribbon, labs, facet_wrap}{Additional
+aesthetics and parameters for the geoms (see customization example).}
 }
 \description{
 Visualisation Recipe for 'modelbased' Objects

@@ -11,7 +11,7 @@
 #'  The latter is experimental and some features might not work.
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf require("emmeans")
+#' @examplesIf require("emmeans", quietly = TRUE)
 #' library(modelbased)
 #'
 #' # Frequentist models
@@ -30,12 +30,12 @@
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
 #'
-#' @examplesIf require("see")
+#' @examplesIf require("see") && require("emmeans", quietly = TRUE)
 #' plot(means) # which runs visualisation_recipe()
 #'
 #' standardize(means)
 #'
-#' @examplesIf require("lme4")
+#' @examplesIf require("lme4") && require("emmeans", quietly = TRUE)
 #' \donttest{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -44,7 +44,7 @@
 #' estimate_means(model)
 #' estimate_means(model, at = "Sepal.Width", length = 3)
 #' }
-#' @return A dataframe of estimated marginal means.
+#' @return A data frame of estimated marginal means.
 #' @export
 estimate_means <- function(model,
                            at = "auto",

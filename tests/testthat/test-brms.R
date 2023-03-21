@@ -1,3 +1,5 @@
+skip_on_os("windows")
+
 if (requiet("brms") && requiet("emmeans")) {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
 

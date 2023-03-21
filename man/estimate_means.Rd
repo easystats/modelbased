@@ -44,7 +44,7 @@ The latter is experimental and some features might not work.}
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{
-A dataframe of estimated marginal means.
+A data frame of estimated marginal means.
 }
 \description{
 Estimate average value of response variable at each factor levels. For
@@ -109,7 +109,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -128,12 +128,12 @@ estimate_means(model, at = "Sepal.Width=c(2, 4)")
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("see") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 plot(means) # which runs visualisation_recipe()
 
 standardize(means)
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("lme4")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
