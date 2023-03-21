@@ -37,7 +37,7 @@ Imports:
     bayestestR (>= 0.13.0),
     datawizard (>= 0.6.5),
     effectsize (>= 0.8.3),
-    insight (>= 0.19.0),
+    insight (>= 0.19.1),
     parameters (>= 0.20.2),
     performance (>= 0.10.1),
     graphics,
