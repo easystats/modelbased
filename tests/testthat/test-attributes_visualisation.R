@@ -3,15 +3,15 @@ if (requiet("emmeans")) {
     model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
     estim <- estimate_means(model)
-    expect_equal(attributes(estim)$at, "Species")
-    expect_equal(attributes(estim)$fixed, NULL)
+    expect_identical(attributes(estim)$at, "Species")
+    expect_identical(attributes(estim)$fixed, NULL)
 
     estim <- estimate_means(model, fixed = "Sepal.Width")
-    expect_equal(attributes(estim)$at, "Species")
-    expect_equal(attributes(estim)$fixed, "Sepal.Width")
+    expect_identical(attributes(estim)$at, "Species")
+    expect_identical(attributes(estim)$fixed, "Sepal.Width")
 
     estim <- estimate_means(model, at = "all")
-    expect_equal(attributes(estim)$at, c("Species", "Sepal.Width"))
+    expect_identical(attributes(estim)$at, c("Species", "Sepal.Width"))
   })
 
 
@@ -20,14 +20,14 @@ if (requiet("emmeans")) {
     model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
     estim <- estimate_contrasts(model)
-    expect_equal(attributes(estim)$contrast, "Species")
-    expect_equal(attributes(estim)$at, NULL)
-    expect_equal(attributes(estim)$fixed, NULL)
+    expect_identical(attributes(estim)$contrast, "Species")
+    expect_identical(attributes(estim)$at, NULL)
+    expect_identical(attributes(estim)$fixed, NULL)
 
     estim <- estimate_contrasts(model, fixed = "Sepal.Width")
-    expect_equal(attributes(estim)$contrast, "Species")
-    expect_equal(attributes(estim)$fixed, "Sepal.Width")
-    expect_equal(attributes(estim)$modulate, NULL)
+    expect_identical(attributes(estim)$contrast, "Species")
+    expect_identical(attributes(estim)$fixed, "Sepal.Width")
+    expect_identical(attributes(estim)$modulate, NULL)
   })
 
 
@@ -35,6 +35,6 @@ if (requiet("emmeans")) {
     model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
     estim <- estimate_link(model)
-    expect_equal(attributes(estim)$response, "Sepal.Length")
+    expect_identical(attributes(estim)$response, "Sepal.Length")
   })
 }
