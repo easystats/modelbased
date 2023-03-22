@@ -14,7 +14,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
     
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.6.2</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.6.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -433,9 +433,9 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |        95% CI |     pd | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |       5.67 | [2.53,  8.96] |   100% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |      10.27 | [6.95, 13.63] |   100% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |       4.58 | [1.08,  7.84] | 99.48% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |       5.57 | [2.41,  8.73] |   100% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |      10.19 | [6.91, 13.48] |   100% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |       4.60 | [1.24,  8.12] | 99.48% |        0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at cyl</span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"am"</span><span class="op">)</span></span></span>
@@ -447,9 +447,9 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | am | Difference |         95% CI |     pd | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |  0 |       3.77 | [-1.00,  8.71] | 94.50% |     1.00%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |  0 |       7.81 | [ 3.79, 11.91] |   100% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |  0 |       4.08 | [ 0.30,  7.59] | 98.05% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |  0 |       3.57 | [-1.05,  8.41] | 93.60% |     0.92%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |  0 |       7.74 | [ 3.56, 11.71] |   100% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |  0 |       4.09 | [ 0.48,  7.70] | 98.78% |        0%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at cyl</span></span>
 <span class="r-in"><span></span></span>
@@ -464,9 +464,9 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |        95% CI |     pd | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |       2.25 | [-1.30, 5.77] | 89.65% |     1.71%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |       4.76 | [ 1.09, 8.38] | 99.55% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |       2.52 | [-0.46, 5.16] | 95.28% |     1.42%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 |       2.18 | [-1.25, 5.64] | 90.30% |     2.11%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 |       4.76 | [ 1.37, 8.36] | 99.45% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 |       2.55 | [-0.15, 5.31] | 96.73% |     1.16%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at cyl</span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, fixed <span class="op">=</span> <span class="st">"wt"</span><span class="op">)</span></span></span>
@@ -478,9 +478,9 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 |   wt | Difference |        95% CI |     pd | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 3.22 |       2.25 | [-1.30, 5.77] | 89.65% |     1.71%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 3.22 |       4.76 | [ 1.09, 8.38] | 99.55% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 3.22 |       2.52 | [-0.46, 5.16] | 95.28% |     1.42%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 3.22 |       2.18 | [-1.25, 5.64] | 90.30% |     2.11%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 3.22 |       4.76 | [ 1.37, 8.36] | 99.45% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 3.22 |       2.55 | [-0.15, 5.31] | 96.73% |     1.16%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at cyl</span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, at <span class="op">=</span> <span class="st">"wt"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
@@ -492,18 +492,18 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 |   wt | Difference |          95% CI |     pd | % in ROPE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 1.51 |       6.01 | [ -3.50, 15.55] | 90.30% |     0.92%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 1.51 |       9.92 | [  4.55, 15.13] | 99.98% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 1.51 |       3.89 | [ -6.18, 13.71] | 78.10% |     1.32%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 2.82 |       3.16 | [ -0.13,  6.51] | 97.00% |     0.87%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 2.82 |       5.99 | [  2.61,  9.22] | 99.90% |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 2.82 |       2.86 | [ -0.82,  6.32] | 93.88% |     1.16%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 4.12 |       0.29 | [ -7.45,  7.99] | 53.02% |     2.32%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 4.12 |       1.95 | [ -3.17,  7.64] | 78.12% |     2.08%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 4.12 |       1.75 | [ -4.27,  7.79] | 71.83% |     2.13%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 5.42 |      -2.59 | [-17.91, 12.66] | 64.00% |     1.11%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 5.42 |      -1.98 | [-10.72,  7.20] | 67.75% |     1.50%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 5.42 |       0.78 | [-12.07, 13.76] | 54.57% |     1.58%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 1.51 |       6.09 | [ -3.22, 14.91] | 90.65% |     0.58%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 1.51 |       9.95 | [  4.79, 15.02] |   100% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 1.51 |       3.92 | [ -6.23, 13.82] | 78.08% |     1.47%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 2.82 |       3.11 | [ -0.09,  6.47] | 97.02% |     0.87%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 2.82 |       5.96 | [  2.70,  9.24] | 99.98% |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 2.82 |       2.90 | [ -0.66,  6.34] | 94.65% |     1.34%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 4.12 |       0.12 | [ -7.31,  7.69] | 51.32% |     2.47%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 4.12 |       1.96 | [ -3.02,  7.12] | 78.45% |     2.47%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 4.12 |       1.91 | [ -4.01,  7.56] | 74.20% |     2.21%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl6 | 5.42 |      -2.89 | [-17.50, 12.20] | 64.62% |     1.11%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl4   |   cyl8 | 5.42 |      -2.03 | [-10.43,  6.78] | 67.60% |     1.50%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> cyl6   |   cyl8 | 5.42 |       0.86 | [-12.23, 13.79] | 56.00% |     1.42%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at cyl</span></span>
 <span class="r-in"><span></span></span>
@@ -517,36 +517,36 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Petal.Length | Difference |       95% CI |   BF</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         1.00 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         1.00 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         1.00 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         1.66 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         1.66 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         1.66 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         2.31 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         2.31 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         2.31 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         2.97 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         2.97 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         2.97 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         3.62 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         3.62 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         3.62 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         4.28 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         4.28 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         4.28 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         4.93 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         4.93 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         4.93 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         5.59 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         5.59 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         5.59 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         6.24 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         6.24 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         6.24 |       0.41 | [0.21, 0.63] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         6.90 |       1.72 | [1.37, 2.07] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         6.90 |       2.14 | [1.61, 2.65] | 1.00</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         6.90 |       0.41 | [0.21, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         1.00 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         1.00 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         1.00 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         1.66 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         1.66 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         1.66 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         2.31 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         2.31 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         2.31 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         2.97 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         2.97 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         2.97 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         3.62 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         3.62 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         3.62 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         4.28 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         4.28 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         4.28 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         4.93 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         4.93 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         4.93 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         5.59 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         5.59 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         5.59 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         6.24 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         6.24 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         6.24 |       0.42 | [0.20, 0.63] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |         6.90 |       1.73 | [1.37, 2.08] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |         6.90 |       2.15 | [1.59, 2.67] | 1.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |         6.90 |       0.42 | [0.20, 0.63] | 1.00</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
