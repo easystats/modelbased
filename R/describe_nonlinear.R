@@ -1,7 +1,7 @@
 #' Describe the smooth term (for GAMs) or non-linear predictors
 #'
 #' This function summarises the smooth term trend in terms of linear segments.
-#' Using the approximative derivative, it separates a non-linear vector into
+#' Using the approximate derivative, it separates a non-linear vector into
 #' quasi-linear segments (in which the trend is either positive or negative).
 #' Each of this segment its characterized by its beginning, end, size (in
 #' proportion, relative to the total size) trend (the linear regression
@@ -14,17 +14,15 @@
 #' @param ... Other arguments to be passed to or from.
 #'
 #' @examples
-#' library(modelbased)
-#'
 #' # Create data
 #' data <- data.frame(x = rnorm(200))
 #' data$y <- data$x^2 + rnorm(200, 0, 0.5)
 #'
-#' model <- lm(y ~ poly(x, 2), data = data)
+#' model <<- lm(y ~ poly(x, 2), data = data)
 #' link_data <- estimate_relation(model, length = 100)
 #'
 #' describe_nonlinear(link_data, x = "x")
-#' @return A dataframe of linear description of non-linear terms.
+#' @return A data frame of linear description of non-linear terms.
 #' @export
 describe_nonlinear <- function(data, ...) {
   UseMethod("describe_nonlinear")
@@ -55,7 +53,7 @@ describe_nonlinear.numeric <- function(data, x = NULL, ...) {
 #' @rdname describe_nonlinear
 #' @export
 describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
-  # Sanity check
+  # Input validation
   if (is.null(x) || !x %in% names(data)) {
     insight::format_error("The name of the predictor variable (`x`) must be correctly supplied.")
   }
@@ -112,7 +110,8 @@ estimate_smooth <- describe_nonlinear
       Start = x[idx_start],
       End = x[idx_end],
       Length = (inversions[i + 1] - inversions[i]) / n,
-      Change = y[idx_end] - y[idx_start]
+      Change = y[idx_end] - y[idx_start],
+      stringsAsFactors = FALSE
     )
     segment$Slope <- segment$Change / (segment$End - segment$Start)
 
@@ -121,5 +120,6 @@ estimate_smooth <- describe_nonlinear
 
     out <- rbind(out, segment)
   }
+
   out
 }

@@ -1,12 +1,12 @@
-if (requiet("marginaleffects") && requiet("lme4")) {
-  test_that("get_marginaleffects", {
-    model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+test_that("get_marginaleffects", {
+  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("lme4")
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-    estimated <- estimate_means(model, backend = "marginaleffects")
+  estimated <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
 
-    expect_equal(nrow(estimated), 3)
-    expect_true(ncol(estimated) >= 5)
+  expect_equal(nrow(estimated), 3)
+  expect_true(ncol(estimated) >= 5)
 
-    # get_marginaleffects(model, trend = "Petal.Length", at = "Species", length = 10)
-  })
-}
+  # get_marginaleffects(model, trend = "Petal.Length", at = "Species", length = 10)
+})

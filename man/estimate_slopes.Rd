@@ -89,7 +89,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans") && require("ggplot2")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("emmeans") && require("ggplot2") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
@@ -97,19 +97,18 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
   geom_smooth(aes(color = Species), linetype = "dotted", se = FALSE) +
   geom_smooth(aes(color = Species), method = "lm", se = FALSE)
 
-
 # Model it
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 # Compute the marginal effect of Petal.Length at each level of Species
 slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
 slopes
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
+# Plot it
 plot(slopes)
 
 standardize(slopes)
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("mgcv") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mgcv") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
 summary(slopes)
