@@ -112,7 +112,7 @@ We can now add these means, as well as the [**credible interval (CI)**](https://
 representing the uncertainty of the estimation, as an overlay on the previous
 plot:
 
-```{r }
+```{r}
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter2(width = 0.05, alpha = 0.5) +
@@ -148,7 +148,7 @@ means change depending on the predictors.
 <!-- The following figure is really difficult to make sense of -->
 <!-- We need to think of a simpler way to visualize these -->
 
-```{r }
+```{r}
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter2(width = 0.05, alpha = 0.5) +

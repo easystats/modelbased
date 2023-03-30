@@ -57,7 +57,7 @@ represent and understand them.
 For instance, let's fit a simple linear model that models the relationship
 between `Sepal.Width` and `Sepal.Length`.
 
-```{r }
+```{r}
 library(parameters)
 
 model <- lm(Sepal.Width ~ Sepal.Length, data = iris)
@@ -67,7 +67,7 @@ model_parameters(model)
 The most obvious way of representing this model is to plot the data points and
 add the regression line using the `geom_smooth` function from `ggplot2`:
 
-```{r }
+```{r}
 library(ggplot2)
 library(see)
 library(poorman)
@@ -85,7 +85,7 @@ Using these *x* and *y* points, we can then create the regression line.
 
 Let's try the `visualisation_matrix` function from the `modelbased` package (note that this function is the same as [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html), just with a different name).
 
-```{r }
+```{r}
 library(modelbased)
 
 visualisation_matrix(iris["Sepal.Length"])
@@ -98,7 +98,7 @@ adjust that through the `length` argument. For instance, for linear relationship
 (i.e., a straight line), two points are in theory sufficient. Let's generate 
 predictions using this reference grid of the predictor.
 
-```{r }
+```{r}
 vizdata <- visualisation_matrix(iris["Sepal.Length"], length = 2)
 vizdata$Predicted <- predict(model, vizdata)
 vizdata
@@ -107,7 +107,7 @@ vizdata
 Now that we have our *x* and *y* values, we can plot the line as an overlay to
 the actual data points:
 
-```{r }
+```{r}
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point() +
   geom_line(data = vizdata, aes(y = Predicted), size = 1, color = "red") +
@@ -126,7 +126,7 @@ adjusting the model for this grouping structure is to add it as a **random effec
 in a **mixed model**. In the model below, the "fixed" effects (the parameters of 
 interest) will be adjusted ("averaged over") to the random effects.
 
-```{r }
+```{r}
 library(lme4)
 
 model <- lmer(Sepal.Width ~ Sepal.Length + (1 | Species), data = iris)
@@ -142,7 +142,7 @@ from the **insight** package, which is a more robust and user-friendly version
 of `predict()`.
 
 
-```{r }
+```{r}
 vizdata <- visualisation_matrix(iris["Sepal.Length"])
 vizdata$Predicted <- insight::get_predicted(model, vizdata)
 
@@ -157,7 +157,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
 The above way of constructing the reference grid, i.e., by providing a single
 column of data to the function, is almost equivalent to the following:
 
-```{r }
+```{r}
 vizdata <- visualisation_matrix(iris, at = "Sepal.Length")
 vizdata
 ```
@@ -169,7 +169,7 @@ interested.
 
 By default, **factors** are fixed by their **"reference" level** and **numeric variables** are fixed at their **mean**. However, this can be easily changed:
 
-```{r }
+```{r}
 vizdata <- visualisation_matrix(iris, at = "Sepal.Length", numerics = "min")
 vizdata
 ```
@@ -183,7 +183,7 @@ factor.
 
 Let's visualise the regression line for each of the levels of `Species`:
 
-```{r }
+```{r}
 model <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
 
 vizdata <- visualisation_matrix(iris, at = c("Sepal.Length", "Species"), length = 5)
@@ -204,7 +204,7 @@ line**. The `preserve_range` option allows to remove observations that are
 "outside" the original dataset (however, the length should be increased to
 improve the precision toward the edges):
 
-```{r }
+```{r}
 vizdata <- visualisation_matrix(iris,
   at = c("Sepal.Length", "Species"),
   length = 100,
@@ -221,7 +221,7 @@ ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
 
 # Visualising an interaction between two numeric variables (three-way interaction)
 
-```{r }
+```{r}
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 model_parameters(model)
 ```
@@ -238,7 +238,7 @@ the interaction.
 We can obtain the right reference grid quite easily by chaining two
 `visualisation_matrix` together as follows:
 
-```{r }
+```{r}
 vizdata <- iris %>%
   visualisation_matrix(c("Petal.Length", "Petal.Width"), length = 10) %>%
   visualisation_matrix("Petal.Width", length = 5, numerics = "all")
@@ -253,7 +253,7 @@ using `numerics = "all"`.
 
 We can then visualise it as follows:
 
-```{r }
+```{r}
 vizdata$Predicted <- insight::get_predicted(model, vizdata)
 
 iris %>%
@@ -267,13 +267,13 @@ iris %>%
 Such plot can be more clear by expressing the interaction variable in terms of
 deviations from the mean (as a standardized variable).
 
-```{r }
+```{r}
 # Express values in an abstract way
 vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, reference = iris$Petal.Width)
 
-iris %>%
-  ggplot(aes(x = Petal.Length, y = Sepal.Length)) +
-  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) + # Only shapes from 21 to 25 have a fill aesthetic
+ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
+  # Only shapes from 21 to 25 have a fill aesthetic
+  geom_point2(aes(fill = Petal.Width), color = "white", shape = 21, size = 5) +
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = "none") +
@@ -292,7 +292,7 @@ To illustrate this, let's set up a **general additive mixed model (GAMM)**,
 where we are going to specify a **smooth term** (a non-linear relationship;
 specified by `s()` function) and some **random effects** structure. 
 
-```{r }
+```{r}
 library(gamm4)
 
 model <- gamm4::gamm4(
@@ -310,13 +310,13 @@ visualisation_matrix(model, length = 3, include_random = FALSE)
 
 We also skip the smooth term if we are interested only in the fixed effects:
 
-```{r }
+```{r}
 visualisation_matrix(model, length = 3, include_random = FALSE, include_smooth = FALSE)
 ```
 
 We can also include random effects:
 
-```{r }
+```{r}
 visualisation_matrix(model, length = 5, include_random = TRUE)
 ```
 

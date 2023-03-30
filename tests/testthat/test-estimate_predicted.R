@@ -115,11 +115,6 @@ test_that("estimate_response - Bayesian", {
   draws <- bayestestR::reshape_iterations(estim)
   expect_equal(c(nrow(draws), ncol(draws)), c(2000, 8))
 
-  # Polr
-  # model <- suppressWarnings(rstanarm::stan_polr(Species ~ Petal.Width + Petal.Length, data = iris, refresh = 0, iter = 200, chains = 2, prior = rstanarm::R2(0.2, "mean")))
-  # estim <- estimate_link(model, length = 6)
-  # expect_equal(dim(estim), c(36, 6))
-
   # Non-sampling algorithms
   model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh = 0)
   estim <- estimate_link(model, keep_iterations = TRUE)
