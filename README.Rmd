@@ -124,7 +124,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
   geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
   # Add relationship lines
-  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), linewidth = 1) +
   # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = "none") +
@@ -156,7 +156,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   geom_jitter2(width = 0.05, alpha = 0.5) +
 
   # Add pointrange and line from means
-  geom_line(data = means, aes(y = Mean, group = 1), size = 1) +
+  geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1) +
   geom_pointrange(
     data = means,
     aes(y = Mean, ymin = CI_low, ymax = CI_high),
@@ -404,7 +404,7 @@ fixed_pred <- estimate_relation(model) # This time, include_random is FALSE (def
 
 plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_ribbon(data = fixed_pred, aes(x = Days, ymin = CI_low, ymax = CI_high), alpha = 0.4) +
-  geom_line(data = fixed_pred, aes(x = Days, y = Predicted), size = 2)
+  geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
 
 ## Code of Conduct

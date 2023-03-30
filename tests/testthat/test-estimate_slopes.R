@@ -24,4 +24,3 @@ test_that("estimate_slopes", {
   estim <- suppressMessages(estimate_slopes(model, at = "Sepal.Width = c(1, 2, 3)"))
   expect_equal(dim(estim), c(3, 9))
 })
-

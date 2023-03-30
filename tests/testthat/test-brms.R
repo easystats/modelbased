@@ -26,4 +26,3 @@ test_that("estimate_means - brms", {
   estim <- estimate_slopes(model, at = "Species")
   expect_equal(dim(estim), c(3, 5))
 })
-

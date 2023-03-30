@@ -153,4 +153,3 @@ test_that("mixed models", {
   estim <- suppressMessages(estimate_means(model))
   expect_equal(dim(estim), c(3, 5))
 })
-

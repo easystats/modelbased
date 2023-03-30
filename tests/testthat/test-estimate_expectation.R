@@ -60,4 +60,3 @@ test_that("estimate_expectation - data-grid", {
     c("cyl", "Predicted", "SE", "CI_low", "CI_high")
   )
 })
-

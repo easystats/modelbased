@@ -47,7 +47,7 @@ test_that("estimate_link", {
 
   # GAMM4
   model <- gamm4::gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
-                        random = ~ (1 | Species), data = iris
+    random = ~ (1 | Species), data = iris
   )
   expect_equal(nrow(estimate_link(model, length = 3, verbose = FALSE)), 9)
   expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3, verbose = FALSE)), c(3, 5))
@@ -55,8 +55,8 @@ test_that("estimate_link", {
   # STAN_GAMM4
   skip_if_not(.Platform$OS.type == "windows")
   model <- suppressWarnings(rstanarm::stan_gamm4(Petal.Length ~ Petal.Width + s(Sepal.Length),
-                                                 random = ~ (1 | Species), data = iris,
-                                                 iter = 100, chains = 2, refresh = 0
+    random = ~ (1 | Species), data = iris,
+    iter = 100, chains = 2, refresh = 0
   ))
   expect_equal(nrow(estimate_relation(model, length = 3)), 9)
   expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
@@ -86,9 +86,9 @@ test_that("estimate_response - Bayesian", {
     chains = 2
   ))
   estim <- estimate_prediction(model,
-                               data = "grid",
-                               seed = 333,
-                               preserve_range = FALSE
+    data = "grid",
+    seed = 333,
+    preserve_range = FALSE
   )
   expect_equal(dim(estim), c(30, 6))
 
@@ -179,4 +179,3 @@ test_that("estimate_response - VisMatrix", {
     c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high")
   )
 })
-

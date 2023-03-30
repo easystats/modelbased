@@ -39,4 +39,3 @@ test_that("attributes_link", {
   estim <- estimate_link(model)
   expect_identical(attributes(estim)$response, "Sepal.Length")
 })
-

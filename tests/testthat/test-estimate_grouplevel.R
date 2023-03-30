@@ -40,4 +40,3 @@ test_that("estimate_grouplevel - lme4", {
   all(reshaped$grp == ref$grp)
   all(reshaped$subgrp == ref$subgrp)
 })
-

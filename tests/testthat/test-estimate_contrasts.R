@@ -156,8 +156,8 @@ test_that("estimate_contrasts - Bayesian", {
   dat$y <- as.numeric(as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))) - 1
   dat <<- dat
   model <- suppressWarnings(rstanarm::stan_glm(y ~ Species,
-                                               family = "binomial", data = dat, refresh = 0,
-                                               prior = rstanarm::normal(scale = 0.5)
+    family = "binomial", data = dat, refresh = 0,
+    prior = rstanarm::normal(scale = 0.5)
   ))
 
   estim <- suppressMessages(estimate_contrasts(model))
@@ -200,4 +200,3 @@ test_that("estimate_contrasts - dfs", {
   # TODO: check out why this test is failing
   # expect_true(any(estim1$CI_low != estim2$CI_low))
 })
-

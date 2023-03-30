@@ -78,4 +78,3 @@ test_that("estimate_link - mgcv gamm", {
 #   estim <- estimate_link(model, length=4)
 #   expect_equal(dim(estim), c(16, 5))
 # })
-
