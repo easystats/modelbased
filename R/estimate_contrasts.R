@@ -135,6 +135,31 @@ estimate_contrasts <- function(model,
   contrasts$contrast <- NULL
   contrasts <- cbind(level_cols, contrasts)
 
+  # Add effect size (Cohen's d)
+  if (is.null(contrast) && is.null(fixed) && is.null(at)) {
+    dat <- insight::get_data(model)
+    resp <- insight::find_response(model)
+
+    if (is.numeric(dat[[resp]])) {
+      dat <- datawizard::data_select(dat, c(resp, info$contrast))
+
+      list.dat <- lapply(seq_len(nrow(contrasts)), function(i) {
+        log.vec <- which(dat[[info$contrast]] == unlist(info$misc$orig.grid)[[i]])
+        dat.temp <- datawizard::data_filter(dat, log.vec)
+      })
+      list.dat <- stats::setNames(list.dat, unique(unlist(level_cols)))
+
+      eff <- lapply(seq_len(nrow(contrasts)), function(i) {
+        effectsize::cohens_d(x = list.dat[[contrasts$Level1[i]]][[resp]],
+                             y = list.dat[[contrasts$Level2[i]]][[resp]],
+                             verbose = FALSE)
+      })
+
+      eff <- do.call(rbind, eff)
+      names(eff)[-1] <- paste0("Cohens_d_", names(eff)[-1])
+      contrasts <- cbind(contrasts, eff)
+    }
+  }
 
   # Table formatting
   attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
