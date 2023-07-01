@@ -11,6 +11,13 @@
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 #'   section in the `emmeans::test` documentation.
 #' @param adjust Deprecated in favour of `p_adjust`.
+#' @param effectsize Desired measure of standardized effect size, one of "none"
+#' (default), "emmeans", "bootES".
+#' @param bootES_type Specifies the type of effect-size measure to
+#' estimate when using `effectsize = "bootES"`. One of `c("unstandardized",
+#' "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")`. See`
+#' effect.type` argument of [bootES::bootES] for details.
+#' @param bootstraps The number of bootstrap resamples to perform.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -83,6 +90,9 @@ estimate_contrasts <- function(model,
                                p_adjust = "holm",
                                method = "pairwise",
                                adjust = NULL,
+                               effectsize = "none",
+                               bootstraps = 200,
+                               bootES_type = "cohens.d",
                                ...) {
   # Deprecation
   if (!is.null(adjust)) {
@@ -135,30 +145,48 @@ estimate_contrasts <- function(model,
   contrasts$contrast <- NULL
   contrasts <- cbind(level_cols, contrasts)
 
-  # Add effect size (Cohen's d)
-  if (is.null(contrast) && is.null(fixed) && is.null(at)) {
-    dat <- insight::get_data(model)
-    resp <- insight::find_response(model)
-
-    if (is.numeric(dat[[resp]])) {
-      dat <- datawizard::data_select(dat, c(resp, info$contrast))
-
-      list.dat <- lapply(seq_len(nrow(contrasts)), function(i) {
-        log.vec <- which(dat[[info$contrast]] == unlist(info$misc$orig.grid)[[i]])
-        dat.temp <- datawizard::data_filter(dat, log.vec)
-      })
-      list.dat <- stats::setNames(list.dat, unique(unlist(level_cols)))
-
-      eff <- lapply(seq_len(nrow(contrasts)), function(i) {
-        effectsize::cohens_d(x = list.dat[[contrasts$Level1[i]]][[resp]],
-                             y = list.dat[[contrasts$Level2[i]]][[resp]],
-                             verbose = FALSE)
-      })
-
-      eff <- do.call(rbind, eff)
-      names(eff)[-1] <- paste0("Cohens_d_", names(eff)[-1])
-      contrasts <- cbind(contrasts, eff)
+  # Add standardized effect size
+  if (!effectsize %in% c("none", "emmeans", "bootES")) {
+    message("Unsupported effect size '", effectsize, "', returning none.")
     }
+
+  if (effectsize == "emmeans") {
+    eff <- emmeans::eff_size(
+      estimated, sigma = stats::sigma(model),
+      edf = stats::df.residual(model), method = "identity")
+    eff <- as.data.frame(eff)
+    eff <- eff[c(2, 5:6)]
+    names(eff) <- c("effect_size", "es_CI_low", "es_CI_high")
+    contrasts <- cbind(contrasts, eff)
+
+    } else if (effectsize == "bootES") {
+      insight::check_if_installed("bootES")
+      dat <- insight::get_data(model)
+      resp <- insight::find_response(model)
+      group <- names(estimated@model.info$xlev)
+      contrast <- estimated@misc$con.coef
+
+      contrast <- lapply(seq_len(nrow(contrast)), function(x) {
+        contrast[x, ]
+        })
+
+      es.lists <- lapply(contrast, function(x) {
+        y <- bootES::bootES(
+          data = stats::na.omit(insight::get_data(model)),
+          R = bootstraps,
+          data.col = insight::find_response(model),
+          group.col = insight::find_predictors(model)[[1]],
+          contrast = x,
+          effect.type = bootES_type
+          )
+        y <- as.data.frame(summary(y))})
+
+      eff <- do.call(rbind, es.lists)
+      eff <- eff[1:3]
+      names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"),
+                      paste0(bootES_type, "es_CI_high"))
+
+      contrasts <- cbind(contrasts, eff)
   }
 
   # Table formatting

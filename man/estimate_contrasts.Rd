@@ -14,6 +14,9 @@ estimate_contrasts(
   p_adjust = "holm",
   method = "pairwise",
   adjust = NULL,
+  effectsize = "none",
+  bootstraps = 200,
+  bootES_type = "cohens.d",
   ...
 )
 }
@@ -52,6 +55,14 @@ section in the \code{emmeans::test} documentation.}
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
 \item{adjust}{Deprecated in favour of \code{p_adjust}.}
+
+\item{effectsize}{Desired measure of standardized effect size, one of "none"
+(default), "emmeans", "bootES".}
+
+\item{bootstraps}{The number of bootstrap resamples to perform.}
+
+\item{bootES_type}{Specifies the type of effect-size measure to
+estimate when using \code{effectsize = "bootES"}. One of \code{c("unstandardized", "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

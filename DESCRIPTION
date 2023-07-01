@@ -22,7 +22,12 @@ Authors@R:
              family = "Patil",
              role = "aut",
              email = "patilindrajeet.science@gmail.com",
-             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")))
+             comment = c(ORCID = "0000-0003-1995-6531", Twitter = "@patilindrajeets")),
+      person(given = "Rémi", 
+             family = "Thériault",
+             role = c("aut"), 
+             email = "remi.theriault@mail.mcgill.ca",
+             comment = c(ORCID = "0000-0003-4315-6788", Twitter = "@rempsyc")))
 Maintainer: Dominique Makowski <dom.makowski@gmail.com>
 Description: Implements a general interface for model-based estimations
     for a wide variety of models (see list of supported models using the
@@ -63,6 +68,7 @@ Suggests:
     rstanarm,
     rtdists,
     see (>= 0.7.4),
+    bootES,
     testthat
 VignetteBuilder:
     knitr
