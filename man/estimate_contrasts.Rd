@@ -147,18 +147,22 @@ if there are multiple predictors or any covariates, it is important to
 re-compute sigma adding back in the response variance associated with the
 variables that aren't part of the contrast.
 
-Note also that standardizing the components of a composite variable will
-probably lead to nonsense results.
-
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
 \code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
-\verb{method = "identity")}.
+\verb{method = "identity")}. This standardizes using the MSE (sigma). This works
+when the contrasts are the only predictors in the model, but not when there
+are covariates. The response variance accounted for by the covariates should
+not be removed from the SD used to standardize. Otherwise, \emph{d} will be
+overestimated.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
-size: \code{d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)}.
+size: \code{d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)}. This standardized
+using the response SD with only the between-groups variance on the focal
+factor/contrast removed. This allows for groups to be equated on their
+covariates, but creates an appropriate scale for standardizing the response.
 
 \code{effectsize = "bootES"} uses bootstrapping (defaults to a low value of
-200) through \link[bootES:bootES]{bootES::bootES}. Does not adjust for covariates.
+200) through \link[bootES:bootES]{bootES::bootES}. Adjust for contrasts, but not for covariates.
 }
 
 \examples{
