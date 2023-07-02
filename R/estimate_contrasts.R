@@ -21,6 +21,22 @@
 #'
 #' @inherit estimate_slopes details
 #'
+#' @section Effect Size: By default, `estimate_contrasts` reports no standardized effect size
+#' on purpose. Should one request one, some things are to keep in mind. As the
+#' authors of `emmeans` write, "There is substantial disagreement among
+#' practitioners on what is the appropriate sigma to use in computing effect
+#' sizes; or, indeed, whether any effect-size measure is appropriate for some
+#' situations. The user is completely responsible for specifying appropriate
+#' parameters (or for failing to do so)."
+#'
+#' In particular, effect size methods `"emmeans"` and `"bootES"` do not correct
+#' for covariates in the model, so should probably only be used when there is
+#' just one categorical predictor (with however many levels). If there are
+#' multiple predictors or any covariates, it is important to re-compute sigma
+#' adding back in the response variance associated with the variables that
+#' aren't part of the contrast (or else the Cohen's *d* scale does not really
+#' make sense).
+#'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
