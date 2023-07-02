@@ -57,7 +57,7 @@ section in the \code{emmeans::test} documentation.}
 \item{adjust}{Deprecated in favour of \code{p_adjust}.}
 
 \item{effectsize}{Desired measure of standardized effect size, one of "none"
-(default), "emmeans", "bootES".}
+(default), "emmeans", "marginal", or "bootES".}
 
 \item{bootstraps}{The number of bootstrap resamples to perform.}
 
@@ -131,21 +131,34 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \section{Effect Size}{
- By default, \code{estimate_contrasts} reports no standardized effect size
-on purpose. Should one request one, some things are to keep in mind. As the
-authors of \code{emmeans} write, "There is substantial disagreement among
-practitioners on what is the appropriate sigma to use in computing effect
-sizes; or, indeed, whether any effect-size measure is appropriate for some
-situations. The user is completely responsible for specifying appropriate
-parameters (or for failing to do so)."
+ By default, \code{estimate_contrasts} reports no
+standardized effect size on purpose. Should one request one, some things
+are to keep in mind. As the authors of \code{emmeans} write, "There is
+substantial disagreement among practitioners on what is the appropriate
+sigma to use in computing effect sizes; or, indeed, whether any effect-size
+measure is appropriate for some situations. The user is completely
+responsible for specifying appropriate parameters (or for failing to do
+so)."
 
-In particular, effect size methods \code{"emmeans"} and \code{"bootES"} do not correct
+In particular, effect size method \code{"bootES"} does not correct
 for covariates in the model, so should probably only be used when there is
-just one categorical predictor (with however many levels). If there are
-multiple predictors or any covariates, it is important to re-compute sigma
-adding back in the response variance associated with the variables that
-aren't part of the contrast (or else the Cohen's \emph{d} scale does not really
-make sense).
+just one categorical predictor (with however many levels). Some believe that
+if there are multiple predictors or any covariates, it is important to
+re-compute sigma adding back in the response variance associated with the
+variables that aren't part of the contrast.
+
+Note also that standardizing the components of a composite variable will
+probably lead to nonsense results.
+
+\code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
+\code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
+\verb{method = "identity")}.
+
+\code{effectsize = "marginal"} uses the following formula to compute effect
+size: \code{d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)}.
+
+\code{effectsize = "bootES"} uses bootstrapping (defaults to a low value of
+200) through \link[bootES:bootES]{bootES::bootES}. Does not adjust for covariates.
 }
 
 \examples{
