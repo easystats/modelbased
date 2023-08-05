@@ -46,7 +46,7 @@
 #' _d_ will be overestimated.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
-#' size: `d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)`. This standardized
+#' size: `d_adj <- difference * (1- R2)/ sigma`. This standardized
 #' using the response SD with only the between-groups variance on the focal
 #' factor/contrast removed. This allows for groups to be equated on their
 #' covariates, but creates an appropriate scale for standardizing the response.
@@ -189,13 +189,15 @@ estimate_contrasts <- function(model,
       edf = stats::df.residual(model), method = "identity")
     eff <- as.data.frame(eff)
     eff <- eff[c(2, 5:6)]
-    names(eff) <- c("effect_size", "es_CI_low", "es_CI_high")
+    names(eff) <- c("partial_effect_size", "es_CI_low", "es_CI_high")
     contrasts <- cbind(contrasts, eff)
 
   } else if (effectsize == "marginal") {
-    # d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)
-    R2_cov <- summary(model)$r.squared
-    d_adj <- contrasts$t * contrasts$SE / sigma(model) * sqrt(1 - R2_cov)
+    # Original: d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)
+    # d_adj <- contrasts$t * contrasts$SE / sigma(model) * sqrt(1 - R2)
+    # New: d_adj <- difference * (1- R2)/ sigma
+    R2 <- summary(model)$r.squared
+    d_adj <- contrasts$Difference * (1 - R2) / sigma(model)
     contrasts <- cbind(contrasts, marginal_d = d_adj)
 
     } else if (effectsize == "bootES") {

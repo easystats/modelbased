@@ -156,7 +156,7 @@ covariates should not be removed from the SD used to standardize. Otherwise,
 \emph{d} will be overestimated.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
-size: \code{d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)}. This standardized
+size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardized
 using the response SD with only the between-groups variance on the focal
 factor/contrast removed. This allows for groups to be equated on their
 covariates, but creates an appropriate scale for standardizing the response.
