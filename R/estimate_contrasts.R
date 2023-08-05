@@ -39,11 +39,11 @@
 #'
 #' `effectsize = "emmeans"` uses [emmeans::eff_size] with
 #' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
-#' `method = "identity")`. This standardizes using the MSE (sigma). This works
-#' when the contrasts are the only predictors in the model, but not when there
-#' are covariates. The response variance accounted for by the covariates should
-#' not be removed from the SD used to standardize. Otherwise, _d_ will be
-#' overestimated.
+#' `method = "identity")`. This standardizes using the MSE (sigma). Some believe
+#' this works when the contrasts are the only predictors in the model, but not
+#' when there are covariates. The response variance accounted for by the
+#' covariates should not be removed from the SD used to standardize. Otherwise,
+#' _d_ will be overestimated.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
 #' size: `d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)`. This standardized

@@ -149,11 +149,11 @@ variables that aren't part of the contrast.
 
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
 \code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
-\verb{method = "identity")}. This standardizes using the MSE (sigma). This works
-when the contrasts are the only predictors in the model, but not when there
-are covariates. The response variance accounted for by the covariates should
-not be removed from the SD used to standardize. Otherwise, \emph{d} will be
-overestimated.
+\verb{method = "identity")}. This standardizes using the MSE (sigma). Some believe
+this works when the contrasts are the only predictors in the model, but not
+when there are covariates. The response variance accounted for by the
+covariates should not be removed from the SD used to standardize. Otherwise,
+\emph{d} will be overestimated.
 
 \code{effectsize = "marginal"} uses the following formula to compute effect
 size: \code{d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)}. This standardized
