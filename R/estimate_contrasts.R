@@ -189,7 +189,7 @@ estimate_contrasts <- function(model,
       edf = stats::df.residual(model), method = "identity")
     eff <- as.data.frame(eff)
     eff <- eff[c(2, 5:6)]
-    names(eff) <- c("partial_effect_size", "es_CI_low", "es_CI_high")
+    names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
     contrasts <- cbind(contrasts, eff)
 
   } else if (effectsize == "marginal") {
