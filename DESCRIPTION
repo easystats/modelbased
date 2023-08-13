@@ -37,7 +37,7 @@ Imports:
     bayestestR (>= 0.13.0),
     datawizard (>= 0.7.0),
     effectsize (>= 0.8.3),
-    insight (>= 0.19.1),
+    insight (>= 0.19.3.2),
     parameters (>= 0.20.2),
     performance (>= 0.10.1),
     graphics,
@@ -76,3 +76,4 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Remotes: easystats/insight
