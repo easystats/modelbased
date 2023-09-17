@@ -9,3 +9,7 @@ datawizard::standardize
 #' @export
 #' @importFrom datawizard unstandardize
 datawizard::unstandardize
+
+#' @importFrom insight print_md
+#' @export
+insight::print_md

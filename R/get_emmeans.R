@@ -99,7 +99,6 @@ model_emmeans <- get_emmeans
 # HELPERS (guess arguments) -----------------------------------------------
 # =========================================================================
 
-#' @importFrom stats model.frame
 #' @keywords internal
 .format_emmeans_arguments <- function(model, args, data, ...) {
   # Create the data_matrix
@@ -118,7 +117,7 @@ model_emmeans <- get_emmeans
       args$data_matrix <- expand.grid(args$at)
       args$at <- names(args$data_matrix)
     } else if (inherits(args$at, "formula")) {
-      args$data_matrix <- model.frame(args$at, data = data)
+      args$data_matrix <- stats::model.frame(args$at, data = data)
       args$at <- names(args$data_matrix)
     } else {
       if (!is.null(args$at) && all(args$at == "all")) {
