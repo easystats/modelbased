@@ -20,7 +20,7 @@
 #'   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
-#' \dontrun{
+#' \donttest{
 #' # TODO: fails with latest emmeans (1.8.0)
 #' if (require("mgcv")) {
 #'   data <- iris

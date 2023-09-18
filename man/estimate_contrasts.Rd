@@ -164,7 +164,7 @@ library(rstanarm)
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
-\dontrun{
+\donttest{
 model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "am")
