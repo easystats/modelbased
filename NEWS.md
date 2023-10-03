@@ -1,5 +1,7 @@
 # modelbased (development version)
 
+- `estimate_contrasts`: now supports optional standardized effect sizes, one of "none" (default), "emmeans", or "bootES" (#227, @rempsyc).
+
 # modelbased 0.8.6
 
 ## Breaking Changes

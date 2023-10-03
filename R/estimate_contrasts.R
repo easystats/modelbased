@@ -11,8 +11,48 @@
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 #'   section in the `emmeans::test` documentation.
 #' @param adjust Deprecated in favour of `p_adjust`.
+#' @param effectsize Desired measure of standardized effect size, one of "none"
+#' (default), "emmeans", "marginal", or "bootES".
+#' @param bootES_type Specifies the type of effect-size measure to
+#' estimate when using `effectsize = "bootES"`. One of `c("unstandardized",
+#' "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")`. See`
+#' effect.type` argument of [bootES::bootES] for details.
+#' @param bootstraps The number of bootstrap resamples to perform.
 #'
 #' @inherit estimate_slopes details
+#'
+#' @section Effect Size: By default, `estimate_contrasts` reports no
+#' standardized effect size on purpose. Should one request one, some things
+#' are to keep in mind. As the authors of `emmeans` write, "There is
+#' substantial disagreement among practitioners on what is the appropriate
+#' sigma to use in computing effect sizes; or, indeed, whether any effect-size
+#' measure is appropriate for some situations. The user is completely
+#' responsible for specifying appropriate parameters (or for failing to do
+#' so)."
+#'
+#' In particular, effect size method `"bootES"` does not correct
+#' for covariates in the model, so should probably only be used when there is
+#' just one categorical predictor (with however many levels). Some believe that
+#' if there are multiple predictors or any covariates, it is important to
+#' re-compute sigma adding back in the response variance associated with the
+#' variables that aren't part of the contrast.
+#'
+#' `effectsize = "emmeans"` uses [emmeans::eff_size] with
+#' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
+#' `method = "identity")`. This standardizes using the MSE (sigma). Some believe
+#' this works when the contrasts are the only predictors in the model, but not
+#' when there are covariates. The response variance accounted for by the
+#' covariates should not be removed from the SD used to standardize. Otherwise,
+#' _d_ will be overestimated.
+#'
+#' `effectsize = "marginal"` uses the following formula to compute effect
+#' size: `d_adj <- difference * (1- R2)/ sigma`. This standardized
+#' using the response SD with only the between-groups variance on the focal
+#' factor/contrast removed. This allows for groups to be equated on their
+#' covariates, but creates an appropriate scale for standardizing the response.
+#'
+#' `effectsize = "bootES"` uses bootstrapping (defaults to a low value of
+#' 200) through [bootES::bootES]. Adjust for contrasts, but not for covariates.
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' # Basic usage
@@ -83,6 +123,9 @@ estimate_contrasts <- function(model,
                                p_adjust = "holm",
                                method = "pairwise",
                                adjust = NULL,
+                               effectsize = "none",
+                               bootstraps = 200,
+                               bootES_type = "cohens.d",
                                ...) {
   # Deprecation
   if (!is.null(adjust)) {
@@ -135,6 +178,63 @@ estimate_contrasts <- function(model,
   contrasts$contrast <- NULL
   contrasts <- cbind(level_cols, contrasts)
 
+  # Add standardized effect size
+  if (!effectsize %in% c("none", "emmeans", "marginal", "bootES")) {
+    message("Unsupported effect size '", effectsize, "', returning none.")
+    }
+
+  if (effectsize == "emmeans") {
+    eff <- emmeans::eff_size(
+      estimated, sigma = stats::sigma(model),
+      edf = stats::df.residual(model), method = "identity")
+    eff <- as.data.frame(eff)
+    eff <- eff[c(2, 5:6)]
+    names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
+    contrasts <- cbind(contrasts, eff)
+
+  } else if (effectsize == "marginal") {
+    # Original: d_adj <- t * se_b / sigma * sqrt(1 - R2_cov)
+    # d_adj <- contrasts$t * contrasts$SE / sigma(model) * sqrt(1 - R2)
+    # New: d_adj <- difference * (1- R2)/ sigma
+    R2 <- summary(model)$r.squared
+    d_adj <- contrasts$Difference * (1 - R2) / sigma(model)
+    contrasts <- cbind(contrasts, marginal_d = d_adj)
+
+    } else if (effectsize == "bootES") {
+      if (bootstraps < 500) {
+        message("Number of bootstraps probably too low. Consider increasing it.")
+      }
+
+      insight::check_if_installed("bootES")
+      dat <- insight::get_data(model)
+      resp <- insight::find_response(model)
+      group <- names(estimated@model.info$xlev)
+      contrast <- estimated@misc$con.coef
+
+      contrast <- lapply(seq_len(nrow(contrast)), function(x) {
+        z <- contrast[x, ]
+        names(z) <- levels(as.factor(dat[[group]]))
+        z
+        })
+
+      es.lists <- lapply(contrast, function(x) {
+        y <- bootES::bootES(
+          data = stats::na.omit(dat),
+          R = bootstraps,
+          data.col = resp,
+          group.col = group,
+          contrast = x,
+          effect.type = bootES_type
+          )
+        y <- as.data.frame(summary(y))})
+
+      eff <- do.call(rbind, es.lists)
+      eff <- eff[1:3]
+      names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"),
+                      paste0(bootES_type, "es_CI_high"))
+
+      contrasts <- cbind(contrasts, eff)
+  }
 
   # Table formatting
   attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
