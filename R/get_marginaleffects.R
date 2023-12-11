@@ -41,7 +41,7 @@ get_marginaleffects <- function(model,
   if (length(fixed) == 0) fixed <- NULL
 
   # Compute stuff
-  estimated <- marginaleffects::marginaleffects(model, variables = trend, newdata = newdata, ...)
+  estimated <- marginaleffects::slopes(model, variables = trend, newdata = newdata, ...)
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- at
