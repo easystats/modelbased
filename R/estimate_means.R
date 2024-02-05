@@ -7,8 +7,6 @@
 #'
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
-#' @param backend Whether to use 'emmeans' or 'marginaleffects' as a backend.
-#'  The latter is experimental and some features might not work.
 #' @inherit estimate_slopes details
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
@@ -51,10 +49,10 @@ estimate_means <- function(model,
                            fixed = NULL,
                            transform = "response",
                            ci = 0.95,
-                           backend = "emmeans",
+                          #  backend = "emmeans",
                            ...) {
   # Compute means
-  if (backend == "emmeans") {
+  # if (backend == "emmeans") {
     estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
 
     # Summarize and clean
@@ -72,11 +70,7 @@ estimate_means <- function(model,
     means <- means[names(means) != "1"]
 
     info <- attributes(estimated)
-  } else {
-    means <- .get_marginalmeans(model, at, fixed, transform = transform, ...)
-
-    info <- attributes(means)
-  }
+  # }
 
   # Restore factor levels
   means <- datawizard::data_restoretype(means, insight::get_data(model))
