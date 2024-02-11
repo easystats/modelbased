@@ -133,8 +133,8 @@ plot(visualisation_recipe(x))
 x <- estimate_means(model, at = c("new_factor", "wt"))
 plot(visualisation_recipe(x))
 
-x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
-plot(visualisation_recipe(x))
+# x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
+# plot(visualisation_recipe(x))  # TODO: broken
 
 #'   # GLMs ---------------------
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))

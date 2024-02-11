@@ -3,7 +3,6 @@
 \docType{package}
 \name{modelbased-package}
 \alias{modelbased-package}
-\alias{_PACKAGE}
 \alias{modelbased}
 \title{modelbased: Estimation of Model-Based Predictions, Contrasts and Means}
 \description{

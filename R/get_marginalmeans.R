@@ -1,42 +1,80 @@
 #' @keywords internal
 .get_marginalmeans <- function(model,
                                at = "auto",
-                               fixed = NULL,
-                               transform = "response",
                                ci = 0.95,
+                               marginal = FALSE,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
 
   # Guess arguments
-  args <- .guess_emmeans_arguments(model, at, fixed, ...)
+  args <- .guess_arguments_means(model, at, ...)
 
-  # Run emmeans
-  means <- marginaleffects::marginalmeans(model, variables = args$at, conf_level = ci)
+  # Get corresponding datagrid (and deal with particular ats)
+  datagrid <- insight::get_datagrid(model, at = args$at, ...)
+  # Drop random effects
+  datagrid <- datagrid[insight::find_predictors(model, effects="fixed", flatten = TRUE)]
+  at_specs <- attributes(datagrid)$at_specs
 
-  # TODO: this should be replaced by parameters::parameters(means)
-  # Format names
-  names(means)[names(means) %in% "conf.low"] <- "CI_low"
-  names(means)[names(means) %in% "conf.high"] <- "CI_high"
-  names(means)[names(means) %in% "std.error"] <- "SE"
-  names(means)[names(means) %in% "marginalmean"] <- "Mean"
-  names(means)[names(means) %in% "p.value"] <- "p"
-  names(means)[names(means) %in% "statistic"] <- ifelse(insight::find_statistic(model) == "t-statistic", "t", "statistic")
 
-  # Format terms
-  term <- unique(means$term) # Get name of variable
-  if (length(term) > 1L) {
-    insight::format_error("marignalmeans backend can currently only deal with one 'at' variable.")
+  if (marginal == FALSE) {
+    if(insight::is_mixed_model(model)) {
+      means <- marginaleffects::predictions(model,
+                                            newdata=datagrid,
+                                            by=at_specs$varname,
+                                            conf_level = ci,
+                                            re.form=NA)
+    } else {
+      means <- marginaleffects::predictions(model,
+                                            newdata=datagrid,
+                                            by=at_specs$varname,
+                                            conf_level = ci)
+    }
+  } else {
+    means <- marginaleffects::predictions(model,
+                                          newdata=insight::get_data(model),
+                                          by=at_specs$varname,
+                                          conf_level = ci)
   }
-  names(means)[names(means) %in% c("value")] <- term # Replace 'value' col by var name
-  means$term <- NULL
-
-  # Drop stats
-  means$p <- NULL
-  means$t <- NULL
-
-  # Store attributes
   attr(means, "at") <- args$at
-
   means
+}
+
+
+# Format ------------------------------------------------------------------
+
+
+#' @keywords internal
+.format_marginaleffects_means <- function(means, model, ...) {
+  # Format
+  params <- parameters::parameters(means) |>
+    datawizard::data_relocate(c("Predicted", "SE", "CI_low", "CI_high"), after=-1) |>
+    datawizard::data_rename("Predicted", "Mean") |>
+    datawizard::data_remove(c("p", "Statistic", "s.value", "S", "CI")) |>
+    datawizard::data_restoretype(insight::get_data(model))
+
+  # Store info
+  attr(params, "at") <- attr(means, "at")
+  params
+}
+
+# Guess -------------------------------------------------------------------
+
+#' @keywords internal
+.guess_arguments_means <- function(model, at = NULL, ...) {
+  # Gather info and data from model
+  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
+  data <- insight::get_data(model)
+
+  # Guess arguments ('at' and 'fixed')
+  if (!is.null(at) && length(at) == 1 && at == "auto") {
+    # Find categorical predictors
+    at <- predictors[!sapply(data[predictors], is.numeric)]
+    if (!length(at) || all(is.na(at))) {
+      stop("Model contains no categorical factor. Please specify 'at'.", call. = FALSE)
+    }
+    message("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
+  }
+
+  list(at=at)
 }
