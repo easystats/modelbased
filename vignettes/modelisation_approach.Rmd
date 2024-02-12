@@ -1,5 +1,5 @@
 ---
-title: "The Modelisation Approach to Statistics"
+title: "The Modelisation Approach"
 output: 
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     fig_height: 6
 tags: [r, estimate, estimate link, predictions]
 vignette: >
-  %\VignetteIndexEntry{The Modelisation Approach to Statistics}
+  %\VignetteIndexEntry{The modelisation approach}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
