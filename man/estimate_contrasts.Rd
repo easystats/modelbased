@@ -161,10 +161,11 @@ estimate_contrasts(model)
 \dontshow{if (require("rstanarm", quietly = TRUE) && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(rstanarm)
 
+\donttest{
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
-\donttest{
+
 model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "am")

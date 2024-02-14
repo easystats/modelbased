@@ -55,10 +55,11 @@
 #' @examplesIf require("rstanarm", quietly = TRUE) && require("emmeans", quietly = TRUE)
 #' library(rstanarm)
 #'
+#' \donttest{
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
-#' \donttest{
+#'
 #' model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "am")
