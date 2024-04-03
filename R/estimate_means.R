@@ -61,7 +61,7 @@ estimate_means <- function(model,
 
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- .get_marginalmeans(model, at, ci=ci, ...)
+    estimated <- .get_marginalmeans(model, at, ci = ci, ...)
     means <- .format_marginaleffects_means(estimated, model, ...)
   }
 

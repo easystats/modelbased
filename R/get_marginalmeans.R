@@ -16,25 +16,25 @@
   datagrid <- datagrid[insight::find_predictors(model, effects="fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
 
-
-  if (marginal == FALSE) {
-    if(insight::is_mixed_model(model)) {
-      means <- marginaleffects::predictions(model,
-                                            newdata=datagrid,
-                                            by=at_specs$varname,
-                                            conf_level = ci,
-                                            re.form=NA)
-    } else {
-      means <- marginaleffects::predictions(model,
-                                            newdata=datagrid,
-                                            by=at_specs$varname,
-                                            conf_level = ci)
-    }
+  if (marginal) {
+    means <- marginaleffects::predictions(model,
+      newdata = insight::get_data(model),
+      by = at_specs$varname,
+      conf_level = ci
+    )
+  } else if (insight::is_mixed_model(model)) {
+    means <- marginaleffects::predictions(model,
+      newdata = datagrid,
+      by = at_specs$varname,
+      conf_level = ci,
+      re.form = NA
+    )
   } else {
     means <- marginaleffects::predictions(model,
-                                          newdata=insight::get_data(model),
-                                          by=at_specs$varname,
-                                          conf_level = ci)
+      newdata = datagrid,
+      by = at_specs$varname,
+      conf_level = ci
+    )
   }
   attr(means, "at") <- args$at
   means
@@ -48,7 +48,7 @@
 .format_marginaleffects_means <- function(means, model, ...) {
   # Format
   params <- parameters::parameters(means) |>
-    datawizard::data_relocate(c("Predicted", "SE", "CI_low", "CI_high"), after=-1) |>
+    datawizard::data_relocate(c("Predicted", "SE", "CI_low", "CI_high"), after = -1) |>
     datawizard::data_rename("Predicted", "Mean") |>
     datawizard::data_remove(c("p", "Statistic", "s.value", "S", "CI")) |>
     datawizard::data_restoretype(insight::get_data(model))
@@ -76,5 +76,5 @@
     message("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
   }
 
-  list(at=at)
+  list(at = at)
 }

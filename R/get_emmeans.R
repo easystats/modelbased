@@ -109,7 +109,7 @@ model_emmeans <- get_emmeans
     means <- parameters::parameters(estimated, ci = ci, ...)
     means <- .clean_names_bayesian(means, model, transform, type = "mean")
     means <- cbind(estimated@grid, means)
-    means$`.wgt.` <- NULL # Drop the weight column
+    means[[".wgt."]] <- NULL # Drop the weight column
   } else {
     means <- as.data.frame(stats::confint(estimated, level = ci))
     means$df <- NULL
@@ -242,9 +242,3 @@ model_emmeans <- get_emmeans
 
   args
 }
-
-
-
-
-
-
