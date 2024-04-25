@@ -13,7 +13,7 @@
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- insight::get_datagrid(model, at = args$at, ...)
   # Drop random effects
-  datagrid <- datagrid[insight::find_predictors(model, effects="fixed", flatten = TRUE)]
+  datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
 
   if (marginal) {
@@ -72,7 +72,7 @@
   # Guess arguments ('at' and 'fixed')
   if (!is.null(at) && length(at) == 1 && at == "auto") {
     # Find categorical predictors
-    at <- predictors[!sapply(data[predictors], is.numeric)]
+    at <- predictors[!vapply(data[predictors], is.numeric, logical(1))]
     if (!length(at) || all(is.na(at))) {
       stop("Model contains no categorical factor. Please specify 'at'.", call. = FALSE)
     }
