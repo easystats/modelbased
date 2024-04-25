@@ -74,9 +74,9 @@
     # Find categorical predictors
     at <- predictors[!vapply(data[predictors], is.numeric, logical(1))]
     if (!length(at) || all(is.na(at))) {
-      stop("Model contains no categorical factor. Please specify 'at'.", call. = FALSE)
+      insight::format_error("Model contains no categorical factor. Please specify 'at'.")
     }
-    message("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
+    insight::format_alert("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
   }
 
   list(at = at)
