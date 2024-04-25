@@ -70,7 +70,7 @@
   data <- insight::get_data(model)
 
   # Guess arguments ('at' and 'fixed')
-  if (!is.null(at) && length(at) == 1 && at == "auto") {
+  if (identical(at, "auto")) {
     # Find categorical predictors
     at <- predictors[!vapply(data[predictors], is.numeric, logical(1))]
     if (!length(at) || all(is.na(at))) {
