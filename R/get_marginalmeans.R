@@ -46,12 +46,15 @@
 
 #' @keywords internal
 .format_marginaleffects_means <- function(means, model, ...) {
+  # check if available
+  insight::check_if_installed("datawizard")
+
   # Format
-  params <- parameters::parameters(means) |>
-    datawizard::data_relocate(c("Predicted", "SE", "CI_low", "CI_high"), after = -1) |>
-    datawizard::data_rename("Predicted", "Mean") |>
-    datawizard::data_remove(c("p", "Statistic", "s.value", "S", "CI")) |>
-    datawizard::data_restoretype(insight::get_data(model))
+  params <- parameters::parameters(means)
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
+  params <- datawizard::data_rename(params, "Predicted", "Mean")
+  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI"))
+  params <- datawizard::data_restoretype(params, insight::get_data(model))
 
   # Store info
   attr(params, "at") <- attr(means, "at")
