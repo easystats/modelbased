@@ -53,12 +53,10 @@ estimate_means <- function(model,
                            ci = 0.95,
                            backend = "emmeans",
                            ...) {
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
     means <- .format_emmeans_means(estimated, model, ci, transform, ...)
-
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- .get_marginalmeans(model, at, ci = ci, ...)
@@ -112,5 +110,3 @@ estimate_means <- function(model,
   if (all(table_footer == "")) table_footer <- NULL
   c(table_footer, "blue")
 }
-
-
