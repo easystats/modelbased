@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.7
+Version: 0.8.7.1
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -76,3 +76,4 @@ Config/Needs/website:
     rstudio/bslib,
     r-lib/pkgdown,
     easystats/easystatstemplate
+Remotes: easystats/insight, easystats/datawizard, easystats/parameters, easystats/performance
