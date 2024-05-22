@@ -32,21 +32,23 @@ model_emcontrasts(
 
 get_emmeans(
   model,
-  at = "auto",
+  by = "auto",
   fixed = NULL,
   transform = "response",
   levels = NULL,
   modulate = NULL,
+  at = NULL,
   ...
 )
 
 model_emmeans(
   model,
-  at = "auto",
+  by = "auto",
   fixed = NULL,
   transform = "response",
   levels = NULL,
   modulate = NULL,
+  at = NULL,
   ...
 )
 
@@ -76,11 +78,6 @@ model_emtrends(
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
-
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
@@ -99,7 +96,12 @@ probabilities.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
-\item{levels, modulate}{Deprecated, use \code{at} instead.}
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
+/ mean / contrasts. Other predictors of the model that are not included
+here will be collapsed and "averaged" over (the effect will be estimated
+across them).}
+
+\item{levels, modulate, at}{Deprecated, use \code{by} instead.}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
@@ -136,21 +138,21 @@ if (require("emmeans", quietly = TRUE)) {
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 if (require("emmeans", quietly = TRUE)) {
-  # By default, 'at' is set to "Species"
+  # By default, 'by' is set to "Species"
   get_emmeans(model)
 
   # Overall mean (close to 'mean(iris$Sepal.Length)')
-  get_emmeans(model, at = NULL)
+  get_emmeans(model, by = NULL)
 
   # One can estimate marginal means at several values of a 'modulate' variable
-  get_emmeans(model, at = "Petal.Width", length = 3)
+  get_emmeans(model, by = "Petal.Width", length = 3)
 
   # Interactions
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
   get_emmeans(model)
-  get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
-  get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+  get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
+  get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 if (require("emmeans")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

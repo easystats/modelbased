@@ -81,7 +81,7 @@
 #' # Model it
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' # Compute the marginal effect of Petal.Length at each level of Species
-#' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+#' slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 #' slopes
 #'
 #' # Plot it
@@ -91,14 +91,14 @@
 #'
 #' @examplesIf require("mgcv") && require("emmeans") && require("see")
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-#' slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+#' slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 #' summary(slopes)
 #' plot(slopes)
 #'
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
 #' slopes <- estimate_slopes(model,
 #'   trend = "Petal.Length",
-#'   at = c("Petal.Length", "Species"), length = 20
+#'   by = c("Petal.Length", "Species"), length = 20
 #' )
 #' summary(slopes)
 #' plot(slopes)
@@ -106,11 +106,16 @@
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,
-                            at = NULL,
+                            by = NULL,
                             ci = 0.95,
+                            at = NULL,
                             ...) {
+  if (!is.null(at)) {
+    by <- at
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+  }
   # Sanitize arguments
-  estimated <- get_emtrends(model, trend, at, ...)
+  estimated <- get_emtrends(model, trend, by, ...)
   info <- attributes(estimated)
 
   # Summarize and clean
@@ -118,7 +123,7 @@ estimate_slopes <- function(model,
     trends <- parameters::parameters(estimated, ci = ci, ...)
     trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
     trends <- cbind(estimated@grid, trends)
-    trends$`.wgt.` <- NULL # Drop the weight column
+    trends[[".wgt."]] <- NULL # Drop the weight column
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }
@@ -137,7 +142,8 @@ estimate_slopes <- function(model,
   attr(trends, "response") <- insight::find_response(model)
   attr(trends, "ci") <- ci
   attr(trends, "trend") <- info$trend
-  attr(trends, "at") <- info$at
+  attr(trends, "at") <- info$by
+  attr(trends, "by") <- info$by
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
@@ -152,11 +158,11 @@ estimate_slopes <- function(model,
 
 #' @export
 summary.estimate_slopes <- function(object, ...) {
-  data <- as.data.frame(object)
+  my_data <- as.data.frame(object)
   trend <- attributes(object)$trend
 
   # Add "Confidence" col based on the sig index present in the data
-  data$Confidence <- .estimate_slopes_sig(data, ...)
+  my_data$Confidence <- .estimate_slopes_sig(my_data, ...)
 
   # Grouping variables
   vars <- attributes(object)$at
@@ -164,14 +170,14 @@ summary.estimate_slopes <- function(object, ...) {
 
   # If no grouping variables, summarize all
   if (length(vars) == 0) {
-    out <- .estimate_slopes_summarize(data, trend = trend)
+    out <- .estimate_slopes_summarize(my_data, trend = trend)
   } else {
     out <- data.frame()
     # Create vizmatrix of grouping variables
-    groups <- as.data.frame(insight::get_datagrid(data[vars], factors = "all", numerics = "all"))
+    groups <- as.data.frame(insight::get_datagrid(my_data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
     for (i in seq_len(nrow(groups))) {
-      g <- datawizard::data_match(data, groups[i, , drop = FALSE])
+      g <- datawizard::data_match(my_data, groups[i, , drop = FALSE])
       out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
     out <- datawizard::data_relocate(out, vars)
@@ -196,15 +202,15 @@ summary.estimate_slopes <- function(object, ...) {
     c("Coefficient", "Median", "Mean", "MAP_Estimate"),
     verbose = FALSE
   )
-  signs <- sign(data[[centrality_columns]])
-  sign <- signs[1]
+  centrality_signs <- sign(data[[centrality_columns]])
+  centrality_sign <- centrality_signs[1]
   sig <- data$Confidence[1]
   starts <- 1
   ends <- nrow(data)
   # Iterate through all rows to find blocks
   for (i in 2:nrow(data)) {
-    if ((data$Confidence[i] != sig) || ((signs[i] != sign) && data$Confidence[i] == "Uncertain")) {
-      sign <- signs[i]
+    if ((data$Confidence[i] != sig) || ((centrality_signs[i] != centrality_sign) && data$Confidence[i] == "Uncertain")) {
+      centrality_sign <- centrality_signs[i]
       sig <- data$Confidence[i]
       starts <- c(starts, i)
       ends <- c(ends, i - 1)
@@ -216,8 +222,8 @@ summary.estimate_slopes <- function(object, ...) {
   out <- data.frame()
   for (g in seq_len(length(starts))) {
     dat <- data[starts[g]:ends[g], ]
-    dat <- as.data.frame(insight::get_datagrid(dat, at = NULL, factors = "mode"))
-    dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)
+    dat <- as.data.frame(insight::get_datagrid(dat, by = NULL, factors = "mode"))
+    dat <- cbind(data.frame(Start = data[starts[g], trend], End = data[ends[g], trend]), dat)
     out <- rbind(out, dat)
   }
   out
@@ -233,16 +239,14 @@ summary.estimate_slopes <- function(object, ...) {
     if ("pd" %in% names(x)) confidence <- "pd"
   }
 
-  if (confidence == "p") {
-    sig <- tools::toTitleCase(effectsize::interpret_p(x$p, ...))
-  } else if (confidence == "BF") {
-    sig <- tools::toTitleCase(effectsize::interpret_bf(x$BF, ...))
-  } else if (confidence == "pd") {
-    sig <- tools::toTitleCase(effectsize::interpret_pd(x$pd, ...))
-  } else {
-    # Based on CI
-    sig <- ifelse((x$CI_high < 0 & x$CI_low < 0) | (x$CI_high > 0 & x$CI_low > 0), "Significant", "Uncertain")
-    sig <- factor(sig, levels = c("Uncertain", "Significant"))
-  }
-  sig
+  switch(confidence,
+    p = tools::toTitleCase(effectsize::interpret_p(x$p, ...)),
+    BF = tools::toTitleCase(effectsize::interpret_bf(x$BF, ...)),
+    pd = tools::toTitleCase(effectsize::interpret_pd(x$pd, ...)),
+    {
+      # Based on CI
+      out <- ifelse((x$CI_high < 0 & x$CI_low < 0) | (x$CI_high > 0 & x$CI_low > 0), "Significant", "Uncertain")
+      factor(out, levels = c("Uncertain", "Significant"))
+    }
+  )
 }

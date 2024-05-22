@@ -4,7 +4,7 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
+estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, at = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -12,7 +12,7 @@ estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
@@ -100,7 +100,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
 # Model it
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 # Compute the marginal effect of Petal.Length at each level of Species
-slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 slopes
 
 # Plot it
@@ -110,14 +110,14 @@ standardize(slopes)
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("mgcv") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 summary(slopes)
 plot(slopes)
 
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
 slopes <- estimate_slopes(model,
   trend = "Petal.Length",
-  at = c("Petal.Length", "Species"), length = 20
+  by = c("Petal.Length", "Species"), length = 20
 )
 summary(slopes)
 plot(slopes)

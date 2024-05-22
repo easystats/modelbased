@@ -12,11 +12,6 @@ get_marginaleffects(model, trend = NULL, at = NULL, fixed = NULL, ...)
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
-
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
 
