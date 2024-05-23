@@ -1,6 +1,6 @@
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examples
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # ==============================================
 #' # estimate_slopes
 #' # ==============================================

@@ -14,103 +14,100 @@
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Other arguments passed to other functions.
 #'
-#' @examples
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # ==============================================
 #' # estimate_relation, estimate_response, ...
 #' # ==============================================
-#' if (require("ggplot2")) {
-#'   # Simple Model ---------------
-#'   x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
-#'   layers <- visualisation_recipe(x)
-#'   layers
-#'   plot(layers)
-#' }
+#' # Simple Model ---------------
+#' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))
+#' layers <- visualisation_recipe(x)
+#' layers
+#' plot(layers)
+#'
 #' \donttest{
-#' if (require("ggplot2")) {
-#'   # Customize aesthetics ----------
+#' # Customize aesthetics ----------
 #'
-#'   layers <- visualisation_recipe(x,
-#'     point = list(color = "red", alpha = 0.6, size = 3),
-#'     line = list(color = "blue", size = 3),
-#'     ribbon = list(fill = "green", alpha = 0.7),
-#'     labs = list(subtitle = "Oh yeah!")
-#'   )
-#'   layers
-#'   plot(layers)
+#' layers <- visualisation_recipe(x,
+#'   point = list(color = "red", alpha = 0.6, size = 3),
+#'   line = list(color = "blue", size = 3),
+#'   ribbon = list(fill = "green", alpha = 0.7),
+#'   labs = list(subtitle = "Oh yeah!")
+#' )
+#' layers
+#' plot(layers)
 #'
-#'   # Customize raw data -------------
+#' # Customize raw data -------------
 #'
-#'   plot(visualisation_recipe(x, show_data = "none"))
-#'   plot(visualisation_recipe(x, show_data = c("density_2d", "points")))
-#'   plot(visualisation_recipe(x, show_data = "density_2d_filled"))
-#'   plot(visualisation_recipe(x, show_data = "density_2d_polygon"))
-#'   plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
-#'     scale_x_continuous(expand = c(0, 0)) +
-#'     scale_y_continuous(expand = c(0, 0))
+#' plot(visualisation_recipe(x, show_data = "none"))
+#' plot(visualisation_recipe(x, show_data = c("density_2d", "points")))
+#' plot(visualisation_recipe(x, show_data = "density_2d_filled"))
+#' plot(visualisation_recipe(x, show_data = "density_2d_polygon"))
+#' plot(visualisation_recipe(x, show_data = "density_2d_raster")) +
+#'   scale_x_continuous(expand = c(0, 0)) +
+#'   scale_y_continuous(expand = c(0, 0))
 #'
-#'   # Single predictors examples -----------
+#' # Single predictors examples -----------
 #'
-#'   plot(estimate_relation(lm(Sepal.Length ~ Sepal.Width, data = iris)))
-#'   plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris)))
+#' plot(estimate_relation(lm(Sepal.Length ~ Sepal.Width, data = iris)))
+#' plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris)))
 #'
-#'   # 2-ways interaction ------------
+#' # 2-ways interaction ------------
 #'
-#'   # Numeric * numeric
-#'   x <- estimate_relation(lm(mpg ~ wt * qsec, data = mtcars))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Numeric * numeric
+#' x <- estimate_relation(lm(mpg ~ wt * qsec, data = mtcars))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # Numeric * factor
-#'   x <- estimate_relation(lm(Sepal.Width ~ Sepal.Length * Species, data = iris))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Numeric * factor
+#' x <- estimate_relation(lm(Sepal.Width ~ Sepal.Length * Species, data = iris))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # Factor * numeric
-#'   x <- estimate_relation(lm(Sepal.Width ~ Species * Sepal.Length, data = iris))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Factor * numeric
+#' x <- estimate_relation(lm(Sepal.Width ~ Species * Sepal.Length, data = iris))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # 3-ways interaction ------------
+#' # 3-ways interaction ------------
 #'
-#'   data <- mtcars
-#'   data$vs <- as.factor(data$vs)
-#'   data$cyl <- as.factor(data$cyl)
-#'   data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
+#' data <- mtcars
+#' data$vs <- as.factor(data$vs)
+#' data$cyl <- as.factor(data$cyl)
+#' data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
-#'   # Numeric * numeric * numeric
-#'   x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length = c(5, 3, 20))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Numeric * numeric * numeric
+#' x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length = c(5, 3, 20))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # Numeric * numeric * factor
-#'   x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Numeric * numeric * factor
+#' x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # Numeric * factor * factor
-#'   x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers)
+#' # Numeric * factor * factor
+#' x <- estimate_relation(lm(mpg ~ wt * cyl * new_factor, data = data))
+#' layers <- visualisation_recipe(x)
+#' plot(layers)
 #'
-#'   # Factor * numeric * numeric
-#'   x <- estimate_relation(lm(mpg ~ cyl * qsec * hp, data = data))
-#'   layers <- visualisation_recipe(x)
-#'   plot(layers) +
-#'     scale_size_continuous(range = c(0.2, 1))
+#' # Factor * numeric * numeric
+#' x <- estimate_relation(lm(mpg ~ cyl * qsec * hp, data = data))
+#' layers <- visualisation_recipe(x)
+#' plot(layers) +
+#'   scale_size_continuous(range = c(0.2, 1))
 #'
-#'   # GLMs ---------------------
-#'   x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
-#'   plot(visualisation_recipe(x))
-#'   plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
+#' # GLMs ---------------------
+#' x <- estimate_relation(glm(vs ~ mpg, data = mtcars, family = "binomial"))
+#' plot(visualisation_recipe(x))
+#' plot(visualisation_recipe(x, show_data = "jitter", point = list(height = 0.03)))
 #'
-#'   # Multiple CIs ---------------------
-#'   plot(estimate_relation(lm(mpg ~ disp, data = mtcars),
-#'     ci = c(.50, .80, .95)
-#'   ))
-#'   plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris),
-#'     ci = c(0.5, 0.7, 0.95)
-#'   ))
-#' }
+#' # Multiple CIs ---------------------
+#' plot(estimate_relation(lm(mpg ~ disp, data = mtcars),
+#'   ci = c(.50, .80, .95)
+#' ))
+#' plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris),
+#'   ci = c(0.5, 0.7, 0.95)
+#' ))
 #'
 #' # Bayesian models ---------------------
 #' if (require("ggplot2") && require("rstanarm")) {

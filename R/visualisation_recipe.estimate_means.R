@@ -1,6 +1,6 @@
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("ggplot2", quietly = TRUE) && require("emmeans", quietly = TRUE)
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # Simple Model ---------------
 #' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
 #' layers <- visualisation_recipe(x)
