@@ -126,14 +126,14 @@ data$cyl <- as.factor(data$cyl)
 data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
 model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-x <- estimate_means(model, at = c("new_factor", "cyl"))
+x <- estimate_means(model, by =c("new_factor", "cyl"))
 plot(visualisation_recipe(x))
 
 # Modulations --------------
-x <- estimate_means(model, at = c("new_factor", "wt"))
+x <- estimate_means(model, by =c("new_factor", "wt"))
 plot(visualisation_recipe(x))
 
-# x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
+# x <- estimate_means(model, by =c("new_factor", "cyl", "wt"))
 # plot(visualisation_recipe(x))  # TODO: broken
 
 #'   # GLMs ---------------------
@@ -257,18 +257,18 @@ if (require("ggplot2") && require("rstanarm")) {
 # ==============================================
 if (require("ggplot2")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-  x <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+  x <- estimate_slopes(model, trend = "Petal.Length", by ="Species")
 
   layers <- visualisation_recipe(x)
   layers
   plot(layers)
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-  x <- estimate_slopes(model, at = "Sepal.Width", length = 20)
+  x <- estimate_slopes(model, by ="Sepal.Width", length = 20)
   plot(visualisation_recipe(x))
 
   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-  x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
+  x <- estimate_slopes(model, by =c("Sepal.Width", "Species"))
   plot(visualisation_recipe(x))
 }
 \donttest{
@@ -278,11 +278,11 @@ if (require("mgcv")) {
   data$Petal.Length <- data$Petal.Length^2
 
   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
-  x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length"), length = 20)
+  x <- estimate_slopes(model, by =c("Petal.Width", "Petal.Length"), length = 20)
   plot(visualisation_recipe(x))
 
   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
-  x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
+  x <- estimate_slopes(model, by =c("Petal.Width", "Petal.Length", "Species"), length = 10)
   plot(visualisation_recipe(x))
 }
 }

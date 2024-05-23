@@ -11,8 +11,9 @@ visualisation_matrix(x, ...)
 
 \method{visualisation_matrix}{data.frame}(
   x,
-  at = "all",
+  by = "all",
   target = NULL,
+  at = NULL,
   factors = "reference",
   numerics = "mean",
   preserve_range = FALSE,
@@ -30,9 +31,57 @@ visualisation_matrix(x, ...)
 \item{...}{Arguments passed to or from other methods (for instance, \code{length}
 or \code{range} to control the spread of numeric variables.).}
 
-\item{at}{Deprecated. Use \code{by} instead.}
+\item{by}{Indicates the \emph{focal predictors} (variables) for the reference grid
+and at which values focal predictors should be represented. If not specified
+otherwise, representative values for numeric variables or predictors are
+evenly distributed from the minimum to the maximum, with a total number of
+\code{length} values covering that range (see 'Examples'). Possible options for
+\code{by} are:
+\itemize{
+\item \code{"all"}, which will include all variables or predictors.
+\item a character vector of one or more variable or predictor names, like
+\code{c("Species", "Sepal.Width")}, which will create a grid of all combinations
+of unique values. For factors, will use all levels, for numeric variables,
+will use a range of length \code{length} (evenly spread from minimum to maximum)
+and for character vectors, will use all unique values.
+\item a list of named elements, indicating focal predictors and their representative
+values, e.g. \code{by = list(Sepal.Length = c(2, 4), Species = "setosa")}.
+\item a string with assignments, e.g. \code{by = "Sepal.Length = 2"} or
+\code{by = c("Sepal.Length = 2", "Species = 'setosa'")} - note the usage of single
+and double quotes to assign strings within strings.
+}
 
-\item{target}{Deprecated name. Please use \code{at} instead.}
+There is a special handling of assignments with \emph{brackets}, i.e. values
+defined inside \code{[} and \verb{]}.For \strong{numeric} variables, the value(s) inside
+the brackets should either be
+\itemize{
+\item two values, indicating minimum and maximum (e.g. \code{by = "Sepal.Length = [0, 5]"}),
+for which a range of length \code{length} (evenly spread from given minimum to
+maximum) is created.
+\item more than two numeric values \code{by = "Sepal.Length = [2,3,4,5]"}, in which
+case these values are used as representative values.
+\item a "token" that creates pre-defined representative values:
+\itemize{
+\item for mean and -/+ 1 SD around the mean: \code{"x = [sd]"}
+\item for median and -/+ 1 MAD around the median: \code{"x = [mad]"}
+\item for Tukey's five number summary (minimum, lower-hinge, median, upper-hinge, maximum): \code{"x = [fivenum]"}
+\item for terciles, including minimum and maximum: \code{"x = [terciles]"}
+\item for terciles, excluding minimum and maximum: \code{"x = [terciles2]"}
+\item for quartiles, including minimum and maximum: \code{"x = [quartiles]"}
+\item for quartiles, excluding minimum and maximum: \code{"x = [quartiles2]"}
+\item for minimum and maximum value: \code{"x = [minmax]"}
+\item for 0 and the maximum value: \code{"x = [zeromax]"}
+}
+}
+
+For \strong{factor} variables, the value(s) inside the brackets should indicate
+one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
+\strong{Note}: the \code{length} argument will be ignored when using brackets-tokens.
+
+The remaining variables not specified in \code{by} will be fixed (see also arguments
+\code{factors} and \code{numerics}).}
+
+\item{target, at}{Deprecated name. Please use \code{by} instead.}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
 reference level), \code{"mode"} (set at the most common level) or \code{"all"} to
@@ -66,23 +115,23 @@ library(modelbased)
 data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 
 # Single variable is of interest; all others are "fixed"
-visualisation_matrix(data, at = "Sepal.Length")
-visualisation_matrix(data, at = "Sepal.Length", length = 3)
-visualisation_matrix(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-visualisation_matrix(data, at = "Sepal.Length", factors = "mode")
+visualisation_matrix(data, by = "Sepal.Length")
+visualisation_matrix(data, by = "Sepal.Length", length = 3)
+visualisation_matrix(data, by = "Sepal.Length", range = "ci", ci = 0.90)
+visualisation_matrix(data, by = "Sepal.Length", factors = "mode")
 
 # Multiple variables are of interest, creating a combination
-visualisation_matrix(data, at = c("Sepal.Length", "Species"), length = 3)
-visualisation_matrix(data, at = c(1, 3), length = 3)
-visualisation_matrix(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-visualisation_matrix(data, at = c("Sepal.Length", "Species"), numerics = 0)
-visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
-visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+visualisation_matrix(data, by = c("Sepal.Length", "Species"), length = 3)
+visualisation_matrix(data, by = c(1, 3), length = 3)
+visualisation_matrix(data, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
+visualisation_matrix(data, by = c("Sepal.Length", "Species"), numerics = 0)
+visualisation_matrix(data, by = c("Sepal.Length = 3", "Species"))
+visualisation_matrix(data, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 
 # with list-style at-argument
-visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+visualisation_matrix(data, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
 
 # Standardize
-vizdata <- visualisation_matrix(data, at = "Sepal.Length")
+vizdata <- visualisation_matrix(data, by = "Sepal.Length")
 standardize(vizdata)
 }
