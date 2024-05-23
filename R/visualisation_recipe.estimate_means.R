@@ -6,7 +6,7 @@
 #' layers <- visualisation_recipe(x)
 #' layers
 #' plot(layers)
-#' \donttest{
+#' \dontrun{
 #' # Customize aesthetics
 #' layers <- visualisation_recipe(x,
 #'   jitter = list(width = 0.03, color = "red"),

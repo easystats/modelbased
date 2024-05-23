@@ -24,7 +24,7 @@
 #' layers
 #' plot(layers)
 #'
-#' \donttest{
+#' \dontun{
 #' # Customize aesthetics ----------
 #'
 #' layers <- visualisation_recipe(x,
