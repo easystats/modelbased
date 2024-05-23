@@ -75,11 +75,6 @@
 #' data$cyl <- as.factor(data$cyl)
 #' data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
-#' # Numeric * numeric * numeric
-#' x <- estimate_relation(lm(mpg ~ wt * qsec * hp, data = data), length = c(5, 3, 20))
-#' layers <- visualisation_recipe(x)
-#' plot(layers)
-#'
 #' # Numeric * numeric * factor
 #' x <- estimate_relation(lm(mpg ~ wt * am * vs, data = data))
 #' layers <- visualisation_recipe(x)

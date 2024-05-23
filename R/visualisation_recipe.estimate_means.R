@@ -22,10 +22,6 @@
 #' data$cyl <- as.factor(data$cyl)
 #' data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
-#' model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-#' x <- estimate_means(model, by = c("new_factor", "cyl"))
-#' plot(visualisation_recipe(x))
-#'
 #' # Modulations --------------
 #' x <- estimate_means(model, by = c("new_factor", "wt"))
 #' plot(visualisation_recipe(x))
