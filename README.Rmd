@@ -108,7 +108,7 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, at = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
+vizdata <- modelbased::visualisation_matrix(model, by = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
 
 # 3. Revert from expected SD to actual values
 vizdata <- unstandardize(vizdata, select = "Petal.Width")
