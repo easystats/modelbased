@@ -7,7 +7,7 @@ output:
     fig_height: 6
 tags: [r, estimate, estimate link, predictions]
 vignette: >
-  %\VignetteIndexEntry{The modelisation approach}
+  %\VignetteIndexEntry{The Modelisation Approach}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -81,7 +81,6 @@ statistical modelisation.
 
 ```{r}
 library(poorman)
-library(ggplot2)
 library(emmeans)
 library(parameters)
 library(modelbased)
@@ -166,6 +165,7 @@ parameters(posthoc)
 ```
 
 ```{r}
+library(ggplot2)
 data_anova %>%
   ggplot(aes(x = Category, y = RT, fill = Condition)) +
   geom_boxplot() +
