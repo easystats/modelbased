@@ -130,7 +130,8 @@ model_emmeans <- get_emmeans
 
   info <- attributes(estimated)
 
-  attr(means, "at") <- info$at
+  attr(means, "at") <- info$by
+  attr(means, "by") <- info$by
   attr(means, "fixed") <- info$fixed
   means
 }
