@@ -1,6 +1,6 @@
 #' @keywords internal
 .get_marginalmeans <- function(model,
-                               at = "auto",
+                               by = "auto",
                                ci = 0.95,
                                marginal = FALSE,
                                ...) {
@@ -8,10 +8,10 @@
   insight::check_if_installed("marginaleffects")
 
   # Guess arguments
-  args <- .guess_arguments_means(model, at, ...)
+  my_args <- .guess_arguments_means(model, by, ...)
 
   # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- insight::get_datagrid(model, at = args$at, ...)
+  datagrid <- insight::get_datagrid(model, by = my_args$by, ...)
   # Drop random effects
   datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
@@ -36,7 +36,8 @@
       conf_level = ci
     )
   }
-  attr(means, "at") <- args$at
+  attr(means, "at") <- my_args$by
+  attr(means, "by") <- my_args$by
   means
 }
 
@@ -57,27 +58,28 @@
   params <- datawizard::data_restoretype(params, insight::get_data(model))
 
   # Store info
-  attr(params, "at") <- attr(means, "at")
+  attr(params, "at") <- attr(means, "by")
+  attr(params, "by") <- attr(means, "by")
   params
 }
 
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal
-.guess_arguments_means <- function(model, at = NULL, ...) {
+.guess_arguments_means <- function(model, by = NULL, ...) {
   # Gather info and data from model
   predictors <- insight::find_predictors(model, flatten = TRUE, ...)
-  data <- insight::get_data(model)
+  model_data <- insight::get_data(model)
 
-  # Guess arguments ('at' and 'fixed')
-  if (identical(at, "auto")) {
+  # Guess arguments ('by' and 'fixed')
+  if (identical(by, "auto")) {
     # Find categorical predictors
-    at <- predictors[!vapply(data[predictors], is.numeric, logical(1))]
-    if (!length(at) || all(is.na(at))) {
-      insight::format_error("Model contains no categorical factor. Please specify 'at'.")
+    by <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
+    if (!length(by) || all(is.na(by))) {
+      insight::format_error("Model contains no categorical factor. Please specify 'by'.")
     }
-    insight::format_alert("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
+    insight::format_alert("We selected `by = c(", toString(paste0('"', by, '"')), ")`.")
   }
 
-  list(at = at)
+  list(by = by)
 }

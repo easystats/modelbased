@@ -13,20 +13,22 @@
 get_emcontrasts(
   model,
   contrast = NULL,
-  at = NULL,
+  by = NULL,
   fixed = NULL,
   transform = "none",
   method = "pairwise",
+  at = NULL,
   ...
 )
 
 model_emcontrasts(
   model,
   contrast = NULL,
-  at = NULL,
+  by = NULL,
   fixed = NULL,
   transform = "none",
   method = "pairwise",
+  at = NULL,
   ...
 )
 
@@ -55,20 +57,22 @@ model_emmeans(
 get_emtrends(
   model,
   trend = NULL,
-  at = NULL,
+  by = NULL,
   fixed = NULL,
   levels = NULL,
   modulate = NULL,
+  at = NULL,
   ...
 )
 
 model_emtrends(
   model,
   trend = NULL,
-  at = NULL,
+  by = NULL,
   fixed = NULL,
   levels = NULL,
   modulate = NULL,
+  at = NULL,
   ...
 )
 }
@@ -77,6 +81,11 @@ model_emtrends(
 
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
+
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
+/ mean / contrasts. Other predictors of the model that are not included
+here will be collapsed and "averaged" over (the effect will be estimated
+across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -95,11 +104,6 @@ probabilities.}
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
-
-\item{by}{The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
 
 \item{levels, modulate, at}{Deprecated, use \code{by} instead.}
 
@@ -133,7 +137,7 @@ if (require("emmeans", quietly = TRUE)) {
   # Can fixate the numeric at a specific value
   get_emcontrasts(model, fixed = "Petal.Width")
   # Or modulate it
-  get_emcontrasts(model, at = "Petal.Width", length = 4)
+  get_emcontrasts(model, by = "Petal.Width", length = 4)
 }
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
@@ -158,12 +162,12 @@ if (require("emmeans")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
   get_emtrends(model)
-  get_emtrends(model, at = "Species")
-  get_emtrends(model, at = "Petal.Length")
-  get_emtrends(model, at = c("Species", "Petal.Length"))
+  get_emtrends(model, by = "Species")
+  get_emtrends(model, by = "Petal.Length")
+  get_emtrends(model, by = c("Species", "Petal.Length"))
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
   get_emtrends(model)
-  get_emtrends(model, at = "Sepal.Width")
+  get_emtrends(model, by = "Sepal.Width")
 }
 }

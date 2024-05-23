@@ -23,41 +23,48 @@
 #'   # Can fixate the numeric at a specific value
 #'   get_emcontrasts(model, fixed = "Petal.Width")
 #'   # Or modulate it
-#'   get_emcontrasts(model, at = "Petal.Width", length = 4)
+#'   get_emcontrasts(model, by = "Petal.Width", length = 4)
 #' }
 #' @export
 get_emcontrasts <- function(model,
                             contrast = NULL,
-                            at = NULL,
+                            by = NULL,
                             fixed = NULL,
                             transform = "none",
                             method = "pairwise",
+                            at = NULL,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
+  if (!is.null(at)) {
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+    by <- at
+  }
+
   # Guess arguments
-  args <- .guess_emcontrasts_arguments(model, contrast, at, fixed, ...)
+  my_args <- .guess_emcontrasts_arguments(model, contrast, by, fixed, ...)
 
   # Run emmeans
   estimated <- emmeans::emmeans(
     model,
-    specs = args$emmeans_specs,
-    at = args$emmeans_at,
+    specs = my_args$emmeans_specs,
+    at = my_args$emmeans_at,
     type = transform,
     ...
   )
 
   # Find by variables
-  by <- args$emmeans_specs[!args$emmeans_specs %in% args$contrast]
-  if (length(by) == 0) by <- NULL
+  emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
+  if (length(emm_by) == 0) emm_by <- NULL
 
-  contrasts <- emmeans::contrast(estimated, by = by, method = method, ...)
+  out <- emmeans::contrast(estimated, by = emm_by, method = method, ...)
 
-  attr(contrasts, "contrast") <- args$contrast
-  attr(contrasts, "at") <- args$at
-  attr(contrasts, "fixed") <- args$fixed
-  contrasts
+  attr(out, "contrast") <- my_args$contrast
+  attr(out, "at") <- my_args$by
+  attr(out, "by") <- my_args$by
+  attr(out, "fixed") <- my_args$fixed
+  out
 }
 
 #' @rdname get_emmeans
@@ -72,26 +79,24 @@ model_emcontrasts <- get_emcontrasts
 #' @keywords internal
 .guess_emcontrasts_arguments <- function(model,
                                          contrast = NULL,
-                                         at = NULL,
+                                         by = NULL,
                                          fixed = NULL,
                                          ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  data <- insight::get_data(model)
+  model_data <- insight::get_data(model)
 
   # Guess arguments
   if (is.null(contrast)) {
-    contrast <- predictors[!sapply(data[predictors], is.numeric)][1]
+    contrast <- predictors[!sapply(model_data[predictors], is.numeric)][1]
     if (!length(contrast) || is.na(contrast)) {
       contrast <- predictors[1]
     }
-    message('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.')
-  } else {
-    if (all(contrast == "all")) {
-      contrast <- predictors
-    }
+    insight::format_alert('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.') # nolint
+  } else if (all(contrast == "all")) {
+    contrast <- predictors
   }
 
-  args <- list(contrast = contrast, at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, data, ...)
+  my_args <- list(contrast = contrast, by = by, fixed = fixed)
+  .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }

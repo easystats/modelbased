@@ -172,33 +172,33 @@ model_emmeans <- get_emmeans
   data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
-  if (is.null(args$at)) {
+  if (is.null(args$by)) {
     args$data_matrix <- NULL
-  } else if (is.data.frame(args$at)) {
-    args$data_matrix <- args$at
-    args$at <- names(args$at)
-  } else if (is.list(args$at)) {
-    args$data_matrix <- expand.grid(args$at)
-    args$at <- names(args$data_matrix)
-  } else if (inherits(args$at, "formula")) {
-    args$data_matrix <- stats::model.frame(args$at, data = data)
-    args$at <- names(args$data_matrix)
+  } else if (is.data.frame(args$by)) {
+    args$data_matrix <- args$by
+    args$by <- names(args$by)
+  } else if (is.list(args$by)) {
+    args$data_matrix <- expand.grid(args$by)
+    args$by <- names(args$data_matrix)
+  } else if (inherits(args$by, "formula")) {
+    args$data_matrix <- stats::model.frame(args$by, data = data)
+    args$by <- names(args$data_matrix)
   } else {
-    if (!is.null(args$at) && all(args$at == "all")) {
+    if (!is.null(args$by) && all(args$by == "all")) {
       target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
       target <- target[!target %in% args$fixed]
     } else {
-      target <- args$at
+      target <- args$by
     }
-    datagrid <- insight::get_datagrid(data, at = target, ...)
-    args$at <- attributes(datagrid)$at_specs$varname
-    args$data_matrix <- as.data.frame(datagrid[args$at])
-    if (length(args$at) == 0) args$at <- NULL # Post-clean
+    datagrid <- insight::get_datagrid(data, by = target, ...)
+    args$by <- attributes(datagrid)$at_specs$varname
+    args$data_matrix <- as.data.frame(datagrid[args$by])
+    if (length(args$by) == 0) args$by <- NULL # Post-clean
   }
 
   # Deal with 'contrast'
   if (!is.null(args$contrast)) {
-    contrast <- insight::get_datagrid(data, at = args$contrast, ...)
+    contrast <- insight::get_datagrid(data, by = args$contrast, ...)
     args$contrast <- attributes(contrast)$at_specs$varname
     contrast <- as.data.frame(contrast[args$contrast])
     if (is.null(args$data_matrix)) {
@@ -211,7 +211,7 @@ model_emmeans <- get_emmeans
 
   # Deal with 'fixed'
   if (!is.null(args$fixed)) {
-    fixed <- insight::get_datagrid(data[args$fixed], at = NULL, ...)
+    fixed <- insight::get_datagrid(data[args$fixed], by = NULL, ...)
     if (is.null(args$data_matrix)) {
       args$data_matrix <- fixed
     } else {

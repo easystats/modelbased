@@ -4,13 +4,25 @@
 \alias{get_marginaleffects}
 \title{Easy marginaleffects}
 \usage{
-get_marginaleffects(model, trend = NULL, at = NULL, fixed = NULL, ...)
+get_marginaleffects(
+  model,
+  trend = NULL,
+  by = NULL,
+  fixed = NULL,
+  at = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
+
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
+/ mean / contrasts. Other predictors of the model that are not included
+here will be collapsed and "averaged" over (the effect will be estimated
+across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
@@ -25,8 +37,8 @@ Work-in-progress.
 if (require("marginaleffects")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-  get_marginaleffects(model, trend = "Petal.Length", at = "Species")
-  get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
-  get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
+  get_marginaleffects(model, trend = "Petal.Length", by = "Species")
+  get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
+  get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 }
 }

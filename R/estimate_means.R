@@ -20,12 +20,12 @@
 #'
 #' estimate_means(model)
 #' estimate_means(model, fixed = "Sepal.Width")
-#' estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
-#' estimate_means(model, at = "Species=c('versicolor', 'setosa')")
-#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
-#' estimate_means(model, at = c("Species", "Sepal.Width=0"))
-#' estimate_means(model, at = "Sepal.Width", length = 5)
-#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+#' estimate_means(model, by = "Species=c('versicolor', 'setosa')")
+#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, by = c("Species", "Sepal.Width=0"))
+#' estimate_means(model, by = "Sepal.Width", length = 5)
+#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, fixed = "Sepal.Width")
@@ -42,24 +42,30 @@
 #'
 #' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #' estimate_means(model)
-#' estimate_means(model, at = "Sepal.Width", length = 3)
+#' estimate_means(model, by = "Sepal.Width", length = 3)
 #' }
 #' @return A data frame of estimated marginal means.
 #' @export
 estimate_means <- function(model,
-                           at = "auto",
+                           by = "auto",
                            fixed = NULL,
                            transform = "response",
                            ci = 0.95,
                            backend = "emmeans",
+                           at = NULL,
                            ...) {
+  if (!is.null(at)) {
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+    by <- at
+  }
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
+    estimated <- get_emmeans(model, by, fixed, transform = transform, ...)
     means <- .format_emmeans_means(estimated, model, ci, transform, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- .get_marginalmeans(model, at, ci = ci, ...)
+    estimated <- .get_marginalmeans(model, by, ci = ci, ...)
     means <- .format_marginaleffects_means(estimated, model, ...)
   }
 
@@ -88,14 +94,14 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, at = NULL, type = "means", p_adjust = NULL) {
+.estimate_means_footer <- function(x, by = NULL, type = "means", p_adjust = NULL) {
   table_footer <- paste("\nMarginal", type)
 
   # Levels
-  if (!is.null(at) && length(at) > 0) {
-    table_footer <- paste0(table_footer, " estimated at ", toString(at))
+  if (!is.null(by) && length(by) > 0) {
+    table_footer <- paste0(table_footer, " estimated at ", toString(by))
   } else {
-    table_footer <- paste0(table_footer, " estimated at ", attr(x, "at"))
+    table_footer <- paste0(table_footer, " estimated at ", attr(x, "by"))
   }
 
   # P-value adjustment footer
@@ -107,6 +113,6 @@ estimate_means <- function(model,
     }
   }
 
-  if (all(table_footer == "")) table_footer <- NULL
+  if (all(table_footer == "")) table_footer <- NULL # nolint
   c(table_footer, "blue")
 }
