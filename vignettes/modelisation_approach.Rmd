@@ -188,7 +188,7 @@ of significance (which are abstract).
 We can use `geom_smooth()`, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.
 
 ```{r}
-data %>%
+data |>
   group_by(Participant, Condition) |>
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
   geom_jitter(alpha = 0.4) +
