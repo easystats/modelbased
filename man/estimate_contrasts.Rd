@@ -54,6 +54,8 @@ section in the \code{emmeans::test} documentation.}
 
 \item{adjust}{Deprecated in favour of \code{p_adjust}.}
 
+\item{at}{Deprecated, use \code{by} instead.}
+
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{

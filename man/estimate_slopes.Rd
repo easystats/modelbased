@@ -19,6 +19,8 @@ across them).}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
+\item{at}{Deprecated, use \code{by} instead.}
+
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{

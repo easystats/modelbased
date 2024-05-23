@@ -103,9 +103,11 @@ probabilities.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
+\item{at}{Deprecated, use \code{by} instead.}
+
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
-\item{levels, modulate, at}{Deprecated, use \code{by} instead.}
+\item{levels, modulate}{Deprecated, use \code{by} instead.}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}

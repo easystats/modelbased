@@ -20,12 +20,13 @@
 #'   Thus for a logistic model, `"none"` will give estimations expressed in
 #'   log-odds (probabilities on logit scale) and `"response"` in terms of
 #'   probabilities.
-#' @param levels,modulate,at Deprecated, use `by` instead.
+#' @param levels,modulate Deprecated, use `by` instead.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #'   / mean / contrasts. Other predictors of the model that are not included
 #'   here will be collapsed and "averaged" over (the effect will be estimated
 #'   across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @param at Deprecated, use `by` instead.
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
