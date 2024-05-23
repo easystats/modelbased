@@ -6,18 +6,18 @@
 #' # ==============================================
 #' if (require("ggplot2")) {
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   x <- estimate_slopes(model, trend = "Petal.Length", by ="Species")
+#'   x <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 #'
 #'   layers <- visualisation_recipe(x)
 #'   layers
 #'   plot(layers)
 #'
 #'   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#'   x <- estimate_slopes(model, by ="Sepal.Width", length = 20)
+#'   x <- estimate_slopes(model, by = "Sepal.Width", length = 20)
 #'   plot(visualisation_recipe(x))
 #'
 #'   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-#'   x <- estimate_slopes(model, by =c("Sepal.Width", "Species"))
+#'   x <- estimate_slopes(model, by = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
 #' \donttest{
@@ -27,11 +27,11 @@
 #'   data$Petal.Length <- data$Petal.Length^2
 #'
 #'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
-#'   x <- estimate_slopes(model, by =c("Petal.Width", "Petal.Length"), length = 20)
+#'   x <- estimate_slopes(model, by = c("Petal.Width", "Petal.Length"), length = 20)
 #'   plot(visualisation_recipe(x))
 #'
 #'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
-#'   x <- estimate_slopes(model, by =c("Petal.Width", "Petal.Length", "Species"), length = 10)
+#'   x <- estimate_slopes(model, by = c("Petal.Width", "Petal.Length", "Species"), length = 10)
 #'   plot(visualisation_recipe(x))
 #' }
 #' }

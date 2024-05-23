@@ -169,6 +169,5 @@ test_that("estimate_response - VisMatrix", {
   vm <- visualisation_matrix(m, by = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
   estim <- estimate_relation(vm)
   expect_identical(dim(estim), c(70L, 6L))
-  expect_named(estim, c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high")
-  )
+  expect_named(estim, c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high"))
 })
