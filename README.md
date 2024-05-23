@@ -163,7 +163,10 @@ means
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86]
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07]
 ## 
-## Marginal means estimated at Species
+## Marginal means estimated at
+```
+
+``` r
 
 # 3. Plot
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
@@ -233,7 +236,7 @@ contrasts
 ``` r
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-estimate_contrasts(model, at = "Petal.Length", length = 3)
+estimate_contrasts(model, by = "Petal.Length", length = 3)
 ## Marginal Contrasts Analysis
 ## 
 ## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p
@@ -254,7 +257,7 @@ estimate_contrasts(model, at = "Petal.Length", length = 3)
 
 ``` r
 # Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
+contrasts <- estimate_contrasts(model, by = "Petal.Length", length = 20)
 
 # Add Contrast column by concatenating
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -306,6 +309,9 @@ head(pred1, n = 5)
 ## 5.00         |      2.19 | 0.10 | [1.99, 2.39] |     -0.79 |         1.40
 ## 
 ## Variable predicted: Petal.Length
+```
+
+``` r
 
 # Same for model 2
 model2 <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
@@ -354,6 +360,9 @@ random
 ## cyl   |     6 |        drat |       -0.09 | 0.54 | [-1.15,  0.98]
 ## cyl   |     8 | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]
 ## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]
+```
+
+``` r
 
 plot(random)
 ```
@@ -391,7 +400,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 # 1. Compute derivatives
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
-  at = "Petal.Length",
+  by = "Petal.Length",
   length = 100
 )
 
@@ -465,7 +474,7 @@ is significantly negative only when `wt` is low (`< ~4`).
 ``` r
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", at = "wt")
+slopes <- estimate_slopes(model, trend = "hp", by = "wt")
 
 plot(slopes)
 ```

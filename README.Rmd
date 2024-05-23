@@ -207,12 +207,12 @@ plot(contrasts, estimate_means(model)) +
 ```{r}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-estimate_contrasts(model, at = "Petal.Length", length = 3)
+estimate_contrasts(model, by = "Petal.Length", length = 3)
 ```
 
 ```{r}
 # Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, at = "Petal.Length", length = 20)
+contrasts <- estimate_contrasts(model, by = "Petal.Length", length = 20)
 
 # Add Contrast column by concatenating
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -302,7 +302,7 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 # 1. Compute derivatives
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
-  at = "Petal.Length",
+  by = "Petal.Length",
   length = 100
 )
 
@@ -363,7 +363,7 @@ For instance, the plot below shows that the effect of `hp` (the y-axis) is signi
 ```{r}
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", at = "wt")
+slopes <- estimate_slopes(model, trend = "hp", by = "wt")
 
 plot(slopes)
 ```

@@ -159,7 +159,7 @@ We can visualize the link between the Delay and the Memory score by using the
 ```{r}
 library(modelbased)
 
-estim <- estimate_relation(model, at = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
+estim <- estimate_relation(model, by = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
 
 ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) +

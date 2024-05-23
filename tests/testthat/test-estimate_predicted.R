@@ -137,7 +137,7 @@ test_that("estimate_response - Frequentist", {
   expect_equal(dim(estim), c(32, 4))
 
   model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
-  estim <- estimate_link(model, at = "wt")
+  estim <- estimate_link(model, by = "wt")
   expect_equal(dim(estim), c(10, 6))
 
 

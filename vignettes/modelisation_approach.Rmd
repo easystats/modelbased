@@ -160,7 +160,7 @@ What can we conclude from that? Absolutely **nothing**! We need to investigate i
 ## Post-hoc comparison tests
 
 ```{r}
-posthoc <- model_emmeans(results, at = c("Condition", "Category")) %>%
+posthoc <- model_emmeans(results, by = c("Condition", "Category")) %>%
   pairs()
 parameters(posthoc)
 ```
