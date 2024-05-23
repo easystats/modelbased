@@ -146,7 +146,7 @@ layers <- visualisation_recipe(x)
 layers
 plot(layers)
 
-\dontun{
+\dontrun{
 # Customize aesthetics ----------
 
 layers <- visualisation_recipe(x,
