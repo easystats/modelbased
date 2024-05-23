@@ -30,7 +30,7 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("poorman", quietly = TRUE)) {
+  !requireNamespace("datawizard", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -80,10 +80,11 @@ statistical modelisation.
 # The Empirical Approach (Classic)
 
 ```{r}
-library(poorman)
+library(datawizard)
 library(emmeans)
 library(parameters)
 library(modelbased)
+library(ggplot2)
 ```
 
 ## Data Simulation
@@ -140,15 +141,18 @@ So we will take, for each participant, its 20...
 
 
 ```{r}
-data_anova <- data %>%
-  mutate(Category = case_when(
-    Experimental_Variable < -1.5 ~ "Low",
-    Experimental_Variable > 1.5 ~ "High",
-    TRUE ~ "Middle"
-  )) %>%
-  mutate(Category = relevel(as.factor(Category), "Low", "Middle", "High")) %>%
-  group_by(Participant, Condition, Category) %>%
-  summarise(RT = mean(RT))
+data_anova <- data
+data_anova$Category <- recode_into(
+  Experimental_Variable < -1.5 ~ "Low",
+  Experimental_Variable > 1.5 ~ "High",
+  default = "Middle",
+  data = data_anova
+)
+data_anova$Category <- factor(data_anova$Category, levels = c("Low", "Middle", "High"))
+
+data_anova <- data_anova |>
+  data_group(c("Participant", "Condition", "Category")) |>
+  data_summary(RT = mean(RT))
 
 results <- aov(RT ~ Condition * Category + Error(Participant), data = data_anova)
 parameters(results)
@@ -159,14 +163,13 @@ What can we conclude from that? Absolutely **nothing**! We need to investigate i
 ## Post-hoc comparison tests
 
 ```{r}
-posthoc <- model_emmeans(results, by = c("Condition", "Category")) %>%
+posthoc <- model_emmeans(results, by = c("Condition", "Category")) |>
   pairs()
 parameters(posthoc)
 ```
 
 ```{r}
-library(ggplot2)
-data_anova %>%
+data_anova |>
   ggplot(aes(x = Category, y = RT, fill = Condition)) +
   geom_boxplot() +
   see::theme_modern()
@@ -186,7 +189,7 @@ We can use `geom_smooth()`, which can fit non-linear relationships in an empiric
 
 ```{r}
 data %>%
-  group_by(Participant, Condition) %>%
+  group_by(Participant, Condition) |>
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
   geom_jitter(alpha = 0.4) +
   geom_smooth(method = "loess", se = FALSE) +
