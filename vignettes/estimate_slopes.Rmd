@@ -85,7 +85,7 @@ We can see that the effect of `Petal.Length`, **marginalized over Species**, is 
 
 
 ```{r}
-slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 
 slopes
 plot(slopes)
@@ -105,7 +105,7 @@ library(modelbased)
 
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", at = "wt")
+slopes <- estimate_slopes(model, trend = "hp", by = "wt")
 
 plot(slopes)
 ```
@@ -144,7 +144,7 @@ Because the meaning of these parameters is somewhat disconnected with our need f
 # Compute derivative
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
-  at = "Petal.Length",
+  by = "Petal.Length",
   length = 100
 )
 

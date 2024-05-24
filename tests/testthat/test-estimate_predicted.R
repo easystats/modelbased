@@ -137,7 +137,7 @@ test_that("estimate_response - Frequentist", {
   expect_equal(dim(estim), c(32, 4))
 
   model <- glm(vs ~ wt + cyl, data = mtcars, family = "binomial")
-  estim <- estimate_link(model, at = "wt")
+  estim <- estimate_link(model, by = "wt")
   expect_equal(dim(estim), c(10, 6))
 
 
@@ -166,11 +166,8 @@ test_that("estimate_response - VisMatrix", {
   skip_if_not_installed("mgcv")
 
   m <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
-  vm <- visualisation_matrix(m, at = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
+  vm <- visualisation_matrix(m, by = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
   estim <- estimate_relation(vm)
-  expect_equal(dim(estim), c(70, 6))
-  expect_equal(
-    colnames(estim),
-    c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high")
-  )
+  expect_identical(dim(estim), c(70L, 6L))
+  expect_named(estim, c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high"))
 })

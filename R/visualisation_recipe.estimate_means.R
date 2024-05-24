@@ -1,12 +1,12 @@
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("ggplot2", quietly = TRUE) && require("emmeans", quietly = TRUE)
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # Simple Model ---------------
 #' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
 #' layers <- visualisation_recipe(x)
 #' layers
 #' plot(layers)
-#' \donttest{
+#' \dontrun{
 #' # Customize aesthetics
 #' layers <- visualisation_recipe(x,
 #'   jitter = list(width = 0.03, color = "red"),
@@ -22,15 +22,11 @@
 #' data$cyl <- as.factor(data$cyl)
 #' data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 #'
-#' model <- lm(mpg ~ new_factor * cyl * wt, data = data)
-#' x <- estimate_means(model, at = c("new_factor", "cyl"))
-#' plot(visualisation_recipe(x))
-#'
 #' # Modulations --------------
-#' x <- estimate_means(model, at = c("new_factor", "wt"))
+#' x <- estimate_means(model, by = c("new_factor", "wt"))
 #' plot(visualisation_recipe(x))
 #'
-#' # x <- estimate_means(model, at = c("new_factor", "cyl", "wt"))
+#' # x <- estimate_means(model, by =c("new_factor", "cyl", "wt"))
 #' # plot(visualisation_recipe(x))  # TODO: broken
 #'
 #' #'   # GLMs ---------------------
@@ -54,17 +50,17 @@ visualisation_recipe.estimate_means <- function(x,
 
 
   # Main aesthetics -----------------
-  data <- as.data.frame(x)
+  vis_data <- as.data.frame(x)
   y <- info$response
   color <- NULL
   alpha <- NULL
 
-  levels <- info$at[info$at %in% names(data[!sapply(data, is.numeric)])]
-  modulate <- info$at[info$at %in% names(data[sapply(data, is.numeric)])]
-  x1 <- levels[1]
-  if (length(levels) > 1L) {
-    color <- levels[2]
-    if (length(levels) > 2L) {
+  by_levels <- info$at[info$at %in% names(vis_data[!sapply(vis_data, is.numeric)])]
+  modulate <- info$at[info$at %in% names(vis_data[sapply(vis_data, is.numeric)])]
+  x1 <- by_levels[1]
+  if (length(by_levels) > 1L) {
+    color <- by_levels[2]
+    if (length(by_levels) > 2L) {
       # TODO: add facetting (needs updating see::geom_from_list to work with facets)
       insight::format_warning("Cannot deal with more than 2 levels variables for now. Other ones will be omitted.")
     }
@@ -120,7 +116,7 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Line
   layers[[paste0("l", l)]] <- .visualisation_means_line(
-    data,
+    vis_data,
     x1,
     y = info$coef_name[1],
     color = color,
@@ -131,7 +127,7 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Pointrange
   layers[[paste0("l", l)]] <- .visualisation_means_pointrange(
-    data,
+    vis_data,
     x1,
     y = info$coef_name[1],
     color = color,
@@ -145,7 +141,7 @@ visualisation_recipe.estimate_means <- function(x,
 
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
-  attr(layers, "data") <- data
+  attr(layers, "data") <- vis_data
   layers
 }
 
@@ -229,16 +225,16 @@ visualisation_recipe.estimate_means <- function(x,
 
 .visualisation_means_labs <- function(info, x1, y, labs = NULL) {
   if (all(info$coef_name == "Probability")) {
-    title <- "Estimated Mean Probabilities"
+    vis_title <- "Estimated Mean Probabilities"
   } else {
-    title <- "Estimated Means"
+    vis_title <- "Estimated Means"
   }
 
   out <- list(
     geom = "labs",
     x = x1,
     y = y,
-    title = paste0(title, " (", format(insight::find_formula(info$model)), ")")
+    title = paste0(vis_title, " (", format(insight::find_formula(info$model)), ")")
   )
   if (!is.null(labs)) out <- utils::modifyList(out, labs) # Update with additional args
   out

@@ -1,33 +1,29 @@
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examples
+#' @examplesIf require("see") && require("lme4") && require("emmeans")
 #' # ==============================================
 #' # estimate_grouplevel
 #' # ==============================================
-#' if (require("see") && require("lme4")) {
-#'   data <- lme4::sleepstudy
-#'   data <- rbind(data, data)
-#'   data$Newfactor <- rep(c("A", "B", "C", "D"))
+#' data <- lme4::sleepstudy
+#' data <- rbind(data, data)
+#' data$Newfactor <- rep(c("A", "B", "C", "D"))
 #'
-#'   # 1 random intercept
-#'   model <- lmer(Reaction ~ Days + (1 | Subject), data = data)
-#'   x <- estimate_grouplevel(model)
-#'   layers <- visualisation_recipe(x)
-#'   layers
-#'   plot(layers)
-#' }
+#' # 1 random intercept
+#' model <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = data)
+#' x <- estimate_grouplevel(model)
+#' layers <- visualisation_recipe(x)
+#' layers
+#' plot(layers)
+#'
 #' \donttest{
-#' if (require("see") && require("lme4")) {
-#'   # 2 random intercepts
-#'   model <- lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
-#'   x <- estimate_grouplevel(model)
-#'   plot(visualisation_recipe(x))
+#' # 2 random intercepts
+#' model <- lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
+#' x <- estimate_grouplevel(model)
+#' plot(visualisation_recipe(x))
 #'
-#'
-#'   model <- lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
-#'   x <- estimate_grouplevel(model)
-#'   plot(visualisation_recipe(x))
-#' }
+#' model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
+#' x <- estimate_grouplevel(model)
+#' plot(visualisation_recipe(x))
 #' }
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,

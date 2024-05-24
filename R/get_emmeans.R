@@ -20,73 +20,80 @@
 #'   Thus for a logistic model, `"none"` will give estimations expressed in
 #'   log-odds (probabilities on logit scale) and `"response"` in terms of
 #'   probabilities.
-#' @param levels,modulate Deprecated, use `at` instead.
-#' @param at The predictor variable(s) *at* which to evaluate the desired effect
+#' @param levels,modulate Deprecated, use `by` instead.
+#' @param by The predictor variable(s) at which to evaluate the desired effect
 #'   / mean / contrasts. Other predictors of the model that are not included
 #'   here will be collapsed and "averaged" over (the effect will be estimated
 #'   across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @param at Deprecated, use `by` instead.
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
 #' if (require("emmeans", quietly = TRUE)) {
-#'   # By default, 'at' is set to "Species"
+#'   # By default, 'by' is set to "Species"
 #'   get_emmeans(model)
 #'
 #'   # Overall mean (close to 'mean(iris$Sepal.Length)')
-#'   get_emmeans(model, at = NULL)
+#'   get_emmeans(model, by = NULL)
 #'
 #'   # One can estimate marginal means at several values of a 'modulate' variable
-#'   get_emmeans(model, at = "Petal.Width", length = 3)
+#'   get_emmeans(model, by = "Petal.Width", length = 3)
 #'
 #'   # Interactions
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #'   get_emmeans(model)
-#'   get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
-#'   get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#'   get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
+#'   get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' }
 #' @export
 get_emmeans <- function(model,
-                        at = "auto",
+                        by = "auto",
                         fixed = NULL,
                         transform = "response",
                         levels = NULL,
                         modulate = NULL,
+                        at = NULL,
                         ...) {
   # Deprecation
+  if (!is.null(at)) {
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+    by <- at
+  }
   if (!is.null(levels) || !is.null(modulate)) {
-    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.")
-    at <- c(levels, modulate)
+    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `by` instead.")
+    by <- c(levels, modulate)
   }
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emmeans_arguments(model, at, fixed, ...)
+  my_args <- .guess_emmeans_arguments(model, by, fixed, ...)
 
 
   # Run emmeans
   estimated <- emmeans::emmeans(
     model,
-    specs = args$emmeans_specs,
-    at = args$emmeans_at,
+    specs = my_args$emmeans_specs,
+    at = my_args$emmeans_at,
     type = transform,
     ...
   )
 
   # Special behaviour for transformations #138 (see below)
-  if ("retransform" %in% names(args) && length(args$retransform) > 0) {
-    for (var in names(args$retransform)) {
-      estimated@levels[[var]] <- levels(args$retransform[[var]])
-      estimated@grid[[var]] <- args$retransform[[var]]
+  if ("retransform" %in% names(my_args) && length(my_args$retransform) > 0) {
+    for (var in names(my_args$retransform)) {
+      estimated@levels[[var]] <- levels(my_args$retransform[[var]])
+      estimated@grid[[var]] <- my_args$retransform[[var]]
     }
   }
 
-  attr(estimated, "at") <- args$at
-  attr(estimated, "fixed") <- args$fixed
+  attr(estimated, "at") <- my_args$by
+  attr(estimated, "by") <- my_args$by
+  attr(estimated, "fixed") <- my_args$fixed
   estimated
 }
 
@@ -124,7 +131,8 @@ model_emmeans <- get_emmeans
 
   info <- attributes(estimated)
 
-  attr(means, "at") <- info$at
+  attr(means, "at") <- info$by
+  attr(means, "by") <- info$by
   attr(means, "fixed") <- info$fixed
   means
 }
@@ -137,24 +145,24 @@ model_emmeans <- get_emmeans
 
 #' @keywords internal
 .guess_emmeans_arguments <- function(model,
-                                     at = NULL,
+                                     by = NULL,
                                      fixed = NULL,
                                      ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  data <- insight::get_data(model)
+  my_data <- insight::get_data(model)
 
   # Guess arguments
-  if (!is.null(at) && length(at) == 1 && at == "auto") {
-    at <- predictors[!sapply(data[predictors], is.numeric)]
-    if (!length(at) || all(is.na(at))) {
-      stop("Model contains no categorical factor. Please specify 'at'.", call. = FALSE)
+  if (!is.null(by) && length(by) == 1 && by == "auto") {
+    by <- predictors[!sapply(my_data[predictors], is.numeric)]
+    if (!length(by) || all(is.na(by))) {
+      stop("Model contains no categorical factor. Please specify 'by'.", call. = FALSE)
     }
-    message("We selected `at = c(", toString(paste0('"', at, '"')), ")`.")
+    message("We selected `by = c(", toString(paste0('"', by, '"')), ")`.")
   }
 
-  args <- list(at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, data, ...)
+  my_args <- list(by = by, fixed = fixed)
+  .format_emmeans_arguments(model, args = my_args, data = my_data, ...)
 }
 
 
@@ -166,35 +174,33 @@ model_emmeans <- get_emmeans
   data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
 
   # Deal with 'at'
-  if (is.null(args$at)) {
+  if (is.null(args$by)) {
     args$data_matrix <- NULL
+  } else if (is.data.frame(args$by)) {
+    args$data_matrix <- args$by
+    args$by <- names(args$by)
+  } else if (is.list(args$by)) {
+    args$data_matrix <- expand.grid(args$by)
+    args$by <- names(args$data_matrix)
+  } else if (inherits(args$by, "formula")) {
+    args$data_matrix <- stats::model.frame(args$by, data = data)
+    args$by <- names(args$data_matrix)
   } else {
-    if (is.data.frame(args$at)) {
-      args$data_matrix <- args$at
-      args$at <- names(args$at)
-    } else if (is.list(args$at)) {
-      args$data_matrix <- expand.grid(args$at)
-      args$at <- names(args$data_matrix)
-    } else if (inherits(args$at, "formula")) {
-      args$data_matrix <- stats::model.frame(args$at, data = data)
-      args$at <- names(args$data_matrix)
+    if (!is.null(args$by) && all(args$by == "all")) {
+      target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+      target <- target[!target %in% args$fixed]
     } else {
-      if (!is.null(args$at) && all(args$at == "all")) {
-        target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
-        target <- target[!target %in% args$fixed]
-      } else {
-        target <- args$at
-      }
-      grid <- insight::get_datagrid(data, at = target, ...)
-      args$at <- attributes(grid)$at_specs$varname
-      args$data_matrix <- as.data.frame(grid[args$at])
-      if (length(args$at) == 0) args$at <- NULL # Post-clean
+      target <- args$by
     }
+    datagrid <- insight::get_datagrid(data, by = target, ...)
+    args$by <- attributes(datagrid)$at_specs$varname
+    args$data_matrix <- as.data.frame(datagrid[args$by])
+    if (length(args$by) == 0) args$by <- NULL # Post-clean
   }
 
   # Deal with 'contrast'
   if (!is.null(args$contrast)) {
-    contrast <- insight::get_datagrid(data, at = args$contrast, ...)
+    contrast <- insight::get_datagrid(data, by = args$contrast, ...)
     args$contrast <- attributes(contrast)$at_specs$varname
     contrast <- as.data.frame(contrast[args$contrast])
     if (is.null(args$data_matrix)) {
@@ -207,7 +213,7 @@ model_emmeans <- get_emmeans
 
   # Deal with 'fixed'
   if (!is.null(args$fixed)) {
-    fixed <- insight::get_datagrid(data[args$fixed], at = NULL, ...)
+    fixed <- insight::get_datagrid(data[args$fixed], by = NULL, ...)
     if (is.null(args$data_matrix)) {
       args$data_matrix <- fixed
     } else {
@@ -229,9 +235,9 @@ model_emmeans <- get_emmeans
   # It's annoying and an ugly fix, not sure how to address
   if (!is.null(args$emmeans_at)) {
     args$retransform <- list()
-    terms <- insight::find_terms(model)$conditional
+    model_terms <- insight::find_terms(model)$conditional
     for (var_at in names(args$emmeans_at)) {
-      term <- terms[grepl(var_at, terms, fixed = TRUE)]
+      term <- model_terms[grepl(var_at, model_terms, fixed = TRUE)]
       if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
         any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
         args$retransform[[var_at]] <- args$emmeans_at[[var_at]]

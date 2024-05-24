@@ -1,23 +1,23 @@
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examples
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # ==============================================
 #' # estimate_slopes
 #' # ==============================================
 #' if (require("ggplot2")) {
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-#'   x <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+#'   x <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 #'
 #'   layers <- visualisation_recipe(x)
 #'   layers
 #'   plot(layers)
 #'
 #'   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#'   x <- estimate_slopes(model, at = "Sepal.Width", length = 20)
+#'   x <- estimate_slopes(model, by = "Sepal.Width", length = 20)
 #'   plot(visualisation_recipe(x))
 #'
 #'   model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-#'   x <- estimate_slopes(model, at = c("Sepal.Width", "Species"))
+#'   x <- estimate_slopes(model, by = c("Sepal.Width", "Species"))
 #'   plot(visualisation_recipe(x))
 #' }
 #' \donttest{
@@ -27,11 +27,11 @@
 #'   data$Petal.Length <- data$Petal.Length^2
 #'
 #'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length), data = data)
-#'   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length"), length = 20)
+#'   x <- estimate_slopes(model, by = c("Petal.Width", "Petal.Length"), length = 20)
 #'   plot(visualisation_recipe(x))
 #'
 #'   model <- mgcv::gam(Sepal.Width ~ t2(Petal.Width, Petal.Length, by = Species), data = data)
-#'   x <- estimate_slopes(model, at = c("Petal.Width", "Petal.Length", "Species"), length = 10)
+#'   x <- estimate_slopes(model, by = c("Petal.Width", "Petal.Length", "Species"), length = 10)
 #'   plot(visualisation_recipe(x))
 #' }
 #' }
@@ -80,19 +80,17 @@ visualisation_recipe.estimate_slopes <- function(x,
       if (length(facs) > 0) {
         facet <- facs[1]
       }
+    } else if (length(facs) > 0) {
+      color <- facs[1]
+      fill <- facs[1]
+      group_ribbon <- facs[1]
+      group_line <- facs[1]
+      alpha <- "Confidence"
     } else {
-      if (length(facs) > 0) {
-        color <- facs[1]
-        fill <- facs[1]
-        group_ribbon <- facs[1]
-        group_line <- facs[1]
-        alpha <- "Confidence"
-      } else {
-        group_ribbon <- ".group"
-        group_line <- 1
-        fill <- "Confidence"
-        color <- NULL
-      }
+      group_ribbon <- ".group"
+      group_line <- 1
+      fill <- "Confidence"
+      color <- NULL
     }
   }
 

@@ -13,26 +13,26 @@ test_that("estimate_means() - core", {
   # Simple
   model <- lm(vs ~ cyl, data = dat)
   estim1 <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim1), c(3, 5))
+  expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(3, 5))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  expect_identical(dim(estim2), c(3L, 5L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
   # Interaction (factor * continuous)
   model <- lm(mpg ~ wt * gear, data = dat)
   estim1 <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim1), c(3, 5))
+  expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(3, 6))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  expect_identical(dim(estim2), c(3L, 6L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
   # At specific levels
   model <- lm(Sepal.Width ~ Species, data = iris)
-  estim1 <- suppressMessages(estimate_means(model, at = "Species=c('versicolor', 'virginica')"))
-  expect_equal(dim(estim1), c(2, 5))
-  estim2 <- suppressMessages(estimate_means(model, at = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(2, 5))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  estim1 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'virginica')"))
+  expect_identical(dim(estim1), c(2L, 5L))
+  estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
+  expect_identical(dim(estim2), c(2L, 5L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
   # Interactions between factors
   dat <- iris
@@ -40,24 +40,24 @@ test_that("estimate_means() - core", {
   dat <<- dat
 
   model <- lm(Sepal.Width ~ Species * Petal.Length_factor, data = dat)
-  estim1 <- suppressMessages(estimate_means(model, at = "all"))
-  expect_equal(dim(estim1), c(6, 6))
-  estim2 <- suppressWarnings(suppressMessages(estimate_means(model, at = "all", backend = "marginaleffects")))
-  expect_equal(dim(estim2), c(6, 6))
+  estim1 <- suppressMessages(estimate_means(model, by = "all"))
+  expect_identical(dim(estim1), c(6L, 6L))
+  estim2 <- suppressWarnings(suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects")))
+  expect_identical(dim(estim2), c(6L, 6L))
 
   # No interaction (two factors)
   model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
   estim1 <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim1), c(3, 5))
+  expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(3, 6))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  expect_identical(dim(estim2), c(3L, 6L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
 
   # At specific levels of continuous
-  estim1 <- suppressMessages(estimate_means(model, at = "Sepal.Width"))
+  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width"))
   expect_equal(dim(estim1), c(10, 5))
-  estim2 <- suppressMessages(estimate_means(model, at = "Sepal.Width", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width", backend = "marginaleffects"))
   expect_equal(dim(estim2), c(10, 6))
   # Note that the absolute values are different here... for unclear reasons
   expect_true(max(diff(estim1$Mean) - diff(estim2$Mean)) < 1e-10)
@@ -69,44 +69,44 @@ test_that("estimate_means() - core", {
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
   estim <- suppressMessages(estimate_means(model, transform = "response"))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
   expect_true(all(estim$Probability >= 0) & all(estim$Probability <= 1))
 
 
   model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
 
-  estim <- suppressMessages(estimate_means(model, at = "all"))
+  estim <- suppressMessages(estimate_means(model, by = "all"))
   expect_equal(dim(estim), c(30, 6))
 
   # In formula modification
   # FIXME: this got broken but it seems just to tedious to fix. Don't use in formula transforms.
   # model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
   # estim <- suppressMessages(estimate_means(model))
-  # expect_equal(dim(estim), c(3, 5))
+  # expect_equal(dim(estim), c(3L, 5L))
 
   # One continuous and one factor
   model <- lm(Petal.Length ~ Species * Sepal.Width, data = iris)
 
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
   estim <- suppressMessages(estimate_means(model, fixed = "Sepal.Width"))
-  expect_equal(dim(estim), c(3, 6))
-  estim <- suppressMessages(estimate_means(model, at = c("Species", "Sepal.Width"), length = 2))
-  expect_equal(dim(estim), c(6, 6))
-  estim <- suppressMessages(estimate_means(model, at = "Species=c('versicolor', 'setosa')"))
-  expect_equal(dim(estim), c(2, 5))
-  estim <- suppressMessages(estimate_means(model, at = "Sepal.Width=c(2, 4)"))
-  expect_equal(dim(estim), c(2, 5))
-  estim <- suppressMessages(estimate_means(model, at = c("Species", "Sepal.Width=0")))
-  expect_equal(dim(estim), c(3, 6))
-  estim <- suppressMessages(estimate_means(model, at = "Sepal.Width", length = 5))
+  expect_identical(dim(estim), c(3L, 6L))
+  estim <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2))
+  expect_identical(dim(estim), c(6L, 6L))
+  estim <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')"))
+  expect_identical(dim(estim), c(2L, 5L))
+  estim <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
+  expect_identical(dim(estim), c(2L, 5L))
+  estim <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0")))
+  expect_identical(dim(estim), c(3L, 6L))
+  estim <- suppressMessages(estimate_means(model, by = "Sepal.Width", length = 5))
   expect_equal(dim(estim), c(5, 5))
-  estim <- suppressMessages(estimate_means(model, at = "Sepal.Width=c(2, 4)"))
-  expect_equal(dim(estim), c(2, 5))
+  estim <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
+  expect_identical(dim(estim), c(2L, 5L))
 
   # Two factors
   dat <- iris
@@ -114,12 +114,12 @@ test_that("estimate_means() - core", {
   dat <<- dat
   model <- lm(Petal.Length ~ Species * Petal.Length_factor, data = dat)
 
-  estim <- suppressMessages(estimate_means(model, at = "all"))
-  expect_equal(dim(estim), c(6, 6))
-  estim <- suppressMessages(estimate_means(model, at = "Petal.Length_factor"))
-  expect_equal(dim(estim), c(2, 5))
-  estim <- suppressMessages(estimate_means(model, at = "Petal.Length_factor='B'"))
-  expect_true(as.character(unique(estim$Petal.Length_factor)) == "B")
+  estim <- suppressMessages(estimate_means(model, by = "all"))
+  expect_identical(dim(estim), c(6L, 6L))
+  estim <- suppressMessages(estimate_means(model, by = "Petal.Length_factor"))
+  expect_identical(dim(estim), c(2L, 5L))
+  estim <- suppressMessages(estimate_means(model, by = "Petal.Length_factor='B'"))
+  expect_identical(as.character(unique(estim$Petal.Length_factor)), "B")
 
 
   # Three factors
@@ -132,7 +132,7 @@ test_that("estimate_means() - core", {
   expect_equal(dim(estim), c(12, 7))
   estim <- suppressMessages(estimate_means(model, fixed = "am"))
   expect_equal(dim(estim), c(6, 7))
-  estim <- suppressMessages(estimate_means(model, at = c("gear='5'", "vs")))
+  estim <- suppressMessages(estimate_means(model, by = c("gear='5'", "vs")))
   expect_equal(dim(estim), c(2, 7))
 
   dat <- iris
@@ -156,13 +156,13 @@ test_that("estimate_means() - core", {
   model <- glm(Petal.Length_factor ~ Species, data = dat, family = "binomial")
 
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
   estim <- suppressMessages(estimate_means(model, transform = "none"))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
 
   model <- glm(Petal.Length ~ Species, data = iris, family = "Gamma")
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
 })
 
 test_that("estimate_means() - mixed models", {
@@ -176,15 +176,15 @@ test_that("estimate_means() - mixed models", {
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat)
 
   estim1 <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim1), c(3, 5))
+  expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(3, 5))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  expect_identical(dim(estim2), c(3L, 5L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
   model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat, family = "Gamma")
   estim1 <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim1), c(3, 5))
+  expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(3, 5))
-  expect_true(max(estim1$Mean - estim2$Mean) < 1e-10)
+  expect_identical(dim(estim2), c(3L, 5L))
+  expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 })

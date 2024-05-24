@@ -38,7 +38,7 @@
 #' estimate_contrasts(model, fixed = "Petal.Width")
 #'
 #' # Or modulate it
-#' estimate_contrasts(model, at = "Petal.Width", length = 4)
+#' estimate_contrasts(model, by = "Petal.Width", length = 4)
 #'
 #' # Standardized differences
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
@@ -67,24 +67,30 @@
 #' model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "wt")
-#' estimate_contrasts(model, at = "wt", length = 4)
+#' estimate_contrasts(model, by = "wt", length = 4)
 #'
 #' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-#' estimate_contrasts(model, at = "Petal.Length", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
 estimate_contrasts <- function(model,
                                contrast = NULL,
-                               at = NULL,
+                               by = NULL,
                                fixed = NULL,
                                transform = "none",
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
                                adjust = NULL,
+                               at = NULL,
                                ...) {
+  if (!is.null(at)) {
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+    by <- at
+  }
+
   # Deprecation
   if (!is.null(adjust)) {
     insight::format_warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.")
@@ -94,7 +100,7 @@ estimate_contrasts <- function(model,
   # Run emmeans
   estimated <- get_emcontrasts(model,
     contrast = contrast,
-    at = at,
+    by = by,
     fixed = fixed,
     transform = transform,
     method = method,
@@ -106,19 +112,18 @@ estimate_contrasts <- function(model,
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    contrasts <- bayestestR::describe_posterior(estimated, ci = ci, ...)
-    contrasts <- cbind(estimated@grid, contrasts)
-    contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
+    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
+    out <- .clean_names_bayesian(out, model, transform, type = "contrast")
   } else {
-    contrasts <- as.data.frame(merge(
+    out <- as.data.frame(merge(
       as.data.frame(estimated),
       stats::confint(estimated, level = ci, adjust = p_adjust)
     ))
-    contrasts <- .clean_names_frequentist(contrasts)
+    out <- .clean_names_frequentist(out)
   }
-  contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  contrasts <- datawizard::data_relocate(
-    contrasts,
+  out$null <- NULL # introduced in emmeans 1.6.1 (#115)
+  out <- datawizard::data_relocate(
+    out,
     c("CI_low", "CI_high"),
     after = c("Difference", "Odds_ratio", "Ratio")
   )
@@ -126,38 +131,39 @@ estimate_contrasts <- function(model,
 
   # Format contrasts names
   # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(contrasts$contrast), " - |\\/")
+  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
   level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
   names(level_cols) <- c("Level1", "Level2")
   level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
   level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
 
   # Merge levels and rest
-  contrasts$contrast <- NULL
-  contrasts <- cbind(level_cols, contrasts)
+  out$contrast <- NULL
+  out <- cbind(level_cols, out)
 
 
   # Table formatting
-  attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(contrasts, "table_footer") <- .estimate_means_footer(
-    contrasts,
+  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_footer") <- .estimate_means_footer(
+    out,
     info$contrast,
     type = "contrasts",
     p_adjust = p_adjust
   )
 
   # Add attributes
-  attr(contrasts, "model") <- model
-  attr(contrasts, "response") <- insight::find_response(model)
-  attr(contrasts, "ci") <- ci
-  attr(contrasts, "transform") <- transform
-  attr(contrasts, "at") <- info$at
-  attr(contrasts, "fixed") <- info$fixed
-  attr(contrasts, "contrast") <- info$contrast
-  attr(contrasts, "p_adjust") <- p_adjust
+  attr(out, "model") <- model
+  attr(out, "response") <- insight::find_response(model)
+  attr(out, "ci") <- ci
+  attr(out, "transform") <- transform
+  attr(out, "at") <- info$by
+  attr(out, "by") <- info$by
+  attr(out, "fixed") <- info$fixed
+  attr(out, "contrast") <- info$contrast
+  attr(out, "p_adjust") <- p_adjust
 
 
   # Output
-  class(contrasts) <- c("estimate_contrasts", "see_estimate_contrasts", class(contrasts))
-  contrasts
+  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
+  out
 }

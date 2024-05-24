@@ -18,39 +18,30 @@
 #'   indices (such as SE and CI), as these are not computable.
 #' @param ... Other arguments passed to or from other methods.
 #'
-#' @examples
+#' @examplesIf require("lme4") && require("see")
 #' # lme4 model
-#' if (require("lme4") && require("see")) {
-#'   model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
-#'   random <- estimate_grouplevel(model)
-#'   random
+#' data(mtcars)
+#' model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+#' random <- estimate_grouplevel(model)
+#' random
 #'
-#'   # Visualize random effects
-#'   plot(random)
+#' # Visualize random effects
+#' plot(random)
 #'
-#'   # Show group-specific effects
-#'   estimate_grouplevel(model, deviation = FALSE)
+#' # Show group-specific effects
+#' estimate_grouplevel(model, deviation = FALSE)
 #'
-#'   # Reshape to wide data so that it matches the original dataframe...
-#'   reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+#' # Reshape to wide data so that it matches the original dataframe...
+#' reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 #'
-#'   # ... and can be easily combined
-#'   alldata <- cbind(mtcars, reshaped)
+#' # ... and can be easily combined
+#' alldata <- cbind(mtcars, reshaped)
 #'
-#'   # Use summary() to remove duplicated rows
-#'   summary(reshaped)
+#' # Use summary() to remove duplicated rows
+#' summary(reshaped)
 #'
-#'   # Compute BLUPs
-#'   estimate_grouplevel(model, type = "total")
-#' }
-#'
-#' # Bayesian models
-#' \donttest{
-#' if (require("rstanarm")) {
-#'   model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb) + (1 | gear), data = mtcars, refresh = 0)
-#'   # Broken estimate_grouplevel(model)
-#' }
-#' }
+#' # Compute BLUPs
+#' estimate_grouplevel(model, type = "total")
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {
   # Extract params

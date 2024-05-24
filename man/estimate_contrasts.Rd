@@ -7,13 +7,14 @@
 estimate_contrasts(
   model,
   contrast = NULL,
-  at = NULL,
+  by = NULL,
   fixed = NULL,
   transform = "none",
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
   adjust = NULL,
+  at = NULL,
   ...
 )
 }
@@ -23,7 +24,7 @@ estimate_contrasts(
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
@@ -52,6 +53,8 @@ section in the \code{emmeans::test} documentation.}
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
 \item{adjust}{Deprecated in favour of \code{p_adjust}.}
+
+\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -144,7 +147,7 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 estimate_contrasts(model, fixed = "Petal.Width")
 
 # Or modulate it
-estimate_contrasts(model, at = "Petal.Width", length = 4)
+estimate_contrasts(model, by = "Petal.Width", length = 4)
 
 # Standardized differences
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
@@ -173,10 +176,10 @@ estimate_contrasts(model, fixed = "am")
 model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)
 estimate_contrasts(model, fixed = "wt")
-estimate_contrasts(model, at = "wt", length = 4)
+estimate_contrasts(model, by = "wt", length = 4)
 
 model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-estimate_contrasts(model, at = "Petal.Length", test = "bf")
+estimate_contrasts(model, by = "Petal.Length", test = "bf")
 }
 \dontshow{\}) # examplesIf}
 }

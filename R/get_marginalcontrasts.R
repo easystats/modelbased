@@ -9,12 +9,12 @@
 #
 # estimate_means(model)
 # estimate_means(model, fixed = "Sepal.Width")
-# estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
-# estimate_means(model, at = "Species=c('versicolor', 'setosa')")
-# estimate_means(model, at = "Sepal.Width=c(2, 4)")
-# estimate_means(model, at = c("Species", "Sepal.Width=0"))
-# estimate_means(model, at = "Sepal.Width", length = 5)
-# estimate_means(model, at = "Sepal.Width=c(2, 4)")
+# estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+# estimate_means(model, by = "Species=c('versicolor', 'setosa')")
+# estimate_means(model, by = "Sepal.Width=c(2, 4)")
+# estimate_means(model, by = c("Species", "Sepal.Width=0"))
+# estimate_means(model, by = "Sepal.Width", length = 5)
+# estimate_means(model, by = "Sepal.Width=c(2, 4)")
 #
 # # Methods that can be applied to it:
 # means <- estimate_means(model, fixed = "Sepal.Width")
@@ -29,13 +29,13 @@
 #
 #   model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 #  estimate_means(model)
-#   estimate_means(model, at = "Sepal.Width", length = 3)
+#   estimate_means(model, by = "Sepal.Width", length = 3)
 # }
 # }
 # }
 # #' @keywords internal
 # .get_marginalmeans <- function(model,
-#                                at = "auto",
+#                                by = "auto",
 #                                fixed = NULL,
 #                                transform = "response",
 #                                ci = 0.95,

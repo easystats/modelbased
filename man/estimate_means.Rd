@@ -6,18 +6,19 @@
 \usage{
 estimate_means(
   model,
-  at = "auto",
+  by = "auto",
   fixed = NULL,
   transform = "response",
   ci = 0.95,
   backend = "emmeans",
+  at = NULL,
   ...
 )
 }
 \arguments{
 \item{model}{A statistical model.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
@@ -40,6 +41,8 @@ probabilities.}
 
 \item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
 The latter is experimental and some features might not work.}
+
+\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -118,12 +121,12 @@ model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
 estimate_means(model, fixed = "Sepal.Width")
-estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
-estimate_means(model, at = "Species=c('versicolor', 'setosa')")
-estimate_means(model, at = "Sepal.Width=c(2, 4)")
-estimate_means(model, at = c("Species", "Sepal.Width=0"))
-estimate_means(model, at = "Sepal.Width", length = 5)
-estimate_means(model, at = "Sepal.Width=c(2, 4)")
+estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+estimate_means(model, by = "Species=c('versicolor', 'setosa')")
+estimate_means(model, by = "Sepal.Width=c(2, 4)")
+estimate_means(model, by = c("Species", "Sepal.Width=0"))
+estimate_means(model, by = "Sepal.Width", length = 5)
+estimate_means(model, by = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, fixed = "Sepal.Width")
@@ -140,7 +143,7 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
 model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
 estimate_means(model)
-estimate_means(model, at = "Sepal.Width", length = 3)
+estimate_means(model, by = "Sepal.Width", length = 3)
 }
 \dontshow{\}) # examplesIf}
 }

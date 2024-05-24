@@ -8,46 +8,52 @@
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #'   get_emtrends(model)
-#'   get_emtrends(model, at = "Species")
-#'   get_emtrends(model, at = "Petal.Length")
-#'   get_emtrends(model, at = c("Species", "Petal.Length"))
+#'   get_emtrends(model, by = "Species")
+#'   get_emtrends(model, by = "Petal.Length")
+#'   get_emtrends(model, by = c("Species", "Petal.Length"))
 #'
 #'   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 #'   get_emtrends(model)
-#'   get_emtrends(model, at = "Sepal.Width")
+#'   get_emtrends(model, by = "Sepal.Width")
 #' }
 #' @export
 get_emtrends <- function(model,
                          trend = NULL,
-                         at = NULL,
+                         by = NULL,
                          fixed = NULL,
                          levels = NULL,
                          modulate = NULL,
+                         at = NULL,
                          ...) {
   # Deprecation
+  if (!is.null(at)) {
+    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
+    by <- at
+  }
   if (!is.null(levels) || !is.null(modulate)) {
-    warning("The `levels` and `modulate` arguments are deprecated. Please use `at` instead.", call. = FALSE)
-    at <- c(levels, modulate)
+    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `by` instead.") # nolint
+    by <- c(levels, modulate)
   }
 
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  args <- .guess_emtrends_arguments(model, trend, at, fixed, ...)
+  my_args <- .guess_emtrends_arguments(model, trend, by, fixed, ...)
 
   # Run emtrends
   estimated <- emmeans::emtrends(
     model,
-    specs = args$emmeans_specs,
-    var = args$trend,
-    at = args$emmeans_at,
+    specs = my_args$emmeans_specs,
+    var = my_args$trend,
+    at = my_args$emmeans_at,
     ...
   )
 
-  attr(estimated, "trend") <- args$trend
-  attr(estimated, "at") <- args$at
-  attr(estimated, "fixed") <- args$fixed
+  attr(estimated, "trend") <- my_args$trend
+  attr(estimated, "at") <- my_args$by
+  attr(estimated, "by") <- my_args$by
+  attr(estimated, "fixed") <- my_args$fixed
   estimated
 }
 
@@ -62,26 +68,26 @@ model_emtrends <- get_emtrends
 #' @keywords internal
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
-                                      at = NULL,
+                                      by = NULL,
                                       fixed = NULL,
                                       ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  data <- insight::get_data(model)
+  model_data <- insight::get_data(model)
 
   # Guess arguments
   if (is.null(trend)) {
-    trend <- predictors[sapply(data[predictors], is.numeric)][1]
+    trend <- predictors[sapply(model_data[predictors], is.numeric)][1]
     if (!length(trend) || is.na(trend)) {
-      stop("Model contains no numeric predictor. Please specify 'trend'.", call. = FALSE)
+      insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
     }
-    message('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
+    insight::format_alert('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
   }
   if (length(trend) > 1) {
-    message("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
+    insight::format_alert("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
     trend <- trend[1]
   }
 
-  args <- list(trend = trend, at = at, fixed = fixed)
-  .format_emmeans_arguments(model, args, data, ...)
+  my_args <- list(trend = trend, by = by, fixed = fixed)
+  .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
