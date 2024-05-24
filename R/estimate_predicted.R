@@ -177,7 +177,8 @@
 #' \donttest{
 #' if (require("rstanarm")) {
 #'   model <- suppressWarnings(rstanarm::stan_glm(
-#'     mpg ~ wt, data = mtcars, refresh = 0, iter = 200
+#'     mpg ~ wt,
+#'     data = mtcars, refresh = 0, iter = 200
 #'   ))
 #'   estimate_response(model)
 #'   estimate_relation(model)
@@ -209,7 +210,7 @@ estimate_response <- function(...) {
   #  TODO: If estimate_response() is removed, document `NULL` with this text.
   insight::format_alert(
     "`estimate_response()` is deprecated.",
-    "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead."
+    "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead." # nolint
   )
   estimate_expectation(...)
 }

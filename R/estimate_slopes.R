@@ -197,7 +197,7 @@ summary.estimate_slopes <- function(object, ...) {
 .estimate_slopes_summarize <- function(data, trend, ...) {
   # Find beginnings and ends -----------------------
   # First row - starting point
-  centrality_columns <- datawizard::data_find(
+  centrality_columns <- datawizard::extract_column_names(
     data,
     c("Coefficient", "Median", "Mean", "MAP_Estimate"),
     verbose = FALSE

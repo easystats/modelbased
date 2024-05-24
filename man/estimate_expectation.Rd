@@ -237,7 +237,8 @@ if (require("lme4")) {
 \donttest{
 if (require("rstanarm")) {
   model <- suppressWarnings(rstanarm::stan_glm(
-    mpg ~ wt, data = mtcars, refresh = 0, iter = 200
+    mpg ~ wt,
+    data = mtcars, refresh = 0, iter = 200
   ))
   estimate_response(model)
   estimate_relation(model)
