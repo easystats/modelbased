@@ -189,7 +189,7 @@ We can use `geom_smooth()`, which can fit non-linear relationships in an empiric
 
 ```{r}
 data |>
-  group_by(Participant, Condition) |>
+  data_group(c("Participant", "Condition")) |>
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
   geom_jitter(alpha = 0.4) +
   geom_smooth(method = "loess", se = FALSE) +
