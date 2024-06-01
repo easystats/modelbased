@@ -45,8 +45,9 @@ Imports:
     utils
 Suggests:
     brms,
+    coda,
     correlation,
-    emmeans (>= 1.8.3),
+    emmeans (>= 1.10.2),
     gamm4,
     gganimate,
     ggplot2,
@@ -62,8 +63,8 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
-    see (>= 0.7.4),
-    testthat
+    see (>= 0.8.4),
+    testthat (>= 3.2.1)
 VignetteBuilder:
     knitr
 Encoding: UTF-8

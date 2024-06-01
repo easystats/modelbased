@@ -116,6 +116,7 @@ test_that("estimate_contrasts - Bayesian", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
+  skip_if_not_installed("coda")
 
   dat <- iris
   dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
