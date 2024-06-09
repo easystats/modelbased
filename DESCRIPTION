@@ -39,7 +39,7 @@ Imports:
     effectsize (>= 0.8.8),
     insight (>= 0.20.0),
     parameters (>= 0.21.7),
-    performance (>= 0.11.0),
+    performance (>= 0.12.0),
     graphics,
     stats,
     utils
