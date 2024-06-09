@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.7.1
+Version: 0.8.7.3
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -35,11 +35,11 @@ Depends:
     R (>= 3.6)
 Imports:
     bayestestR (>= 0.13.2),
-    datawizard (>= 0.10.0),
+    datawizard (>= 0.11.0),
     effectsize (>= 0.8.8),
-    insight (>= 0.19.11),
+    insight (>= 0.20.0),
     parameters (>= 0.21.7),
-    performance (>= 0.11.0),
+    performance (>= 0.12.0),
     graphics,
     stats,
     utils
@@ -73,8 +73,4 @@ RoxygenNote: 7.3.1
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
-Config/Needs/website:
-    rstudio/bslib,
-    r-lib/pkgdown,
-    easystats/easystatstemplate
-Remotes: easystats/insight, easystats/datawizard, easystats/parameters, easystats/performance
+Config/Needs/website: easystats/easystatstemplate
