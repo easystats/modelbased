@@ -47,7 +47,7 @@ linear models"* (aka, linear regressions). And thus, one can only wonder why
 these different tests have not been yet replaced by a unified model.
 
 ```{r echo=FALSE, fig.align='center', out.width="50%"}
-knitr::include_graphics("https://github.com/easystats/easystats/blob/master/hextools/modelbased/allregressions.png")
+knitr::include_graphics("https://github.com/easystats/easystats/raw/main/hextools/modelbased/allregressions.png")
 ```
 
 The tests mentioned above have major advantages. For instance, they are very easy to
