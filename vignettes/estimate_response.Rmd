@@ -258,7 +258,7 @@ gganimate::animate(p)
 # anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
 
 if (knitr::is_html_output()) {
-  knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
+  knitr::include_graphics("https://github.com/easystats/estimate/raw/main/man/figures/gganimate_figure.gif")
 } else {
   iris %>%
     ggplot(aes(x = Sepal.Length)) +
