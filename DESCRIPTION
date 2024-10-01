@@ -34,12 +34,12 @@ BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.13.2),
-    datawizard (>= 0.11.0),
-    effectsize (>= 0.8.8),
-    insight (>= 0.20.0),
-    parameters (>= 0.21.7),
-    performance (>= 0.12.0),
+    bayestestR (>= 0.14.0),
+    datawizard (>= 0.12.3),
+    effectsize (>= 0.8.9),
+    insight (>= 0.20.4),
+    parameters (>= 0.22.2),
+    performance (>= 0.12.3),
     graphics,
     stats,
     utils
