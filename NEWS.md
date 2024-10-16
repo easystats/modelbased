@@ -1,4 +1,6 @@
-# modelbased (development version)
+# modelbased 0.8.9
+
+- Fixed issues related to updates of other *easystats* packages.
 
 # modelbased 0.8.6
 
@@ -102,4 +104,3 @@
 # modelbased 0.1.0
 
 - Added a `NEWS.md` file to track changes to the package
-

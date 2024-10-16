@@ -115,8 +115,12 @@ model_emmeans <- get_emmeans
   if (insight::model_info(model)$is_bayesian) {
     means <- parameters::parameters(estimated, ci = ci, ...)
     means <- .clean_names_bayesian(means, model, transform, type = "mean")
-    means <- cbind(estimated@grid, means)
-    means[[".wgt."]] <- NULL # Drop the weight column
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(means))
+    if (length(colums_to_add)) {
+      means <- cbind(em_grid[colums_to_add], means)
+    }
   } else {
     means <- as.data.frame(stats::confint(estimated, level = ci))
     means$df <- NULL
