@@ -14,7 +14,8 @@
 #'
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf require("emmeans", quietly = TRUE)
+#' @examplesIf require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE) && require("rstanarm", quietly = TRUE)
+#' \dontrun{
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
@@ -44,8 +45,6 @@
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #' standardize(estimated)
 #'
-#' @examplesIf require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE) && require("rstanarm", quietly = TRUE)
-#' \dontrun{
 #' # Other models (mixed, Bayesian, ...)
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
