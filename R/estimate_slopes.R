@@ -122,8 +122,12 @@ estimate_slopes <- function(model,
   if (insight::model_info(model)$is_bayesian) {
     trends <- parameters::parameters(estimated, ci = ci, ...)
     trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
-    trends <- cbind(estimated@grid, trends)
-    trends[[".wgt."]] <- NULL # Drop the weight column
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
+    if (length(colums_to_add)) {
+      trends <- cbind(em_grid[colums_to_add], trends)
+    }
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }
