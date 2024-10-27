@@ -123,7 +123,8 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE) && require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
@@ -152,19 +153,16 @@ estimate_contrasts(model, by = "Petal.Width", length = 4)
 # Standardized differences
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 standardize(estimated)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 # Other models (mixed, Bayesian, ...)
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
 model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("rstanarm", quietly = TRUE) && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 library(rstanarm)
 
-\donttest{
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
