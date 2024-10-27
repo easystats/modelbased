@@ -9,7 +9,7 @@ Work-in-progress."><meta property="og:image" content="https://easystats.github.i
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -130,29 +130,20 @@ across them).</p></dd>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: marginaleffects</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Term    Species Petal.Length Estimate Std. Error    z Pr(&gt;|z|)    S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length setosa             1.00    0.388     0.2602 1.49  0.13601  2.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length setosa             1.66    0.388     0.2601 1.49  0.13596  2.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         3.62    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         4.28    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         4.93    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          4.93    0.234     0.0819 2.86  0.00420  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          5.59    0.234     0.0819 2.86  0.00421  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          6.24    0.234     0.0818 2.86  0.00418  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          6.90    0.234     0.0819 2.86  0.00420  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2.5 % 97.5 %</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1221  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1220  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0740  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Species Estimate Std. Error    z Pr(&gt;|z|)    S   2.5 % 97.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa        0.388     0.2602 1.49  0.13601  2.9 -0.1221  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa        0.388     0.2601 1.49  0.13596  2.9 -0.1220  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica     0.234     0.0819 2.86  0.00420  7.9  0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica     0.234     0.0819 2.86  0.00421  7.9  0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica     0.234     0.0818 2.86  0.00418  7.9  0.0740  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica     0.234     0.0819 2.86  0.00420  7.9  0.0739  0.395</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, term, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, predicted_lo, predicted_hi, predicted, Species, Petal.Length, Sepal.Width </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Term: Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, term, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, predicted_lo, predicted_hi, predicted, Species, Petal.Length, Sepal.Width </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
@@ -165,7 +156,7 @@ across them).</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
 </div>
 
     </footer></div>
