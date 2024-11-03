@@ -102,7 +102,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Marginal effects and derivatives</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.8.9/vignettes/estimate_slopes.Rmd" class="external-link"><code>vignettes/estimate_slopes.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/estimate_slopes.Rmd" class="external-link"><code>vignettes/estimate_slopes.Rmd</code></a></small>
       <div class="d-none name"><code>estimate_slopes.Rmd</code></div>
     </div>
 
@@ -140,14 +140,23 @@ predictor and visualize it.</p>
 direction) across the different factor levels.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Parameter                           | Coefficient |   SE |         95% CI | t(144) |      p
-&gt; -------------------------------------------------------------------------------------------
-&gt; (Intercept)                         |        4.21 | 0.41 | [ 3.41,  5.02] |  10.34 | &lt; .001
-&gt; Petal Length                        |        0.54 | 0.28 | [ 0.00,  1.09] |   1.96 | 0.052 
-&gt; Species [versicolor]                |       -1.81 | 0.60 | [-2.99, -0.62] |  -3.02 | 0.003 
-&gt; Species [virginica]                 |       -3.15 | 0.63 | [-4.41, -1.90] |  -4.97 | &lt; .001
-&gt; Petal Length × Species [versicolor] |        0.29 | 0.30 | [-0.30,  0.87] |   0.97 | 0.334 
-&gt; Petal Length × Species [virginica]  |        0.45 | 0.29 | [-0.12,  1.03] |   1.56 | 0.120</code></pre>
+<pre><code>&gt; Parameter                           | Coefficient |   SE |         95% CI
+&gt; -------------------------------------------------------------------------
+&gt; (Intercept)                         |        4.21 | 0.41 | [ 3.41,  5.02]
+&gt; Petal Length                        |        0.54 | 0.28 | [ 0.00,  1.09]
+&gt; Species [versicolor]                |       -1.81 | 0.60 | [-2.99, -0.62]
+&gt; Species [virginica]                 |       -3.15 | 0.63 | [-4.41, -1.90]
+&gt; Petal Length × Species [versicolor] |        0.29 | 0.30 | [-0.30,  0.87]
+&gt; Petal Length × Species [virginica]  |        0.45 | 0.29 | [-0.12,  1.03]
+&gt; 
+&gt; Parameter                           | t(144) |      p
+&gt; -----------------------------------------------------
+&gt; (Intercept)                         |  10.34 | &lt; .001
+&gt; Petal Length                        |   1.96 | 0.052 
+&gt; Species [versicolor]                |  -3.02 | 0.003 
+&gt; Species [virginica]                 |  -4.97 | &lt; .001
+&gt; Petal Length × Species [versicolor] |   0.97 | 0.334 
+&gt; Petal Length × Species [virginica]  |   1.56 | 0.120</code></pre>
 <p>Moreover, the interaction is not significant. However, we see below
 that removing the interaction does not <em>substantially</em> improve
 the model’s performance. So, for the sake of the demonstration, let’s
