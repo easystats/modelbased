@@ -1,6 +1,7 @@
 skip_on_os("windows")
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")
+skip_if_not_installed("RcppEigen")
 skip_if_not_installed("emmeans")
 
 test_that("estimate_means - brms", {

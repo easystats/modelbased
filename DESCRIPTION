@@ -60,6 +60,7 @@ Suggests:
     mgcv,
     patchwork,
     poorman,
+    RcppEigen,
     report,
     rmarkdown,
     rstanarm,
