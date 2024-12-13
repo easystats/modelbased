@@ -524,10 +524,10 @@ visualisation_recipe.estimate_predicted <- function(x,
 # Utilities ---------------------------------------------------------------
 
 .visualisation_recipe_getrawdata <- function(x, ...) {
-  rawdata <- insight::get_data(attributes(x)$model)
+  rawdata <- insight::get_data(attributes(x)$model, verbose = FALSE)
 
   # Add response to data if not there
   y <- insight::find_response(attributes(x)$model)
-  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model)
+  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
   rawdata
 }

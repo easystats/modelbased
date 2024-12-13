@@ -60,7 +60,7 @@ model_emtrends <- get_emtrends
                                       ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
 
   # Guess arguments
   if (is.null(trend)) {

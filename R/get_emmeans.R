@@ -115,7 +115,7 @@ model_emmeans <- get_emmeans
   means <- means[names(means) != "1"]
 
   # Restore factor levels
-  means <- datawizard::data_restoretype(means, insight::get_data(model))
+  means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
 
 
   info <- attributes(estimated)
@@ -139,7 +139,7 @@ model_emmeans <- get_emmeans
                                      ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  my_data <- insight::get_data(model)
+  my_data <- insight::get_data(model, verbose = FALSE)
 
   # Guess arguments
   if (!is.null(by) && length(by) == 1 && by == "auto") {

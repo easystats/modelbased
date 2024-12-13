@@ -130,7 +130,7 @@ estimate_slopes <- function(model,
   trends <- trends[names(trends) != "1"]
 
   # Restore factor levels
-  trends <- datawizard::data_restoretype(trends, insight::get_data(model))
+  trends <- datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
