@@ -2,7 +2,6 @@
 % Please edit documentation in R/estimate_predicted.R
 \name{estimate_expectation}
 \alias{estimate_expectation}
-\alias{estimate_response}
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
@@ -15,8 +14,6 @@ estimate_expectation(
   keep_iterations = FALSE,
   ...
 )
-
-estimate_response(...)
 
 estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
 
@@ -180,8 +177,6 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 }
 }
-
-\code{estimate_response()} is a deprecated alias for \code{estimate_expectation()}.
 }
 
 \section{Data for predictions}{
@@ -198,22 +193,21 @@ to generate model predictions for specific combinations of predictor values.
 }
 
 \examples{
+\dontshow{if (all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
 
 # Get predicted and prediction interval (see insight::get_predicted)
-estimate_response(model)
+estimate_expectation(model)
 
 # Get expected values with confidence interval
 pred <- estimate_relation(model)
 pred
 
 # Visualisation (see visualisation_recipe())
-if (require("see")) {
-  plot(pred)
-}
+plot(pred)
 
 # Standardize predictions
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
@@ -223,25 +217,22 @@ unstandardize(z, include_response = FALSE)
 
 # Logistic Models
 model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-estimate_response(model)
+estimate_expectation(model)
 estimate_relation(model)
 
 # Mixed models
-if (require("lme4")) {
-  model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-  estimate_response(model)
-  estimate_relation(model)
-}
+model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+estimate_expectation(model)
+estimate_relation(model)
 
 # Bayesian models
 \donttest{
-if (require("rstanarm")) {
-  model <- suppressWarnings(rstanarm::stan_glm(
-    mpg ~ wt,
-    data = mtcars, refresh = 0, iter = 200
-  ))
-  estimate_response(model)
-  estimate_relation(model)
+model <- suppressWarnings(rstanarm::stan_glm(
+  mpg ~ wt,
+  data = mtcars, refresh = 0, iter = 200
+))
+estimate_expectation(model)
+estimate_relation(model)
 }
-}
+\dontshow{\}) # examplesIf}
 }

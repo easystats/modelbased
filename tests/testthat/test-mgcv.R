@@ -18,13 +18,13 @@ test_that("estimate_contrasts - mgcv gam", {
   expect_equal(dim(estim), c(3, 9))
 })
 
-test_that("estimate_response - mgcv gam", {
+test_that("estimate_expectation - mgcv gam", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("gamm4")
   skip_if_not_installed("emmeans")
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
-  estim <- suppressMessages(estimate_response(model))
+  estim <- suppressMessages(estimate_expectation(model))
   expect_equal(dim(estim), c(150, 7))
 })
 
@@ -41,13 +41,13 @@ test_that("estimate_link - mgcv gam", {
 # model <- mgcv::gam(Sepal.Length ~ Petal.Length + s(Sepal.Width) + s(Species, bs = "fs"), data = iris)
 # estim <- estimate_link(model)
 
-test_that("estimate_response - mgcv gamm", {
+test_that("estimate_expectation - mgcv gamm", {
   skip_if_not_installed("mgcv")
   skip_if_not_installed("gamm4")
   skip_if_not_installed("emmeans")
   model <- mgcv::gamm(Sepal.Length ~ Petal.Length + s(Sepal.Width), random = list(Species = ~1), data = iris)
 
-  estim <- suppressMessages(estimate_response(model))
+  estim <- suppressMessages(estimate_expectation(model))
   expect_equal(dim(estim), c(150, 8))
 })
 
@@ -69,8 +69,8 @@ test_that("estimate_link - mgcv gamm", {
 
 # model <- gamm4::gamm4(Sepal.Length ~ Petal.Length + s(Sepal.Width), random=~(1|Species), data = iris)
 #
-# test_that("estimate_response - gamm4", {
-#   estim <- estimate_response(model)
+# test_that("estimate_expectation - gamm4", {
+#   estim <- estimate_expectation(model)
 #   expect_equal(dim(estim), c(150, 5))
 # })
 #

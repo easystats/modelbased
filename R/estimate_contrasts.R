@@ -10,7 +10,6 @@
 #'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 #'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
 #'   section in the `emmeans::test` documentation.
-#' @param adjust Deprecated in favour of `p_adjust`.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -81,20 +80,7 @@ estimate_contrasts <- function(model,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
-                               adjust = NULL,
-                               at = NULL,
                                ...) {
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-
-  # Deprecation
-  if (!is.null(adjust)) {
-    insight::format_warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.")
-    p_adjust <- adjust
-  }
-
   # Run emmeans
   estimated <- get_emcontrasts(model,
     contrast = contrast,

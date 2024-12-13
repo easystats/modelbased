@@ -4,7 +4,6 @@
 #' function. Same arguments apply.
 #'
 #' @inheritParams insight::get_datagrid
-#' @param target,at Deprecated name. Please use `by` instead.
 #'
 #' @return Reference grid data frame.
 #'
@@ -47,22 +46,11 @@ visualisation_matrix <- function(x, ...) {
 #' @export
 visualisation_matrix.data.frame <- function(x,
                                             by = "all",
-                                            target = NULL,
-                                            at = NULL,
                                             factors = "reference",
                                             numerics = "mean",
                                             preserve_range = FALSE,
                                             reference = x,
                                             ...) {
-  if (!is.null(target)) {
-    insight::format_warning("The 'target` argument name is deprecated in favour of `by`. Please replace `target` with `by`.") # nolint
-    by <- target
-  }
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-
   insight::get_datagrid(x,
     by = by,
     factors = factors,

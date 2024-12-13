@@ -12,8 +12,6 @@ visualisation_matrix(x, ...)
 \method{visualisation_matrix}{data.frame}(
   x,
   by = "all",
-  target = NULL,
-  at = NULL,
   factors = "reference",
   numerics = "mean",
   preserve_range = FALSE,
@@ -80,8 +78,6 @@ one or more factor levels, like \code{by = "Species = [setosa, versicolor]"}.
 
 The remaining variables not specified in \code{by} will be fixed (see also arguments
 \code{factors} and \code{numerics}).}
-
-\item{target, at}{Deprecated name. Please use \code{by} instead.}
 
 \item{factors}{Type of summary for factors. Can be \code{"reference"} (set at the
 reference level), \code{"mode"} (set at the most common level) or \code{"all"} to

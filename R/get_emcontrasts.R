@@ -32,15 +32,9 @@ get_emcontrasts <- function(model,
                             fixed = NULL,
                             transform = "none",
                             method = "pairwise",
-                            at = NULL,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
 
   # Guess arguments
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, fixed, ...)
@@ -84,7 +78,7 @@ model_emcontrasts <- get_emcontrasts
                                          ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
 
   # Guess arguments
   if (is.null(contrast)) {
@@ -92,7 +86,7 @@ model_emcontrasts <- get_emcontrasts
     if (!length(contrast) || is.na(contrast)) {
       contrast <- predictors[1]
     }
-    insight::format_alert('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.') # nolint
+    insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
   } else if (all(contrast == "all")) {
     contrast <- predictors
   }

@@ -4,14 +4,7 @@
 \alias{get_marginaleffects}
 \title{Easy marginaleffects}
 \usage{
-get_marginaleffects(
-  model,
-  trend = NULL,
-  by = NULL,
-  fixed = NULL,
-  at = NULL,
-  ...
-)
+get_marginaleffects(model, trend = NULL, by = NULL, fixed = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -26,8 +19,6 @@ across them).}
 
 \item{fixed}{A character vector indicating the names of the predictors to be
 "fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

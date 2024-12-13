@@ -48,7 +48,7 @@ test_that("estimate_slope - glmmTMB", {
 })
 
 
-test_that("estimate_response - glmmTMB", {
+test_that("estimate_expectation - glmmTMB", {
   estim <- suppressMessages(estimate_expectation(model2))
   expect_identical(dim(estim), c(nrow(data), 8L))
 })
@@ -58,7 +58,7 @@ test_that("estimate_link - glmmTMB", {
   expect_identical(dim(estim), c(20L, 7L))
 })
 
-test_that("estimate_response - glmmTMB", {
+test_that("estimate_expectation - glmmTMB", {
   estim <- suppressMessages(estimate_expectation(model2))
   expect_identical(dim(estim), c(644L, 8L))
 })

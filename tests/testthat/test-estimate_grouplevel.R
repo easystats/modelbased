@@ -35,7 +35,7 @@ test_that("estimate_grouplevel - lme4", {
 
   reshaped <- reshape_grouplevel(random)
   expect_equal(nrow(reshaped), nrow(data))
-  ref <- insight::get_data(model)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
+  ref <- insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
   all(reshaped$Subject == ref$Subject)
   all(reshaped$grp == ref$grp)
   all(reshaped$subgrp == ref$subgrp)
