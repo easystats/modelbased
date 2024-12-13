@@ -4,7 +4,7 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, at = NULL, ...)
+estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -18,8 +18,6 @@ here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
-
-\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

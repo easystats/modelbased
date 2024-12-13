@@ -21,20 +21,7 @@ get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
                          fixed = NULL,
-                         levels = NULL,
-                         modulate = NULL,
-                         at = NULL,
                          ...) {
-  # Deprecation
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-  if (!is.null(levels) || !is.null(modulate)) {
-    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `by` instead.") # nolint
-    by <- c(levels, modulate)
-  }
-
   # check if available
   insight::check_if_installed("emmeans")
 

@@ -169,6 +169,7 @@ test_that("estimate_means() - mixed models", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("emmeans")
   skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
   dat <- iris
   dat$Petal.Length_factor <- as.factor(ifelse(dat$Petal.Length < 4.2, "A", "B"))
   dat <<- dat
@@ -187,4 +188,18 @@ test_that("estimate_means() - mixed models", {
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
   expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
+
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ mined * spp + (1|site),
+    zi = ~mined,
+    family = poisson(),
+    data = Salamanders
+  )
+  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+  expect_snapshot(print(out))
+
+  m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
+  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+  expect_snapshot(print(out))
 })

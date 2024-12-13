@@ -17,7 +17,6 @@ get_emcontrasts(
   fixed = NULL,
   transform = "none",
   method = "pairwise",
-  at = NULL,
   ...
 )
 
@@ -28,53 +27,16 @@ model_emcontrasts(
   fixed = NULL,
   transform = "none",
   method = "pairwise",
-  at = NULL,
   ...
 )
 
-get_emmeans(
-  model,
-  by = "auto",
-  fixed = NULL,
-  transform = "response",
-  levels = NULL,
-  modulate = NULL,
-  at = NULL,
-  ...
-)
+get_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
 
-model_emmeans(
-  model,
-  by = "auto",
-  fixed = NULL,
-  transform = "response",
-  levels = NULL,
-  modulate = NULL,
-  at = NULL,
-  ...
-)
+model_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
 
-get_emtrends(
-  model,
-  trend = NULL,
-  by = NULL,
-  fixed = NULL,
-  levels = NULL,
-  modulate = NULL,
-  at = NULL,
-  ...
-)
+get_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
 
-model_emtrends(
-  model,
-  trend = NULL,
-  by = NULL,
-  fixed = NULL,
-  levels = NULL,
-  modulate = NULL,
-  at = NULL,
-  ...
-)
+model_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -103,11 +65,7 @@ probabilities.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
-\item{at}{Deprecated, use \code{by} instead.}
-
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
-
-\item{levels, modulate}{Deprecated, use \code{by} instead.}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}

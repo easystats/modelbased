@@ -108,12 +108,7 @@ estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             ci = 0.95,
-                            at = NULL,
                             ...) {
-  if (!is.null(at)) {
-    by <- at
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-  }
   # Sanitize arguments
   estimated <- get_emtrends(model, trend, by, ...)
   info <- attributes(estimated)

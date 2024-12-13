@@ -13,8 +13,6 @@ estimate_contrasts(
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
-  adjust = NULL,
-  at = NULL,
   ...
 )
 }
@@ -51,10 +49,6 @@ comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
 section in the \code{emmeans::test} documentation.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
-
-\item{adjust}{Deprecated in favour of \code{p_adjust}.}
-
-\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

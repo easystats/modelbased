@@ -32,15 +32,9 @@ get_emcontrasts <- function(model,
                             fixed = NULL,
                             transform = "none",
                             method = "pairwise",
-                            at = NULL,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
 
   # Guess arguments
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, fixed, ...)

@@ -18,16 +18,9 @@ get_marginaleffects <- function(model,
                                 trend = NULL,
                                 by = NULL,
                                 fixed = NULL,
-                                at = NULL,
                                 ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-
-  # Deprecation
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
 
   # Guess arguments
   if (is.null(trend)) {

@@ -11,7 +11,6 @@ estimate_means(
   transform = "response",
   ci = 0.95,
   backend = "emmeans",
-  at = NULL,
   ...
 )
 }
@@ -41,8 +40,6 @@ probabilities.}
 
 \item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
 The latter is experimental and some features might not work.}
-
-\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
