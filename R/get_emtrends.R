@@ -68,10 +68,10 @@ model_emtrends <- get_emtrends
     if (!length(trend) || is.na(trend)) {
       insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
     }
-    insight::format_alert('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
+    insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
   }
   if (length(trend) > 1) {
-    insight::format_alert("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
+    insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
     trend <- trend[1]
   }
 

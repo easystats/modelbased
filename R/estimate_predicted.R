@@ -259,7 +259,7 @@ estimate_relation <- function(model,
                                 keep_iterations = FALSE,
                                 ...) {
   # call "get_data()" only once...
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
   is_model <- insight::is_model(model)
 
   # model and data properties
