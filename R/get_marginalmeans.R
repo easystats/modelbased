@@ -16,26 +16,13 @@
   datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
 
-  if (marginal) {
-    means <- marginaleffects::predictions(model,
-      newdata = insight::get_data(model),
-      by = at_specs$varname,
-      conf_level = ci
-    )
-  } else if (insight::is_mixed_model(model)) {
-    means <- marginaleffects::predictions(model,
-      newdata = datagrid,
-      by = at_specs$varname,
-      conf_level = ci,
-      re.form = NA
-    )
-  } else {
-    means <- marginaleffects::predictions(model,
-      newdata = datagrid,
-      by = at_specs$varname,
-      conf_level = ci
-    )
-  }
+  ## TODO: extract correct type argument
+  means <- marginaleffects::avg_predictions(
+    model,
+    by = at_specs$varname,
+    conf_level = ci
+  )
+
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
   means
