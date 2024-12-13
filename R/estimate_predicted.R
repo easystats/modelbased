@@ -96,8 +96,6 @@
 #'   - By default, values are computed using a reference grid spanning the
 #'     observed range of predictor values (see [visualisation_matrix()]).
 #'
-#' `estimate_response()` is a deprecated alias for `estimate_expectation()`.
-#'
 #' @section Data for predictions:
 #'
 #' If the `data = NULL`, values are estimated using the data used to fit the
@@ -137,23 +135,21 @@
 #'   [insight::get_datagrid()] (used when `data = "grid"`) and
 #'   [insight::get_predicted()].
 #'
-#' @examples
+#' @examplesIf all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
 #'
 #' # Get predicted and prediction interval (see insight::get_predicted)
-#' estimate_response(model)
+#' estimate_expectation(model)
 #'
 #' # Get expected values with confidence interval
 #' pred <- estimate_relation(model)
 #' pred
 #'
 #' # Visualisation (see visualisation_recipe())
-#' if (require("see")) {
-#'   plot(pred)
-#' }
+#' plot(pred)
 #'
 #' # Standardize predictions
 #' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
@@ -163,26 +159,22 @@
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-#' estimate_response(model)
+#' estimate_expectation(model)
 #' estimate_relation(model)
 #'
 #' # Mixed models
-#' if (require("lme4")) {
-#'   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-#'   estimate_response(model)
-#'   estimate_relation(model)
-#' }
+#' model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+#' estimate_expectation(model)
+#' estimate_relation(model)
 #'
 #' # Bayesian models
 #' \donttest{
-#' if (require("rstanarm")) {
-#'   model <- suppressWarnings(rstanarm::stan_glm(
-#'     mpg ~ wt,
-#'     data = mtcars, refresh = 0, iter = 200
-#'   ))
-#'   estimate_response(model)
-#'   estimate_relation(model)
-#' }
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt,
+#'   data = mtcars, refresh = 0, iter = 200
+#' ))
+#' estimate_expectation(model)
+#' estimate_relation(model)
 #' }
 #' @return A data frame of predicted values and uncertainty intervals, with
 #' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
@@ -202,20 +194,6 @@ estimate_expectation <- function(model,
     ...
   )
 }
-
-
-#' @rdname estimate_expectation
-#' @export
-estimate_response <- function(...) {
-  #  TODO: If estimate_response() is removed, document `NULL` with this text.
-  insight::format_alert(
-    "`estimate_response()` is deprecated.",
-    "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead." # nolint
-  )
-  estimate_expectation(...)
-}
-
-
 
 
 #' @rdname estimate_expectation

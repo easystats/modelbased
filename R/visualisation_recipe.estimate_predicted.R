@@ -6,7 +6,7 @@
 #'   estimation. Can be set to `"none"` to remove it. When input is the result
 #'   of `estimate_means`, `show_data` can be "points" (the jittered observation
 #'   points), "boxplot", "violin" a combination of them (see examples). When
-#'   input is the result of `estimate_response` or `estimate_relation`,
+#'   input is the result of `estimate_expectation` or `estimate_relation`,
 #'   `show_data` can be "points" (the points of the original data corresponding
 #'   to the x and y axes), "density_2d", "density_2d_filled",
 #'   "density_2d_polygon" or "density_2d_raster".
@@ -16,7 +16,7 @@
 #'
 #' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # ==============================================
-#' # estimate_relation, estimate_response, ...
+#' # estimate_relation, estimate_expectation, ...
 #' # ==============================================
 #' # Simple Model ---------------
 #' x <- estimate_relation(lm(mpg ~ wt, data = mtcars))

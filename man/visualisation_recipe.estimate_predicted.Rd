@@ -63,7 +63,7 @@
 estimation. Can be set to \code{"none"} to remove it. When input is the result
 of \code{estimate_means}, \code{show_data} can be "points" (the jittered observation
 points), "boxplot", "violin" a combination of them (see examples). When
-input is the result of \code{estimate_response} or \code{estimate_relation},
+input is the result of \code{estimate_expectation} or \code{estimate_relation},
 \code{show_data} can be "points" (the points of the original data corresponding
 to the x and y axes), "density_2d", "density_2d_filled",
 "density_2d_polygon" or "density_2d_raster".}
@@ -138,7 +138,7 @@ plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
-# estimate_relation, estimate_response, ...
+# estimate_relation, estimate_expectation, ...
 # ==============================================
 # Simple Model ---------------
 x <- estimate_relation(lm(mpg ~ wt, data = mtcars))

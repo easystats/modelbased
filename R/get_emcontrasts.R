@@ -86,7 +86,7 @@ model_emcontrasts <- get_emcontrasts
     if (!length(contrast) || is.na(contrast)) {
       contrast <- predictors[1]
     }
-    insight::format_alert('No variable was specified for contrast estimation. Selecting `contrast = "', contrast, '"`.') # nolint
+    insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
   } else if (all(contrast == "all")) {
     contrast <- predictors
   }
