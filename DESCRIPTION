@@ -44,6 +44,7 @@ Imports:
     stats,
     utils
 Suggests:
+    BH,
     brms,
     coda,
     correlation,
