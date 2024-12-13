@@ -63,7 +63,7 @@
 #' `condition` is a factor with 3 levels A, B and C and `x` a continuous
 #' variable (like age for example). One idea is to see how this model performs,
 #' and compare the actual response y to the one predicted by the model (using
-#' [estimate_response()]). Another idea is evaluate the average mean at each of
+#' [estimate_expectation()]). Another idea is evaluate the average mean at each of
 #' the condition's levels (using [estimate_means()]), which can be useful to
 #' visualize them. Another possibility is to evaluate the difference between
 #' these levels (using [estimate_contrasts()]). Finally, one could also estimate
@@ -108,12 +108,7 @@ estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             ci = 0.95,
-                            at = NULL,
                             ...) {
-  if (!is.null(at)) {
-    by <- at
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-  }
   # Sanitize arguments
   estimated <- get_emtrends(model, trend, by, ...)
   info <- attributes(estimated)
@@ -135,7 +130,7 @@ estimate_slopes <- function(model,
   trends <- trends[names(trends) != "1"]
 
   # Restore factor levels
-  trends <- datawizard::data_restoretype(trends, insight::get_data(model))
+  trends <- datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")

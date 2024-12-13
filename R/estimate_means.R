@@ -52,13 +52,7 @@ estimate_means <- function(model,
                            transform = "response",
                            ci = 0.95,
                            backend = "emmeans",
-                           at = NULL,
                            ...) {
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, by, fixed, transform = transform, ...)

@@ -20,13 +20,11 @@
 #'   Thus for a logistic model, `"none"` will give estimations expressed in
 #'   log-odds (probabilities on logit scale) and `"response"` in terms of
 #'   probabilities.
-#' @param levels,modulate Deprecated, use `by` instead.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #'   / mean / contrasts. Other predictors of the model that are not included
 #'   here will be collapsed and "averaged" over (the effect will be estimated
 #'   across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
-#' @param at Deprecated, use `by` instead.
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -53,20 +51,7 @@ get_emmeans <- function(model,
                         by = "auto",
                         fixed = NULL,
                         transform = "response",
-                        levels = NULL,
-                        modulate = NULL,
-                        at = NULL,
                         ...) {
-  # Deprecation
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-  if (!is.null(levels) || !is.null(modulate)) {
-    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `by` instead.")
-    by <- c(levels, modulate)
-  }
-
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -130,7 +115,7 @@ model_emmeans <- get_emmeans
   means <- means[names(means) != "1"]
 
   # Restore factor levels
-  means <- datawizard::data_restoretype(means, insight::get_data(model))
+  means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
 
 
   info <- attributes(estimated)
@@ -154,7 +139,7 @@ model_emmeans <- get_emmeans
                                      ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  my_data <- insight::get_data(model)
+  my_data <- insight::get_data(model, verbose = FALSE)
 
   # Guess arguments
   if (!is.null(by) && length(by) == 1 && by == "auto") {
@@ -162,7 +147,7 @@ model_emmeans <- get_emmeans
     if (!length(by) || all(is.na(by))) {
       stop("Model contains no categorical factor. Please specify 'by'.", call. = FALSE)
     }
-    message("We selected `by = c(", toString(paste0('"', by, '"')), ")`.")
+    insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }
 
   my_args <- list(by = by, fixed = fixed)

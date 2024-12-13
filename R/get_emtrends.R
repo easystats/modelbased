@@ -21,20 +21,7 @@ get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
                          fixed = NULL,
-                         levels = NULL,
-                         modulate = NULL,
-                         at = NULL,
                          ...) {
-  # Deprecation
-  if (!is.null(at)) {
-    insight::format_warning("The `at` argument is deprecated and will be removed in the future. Please use `by` instead.") # nolint
-    by <- at
-  }
-  if (!is.null(levels) || !is.null(modulate)) {
-    insight::format_warning("The `levels` and `modulate` arguments are deprecated. Please use `by` instead.") # nolint
-    by <- c(levels, modulate)
-  }
-
   # check if available
   insight::check_if_installed("emmeans")
 
@@ -73,7 +60,7 @@ model_emtrends <- get_emtrends
                                       ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
 
   # Guess arguments
   if (is.null(trend)) {
@@ -81,10 +68,10 @@ model_emtrends <- get_emtrends
     if (!length(trend) || is.na(trend)) {
       insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
     }
-    insight::format_alert('No numeric variable was specified for slope estimation. Selecting `trend = "', trend, '"`.')
+    insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
   }
   if (length(trend) > 1) {
-    insight::format_alert("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")
+    insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
     trend <- trend[1]
   }
 

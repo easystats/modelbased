@@ -78,7 +78,7 @@
     if (!length(by) || all(is.na(by))) {
       insight::format_error("Model contains no categorical factor. Please specify 'by'.")
     }
-    insight::format_alert("We selected `by = c(", toString(paste0('"', by, '"')), ")`.")
+    insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }
 
   list(by = by)

@@ -11,7 +11,6 @@ estimate_means(
   transform = "response",
   ci = 0.95,
   backend = "emmeans",
-  at = NULL,
   ...
 )
 }
@@ -41,8 +40,6 @@ probabilities.}
 
 \item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
 The latter is experimental and some features might not work.}
-
-\item{at}{Deprecated, use \code{by} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -104,7 +101,7 @@ can also be "averaged" over other predictors, to get for instance the
 \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous
 variable (like age for example). One idea is to see how this model performs,
 and compare the actual response y to the one predicted by the model (using
-\code{\link[=estimate_response]{estimate_response()}}). Another idea is evaluate the average mean at each of
+\code{\link[=estimate_expectation]{estimate_expectation()}}). Another idea is evaluate the average mean at each of
 the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), which can be useful to
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate

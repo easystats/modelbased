@@ -1,3 +1,9 @@
+# modelbased 0.9.0
+
+## Breaking Changes
+
+- Deprecated argument and function names have been removed.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.

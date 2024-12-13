@@ -62,7 +62,7 @@ test_that("estimate_link", {
   expect_equal(dim(estimate_link(model, include_smooth = FALSE, length = 3)), c(3, 5))
 })
 
-test_that("estimate_response - Bayesian", {
+test_that("estimate_expectation - Bayesian", {
   skip_if_not_installed("gamm4")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
@@ -122,7 +122,7 @@ test_that("estimate_response - Bayesian", {
 })
 
 
-test_that("estimate_response - Frequentist", {
+test_that("estimate_expectation - Frequentist", {
   skip_if_not_installed("gamm4")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
@@ -158,7 +158,7 @@ test_that("estimate_response - Frequentist", {
 })
 
 
-test_that("estimate_response - VisMatrix", {
+test_that("estimate_expectation - VisMatrix", {
   skip_if_not_installed("gamm4")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
