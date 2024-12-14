@@ -203,3 +203,23 @@ test_that("estimate_means() - mixed models", {
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   expect_snapshot(print(out))
 })
+
+
+
+test_that("Test against other packages", {
+  skip_if_not_installed("emmeans")
+
+  dat <- mtcars
+  dat$gear <- as.factor(dat$gear)
+  dat$cyl <- as.factor(dat$cyl)
+  dat <<- dat
+
+  # Simple
+  model <- lm(vs ~ cyl, data = dat)
+  rez <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  rez_emmeans <- emmeans::emmeans(model, "cyl")
+
+  # TODO: estimate_means reorders factors based on datagrid?
+  # expect_lt(max(rez$Mean - as.data.frame(rez_emmeans)$emmean), 1e-10)
+
+})
