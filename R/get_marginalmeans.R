@@ -2,7 +2,6 @@
 .get_marginalmeans <- function(model,
                                by = "auto",
                                ci = 0.95,
-                               marginal = FALSE,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
