@@ -6,6 +6,7 @@
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
+  dots <- list(...)
 
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
@@ -13,16 +14,23 @@
   # find default response-type
   type <- .get_type_argument(model, ...)
 
-  # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- insight::get_datagrid(
+  # setup arguments
+  dg_args <- list(
     model,
     by = my_args$by,
     factors = "all",
-    include_random = TRUE,
-    # always show all theoretical values
-    preserve_range = FALSE,
-    ...
+    include_random = TRUE
   )
+  # always show all theoretical values by default
+  if (is.null(dots$preserve_range)) {
+    dg_args$preserve_range = FALSE
+  }
+  # add user-arguments from "...", but remove those arguments that are already set
+  dots[c("by", "factors", "include_random")] <- NULL
+  dg_args <- insight::compact_list(c(dg_args, dots))
+
+  # Get corresponding datagrid (and deal with particular ats)
+  datagrid <- do.call(insight::get_datagrid, dg_args)
   at_specs <- attributes(datagrid)$at_specs
 
   # model df
@@ -39,7 +47,6 @@
     hypothesis = hypothesis
   )
   # add user-arguments from "...", but remove those arguments that are already set
-  dots <- list(...)
   dots[c("by", "newdata", "conf_level", "df", "type", "hypothesis")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
