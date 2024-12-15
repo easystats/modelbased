@@ -38,7 +38,7 @@
 
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
-  attr(means, "focal_terms") <- colnames(datagrid)
+  attr(means, "focal_terms") <- my_args$focal_terms
   means
 }
 
@@ -83,26 +83,25 @@
     insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }
 
-  # # in "focal_terms", we want the variable names.
-  # focal_terms <- by
+  # in "focal_terms", we want the variable names.
+  focal_terms <- by
 
-  # # This is needed when we have something like
-  # # `by = "Species=c('versicolor', 'virginica')")`
-  # # we need the variable names for selecting columns in the output
-  # focals_to_fix <- vapply(by, function(i) grepl("=", i, fixed = TRUE), logical(1))
-  # if (any(focals_to_fix)) {
-  #   for (i in seq_along(focal_terms)) {
-  #     if (focals_to_fix[i]) {
-  #       focal_terms[i] <- insight::trim_ws(unlist(strsplit(by[i], "=", fixed = TRUE), use.names = FALSE))[1]
-  #     }
-  #   }
-  # }
+  # This is needed when we have something like
+  # `by = "Species=c('versicolor', 'virginica')")`
+  # we need the variable names for selecting columns in the output
+  focals_to_fix <- vapply(by, function(i) grepl("=", i, fixed = TRUE), logical(1))
+  if (any(focals_to_fix)) {
+    for (i in seq_along(focal_terms)) {
+      if (focals_to_fix[i]) {
+        focal_terms[i] <- insight::trim_ws(unlist(strsplit(by[i], "=", fixed = TRUE), use.names = FALSE))[1]
+      }
+    }
+  }
 
-  # # exceptions: by = "all"
-  # if (all(focal_terms == "all")) {
-  #   focal_terms <- predictors
-  # }
+  # exceptions: by = "all"
+  if (all(focal_terms == "all")) {
+    focal_terms <- predictors
+  }
 
-  # list(by = by, focal_terms = focal_terms)
-  list(by = by)
+  list(by = by, focal_terms = focal_terms)
 }
