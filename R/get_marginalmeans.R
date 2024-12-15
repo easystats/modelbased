@@ -14,14 +14,14 @@
   type <- .get_type_argument(model, ...)
 
   # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- insight::get_datagrid(model, by = my_args$by, ...)
+  datagrid <- insight::get_datagrid(model, by = my_args$by, factors = "all", ...)
   at_specs <- attributes(datagrid)$at_specs
 
   # setup arguments
   fun_args <- list(
     model,
     by = at_specs$varname,
-    newdata = datagrid,
+    newdata = as.data.frame(datagrid),
     conf_level = ci,
     type = type,
     hypothesis = hypothesis
