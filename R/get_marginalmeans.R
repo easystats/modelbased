@@ -6,7 +6,7 @@
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-
+browser()
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
 
@@ -15,9 +15,10 @@
 
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- insight::get_datagrid(model, by = my_args$by, ...)
+  at_specs <- attributes(datagrid)$at_specs
+
   # Drop random effects
   datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
-  at_specs <- attributes(datagrid)$at_specs
 
   # we can use this function for contrasts as well, just need to add "hypothesis"
   # argument
