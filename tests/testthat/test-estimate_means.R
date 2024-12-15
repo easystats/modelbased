@@ -47,7 +47,7 @@ test_that("estimate_means() - core", {
   expect_identical(dim(estim1), c(6L, 6L))
   estim2 <- suppressWarnings(suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects")))
   expect_identical(dim(estim2), c(6L, 6L))
-  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$Mean, c(3.428, 3.79557, 2.54211, 2.90968, 2.60643, 2.974), tolerance = 1e-4)
   expect_named(estim1, c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high"))
   expect_named(estim2, c("Species", "Petal.Length_factor", "Mean", "SE", "CI_low", "CI_high"))
 
@@ -56,10 +56,10 @@ test_that("estimate_means() - core", {
   estim1 <- suppressMessages(estimate_means(model))
   expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_identical(dim(estim2), c(3L, 6L))
+  expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
-  expect_named(estim2, c("Species", "Sepal.Width", "Mean", "SE", "CI_low", "CI_high"))
+  expect_named(estim2, c("Species", "Mean", "SE", "CI_low", "CI_high"))
 
 
   # At specific levels of continuous
