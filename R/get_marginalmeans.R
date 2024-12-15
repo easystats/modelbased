@@ -14,8 +14,11 @@
   type <- .get_type_argument(model, ...)
 
   # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- insight::get_datagrid(model, by = my_args$by, factors = "all", ...)
+  datagrid <- insight::get_datagrid(model, by = my_args$by, factors = "all", include_random = TRUE, ...)
   at_specs <- attributes(datagrid)$at_specs
+
+  # model df
+  dof <- insight::get_df(model)
 
   # setup arguments
   fun_args <- list(
@@ -23,6 +26,7 @@
     by = at_specs$varname,
     newdata = as.data.frame(datagrid),
     conf_level = ci,
+    df = dof,
     type = type,
     hypothesis = hypothesis
   )
@@ -48,16 +52,24 @@
 
 #' @keywords internal
 .format_marginaleffects_means <- function(means, model, ...) {
+  # model information
   model_data <- insight::get_data(model)
+  info <- insight::model_info(model)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
+
+  # estimate name
+  if (info$is_binomial || info$is_bernoulli) {
+    estimate_name <- "Probability"
+  } else {
+    estimate_name <- "Mean"
+  }
+
   # Format
   params <- parameters::parameters(means, verbose = FALSE)
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
-  params <- datawizard::data_rename(params, "Predicted", "Mean")
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE)
+  params <- datawizard::data_rename(params, "Predicted", estimate_name)
   params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup", non_focal))
   params <- datawizard::data_restoretype(params, model_data)
-
-
 
   # Store info
   attr(params, "at") <- attr(means, "by")

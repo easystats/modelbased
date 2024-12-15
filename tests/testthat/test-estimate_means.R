@@ -14,6 +14,8 @@ test_that("estimate_means() - core", {
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
   expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   # Interaction (factor * continuous)
   model <- lm(mpg ~ wt * gear, data = dat)
@@ -25,6 +27,7 @@ test_that("estimate_means() - core", {
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_named(estim1, c("gear", "Mean", "SE", "CI_low", "CI_high"))
   expect_named(estim2, c("gear", "Mean", "SE", "CI_low", "CI_high"))
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   # At specific levels
   model <- lm(Sepal.Width ~ Species, data = iris)
@@ -36,6 +39,7 @@ test_that("estimate_means() - core", {
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_named(estim1, c("Species", "Mean", "SE", "CI_low", "CI_high"))
   expect_named(estim2, c("Species", "Mean", "SE", "CI_low", "CI_high"))
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   # Interactions between factors
   dat <- iris
@@ -59,6 +63,7 @@ test_that("estimate_means() - core", {
   expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
   expect_named(estim2, c("Species", "Mean", "SE", "CI_low", "CI_high"))
 
 
@@ -78,8 +83,13 @@ test_that("estimate_means() - core", {
   dat <<- dat
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
-  estim <- suppressMessages(estimate_means(model))
-  expect_identical(dim(estim), c(3L, 5L))
+  estim1 <- suppressMessages(estimate_means(model))
+  expect_identical(dim(estim1), c(3L, 5L))
+  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  expect_identical(dim(estim2), c(3L, 4L))
+  expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-4)
+  expect_named(estim2, c("Species", "Probability", "CI_low", "CI_high"))
+
   estim <- suppressMessages(estimate_means(model, transform = "response"))
   expect_identical(dim(estim), c(3L, 5L))
   expect_true(all(estim$Probability >= 0) & all(estim$Probability <= 1))
