@@ -82,9 +82,9 @@ test_that("estimate_means() - lm", {
   estim1 <- suppressMessages(estimate_means(model, by = "all"))
   estim2 <- suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects"))
   expect_equal(dim(estim1), c(30, 6))
-  ## FIXME: marginaleffects does not return all values?
-  ## Seems like marginaleffects only used data that actually exists
-  expect_equal(dim(estim2), c(20, 6))
+  expect_equal(dim(estim2), c(30, 6))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   # In formula modification
   # FIXME: this got broken but it seems just to tedious to fix. Don't use in formula transforms.
@@ -101,26 +101,42 @@ test_that("estimate_means() - lm", {
   expect_identical(dim(estim2), c(3L, 5L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
   estim1 <- suppressMessages(estimate_means(model, fixed = "Sepal.Width"))
   estim2 <- suppressMessages(estimate_means(model, fixed = "Sepal.Width", backend = "marginaleffects"))
   expect_identical(dim(estim1), c(3L, 6L))
   expect_identical(dim(estim2), c(3L, 5L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
   estim1 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2))
   estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2, backend = "marginaleffects"))
   expect_identical(dim(estim1), c(6L, 6L))
-  ## FIXME: marginaleffects does not return all values?
-  ## Seems like marginaleffects only used data that actually exists
-  expect_identical(dim(estim2), c(2L, 6L))
-  # expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
-  # expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
-  estim <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')"))
-  expect_identical(dim(estim), c(2L, 5L))
-  estim <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
-  expect_identical(dim(estim), c(2L, 5L))
-  estim <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0")))
-  expect_identical(dim(estim), c(3L, 6L))
+  expect_identical(dim(estim2), c(6L, 6L))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
+  estim1 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')"))
+  estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')", backend = "marginaleffects"))
+  expect_identical(dim(estim1), c(2L, 5L))
+  expect_identical(dim(estim2), c(2L, 5L))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
+  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
+  estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "marginaleffects"))
+  expect_identical(dim(estim1), c(2L, 5L))
+  expect_identical(dim(estim2), c(2L, 5L))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
+  estim1 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0")))
+  estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width=0"), backend = "marginaleffects"))
+  expect_identical(dim(estim1), c(3L, 6L))
+  expect_identical(dim(estim2), c(3L, 6L))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+
   estim <- suppressMessages(estimate_means(model, by = "Sepal.Width", length = 5))
   expect_equal(dim(estim), c(5, 5))
   estim <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
@@ -235,6 +251,8 @@ test_that("estimate_means() - mixed models", {
   )
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   expect_snapshot(print(out))
+  out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
+  out2 <- estimate_means(m, c("mined", "spp"))
 
   m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")

@@ -14,7 +14,15 @@
   type <- .get_type_argument(model, ...)
 
   # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- insight::get_datagrid(model, by = my_args$by, factors = "all", include_random = TRUE, ...)
+  datagrid <- insight::get_datagrid(
+    model,
+    by = my_args$by,
+    factors = "all",
+    include_random = TRUE,
+    # always show all theoretical values
+    preserve_range = FALSE,
+    ...
+  )
   at_specs <- attributes(datagrid)$at_specs
 
   # model df
@@ -30,7 +38,10 @@
     type = type,
     hypothesis = hypothesis
   )
-  fun_args <- insight::compact_list(c(fun_args, list(...)))
+  # add user-arguments from "...", but remove those arguments that are already set
+  dots <- list(...)
+  dots[c("by", "newdata", "conf_level", "df", "type", "hypotheses")] <- NULL
+  fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
