@@ -145,7 +145,7 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
-  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"), backend = "marginaleffects")
+  estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)", backend = "marginaleffects"))
   expect_identical(dim(estim1), c(2L, 5L))
   expect_identical(dim(estim2), c(2L, 5L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
