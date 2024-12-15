@@ -253,12 +253,15 @@ test_that("estimate_means() - mixed models", {
   expect_snapshot(print(out))
   out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"))
+  expect_equal(out1$Mean, out2$rate, tolerance = 1e-3)
 
   m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   expect_snapshot(print(out))
+  out1 <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+  out2 <- estimate_means(m, c("mined", "spp"))
+  expect_equal(out1$Mean[order(out1$spp)], out2$rate, tolerance = 1e-3)
 })
-
 
 
 test_that("Test against other packages", {
@@ -276,5 +279,4 @@ test_that("Test against other packages", {
 
   # TODO: estimate_means reorders factors based on datagrid?
   # expect_lt(max(rez$Mean - as.data.frame(rez_emmeans)$emmean), 1e-10)
-
 })
