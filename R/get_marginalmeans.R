@@ -51,7 +51,7 @@
   model_data <- insight::get_data(model)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
   # Format
-  params <- parameters::parameters(means)
+  params <- parameters::parameters(means, verbose = FALSE)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
   params <- datawizard::data_rename(params, "Predicted", "Mean")
   params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup", non_focal))
