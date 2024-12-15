@@ -333,21 +333,3 @@ test_that("estimate_means() - mixed models", {
   out2 <- estimate_means(m, c("mined", "spp"))
   expect_equal(out1$Mean[order(out1$spp)], out2$rate, tolerance = 1e-3)
 })
-
-
-test_that("Test against other packages", {
-  skip_if_not_installed("emmeans")
-
-  dat <- mtcars
-  dat$gear <- as.factor(dat$gear)
-  dat$cyl <- as.factor(dat$cyl)
-  dat <<- dat
-
-  # Simple
-  model <- lm(vs ~ cyl, data = dat)
-  rez <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  rez_emmeans <- emmeans::emmeans(model, "cyl")
-
-  # TODO: estimate_means reorders factors based on datagrid?
-  # expect_lt(max(rez$Mean - as.data.frame(rez_emmeans)$emmean), 1e-10)
-})
