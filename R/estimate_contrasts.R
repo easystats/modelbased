@@ -7,13 +7,13 @@
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
-#'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
-#'   section in the `emmeans::test` documentation.
+#'   comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
+#'   `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
+#'   p-value adjustment section in the `emmeans::test` documentation.
 #'
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE) && require("rstanarm", quietly = TRUE)
+#' @examplesIf insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE)
 #' \dontrun{
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
@@ -51,22 +51,20 @@
 #' model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
 #'
-#' library(rstanarm)
-#'
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
 #'
-#' model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
+#' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "am")
 #'
-#' model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
+#' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, fixed = "wt")
 #' estimate_contrasts(model, by = "wt", length = 4)
 #'
-#' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
+#' model <- rstanarm::stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
 #' estimate_contrasts(model, by = "Petal.Length", test = "bf")
 #' }
 #'
