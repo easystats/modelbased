@@ -20,11 +20,11 @@ test_that("estimate_means() - core", {
   estim1 <- suppressMessages(estimate_means(model))
   expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_identical(dim(estim2), c(3L, 6L))
+  expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_named(estim1, c("gear", "Mean", "SE", "CI_low", "CI_high"))
-  expect_named(estim2, c("gear", "wt", "Mean", "SE", "CI_low", "CI_high"))
+  expect_named(estim2, c("gear", "Mean", "SE", "CI_low", "CI_high"))
 
   # At specific levels
   model <- lm(Sepal.Width ~ Species, data = iris)
@@ -66,7 +66,7 @@ test_that("estimate_means() - core", {
   estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width"))
   expect_equal(dim(estim1), c(10, 5))
   estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width", backend = "marginaleffects"))
-  expect_equal(dim(estim2), c(10, 6))
+  expect_equal(dim(estim2), c(10, 5))
   # Note that the absolute values are different here... for unclear reasons
   expect_true(max(diff(estim1$Mean) - diff(estim2$Mean)) < 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
