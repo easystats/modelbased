@@ -6,7 +6,7 @@
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-browser()
+
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
 
