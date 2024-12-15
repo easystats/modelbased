@@ -19,7 +19,7 @@ get_marginalcontrasts <- function(model,
   )
 
   attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(out, "table_footer") <- .estimate_means_footer(out, type = "contrasts", p_adjust = NULL)
+  attr(out, "table_footer") <- .estimate_means_footer(out, by = by, type = "contrasts", p_adjust = NULL)
 
   out
 }
