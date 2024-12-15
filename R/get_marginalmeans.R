@@ -41,12 +41,16 @@
 
 #' @keywords internal
 .format_marginaleffects_means <- function(means, model, ...) {
+  model_data <- insight::get_data(model)
+  non_focal <- setdiff(colnames(model_data), attr(means, "by"))
   # Format
   params <- parameters::parameters(means)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
   params <- datawizard::data_rename(params, "Predicted", "Mean")
-  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup"))
-  params <- datawizard::data_restoretype(params, insight::get_data(model))
+  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup", non_focal))
+  params <- datawizard::data_restoretype(params, model_data)
+
+
 
   # Store info
   attr(params, "at") <- attr(means, "by")
