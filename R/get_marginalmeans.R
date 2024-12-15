@@ -45,7 +45,7 @@
 
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
-  fun_args$re.form = NULL
+  fun_args$re.form <- NULL
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument

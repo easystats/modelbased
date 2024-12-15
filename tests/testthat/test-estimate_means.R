@@ -244,7 +244,7 @@ test_that("estimate_means() - mixed models", {
 
   data(Salamanders, package = "glmmTMB")
   m <- glmmTMB::glmmTMB(
-    count ~ mined * spp + (1|site),
+    count ~ mined * spp + (1 | site),
     zi = ~mined,
     family = poisson(),
     data = Salamanders
