@@ -22,10 +22,13 @@
     by = at_specs$varname,
     conf_level = ci,
     type = type,
-    hypothesis = hypothesis,
-    re.form = NULL
+    hypothesis = hypothesis
   )
   fun_args <- insight::compact_list(c(fun_args, list(...)))
+
+  ## TODO: need to check against different mixed models results from other packages
+  # set to NULL
+  fun_args$re.form = NULL
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
