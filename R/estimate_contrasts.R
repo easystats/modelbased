@@ -64,7 +64,11 @@
 #' estimate_contrasts(model, fixed = "wt")
 #' estimate_contrasts(model, by = "wt", length = 4)
 #'
-#' model <- rstanarm::stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
+#' model <- rstanarm::stan_glm(
+#'   Sepal.Width ~ Species + Petal.Width + Petal.Length,
+#'   data = iris,
+#'   refresh = 0
+#' )
 #' estimate_contrasts(model, by = "Petal.Length", test = "bf")
 #' }
 #'
