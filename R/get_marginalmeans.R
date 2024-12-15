@@ -18,7 +18,7 @@
   at_specs <- attributes(datagrid)$at_specs
 
   # model df
-  dof <- insight::get_df(model)
+  dof <- insight::get_df(model, verbose = FALSE)
 
   # setup arguments
   fun_args <- list(
@@ -65,10 +65,10 @@
   }
 
   # Format
-  params <- parameters::parameters(means, verbose = FALSE)
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE)
+  params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
   params <- datawizard::data_rename(params, "Predicted", estimate_name)
-  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup", non_focal))
+  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)
 
   # Store info
