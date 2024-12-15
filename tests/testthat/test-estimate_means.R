@@ -65,8 +65,8 @@ test_that("estimate_means() - lm", {
   # At specific levels of continuous
   estim1 <- suppressMessages(estimate_means(model, by = "Sepal.Width"))
   estim2 <- suppressMessages(estimate_means(model, by = "Sepal.Width", backend = "marginaleffects"))
-  expect_equal(dim(estim1), c(10, 5))
-  expect_equal(dim(estim2), c(10, 5))
+  expect_identical(dim(estim1), c(10L, 5L))
+  expect_identical(dim(estim2), c(10L, 5L))
   # Note that the absolute values are different here... for unclear reasons
   expect_true(max(diff(estim1$Mean) - diff(estim2$Mean)) < 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
@@ -81,8 +81,8 @@ test_that("estimate_means() - lm", {
 
   estim1 <- suppressMessages(estimate_means(model, by = "all"))
   estim2 <- suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects"))
-  expect_equal(dim(estim1), c(30, 6))
-  expect_equal(dim(estim2), c(30, 6))
+  expect_identical(dim(estim1), c(30L, 6L))
+  expect_identical(dim(estim2), c(30L, 6L))
   expect_equal(estim1$Mean[order(estim1$Sepal.Width)], estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low[order(estim1$Sepal.Width)], estim2$CI_low, tolerance = 1e-3)
 
@@ -164,11 +164,11 @@ test_that("estimate_means() - lm", {
   model <- lm(mpg ~ gear * vs * am, data = dat)
 
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(12, 7))
+  expect_identical(dim(estim), c(12L, 7L))
   estim <- suppressMessages(estimate_means(model, fixed = "am"))
-  expect_equal(dim(estim), c(6, 7))
+  expect_identical(dim(estim), c(6L, 7L))
   estim <- suppressMessages(estimate_means(model, by = c("gear='5'", "vs")))
-  expect_equal(dim(estim), c(2, 7))
+  expect_identical(dim(estim), c(2L, 7L))
 
   dat <- iris
   dat$factor1 <- ifelse(dat$Sepal.Width > 3, "A", "B")
@@ -178,9 +178,9 @@ test_that("estimate_means() - lm", {
 
   model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = dat)
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(8, 7))
+  expect_identical(dim(estim), c(8L, 7L))
   estim <- suppressMessages(estimate_means(model, fixed = "factor3"))
-  expect_equal(dim(estim), c(4, 7))
+  expect_identical(dim(estim), c(4L, 7L))
 })
 
 
