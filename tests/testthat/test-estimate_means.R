@@ -83,8 +83,8 @@ test_that("estimate_means() - lm", {
   estim2 <- suppressMessages(estimate_means(model, by = "all", backend = "marginaleffects"))
   expect_equal(dim(estim1), c(30, 6))
   expect_equal(dim(estim2), c(30, 6))
-  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
-  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+  expect_equal(estim1$Mean[order(estim1$Sepal.Width)], estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low[order(estim1$Sepal.Width)], estim2$CI_low, tolerance = 1e-3)
 
   # In formula modification
   # FIXME: this got broken but it seems just to tedious to fix. Don't use in formula transforms.
@@ -113,8 +113,8 @@ test_that("estimate_means() - lm", {
   estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2, backend = "marginaleffects"))
   expect_identical(dim(estim1), c(6L, 6L))
   expect_identical(dim(estim2), c(6L, 6L))
-  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
-  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
+  expect_equal(estim1$Mean[order(estim1$Species)], estim2$Mean, tolerance = 1e-4)
+  expect_equal(estim1$CI_low[order(estim1$Species)], estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')"))
   estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'setosa')", backend = "marginaleffects"))
