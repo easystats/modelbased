@@ -21,6 +21,7 @@
   fun_args <- list(
     model,
     by = at_specs$varname,
+    newdata = datagrid,
     conf_level = ci,
     type = type,
     hypothesis = hypothesis
@@ -37,6 +38,7 @@
 
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
+  attr(means, "focal_terms") <- my_args$focal_terms
   means
 }
 
@@ -47,7 +49,7 @@
 #' @keywords internal
 .format_marginaleffects_means <- function(means, model, ...) {
   model_data <- insight::get_data(model)
-  non_focal <- setdiff(colnames(model_data), attr(means, "by"))
+  non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
   # Format
   params <- parameters::parameters(means)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
@@ -71,15 +73,35 @@
   predictors <- insight::find_predictors(model, flatten = TRUE, ...)
   model_data <- insight::get_data(model)
 
-  # Guess arguments ('by' and 'fixed')
+  # Guess arguments 'by'
   if (identical(by, "auto")) {
     # Find categorical predictors
     by <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
     if (!length(by) || all(is.na(by))) {
-      insight::format_error("Model contains no categorical factor. Please specify 'by'.")
+      insight::format_error("Model contains no categorical predictor. Please specify `by`.")
     }
     insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }
 
-  list(by = by)
+  # in "focal_terms", we want the variable names.
+  focal_terms <- by
+
+  # This is needed when we have something like
+  # `by = "Species=c('versicolor', 'virginica')")`
+  # we need the variable names for selecting columns in the output
+  focals_to_fix <- vapply(by, function(i) grepl("=", i, fixed = TRUE), logical(1))
+  if (any(focals_to_fix)) {
+    for (i in seq_along(focal_terms)) {
+      if (focals_to_fix[i]) {
+        focal_terms[i] <- insight::trim_ws(unlist(strsplit(by[i], "=", fixed = TRUE), use.names = FALSE))[1]
+      }
+    }
+  }
+
+  # exceptions: by = "all"
+  if (all(focal_terms == "all")) {
+    focal_terms <- predictors
+  }
+
+  list(by = by, focal_terms = focal_terms)
 }

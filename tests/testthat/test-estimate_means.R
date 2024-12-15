@@ -1,9 +1,6 @@
 test_that("estimate_means() - core", {
-  skip_if_not_installed("rstanarm")
   skip_if_not_installed("emmeans")
   skip_if_not_installed("marginaleffects")
-
-  # library(testthat)
 
   dat <- mtcars
   dat$gear <- as.factor(dat$gear)
@@ -23,8 +20,11 @@ test_that("estimate_means() - core", {
   estim1 <- suppressMessages(estimate_means(model))
   expect_identical(dim(estim1), c(3L, 5L))
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
-  expect_identical(dim(estim2), c(3L, 6L))
+  expect_identical(dim(estim2), c(3L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_named(estim1, c("gear", "Mean", "SE", "CI_low", "CI_high"))
+  expect_named(estim2, c("gear", "Mean", "SE", "CI_low", "CI_high"))
 
   # At specific levels
   model <- lm(Sepal.Width ~ Species, data = iris)
@@ -33,6 +33,9 @@ test_that("estimate_means() - core", {
   estim2 <- suppressMessages(estimate_means(model, by = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
   expect_identical(dim(estim2), c(2L, 5L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
+  expect_named(estim1, c("Species", "Mean", "SE", "CI_low", "CI_high"))
+  expect_named(estim2, c("Species", "Mean", "SE", "CI_low", "CI_high"))
 
   # Interactions between factors
   dat <- iris
@@ -107,6 +110,8 @@ test_that("estimate_means() - core", {
   expect_equal(dim(estim), c(5, 5))
   estim <- suppressMessages(estimate_means(model, by = "Sepal.Width=c(2, 4)"))
   expect_identical(dim(estim), c(2L, 5L))
+  estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)")))
+  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginalmeans"))
 
   # Two factors
   dat <- iris
@@ -166,7 +171,6 @@ test_that("estimate_means() - core", {
 })
 
 test_that("estimate_means() - mixed models", {
-  skip_if_not_installed("rstanarm")
   skip_if_not_installed("emmeans")
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
