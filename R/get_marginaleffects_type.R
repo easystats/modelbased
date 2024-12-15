@@ -1,7 +1,12 @@
 #' @keywords internal
-.get_type_argument <- function(model, ...) {
+.get_type_argument <- function(model, transform = NULL, ...) {
   dots <- list(...)
   model_class <- class(model)[1]
+
+  # no transformation always returns link-scale
+  if (identical(transform, "none")) {
+    return("link")
+  }
 
   # for unrecognized model classes, return "response"
   if (!model_class %in% .typedic$class) {

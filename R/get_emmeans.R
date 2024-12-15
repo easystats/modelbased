@@ -9,21 +9,19 @@
 #'
 #' @param model A statistical model.
 #' @param fixed A character vector indicating the names of the predictors to be
-#'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param transform Is passed to the `type` argument in
-#'   `emmeans::emmeans()`. See
-#'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#'   Can be `"none"` (default for contrasts), `"response"`
-#'   (default for means), `"mu"`, `"unlink"`, `"log"`.
-#'   `"none"` will leave the values on scale of the linear predictors.
-#'   `"response"` will transform them on scale of the response variable.
-#'   Thus for a logistic model, `"none"` will give estimations expressed in
-#'   log-odds (probabilities on logit scale) and `"response"` in terms of
-#'   probabilities.
+#' "fixed" (i.e., maintained), so that the estimation is made at these values.
+#' @param transform Is passed to the `type` argument in `emmeans::emmeans()`.
+#' See [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#' Can be `"none"` (default for contrasts), `"response"` (default for means),
+#' `"mu"`, `"unlink"`, `"log"`. `"none"` will leave the values on scale of the
+#' linear predictors. `"response"` will transform them on scale of the response
+#' variable. Thus for a logistic model, `"none"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
-#'   / mean / contrasts. Other predictors of the model that are not included
-#'   here will be collapsed and "averaged" over (the effect will be estimated
-#'   across them).
+#' / mean / contrasts. Other predictors of the model that are not included
+#' here will be collapsed and "averaged" over (the effect will be estimated
+#' across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
 #'
 #' @examples

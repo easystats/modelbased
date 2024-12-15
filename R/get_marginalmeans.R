@@ -1,6 +1,7 @@
 #' @keywords internal
 .get_marginalmeans <- function(model,
                                by = "auto",
+                               transform = NULL,
                                ci = 0.95,
                                hypothesis = NULL,
                                ...) {
@@ -12,7 +13,7 @@
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, ...)
+  type <- .get_type_argument(model, transform, ...)
 
   # setup arguments
   dg_args <- list(
@@ -69,14 +70,14 @@
 
 
 #' @keywords internal
-.format_marginaleffects_means <- function(means, model, ...) {
+.format_marginaleffects_means <- function(means, model, transform, ...) {
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
 
   # estimate name
-  if (info$is_binomial || info$is_bernoulli) {
+  if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
     estimate_name <- "Probability"
   } else {
     estimate_name <- "Mean"
