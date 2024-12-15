@@ -11,7 +11,7 @@
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model)
+  type <- .get_type_argument(model, ...)
 
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- insight::get_datagrid(model, by = my_args$by, ...)

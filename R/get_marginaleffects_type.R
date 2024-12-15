@@ -1,12 +1,34 @@
-.get_type_argument <- function(model, type = NULL) {
-  # for unrecognized model classes, return "response"
+#' @keywords internal
+.get_type_argument <- function(model, ...) {
+  dots <- list(...)
   model_class <- class(model)[1]
+
+  # for unrecognized model classes, return "response"
   if (!model_class %in% .typedic$class) {
     return("response")
   }
-  # return default type
+
+  # extract all valid types for model class
   valid_types <- .typedic$type[.typedic$class == model_class]
-  valid_types[1]
+
+  # check if user supplied type-argument
+  if (!is.null(dots$type)) {
+    if (!dots$type %in% valid_types) {
+      insight::format_error(paste0(
+        "The option provided in the `type` argument is not recognized.",
+        " Valid options are: ",
+        datawizard::text_concatenate(valid_types, enclose = "`"),
+        "."
+      ))
+    } else {
+      type <- dots$type
+    }
+  } else {
+    type <- valid_types[1]
+  }
+
+  # return default type
+  type
 }
 
 
