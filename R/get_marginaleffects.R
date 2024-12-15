@@ -17,7 +17,6 @@
 get_marginaleffects <- function(model,
                                 trend = NULL,
                                 by = NULL,
-                                fixed = NULL,
                                 ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -37,15 +36,11 @@ get_marginaleffects <- function(model,
 
   newdata <- insight::get_datagrid(model, by = by, ...)
 
-  fixed <- names(newdata)[!names(newdata) %in% c(by, trend)]
-  if (length(fixed) == 0) fixed <- NULL
-
   # Compute stuff
   estimated <- marginaleffects::slopes(model, variables = trend, newdata = newdata, ...)
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
   attr(estimated, "by") <- by
-  attr(estimated, "fixed") <- fixed
   estimated
 }

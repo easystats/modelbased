@@ -7,7 +7,6 @@
 estimate_means(
   model,
   by = "auto",
-  fixed = NULL,
   transform = "response",
   ci = 0.95,
   backend = "emmeans",
@@ -21,9 +20,6 @@ estimate_means(
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
-
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
 \item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
 See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
@@ -115,7 +111,6 @@ library(modelbased)
 model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
-estimate_means(model, fixed = "Sepal.Width")
 estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
 estimate_means(model, by = "Species=c('versicolor', 'setosa')")
 estimate_means(model, by = "Sepal.Width=c(2, 4)")
@@ -124,7 +119,7 @@ estimate_means(model, by = "Sepal.Width", length = 5)
 estimate_means(model, by = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
-means <- estimate_means(model, fixed = "Sepal.Width")
+means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("see") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 plot(means) # which runs visualisation_recipe()

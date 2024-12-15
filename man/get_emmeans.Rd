@@ -14,7 +14,6 @@ get_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   method = "pairwise",
   ...
@@ -24,19 +23,18 @@ model_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   method = "pairwise",
   ...
 )
 
-get_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
+get_emmeans(model, by = "auto", transform = "response", ...)
 
-model_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
+model_emmeans(model, by = "auto", transform = "response", ...)
 
-get_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
+get_emtrends(model, trend = NULL, by = NULL, ...)
 
-model_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
+model_emtrends(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -48,9 +46,6 @@ for which to compute the contrasts.}
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
-
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
 \item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
 See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
@@ -92,8 +87,6 @@ get_emcontrasts(model, contrast = "Petal.Width", length = 3)
 get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 # Or with custom specifications
 estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
-# Can fixate the numeric at a specific value
-get_emcontrasts(model, fixed = "Petal.Width")
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 \dontshow{\}) # examplesIf}

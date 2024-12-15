@@ -4,14 +4,12 @@
 #' @export
 get_marginalcontrasts <- function(model,
                                   by = NULL,
-                                  fixed = NULL,
                                   ci = 0.95,
                                   method = "pairwise",
                                   ...) {
   out <- estimate_means(
     model = model,
     by = by,
-    fixed = fixed,
     ci = ci,
     hypothesis = method,
     backend = "marginaleffects",

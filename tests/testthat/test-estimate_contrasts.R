@@ -24,14 +24,14 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 9L))
   estim <- suppressMessages(estimate_contrasts(model, levels = "Species"))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, fixed = "fac"))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "fac='A'")))
   expect_identical(dim(estim), c(3L, 10L))
 
   # One factor and one continuous
   model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, fixed = "Petal.Width"))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0")))
   expect_identical(dim(estim), c(3L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
   expect_identical(dim(estim), c(12L, 10L))
@@ -54,8 +54,6 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model, by = "all"))
   expect_identical(dim(estim), c(12L, 11L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), fixed = "gear"))
-  expect_identical(dim(estim), c(6L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'"))
   expect_identical(dim(estim), c(1L, 10L))
 
@@ -70,8 +68,6 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), by = "all"))
   expect_identical(dim(estim), c(28L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), fixed = "factor3"))
-  expect_identical(dim(estim), c(6L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3='F'"))
   expect_identical(dim(estim), c(6L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3"))
@@ -133,7 +129,7 @@ test_that("estimate_contrasts - Bayesian", {
   )
   estim <- suppressMessages(estimate_contrasts(model, contrast = "all"))
   expect_identical(dim(estim), c(15L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, fixed = "Petal.Length_factor"))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'")))
   expect_identical(dim(estim), c(3L, 8L))
 
   model <- suppressWarnings(
@@ -147,7 +143,7 @@ test_that("estimate_contrasts - Bayesian", {
   )
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, fixed = "Petal.Width"))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0")))
   expect_identical(dim(estim), c(3L, 8L))
   estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
   expect_identical(dim(estim), c(12L, 8L))

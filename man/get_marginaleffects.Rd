@@ -4,7 +4,7 @@
 \alias{get_marginaleffects}
 \title{Easy marginaleffects}
 \usage{
-get_marginaleffects(model, trend = NULL, by = NULL, fixed = NULL, ...)
+get_marginaleffects(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -16,9 +16,6 @@ for which to compute the slopes.}
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
-
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

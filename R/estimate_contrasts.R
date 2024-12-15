@@ -34,9 +34,6 @@
 #' # Or with custom specifications
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #'
-#' # Can fixate the numeric at a specific value
-#' estimate_contrasts(model, fixed = "Petal.Width")
-#'
 #' # Or modulate it
 #' estimate_contrasts(model, by = "Petal.Width", length = 4)
 #'
@@ -57,11 +54,11 @@
 #'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed = "am")
+#' # fix `am` at value 1
+#' estimate_contrasts(model, by = c("cyl", "am='1'"))
 #'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed = "wt")
 #' estimate_contrasts(model, by = "wt", length = 4)
 #'
 #' model <- rstanarm::stan_glm(
@@ -77,7 +74,6 @@
 estimate_contrasts <- function(model,
                                contrast = NULL,
                                by = NULL,
-                               fixed = NULL,
                                transform = "none",
                                ci = 0.95,
                                p_adjust = "holm",
@@ -87,7 +83,6 @@ estimate_contrasts <- function(model,
   estimated <- get_emcontrasts(model,
     contrast = contrast,
     by = by,
-    fixed = fixed,
     transform = transform,
     method = method,
     adjust = p_adjust,
@@ -144,7 +139,6 @@ estimate_contrasts <- function(model,
   attr(out, "transform") <- transform
   attr(out, "at") <- info$by
   attr(out, "by") <- info$by
-  attr(out, "fixed") <- info$fixed
   attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
 

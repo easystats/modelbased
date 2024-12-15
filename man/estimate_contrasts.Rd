@@ -10,7 +10,6 @@ estimate_contrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   ci = 0.95,
   p_adjust = "holm",
@@ -18,23 +17,9 @@ estimate_contrasts(
   ...
 )
 
-get_marginalcontrasts(
-  model,
-  by = NULL,
-  fixed = NULL,
-  ci = 0.95,
-  method = "pairwise",
-  ...
-)
+get_marginalcontrasts(model, by = NULL, ci = 0.95, method = "pairwise", ...)
 
-model_marginalcontrasts(
-  model,
-  by = NULL,
-  fixed = NULL,
-  ci = 0.95,
-  method = "pairwise",
-  ...
-)
+model_marginalcontrasts(model, by = NULL, ci = 0.95, method = "pairwise", ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -46,9 +31,6 @@ for which to compute the contrasts.}
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
-
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
 
 \item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
 See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
@@ -156,9 +138,6 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 # Or with custom specifications
 estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 
-# Can fixate the numeric at a specific value
-estimate_contrasts(model, fixed = "Petal.Width")
-
 # Or modulate it
 estimate_contrasts(model, by = "Petal.Width", length = 4)
 
@@ -179,11 +158,11 @@ data$am <- as.factor(data$am)
 
 model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 estimate_contrasts(model)
-estimate_contrasts(model, fixed = "am")
+# fix `am` at value 1
+estimate_contrasts(model, by = c("cyl", "am='1'"))
 
 model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)
-estimate_contrasts(model, fixed = "wt")
 estimate_contrasts(model, by = "wt", length = 4)
 
 model <- rstanarm::stan_glm(

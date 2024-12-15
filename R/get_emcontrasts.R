@@ -19,15 +19,12 @@
 #' get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #' # Or with custom specifications
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
-#' # Can fixate the numeric at a specific value
-#' get_emcontrasts(model, fixed = "Petal.Width")
 #' # Or modulate it
 #' get_emcontrasts(model, by = "Petal.Width", length = 4)
 #' @export
 get_emcontrasts <- function(model,
                             contrast = NULL,
                             by = NULL,
-                            fixed = NULL,
                             transform = "none",
                             method = "pairwise",
                             ...) {
@@ -35,7 +32,7 @@ get_emcontrasts <- function(model,
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  my_args <- .guess_emcontrasts_arguments(model, contrast, by, fixed, ...)
+  my_args <- .guess_emcontrasts_arguments(model, contrast, by, ...)
 
   # Run emmeans
   estimated <- emmeans::emmeans(
@@ -55,7 +52,6 @@ get_emcontrasts <- function(model,
   attr(out, "contrast") <- my_args$contrast
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
-  attr(out, "fixed") <- my_args$fixed
   out
 }
 
@@ -72,7 +68,6 @@ model_emcontrasts <- get_emcontrasts
 .guess_emcontrasts_arguments <- function(model,
                                          contrast = NULL,
                                          by = NULL,
-                                         fixed = NULL,
                                          ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
@@ -89,6 +84,6 @@ model_emcontrasts <- get_emcontrasts
     contrast <- predictors
   }
 
-  my_args <- list(contrast = contrast, by = by, fixed = fixed)
+  my_args <- list(contrast = contrast, by = by)
   .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }

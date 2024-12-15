@@ -105,13 +105,6 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, fixed = "Sepal.Width"))
-  estim2 <- suppressMessages(estimate_means(model, fixed = "Sepal.Width", backend = "marginaleffects"))
-  expect_identical(dim(estim1), c(3L, 6L))
-  expect_identical(dim(estim2), c(3L, 5L))
-  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
-  expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
-
   estim1 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2))
   estim2 <- suppressMessages(estimate_means(model, by = c("Species", "Sepal.Width"), length = 2, backend = "marginaleffects"))
   expect_identical(dim(estim1), c(6L, 6L))
@@ -201,7 +194,7 @@ test_that("estimate_means() - lm", {
     tolerance = 1e-4
   )
 
-  estim1 <- suppressMessages(estimate_means(model, fixed = "am"))
+  estim1 <- suppressMessages(estimate_means(model, by = c("gear", "vs", "am='1'")))
   estim2 <- suppressMessages(estimate_means(model, by = c("gear", "vs", "am='1'"), backend = "marginaleffects"))
   expect_identical(dim(estim1), c(6L, 7L))
   expect_identical(dim(estim2), c(6L, 7L))
@@ -234,7 +227,7 @@ test_that("estimate_means() - lm", {
     tolerance = 1e-4
   )
 
-  estim1 <- suppressMessages(estimate_means(model, fixed = "factor3"))
+  estim1 <- suppressMessages(estimate_means(model, by = c("factor1", "factor2", "factor3='E'")))
   estim2 <- suppressMessages(estimate_means(model, by = c("factor1", "factor2", "factor3='E'"), backend = "marginaleffects"))
   expect_identical(dim(estim1), c(4L, 7L))
   expect_identical(dim(estim2), c(4L, 7L))

@@ -70,7 +70,7 @@
 
 
 #' @keywords internal
-.format_marginaleffects_means <- function(means, model, transform, ...) {
+.format_marginaleffects_means <- function(means, model, transform = NULL, ...) {
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model)
