@@ -1,18 +1,13 @@
-#' Easy marginaleffects
-#'
-#' Modelbased-like API to create \pkg{marginaleffects} objects. This is
-#' Work-in-progress.
+#' @rdname get_marginalmeans
 #'
 #' @inheritParams get_emmeans
 #'
-#' @examples
-#' if (require("marginaleffects")) {
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#'   get_marginaleffects(model, trend = "Petal.Length", by = "Species")
-#'   get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
-#'   get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
-#' }
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Species")
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
+#' get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
 get_marginaleffects <- function(model,
                                 trend = NULL,
@@ -37,6 +32,7 @@ get_marginaleffects <- function(model,
   newdata <- insight::get_datagrid(model, by = by, ...)
 
   # Compute stuff
+  ## FIXME: should be relaced by avg_slopes with "by" argument
   estimated <- marginaleffects::slopes(model, variables = trend, newdata = newdata, ...)
 
   attr(estimated, "trend") <- trend

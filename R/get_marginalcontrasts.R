@@ -1,4 +1,4 @@
-#' @rdname estimate_contrasts
+#' @rdname get_marginalmeans
 #'
 #' @param method Contrast method.
 #' @export
@@ -22,6 +22,6 @@ get_marginalcontrasts <- function(model,
   out
 }
 
-#' @rdname estimate_contrasts
+#' @rdname get_marginalmeans
 #' @export
 model_marginalcontrasts <- get_marginalcontrasts

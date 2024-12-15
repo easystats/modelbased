@@ -85,7 +85,7 @@ model_emmeans <- get_emmeans
 # =========================================================================
 # HELPERS  ----------------------------------------------------------------
 # =========================================================================
-# This function is the actual equivalent of .get_marginalmeans(); both being used
+# This function is the actual equivalent of get_marginalmeans(); both being used
 # in estimate_means
 
 #' @keywords internal

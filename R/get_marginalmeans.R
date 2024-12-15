@@ -1,10 +1,51 @@
-#' @keywords internal
-.get_marginalmeans <- function(model,
-                               by = "auto",
-                               transform = NULL,
-                               ci = 0.95,
-                               hypothesis = NULL,
-                               ...) {
+#' Easy 'avg_predictions' and 'avg_slopes'
+#'
+#' The `get_marginalmeans()` function is a wrapper to facilitate the usage of
+#' `marginaleffects::avg_predictions()` and `marginaleffects::avg_slopes()`,
+#' providing a somewhat simpler and intuitive API to find the specifications and
+#' variables of interest. It is meanly made to for the developers to facilitate
+#' the organization and debugging, and end-users should rather use the
+#' `estimate_*()` series of functions.
+#'
+#' @param model A statistical model.
+#' @param transform Can be used to easily modulate the `type` argument in
+#' `marginaleffects::avg_predictions()`. Can be `"none"` or `"response"`.
+#' `"none"` will leave the values on scale of the linear predictors.
+#' `"response"` will transform them on scale of the response variable. Thus for
+#' a logistic model, `"none"` will give estimations expressed in log-odds
+#' (probabilities on logit scale) and `"response"` in terms of probabilities.
+#' @param by The predictor variable(s) at which to evaluate the desired effect
+#' / mean / contrasts. Other predictors of the model that are not included
+#' here will be collapsed and "averaged" over (the effect will be estimated
+#' across them).
+#' @param ci Level for confidence intervals.
+#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
+#' or [marginaleffects::avg_predictions()].
+#'
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
+#' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
+#'
+#' # By default, 'by' is set to "Species"
+#' get_marginalmeans(model)
+#'
+#' # Overall mean (close to 'mean(iris$Sepal.Length)')
+#' get_marginalmeans(model, by = NULL)
+#'
+#' # One can estimate marginal means at several values of a 'modulate' variable
+#' get_marginalmeans(model, by = "Petal.Width", length = 3)
+#'
+#' # Interactions
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#'
+#' get_marginalmeans(model)
+#' get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
+#' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' @export
+get_marginalmeans <- function(model,
+                              by = "auto",
+                              transform = NULL,
+                              ci = 0.95,
+                              ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
@@ -44,11 +85,10 @@
     newdata = as.data.frame(datagrid),
     conf_level = ci,
     df = dof,
-    type = type,
-    hypothesis = hypothesis
+    type = type
   )
   # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "newdata", "conf_level", "df", "type", "hypothesis")] <- NULL
+  dots[c("by", "newdata", "conf_level", "df", "type")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
@@ -64,6 +104,10 @@
   attr(means, "focal_terms") <- at_specs$varname
   means
 }
+
+#' @rdname get_marginalmeans
+#' @export
+model_marginalmeans <- get_marginalmeans
 
 
 # Format ------------------------------------------------------------------
