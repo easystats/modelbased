@@ -19,6 +19,7 @@
 
   # setup arguments
   fun_args <- list(
+    model,
     by = at_specs$varname,
     conf_level = ci,
     type = type,
@@ -32,7 +33,7 @@
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- suppressWarnings(do.call("marginaleffects::avg_predictions", fun_args))
+  means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
 
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
