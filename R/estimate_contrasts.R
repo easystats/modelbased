@@ -13,7 +13,7 @@
 #'
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)

@@ -117,7 +117,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
