@@ -9,17 +9,21 @@
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
 
+  # find default response-type
+  type <- .get_type_argument(model)
+
   # Get corresponding datagrid (and deal with particular ats)
   datagrid <- insight::get_datagrid(model, by = my_args$by, ...)
   # Drop random effects
   datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
 
-  ## TODO: extract correct type argument
   means <- marginaleffects::avg_predictions(
     model,
     by = at_specs$varname,
-    conf_level = ci
+    conf_level = ci,
+    type = type,
+    ...
   )
 
   attr(means, "at") <- my_args$by
@@ -40,7 +44,7 @@
   params <- parameters::parameters(means)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
   params <- datawizard::data_rename(params, "Predicted", "Mean")
-  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI"))
+  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "rowid_dedup"))
   params <- datawizard::data_restoretype(params, insight::get_data(model))
 
   # Store info
