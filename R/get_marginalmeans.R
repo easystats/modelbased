@@ -17,19 +17,19 @@
   datagrid <- insight::get_datagrid(model, by = my_args$by, ...)
   at_specs <- attributes(datagrid)$at_specs
 
-  # Drop random effects
-  datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
-
-  # we can use this function for contrasts as well, just need to add "hypothesis"
-  # argument
-  means <- marginaleffects::avg_predictions(
-    model,
+  # setup arguments
+  fun_args <- list(
     by = at_specs$varname,
     conf_level = ci,
     type = type,
     hypothesis = hypothesis,
-    ...
+    re.form = NULL
   )
+  fun_args <- insight::compact_list(c(fun_args, list(...)))
+
+  # we can use this function for contrasts as well,
+  # just need to add "hypothesis" argument
+  means <- suppressWarnings(do.call("marginaleffects::avg_predictions", fun_args))
 
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
