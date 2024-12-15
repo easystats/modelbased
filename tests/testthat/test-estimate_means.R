@@ -238,7 +238,6 @@ test_that("estimate_means() - lm", {
 
 test_that("estimate_means() - glm", {
   # GLM
-  # TODO: add the marginaleffects comparison for the remaining tests
   dat <- iris
   dat$y <- as.numeric(as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))) - 1
   dat <<- dat
