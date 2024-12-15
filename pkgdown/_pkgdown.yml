@@ -15,7 +15,7 @@ reference:
     contents:
       - describe_nonlinear
       - get_emmeans
-      - get_mearginalmeans
+      - get_marginalmeans
       - find_inversions
       - zero_crossings
       - smoothing
