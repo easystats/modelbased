@@ -2,6 +2,7 @@
 .get_marginalmeans <- function(model,
                                by = "auto",
                                ci = 0.95,
+                               hypothesis = NULL,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -18,11 +19,14 @@
   datagrid <- datagrid[insight::find_predictors(model, effects = "fixed", flatten = TRUE)]
   at_specs <- attributes(datagrid)$at_specs
 
+  # we can use this function for contrasts as well, just need to add "hypothesis"
+  # argument
   means <- marginaleffects::avg_predictions(
     model,
     by = at_specs$varname,
     conf_level = ci,
     type = type,
+    hypothesis = hypothesis,
     ...
   )
 
@@ -37,9 +41,6 @@
 
 #' @keywords internal
 .format_marginaleffects_means <- function(means, model, ...) {
-  # check if available
-  insight::check_if_installed("datawizard")
-
   # Format
   params <- parameters::parameters(means)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1)
