@@ -8,22 +8,18 @@
 #' functions.
 #'
 #' @param model A statistical model.
-#' @param fixed A character vector indicating the names of the predictors to be
-#'   "fixed" (i.e., maintained), so that the estimation is made at these values.
-#' @param transform Is passed to the `type` argument in
-#'   `emmeans::emmeans()`. See
-#'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#'   Can be `"none"` (default for contrasts), `"response"`
-#'   (default for means), `"mu"`, `"unlink"`, `"log"`.
-#'   `"none"` will leave the values on scale of the linear predictors.
-#'   `"response"` will transform them on scale of the response variable.
-#'   Thus for a logistic model, `"none"` will give estimations expressed in
-#'   log-odds (probabilities on logit scale) and `"response"` in terms of
-#'   probabilities.
+#' @param transform Is passed to the `type` argument in `emmeans::emmeans()`.
+#' See [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#' Can be `"none"` (default for contrasts), `"response"` (default for means),
+#' `"mu"`, `"unlink"`, `"log"`. `"none"` will leave the values on scale of the
+#' linear predictors. `"response"` will transform them on scale of the response
+#' variable. Thus for a logistic model, `"none"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
-#'   / mean / contrasts. Other predictors of the model that are not included
-#'   here will be collapsed and "averaged" over (the effect will be estimated
-#'   across them).
+#' / mean / contrasts. Other predictors of the model that are not included
+#' here will be collapsed and "averaged" over (the effect will be estimated
+#' across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
 #'
 #' @examples
@@ -49,14 +45,13 @@
 #' @export
 get_emmeans <- function(model,
                         by = "auto",
-                        fixed = NULL,
                         transform = "response",
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  my_args <- .guess_emmeans_arguments(model, by, fixed, ...)
+  my_args <- .guess_emmeans_arguments(model, by, ...)
 
 
   # Run emmeans
@@ -78,7 +73,6 @@ get_emmeans <- function(model,
 
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
-  attr(estimated, "fixed") <- my_args$fixed
   estimated
 }
 
@@ -91,7 +85,7 @@ model_emmeans <- get_emmeans
 # =========================================================================
 # HELPERS  ----------------------------------------------------------------
 # =========================================================================
-# This function is the actual equivalent of .get_marginalmeans(); both being used
+# This function is the actual equivalent of get_marginalmeans(); both being used
 # in estimate_means
 
 #' @keywords internal
@@ -122,7 +116,6 @@ model_emmeans <- get_emmeans
 
   attr(means, "at") <- info$by
   attr(means, "by") <- info$by
-  attr(means, "fixed") <- info$fixed
   means
 }
 
@@ -135,7 +128,6 @@ model_emmeans <- get_emmeans
 #' @keywords internal
 .guess_emmeans_arguments <- function(model,
                                      by = NULL,
-                                     fixed = NULL,
                                      ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
@@ -150,7 +142,7 @@ model_emmeans <- get_emmeans
     insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }
 
-  my_args <- list(by = by, fixed = fixed)
+  my_args <- list(by = by)
   .format_emmeans_arguments(model, args = my_args, data = my_data, ...)
 }
 
@@ -177,7 +169,6 @@ model_emmeans <- get_emmeans
   } else {
     if (!is.null(args$by) && all(args$by == "all")) {
       target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
-      target <- target[!target %in% args$fixed]
     } else {
       target <- args$by
     }
@@ -197,16 +188,6 @@ model_emmeans <- get_emmeans
     } else {
       contrast <- contrast[!names(contrast) %in% names(args$data_matrix)]
       if (ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
-    }
-  }
-
-  # Deal with 'fixed'
-  if (!is.null(args$fixed)) {
-    fixed <- insight::get_datagrid(data[args$fixed], by = NULL, ...)
-    if (is.null(args$data_matrix)) {
-      args$data_matrix <- fixed
-    } else {
-      args$data_matrix <- merge(args$data_matrix, fixed)
     }
   }
 

@@ -14,7 +14,6 @@ get_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   method = "pairwise",
   ...
@@ -24,19 +23,18 @@ model_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   method = "pairwise",
   ...
 )
 
-get_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
+get_emmeans(model, by = "auto", transform = "response", ...)
 
-model_emmeans(model, by = "auto", fixed = NULL, transform = "response", ...)
+model_emmeans(model, by = "auto", transform = "response", ...)
 
-get_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
+get_emtrends(model, trend = NULL, by = NULL, ...)
 
-model_emtrends(model, trend = NULL, by = NULL, fixed = NULL, ...)
+model_emtrends(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -49,18 +47,13 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{transform}{Is passed to the \code{type} argument in
-\code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"}
-(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\code{"none"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable.
-Thus for a logistic model, \code{"none"} will give estimations expressed in
-log-odds (probabilities on logit scale) and \code{"response"} in terms of
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
+See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
+\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
+linear predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
@@ -79,26 +72,24 @@ debugging, and end-users should rather use the \verb{estimate_*()} series of
 functions.
 }
 \examples{
-if (require("emmeans", quietly = TRUE)) {
-  # Basic usage
-  model <- lm(Sepal.Width ~ Species, data = iris)
-  get_emcontrasts(model)
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Basic usage
+model <- lm(Sepal.Width ~ Species, data = iris)
+get_emcontrasts(model)
 
-  # Dealing with interactions
-  model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-  # By default: selects first factor
-  get_emcontrasts(model)
-  # Can also run contrasts between points of numeric
-  get_emcontrasts(model, contrast = "Petal.Width", length = 3)
-  # Or both
-  get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
-  # Or with custom specifications
-  estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
-  # Can fixate the numeric at a specific value
-  get_emcontrasts(model, fixed = "Petal.Width")
-  # Or modulate it
-  get_emcontrasts(model, by = "Petal.Width", length = 4)
-}
+# Dealing with interactions
+model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+# By default: selects first factor
+get_emcontrasts(model)
+# Can also run contrasts between points of numeric
+get_emcontrasts(model, contrast = "Petal.Width", length = 3)
+# Or both
+get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+# Or with custom specifications
+estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+# Or modulate it
+get_emcontrasts(model, by = "Petal.Width", length = 4)
+\dontshow{\}) # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 if (require("emmeans", quietly = TRUE)) {

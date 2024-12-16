@@ -19,7 +19,6 @@
 #' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #'
 #' estimate_means(model)
-#' estimate_means(model, fixed = "Sepal.Width")
 #' estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
 #' estimate_means(model, by = "Species=c('versicolor', 'setosa')")
 #' estimate_means(model, by = "Sepal.Width=c(2, 4)")
@@ -28,7 +27,7 @@
 #' estimate_means(model, by = "Sepal.Width=c(2, 4)")
 #'
 #' # Methods that can be applied to it:
-#' means <- estimate_means(model, fixed = "Sepal.Width")
+#' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 #'
 #' @examplesIf require("see") && require("emmeans", quietly = TRUE)
 #' plot(means) # which runs visualisation_recipe()
@@ -48,19 +47,18 @@
 #' @export
 estimate_means <- function(model,
                            by = "auto",
-                           fixed = NULL,
                            transform = "response",
                            ci = 0.95,
                            backend = "emmeans",
                            ...) {
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by, fixed, transform = transform, ...)
+    estimated <- get_emmeans(model, by, transform = transform, ...)
     means <- .format_emmeans_means(estimated, model, ci, transform, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- .get_marginalmeans(model, by, ci = ci, ...)
-    means <- .format_marginaleffects_means(estimated, model, ...)
+    estimated <- get_marginalmeans(model, by, transform = transform, ci = ci, ...)
+    means <- .format_marginaleffects_means(estimated, model, transform, ...)
   }
 
 

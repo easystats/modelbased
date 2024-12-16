@@ -8,7 +8,6 @@ estimate_contrasts(
   model,
   contrast = NULL,
   by = NULL,
-  fixed = NULL,
   transform = "none",
   ci = 0.95,
   p_adjust = "holm",
@@ -27,26 +26,21 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{transform}{Is passed to the \code{type} argument in
-\code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"}
-(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\code{"none"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable.
-Thus for a logistic model, \code{"none"} will give estimations expressed in
-log-odds (probabilities on logit scale) and \code{"response"} in terms of
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
+See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
+\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
+linear predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
-"bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
-section in the \code{emmeans::test} documentation.}
+comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochberg"},
+\code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
@@ -117,7 +111,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE) && require("rstanarm", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
@@ -138,9 +132,6 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 # Or with custom specifications
 estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 
-# Can fixate the numeric at a specific value
-estimate_contrasts(model, fixed = "Petal.Width")
-
 # Or modulate it
 estimate_contrasts(model, by = "Petal.Width", length = 4)
 
@@ -155,22 +146,24 @@ data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 estimate_contrasts(model)
 
-library(rstanarm)
-
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
 
-model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
+model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 estimate_contrasts(model)
-estimate_contrasts(model, fixed = "am")
+# fix `am` at value 1
+estimate_contrasts(model, by = c("cyl", "am='1'"))
 
-model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
+model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)
-estimate_contrasts(model, fixed = "wt")
 estimate_contrasts(model, by = "wt", length = 4)
 
-model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
+model <- rstanarm::stan_glm(
+  Sepal.Width ~ Species + Petal.Width + Petal.Length,
+  data = iris,
+  refresh = 0
+)
 estimate_contrasts(model, by = "Petal.Length", test = "bf")
 }
 \dontshow{\}) # examplesIf}

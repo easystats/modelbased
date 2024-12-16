@@ -1,23 +1,17 @@
-#' Easy marginaleffects
-#'
-#' Modelbased-like API to create \pkg{marginaleffects} objects. This is
-#' Work-in-progress.
+#' @rdname get_marginalmeans
 #'
 #' @inheritParams get_emmeans
 #'
-#' @examples
-#' if (require("marginaleffects")) {
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#'   get_marginaleffects(model, trend = "Petal.Length", by = "Species")
-#'   get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
-#'   get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
-#' }
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Species")
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
+#' get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
 get_marginaleffects <- function(model,
                                 trend = NULL,
                                 by = NULL,
-                                fixed = NULL,
                                 ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -35,17 +29,20 @@ get_marginaleffects <- function(model,
     by <- by[!by %in% trend]
   }
 
-  newdata <- insight::get_datagrid(model, by = by, ...)
-
-  fixed <- names(newdata)[!names(newdata) %in% c(by, trend)]
-  if (length(fixed) == 0) fixed <- NULL
+  datagrid <- insight::get_datagrid(model, by = by, ...)
+  at_specs <- attributes(datagrid)$at_specs
 
   # Compute stuff
-  estimated <- marginaleffects::slopes(model, variables = trend, newdata = newdata, ...)
+  estimated <- marginaleffects::avg_slopes(
+    model,
+    variables = trend,
+    by = at_specs$varname,
+    newdata = datagrid,
+    ...
+  )
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
   attr(estimated, "by") <- by
-  attr(estimated, "fixed") <- fixed
   estimated
 }

@@ -20,13 +20,12 @@
 get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
-                         fixed = NULL,
                          ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  my_args <- .guess_emtrends_arguments(model, trend, by, fixed, ...)
+  my_args <- .guess_emtrends_arguments(model, trend, by, ...)
 
   # Run emtrends
   estimated <- emmeans::emtrends(
@@ -40,7 +39,6 @@ get_emtrends <- function(model,
   attr(estimated, "trend") <- my_args$trend
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
-  attr(estimated, "fixed") <- my_args$fixed
   estimated
 }
 
@@ -56,7 +54,6 @@ model_emtrends <- get_emtrends
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
                                       by = NULL,
-                                      fixed = NULL,
                                       ...) {
   # Gather info
   predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
@@ -75,6 +72,6 @@ model_emtrends <- get_emtrends
     trend <- trend[1]
   }
 
-  my_args <- list(trend = trend, by = by, fixed = fixed)
+  my_args <- list(trend = trend, by = by)
   .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
