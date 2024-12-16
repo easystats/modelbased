@@ -32,8 +32,7 @@ get_marginaleffects <- function(model,
   newdata <- insight::get_datagrid(model, by = by, ...)
 
   # Compute stuff
-  ## FIXME: should be relaced by avg_slopes with "by" argument
-  estimated <- marginaleffects::slopes(model, variables = trend, newdata = newdata, ...)
+  estimated <- marginaleffects::avg_slopes(model, variables = trend, newdata = newdata, ...)
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
