@@ -9,7 +9,6 @@ get_marginalcontrasts <- function(model,
                                   transform = "none",
                                   method = "pairwise",
                                   ci = 0.95,
-                                  p_adjust = "none",
                                   ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -23,8 +22,6 @@ get_marginalcontrasts <- function(model,
     backend = "marginaleffects",
     ...
   )
-
-  out <- .p_adjust(model, out, p_adjust, ...)
 
   attr(out, "contrast") <- contrast
   out

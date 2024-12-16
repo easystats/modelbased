@@ -39,9 +39,16 @@ probabilities.}
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochberg"},
-\code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation.}
+comparisons.
+\itemize{
+\item For \code{backend = "emmeans"}, can be one of \code{"holm"} (default), \code{"tukey"},
+\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or
+\code{"none"}. See the p-value adjustment section in the \code{emmeans::test}
+documentation.
+\item For \code{backend = "marginaleffects"}, can be one of \code{"holm"} (default),
+\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"bh"}, \code{"by"}, \code{"fdr"},
+\code{"none"}, \code{"tukey"} or \code{"sidak"}.
+}}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 

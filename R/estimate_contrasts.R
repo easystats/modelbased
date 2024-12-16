@@ -7,9 +7,14 @@
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#'   comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
-#'   `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
-#'   p-value adjustment section in the `emmeans::test` documentation.
+#' comparisons.
+#' - For `backend = "emmeans"`, can be one of `"holm"` (default), `"tukey"`,
+#'   `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or
+#'   `"none"`. See the p-value adjustment section in the `emmeans::test`
+#'   documentation.
+#' - For `backend = "marginaleffects"`, can be one of `"holm"` (default),
+#'   `"hochberg"`, `"hommel"`, `"bonferroni"`, `"bh"`, `"by"`, `"fdr"`,
+#'   `"none"`, `"tukey"` or `"sidak"`.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -103,7 +108,7 @@ estimate_contrasts <- function(model,
       ci = ci,
       ...
     )
-    out <- .format_marginaleffects_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
     ## TODO: needs to be fixed
     info <- list(contrast = contrast, by = by)
   }
@@ -127,7 +132,6 @@ estimate_contrasts <- function(model,
   attr(out, "by") <- info$by
   attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
-
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
@@ -173,11 +177,21 @@ estimate_contrasts <- function(model,
 }
 
 
-.format_marginaleffects_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
+.format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
+  focal_terms <- attributes(estimated)$focal_terms
 
+  estimated <- .p_adjust(model, estimated, p_adjust, ...)
+
+  valid_methods <- c(
+    "pairwise", "reference", "sequential", "meandev","meanotherdev",
+    "revpairwise", "revreference", "revsequential"
+  )
   ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
+  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
+
+  }
 
   estimated
 }

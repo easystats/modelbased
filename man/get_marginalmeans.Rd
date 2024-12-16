@@ -16,7 +16,6 @@ get_marginalcontrasts(
   transform = "none",
   method = "pairwise",
   ci = 0.95,
-  p_adjust = "none",
   ...
 )
 
@@ -27,7 +26,6 @@ model_marginalcontrasts(
   transform = "none",
   method = "pairwise",
   ci = 0.95,
-  p_adjust = "none",
   ...
 )
 
