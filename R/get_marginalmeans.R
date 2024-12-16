@@ -88,7 +88,7 @@ get_marginalmeans <- function(model,
     type = type
   )
   # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "newdata", "conf_level", "df", "type")] <- NULL
+  dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages

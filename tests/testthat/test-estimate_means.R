@@ -260,14 +260,14 @@ test_that("estimate_means() - glm", {
   model <- glm(Petal.Length_factor ~ Species, data = dat, family = "binomial")
 
   estim1 <- suppressMessages(estimate_means(model))
-  estim2 <- suppressWarnings(suppressMessages(estimate_means(model, backend = "marginaleffects")))
+  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects", verbose = FALSE))
   expect_identical(dim(estim1), c(3L, 5L))
   expect_identical(dim(estim2), c(3L, 4L))
   expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-2)
 
   estim1 <- suppressMessages(estimate_means(model, transform = "none"))
-  estim2 <- suppressMessages(estimate_means(model, transform = "none", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_means(model, transform = "none", verbose = FALSE, backend = "marginaleffects"))
   expect_identical(dim(estim1), c(3L, 5L))
   expect_identical(dim(estim2), c(3L, 5L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
