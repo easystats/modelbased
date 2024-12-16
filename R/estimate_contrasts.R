@@ -78,17 +78,64 @@ estimate_contrasts <- function(model,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
+                               backend = "emmeans",
                                ...) {
-  # Run emmeans
-  estimated <- get_emcontrasts(model,
-    contrast = contrast,
-    by = by,
-    transform = transform,
-    method = method,
-    adjust = p_adjust,
-    ...
+  if (backend == "emmeans") {
+    # Emmeans ------------------------------------------------------------------
+    estimated <- get_emcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      adjust = p_adjust,
+      ...
+    )
+    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+  } else {
+    # Marginalmeans ------------------------------------------------------------
+    estimated <- get_marginalcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      adjust = p_adjust,
+      ...
+    )
+    out <- .format_marginaleffects_means(estimated, model, transform, ...)
+  }
+
+
+  # Table formatting
+  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_footer") <- .estimate_means_footer(
+    out,
+    info$contrast,
+    type = "contrasts",
+    p_adjust = p_adjust
   )
 
+  # Add attributes
+  attr(out, "model") <- model
+  attr(out, "response") <- insight::find_response(model)
+  attr(out, "ci") <- ci
+  attr(out, "transform") <- transform
+  attr(out, "at") <- info$by
+  attr(out, "by") <- info$by
+  attr(out, "contrast") <- info$contrast
+  attr(out, "p_adjust") <- p_adjust
+
+
+  # Output
+  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
+  out
+}
+
+
+
+# Table formatting emmeans ----------------------------------------------------
+
+
+.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
   info <- attributes(estimated)
 
   # Summarize and clean
@@ -120,30 +167,10 @@ estimate_contrasts <- function(model,
 
   # Merge levels and rest
   out$contrast <- NULL
-  out <- cbind(level_cols, out)
+  cbind(level_cols, out)
+}
 
 
-  # Table formatting
-  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(out, "table_footer") <- .estimate_means_footer(
-    out,
-    info$contrast,
-    type = "contrasts",
-    p_adjust = p_adjust
-  )
+.format_marginaleffects_means <- function() {
 
-  # Add attributes
-  attr(out, "model") <- model
-  attr(out, "response") <- insight::find_response(model)
-  attr(out, "ci") <- ci
-  attr(out, "transform") <- transform
-  attr(out, "at") <- info$by
-  attr(out, "by") <- info$by
-  attr(out, "contrast") <- info$contrast
-  attr(out, "p_adjust") <- p_adjust
-
-
-  # Output
-  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
-  out
 }

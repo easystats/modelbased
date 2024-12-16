@@ -9,9 +9,25 @@
 \alias{model_marginalmeans}
 \title{Easy 'avg_predictions' and 'avg_slopes'}
 \usage{
-get_marginalcontrasts(model, by = NULL, ci = 0.95, method = "pairwise", ...)
+get_marginalcontrasts(
+  model,
+  contrast = NULL,
+  by = NULL,
+  transform = "none",
+  method = "pairwise",
+  ci = 0.95,
+  ...
+)
 
-model_marginalcontrasts(model, by = NULL, ci = 0.95, method = "pairwise", ...)
+model_marginalcontrasts(
+  model,
+  contrast = NULL,
+  by = NULL,
+  transform = "none",
+  method = "pairwise",
+  ci = 0.95,
+  ...
+)
 
 get_marginaleffects(model, trend = NULL, by = NULL, ...)
 
@@ -22,20 +38,13 @@ model_marginalmeans(model, by = "auto", transform = NULL, ci = 0.95, ...)
 \arguments{
 \item{model}{A statistical model.}
 
+\item{contrast}{A character vector indicating the name of the variable(s)
+for which to compute the contrasts.}
+
 \item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
-
-\item{ci}{Level for confidence intervals.}
-
-\item{method}{Contrast method.}
-
-\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
-or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}.}
-
-\item{trend}{A character indicating the name of the variable
-for which to compute the slopes.}
 
 \item{transform}{Can be used to easily modulate the \code{type} argument in
 \code{marginaleffects::avg_predictions()}. Can be \code{"none"} or \code{"response"}.
@@ -43,6 +52,16 @@ for which to compute the slopes.}
 \code{"response"} will transform them on scale of the response variable. Thus for
 a logistic model, \code{"none"} will give estimations expressed in log-odds
 (probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+
+\item{method}{Contrast method.}
+
+\item{ci}{Level for confidence intervals.}
+
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
+or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}.}
+
+\item{trend}{A character indicating the name of the variable
+for which to compute the slopes.}
 }
 \description{
 The \code{get_marginalmeans()} function is a wrapper to facilitate the usage of

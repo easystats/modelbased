@@ -12,6 +12,7 @@ estimate_contrasts(
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
+  backend = "emmeans",
   ...
 )
 }
@@ -43,6 +44,9 @@ comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochb
 p-value adjustment section in the \code{emmeans::test} documentation.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
+
+\item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
+The latter is experimental and some features might not work.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
