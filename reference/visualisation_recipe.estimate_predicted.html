@@ -498,6 +498,13 @@ aesthetics and parameters for the geoms (see customization example).</p></dd>
 <span class="r-in"><span>  <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">rstanarm</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html" class="external-link">stan_glm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Sepal.Length</span>, data <span class="op">=</span> <span class="va">iris</span>, refresh <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, keep_iterations <span class="op">=</span> <span class="fl">100</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: rstanarm</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: Rcpp</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> This is rstanarm version 2.32.1</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> - See https://mc-stan.org/rstanarm/articles/priors for changes to default priors!</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> - Default priors may change, so it's safest to specify priors, even if equivalent to the defaults.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> - For execution on a local, multicore CPU with excess RAM we recommend calling</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   options(mc.cores = parallel::detectCores())</span>
 <span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-28.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span><span class="co"># ==============================================</span></span></span>
