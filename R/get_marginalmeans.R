@@ -119,26 +119,30 @@ model_marginalmeans <- get_marginalmeans
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
+  is_contrast_analysis <- !is.null(list(...)$hypothesis)
 
   # do we have contrasts? For contrasts, we want to keep p-values
-  if (is.null(list(...)$hypothesis)) {
-    p_column <- "p"
+  if (is_contrast_analysis) {
+    remove_column <- "SE"
+    estimate_name <- "Difference"
+  } else {
+    remove_column <- "p"
     # estimate name
     if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
       estimate_name <- "Mean"
     }
-  } else {
-    p_column <- NULL
-    estimate_name <- "Difference"
   }
 
   # Format
   params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high", "p"), after = -1, verbose = FALSE) # nolint
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
+  # move p to the end
+  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
   params <- datawizard::data_rename(params, "Predicted", estimate_name)
-  params <- datawizard::data_remove(params, c(p_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
+  # remove redundant columns
+  params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)
 
   # Store info

@@ -176,5 +176,8 @@ estimate_contrasts <- function(model,
 .format_marginaleffects_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
+
+  ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
+
   estimated
 }
