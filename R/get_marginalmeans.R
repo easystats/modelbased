@@ -123,15 +123,15 @@ model_marginalmeans <- get_marginalmeans
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is.null(list(...)$hypothesis)) {
     p_column <- "p"
+    # estimate name
+    if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
+      estimate_name <- "Probability"
+    } else {
+      estimate_name <- "Mean"
+    }
   } else {
     p_column <- NULL
-  }
-
-  # estimate name
-  if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
-    estimate_name <- "Probability"
-  } else {
-    estimate_name <- "Mean"
+    estimate_name <- "Difference"
   }
 
   # Format
