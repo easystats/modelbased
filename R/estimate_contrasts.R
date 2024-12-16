@@ -7,14 +7,9 @@
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons.
-#' - For `backend = "emmeans"`, can be one of `"holm"` (default), `"tukey"`,
-#'   `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or
-#'   `"none"`. See the p-value adjustment section in the `emmeans::test`
-#'   documentation.
-#' - For `backend = "marginaleffects"`, can be one of `"holm"` (default),
-#'   `"hochberg"`, `"hommel"`, `"bonferroni"`, `"bh"`, `"by"`, `"fdr"`,
-#'   `"none"`, `"tukey"` or `"sidak"`.
+#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
+#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
+#' p-value adjustment section in the `emmeans::test` documentation.
 #'
 #' @inherit estimate_slopes details
 #'
