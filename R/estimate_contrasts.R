@@ -91,6 +91,7 @@ estimate_contrasts <- function(model,
       ...
     )
     out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalcontrasts(model,
@@ -98,10 +99,13 @@ estimate_contrasts <- function(model,
       by = by,
       transform = transform,
       method = method,
-      adjust = p_adjust,
+      p_adjust = p_adjust,
+      ci = ci,
       ...
     )
-    out <- .format_marginaleffects_means(estimated, model, transform, ...)
+    out <- .format_marginaleffects_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    ## TODO: needs to be fixed
+    info <- list(contrast = contrast, by = by)
   }
 
 
@@ -136,8 +140,6 @@ estimate_contrasts <- function(model,
 
 
 .format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
-  info <- attributes(estimated)
-
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
@@ -171,6 +173,8 @@ estimate_contrasts <- function(model,
 }
 
 
-.format_marginaleffects_means <- function() {
-
+.format_marginaleffects_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
+  groups <- attributes(estimated)$by
+  contrast <- attributes(estimated)$contrast
+  estimated
 }

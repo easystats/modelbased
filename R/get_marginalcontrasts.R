@@ -13,22 +13,17 @@ get_marginalcontrasts <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
-  # Guess arguments
-  my_args <- .guess_marginalcontrasts_arguments(model, contrast, by, ...)
-
   out <- estimate_means(
     model = model,
-    by = my_args$by,
+    by = c(contrast, by),
     ci = ci,
     hypothesis = method,
-    transform = transform,
+    transform = "response",
     backend = "marginaleffects",
     ...
   )
 
-  attr(out, "contrast") <- my_args$contrast
-  attr(out, "at") <- my_args$by
-  attr(out, "by") <- my_args$by
+  attr(out, "contrast") <- contrast
   out
 }
 
