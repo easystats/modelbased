@@ -65,7 +65,7 @@ get_marginalmeans <- function(model,
   )
   # always show all theoretical values by default
   if (is.null(dots$preserve_range)) {
-    dg_args$preserve_range = FALSE
+    dg_args$preserve_range <- FALSE
   }
   # add user-arguments from "...", but remove those arguments that are already set
   dots[c("by", "factors", "include_random")] <- NULL
