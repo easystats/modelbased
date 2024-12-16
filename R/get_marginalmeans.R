@@ -117,7 +117,7 @@ model_marginalmeans <- get_marginalmeans
 .format_marginaleffects_means <- function(means, model, transform = NULL, ...) {
   # model information
   model_data <- insight::get_data(model)
-  info <- insight::model_info(model)
+  info <- insight::model_info(model, verbose = FALSE)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
 
   # estimate name
