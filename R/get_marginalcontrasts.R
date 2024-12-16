@@ -40,6 +40,7 @@ model_marginalcontrasts <- get_marginalcontrasts
   focal <- attributes(params)$focal_terms
   statistic <- insight::get_statistic(model)$Statistic
   df <- insight::get_df(model)
+  verbose <- isTRUE(list(...)$verbose)
 
   # exit on NULL, or if no p-adjustment requested
   if (is.null(p_adjust) || identical(p_adjust, "none")) {
