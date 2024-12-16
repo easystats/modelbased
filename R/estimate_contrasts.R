@@ -172,6 +172,10 @@ estimate_contrasts <- function(model,
 }
 
 
+
+# Table formatting marginal effects -------------------------------------------
+
+
 .format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
