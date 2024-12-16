@@ -102,6 +102,7 @@ get_marginalmeans <- function(model,
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
   attr(means, "focal_terms") <- at_specs$varname
+  attr(means, "datagrid") <- datagrid
   means
 }
 
