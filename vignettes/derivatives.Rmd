@@ -1,16 +1,16 @@
 ---
 title: "Interpret simple and complex models using the power of Effect Derivatives"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
     fig_height: 6
 tags: [r, estimate, estimate response, predictions, non linear, polynomial]
 vignette: >
-  %\VignetteIndexEntry{Interpret simple and complex models using the power of derivatives}
+  %\VignetteIndexEntry{Interpret simple and complex models using the power of Effect Derivatives}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -77,7 +77,7 @@ report::report(rez)
 print(report::report(cor.test(data$y, data$x)), width = 80)
 ```
 
-Great, we know there is a significant correlation between the two variables! 🥳 
+Great, we know there is a significant correlation between the two variables! 🥳
 
 But what we would like to know is **for every increase of 1 on *x*, how much does *y* increase?** In other words, what is the **slope** of the relationship?
 
@@ -93,7 +93,7 @@ plot(modelbased::estimate_relation(model_lm))
 parameters::parameters(model_lm)
 ```
 
-The parameters table shows us that the **effect of x** is `12.75`. This means that for every increase of 1 on `x`, `y` increases by `12.75`. 
+The parameters table shows us that the **effect of x** is `12.75`. This means that for every increase of 1 on `x`, `y` increases by `12.75`.
 
 Congrats, we've answered our question!
 
@@ -136,7 +136,7 @@ In the figure above, the above plot shows a non-linear relationship between the 
 
 You can see that the derivative peaks when the slope of the relationship is at its highest (when it is the steepest), and then decrease again until reaching 0. A zero-crossing of the derivative means an inversion of the the trend; it is when the relationship starts to be negative.
 
-Derivatives can be computed for statistical models, including simple ones such as linear regressions. Before you look at the answer below, try to think and imagine what would the derivative plot of our previously computed linear model would look like? 
+Derivatives can be computed for statistical models, including simple ones such as linear regressions. Before you look at the answer below, try to think and imagine what would the derivative plot of our previously computed linear model would look like?
 
 We know that the slope is `12.75` (from our parameters analysis). Does it change across the course of the relationship? No, because it is a straight line, so the slope is constant. If the slope is constant, then the derivative should be... a constant line too, right? Let's verify this.
 
@@ -256,6 +256,6 @@ plot(deriv, line = list(color = "blue")) +
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-Again, the GAM nicely recovered the shape of the relationship. 
+Again, the GAM nicely recovered the shape of the relationship.
 
 **In summary, effects derivatives can be used to easily leverage the power of GAMs.**
