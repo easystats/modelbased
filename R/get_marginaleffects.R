@@ -29,10 +29,17 @@ get_marginaleffects <- function(model,
     by <- by[!by %in% trend]
   }
 
-  newdata <- insight::get_datagrid(model, by = by, ...)
+  datagrid <- insight::get_datagrid(model, by = by, ...)
+  at_specs <- attributes(datagrid)$at_specs
 
   # Compute stuff
-  estimated <- marginaleffects::avg_slopes(model, variables = trend, newdata = newdata, ...)
+  estimated <- marginaleffects::avg_slopes(
+    model,
+    variables = trend,
+    by = at_specs$varname,
+    newdata = datagrid,
+    ...
+  )
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
