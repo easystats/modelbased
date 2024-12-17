@@ -32,8 +32,11 @@ probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
-The latter is experimental and some features might not work.}
+\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where \code{backend = "marginaleffects"} will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -103,7 +106,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -120,20 +123,24 @@ estimate_means(model, by = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("see") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-plot(means) # which runs visualisation_recipe()
 
+plot(means) # which runs visualisation_recipe()
 standardize(means)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("lme4") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 \donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+model <- lme4::lmer(
+  Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor),
+  data = data
+)
 estimate_means(model)
 estimate_means(model, by = "Sepal.Width", length = 3)
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+{marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
 }

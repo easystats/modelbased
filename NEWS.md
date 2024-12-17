@@ -4,6 +4,14 @@
 
 - Deprecated argument and function names have been removed.
 
+- Argument `fixed` has been removed, as you can fix predictor at certain values
+  using the `by` argument.
+
+## Major Changes
+
+- The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
+  and no longer work-in-progress.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.
