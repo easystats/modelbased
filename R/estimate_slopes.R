@@ -73,6 +73,7 @@
 #' @return A data.frame of class `estimate_slopes`.
 #'
 #' @examplesIf all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))
+#' library(ggplot2)
 #' # Get an idea of the data
 #' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
 #'   geom_point(aes(color = Species)) +

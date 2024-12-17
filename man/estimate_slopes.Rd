@@ -91,6 +91,7 @@ condition (\code{using [estimate_slopes]}).
 }
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
