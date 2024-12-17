@@ -138,6 +138,8 @@ model_marginalmeans <- get_marginalmeans
 
   # Format
   params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
+  # add ci?
+  params <- .add_contrasts_ci(is_contrast_analysis, params)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
   # move p to the end
   params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
@@ -151,6 +153,36 @@ model_marginalmeans <- get_marginalmeans
   attr(params, "by") <- attr(means, "by")
   params
 }
+
+
+#' @keywords internal
+.add_contrasts_ci <- function(is_contrast_analysis, params) {
+  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
+    # extract ci-level
+    if ("CI" %in% colnames(params)) {
+      ci <- params[["CI"]]
+    } else {
+      ci <- attributes(params$ci)
+    }
+    if (is.null(ci)) {
+      ci <- 0.95
+    }
+    # get degrees of freedom
+    if ("df" %in% colnames(params)) {
+      df <- params[["df"]]
+    } else {
+      df <- Inf
+    }
+    # critical test value
+    crit <- stats::qt((1 + ci) / 2, df = df)
+    add CI
+    params$CI_low <- params$predicted - crit * params$SE
+    params$CI_high <- params$predicted + crit * params$SE
+  }
+  params
+}
+
+
 
 # Guess -------------------------------------------------------------------
 
