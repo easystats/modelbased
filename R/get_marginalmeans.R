@@ -176,8 +176,8 @@ model_marginalmeans <- get_marginalmeans
     # critical test value
     crit <- stats::qt((1 + ci) / 2, df = dof)
     # add CI
-    params$CI_low <- params$predicted - crit * params$SE
-    params$CI_high <- params$predicted + crit * params$SE
+    params$CI_low <- params$Predicted - crit * params$SE
+    params$CI_high <- params$Predicted + crit * params$SE
   }
   params
 }
