@@ -51,6 +51,7 @@ Suggests:
     emmeans (>= 1.10.2),
     gamm4,
     gganimate,
+    ggeffects,
     ggplot2,
     glmmTMB,
     knitr,
