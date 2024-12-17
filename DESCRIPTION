@@ -49,6 +49,7 @@ Suggests:
     coda,
     correlation,
     emmeans (>= 1.10.2),
+    Formula,
     gamm4,
     gganimate,
     ggeffects,
