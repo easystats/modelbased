@@ -1,7 +1,7 @@
 # estimate_contrasts - marginaleffects
 
     Code
-      out
+      print(out, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
@@ -9,9 +9,9 @@
       ------------------------------------------------------------------------------
       morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004 
       morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336 
-      morning, coffee - noon, control        |  -7.11e-15 | [ -3.95,  3.95] | > .999
+      morning, coffee - noon, control        |       0.00 | [ -3.95,  3.95] | > .999
       morning, coffee - afternoon, coffee    |      -1.93 | [ -5.88,  2.02] | 0.336 
-      morning, coffee - afternoon, control   |  -3.55e-15 | [ -3.95,  3.95] | > .999
+      morning, coffee - afternoon, control   |       0.00 | [ -3.95,  3.95] | > .999
       morning, control - noon, coffee        |      -3.86 | [ -7.81,  0.09] | 0.056 
       morning, control - noon, control       |      -5.78 | [ -9.73, -1.83] | 0.004 
       morning, control - afternoon, coffee   |      -7.71 | [-11.66, -3.76] | < .001
@@ -20,7 +20,7 @@
       noon, coffee - afternoon, coffee       |      -3.86 | [ -7.81,  0.09] | 0.056 
       noon, coffee - afternoon, control      |      -1.93 | [ -5.88,  2.02] | 0.336 
       noon, control - afternoon, coffee      |      -1.93 | [ -5.88,  2.02] | 0.336 
-      noon, control - afternoon, control     |   3.55e-15 | [ -3.95,  3.95] | > .999
+      noon, control - afternoon, control     |       0.00 | [ -3.95,  3.95] | > .999
       afternoon, coffee - afternoon, control |       1.93 | [ -2.02,  5.88] | 0.336 
       
       Marginal contrasts estimated at time, coffee
@@ -29,7 +29,7 @@
 ---
 
     Code
-      out
+      print(out, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
@@ -46,7 +46,7 @@
 ---
 
     Code
-      out
+      print(out, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
