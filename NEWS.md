@@ -12,6 +12,10 @@
 - The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
   and no longer work-in-progress.
 
+- `estimate_contrasts()` gains a `backend` argument. This defaults to `"emmeans"`,
+  but can be set to `"marginaleffects"` to use features of that package to estimate
+  contrasts and pairwise comparisons.
+
 - `estimate_expectation()` and related functions also get a `by` argument, as
   alternative to create a datagrid for the `data` argument.
 
