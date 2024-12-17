@@ -12,6 +12,9 @@
 - The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
   and no longer work-in-progress.
 
+- `estimate_expectation()` and related functions also get a `by` argument, as
+  alternative to create a datagrid for the `data` argument.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.

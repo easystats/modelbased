@@ -10,16 +10,25 @@
 estimate_expectation(
   model,
   data = NULL,
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
 )
 
-estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
+estimate_link(
+  model,
+  data = "grid",
+  by = NULL,
+  ci = 0.95,
+  keep_iterations = FALSE,
+  ...
+)
 
 estimate_prediction(
   model,
   data = NULL,
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -28,6 +37,7 @@ estimate_prediction(
 estimate_relation(
   model,
   data = "grid",
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -37,8 +47,15 @@ estimate_relation(
 \item{model}{A statistical model.}
 
 \item{data}{A data frame with model's predictors to estimate the response. If
-\code{NULL}, the model's data is used. If "grid", the model matrix is obtained
+\code{NULL}, the model's data is used. If \code{"grid"}, the model matrix is obtained
 (through \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).}
+
+\item{by}{The predictor variable(s) at which to estimate the response. Other
+predictors of the model that are not included here will be set to their mean
+value (for numeric predictors), reference level (for factors) or mode (other
+types). The \code{by} argument will be used to create a data grid via
+\code{insight::get_datagrid()}, which will then be used as \code{data} argument. Thus,
+you cannot specify both \code{data} and \code{by} but only of these two arguments.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 

@@ -40,10 +40,11 @@ various examples, tutorials and use cases.
 
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
-estimations (estimations based on a model). All three are also built on the
-\pkg{emmeans} package, so reading its documentation (for instance for
-\code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is recommended to understand
-the idea behind these types of procedures.
+estimations (estimations based on a model). All three are built on the
+\strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
+argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
@@ -89,7 +90,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans") && require("ggplot2") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
@@ -105,10 +106,8 @@ slopes
 
 # Plot it
 plot(slopes)
-
 standardize(slopes)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("mgcv") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 summary(slopes)
