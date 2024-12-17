@@ -9,6 +9,7 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 9L))
+  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')"))
   expect_identical(dim(estim), c(1L, 9L))
