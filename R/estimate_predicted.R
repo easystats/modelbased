@@ -213,6 +213,11 @@ estimate_link <- function(model,
                           ci = 0.95,
                           keep_iterations = FALSE,
                           ...) {
+  # reset to NULL if only "by" was specified
+  if (missing(data) && !missing(by)) {
+    data <- NULL
+  }
+
   .estimate_predicted(
     model,
     data = data,
@@ -251,6 +256,11 @@ estimate_relation <- function(model,
                               ci = 0.95,
                               keep_iterations = FALSE,
                               ...) {
+  # reset to NULL if only "by" was specified
+  if (missing(data) && !missing(by)) {
+    data <- NULL
+  }
+
   .estimate_predicted(
     model,
     data = data,

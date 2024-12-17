@@ -43,9 +43,6 @@ test_that("estimate_expectation - data-grid", {
     colnames(estim),
     c("Predicted", "SE", "CI_low", "CI_high", "Residuals")
   )
-  estim2 <- estimate_expectation(m, by = "cyl")
-  expect_equal(estim$cyl, esimt2$cyl, tolerance = 1e-4)
-  expect_equal(estim$Predicted, esimt2$Predicted, tolerance = 1e-4)
 
   m <- lm(mpg ~ cyl, data = mtcars)
   estim <- estimate_expectation(m, data = "grid")
@@ -54,6 +51,9 @@ test_that("estimate_expectation - data-grid", {
     colnames(estim),
     c("cyl", "Predicted", "SE", "CI_low", "CI_high")
   )
+  estim2 <- estimate_expectation(m, by = "cyl")
+  expect_equal(estim$cyl, esimt2$cyl, tolerance = 1e-4)
+  expect_equal(estim$Predicted, esimt2$Predicted, tolerance = 1e-4)
 
   m <- lm(mpg ~ factor(cyl), data = mtcars)
   estim <- estimate_expectation(m, data = "grid")
