@@ -184,7 +184,7 @@ estimate_contrasts <- function(model,
   estimated <- .p_adjust(model, estimated, p_adjust, ...)
 
   valid_methods <- c(
-    "pairwise", "reference", "sequential", "meandev","meanotherdev",
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"
   )
   ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"

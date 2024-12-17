@@ -3,6 +3,8 @@ BH
 BLUPs
 Dom
 GAMM
+GLMMs
+Heiss
 LM
 Mattan
 McKoon
@@ -35,6 +37,7 @@ codecov
 computable
 conditionspeed
 dat
+datagrid
 datawizard
 easystats
 edu

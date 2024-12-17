@@ -169,12 +169,12 @@ model_marginalmeans <- get_marginalmeans
     }
     # get degrees of freedom
     if ("df" %in% colnames(params)) {
-      df <- params[["df"]]
+      dof <- params[["df"]]
     } else {
-      df <- Inf
+      dof <- Inf
     }
     # critical test value
-    crit <- stats::qt((1 + ci) / 2, df = df)
+    crit <- stats::qt((1 + ci) / 2, df = dof)
     # add CI
     params$CI_low <- params$predicted - crit * params$SE
     params$CI_high <- params$predicted + crit * params$SE
