@@ -160,9 +160,9 @@ model_marginalmeans <- get_marginalmeans
   if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
     # extract ci-level
     if ("CI" %in% colnames(params)) {
-      ci <- params[["CI"]]
+      ci <- params[["CI"]][1]
     } else {
-      ci <- attributes(params$ci)
+      ci <- attributes(params)$ci
     }
     if (is.null(ci)) {
       ci <- 0.95
