@@ -1,23 +1,17 @@
-#' Easy marginaleffects
-#'
-#' Modelbased-like API to create \pkg{marginaleffects} objects. This is
-#' Work-in-progress.
+#' @rdname get_marginalmeans
 #'
 #' @inheritParams get_emmeans
 #'
-#' @examples
-#' if (require("marginaleffects")) {
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#'   get_marginaleffects(model, trend = "Petal.Length", at = "Species")
-#'   get_marginaleffects(model, trend = "Petal.Length", at = "Petal.Length")
-#'   get_marginaleffects(model, trend = "Petal.Length", at = c("Species", "Petal.Length"))
-#' }
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Species")
+#' get_marginaleffects(model, trend = "Petal.Length", by = "Petal.Length")
+#' get_marginaleffects(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
 get_marginaleffects <- function(model,
                                 trend = NULL,
-                                at = NULL,
-                                fixed = NULL,
+                                by = NULL,
                                 ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -30,21 +24,25 @@ get_marginaleffects <- function(model,
     )
   }
 
-  if (is.null(at)) {
-    at <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
-    at <- at[!at %in% trend]
+  if (is.null(by)) {
+    by <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+    by <- by[!by %in% trend]
   }
 
-  newdata <- insight::get_datagrid(model, at = at, ...)
-
-  fixed <- names(newdata)[!names(newdata) %in% c(at, trend)]
-  if (length(fixed) == 0) fixed <- NULL
+  datagrid <- insight::get_datagrid(model, by = by, ...)
+  at_specs <- attributes(datagrid)$at_specs
 
   # Compute stuff
-  estimated <- marginaleffects::marginaleffects(model, variables = trend, newdata = newdata, ...)
+  estimated <- marginaleffects::avg_slopes(
+    model,
+    variables = trend,
+    by = at_specs$varname,
+    newdata = datagrid,
+    ...
+  )
 
   attr(estimated, "trend") <- trend
-  attr(estimated, "at") <- at
-  attr(estimated, "fixed") <- fixed
+  attr(estimated, "at") <- by
+  attr(estimated, "by") <- by
   estimated
 }

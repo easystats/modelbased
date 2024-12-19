@@ -1,6 +1,6 @@
 ---
 title: "Model and describe non-linear relationships"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Model and describe non-linear relationships}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -129,7 +129,7 @@ df <- data_filter(df, Delay <= 14 & Memory >= 20)
 
 # Plot the density of the point and a loess smooth line
 ggplot(df, aes(x = Delay, y = Memory)) +
-  stat_density_2d(geom = "raster", aes(fill = ..density..), contour = FALSE) +
+  stat_density_2d(geom = "raster", aes(fill = after_stat(density)), contour = FALSE) +
   geom_jitter(width = 0.2, height = 0.2) +
   scale_fill_viridis_c() +
   geom_smooth(formula = "y ~ x", method = "loess", color = "red", se = FALSE) +
@@ -159,7 +159,7 @@ We can visualize the link between the Delay and the Memory score by using the
 ```{r}
 library(modelbased)
 
-estim <- estimate_relation(model, at = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
+estim <- estimate_relation(model, by = "Delay", ci = c(0.50, 0.69, 0.89, 0.97))
 
 ggplot(estim, aes(x = Delay, y = Predicted)) +
   geom_jitter(data = df, aes(y = Memory), width = 0.2, height = 0.2) +

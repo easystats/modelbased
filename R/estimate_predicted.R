@@ -96,8 +96,6 @@
 #'   - By default, values are computed using a reference grid spanning the
 #'     observed range of predictor values (see [visualisation_matrix()]).
 #'
-#' `estimate_response()` is a deprecated alias for `estimate_expectation()`.
-#'
 #' @section Data for predictions:
 #'
 #' If the `data = NULL`, values are estimated using the data used to fit the
@@ -131,29 +129,37 @@
 #' @inheritParams estimate_means
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
-#'   `NULL`, the model's data is used. If "grid", the model matrix is obtained
-#'   (through [insight::get_datagrid()]).
+#' `NULL`, the model's data is used. If `"grid"`, the model matrix is obtained
+#' (through [insight::get_datagrid()]).
+#' @param by The predictor variable(s) at which to estimate the response. Other
+#' predictors of the model that are not included here will be set to their mean
+#' value (for numeric predictors), reference level (for factors) or mode (other
+#' types). The `by` argument will be used to create a data grid via
+#' `insight::get_datagrid()`, which will then be used as `data` argument. Thus,
+#' you cannot specify both `data` and `by` but only of these two arguments.
 #' @param ... You can add all the additional control arguments from
-#'   [insight::get_datagrid()] (used when `data = "grid"`) and
-#'   [insight::get_predicted()].
+#' [insight::get_datagrid()] (used when `data = "grid"`) and
+#' [insight::get_predicted()].
 #'
-#' @examples
+#' @return A data frame of predicted values and uncertainty intervals, with
+#' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
+#' and [`plot()`][visualisation_recipe.estimate_predicted] are available.
+#'
+#' @examplesIf all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Linear Models
 #' model <- lm(mpg ~ wt, data = mtcars)
 #'
 #' # Get predicted and prediction interval (see insight::get_predicted)
-#' estimate_response(model)
+#' estimate_expectation(model)
 #'
 #' # Get expected values with confidence interval
 #' pred <- estimate_relation(model)
 #' pred
 #'
 #' # Visualisation (see visualisation_recipe())
-#' if (require("see")) {
-#'   plot(pred)
-#' }
+#' plot(pred)
 #'
 #' # Standardize predictions
 #' pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
@@ -163,36 +169,34 @@
 #'
 #' # Logistic Models
 #' model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-#' estimate_response(model)
+#' estimate_expectation(model)
 #' estimate_relation(model)
 #'
 #' # Mixed models
-#' if (require("lme4")) {
-#'   model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-#'   estimate_response(model)
-#'   estimate_relation(model)
-#' }
+#' model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+#' estimate_expectation(model)
+#' estimate_relation(model)
 #'
 #' # Bayesian models
 #' \donttest{
-#' if (require("rstanarm")) {
-#'   model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0, iter = 200)
-#'   estimate_response(model)
-#'   estimate_relation(model)
+#' model <- suppressWarnings(rstanarm::stan_glm(
+#'   mpg ~ wt,
+#'   data = mtcars, refresh = 0, iter = 200
+#' ))
+#' estimate_expectation(model)
+#' estimate_relation(model)
 #' }
-#' }
-#' @return A data frame of predicted values and uncertainty intervals, with
-#' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
-#' and [`plot()`][visualisation_recipe.estimate_predicted] are available.
 #' @export
 estimate_expectation <- function(model,
                                  data = NULL,
+                                 by = NULL,
                                  ci = 0.95,
                                  keep_iterations = FALSE,
                                  ...) {
   .estimate_predicted(
     model,
     data = data,
+    by = by,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = "expectation",
@@ -203,28 +207,21 @@ estimate_expectation <- function(model,
 
 #' @rdname estimate_expectation
 #' @export
-estimate_response <- function(...) {
-  #  TODO: If estimate_response() is removed, document `NULL` with this text.
-  insight::format_alert(
-    "`estimate_response()` is deprecated.",
-    "Please use `estimate_expectation()` (for conditional expected values) or `estimate_prediction()` (for individual case predictions) instead."
-  )
-  estimate_expectation(...)
-}
-
-
-
-
-#' @rdname estimate_expectation
-#' @export
 estimate_link <- function(model,
                           data = "grid",
+                          by = NULL,
                           ci = 0.95,
                           keep_iterations = FALSE,
                           ...) {
+  # reset to NULL if only "by" was specified
+  if (missing(data) && !missing(by)) {
+    data <- NULL
+  }
+
   .estimate_predicted(
     model,
     data = data,
+    by = by,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = "link",
@@ -236,12 +233,14 @@ estimate_link <- function(model,
 #' @export
 estimate_prediction <- function(model,
                                 data = NULL,
+                                by = NULL,
                                 ci = 0.95,
                                 keep_iterations = FALSE,
                                 ...) {
   .estimate_predicted(
     model,
     data = data,
+    by = by,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = "prediction",
@@ -253,12 +252,19 @@ estimate_prediction <- function(model,
 #' @export
 estimate_relation <- function(model,
                               data = "grid",
+                              by = NULL,
                               ci = 0.95,
                               keep_iterations = FALSE,
                               ...) {
+  # reset to NULL if only "by" was specified
+  if (missing(data) && !missing(by)) {
+    data <- NULL
+  }
+
   .estimate_predicted(
     model,
     data = data,
+    by = by,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = "expectation",
@@ -273,12 +279,18 @@ estimate_relation <- function(model,
 #' @keywords internal
 .estimate_predicted <- function(model,
                                 data = "grid",
+                                by = NULL,
                                 predict = "expectation",
                                 ci = 0.95,
                                 keep_iterations = FALSE,
                                 ...) {
+  # only "by" or "data", but not both
+  if (!is.null(by) && !is.null(data)) {
+    insight::format_error("You can only specify one of `by` or `data`, but not both.")
+  }
+
   # call "get_data()" only once...
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
   is_model <- insight::is_model(model)
 
   # model and data properties
@@ -292,6 +304,11 @@ estimate_relation <- function(model,
     variables <- colnames(model_data)
     model_response <- NULL
     is_nullmodel <- FALSE
+  }
+
+  # if "by" is provided, get datagrid
+  if (!is.null(by)) {
+    data <- insight::get_datagrid(model, by = by, include_response = is_nullmodel, ...)
   }
 
   is_grid <- identical(data, "grid")

@@ -7,10 +7,9 @@
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#'   comparisons. Can be one of "holm" (default), "tukey", "hochberg", "hommel",
-#'   "bonferroni", "BH", "BY", "fdr" or "none". See the p-value adjustment
-#'   section in the `emmeans::test` documentation.
-#' @param adjust Deprecated in favour of `p_adjust`.
+#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
+#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
+#' p-value adjustment section in the `emmeans::test` documentation.
 #' @param effectsize Desired measure of standardized effect size, one of "none"
 #' (default), "emmeans", "marginal", or "bootES".
 #' @param bootES_type Specifies the type of effect-size measure to
@@ -54,7 +53,8 @@
 #' `effectsize = "bootES"` uses bootstrapping (defaults to a low value of
 #' 200) through [bootES::bootES]. Adjust for contrasts, but not for covariates.
 #'
-#' @examplesIf require("emmeans", quietly = TRUE)
+#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))
+#' \dontrun{
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
@@ -74,17 +74,13 @@
 #' # Or with custom specifications
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #'
-#' # Can fixate the numeric at a specific value
-#' estimate_contrasts(model, fixed = "Petal.Width")
-#'
 #' # Or modulate it
-#' estimate_contrasts(model, at = "Petal.Width", length = 4)
+#' estimate_contrasts(model, by = "Petal.Width", length = 4)
 #'
 #' # Standardized differences
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #' standardize(estimated)
 #'
-#' @examplesIf require("lme4", quietly = TRUE) && require("emmeans", quietly = TRUE)
 #' # Other models (mixed, Bayesian, ...)
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -92,75 +88,114 @@
 #' model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 #' estimate_contrasts(model)
 #'
-#' @examplesIf require("rstanarm", quietly = TRUE) && require("emmeans", quietly = TRUE)
-#' library(rstanarm)
-#'
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
-#' \dontrun{
-#' model <- stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed = "am")
 #'
-#' model <- stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
+#' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 #' estimate_contrasts(model)
-#' estimate_contrasts(model, fixed = "wt")
-#' estimate_contrasts(model, at = "wt", length = 4)
+#' # fix `am` at value 1
+#' estimate_contrasts(model, by = c("cyl", "am='1'"))
 #'
-#' model <- stan_glm(Sepal.Width ~ Species + Petal.Width + Petal.Length, data = iris, refresh = 0)
-#' estimate_contrasts(model, at = "Petal.Length", test = "bf")
+#' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
+#' estimate_contrasts(model)
+#' estimate_contrasts(model, by = "wt", length = 4)
+#'
+#' model <- rstanarm::stan_glm(
+#'   Sepal.Width ~ Species + Petal.Width + Petal.Length,
+#'   data = iris,
+#'   refresh = 0
+#' )
+#' estimate_contrasts(model, by = "Petal.Length", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
 estimate_contrasts <- function(model,
                                contrast = NULL,
-                               at = NULL,
-                               fixed = NULL,
+                               by = NULL,
                                transform = "none",
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
-                               adjust = NULL,
                                effectsize = "none",
                                bootstraps = 200,
                                bootES_type = "cohens.d",
+                               backend = "emmeans",
                                ...) {
-  # Deprecation
-  if (!is.null(adjust)) {
-    insight::format_warning("The `adjust` argument is deprecated. Please write `p_adjust` instead.")
-    p_adjust <- adjust
+  if (backend == "emmeans") {
+    # Emmeans ------------------------------------------------------------------
+    estimated <- get_emcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      adjust = p_adjust,
+      ...
+    )
+    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    info <- attributes(estimated)
+  } else {
+    # Marginalmeans ------------------------------------------------------------
+    estimated <- get_marginalcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      p_adjust = p_adjust,
+      ci = ci,
+      ...
+    )
+    out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
+    ## TODO: needs to be fixed
+    info <- list(contrast = contrast, by = by)
   }
 
-  # Run emmeans
-  estimated <- get_emcontrasts(model,
-    contrast = contrast,
-    at = at,
-    fixed = fixed,
-    transform = transform,
-    method = method,
-    adjust = p_adjust,
-    ...
+
+  # Table formatting
+  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_footer") <- .estimate_means_footer(
+    out,
+    info$contrast,
+    type = "contrasts",
+    p_adjust = p_adjust
   )
 
-  info <- attributes(estimated)
+  # Add attributes
+  attr(out, "model") <- model
+  attr(out, "response") <- insight::find_response(model)
+  attr(out, "ci") <- ci
+  attr(out, "transform") <- transform
+  attr(out, "at") <- info$by
+  attr(out, "by") <- info$by
+  attr(out, "contrast") <- info$contrast
+  attr(out, "p_adjust") <- p_adjust
 
+  # Output
+  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
+  out
+}
+
+
+
+# Table formatting emmeans ----------------------------------------------------
+
+
+.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    contrasts <- bayestestR::describe_posterior(estimated, ci = ci, ...)
-    contrasts <- cbind(estimated@grid, contrasts)
-    contrasts <- .clean_names_bayesian(contrasts, model, transform, type = "contrast")
+    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
+    out <- .clean_names_bayesian(out, model, transform, type = "contrast")
   } else {
-    contrasts <- as.data.frame(merge(
+    out <- as.data.frame(merge(
       as.data.frame(estimated),
       stats::confint(estimated, level = ci, adjust = p_adjust)
     ))
-    contrasts <- .clean_names_frequentist(contrasts)
+    out <- .clean_names_frequentist(out)
   }
-  contrasts$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  contrasts <- datawizard::data_relocate(
-    contrasts,
+  out$null <- NULL # introduced in emmeans 1.6.1 (#115)
+  out <- datawizard::data_relocate(
+    out,
     c("CI_low", "CI_high"),
     after = c("Difference", "Odds_ratio", "Ratio")
   )
@@ -168,15 +203,16 @@ estimate_contrasts <- function(model,
 
   # Format contrasts names
   # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(contrasts$contrast), " - |\\/")
+  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
   level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
   names(level_cols) <- c("Level1", "Level2")
   level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
   level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
 
   # Merge levels and rest
-  contrasts$contrast <- NULL
-  contrasts <- cbind(level_cols, contrasts)
+  out$contrast <- NULL
+  cbind(level_cols, out)
+}
 
   # Add standardized effect size
   if (!effectsize %in% c("none", "emmeans", "marginal", "bootES")) {
@@ -236,27 +272,56 @@ estimate_contrasts <- function(model,
       contrasts <- cbind(contrasts, eff)
   }
 
-  # Table formatting
-  attr(contrasts, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(contrasts, "table_footer") <- .estimate_means_footer(
-    contrasts,
-    info$contrast,
-    type = "contrasts",
-    p_adjust = p_adjust
+
+# Table formatting marginal effects -------------------------------------------
+
+
+.format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
+  groups <- attributes(estimated)$by
+  contrast <- attributes(estimated)$contrast
+  focal_terms <- attributes(estimated)$focal_terms
+
+  estimated <- .p_adjust(model, estimated, p_adjust, ...)
+
+  valid_methods <- c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential"
   )
 
-  # Add attributes
-  attr(contrasts, "model") <- model
-  attr(contrasts, "response") <- insight::find_response(model)
-  attr(contrasts, "ci") <- ci
-  attr(contrasts, "transform") <- transform
-  attr(contrasts, "at") <- info$at
-  attr(contrasts, "fixed") <- info$fixed
-  attr(contrasts, "contrast") <- info$contrast
-  attr(contrasts, "p_adjust") <- p_adjust
+  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
 
+    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
-  # Output
-  class(contrasts) <- c("estimate_contrasts", "see_estimate_contrasts", class(contrasts))
-  contrasts
+    # These are examples of what {marginaleffects} returns, a single parmater
+    # column that includes all levels, comma- and dash-separated, or with /
+    # see also https://github.com/easystats/modelbased/pull/280
+    #
+    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> Parameter                              | Difference |          95% CI |      p
+    # #> ------------------------------------------------------------------------------
+    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
+    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
+    #
+    # estimate_contrasts(
+    #   m,
+    #   c("time", "coffee"),
+    #   backend = "marginaleffects",
+    #   p_adjust = "none",
+    #   method = ratio ~ reference | coffee
+    # )
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> coffee  |              hypothesis | Difference |       95% CI |      p
+    # #> ----------------------------------------------------------------------
+    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
+    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
+    #
+    # We need to split the "Parameter" or "hypothesis" columns into one column
+    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
+    # argument, which is used for filtering by levels of given focal terms.
+  }
+
+  estimated
 }

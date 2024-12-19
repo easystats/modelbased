@@ -6,8 +6,7 @@
 \usage{
 estimate_means(
   model,
-  at = "auto",
-  fixed = NULL,
+  by = "auto",
   transform = "response",
   ci = 0.95,
   backend = "emmeans",
@@ -17,29 +16,27 @@ estimate_means(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{transform}{Is passed to the \code{type} argument in
-\code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"}
-(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\code{"none"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable.
-Thus for a logistic model, \code{"none"} will give estimations expressed in
-log-odds (probabilities on logit scale) and \code{"response"} in terms of
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
+See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
+\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
+linear predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
-The latter is experimental and some features might not work.}
+\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where \code{backend = "marginaleffects"} will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -60,10 +57,11 @@ various examples, tutorials and use cases.
 
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
-estimations (estimations based on a model). All three are also built on the
-\pkg{emmeans} package, so reading its documentation (for instance for
-\code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is recommended to understand
-the idea behind these types of procedures.
+estimations (estimations based on a model). All three are built on the
+\strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
+argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
@@ -101,7 +99,7 @@ can also be "averaged" over other predictors, to get for instance the
 \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous
 variable (like age for example). One idea is to see how this model performs,
 and compare the actual response y to the one predicted by the model (using
-\code{\link[=estimate_response]{estimate_response()}}). Another idea is evaluate the average mean at each of
+\code{\link[=estimate_expectation]{estimate_expectation()}}). Another idea is evaluate the average mean at each of
 the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), which can be useful to
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate
@@ -109,7 +107,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -117,30 +115,33 @@ library(modelbased)
 model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 
 estimate_means(model)
-estimate_means(model, fixed = "Sepal.Width")
-estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
-estimate_means(model, at = "Species=c('versicolor', 'setosa')")
-estimate_means(model, at = "Sepal.Width=c(2, 4)")
-estimate_means(model, at = c("Species", "Sepal.Width=0"))
-estimate_means(model, at = "Sepal.Width", length = 5)
-estimate_means(model, at = "Sepal.Width=c(2, 4)")
+estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+estimate_means(model, by = "Species=c('versicolor', 'setosa')")
+estimate_means(model, by = "Sepal.Width=c(2, 4)")
+estimate_means(model, by = c("Species", "Sepal.Width=0"))
+estimate_means(model, by = "Sepal.Width", length = 5)
+estimate_means(model, by = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
-means <- estimate_means(model, fixed = "Sepal.Width")
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("see") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-plot(means) # which runs visualisation_recipe()
+means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 
+plot(means) # which runs visualisation_recipe()
 standardize(means)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("lme4") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 \donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+model <- lme4::lmer(
+  Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor),
+  data = data
+)
 estimate_means(model)
-estimate_means(model, at = "Sepal.Width", length = 3)
+estimate_means(model, by = "Sepal.Width", length = 3)
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+{marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
 }

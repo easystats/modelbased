@@ -1,6 +1,6 @@
 ---
 title: "Contrast analysis"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Contrast analysis}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -111,7 +111,7 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, at = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(model, by = "Petal.Width", length = 100)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -119,14 +119,14 @@ contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
 # Visualise the changes in the differences
 ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
   geom_ribbon(aes(fill = Contrast, ymin = CI_low, ymax = CI_high), alpha = 0.2) +
-  geom_line(aes(colour = Contrast), size = 1) +
+  geom_line(aes(colour = Contrast), linewidth = 1) +
   geom_hline(yintercept = 0, linetype = "dashed") +
   theme_modern() +
   ylab("Difference")
 ```
 
 As we can see, the difference between *versicolor* and *virginica* increases as
-`Petal.Width` increases. 
+`Petal.Width` increases.
 
 # Conclusion
 

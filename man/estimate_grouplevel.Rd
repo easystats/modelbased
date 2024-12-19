@@ -38,36 +38,29 @@ models. Can be reshaped to be of the same dimensions as the original data,
 which can be useful to add the random effects to the original data.
 }
 \examples{
+\dontshow{if (require("lme4") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # lme4 model
-if (require("lme4") && require("see")) {
-  model <- lmer(mpg ~ hp + (1 | carb), data = mtcars)
-  random <- estimate_grouplevel(model)
-  random
+data(mtcars)
+model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+random <- estimate_grouplevel(model)
+random
 
-  # Visualize random effects
-  plot(random)
+# Visualize random effects
+plot(random)
 
-  # Show group-specific effects
-  estimate_grouplevel(model, deviation = FALSE)
+# Show group-specific effects
+estimate_grouplevel(model, deviation = FALSE)
 
-  # Reshape to wide data so that it matches the original dataframe...
-  reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+# Reshape to wide data so that it matches the original dataframe...
+reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 
-  # ... and can be easily combined
-  alldata <- cbind(mtcars, reshaped)
+# ... and can be easily combined
+alldata <- cbind(mtcars, reshaped)
 
-  # Use summary() to remove duplicated rows
-  summary(reshaped)
+# Use summary() to remove duplicated rows
+summary(reshaped)
 
-  # Compute BLUPs
-  estimate_grouplevel(model, type = "total")
-}
-
-# Bayesian models
-\donttest{
-if (require("rstanarm")) {
-  model <- rstanarm::stan_lmer(mpg ~ hp + (1 | carb) + (1 | gear), data = mtcars, refresh = 0)
-  # Broken estimate_grouplevel(model)
-}
-}
+# Compute BLUPs
+estimate_grouplevel(model, type = "total")
+\dontshow{\}) # examplesIf}
 }

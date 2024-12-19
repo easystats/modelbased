@@ -26,10 +26,3 @@ print_md.visualisation_matrix <- print_md.estimate_contrasts
 
 #' @export
 print_md.estimate_grouplevel <- print_md.estimate_contrasts
-
-
-# Reexports models ------------------------
-
-#' @importFrom insight print_md
-#' @export
-insight::print_md

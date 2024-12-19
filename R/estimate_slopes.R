@@ -16,13 +16,13 @@
 #' @inheritParams estimate_means
 #'
 #' @details
-#'
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]
 #' functions are forming a group, as they are all based on *marginal*
-#' estimations (estimations based on a model). All three are also built on the
-#' \pkg{emmeans} package, so reading its documentation (for instance for
-#' [emmeans::emmeans()] and [emmeans::emtrends()]) is recommended to understand
-#' the idea behind these types of procedures.
+#' estimations (estimations based on a model). All three are built on the
+#' **emmeans** or **marginaleffects** package (depending on the `backend`
+#' argument), so reading its documentation (for instance [emmeans::emmeans()],
+#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/) is
+#' recommended to understand the idea behind these types of procedures.
 #'
 #' - Model-based **predictions** is the basis for all that follows. Indeed,
 #' the first thing to understand is how models can be used to make predictions
@@ -63,14 +63,17 @@
 #' `condition` is a factor with 3 levels A, B and C and `x` a continuous
 #' variable (like age for example). One idea is to see how this model performs,
 #' and compare the actual response y to the one predicted by the model (using
-#' [estimate_response()]). Another idea is evaluate the average mean at each of
+#' [estimate_expectation()]). Another idea is evaluate the average mean at each of
 #' the condition's levels (using [estimate_means()]), which can be useful to
 #' visualize them. Another possibility is to evaluate the difference between
 #' these levels (using [estimate_contrasts()]). Finally, one could also estimate
 #' the effect of x averaged over all conditions, or instead within each
 #' condition (`using [estimate_slopes]`).
 #'
-#' @examplesIf require("emmeans") && require("ggplot2") && require("see")
+#' @return A data.frame of class `estimate_slopes`.
+#'
+#' @examplesIf all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))
+#' library(ggplot2)
 #' # Get an idea of the data
 #' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
 #'   geom_point(aes(color = Species)) +
@@ -81,44 +84,45 @@
 #' # Model it
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #' # Compute the marginal effect of Petal.Length at each level of Species
-#' slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+#' slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 #' slopes
 #'
 #' # Plot it
 #' plot(slopes)
-#'
 #' standardize(slopes)
 #'
-#' @examplesIf require("mgcv") && require("emmeans") && require("see")
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-#' slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+#' slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 #' summary(slopes)
 #' plot(slopes)
 #'
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
 #' slopes <- estimate_slopes(model,
 #'   trend = "Petal.Length",
-#'   at = c("Petal.Length", "Species"), length = 20
+#'   by = c("Petal.Length", "Species"), length = 20
 #' )
 #' summary(slopes)
 #' plot(slopes)
-#' @return A data.frame of class `estimate_slopes`.
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,
-                            at = NULL,
+                            by = NULL,
                             ci = 0.95,
                             ...) {
   # Sanitize arguments
-  estimated <- get_emtrends(model, trend, at, ...)
+  estimated <- get_emtrends(model, trend, by, ...)
   info <- attributes(estimated)
 
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     trends <- parameters::parameters(estimated, ci = ci, ...)
     trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
-    trends <- cbind(estimated@grid, trends)
-    trends$`.wgt.` <- NULL # Drop the weight column
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
+    if (length(colums_to_add)) {
+      trends <- cbind(em_grid[colums_to_add], trends)
+    }
   } else {
     trends <- parameters::parameters(estimated, ci = ci, ...)
   }
@@ -126,7 +130,7 @@ estimate_slopes <- function(model,
   trends <- trends[names(trends) != "1"]
 
   # Restore factor levels
-  trends <- datawizard::data_restoretype(trends, insight::get_data(model))
+  trends <- datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
@@ -137,7 +141,8 @@ estimate_slopes <- function(model,
   attr(trends, "response") <- insight::find_response(model)
   attr(trends, "ci") <- ci
   attr(trends, "trend") <- info$trend
-  attr(trends, "at") <- info$at
+  attr(trends, "at") <- info$by
+  attr(trends, "by") <- info$by
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
@@ -152,11 +157,11 @@ estimate_slopes <- function(model,
 
 #' @export
 summary.estimate_slopes <- function(object, ...) {
-  data <- as.data.frame(object)
+  my_data <- as.data.frame(object)
   trend <- attributes(object)$trend
 
   # Add "Confidence" col based on the sig index present in the data
-  data$Confidence <- .estimate_slopes_sig(data, ...)
+  my_data$Confidence <- .estimate_slopes_sig(my_data, ...)
 
   # Grouping variables
   vars <- attributes(object)$at
@@ -164,14 +169,14 @@ summary.estimate_slopes <- function(object, ...) {
 
   # If no grouping variables, summarize all
   if (length(vars) == 0) {
-    out <- .estimate_slopes_summarize(data, trend = trend)
+    out <- .estimate_slopes_summarize(my_data, trend = trend)
   } else {
     out <- data.frame()
     # Create vizmatrix of grouping variables
-    groups <- as.data.frame(insight::get_datagrid(data[vars], factors = "all", numerics = "all"))
+    groups <- as.data.frame(insight::get_datagrid(my_data[vars], factors = "all", numerics = "all"))
     # Summarize all of the chunks
     for (i in seq_len(nrow(groups))) {
-      g <- datawizard::data_match(data, groups[i, , drop = FALSE])
+      g <- datawizard::data_match(my_data, groups[i, , drop = FALSE])
       out <- rbind(out, .estimate_slopes_summarize(g, trend = trend))
     }
     out <- datawizard::data_relocate(out, vars)
@@ -191,20 +196,20 @@ summary.estimate_slopes <- function(object, ...) {
 .estimate_slopes_summarize <- function(data, trend, ...) {
   # Find beginnings and ends -----------------------
   # First row - starting point
-  centrality_columns <- datawizard::data_find(
+  centrality_columns <- datawizard::extract_column_names(
     data,
     c("Coefficient", "Median", "Mean", "MAP_Estimate"),
     verbose = FALSE
   )
-  signs <- sign(data[[centrality_columns]])
-  sign <- signs[1]
+  centrality_signs <- sign(data[[centrality_columns]])
+  centrality_sign <- centrality_signs[1]
   sig <- data$Confidence[1]
   starts <- 1
   ends <- nrow(data)
   # Iterate through all rows to find blocks
   for (i in 2:nrow(data)) {
-    if ((data$Confidence[i] != sig) || ((signs[i] != sign) && data$Confidence[i] == "Uncertain")) {
-      sign <- signs[i]
+    if ((data$Confidence[i] != sig) || ((centrality_signs[i] != centrality_sign) && data$Confidence[i] == "Uncertain")) {
+      centrality_sign <- centrality_signs[i]
       sig <- data$Confidence[i]
       starts <- c(starts, i)
       ends <- c(ends, i - 1)
@@ -216,8 +221,8 @@ summary.estimate_slopes <- function(object, ...) {
   out <- data.frame()
   for (g in seq_len(length(starts))) {
     dat <- data[starts[g]:ends[g], ]
-    dat <- as.data.frame(insight::get_datagrid(dat, at = NULL, factors = "mode"))
-    dat <- cbind(data.frame("Start" = data[starts[g], trend], "End" = data[ends[g], trend]), dat)
+    dat <- as.data.frame(insight::get_datagrid(dat, by = NULL, factors = "mode"))
+    dat <- cbind(data.frame(Start = data[starts[g], trend], End = data[ends[g], trend]), dat)
     out <- rbind(out, dat)
   }
   out
@@ -233,16 +238,14 @@ summary.estimate_slopes <- function(object, ...) {
     if ("pd" %in% names(x)) confidence <- "pd"
   }
 
-  if (confidence == "p") {
-    sig <- tools::toTitleCase(effectsize::interpret_p(x$p, ...))
-  } else if (confidence == "BF") {
-    sig <- tools::toTitleCase(effectsize::interpret_bf(x$BF, ...))
-  } else if (confidence == "pd") {
-    sig <- tools::toTitleCase(effectsize::interpret_pd(x$pd, ...))
-  } else {
-    # Based on CI
-    sig <- ifelse((x$CI_high < 0 & x$CI_low < 0) | (x$CI_high > 0 & x$CI_low > 0), "Significant", "Uncertain")
-    sig <- factor(sig, levels = c("Uncertain", "Significant"))
-  }
-  sig
+  switch(confidence,
+    p = tools::toTitleCase(effectsize::interpret_p(x$p, ...)),
+    BF = tools::toTitleCase(effectsize::interpret_bf(x$BF, ...)),
+    pd = tools::toTitleCase(effectsize::interpret_pd(x$pd, ...)),
+    {
+      # Based on CI
+      out <- ifelse((x$CI_high < 0 & x$CI_low < 0) | (x$CI_high > 0 & x$CI_low > 0), "Significant", "Uncertain")
+      factor(out, levels = c("Uncertain", "Significant"))
+    }
+  )
 }

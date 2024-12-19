@@ -4,7 +4,6 @@
 #' function. Same arguments apply.
 #'
 #' @inheritParams insight::get_datagrid
-#' @param target Deprecated name. Please use `at` instead.
 #'
 #' @return Reference grid data frame.
 #'
@@ -15,24 +14,24 @@
 #' data <- rbind(iris, iris[149, ], make.row.names = FALSE)
 #'
 #' # Single variable is of interest; all others are "fixed"
-#' visualisation_matrix(data, at = "Sepal.Length")
-#' visualisation_matrix(data, at = "Sepal.Length", length = 3)
-#' visualisation_matrix(data, at = "Sepal.Length", range = "ci", ci = 0.90)
-#' visualisation_matrix(data, at = "Sepal.Length", factors = "mode")
+#' visualisation_matrix(data, by = "Sepal.Length")
+#' visualisation_matrix(data, by = "Sepal.Length", length = 3)
+#' visualisation_matrix(data, by = "Sepal.Length", range = "ci", ci = 0.90)
+#' visualisation_matrix(data, by = "Sepal.Length", factors = "mode")
 #'
 #' # Multiple variables are of interest, creating a combination
-#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), length = 3)
-#' visualisation_matrix(data, at = c(1, 3), length = 3)
-#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#' visualisation_matrix(data, at = c("Sepal.Length", "Species"), numerics = 0)
-#' visualisation_matrix(data, at = c("Sepal.Length = 3", "Species"))
-#' visualisation_matrix(data, at = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
+#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), length = 3)
+#' visualisation_matrix(data, by = c(1, 3), length = 3)
+#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
+#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), numerics = 0)
+#' visualisation_matrix(data, by = c("Sepal.Length = 3", "Species"))
+#' visualisation_matrix(data, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
 #'
 #' # with list-style at-argument
-#' visualisation_matrix(data, at = list(Sepal.Length = c(1, 3), Species = "setosa"))
+#' visualisation_matrix(data, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
 #'
 #' # Standardize
-#' vizdata <- visualisation_matrix(data, at = "Sepal.Length")
+#' vizdata <- visualisation_matrix(data, by = "Sepal.Length")
 #' standardize(vizdata)
 #' @export
 visualisation_matrix <- function(x, ...) {
@@ -46,20 +45,14 @@ visualisation_matrix <- function(x, ...) {
 #' @rdname visualisation_matrix
 #' @export
 visualisation_matrix.data.frame <- function(x,
-                                            at = "all",
-                                            target = NULL,
+                                            by = "all",
                                             factors = "reference",
                                             numerics = "mean",
                                             preserve_range = FALSE,
                                             reference = x,
                                             ...) {
-  if (!is.null(target)) {
-    insight::format_warning("The 'target' argument name is deprecated in favour of 'at'. Please replace 'target' with 'at'.")
-    at <- target
-  }
-
   insight::get_datagrid(x,
-    at = at,
+    by = by,
     factors = factors,
     numerics = numerics,
     preserve_range = preserve_range,

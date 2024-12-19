@@ -1,6 +1,6 @@
 ---
 title: "Use a model to make predictions"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Use a model to make predictions}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -129,7 +129,7 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
   theme_modern()
 ```
 
@@ -155,7 +155,7 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_ribbon(data = predicted, aes(ymin = CI_low, ymax = CI_high, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
   theme_modern()
 ```
 
@@ -175,7 +175,7 @@ iris %>%
   geom_ribbon(data = predicted, aes(ymin = CI_low_0.99, ymax = CI_high_0.99, fill = Species), alpha = 0.2) +
   geom_ribbon(data = predicted, aes(ymin = CI_low_0.89, ymax = CI_high_0.89, fill = Species), alpha = 0.3) +
   geom_ribbon(data = predicted, aes(ymin = CI_low_0.69, ymax = CI_high_0.69, fill = Species), alpha = 0.3) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
   theme_modern()
 ```
 
@@ -211,7 +211,7 @@ iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.05) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
   theme_modern()
 ```
 
@@ -232,7 +232,7 @@ p <- iris %>%
   ggplot(aes(x = Sepal.Length)) +
   geom_point(aes(y = Petal.Length, color = Species)) +
   geom_line(data = iterations, aes(y = iter_value, color = Species, group = group), alpha = 0.1) +
-  geom_line(data = predicted, aes(y = Predicted, color = Species), size = 1) +
+  geom_line(data = predicted, aes(y = Predicted, color = Species), linewidth = 1) +
   theme_modern()
 p
 ```
@@ -258,7 +258,7 @@ gganimate::animate(p)
 # anim_save("gganimate_figure.gif", gganimate::animate(p, width = 800, height = 500, type = "cairo"))
 
 if (knitr::is_html_output()) {
-  knitr::include_graphics("https://github.com/easystats/estimate/raw/master/man/figures/gganimate_figure.gif")
+  knitr::include_graphics("https://github.com/easystats/estimate/raw/main/man/figures/gganimate_figure.gif")
 } else {
   iris %>%
     ggplot(aes(x = Sepal.Length)) +

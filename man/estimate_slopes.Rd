@@ -4,7 +4,7 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
+estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -12,7 +12,7 @@ estimate_slopes(model, trend = NULL, at = NULL, ci = 0.95, ...)
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
@@ -40,10 +40,11 @@ various examples, tutorials and use cases.
 
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
-estimations (estimations based on a model). All three are also built on the
-\pkg{emmeans} package, so reading its documentation (for instance for
-\code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is recommended to understand
-the idea behind these types of procedures.
+estimations (estimations based on a model). All three are built on the
+\strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
+argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
@@ -81,7 +82,7 @@ can also be "averaged" over other predictors, to get for instance the
 \code{condition} is a factor with 3 levels A, B and C and \code{x} a continuous
 variable (like age for example). One idea is to see how this model performs,
 and compare the actual response y to the one predicted by the model (using
-\code{\link[=estimate_response]{estimate_response()}}). Another idea is evaluate the average mean at each of
+\code{\link[=estimate_expectation]{estimate_expectation()}}). Another idea is evaluate the average mean at each of
 the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), which can be useful to
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate
@@ -89,7 +90,8 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans") && require("ggplot2") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
@@ -100,24 +102,22 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
 # Model it
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 # Compute the marginal effect of Petal.Length at each level of Species
-slopes <- estimate_slopes(model, trend = "Petal.Length", at = "Species")
+slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 slopes
 
 # Plot it
 plot(slopes)
-
 standardize(slopes)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("mgcv") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
-slopes <- estimate_slopes(model, at = "Petal.Length", length = 50)
+slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 summary(slopes)
 plot(slopes)
 
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
 slopes <- estimate_slopes(model,
   trend = "Petal.Length",
-  at = c("Petal.Length", "Species"), length = 20
+  by = c("Petal.Length", "Species"), length = 20
 )
 summary(slopes)
 plot(slopes)

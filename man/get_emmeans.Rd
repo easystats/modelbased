@@ -13,8 +13,7 @@
 get_emcontrasts(
   model,
   contrast = NULL,
-  at = NULL,
-  fixed = NULL,
+  by = NULL,
   transform = "none",
   method = "pairwise",
   ...
@@ -23,52 +22,19 @@ get_emcontrasts(
 model_emcontrasts(
   model,
   contrast = NULL,
-  at = NULL,
-  fixed = NULL,
+  by = NULL,
   transform = "none",
   method = "pairwise",
   ...
 )
 
-get_emmeans(
-  model,
-  at = "auto",
-  fixed = NULL,
-  transform = "response",
-  levels = NULL,
-  modulate = NULL,
-  ...
-)
+get_emmeans(model, by = "auto", transform = "response", ...)
 
-model_emmeans(
-  model,
-  at = "auto",
-  fixed = NULL,
-  transform = "response",
-  levels = NULL,
-  modulate = NULL,
-  ...
-)
+model_emmeans(model, by = "auto", transform = "response", ...)
 
-get_emtrends(
-  model,
-  trend = NULL,
-  at = NULL,
-  fixed = NULL,
-  levels = NULL,
-  modulate = NULL,
-  ...
-)
+get_emtrends(model, trend = NULL, by = NULL, ...)
 
-model_emtrends(
-  model,
-  trend = NULL,
-  at = NULL,
-  fixed = NULL,
-  levels = NULL,
-  modulate = NULL,
-  ...
-)
+model_emtrends(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -76,30 +42,23 @@ model_emtrends(
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
 
-\item{at}{The predictor variable(s) \emph{at} which to evaluate the desired effect
+\item{by}{The predictor variable(s) at which to evaluate the desired effect
 / mean / contrasts. Other predictors of the model that are not included
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{fixed}{A character vector indicating the names of the predictors to be
-"fixed" (i.e., maintained), so that the estimation is made at these values.}
-
-\item{transform}{Is passed to the \code{type} argument in
-\code{emmeans::emmeans()}. See
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"}
-(default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\code{"none"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable.
-Thus for a logistic model, \code{"none"} will give estimations expressed in
-log-odds (probabilities on logit scale) and \code{"response"} in terms of
+\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
+See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
+\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
+linear predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
-
-\item{levels, modulate}{Deprecated, use \code{at} instead.}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
@@ -113,55 +72,53 @@ debugging, and end-users should rather use the \verb{estimate_*()} series of
 functions.
 }
 \examples{
-if (require("emmeans", quietly = TRUE)) {
-  # Basic usage
-  model <- lm(Sepal.Width ~ Species, data = iris)
-  get_emcontrasts(model)
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+# Basic usage
+model <- lm(Sepal.Width ~ Species, data = iris)
+get_emcontrasts(model)
 
-  # Dealing with interactions
-  model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-  # By default: selects first factor
-  get_emcontrasts(model)
-  # Can also run contrasts between points of numeric
-  get_emcontrasts(model, contrast = "Petal.Width", length = 3)
-  # Or both
-  get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
-  # Or with custom specifications
-  estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
-  # Can fixate the numeric at a specific value
-  get_emcontrasts(model, fixed = "Petal.Width")
-  # Or modulate it
-  get_emcontrasts(model, at = "Petal.Width", length = 4)
-}
+# Dealing with interactions
+model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+# By default: selects first factor
+get_emcontrasts(model)
+# Can also run contrasts between points of numeric
+get_emcontrasts(model, contrast = "Petal.Width", length = 3)
+# Or both
+get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
+# Or with custom specifications
+estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+# Or modulate it
+get_emcontrasts(model, by = "Petal.Width", length = 4)
+\dontshow{\}) # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 if (require("emmeans", quietly = TRUE)) {
-  # By default, 'at' is set to "Species"
+  # By default, 'by' is set to "Species"
   get_emmeans(model)
 
   # Overall mean (close to 'mean(iris$Sepal.Length)')
-  get_emmeans(model, at = NULL)
+  get_emmeans(model, by = NULL)
 
   # One can estimate marginal means at several values of a 'modulate' variable
-  get_emmeans(model, at = "Petal.Width", length = 3)
+  get_emmeans(model, by = "Petal.Width", length = 3)
 
   # Interactions
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
   get_emmeans(model)
-  get_emmeans(model, at = c("Species", "Petal.Length"), length = 2)
-  get_emmeans(model, at = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+  get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
+  get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 if (require("emmeans")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
   get_emtrends(model)
-  get_emtrends(model, at = "Species")
-  get_emtrends(model, at = "Petal.Length")
-  get_emtrends(model, at = c("Species", "Petal.Length"))
+  get_emtrends(model, by = "Species")
+  get_emtrends(model, by = "Petal.Length")
+  get_emtrends(model, by = c("Species", "Petal.Length"))
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
   get_emtrends(model)
-  get_emtrends(model, at = "Sepal.Width")
+  get_emtrends(model, by = "Sepal.Width")
 }
 }

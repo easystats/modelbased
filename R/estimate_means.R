@@ -7,11 +7,20 @@
 #'
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
-#' @param backend Whether to use 'emmeans' or 'marginaleffects' as a backend.
-#'  The latter is experimental and some features might not work.
+#' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
+#' Results are usually very similar. The major difference will be found for mixed
+#' models, where `backend = "marginaleffects"` will also average across random
+#' effects levels, producing "marginal predictions" (instead of "conditional
+#' predictions", see Heiss 2022).
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf require("emmeans", quietly = TRUE)
+#' @return A data frame of estimated marginal means.
+#'
+#' @references
+#' Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+#' {marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
+#'
+#' @examplesIf all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Frequentist models
@@ -19,81 +28,58 @@
 #' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #'
 #' estimate_means(model)
-#' estimate_means(model, fixed = "Sepal.Width")
-#' estimate_means(model, at = c("Species", "Sepal.Width"), length = 2)
-#' estimate_means(model, at = "Species=c('versicolor', 'setosa')")
-#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
-#' estimate_means(model, at = c("Species", "Sepal.Width=0"))
-#' estimate_means(model, at = "Sepal.Width", length = 5)
-#' estimate_means(model, at = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+#' estimate_means(model, by = "Species=c('versicolor', 'setosa')")
+#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, by = c("Species", "Sepal.Width=0"))
+#' estimate_means(model, by = "Sepal.Width", length = 5)
+#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
 #'
 #' # Methods that can be applied to it:
-#' means <- estimate_means(model, fixed = "Sepal.Width")
+#' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 #'
-#' @examplesIf require("see") && require("emmeans", quietly = TRUE)
 #' plot(means) # which runs visualisation_recipe()
-#'
 #' standardize(means)
 #'
-#' @examplesIf require("lme4") && require("emmeans", quietly = TRUE)
 #' \donttest{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+#' model <- lme4::lmer(
+#'   Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor),
+#'   data = data
+#' )
 #' estimate_means(model)
-#' estimate_means(model, at = "Sepal.Width", length = 3)
+#' estimate_means(model, by = "Sepal.Width", length = 3)
 #' }
-#' @return A data frame of estimated marginal means.
 #' @export
 estimate_means <- function(model,
-                           at = "auto",
-                           fixed = NULL,
+                           by = "auto",
                            transform = "response",
                            ci = 0.95,
                            backend = "emmeans",
                            ...) {
-  # Compute means
   if (backend == "emmeans") {
-    estimated <- get_emmeans(model, at, fixed, transform = transform, ...)
-
-    # Summarize and clean
-    if (insight::model_info(model)$is_bayesian) {
-      means <- parameters::parameters(estimated, ci = ci, ...)
-      means <- .clean_names_bayesian(means, model, transform, type = "mean")
-      means <- cbind(estimated@grid, means)
-      means$`.wgt.` <- NULL # Drop the weight column
-    } else {
-      means <- as.data.frame(stats::confint(estimated, level = ci))
-      means$df <- NULL
-      means <- .clean_names_frequentist(means)
-    }
-    # Remove the "1 - overall" column that can appear in cases like at = NULL
-    means <- means[names(means) != "1"]
-
-    info <- attributes(estimated)
+    # Emmeans ------------------------------------------------------------------
+    estimated <- get_emmeans(model, by, transform = transform, ...)
+    means <- .format_emmeans_means(estimated, model, ci, transform, ...)
   } else {
-    means <- .get_marginalmeans(model, at, fixed, transform = transform, ...)
-
-    info <- attributes(means)
+    # Marginalmeans ------------------------------------------------------------
+    estimated <- get_marginalmeans(model, by, transform = transform, ci = ci, ...)
+    means <- .format_marginaleffects_means(estimated, model, transform, ...)
   }
-
-  # Restore factor levels
-  means <- datawizard::data_restoretype(means, insight::get_data(model))
 
 
   # Table formatting
-
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(means, info$at, type = "means")
+  attr(means, "table_footer") <- .estimate_means_footer(means, type = "means")
 
   # Add attributes
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "transform") <- transform
-  attr(means, "at") <- info$at
-  attr(means, "fixed") <- info$fixed
+
   attr(means, "coef_name") <- intersect(c("Mean", "Probability"), names(means))
 
 
@@ -108,12 +94,14 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, at = NULL, type = "means", p_adjust = NULL) {
+.estimate_means_footer <- function(x, by = NULL, type = "means", p_adjust = NULL) {
   table_footer <- paste("\nMarginal", type)
 
   # Levels
-  if (!is.null(at) && length(at) > 0) {
-    table_footer <- paste0(table_footer, " estimated at ", toString(at))
+  if (!is.null(by) && length(by) > 0) {
+    table_footer <- paste0(table_footer, " estimated at ", toString(by))
+  } else {
+    table_footer <- paste0(table_footer, " estimated at ", attr(x, "by"))
   }
 
   # P-value adjustment footer
@@ -125,6 +113,6 @@ estimate_means <- function(model,
     }
   }
 
-  if (table_footer == "") table_footer <- NULL
+  if (all(table_footer == "")) table_footer <- NULL # nolint
   c(table_footer, "blue")
 }

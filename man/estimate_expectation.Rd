@@ -2,7 +2,6 @@
 % Please edit documentation in R/estimate_predicted.R
 \name{estimate_expectation}
 \alias{estimate_expectation}
-\alias{estimate_response}
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
@@ -11,18 +10,25 @@
 estimate_expectation(
   model,
   data = NULL,
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
 )
 
-estimate_response(...)
-
-estimate_link(model, data = "grid", ci = 0.95, keep_iterations = FALSE, ...)
+estimate_link(
+  model,
+  data = "grid",
+  by = NULL,
+  ci = 0.95,
+  keep_iterations = FALSE,
+  ...
+)
 
 estimate_prediction(
   model,
   data = NULL,
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -31,6 +37,7 @@ estimate_prediction(
 estimate_relation(
   model,
   data = "grid",
+  by = NULL,
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -40,8 +47,15 @@ estimate_relation(
 \item{model}{A statistical model.}
 
 \item{data}{A data frame with model's predictors to estimate the response. If
-\code{NULL}, the model's data is used. If "grid", the model matrix is obtained
+\code{NULL}, the model's data is used. If \code{"grid"}, the model matrix is obtained
 (through \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).}
+
+\item{by}{The predictor variable(s) at which to estimate the response. Other
+predictors of the model that are not included here will be set to their mean
+value (for numeric predictors), reference level (for factors) or mode (other
+types). The \code{by} argument will be used to create a data grid via
+\code{insight::get_datagrid()}, which will then be used as \code{data} argument. Thus,
+you cannot specify both \code{data} and \code{by} but only of these two arguments.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -180,8 +194,6 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 }
 }
-
-\code{estimate_response()} is a deprecated alias for \code{estimate_expectation()}.
 }
 
 \section{Data for predictions}{
@@ -198,22 +210,21 @@ to generate model predictions for specific combinations of predictor values.
 }
 
 \examples{
+\dontshow{if (all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Linear Models
 model <- lm(mpg ~ wt, data = mtcars)
 
 # Get predicted and prediction interval (see insight::get_predicted)
-estimate_response(model)
+estimate_expectation(model)
 
 # Get expected values with confidence interval
 pred <- estimate_relation(model)
 pred
 
 # Visualisation (see visualisation_recipe())
-if (require("see")) {
-  plot(pred)
-}
+plot(pred)
 
 # Standardize predictions
 pred <- estimate_relation(lm(mpg ~ wt + am, data = mtcars))
@@ -223,22 +234,22 @@ unstandardize(z, include_response = FALSE)
 
 # Logistic Models
 model <- glm(vs ~ wt, data = mtcars, family = "binomial")
-estimate_response(model)
+estimate_expectation(model)
 estimate_relation(model)
 
 # Mixed models
-if (require("lme4")) {
-  model <- lmer(mpg ~ wt + (1 | gear), data = mtcars)
-  estimate_response(model)
-  estimate_relation(model)
-}
+model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+estimate_expectation(model)
+estimate_relation(model)
 
 # Bayesian models
 \donttest{
-if (require("rstanarm")) {
-  model <- rstanarm::stan_glm(mpg ~ wt, data = mtcars, refresh = 0, iter = 200)
-  estimate_response(model)
-  estimate_relation(model)
+model <- suppressWarnings(rstanarm::stan_glm(
+  mpg ~ wt,
+  data = mtcars, refresh = 0, iter = 200
+))
+estimate_expectation(model)
+estimate_relation(model)
 }
-}
+\dontshow{\}) # examplesIf}
 }
