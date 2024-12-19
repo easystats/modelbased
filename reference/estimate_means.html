@@ -13,7 +13,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,8 +122,11 @@ probabilities.</p></dd>
 
 
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
-<dd><p>Whether to use 'emmeans' or 'marginaleffects' as a backend.
-The latter is experimental and some features might not work.</p></dd>
+<dd><p>Whether to use <code>"emmeans"</code> or <code>"marginaleffects"</code> as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where <code>backend = "marginaleffects"</code> will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -142,10 +145,11 @@ and <a href="https://easystats.github.io/modelbased/index.html#features">README 
 various examples, tutorials and use cases.</p>
 <p>The <code><a href="estimate_slopes.html">estimate_slopes()</a></code>, <code>estimate_means()</code> and <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code>
 functions are forming a group, as they are all based on <em>marginal</em>
-estimations (estimations based on a model). All three are also built on the
-<span class="pkg">emmeans</span> package, so reading its documentation (for instance for
-<code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> and <code><a href="https://rvlenth.github.io/emmeans/reference/emtrends.html" class="external-link">emmeans::emtrends()</a></code>) is recommended to understand
-the idea behind these types of procedures.</p><ul><li><p>Model-based <strong>predictions</strong> is the basis for all that follows. Indeed,
+estimations (estimations based on a model). All three are built on the
+<strong>emmeans</strong> or <strong>marginaleffects</strong> package (depending on the <code>backend</code>
+argument), so reading its documentation (for instance <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code>,
+<code><a href="https://rvlenth.github.io/emmeans/reference/emtrends.html" class="external-link">emmeans::emtrends()</a></code> or this <a href="https://marginaleffects.com/" class="external-link">website</a> is
+recommended to understand the idea behind these types of procedures.</p><ul><li><p>Model-based <strong>predictions</strong> is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
 (see <code><a href="estimate_expectation.html">estimate_link()</a></code>). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors (i.e.,
@@ -185,6 +189,11 @@ visualize them. Another possibility is to evaluate the difference between
 these levels (using <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code>). Finally, one could also estimate
 the effect of x averaged over all conditions, or instead within each
 condition (<code>using [estimate_slopes]</code>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" class="external-link">doi:10.59350/xwnfm-x1827</a></p>
     </div>
 
     <div class="section level2">
@@ -276,9 +285,9 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods that can be applied to it:</span></span></span>
 <span class="r-in"><span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">means</span><span class="op">)</span> <span class="co"># which runs visualisation_recipe()</span></span></span>
 <span class="r-plt img"><img src="estimate_means-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize</a></span><span class="op">(</span><span class="va">means</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means (standardized)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -289,11 +298,15 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |       -7.01 | -0.14 | 0.29 | [-0.71,  0.43]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Marginal means estimated at Species</span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;</span> <span class="fl">4.2</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Species</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Petal.Length_factor</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">Petal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">+</span> <span class="va">Species</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">Petal.Length_factor</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  data <span class="op">=</span> <span class="va">data</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `by = c("Species")`.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,7 +69,14 @@
 <h2 class="pkg-version" data-toc-text="0.9.0" id="modelbased-090">modelbased 0.9.0<a class="anchor" aria-label="anchor" href="#modelbased-090"></a></h2>
 <div class="section level3">
 <h3 id="breaking-changes-0-9-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
-<ul><li>Deprecated argument and function names have been removed.</li>
+<ul><li><p>Deprecated argument and function names have been removed.</p></li>
+<li><p>Argument <code>fixed</code> has been removed, as you can fix predictor at certain values using the <code>by</code> argument.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="major-changes-0-9-0">Major Changes<a class="anchor" aria-label="anchor" href="#major-changes-0-9-0"></a></h3>
+<ul><li><p>The <code>"marginaleffects"</code> backend for <code><a href="../reference/estimate_means.html">estimate_means()</a></code> is now fully implemented and no longer work-in-progress.</p></li>
+<li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gains a <code>backend</code> argument. This defaults to <code>"emmeans"</code>, but can be set to <code>"marginaleffects"</code> to use features of that package to estimate contrasts and pairwise comparisons.</p></li>
+<li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> and related functions also get a <code>by</code> argument, as alternative to create a datagrid for the <code>data</code> argument.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
