@@ -2,7 +2,8 @@ Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
 Version: 0.8.9.2
-Authors@R:    c(person(given = "Dominique",
+Authors@R:
+    c(person(given = "Dominique",
              family = "Makowski",
              role = c("aut", "cre"),
              email = "dom.makowski@gmail.com",
@@ -22,9 +23,9 @@ Authors@R:    c(person(given = "Dominique",
              role = "aut",
              email = "patilindrajeet.science@gmail.com",
              comment = c(ORCID = "0000-0003-1995-6531")),
-      person(given = "Rémi", 
+      person(given = "Rémi",
              family = "Thériault",
-             role = c("aut"), 
+             role = c("aut"),
              email = "remi.theriault@mail.mcgill.ca",
              comment = c(ORCID = "0000-0003-4315-6788")))
 Maintainer: Dominique Makowski <dom.makowski@gmail.com>

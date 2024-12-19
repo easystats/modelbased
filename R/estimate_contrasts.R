@@ -38,7 +38,7 @@
 #'
 #' `effectsize = "emmeans"` uses [emmeans::eff_size] with
 #' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
-#' `method = "identity")`. This standardizes using the MSE (sigma). Some believe
+#' `method = "identity"`. This standardizes using the MSE (sigma). Some believe
 #' this works when the contrasts are the only predictors in the model, but not
 #' when there are covariates. The response variance accounted for by the
 #' covariates should not be removed from the SD used to standardize. Otherwise,
@@ -133,7 +133,7 @@ estimate_contrasts <- function(model,
       adjust = p_adjust,
       ...
     )
-    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, effectsize, ...)
     info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
@@ -181,7 +181,7 @@ estimate_contrasts <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
+.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, effectsize, ...) {
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
@@ -217,7 +217,7 @@ estimate_contrasts <- function(model,
   # Add standardized effect size
   if (!effectsize %in% c("none", "emmeans", "marginal", "bootES")) {
     message("Unsupported effect size '", effectsize, "', returning none.")
-    }
+  }
 
   if (effectsize == "emmeans") {
     eff <- emmeans::eff_size(
