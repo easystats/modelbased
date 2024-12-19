@@ -1,6 +1,6 @@
 ---
-title: "Marginal effects and derivatives"
-output: 
+title: "Estimate marginal effects and derivatives"
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Estimate marginal effects and derivatives}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -45,7 +45,7 @@ Let's see some examples.
 
 # Marginal effects over a factor's levels
 
-Let's fit a linear model with a factor interacting with a continuous predictor and visualize it. 
+Let's fit a linear model with a factor interacting with a continuous predictor and visualize it.
 
 ```{r}
 library(parameters)
@@ -165,4 +165,3 @@ We can conclude that Petal.Length shares significantly negative relationship wit
 
 
 # References
-
