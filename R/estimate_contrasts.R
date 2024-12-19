@@ -194,6 +194,8 @@ estimate_contrasts <- function(model,
 
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /
+    # see also https://github.com/easystats/modelbased/pull/280
+    #
     #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
     # #> Marginal Contrasts Analysis
     # #>
