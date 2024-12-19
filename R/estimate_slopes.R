@@ -16,13 +16,13 @@
 #' @inheritParams estimate_means
 #'
 #' @details
-#'
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]
 #' functions are forming a group, as they are all based on *marginal*
-#' estimations (estimations based on a model). All three are also built on the
-#' \pkg{emmeans} package, so reading its documentation (for instance for
-#' [emmeans::emmeans()] and [emmeans::emtrends()]) is recommended to understand
-#' the idea behind these types of procedures.
+#' estimations (estimations based on a model). All three are built on the
+#' **emmeans** or **marginaleffects** package (depending on the `backend`
+#' argument), so reading its documentation (for instance [emmeans::emmeans()],
+#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/) is
+#' recommended to understand the idea behind these types of procedures.
 #'
 #' - Model-based **predictions** is the basis for all that follows. Indeed,
 #' the first thing to understand is how models can be used to make predictions
@@ -70,7 +70,10 @@
 #' the effect of x averaged over all conditions, or instead within each
 #' condition (`using [estimate_slopes]`).
 #'
-#' @examplesIf require("emmeans") && require("ggplot2") && require("see")
+#' @return A data.frame of class `estimate_slopes`.
+#'
+#' @examplesIf all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))
+#' library(ggplot2)
 #' # Get an idea of the data
 #' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
 #'   geom_point(aes(color = Species)) +
@@ -86,10 +89,8 @@
 #'
 #' # Plot it
 #' plot(slopes)
-#'
 #' standardize(slopes)
 #'
-#' @examplesIf require("mgcv") && require("emmeans") && require("see")
 #' model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 #' slopes <- estimate_slopes(model, by = "Petal.Length", length = 50)
 #' summary(slopes)
@@ -102,7 +103,6 @@
 #' )
 #' summary(slopes)
 #' plot(slopes)
-#' @return A data.frame of class `estimate_slopes`.
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,

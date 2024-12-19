@@ -9,6 +9,7 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 9L))
+  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')"))
   expect_identical(dim(estim), c(1L, 9L))
@@ -169,8 +170,6 @@ test_that("estimate_contrasts - Bayesian", {
 })
 
 
-
-
 test_that("estimate_contrasts - p.adjust", {
   skip_if_not_installed("emmeans")
 
@@ -182,10 +181,10 @@ test_that("estimate_contrasts - p.adjust", {
   expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
 })
 
+
 test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
-
 
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -196,4 +195,35 @@ test_that("estimate_contrasts - dfs", {
 
   # TODO: check out why this test is failing
   # expect_true(any(estim1$CI_low != estim2$CI_low))
+})
+
+
+test_that("estimate_contrasts - marginaleffects", {
+  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("ggeffects")
+  skip_if_not_installed("Formula")
+
+  data(coffee_data, package = "ggeffects")
+  m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
+
+  out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
+  expect_snapshot(print(out, zap_small = TRUE))
+
+  out <- estimate_contrasts(
+    m,
+    c("time", "coffee"),
+    backend = "marginaleffects",
+    p_adjust = "none",
+    method = ratio ~ reference | coffee
+  )
+  expect_snapshot(print(out, zap_small = TRUE))
+
+  out <- estimate_contrasts(
+    m,
+    c("time", "coffee"),
+    backend = "marginaleffects",
+    p_adjust = "none",
+    method = "(b2-b1)=(b4-b3)"
+  )
+  expect_snapshot(print(out, zap_small = TRUE))
 })

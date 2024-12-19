@@ -32,8 +32,11 @@ probabilities.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{backend}{Whether to use 'emmeans' or 'marginaleffects' as a backend.
-The latter is experimental and some features might not work.}
+\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where \code{backend = "marginaleffects"} will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -54,10 +57,11 @@ various examples, tutorials and use cases.
 
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
-estimations (estimations based on a model). All three are also built on the
-\pkg{emmeans} package, so reading its documentation (for instance for
-\code{\link[emmeans:emmeans]{emmeans::emmeans()}} and \code{\link[emmeans:emtrends]{emmeans::emtrends()}}) is recommended to understand
-the idea behind these types of procedures.
+estimations (estimations based on a model). All three are built on the
+\strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
+argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
@@ -103,7 +107,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -120,20 +124,24 @@ estimate_means(model, by = "Sepal.Width=c(2, 4)")
 
 # Methods that can be applied to it:
 means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("see") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
-plot(means) # which runs visualisation_recipe()
 
+plot(means) # which runs visualisation_recipe()
 standardize(means)
-\dontshow{\}) # examplesIf}
-\dontshow{if (require("lme4") && require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 \donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
-model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+model <- lme4::lmer(
+  Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor),
+  data = data
+)
 estimate_means(model)
 estimate_means(model, by = "Sepal.Width", length = 3)
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+{marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
 }

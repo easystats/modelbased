@@ -7,11 +7,20 @@
 #'
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
-#' @param backend Whether to use 'emmeans' or 'marginaleffects' as a backend.
-#'  The latter is experimental and some features might not work.
+#' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
+#' Results are usually very similar. The major difference will be found for mixed
+#' models, where `backend = "marginaleffects"` will also average across random
+#' effects levels, producing "marginal predictions" (instead of "conditional
+#' predictions", see Heiss 2022).
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf require("emmeans", quietly = TRUE)
+#' @return A data frame of estimated marginal means.
+#'
+#' @references
+#' Heiss, A. (2022). Marginal and conditional effects for GLMMs with
+#' {marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
+#'
+#' @examplesIf all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Frequentist models
@@ -29,21 +38,20 @@
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 #'
-#' @examplesIf require("see") && require("emmeans", quietly = TRUE)
 #' plot(means) # which runs visualisation_recipe()
-#'
 #' standardize(means)
 #'
-#' @examplesIf require("lme4") && require("emmeans", quietly = TRUE)
 #' \donttest{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
-#' model <- lmer(Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor), data = data)
+#' model <- lme4::lmer(
+#'   Petal.Length ~ Sepal.Width + Species + (1 | Petal.Length_factor),
+#'   data = data
+#' )
 #' estimate_means(model)
 #' estimate_means(model, by = "Sepal.Width", length = 3)
 #' }
-#' @return A data frame of estimated marginal means.
 #' @export
 estimate_means <- function(model,
                            by = "auto",

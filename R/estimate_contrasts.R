@@ -7,9 +7,9 @@
 #' @inheritParams estimate_means
 #' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#'   comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
-#'   `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
-#'   p-value adjustment section in the `emmeans::test` documentation.
+#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
+#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
+#' p-value adjustment section in the `emmeans::test` documentation.
 #'
 #' @inherit estimate_slopes details
 #'
@@ -78,19 +78,67 @@ estimate_contrasts <- function(model,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
+                               backend = "emmeans",
                                ...) {
-  # Run emmeans
-  estimated <- get_emcontrasts(model,
-    contrast = contrast,
-    by = by,
-    transform = transform,
-    method = method,
-    adjust = p_adjust,
-    ...
+  if (backend == "emmeans") {
+    # Emmeans ------------------------------------------------------------------
+    estimated <- get_emcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      adjust = p_adjust,
+      ...
+    )
+    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    info <- attributes(estimated)
+  } else {
+    # Marginalmeans ------------------------------------------------------------
+    estimated <- get_marginalcontrasts(model,
+      contrast = contrast,
+      by = by,
+      transform = transform,
+      method = method,
+      p_adjust = p_adjust,
+      ci = ci,
+      ...
+    )
+    out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
+    ## TODO: needs to be fixed
+    info <- list(contrast = contrast, by = by)
+  }
+
+
+  # Table formatting
+  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_footer") <- .estimate_means_footer(
+    out,
+    info$contrast,
+    type = "contrasts",
+    p_adjust = p_adjust
   )
 
-  info <- attributes(estimated)
+  # Add attributes
+  attr(out, "model") <- model
+  attr(out, "response") <- insight::find_response(model)
+  attr(out, "ci") <- ci
+  attr(out, "transform") <- transform
+  attr(out, "at") <- info$by
+  attr(out, "by") <- info$by
+  attr(out, "contrast") <- info$contrast
+  attr(out, "p_adjust") <- p_adjust
 
+  # Output
+  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
+  out
+}
+
+
+
+# Table formatting emmeans ----------------------------------------------------
+
+
+.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
@@ -120,30 +168,60 @@ estimate_contrasts <- function(model,
 
   # Merge levels and rest
   out$contrast <- NULL
-  out <- cbind(level_cols, out)
+  cbind(level_cols, out)
+}
 
 
-  # Table formatting
-  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(out, "table_footer") <- .estimate_means_footer(
-    out,
-    info$contrast,
-    type = "contrasts",
-    p_adjust = p_adjust
+
+# Table formatting marginal effects -------------------------------------------
+
+
+.format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
+  groups <- attributes(estimated)$by
+  contrast <- attributes(estimated)$contrast
+  focal_terms <- attributes(estimated)$focal_terms
+
+  estimated <- .p_adjust(model, estimated, p_adjust, ...)
+
+  valid_methods <- c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential"
   )
 
-  # Add attributes
-  attr(out, "model") <- model
-  attr(out, "response") <- insight::find_response(model)
-  attr(out, "ci") <- ci
-  attr(out, "transform") <- transform
-  attr(out, "at") <- info$by
-  attr(out, "by") <- info$by
-  attr(out, "contrast") <- info$contrast
-  attr(out, "p_adjust") <- p_adjust
+  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
 
+    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
-  # Output
-  class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
-  out
+    # These are examples of what {marginaleffects} returns, a single parmater
+    # column that includes all levels, comma- and dash-separated, or with /
+    # see also https://github.com/easystats/modelbased/pull/280
+    #
+    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> Parameter                              | Difference |          95% CI |      p
+    # #> ------------------------------------------------------------------------------
+    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
+    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
+    #
+    # estimate_contrasts(
+    #   m,
+    #   c("time", "coffee"),
+    #   backend = "marginaleffects",
+    #   p_adjust = "none",
+    #   method = ratio ~ reference | coffee
+    # )
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> coffee  |              hypothesis | Difference |       95% CI |      p
+    # #> ----------------------------------------------------------------------
+    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
+    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
+    #
+    # We need to split the "Parameter" or "hypothesis" columns into one column
+    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
+    # argument, which is used for filtering by levels of given focal terms.
+  }
+
+  estimated
 }

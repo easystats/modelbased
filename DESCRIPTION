@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.9.1
+Version: 0.8.9.2
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -49,8 +49,10 @@ Suggests:
     coda,
     correlation,
     emmeans (>= 1.10.2),
+    Formula,
     gamm4,
     gganimate,
+    ggeffects,
     ggplot2,
     glmmTMB,
     knitr,

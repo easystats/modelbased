@@ -102,6 +102,7 @@ get_marginalmeans <- function(model,
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
   attr(means, "focal_terms") <- at_specs$varname
+  attr(means, "datagrid") <- datagrid
   means
 }
 
@@ -119,19 +120,32 @@ model_marginalmeans <- get_marginalmeans
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
   non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
+  is_contrast_analysis <- !is.null(list(...)$hypothesis)
 
-  # estimate name
-  if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
-    estimate_name <- "Probability"
+  # do we have contrasts? For contrasts, we want to keep p-values
+  if (is_contrast_analysis) {
+    remove_column <- "SE"
+    estimate_name <- "Difference"
   } else {
-    estimate_name <- "Mean"
+    remove_column <- "p"
+    # estimate name
+    if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
+      estimate_name <- "Probability"
+    } else {
+      estimate_name <- "Mean"
+    }
   }
 
   # Format
   params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
+  # add ci?
+  params <- .add_contrasts_ci(is_contrast_analysis, params)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
+  # move p to the end
+  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
   params <- datawizard::data_rename(params, "Predicted", estimate_name)
-  params <- datawizard::data_remove(params, c("p", "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
+  # remove redundant columns
+  params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)
 
   # Store info
@@ -139,6 +153,36 @@ model_marginalmeans <- get_marginalmeans
   attr(params, "by") <- attr(means, "by")
   params
 }
+
+
+#' @keywords internal
+.add_contrasts_ci <- function(is_contrast_analysis, params) {
+  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
+    # extract ci-level
+    if ("CI" %in% colnames(params)) {
+      ci <- params[["CI"]][1]
+    } else {
+      ci <- attributes(params)$ci
+    }
+    if (is.null(ci)) {
+      ci <- 0.95
+    }
+    # get degrees of freedom
+    if ("df" %in% colnames(params)) {
+      dof <- params[["df"]]
+    } else {
+      dof <- Inf
+    }
+    # critical test value
+    crit <- stats::qt((1 + ci) / 2, df = dof)
+    # add CI
+    params$CI_low <- params$Predicted - crit * params$SE
+    params$CI_high <- params$Predicted + crit * params$SE
+  }
+  params
+}
+
+
 
 # Guess -------------------------------------------------------------------
 

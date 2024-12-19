@@ -4,6 +4,21 @@
 
 - Deprecated argument and function names have been removed.
 
+- Argument `fixed` has been removed, as you can fix predictor at certain values
+  using the `by` argument.
+
+## Major Changes
+
+- The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
+  and no longer work-in-progress.
+
+- `estimate_contrasts()` gains a `backend` argument. This defaults to `"emmeans"`,
+  but can be set to `"marginaleffects"` to use features of that package to estimate
+  contrasts and pairwise comparisons.
+
+- `estimate_expectation()` and related functions also get a `by` argument, as
+  alternative to create a datagrid for the `data` argument.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.
