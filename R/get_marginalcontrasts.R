@@ -39,7 +39,7 @@ model_marginalcontrasts <- get_marginalcontrasts
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$focal_terms
   statistic <- insight::get_statistic(model)$Statistic
-  df <- insight::get_df(model)
+  dof <- insight::get_df(model)
   verbose <- isTRUE(list(...)$verbose)
 
   # exit on NULL, or if no p-adjustment requested
@@ -64,13 +64,13 @@ model_marginalcontrasts <- get_marginalcontrasts
         params[["p"]] <- suppressWarnings(stats::ptukey(
           sqrt(2) * abs(statistic),
           rank_adjust,
-          df,
+          dof,
           lower.tail = FALSE
         ))
         # for specific contrasts, ptukey might fail, and the tukey-adjustement
         # could just be simple p-value calculation
         if (all(is.na(params[["p"]]))) {
-          params[["p"]] <- 2 * stats::pt(abs(statistic), df = df, lower.tail = FALSE)
+          params[["p"]] <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
         }
       } else if (verbose) {
         insight::format_alert("No test-statistic found. P-values were not adjusted.")
