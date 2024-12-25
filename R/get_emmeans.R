@@ -130,12 +130,15 @@ model_emmeans <- get_emmeans
                                      by = NULL,
                                      ...) {
   # Gather info
-  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
-  my_data <- insight::get_data(model, verbose = FALSE)
+  model_data <- insight::get_data(model, verbose = FALSE)
+  predictors <- intersect(
+    colnames(model_data),
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  )
 
   # Guess arguments
   if (!is.null(by) && length(by) == 1 && by == "auto") {
-    by <- predictors[!sapply(my_data[predictors], is.numeric)]
+    by <- predictors[!sapply(model_data[predictors], is.numeric)]
     if (!length(by) || all(is.na(by))) {
       stop("Model contains no categorical factor. Please specify 'by'.", call. = FALSE)
     }
@@ -143,7 +146,7 @@ model_emmeans <- get_emmeans
   }
 
   my_args <- list(by = by)
-  .format_emmeans_arguments(model, args = my_args, data = my_data, ...)
+  .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
 
 
@@ -152,7 +155,13 @@ model_emmeans <- get_emmeans
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model)
-  data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
+  predictors <- insight::find_predictors(
+    model,
+    effects = "fixed",
+    flatten = TRUE,
+    ...
+  )
+  data <- data[intersect(predictors, colnames(data))]
 
   # Deal with 'at'
   if (is.null(args$by)) {
@@ -168,7 +177,7 @@ model_emmeans <- get_emmeans
     args$by <- names(args$data_matrix)
   } else {
     if (!is.null(args$by) && all(args$by == "all")) {
-      target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+      target <- intersect(predictors, colnames(data))
     } else {
       target <- args$by
     }

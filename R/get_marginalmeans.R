@@ -189,8 +189,11 @@ model_marginalmeans <- get_marginalmeans
 #' @keywords internal
 .guess_arguments_means <- function(model, by = NULL, ...) {
   # Gather info and data from model
-  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
   model_data <- insight::get_data(model)
+  predictors <- intersect(
+    colnames(model_data),
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  )
 
   # Guess arguments 'by'
   if (identical(by, "auto")) {

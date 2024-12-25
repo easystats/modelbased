@@ -56,8 +56,11 @@ model_emtrends <- get_emtrends
                                       by = NULL,
                                       ...) {
   # Gather info
-  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   model_data <- insight::get_data(model, verbose = FALSE)
+  predictors <- intersect(
+    colnames(model_data),
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  )
 
   # Guess arguments
   if (is.null(trend)) {
