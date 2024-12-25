@@ -130,8 +130,17 @@ model_emmeans <- get_emmeans
                                      by = NULL,
                                      ...) {
   # Gather info
-  predictors <- insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   my_data <- insight::get_data(model, verbose = FALSE)
+  predictors <- intersect(
+    insight::find_predictors(
+      model,
+      effects = "fixed",
+      component = "location",
+      flatten = TRUE,
+      ...
+    ),
+    colnames(my_data)
+  )
 
   # Guess arguments
   if (!is.null(by) && length(by) == 1 && by == "auto") {
@@ -152,7 +161,13 @@ model_emmeans <- get_emmeans
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model)
-  data <- data[insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)]
+  predictors <- insight::find_predictors(
+    model,
+    effects = "fixed",
+    flatten = TRUE,
+    ...
+  )
+  data <- data[intersect(predictors, colnames(data))]
 
   # Deal with 'at'
   if (is.null(args$by)) {
@@ -168,7 +183,7 @@ model_emmeans <- get_emmeans
     args$by <- names(args$data_matrix)
   } else {
     if (!is.null(args$by) && all(args$by == "all")) {
-      target <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
+      target <- intersect(predictors, colnames(data))
     } else {
       target <- args$by
     }
