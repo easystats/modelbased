@@ -5,6 +5,7 @@
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
+\alias{estimate_parameters}
 \title{Model-based response estimates and uncertainty}
 \usage{
 estimate_expectation(
@@ -42,6 +43,16 @@ estimate_relation(
   keep_iterations = FALSE,
   ...
 )
+
+estimate_parameters(
+  model,
+  data = "grid",
+  parameter = "sigma",
+  by = NULL,
+  ci = 0.95,
+  keep_iterations = FALSE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -67,6 +78,10 @@ running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and
 \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+
+\item{parameter}{Name of the auxiliary parameter to estimate. Defaults to
+\code{"sigma"}, but can be any other value that is usually accepted by the \code{dpar}
+argument.}
 }
 \value{
 A data frame of predicted values and uncertainty intervals, with
@@ -189,6 +204,13 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 \item Like \code{estimate_expectation()}.
 \item Useful for visualizing a model.
 \item Generates \strong{expected values} (conditional average) on the \strong{response scale}.
+\item The uncertainty interval is a \emph{confidence interval}.
+\item By default, values are computed using a reference grid spanning the
+observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+}
+\item \strong{\code{estimate_parameters()}}:
+\itemize{
+\item Estimates the \strong{expected values} of auxiliary parameters.
 \item The uncertainty interval is a \emph{confidence interval}.
 \item By default, values are computed using a reference grid spanning the
 observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).

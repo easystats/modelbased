@@ -96,6 +96,12 @@
 #'   - By default, values are computed using a reference grid spanning the
 #'     observed range of predictor values (see [visualisation_matrix()]).
 #'
+#' - **`estimate_parameters()`**:
+#'   - Estimates the **expected values** of auxiliary parameters.
+#'   - The uncertainty interval is a *confidence interval*.
+#'   - By default, values are computed using a reference grid spanning the
+#'     observed range of predictor values (see [visualisation_matrix()]).
+#'
 #' @section Data for predictions:
 #'
 #' If the `data = NULL`, values are estimated using the data used to fit the
@@ -137,6 +143,9 @@
 #' types). The `by` argument will be used to create a data grid via
 #' `insight::get_datagrid()`, which will then be used as `data` argument. Thus,
 #' you cannot specify both `data` and `by` but only of these two arguments.
+#' @param parameter Name of the auxiliary parameter to estimate. Defaults to
+#' `"sigma"`, but can be any other value that is usually accepted by the `dpar`
+#' argument.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -272,6 +281,27 @@ estimate_relation <- function(model,
   )
 }
 
+
+#' @rdname estimate_expectation
+#' @export
+estimate_parameters <- function(model,
+                                data = "grid",
+                                parameter = "sigma",
+                                by = NULL,
+                                ci = 0.95,
+                                keep_iterations = FALSE,
+                                ...) {
+  .estimate_predicted(
+    model,
+    data = data,
+    by = by,
+    ci = ci,
+    keep_iterations = keep_iterations,
+    predict = "expectation",
+    dpar = parameter,
+    ...
+  )
+}
 
 
 # Internal ----------------------------------------------------------------
