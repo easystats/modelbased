@@ -1,5 +1,5 @@
 #' @keywords internal
-.get_type_argument <- function(model, predict = NULL, ...) {
+.get_marginaleffects_type_argument <- function(model, predict = NULL, ...) {
   dots <- list(...)
   model_class <- class(model)[1]
 
@@ -32,7 +32,7 @@
     error_arg <- "predict"
   }
 
-  if (is.na(predict)) {
+  if (isTRUE(is.na(predict))) {
     insight::format_error(paste0(
       "The option provided in the `", error_arg, "` argument is not recognized.",
       " Valid options are: ",

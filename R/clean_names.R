@@ -36,7 +36,7 @@
     } else if (type == "mean") {
       if (insight::model_info(model)$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"
-      } else if (predict %in% .brms_aux_elements()) {
+      } else if (!is.null(predict) && predict %in% .brms_aux_elements()) {
         names(means)[names(means) == vars] <- .capitalize(predict)
       } else {
         names(means)[names(means) == vars] <- "Mean"

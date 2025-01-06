@@ -1,6 +1,6 @@
 ---
 title: "The Modelisation Approach"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{The Modelisation Approach}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -28,6 +28,8 @@ options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("emmeans", quietly = TRUE) ||
+  !requireNamespace("parameters", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
   !requireNamespace("datawizard", quietly = TRUE)) {
@@ -64,7 +66,7 @@ But here are some problems with this approach:
 1. We don't know whether the model lying underlying the test (the *t*-test, the
    ANOVAs or the correlation) is any good to "represent" the data, preventing in
    turn to adjust the confidence in the results. For instance, we know that reaction
-   times (RTs) have a non-normal distribution, and yet we often see the use of 
+   times (RTs) have a non-normal distribution, and yet we often see the use of
    unsuited methods, like outliers-removal, scale-transformations, and computation
    of empirical scores like "mean" or "SD" that do not represent the data well.
 
@@ -126,10 +128,10 @@ data <- generate_data(effect = rnorm(30, 2, 2), noise = rnorm(30, 0, 0.4))
 </details>
 
 
-## Preprocessing 
+## Preprocessing
 
 
-## ANOVAs 
+## ANOVAs
 
 In ANOVAs, it's all about groups. Even though people also add in continuous
 variables (creating these ANCOVAs, MANOVAs and other monstrosities), it's not
@@ -181,7 +183,7 @@ data_anova |>
 A model is made of parameters, which have 'real' meaning, as opposed to indices
 of significance (which are abstract).
 
-## Summary 
+## Summary
 
 ## 1. Draw what you want to visualize
 

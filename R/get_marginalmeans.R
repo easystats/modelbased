@@ -66,7 +66,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  predict <- .get_type_argument(model, predict, ...)
+  predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
   # setup arguments
   dg_args <- list(
@@ -136,6 +136,7 @@ model_marginalmeans <- get_marginalmeans
 
 #' @keywords internal
 .format_marginaleffects_means <- function(model, estimated, predict = NULL, ...) {
+  predict <- attributes(estimated)$predict
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)

@@ -74,7 +74,6 @@ estimate_means <- function(model,
       model,
       estimated = estimated,
       ci = ci,
-      predict = predict,
       ...
     )
   } else {
@@ -83,7 +82,6 @@ estimate_means <- function(model,
     means <- .format_marginaleffects_means(
       model,
       estimated = estimated,
-      predict = predict,
       ...
     )
   }

@@ -112,7 +112,8 @@ model_emmeans <- get_emmeans
 # in estimate_means
 
 #' @keywords internal
-.format_emmeans_means <- function(model, estimated, ci = 0.95, predict = "response", ...) {
+.format_emmeans_means <- function(model, estimated, ci = 0.95, ...) {
+  predict <- attributes(estimated)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     means <- parameters::parameters(estimated, ci = ci, ...)
