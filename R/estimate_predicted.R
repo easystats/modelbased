@@ -137,15 +137,15 @@
 #' types). The `by` argument will be used to create a data grid via
 #' `insight::get_datagrid()`, which will then be used as `data` argument. Thus,
 #' you cannot specify both `data` and `by` but only of these two arguments.
-#' @param predict This parameter controls what is predicted. In most cases, it
-#' is changed automatically when using the different functions such as
-#' `estimate_expectation()`, `estimate_prediction()`, `estimate_link()` or
-#' `estimate_relation()`. The only time you might be interested in manually
+#' @param predict This parameter controls what is predicted (and gets internally
+#' passed to [insight::get_predicted()]). In most cases, you don't need to care
+#' about it: it is changed automatically according to the different predicting
+#' functions (i.e., `estimate_expectation()`, `estimate_prediction()`, `estimate_link()`
+#' or `estimate_relation()`). The only time you might be interested in manually
 #' changing it is to estimate other distributional parameters (called "dpar" in
 #' other packages) - for instance when using complex formulae in `brms` models.
-#' The `predict` argument can take the value of the parameter you want to
-#' estimate, for instance `"sigma"`, `"kappa"`, etc. This argument gets passed
-#' to [insight::get_predicted()].
+#' The `predict` argument can then be set to the parameter you want to
+#' estimate, for instance `"sigma"`, `"kappa"`, etc.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
