@@ -12,7 +12,6 @@ estimate_contrasts(
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
-  backend = "emmeans",
   ...
 )
 }
@@ -50,6 +49,14 @@ Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
 predictions", see Heiss 2022).}
+
+\item{effectsize}{Desired measure of standardized effect size, one of "none"
+(default), "emmeans", "marginal", or "bootES".}
+
+\item{bootstraps}{The number of bootstrap resamples to perform.}
+
+\item{bootES_type}{Specifies the type of effect-size measure to
+estimate when using \code{effectsize = "bootES"}. One of \code{c("unstandardized", "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -118,6 +125,41 @@ these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Fi
 the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
+\section{Effect Size}{
+ By default, \code{estimate_contrasts} reports no
+standardized effect size on purpose. Should one request one, some things
+are to keep in mind. As the authors of \code{emmeans} write, "There is
+substantial disagreement among practitioners on what is the appropriate
+sigma to use in computing effect sizes; or, indeed, whether any effect-size
+measure is appropriate for some situations. The user is completely
+responsible for specifying appropriate parameters (or for failing to do
+so)."
+
+In particular, effect size method \code{"bootES"} does not correct
+for covariates in the model, so should probably only be used when there is
+just one categorical predictor (with however many levels). Some believe that
+if there are multiple predictors or any covariates, it is important to
+re-compute sigma adding back in the response variance associated with the
+variables that aren't part of the contrast.
+
+\code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
+\code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
+\verb{method = "identity")}. This standardizes using the MSE (sigma). Some believe
+this works when the contrasts are the only predictors in the model, but not
+when there are covariates. The response variance accounted for by the
+covariates should not be removed from the SD used to standardize. Otherwise,
+\emph{d} will be overestimated.
+
+\code{effectsize = "marginal"} uses the following formula to compute effect
+size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardized
+using the response SD with only the between-groups variance on the focal
+factor/contrast removed. This allows for groups to be equated on their
+covariates, but creates an appropriate scale for standardizing the response.
+
+\code{effectsize = "bootES"} uses bootstrapping (defaults to a low value of
+200) through \link[bootES:bootES]{bootES::bootES}. Adjust for contrasts, but not for covariates.
+}
+
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
