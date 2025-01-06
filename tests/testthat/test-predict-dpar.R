@@ -21,7 +21,7 @@ test_that("estimate_means and estimate_relation - dpar", {
     predict = "sigma",
     backend = "marginaleffects"
   )
-  expect_equal(out1$estimate, out2$Mean, tolerance = 1e-4)
+  expect_equal(out1$estimate, out2$Sigma, tolerance = 1e-4)
 
   out1 <- estimate_relation(
     m,

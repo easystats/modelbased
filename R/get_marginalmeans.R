@@ -141,6 +141,7 @@ model_marginalmeans <- get_marginalmeans
   info <- insight::model_info(model, verbose = FALSE)
   non_focal <- setdiff(colnames(model_data), attr(estimated, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
+  predict_type <- attributes(estimated)$predict
 
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is_contrast_analysis) {
@@ -149,7 +150,10 @@ model_marginalmeans <- get_marginalmeans
   } else {
     remove_column <- "p"
     # estimate name
-    if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
+    if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+      # for Bayesian models with distributional parameter
+      estimate_name <- .capitalize(predict_type)
+    } else if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
       estimate_name <- "Mean"
