@@ -56,7 +56,7 @@
 #' @export
 estimate_means <- function(model,
                            by = "auto",
-                           predict = "response",
+                           predict = NULL,
                            ci = 0.95,
                            backend = "emmeans",
                            transform,

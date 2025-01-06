@@ -48,7 +48,7 @@
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
-                              predict = "response",
+                              predict = NULL,
                               ci = 0.95,
                               transform,
                               ...) {

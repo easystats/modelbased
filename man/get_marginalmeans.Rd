@@ -34,7 +34,7 @@ get_marginaleffects(model, trend = NULL, by = NULL, ...)
 get_marginalmeans(
   model,
   by = "auto",
-  predict = "response",
+  predict = NULL,
   ci = 0.95,
   transform,
   ...
@@ -43,7 +43,7 @@ get_marginalmeans(
 model_marginalmeans(
   model,
   by = "auto",
-  predict = "response",
+  predict = NULL,
   ci = 0.95,
   transform,
   ...

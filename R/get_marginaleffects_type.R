@@ -44,7 +44,7 @@
   # return default type
   if (is.null(dots$type)) {
     if (is.null(predict)) {
-      "response"
+      valid_types[1]
     } else {
       predict
     }

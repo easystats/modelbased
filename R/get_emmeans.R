@@ -47,7 +47,7 @@
 #' @export
 get_emmeans <- function(model,
                         by = "auto",
-                        predict = "response",
+                        predict = NULL,
                         transform,
                         ...) {
   # check if available
@@ -173,7 +173,9 @@ model_emmeans <- get_emmeans
 
 
 .get_emmeans_type_argument <- function(model, predict, ...) {
-  if (is.null(predict) || predict == "link") {
+  if (is.null(predict)) {
+    predict <- "response"
+  } else if (predict == "link") {
     predict <- "none"
   }
   predict
