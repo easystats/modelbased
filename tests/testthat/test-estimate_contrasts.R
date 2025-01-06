@@ -92,7 +92,7 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, transform = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
   expect_identical(dim(estim), c(3L, 9L))
 
   # GLM - poisson
@@ -103,7 +103,7 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(counts ~ treatment, data = dat, family = poisson())
 
-  estim <- suppressMessages(estimate_contrasts(model, transform = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
   expect_identical(dim(estim), c(3L, 9L))
 })
 
@@ -160,12 +160,12 @@ test_that("estimate_contrasts - Bayesian", {
 
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, transform = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
   expect_identical(dim(estim), c(3L, 7L))
 
   estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf")))
   expect_identical(dim(estim), c(3L, 6L))
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, transform = "response", test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "response", test = "bf")))
   expect_identical(dim(estim), c(3L, 6L))
 })
 

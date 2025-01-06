@@ -60,6 +60,7 @@ get_emcontrasts <- function(model,
   out <- emmeans::contrast(estimated, by = emm_by, method = method, ...)
 
   attr(out, "contrast") <- my_args$contrast
+  attr(out, "predict") <- predict
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
   out
