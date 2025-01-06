@@ -26,18 +26,20 @@ test_that("estimate_means and estimate_relation - dpar", {
   out1 <- estimate_relation(
     m,
     by = c("Condition", "Participant"),
-    predict = "sigma",
-  ) |> datawizard::data_arrange("Condition")
+    predict = "sigma"
+  )
+  out1 <- datawizard::data_arrange(out1, "Condition")
   dg <- insight::get_datagrid(m, c("Condition", "Participant"))
   out2 <- cbind(
     dg,
     data.frame(
-      predicted = brms::posterior_epred(
+      predicted = colMeans(brms::posterior_epred(
         m,
         newdata = dg,
         dpar = "sigma"
-      ) |> colMeans()
+      ))
     )
-  ) |> datawizard::data_arrange("Condition")
+  )
+  out2 <- datawizard::data_arrange(out2, "Condition")
   expect_equal(out1$Predicted, out2$predicted, tolerance = 1e-4)
 })

@@ -126,7 +126,7 @@
 #' examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and usecases.
 #'
-#' @inheritParams estimate_means
+#' @inheritParams get_emmeans
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
 #' `NULL`, the model's data is used. If `"grid"`, the model matrix is obtained

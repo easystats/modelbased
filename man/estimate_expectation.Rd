@@ -48,6 +48,8 @@ estimate_relation(
 )
 }
 \arguments{
+\item{model}{A statistical model.}
+
 \item{data}{A data frame with model's predictors to estimate the response. If
 \code{NULL}, the model's data is used. If \code{"grid"}, the model matrix is obtained
 (through \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).}
