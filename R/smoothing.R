@@ -69,7 +69,6 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
 }
 
 
-
 #' @export
 smoothing.data.frame <- function(x, method = "loess", strength = 0.25, ...) {
   nums <- names(x)[vapply(x, is.numeric, TRUE)]

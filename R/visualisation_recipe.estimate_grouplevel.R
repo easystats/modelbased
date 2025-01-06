@@ -117,7 +117,6 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 }
 
 
-
 # Layer - Labels --------------------------------------------------------------
 
 .visualisation_grouplevel_labs <- function(labs = NULL) {

@@ -220,7 +220,6 @@ visualisation_recipe.estimate_means <- function(x,
 }
 
 
-
 # Layer - Labels --------------------------------------------------------------
 
 .visualisation_means_labs <- function(info, x1, y, labs = NULL) {

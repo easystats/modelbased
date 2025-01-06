@@ -64,7 +64,6 @@ test_that("estimate_link - mgcv gamm", {
 })
 
 
-
 # Gamm4 -------------------------------------------------------------------
 
 # model <- gamm4::gamm4(Sepal.Length ~ Petal.Length + s(Sepal.Width), random=~(1|Species), data = iris)

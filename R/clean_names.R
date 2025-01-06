@@ -20,8 +20,6 @@
 }
 
 
-
-
 #' @keywords internal
 .clean_names_bayesian <- function(means, model, transform, type = "mean") {
   vars <- names(means)[names(means) %in% c("Median", "Mean", "MAP")]

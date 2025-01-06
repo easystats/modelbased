@@ -191,7 +191,6 @@ summary.estimate_slopes <- function(object, ...) {
 }
 
 
-
 # Utilities ---------------------------------------------------------------
 .estimate_slopes_summarize <- function(data, trend, ...) {
   # Find beginnings and ends -----------------------
@@ -227,7 +226,6 @@ summary.estimate_slopes <- function(object, ...) {
   }
   out
 }
-
 
 
 .estimate_slopes_sig <- function(x, confidence = "auto", ...) {

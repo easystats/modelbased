@@ -10,7 +10,6 @@ test_that("attributes_means", {
 })
 
 
-
 test_that("attributes_contrasts", {
   skip_if_not_installed("emmeans")
   model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)

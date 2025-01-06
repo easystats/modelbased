@@ -61,8 +61,6 @@ zero_crossings <- function(x) {
 }
 
 
-
-
 #' Find points of inversion
 #'
 #' Find points of inversion of a curve.

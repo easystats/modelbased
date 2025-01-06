@@ -188,7 +188,6 @@ model_marginalmeans <- get_marginalmeans
 }
 
 
-
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal

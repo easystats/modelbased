@@ -134,7 +134,6 @@ estimate_contrasts <- function(model,
 }
 
 
-
 # Table formatting emmeans ----------------------------------------------------
 
 
@@ -172,7 +171,6 @@ estimate_contrasts <- function(model,
 }
 
 
-
 # Table formatting marginal effects -------------------------------------------
 
 
@@ -189,7 +187,6 @@ estimate_contrasts <- function(model,
   )
 
   if (!is.null(method) && is.character(method) && method %in% valid_methods) {
-
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
     # These are examples of what {marginaleffects} returns, a single parmater

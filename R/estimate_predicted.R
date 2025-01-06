@@ -417,7 +417,6 @@ estimate_relation <- function(model,
 }
 
 
-
 # Utils -------------------------------------------------------------------
 
 #' @keywords internal
