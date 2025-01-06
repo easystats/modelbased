@@ -7,6 +7,7 @@
 #'
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
+#' @inheritParams estimate_expectation
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random

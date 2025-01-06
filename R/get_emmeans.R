@@ -21,6 +21,7 @@
 #' here will be collapsed and "averaged" over (the effect will be estimated
 #' across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @inheritParams estimate_expectation
 #'
 #' @examples
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)

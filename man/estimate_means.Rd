@@ -31,6 +31,16 @@ variable. Thus for a logistic model, \code{"none"} will give estimations express
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities.}
 
+\item{predict}{This parameter controls what is predicted. In most cases, it
+is changed automatically when using the different functions such as
+\code{estimate_expectation()}, \code{estimate_prediction()}, \code{estimate_link()} or
+\code{estimate_relation()}. The only time you might be interested in manually
+changing it is to estimate other distributional parameters (called "dpar" in
+other packages) - for instance when using complex formulae in \code{brms} models.
+The \code{predict} argument can take the value of the parameter you want to
+estimate, for instance \code{"sigma"}, \code{"kappa"}, etc. This argument gets passed
+to \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
