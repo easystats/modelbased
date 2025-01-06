@@ -17,19 +17,17 @@
   valid_types <- .typedic$type[.typedic$class == model_class]
 
   # check if user supplied type-argument
-  if (!is.null(dots$type)) {
-    if (!dots$type %in% valid_types) {
-      insight::format_error(paste0(
-        "The option provided in the `type` argument is not recognized.",
-        " Valid options are: ",
-        datawizard::text_concatenate(valid_types, enclose = "`"),
-        "."
-      ))
-    } else {
-      type <- dots$type
-    }
-  } else {
+  if (is.null(dots$type)) {
     type <- valid_types[1]
+  } else if (!dots$type %in% valid_types) {
+    insight::format_error(paste0(
+      "The option provided in the `type` argument is not recognized.",
+      " Valid options are: ",
+      datawizard::text_concatenate(valid_types, enclose = "`"),
+      "."
+    ))
+  } else {
+    type <- dots$type
   }
 
   # return default type

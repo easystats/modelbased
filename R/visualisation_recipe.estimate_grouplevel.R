@@ -32,31 +32,40 @@ visualisation_recipe.estimate_grouplevel <- function(x,
                                                      facet_wrap = NULL,
                                                      labs = NULL,
                                                      ...) {
-  data <- as.data.frame(x)
+  my_data <- as.data.frame(x)
   # Fix order so that it's plotted with sorted levels
-  data$Level <- factor(data$Level, levels = sort(.to_numeric(unique(data$Level))))
+  my_data$Level <- factor(my_data$Level, levels = sort(.to_numeric(unique(my_data$Level))))
 
   layers <- list()
 
   # Main aesthetics -----------------
   color <- NULL
-  if (length(unique(data$Group)) > 1) color <- "Group"
+  if (length(unique(my_data$Group)) > 1) color <- "Group"
   y <- "Coefficient"
   x1 <- "Level"
 
   # Layers -----------------------
   l <- 1
   # Horizontal Line
-  layers[[paste0("l", l)]] <- .visualisation_grouplevel_hline(data, x1, hline = hline)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_hline(
+    data = my_data,
+    x1,
+    hline = hline
+  )
   l <- l + 1
   # Point range
-  layers[[paste0("l", l)]] <- .visualisation_grouplevel_pointrange(data, x1, color, pointrange = pointrange)
+  layers[[paste0("l", l)]] <- .visualisation_grouplevel_pointrange(
+    data = my_data,
+    x1,
+    color,
+    pointrange = pointrange
+  )
   l <- l + 1
   # Flip coord
   layers[[paste0("l", l)]] <- list(geom = "coord_flip")
   l <- l + 1
   # Facet wrap
-  if (length(unique(data$Parameter)) > 1) {
+  if (length(unique(my_data$Parameter)) > 1) {
     layers[[paste0("l", l)]] <- .visualisation_grouplevel_facet_wrap(facet_wrap = facet_wrap)
     l <- l + 1
   }
@@ -65,7 +74,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
 
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
-  attr(layers, "data") <- data
+  attr(layers, "data") <- my_data
   layers
 }
 

@@ -5,7 +5,7 @@ test_that("estimate_means - mgcv gam", {
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
   estim <- suppressMessages(estimate_means(model))
-  expect_equal(dim(estim), c(3, 5))
+  expect_identical(dim(estim), c(3L, 5L))
 })
 
 test_that("estimate_contrasts - mgcv gam", {
@@ -15,7 +15,7 @@ test_that("estimate_contrasts - mgcv gam", {
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
   estim <- suppressMessages(estimate_contrasts(model))
-  expect_equal(dim(estim), c(3, 9))
+  expect_identical(dim(estim), c(3L, 9L))
 })
 
 test_that("estimate_expectation - mgcv gam", {
@@ -25,7 +25,7 @@ test_that("estimate_expectation - mgcv gam", {
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
 
   estim <- suppressMessages(estimate_expectation(model))
-  expect_equal(dim(estim), c(150, 7))
+  expect_identical(dim(estim), c(150L, 7L))
 })
 
 test_that("estimate_link - mgcv gam", {
