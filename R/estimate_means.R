@@ -56,16 +56,17 @@
 estimate_means <- function(model,
                            by = "auto",
                            transform = "response",
+                           predict = "response",
                            ci = 0.95,
                            backend = "emmeans",
                            ...) {
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by, transform = transform, ...)
+    estimated <- get_emmeans(model, by, transform, predict, ...)
     means <- .format_emmeans_means(estimated, model, ci, transform, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by, transform = transform, ci = ci, ...)
+    estimated <- get_marginalmeans(model, by, transform, predict, ci, ...)
     means <- .format_marginaleffects_means(estimated, model, transform, ...)
   }
 

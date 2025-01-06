@@ -28,9 +28,9 @@ model_emcontrasts(
   ...
 )
 
-get_emmeans(model, by = "auto", transform = "response", ...)
+get_emmeans(model, by = "auto", transform = "response", predict = NULL, ...)
 
-model_emmeans(model, by = "auto", transform = "response", ...)
+model_emmeans(model, by = "auto", transform = "response", predict = NULL, ...)
 
 get_emtrends(model, trend = NULL, by = NULL, ...)
 

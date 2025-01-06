@@ -31,9 +31,23 @@ model_marginalcontrasts(
 
 get_marginaleffects(model, trend = NULL, by = NULL, ...)
 
-get_marginalmeans(model, by = "auto", transform = NULL, ci = 0.95, ...)
+get_marginalmeans(
+  model,
+  by = "auto",
+  transform = NULL,
+  predict = NULL,
+  ci = 0.95,
+  ...
+)
 
-model_marginalmeans(model, by = "auto", transform = NULL, ci = 0.95, ...)
+model_marginalmeans(
+  model,
+  by = "auto",
+  transform = NULL,
+  predict = NULL,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}

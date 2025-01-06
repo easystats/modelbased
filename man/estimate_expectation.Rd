@@ -5,13 +5,13 @@
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
-\alias{estimate_parameters}
 \title{Model-based response estimates and uncertainty}
 \usage{
 estimate_expectation(
   model,
   data = NULL,
   by = NULL,
+  predict = "expectation",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -21,6 +21,7 @@ estimate_link(
   model,
   data = "grid",
   by = NULL,
+  predict = "link",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -30,6 +31,7 @@ estimate_prediction(
   model,
   data = NULL,
   by = NULL,
+  predict = "prediction",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -39,16 +41,7 @@ estimate_relation(
   model,
   data = "grid",
   by = NULL,
-  ci = 0.95,
-  keep_iterations = FALSE,
-  ...
-)
-
-estimate_parameters(
-  model,
-  data = "grid",
-  parameter = "sigma",
-  by = NULL,
+  predict = "expectation",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -68,6 +61,8 @@ types). The \code{by} argument will be used to create a data grid via
 \code{insight::get_datagrid()}, which will then be used as \code{data} argument. Thus,
 you cannot specify both \code{data} and \code{by} but only of these two arguments.}
 
+\item{predict}{to do...}
+
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
@@ -78,10 +73,6 @@ running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and
 \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
-
-\item{parameter}{Name of the auxiliary parameter to estimate. Defaults to
-\code{"sigma"}, but can be any other value that is usually accepted by the \code{dpar}
-argument.}
 }
 \value{
 A data frame of predicted values and uncertainty intervals, with

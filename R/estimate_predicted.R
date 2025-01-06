@@ -143,9 +143,7 @@
 #' types). The `by` argument will be used to create a data grid via
 #' `insight::get_datagrid()`, which will then be used as `data` argument. Thus,
 #' you cannot specify both `data` and `by` but only of these two arguments.
-#' @param parameter Name of the auxiliary parameter to estimate. Defaults to
-#' `"sigma"`, but can be any other value that is usually accepted by the `dpar`
-#' argument.
+#' @param predict to do...
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -199,6 +197,7 @@
 estimate_expectation <- function(model,
                                  data = NULL,
                                  by = NULL,
+                                 predict = "expectation",
                                  ci = 0.95,
                                  keep_iterations = FALSE,
                                  ...) {
@@ -208,7 +207,7 @@ estimate_expectation <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "expectation",
+    predict = predict,
     ...
   )
 }
@@ -219,6 +218,7 @@ estimate_expectation <- function(model,
 estimate_link <- function(model,
                           data = "grid",
                           by = NULL,
+                          predict = "link",
                           ci = 0.95,
                           keep_iterations = FALSE,
                           ...) {
@@ -233,7 +233,7 @@ estimate_link <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "link",
+    predict = predict,
     ...
   )
 }
@@ -243,6 +243,7 @@ estimate_link <- function(model,
 estimate_prediction <- function(model,
                                 data = NULL,
                                 by = NULL,
+                                predict = "prediction",
                                 ci = 0.95,
                                 keep_iterations = FALSE,
                                 ...) {
@@ -252,7 +253,7 @@ estimate_prediction <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "prediction",
+    predict = predict,
     ...
   )
 }
@@ -262,6 +263,7 @@ estimate_prediction <- function(model,
 estimate_relation <- function(model,
                               data = "grid",
                               by = NULL,
+                              predict = "expectation",
                               ci = 0.95,
                               keep_iterations = FALSE,
                               ...) {
@@ -276,29 +278,7 @@ estimate_relation <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "expectation",
-    ...
-  )
-}
-
-
-#' @rdname estimate_expectation
-#' @export
-estimate_parameters <- function(model,
-                                data = "grid",
-                                parameter = "sigma",
-                                by = NULL,
-                                ci = 0.95,
-                                keep_iterations = FALSE,
-                                ...) {
-  .estimate_predicted(
-    model,
-    data = data,
-    by = by,
-    ci = ci,
-    keep_iterations = keep_iterations,
-    predict = "expectation",
-    dpar = parameter,
+    predict = predict,
     ...
   )
 }

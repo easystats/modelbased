@@ -46,13 +46,13 @@
 get_emmeans <- function(model,
                         by = "auto",
                         transform = "response",
+                        predict = NULL,
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
   my_args <- .guess_emmeans_arguments(model, by, ...)
-
 
   # Run emmeans
   estimated <- emmeans::emmeans(

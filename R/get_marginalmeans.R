@@ -44,6 +44,7 @@
 get_marginalmeans <- function(model,
                               by = "auto",
                               transform = NULL,
+                              predict = NULL,
                               ci = 0.95,
                               ...) {
   # check if available
@@ -54,7 +55,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, transform, ...)
+  type <- .get_type_argument(model, transform, predict, ...)
 
   # setup arguments
   dg_args <- list(
@@ -87,6 +88,10 @@ get_marginalmeans <- function(model,
     df = dof,
     type = type
   )
+  # handle distributional parameters
+  if (identical(predict, "sigma") && inherits(model, "brmsfit")) {
+    fun_args$dpar <- "sigma"
+  }
   # add user-arguments from "...", but remove those arguments that are already set
   dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))

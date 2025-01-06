@@ -8,6 +8,7 @@ estimate_means(
   model,
   by = "auto",
   transform = "response",
+  predict = "response",
   ci = 0.95,
   backend = "emmeans",
   ...

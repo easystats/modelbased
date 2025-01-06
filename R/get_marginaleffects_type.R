@@ -4,7 +4,7 @@
   model_class <- class(model)[1]
 
   # no transformation always returns link-scale
-  if (identical(transform, "none")) {
+  if (identical(transform, "none") || identical(predict, "link")) {
     return("link")
   }
 
