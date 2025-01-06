@@ -56,19 +56,36 @@
 #' @export
 estimate_means <- function(model,
                            by = "auto",
-                           transform = "response",
                            predict = "response",
                            ci = 0.95,
                            backend = "emmeans",
+                           transform,
                            ...) {
+  ## TODO: remove deprecation warning later
+  if (!missing(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by, transform, predict, ...)
-    means <- .format_emmeans_means(estimated, model, ci, transform, ...)
+    estimated <- get_emmeans(model, by = by, predict = predict, ...)
+    means <- .format_emmeans_means(
+      model,
+      estimated = estimated,
+      ci = ci,
+      predict = predict,
+      ...
+    )
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalmeans(model, by, transform, predict, ci, ...)
-    means <- .format_marginaleffects_means(estimated, model, transform, ...)
+    means <- .format_marginaleffects_means(
+      model,
+      estimated = estimated,
+      predict = predict,
+      ...
+    )
   }
 
 

@@ -8,12 +8,16 @@
 #' `estimate_*()` series of functions.
 #'
 #' @param model A statistical model.
-#' @param transform Can be used to easily modulate the `type` argument in
-#' `marginaleffects::avg_predictions()`. Can be `"none"` or `"response"`.
-#' `"none"` will leave the values on scale of the linear predictors.
+#' @param predict Can be used to easily modulate the `type` argument in
+#' `marginaleffects::avg_predictions()`. Can be `"link"` or `"response"`.
+#' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` will transform them on scale of the response variable. Thus for
-#' a logistic model, `"none"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities.
+#' a logistic model, `"link"` will give estimations expressed in log-odds
+#' (probabilities on logit scale) and `"response"` in terms of probabilities. To
+#' predict distributional parameters (called "dpar" in other packages), for
+#' instance when using complex formulae in `brms` models, the `predict` argument
+#' can take the value of the parameter you want to estimate, for instance
+#' `"sigma"`, `"kappa"`, etc.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #' / mean / contrasts. Other predictors of the model that are not included
 #' here will be collapsed and "averaged" over (the effect will be estimated
@@ -21,6 +25,7 @@
 #' @param ci Level for confidence intervals.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
 #' or [marginaleffects::avg_predictions()].
+#' @param transform Deprecated, please use `predict` instead.
 #'
 #' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -43,19 +48,25 @@
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
-                              transform = NULL,
-                              predict = NULL,
+                              predict = "response",
                               ci = 0.95,
+                              transform,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
 
+  ## TODO: remove deprecation warning later
+  if (!missing(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, transform, predict, ...)
+  type <- .get_type_argument(model, predict, ...)
 
   # setup arguments
   dg_args <- list(
@@ -120,7 +131,7 @@ model_marginalmeans <- get_marginalmeans
 
 
 #' @keywords internal
-.format_marginaleffects_means <- function(means, model, transform = NULL, ...) {
+.format_marginaleffects_means <- function(means, model, predict = NULL, ...) {
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
@@ -134,7 +145,7 @@ model_marginalmeans <- get_marginalmeans
   } else {
     remove_column <- "p"
     # estimate name
-    if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
+    if (!identical(predict, "none") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
       estimate_name <- "Mean"

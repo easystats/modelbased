@@ -1,10 +1,10 @@
 #' @keywords internal
-.get_type_argument <- function(model, transform = NULL, predict = NULL, ...) {
+.get_type_argument <- function(model, predict = NULL, ...) {
   dots <- list(...)
   model_class <- class(model)[1]
 
   # no transformation always returns link-scale
-  if (identical(transform, "none") || identical(predict, "link")) {
+  if (identical(predict, "link")) {
     return("link")
   }
 
@@ -16,22 +16,32 @@
   # extract all valid types for model class
   valid_types <- .typedic$type[.typedic$class == model_class]
 
-  # check if user supplied type-argument
-  if (is.null(dots$type)) {
-    type <- valid_types[1]
-  } else if (!dots$type %in% valid_types) {
+  # check if user supplied type- or predict argument, and if it's valid
+  if (!is.null(dots$type) && !dots$type %in% valid_types) {
+    # if not, indicate wrong argument
+    predict <- NA
+    error_arg <- "type"
+  } else if (!is.null(predict) && !predict %in% valid_types) {
+    # if not, indicate wrong argument
+    predict <- NA
+    error_arg <- "predict"
+  }
+
+  if (is.na(predict)) {
     insight::format_error(paste0(
-      "The option provided in the `type` argument is not recognized.",
+      "The option provided in the `", error_arg, "` argument is not recognized.",
       " Valid options are: ",
       datawizard::text_concatenate(valid_types, enclose = "`"),
       "."
     ))
-  } else {
-    type <- dots$type
   }
 
   # return default type
-  type
+  if (is.null(dots$type)) {
+    predict
+  } else {
+    dots$type
+  }
 }
 
 

@@ -48,8 +48,6 @@ estimate_relation(
 )
 }
 \arguments{
-\item{model}{A statistical model.}
-
 \item{data}{A data frame with model's predictors to estimate the response. If
 \code{NULL}, the model's data is used. If \code{"grid"}, the model matrix is obtained
 (through \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).}
@@ -71,7 +69,8 @@ The \code{predict} argument can take the value of the parameter you want to
 estimate, for instance \code{"sigma"}, \code{"kappa"}, etc. This argument gets passed
 to \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Value or vector of probability of the CI (between 0 and 1)
+to be estimated. Default to \code{0.95} (\verb{95\%}).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

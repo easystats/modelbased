@@ -13,7 +13,7 @@ get_marginalcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  transform = "none",
+  predict = "response",
   method = "pairwise",
   ci = 0.95,
   ...
@@ -23,7 +23,7 @@ model_marginalcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  transform = "none",
+  predict = "response",
   method = "pairwise",
   ci = 0.95,
   ...
@@ -34,18 +34,18 @@ get_marginaleffects(model, trend = NULL, by = NULL, ...)
 get_marginalmeans(
   model,
   by = "auto",
-  transform = NULL,
-  predict = NULL,
+  predict = "response",
   ci = 0.95,
+  transform,
   ...
 )
 
 model_marginalmeans(
   model,
   by = "auto",
-  transform = NULL,
-  predict = NULL,
+  predict = "response",
   ci = 0.95,
+  transform,
   ...
 )
 }
@@ -60,12 +60,16 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{transform}{Can be used to easily modulate the \code{type} argument in
-\code{marginaleffects::avg_predictions()}. Can be \code{"none"} or \code{"response"}.
-\code{"none"} will leave the values on scale of the linear predictors.
+\item{predict}{Can be used to easily modulate the \code{type} argument in
+\code{marginaleffects::avg_predictions()}. Can be \code{"link"} or \code{"response"}.
+\code{"link"} will leave the values on scale of the linear predictors.
 \code{"response"} will transform them on scale of the response variable. Thus for
-a logistic model, \code{"none"} will give estimations expressed in log-odds
-(probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+a logistic model, \code{"link"} will give estimations expressed in log-odds
+(probabilities on logit scale) and \code{"response"} in terms of probabilities. To
+predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in \code{brms} models, the \code{predict} argument
+can take the value of the parameter you want to estimate, for instance
+\code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{method}{Contrast method.}
 
@@ -77,15 +81,7 @@ or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
 
-\item{predict}{This parameter controls what is predicted. In most cases, it
-is changed automatically when using the different functions such as
-\code{estimate_expectation()}, \code{estimate_prediction()}, \code{estimate_link()} or
-\code{estimate_relation()}. The only time you might be interested in manually
-changing it is to estimate other distributional parameters (called "dpar" in
-other packages) - for instance when using complex formulae in \code{brms} models.
-The \code{predict} argument can take the value of the parameter you want to
-estimate, for instance \code{"sigma"}, \code{"kappa"}, etc. This argument gets passed
-to \code{\link[insight:get_predicted]{insight::get_predicted()}}.}
+\item{transform}{Deprecated, please use \code{predict} instead.}
 }
 \description{
 The \code{get_marginalmeans()} function is a wrapper to facilitate the usage of

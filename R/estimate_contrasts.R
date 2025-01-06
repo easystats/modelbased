@@ -74,30 +74,37 @@
 estimate_contrasts <- function(model,
                                contrast = NULL,
                                by = NULL,
-                               transform = "none",
+                               predict = "link",
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
                                backend = "emmeans",
+                               transform,
                                ...) {
+  ## TODO: remove deprecation warning later
+  if (!missing(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
+      predict = predict,
       method = method,
       adjust = p_adjust,
       ...
     )
-    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    out <- .format_emmeans_contrasts(model, estimated, ci, predict, p_adjust, ...)
     info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
+      predict = predict,
       method = method,
       p_adjust = p_adjust,
       ci = ci,
@@ -122,7 +129,7 @@ estimate_contrasts <- function(model,
   attr(out, "model") <- model
   attr(out, "response") <- insight::find_response(model)
   attr(out, "ci") <- ci
-  attr(out, "transform") <- transform
+  attr(out, "transform") <- predict
   attr(out, "at") <- info$by
   attr(out, "by") <- info$by
   attr(out, "contrast") <- info$contrast
@@ -137,11 +144,11 @@ estimate_contrasts <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
+.format_emmeans_contrasts <- function(model, estimated, ci, predict, p_adjust, ...) {
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
-    out <- .clean_names_bayesian(out, model, transform, type = "contrast")
+    out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
     out <- as.data.frame(merge(
       as.data.frame(estimated),

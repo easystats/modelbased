@@ -55,6 +55,7 @@ Suggests:
     ggeffects,
     ggplot2,
     glmmTMB,
+    httr2,
     knitr,
     lme4,
     logspline,
