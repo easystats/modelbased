@@ -54,14 +54,23 @@ get_emmeans <- function(model,
   # Guess arguments
   my_args <- .guess_emmeans_arguments(model, by, ...)
 
-  # Run emmeans
-  estimated <- emmeans::emmeans(
+  # setup arguments
+  fun_args <- list(
     model,
     specs = my_args$emmeans_specs,
     at = my_args$emmeans_at,
-    type = transform,
-    ...
+    type = transform
   )
+  # handle distributional parameters
+  if (!is.null(predict) && predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
+  }
+  # add dots
+  dots <- list(...)
+  fun_args <- insight::compact_list(c(fun_args, dots))
+
+  # Run emmeans
+  estimated <- suppressWarnings(do.call(emmeans::emmeans, fun_args))
 
   # Special behaviour for transformations #138 (see below)
   if ("retransform" %in% names(my_args) && length(my_args$retransform) > 0) {

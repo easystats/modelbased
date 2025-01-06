@@ -89,8 +89,8 @@ get_marginalmeans <- function(model,
     type = type
   )
   # handle distributional parameters
-  if (identical(predict, "sigma") && inherits(model, "brmsfit")) {
-    fun_args$dpar <- "sigma"
+  if (!is.null(predict) && predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
   }
   # add user-arguments from "...", but remove those arguments that are already set
   dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
