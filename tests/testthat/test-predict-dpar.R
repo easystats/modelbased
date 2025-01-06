@@ -5,6 +5,7 @@ test_that("estimate_means and estimate_relation - dpar", {
   skip_if_not_installed("marginaleffects")
   skip_if_not_installed("datawizard")
   skip_if_not_installed("httr2")
+  skip_if_not_installed("collapse")
 
   m <- insight::download_model("brms_sigma_2")
   skip_if(is.null(m))

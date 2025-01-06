@@ -47,6 +47,7 @@ Suggests:
     BH,
     brms,
     coda,
+    collapse,
     correlation,
     emmeans (>= 1.10.2),
     Formula,
