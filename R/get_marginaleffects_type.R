@@ -1,5 +1,5 @@
 #' @keywords internal
-.get_type_argument <- function(model, transform = NULL, ...) {
+.get_type_argument <- function(model, transform = NULL, predict = NULL, ...) {
   dots <- list(...)
   model_class <- class(model)[1]
 
