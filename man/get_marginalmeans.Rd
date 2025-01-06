@@ -13,7 +13,7 @@ get_marginalcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "response",
+  predict = NULL,
   method = "pairwise",
   ci = 0.95,
   ...
@@ -23,7 +23,7 @@ model_marginalcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "response",
+  predict = NULL,
   method = "pairwise",
   ci = 0.95,
   ...

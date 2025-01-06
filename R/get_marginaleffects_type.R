@@ -1,16 +1,10 @@
 #' @keywords internal
 .get_marginaleffects_type_argument <- function(model, predict = NULL, ...) {
   dots <- list(...)
-  model_class <- class(model)[1]
 
   # no transformation always returns link-scale
   if (identical(predict, "link")) {
     return("link")
-  }
-
-  # for unrecognized model classes, return "response"
-  if (!model_class %in% .typedic$class) {
-    return("response")
   }
 
   # handle distributional parameters
@@ -19,7 +13,7 @@
   }
 
   # extract all valid types for model class
-  valid_types <- .typedic$type[.typedic$class == model_class]
+  valid_types <- .valid_marginaleffects_types(model)
 
   # check if user supplied type- or predict argument, and if it's valid
   if (!is.null(dots$type) && !dots$type %in% valid_types) {
@@ -51,6 +45,18 @@
   } else {
     dots$type
   }
+}
+
+
+# return default "type" argument - this differs, depending on model class
+.valid_marginaleffects_types <- function(model) {
+  model_class <- class(model)[1]
+  # for unrecognized model classes, return "response"
+  if (!model_class %in% .typedic$class) {
+    return("response")
+  }
+  # extract all valid types for model class
+  .typedic$type[.typedic$class == model_class]
 }
 
 

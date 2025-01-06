@@ -89,10 +89,6 @@ estimate_contrasts <- function(model,
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    if (is.null(predict)) {
-      # set default
-      predict <- "link"
-    }
     estimated <- get_emcontrasts(model,
       contrast = contrast,
       by = by,
@@ -101,14 +97,10 @@ estimate_contrasts <- function(model,
       adjust = p_adjust,
       ...
     )
-    out <- .format_emmeans_contrasts(model, estimated, ci, predict, p_adjust, ...)
+    out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
     info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    if (is.null(predict)) {
-      # set default
-      predict <- "response"
-    }
     estimated <- get_marginalcontrasts(model,
       contrast = contrast,
       by = by,
@@ -152,7 +144,8 @@ estimate_contrasts <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-.format_emmeans_contrasts <- function(model, estimated, ci, predict, p_adjust, ...) {
+.format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
+  predict <- attributes(estimated)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
@@ -190,6 +183,7 @@ estimate_contrasts <- function(model,
 
 
 .format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
+  predict <- attributes(estimated)$predict
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
   focal_terms <- attributes(estimated)$focal_terms
