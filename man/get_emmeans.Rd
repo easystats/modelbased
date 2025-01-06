@@ -14,7 +14,7 @@ get_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "none",
+  predict = "link",
   method = "pairwise",
   transform,
   ...
@@ -24,7 +24,7 @@ model_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "none",
+  predict = "link",
   method = "pairwise",
   transform,
   ...

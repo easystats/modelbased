@@ -173,7 +173,7 @@ model_emmeans <- get_emmeans
 
 
 .get_emmeans_type_argument <- function(model, predict, ...) {
-  if (predict == "link") {
+  if (is.null(predict) || predict == "link") {
     predict <- "none"
   }
   predict

@@ -25,7 +25,7 @@
 get_emcontrasts <- function(model,
                             contrast = NULL,
                             by = NULL,
-                            predict = "none",
+                            predict = "link",
                             method = "pairwise",
                             transform,
                             ...) {

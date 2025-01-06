@@ -74,7 +74,7 @@
 estimate_contrasts <- function(model,
                                contrast = NULL,
                                by = NULL,
-                               predict = "link",
+                               predict = NULL,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
@@ -89,6 +89,10 @@ estimate_contrasts <- function(model,
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
+    if (is.null(predict)) {
+      # set default
+      predict <- "link"
+    }
     estimated <- get_emcontrasts(model,
       contrast = contrast,
       by = by,
@@ -101,6 +105,10 @@ estimate_contrasts <- function(model,
     info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
+    if (is.null(predict)) {
+      # set default
+      predict <- "response"
+    }
     estimated <- get_marginalcontrasts(model,
       contrast = contrast,
       by = by,

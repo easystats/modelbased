@@ -8,7 +8,7 @@ estimate_contrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "link",
+  predict = NULL,
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",

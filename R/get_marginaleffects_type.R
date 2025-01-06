@@ -43,7 +43,11 @@
 
   # return default type
   if (is.null(dots$type)) {
-    predict
+    if (is.null(predict)) {
+      "response"
+    } else {
+      predict
+    }
   } else {
     dots$type
   }
