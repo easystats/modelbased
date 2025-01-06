@@ -16,7 +16,7 @@ get_emcontrasts(
   by = NULL,
   predict = "link",
   method = "pairwise",
-  transform,
+  transform = NULL,
   ...
 )
 
@@ -26,13 +26,13 @@ model_emcontrasts(
   by = NULL,
   predict = "link",
   method = "pairwise",
-  transform,
+  transform = NULL,
   ...
 )
 
-get_emmeans(model, by = "auto", predict = NULL, transform, ...)
+get_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
 
-model_emmeans(model, by = "auto", predict = NULL, transform, ...)
+model_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
 
 get_emtrends(model, trend = NULL, by = NULL, ...)
 

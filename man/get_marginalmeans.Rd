@@ -36,7 +36,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  transform,
+  transform = NULL,
   ...
 )
 
@@ -45,7 +45,7 @@ model_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  transform,
+  transform = NULL,
   ...
 )
 }

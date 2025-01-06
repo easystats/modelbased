@@ -59,10 +59,10 @@ estimate_means <- function(model,
                            predict = NULL,
                            ci = 0.95,
                            backend = "emmeans",
-                           transform,
+                           transform = NULL,
                            ...) {
   ## TODO: remove deprecation warning later
-  if (!missing(transform)) {
+  if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }

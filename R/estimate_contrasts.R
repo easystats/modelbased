@@ -79,10 +79,10 @@ estimate_contrasts <- function(model,
                                p_adjust = "holm",
                                method = "pairwise",
                                backend = "emmeans",
-                               transform,
+                               transform = NULL,
                                ...) {
   ## TODO: remove deprecation warning later
-  if (!missing(transform)) {
+  if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }

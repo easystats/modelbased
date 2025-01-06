@@ -27,13 +27,13 @@ get_emcontrasts <- function(model,
                             by = NULL,
                             predict = "link",
                             method = "pairwise",
-                            transform,
+                            transform = NULL,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
   ## TODO: remove deprecation warning later
-  if (!missing(transform)) {
+  if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }

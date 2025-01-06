@@ -10,7 +10,7 @@ estimate_means(
   predict = NULL,
   ci = 0.95,
   backend = "emmeans",
-  transform,
+  transform = NULL,
   ...
 )
 }

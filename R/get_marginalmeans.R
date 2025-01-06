@@ -50,14 +50,14 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              transform,
+                              transform = NULL,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
 
   ## TODO: remove deprecation warning later
-  if (!missing(transform)) {
+  if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
