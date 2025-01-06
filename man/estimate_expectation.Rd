@@ -207,13 +207,6 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 \item By default, values are computed using a reference grid spanning the
 observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
 }
-\item \strong{\code{estimate_parameters()}}:
-\itemize{
-\item Estimates the \strong{expected values} of auxiliary parameters.
-\item The uncertainty interval is a \emph{confidence interval}.
-\item By default, values are computed using a reference grid spanning the
-observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
-}
 }
 }
 
