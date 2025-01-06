@@ -69,13 +69,16 @@ get_emmeans <- function(model,
   fun_args <- list(
     model,
     specs = my_args$emmeans_specs,
-    at = my_args$emmeans_at,
-    type = predict
+    at = my_args$emmeans_at
   )
+
   # handle distributional parameters
-  if (!is.null(predict) && predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
   }
+
   # add dots
   dots <- list(...)
   fun_args <- insight::compact_list(c(fun_args, dots))
@@ -93,6 +96,7 @@ get_emmeans <- function(model,
 
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
+  attr(estimated, "predict") <- predict
   estimated
 }
 

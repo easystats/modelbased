@@ -13,6 +13,11 @@
     return("response")
   }
 
+  # handle distributional parameters
+  if (!is.null(predict) && predict %in% .brms_aux_elements()) {
+    return(predict)
+  }
+
   # extract all valid types for model class
   valid_types <- .typedic$type[.typedic$class == model_class]
 

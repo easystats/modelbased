@@ -66,7 +66,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, predict, ...)
+  predict <- .get_type_argument(model, predict, ...)
 
   # setup arguments
   dg_args <- list(
@@ -96,13 +96,16 @@ get_marginalmeans <- function(model,
     by = at_specs$varname,
     newdata = as.data.frame(datagrid),
     conf_level = ci,
-    df = dof,
-    type = type
+    df = dof
   )
+
   # handle distributional parameters
-  if (!is.null(predict) && predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
   }
+
   # add user-arguments from "...", but remove those arguments that are already set
   dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
@@ -119,6 +122,7 @@ get_marginalmeans <- function(model,
   attr(means, "by") <- my_args$by
   attr(means, "focal_terms") <- at_specs$varname
   attr(means, "datagrid") <- datagrid
+  attr(means, "predict") <- predict
   means
 }
 
@@ -131,11 +135,11 @@ model_marginalmeans <- get_marginalmeans
 
 
 #' @keywords internal
-.format_marginaleffects_means <- function(means, model, predict = NULL, ...) {
+.format_marginaleffects_means <- function(model, estimated, predict = NULL, ...) {
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
-  non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
+  non_focal <- setdiff(colnames(model_data), attr(estimated, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
 
   # do we have contrasts? For contrasts, we want to keep p-values
@@ -145,7 +149,7 @@ model_marginalmeans <- get_marginalmeans
   } else {
     remove_column <- "p"
     # estimate name
-    if (!identical(predict, "none") && (info$is_binomial || info$is_bernoulli)) {
+    if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
       estimate_name <- "Mean"
@@ -153,7 +157,7 @@ model_marginalmeans <- get_marginalmeans
   }
 
   # Format
-  params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
+  params <- suppressWarnings(parameters::model_parameters(estimated, verbose = FALSE))
   # add ci?
   params <- .add_contrasts_ci(is_contrast_analysis, params)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
@@ -165,8 +169,8 @@ model_marginalmeans <- get_marginalmeans
   params <- datawizard::data_restoretype(params, model_data)
 
   # Store info
-  attr(params, "at") <- attr(means, "by")
-  attr(params, "by") <- attr(means, "by")
+  attr(params, "at") <- attr(estimated, "by")
+  attr(params, "by") <- attr(estimated, "by")
   params
 }
 

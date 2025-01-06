@@ -79,7 +79,7 @@ estimate_means <- function(model,
     )
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by, transform, predict, ci, ...)
+    estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
     means <- .format_marginaleffects_means(
       model,
       estimated = estimated,
@@ -97,7 +97,7 @@ estimate_means <- function(model,
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
-  attr(means, "transform") <- transform
+  attr(means, "transform") <- predict
 
   attr(means, "coef_name") <- intersect(c("Mean", "Probability"), names(means))
 
