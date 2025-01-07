@@ -29,7 +29,7 @@ get_marginaleffects <- function(model,
     by <- by[!by %in% trend]
   }
 
-  datagrid <- insight::get_datagrid(model, by = by, ...)
+  datagrid <- insight::get_datagrid(model, by = by, verbose = FALSE, ...)
   at_specs <- attributes(datagrid)$at_specs
 
   # Compute stuff

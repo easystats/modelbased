@@ -74,7 +74,8 @@ get_marginalmeans <- function(model,
     model,
     by = my_args$by,
     factors = "all",
-    include_random = TRUE
+    include_random = TRUE,
+    verbose = FALSE
   )
   # always show all theoretical values by default
   if (is.null(dots$preserve_range)) {
