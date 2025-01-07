@@ -37,12 +37,12 @@
       if (insight::model_info(model)$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"
       } else if (!is.null(predict) && predict %in% .brms_aux_elements()) {
-        names(means)[names(means) == vars] <- .capitalize(predict)
+        names(means)[names(means) == vars] <- tools::toTitleCase(predict)
       } else {
         names(means)[names(means) == vars] <- "Mean"
       }
     } else if (predict %in% .brms_aux_elements()) {
-      names(means)[names(means) == vars] <- .capitalize(predict)
+      names(means)[names(means) == vars] <- tools::toTitleCase(predict)
     } else {
       names(means)[names(means) == vars] <- "Coefficient"
     }
@@ -54,9 +54,4 @@
   means$ROPE_high <- NULL
   means$Parameter <- NULL
   means
-}
-
-
-.capitalize <- function(x) {
-  paste0(toupper(substr(x, 1, 1)), substring(x, 2))
 }

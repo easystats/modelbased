@@ -150,7 +150,7 @@ get_marginalmeans <- function(model,
     # estimate name
     if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
       # for Bayesian models with distributional parameter
-      estimate_name <- .capitalize(predict_type)
+      estimate_name <- tools::toTitleCase(predict_type)
     } else if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
