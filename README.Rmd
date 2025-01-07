@@ -1,5 +1,5 @@
 ---
-output: 
+output:
   github_document:
     toc: false
     fig_width: 10.08
@@ -9,7 +9,7 @@ vignette: >
   %\VignetteIndexEntry{README}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 ---
 
@@ -54,14 +54,14 @@ Type | Source | Command
 Development | R-universe | `install.packages("modelbased", repos = "https://easystats.r-universe.dev")`
 
 Once you have downloaded the package, you can then load it using:
-  
+
 ```{r, eval=FALSE}
 library("modelbased")
 ```
 
 > **Tip**
 >
-> **Instead of `library(datawizard)`, use `library(easystats)`.**
+> **Instead of `library(modelbased)`, use `library(easystats)`.**
 > **This will make all features of the  easystats-ecosystem available.**
 >
 > **To stay updated, use `easystats::install_latest()`.**
@@ -140,7 +140,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
 - **Solution**: Estimate model-based means ("marginal means"). You can visualize them by plotting their confidence interval and the original data.
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
- 
+
 ```{r}
 # 1. The model
 model <- lm(Sepal.Width ~ Species, data = iris)
@@ -290,7 +290,7 @@ plot(random)
 - **Problem**:  You model a non-linear relationship using polynomials, splines or GAMs. You want to know which parts of the curve are significant positive or negative trends.
 - **Solution**: You can estimate the *derivative* of smooth using `estimate_slopes`.
 
-The two plots below represent the modeled (non-linear) effect estimated by the model, i.e., the relationship between the outcome and the predictor, as well as the "trend" (or slope) of that relationship at any given point. You can see that whenever the slope is negative, the effect is below 0, and vice versa, with some regions of the effect being significant (i.e., positive or negative with enough confidence) while the others denote regions where the relationship is rather flat.  
+The two plots below represent the modeled (non-linear) effect estimated by the model, i.e., the relationship between the outcome and the predictor, as well as the "trend" (or slope) of that relationship at any given point. You can see that whenever the slope is negative, the effect is below 0, and vice versa, with some regions of the effect being significant (i.e., positive or negative with enough confidence) while the others denote regions where the relationship is rather flat.
 
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html) for a detailed walkthrough on *marginal effects*.
 
@@ -373,7 +373,7 @@ plot(slopes)
 
 ## Visualize predictions with random effects
 
-Aside from plotting the coefficient of each random effect (as done [here](https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects)), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with `estimate_relation` and setting `include_random` to `TRUE`. 
+Aside from plotting the coefficient of each random effect (as done [here](https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects)), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with `estimate_relation` and setting `include_random` to `TRUE`.
 
 Let's model the reaction time with the number of days of sleep deprivation as fixed effect and the participants as random intercept.
 
