@@ -94,7 +94,7 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim1), c(3L, 9L))
   estim2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
   expect_identical(dim(estim2), c(3L, 9L))
-  # exp(estim1$Difference) == estim2$Difference
+  expect_true(all(estim1$Difference != estim2$Difference))
 
   # GLM - poisson
   dat <- data.frame(
