@@ -10,7 +10,7 @@
 #' @param model A statistical model.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()`. See
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Can be `"link"` (default for contrasts), `"response"` (default for means),
+#' Can be `"response"` (default), `"link"` or other option supported such as
 #' `"mu"`, `"unlink"`, `"log"`. `"link"` will leave the values on scale of the
 #' linear predictors. `"response"` will transform them on scale of the response
 #' variable. Thus for a logistic model, `"link"` will give estimations expressed
