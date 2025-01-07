@@ -174,6 +174,7 @@ get_emmeans <- function(model,
   if (is.null(predict)) {
     predict <- switch(type,
       means = "response",
+      contrast = "response",
       "none"
     )
   } else if (predict == "link") {
