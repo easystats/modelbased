@@ -90,10 +90,11 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model))
-  expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
-  expect_identical(dim(estim), c(3L, 9L))
+  estim1 <- suppressMessages(estimate_contrasts(model))
+  expect_identical(dim(estim1), c(3L, 9L))
+  estim2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  expect_identical(dim(estim2), c(3L, 9L))
+  # exp(estim1$Difference) == estim2$Difference
 
   # GLM - poisson
   dat <- data.frame(
