@@ -16,7 +16,7 @@
 
 - All `estimate_*()` functions get a `predict` argument, which can be used
   to modulate the type of transformation applied to the predictions (i.e. whether
-  predictions should be on the reponse scale, link scale, etc.). It can also
+  predictions should be on the response scale, link scale, etc.). It can also
   be used to predict auxiliary (distributional) parameters.
 
 - The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
