@@ -19,7 +19,7 @@ for predictions about individual cases. See below for details."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,6 +94,7 @@ for predictions about individual cases. See below for details.</p>
 <span>  <span class="va">model</span>,</span>
 <span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -103,6 +104,7 @@ for predictions about individual cases. See below for details.</p>
 <span>  <span class="va">model</span>,</span>
 <span>  data <span class="op">=</span> <span class="st">"grid"</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"link"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -112,6 +114,7 @@ for predictions about individual cases. See below for details.</p>
 <span>  <span class="va">model</span>,</span>
 <span>  data <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"prediction"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -121,6 +124,7 @@ for predictions about individual cases. See below for details.</p>
 <span>  <span class="va">model</span>,</span>
 <span>  data <span class="op">=</span> <span class="st">"grid"</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  predict <span class="op">=</span> <span class="st">"expectation"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -150,8 +154,21 @@ types). The <code>by</code> argument will be used to create a data grid via
 you cannot specify both <code>data</code> and <code>by</code> but only of these two arguments.</p></dd>
 
 
+<dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
+<dd><p>This parameter controls what is predicted (and gets internally
+passed to <code><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">insight::get_predicted()</a></code>). In most cases, you don't need to care
+about it: it is changed automatically according to the different predicting
+functions (i.e., <code>estimate_expectation()</code>, <code>estimate_prediction()</code>, <code>estimate_link()</code>
+or <code>estimate_relation()</code>). The only time you might be interested in manually
+changing it is to estimate other distributional parameters (called "dpar" in
+other packages) - for instance when using complex formulae in <code>brms</code> models.
+The <code>predict</code> argument can then be set to the parameter you want to
+estimate, for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
+
+
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
+<dd><p>Value or vector of probability of the CI (between 0 and 1)
+to be estimated. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
 
 
 <dt id="arg-keep-iterations">keep_iterations<a class="anchor" aria-label="anchor" href="#arg-keep-iterations"></a></dt>

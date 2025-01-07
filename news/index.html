@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -71,10 +71,13 @@
 <h3 id="breaking-changes-0-9-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
 <ul><li><p>Deprecated argument and function names have been removed.</p></li>
 <li><p>Argument <code>fixed</code> has been removed, as you can fix predictor at certain values using the <code>by</code> argument.</p></li>
+<li><p>Argument <code>transform</code> is deprecated. Please use <code>predict</code> instead.</p></li>
+<li><p>All <code>model_*()</code> alias names have been removed. Use the related <code>get_*()</code> functions instead.</p></li>
 </ul></div>
 <div class="section level3">
 <h3 id="major-changes-0-9-0">Major Changes<a class="anchor" aria-label="anchor" href="#major-changes-0-9-0"></a></h3>
-<ul><li><p>The <code>"marginaleffects"</code> backend for <code><a href="../reference/estimate_means.html">estimate_means()</a></code> is now fully implemented and no longer work-in-progress.</p></li>
+<ul><li><p>All <code>estimate_*()</code> functions get a <code>predict</code> argument, which can be used to modulate the type of transformation applied to the predictions (i.e. whether predictions should be on the response scale, link scale, etc.). It can also be used to predict auxiliary (distributional) parameters.</p></li>
+<li><p>The <code>"marginaleffects"</code> backend for <code><a href="../reference/estimate_means.html">estimate_means()</a></code> is now fully implemented and no longer work-in-progress.</p></li>
 <li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gains a <code>backend</code> argument. This defaults to <code>"emmeans"</code>, but can be set to <code>"marginaleffects"</code> to use features of that package to estimate contrasts and pairwise comparisons.</p></li>
 <li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> and related functions also get a <code>by</code> argument, as alternative to create a datagrid for the <code>data</code> argument.</p></li>
 </ul></div>
@@ -119,7 +122,7 @@
 <ul><li><p>General overhaul of the package.</p></li>
 <li><p>Entire refactoring of <code><a href="../reference/visualisation_matrix.html">visualisation_matrix()</a></code>.</p></li>
 <li><p>Option of standardizing/unstandardizing predictions, contrasts and means is now available via <code><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">standardize()</a></code> instead of via options.</p></li>
-<li><p>Introduction of <code><a href="../reference/get_emmeans.html">model_emmeans()</a></code> as a wrapper to easily create <code>emmeans</code> objects.</p></li>
+<li><p>Introduction of <code>model_emmeans()</code> as a wrapper to easily create <code>emmeans</code> objects.</p></li>
 <li><p><code><a href="../reference/describe_nonlinear.html">estimate_smooth()</a></code> transformed into <code><a href="../reference/describe_nonlinear.html">describe_nonlinear()</a></code> and made more explicit.</p></li>
 </ul></div>
     <div class="section level2">

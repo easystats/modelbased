@@ -17,7 +17,7 @@ estimate_*() series of functions."><meta property="og:image" content="https://ea
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,17 +91,7 @@ the organization and debugging, and end-users should rather use the
 <span>  <span class="va">model</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  transform <span class="op">=</span> <span class="st">"none"</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
-<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  <span class="va">...</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">model_marginalcontrasts</span><span class="op">(</span></span>
-<span>  <span class="va">model</span>,</span>
-<span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  transform <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -109,9 +99,14 @@ the organization and debugging, and end-users should rather use the
 <span></span>
 <span><span class="fu">get_marginaleffects</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_marginalmeans</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"auto"</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu">model_marginalmeans</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"auto"</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, ci <span class="op">=</span> <span class="fl">0.95</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_marginalmeans</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -134,17 +129,24 @@ here will be collapsed and "averaged" over (the effect will be estimated
 across them).</p></dd>
 
 
-<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Can be used to easily modulate the <code>type</code> argument in
-<code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code>. Can be <code>"none"</code> or <code>"response"</code>.
-<code>"none"</code> will leave the values on scale of the linear predictors.
-<code>"response"</code> will transform them on scale of the response variable. Thus for
-a logistic model, <code>"none"</code> will give estimations expressed in log-odds
-(probabilities on logit scale) and <code>"response"</code> in terms of probabilities.</p></dd>
+<code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code>. Can be <code>"link"</code>, <code>"response"</code> or any
+valid <code>type</code> option supported by <strong>marginaleffects</strong> (which depends on the
+model-class). <code>"link"</code> will leave the values on scale of the linear
+predictors. <code>"response"</code> will transform them on scale of the response
+variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
+in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in <code>brms</code> models, the
+<code>predict</code> argument can take the value of the parameter you want to estimate,
+for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Contrast method.</p></dd>
+<dd><p>Contrast method, respectively a formulation of the hypothesis
+to test. See <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.
+Will be passed to the <code>hypothesis</code> argument in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code>.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -159,6 +161,10 @@ or <code><a href="https://marginaleffects.com/man/r/predictions.html" class="ext
 <dt id="arg-trend">trend<a class="anchor" aria-label="anchor" href="#arg-trend"></a></dt>
 <dd><p>A character indicating the name of the variable
 for which to compute the slopes.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>Deprecated, please use <code>predict</code> instead.</p></dd>
 
 </dl></div>
 

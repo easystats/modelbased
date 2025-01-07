@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,7 +243,7 @@ be banned from psychological science.</p>
 <h3 id="post-hoc-comparison-tests">Post-hoc comparison tests<a class="anchor" aria-label="anchor" href="#post-hoc-comparison-tests"></a>
 </h3>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_emmeans.html">model_emmeans</a></span><span class="op">(</span><span class="va">results</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Condition"</span>, <span class="st">"Category"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<code class="sourceCode R"><span><span class="va">posthoc</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_emmeans.html">get_emmeans</a></span><span class="op">(</span><span class="va">results</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Condition"</span>, <span class="st">"Category"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/graphics/pairs.html" class="external-link">pairs</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">posthoc</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; contrast            | Coefficient |   SE |           95% CI | t(145) |      p
