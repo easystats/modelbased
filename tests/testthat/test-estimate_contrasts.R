@@ -233,3 +233,29 @@ test_that("estimate_contrasts - marginaleffects", {
   )
   expect_snapshot(print(out, zap_small = TRUE))
 })
+
+
+test_that("estimate_contrasts - marginaleffects", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("ggeffects")
+
+  data(iris)
+  dat <- iris
+  dat$y <- as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))
+  model <- glm(y ~ Species, family = "binomial", data = dat)
+
+  expect_message(estimate_contrasts(model), regex = "No variable was")
+
+  out1 <- suppressMessages(estimate_contrasts(model))
+  out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  pr <- ggeffects::predict_response(model, "Species")
+  out3 <- ggeffects::test_predictions(pr)
+
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$Difference, out3$Contrast, tolerance = 1e-4)
+
+  out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
+  out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
+  expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
+  expect_equal(out4$Difference, out3$Contrast, tolerance = 1e-4)
+})
