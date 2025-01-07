@@ -100,10 +100,6 @@ get_emmeans <- function(model,
   estimated
 }
 
-#' @rdname get_emmeans
-#' @export
-model_emmeans <- get_emmeans
-
 
 # =========================================================================
 # HELPERS  ----------------------------------------------------------------

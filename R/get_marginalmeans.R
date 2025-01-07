@@ -127,10 +127,6 @@ get_marginalmeans <- function(model,
   means
 }
 
-#' @rdname get_marginalmeans
-#' @export
-model_marginalmeans <- get_marginalmeans
-
 
 # Format ------------------------------------------------------------------
 

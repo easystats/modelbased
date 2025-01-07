@@ -3,10 +3,8 @@
 %   R/get_marginaleffects.R, R/get_marginalmeans.R
 \name{get_marginalcontrasts}
 \alias{get_marginalcontrasts}
-\alias{model_marginalcontrasts}
 \alias{get_marginaleffects}
 \alias{get_marginalmeans}
-\alias{model_marginalmeans}
 \title{Easy 'avg_predictions' and 'avg_slopes'}
 \usage{
 get_marginalcontrasts(
@@ -19,28 +17,9 @@ get_marginalcontrasts(
   ...
 )
 
-model_marginalcontrasts(
-  model,
-  contrast = NULL,
-  by = NULL,
-  predict = NULL,
-  method = "pairwise",
-  ci = 0.95,
-  ...
-)
-
 get_marginaleffects(model, trend = NULL, by = NULL, ...)
 
 get_marginalmeans(
-  model,
-  by = "auto",
-  predict = NULL,
-  ci = 0.95,
-  transform = NULL,
-  ...
-)
-
-model_marginalmeans(
   model,
   by = "auto",
   predict = NULL,

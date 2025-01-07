@@ -3,11 +3,8 @@
 %   R/get_emtrends.R
 \name{get_emcontrasts}
 \alias{get_emcontrasts}
-\alias{model_emcontrasts}
 \alias{get_emmeans}
-\alias{model_emmeans}
 \alias{get_emtrends}
-\alias{model_emtrends}
 \title{Easy 'emmeans' and 'emtrends'}
 \usage{
 get_emcontrasts(
@@ -20,23 +17,9 @@ get_emcontrasts(
   ...
 )
 
-model_emcontrasts(
-  model,
-  contrast = NULL,
-  by = NULL,
-  predict = "link",
-  method = "pairwise",
-  transform = NULL,
-  ...
-)
-
 get_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
 
-model_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
-
 get_emtrends(model, trend = NULL, by = NULL, ...)
-
-model_emtrends(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}

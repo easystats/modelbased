@@ -30,10 +30,6 @@ get_marginalcontrasts <- function(model,
   out
 }
 
-#' @rdname get_marginalmeans
-#' @export
-model_marginalcontrasts <- get_marginalcontrasts
-
 
 # p-value adjustment -------------------
 

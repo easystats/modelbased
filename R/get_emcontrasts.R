@@ -66,10 +66,6 @@ get_emcontrasts <- function(model,
   out
 }
 
-#' @rdname get_emmeans
-#' @export
-model_emcontrasts <- get_emcontrasts
-
 
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------
