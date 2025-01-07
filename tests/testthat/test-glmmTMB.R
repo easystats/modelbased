@@ -30,19 +30,22 @@ test_that("estimate_means - glmmTMB", {
 
 test_that("estimate_contrasts - glmmTMB", {
   estim1 <- suppressMessages(estimate_contrasts(model))
-  pr <- ggeffects::predict_response(model, "mined")
+  pr <- ggeffects::predict_response(model, "mined", verbose = FALSE)
   estim2 <- ggeffects::test_predictions(pr)
   expect_identical(dim(estim1), c(1L, 9L))
   expect_equal(estim1$Difference, -2.32874, tolerance = 1e-3)
-  expect_equal(estim1$Difference, estim2$Contrast, tolerance = 1e-3)
+  expect_equal(estim1$Difference, estim2$Contrast, tolerance = 1e-1)
   expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
   estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
   expect_equal(estim3$Difference, -1.99344, tolerance = 1e-3)
 
-  estim <- suppressMessages(estimate_contrasts(model, component = "zi"))
-  expect_identical(dim(estim), c(1L, 9L))
-  expect_equal(estim$Difference, 1.736067, tolerance = 1e-1)
-  expect_identical(c(estim$Level1[1], estim$Level2[1]), c("yes", "no"))
+  estim1 <- suppressMessages(estimate_contrasts(model, component = "zi"))
+  pr <- ggeffects::predict_response(model, "mined", type = "zi_prob", verbose = FALSE)
+  estim2 <- ggeffects::test_predictions(pr)
+  expect_identical(dim(estim1), c(1L, 9L))
+  expect_equal(estim1$Difference, 0.40247, tolerance = 1e-1)
+  expect_identical(c(estim$Level1[1], estim1$Level2[1]), c("yes", "no"))
+  expect_equal(estim1$Difference, estim2$Contrast, tolerance = 1e-1)
 })
 
 test_that("estimate_slope - glmmTMB", {

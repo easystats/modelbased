@@ -258,4 +258,5 @@ test_that("estimate_contrasts - marginaleffects", {
   out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
   expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
   expect_equal(out4$Difference, out3$Contrast, tolerance = 1e-4)
+  expect_equal(out4$CI_low, out3$conf.low, tolerance = 1e-2)
 })
