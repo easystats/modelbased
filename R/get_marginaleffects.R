@@ -15,6 +15,7 @@ get_marginaleffects <- function(model,
                                 ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
+  dots <- list(...)
 
   # Guess arguments
   if (is.null(trend)) {
@@ -29,7 +30,18 @@ get_marginaleffects <- function(model,
     by <- by[!by %in% trend]
   }
 
-  datagrid <- insight::get_datagrid(model, by = by, verbose = FALSE, ...)
+  # setup arguments
+  dg_args <- list(
+    model,
+    by = by,
+    verbose = FALSE
+  )
+  # add user-arguments from "...", but remove those arguments that are already set
+  dots[c("by", "verbose")] <- NULL
+  dg_args <- insight::compact_list(c(dg_args, dots))
+
+  # Get corresponding datagrid (and deal with particular ats)
+  datagrid <- do.call(insight::get_datagrid, dg_args)
   at_specs <- attributes(datagrid)$at_specs
 
   # Compute stuff

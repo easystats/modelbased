@@ -82,7 +82,7 @@ get_marginalmeans <- function(model,
     dg_args$preserve_range <- FALSE
   }
   # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "factors", "include_random")] <- NULL
+  dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
   # Get corresponding datagrid (and deal with particular ats)
