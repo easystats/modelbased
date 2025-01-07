@@ -26,6 +26,16 @@ test_that("estimate_means - glmmTMB", {
   estim <- suppressMessages(estimate_means(model, component = "zi"))
   estim2 <- as.data.frame(emmeans::emmeans(model, ~mined, component = "zi", type = "response"))
   expect_equal(estim$rate, estim2$rate, tolerance = 1e-3)
+
+  estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects")
+  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-3)
+
+  estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
+  estim2 <- ggeffects::predict_response(model, "mined", type = "zi_prob")
+  estim3 <- estimate_means(model, backend = "marginaleffects", predict = "zprob")
+  expect_equal(estim1$Mean, estim2$predicted, tolerance = 1e-3)
+  expect_equal(estim1$Mean, estim3$Mean, tolerance = 1e-3)
 })
 
 test_that("estimate_contrasts - glmmTMB", {
@@ -38,6 +48,8 @@ test_that("estimate_contrasts - glmmTMB", {
   expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
   estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
   expect_equal(estim3$Difference, -1.99344, tolerance = 1e-3)
+  estim4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
+  expect_equal(estim3$Difference, estim4$Difference, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_contrasts(model, component = "zi"))
   pr <- ggeffects::predict_response(model, "mined", type = "zi_prob", verbose = FALSE)

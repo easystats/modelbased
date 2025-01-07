@@ -64,7 +64,7 @@ get_marginalmeans <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_arguments_means(model, by, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, ...)
 
   # find default response-type
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
@@ -209,7 +209,7 @@ get_marginalmeans <- function(model,
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal
-.guess_arguments_means <- function(model, by = NULL, ...) {
+.guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, ...) {
   # Gather info and data from model
   model_data <- insight::get_data(model)
   predictors <- intersect(
@@ -217,14 +217,23 @@ get_marginalmeans <- function(model,
     insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
   )
 
-  # Guess arguments 'by'
-  if (identical(by, "auto")) {
-    # Find categorical predictors
-    by <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
-    if (!length(by) || all(is.na(by))) {
-      insight::format_error("Model contains no categorical predictor. Please specify `by`.")
+  validate_arg <- function(spec_value, spec_name) {
+    if (identical(spec_value, "auto")) {
+      # Find categorical predictors
+      spec_value <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
+      if (!length(spec_value) || all(is.na(spec_value))) {
+        insight::format_error(paste0(
+          "Model contains no categorical predictor. Please specify `", spec_name, "`."
+        ))
+      }
     }
-    insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
+    spec_value
   }
-  list(by = by)
+
+  # Guess arguments 'by'
+  by <- validate_arg(by, "by")
+  # Guess arguments 'contrast'
+  contrast <- validate_arg(contrast, "contrast")
+
+  list(by = by, contrast = contrast)
 }

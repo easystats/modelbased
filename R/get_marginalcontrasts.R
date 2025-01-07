@@ -16,9 +16,20 @@ get_marginalcontrasts <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
+  # set default, if NULL
+  if (is.null(contrast)) {
+    contrast <- "auto"
+  }
+
+  # Guess arguments
+  my_args <- .guess_marginaleffects_arguments(model, by, contrast, ...)
+
   out <- estimate_means(
     model = model,
-    by = c(contrast, by),
+    ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+    ## pass only "contrast" to the `by` argument, and use `my_args$by` for
+    ## filtering...
+    by = unique(c(my_args$contrast, my_args$by)),
     ci = ci,
     hypothesis = method,
     predict = predict,
@@ -26,7 +37,7 @@ get_marginalcontrasts <- function(model,
     ...
   )
 
-  attr(out, "contrast") <- contrast
+  attr(out, "contrast") <- my_args$contrast
   out
 }
 
