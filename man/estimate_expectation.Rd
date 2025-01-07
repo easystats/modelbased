@@ -69,7 +69,11 @@ or \code{estimate_relation()}). The only time you might be interested in manuall
 changing it is to estimate other distributional parameters (called "dpar" in
 other packages) - for instance when using complex formulae in \code{brms} models.
 The \code{predict} argument can then be set to the parameter you want to
-estimate, for instance \code{"sigma"}, \code{"kappa"}, etc.}
+estimate, for instance \code{"sigma"}, \code{"kappa"}, etc. Note that the distinction
+between \code{"expectation"}, \code{"link"} and \code{"prediction"} does not then apply (as
+you are directly predicting the value of some distributional parameter), and
+the corresponding functions will then only differ in the default value of
+their \code{data} argument.}
 
 \item{ci}{Value or vector of probability of the CI (between 0 and 1)
 to be estimated. Default to \code{0.95} (\verb{95\%}).}

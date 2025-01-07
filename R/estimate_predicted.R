@@ -146,9 +146,10 @@
 #' other packages) - for instance when using complex formulae in `brms` models.
 #' The `predict` argument can then be set to the parameter you want to
 #' estimate, for instance `"sigma"`, `"kappa"`, etc. Note that the distinction
-#' between "expectation", "link" and "prediction" does not then apply (as you are
-#' directly predicting the value of some distributional parameter), and the corresponding
-#' functions will then only differ in the default value of their `data` argument.
+#' between `"expectation"`, `"link"` and `"prediction"` does not then apply (as
+#' you are directly predicting the value of some distributional parameter), and
+#' the corresponding functions will then only differ in the default value of
+#' their `data` argument.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
