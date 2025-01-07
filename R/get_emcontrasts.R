@@ -54,7 +54,7 @@ get_emcontrasts <- function(model,
   )
 
   # If means are on the response scale (e.g., probabilities), need to regrid
-  if(predict == "response") {
+  if (predict == "response") {
     estimated <- emmeans::regrid(estimated)
   }
 
