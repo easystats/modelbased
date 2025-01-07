@@ -117,7 +117,7 @@ estimate_means <- function(model,
   attr(means, "transform") <- predict
 
   attr(means, "coef_name") <- intersect(
-    c("Mean", "Probability", .capitalize(.brms_aux_elements())),
+    c("Mean", "Probability", tools::toTitleCase(.brms_aux_elements())),
     names(means)
   )
 
