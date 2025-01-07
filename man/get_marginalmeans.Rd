@@ -72,7 +72,9 @@ packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
-\item{method}{Contrast method.}
+\item{method}{Contrast method, respectively a formulation of the hypothesis
+to test. See \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_predictions()}.}
 
 \item{ci}{Level for confidence intervals.}
 

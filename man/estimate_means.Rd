@@ -28,12 +28,12 @@ across them).}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for `predict`` are:
 \itemize{
-\item \code{backend = "emmeans"}
-Can be \code{"link"} (default for contrasts), \code{"response"} (default for means),
-\code{"mu"}, \code{"unlink"}, \code{"log"}.
-\item \code{backend = "marginaleffects"}
-Can be \code{"link"} (default for contrasts), \code{"response"} (default for means),
-or any valid \code{type} option, which depends on the model-class.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"link"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"link"}, \code{"response"} or
+any valid \code{type} option, which depends on the model-class.
+}
+
 \code{"link"} will leave the values on scale of the linear predictors.
 \code{"response"} will transform them on scale of the response variable. Thus
 for a logistic model, \code{"link"} will give estimations expressed in log-odds
@@ -41,8 +41,7 @@ for a logistic model, \code{"link"} will give estimations expressed in log-odds
 To predict distributional parameters (called "dpar" in other packages), for
 instance when using complex formulae in \code{brms} models, the \code{predict} argument
 can take the value of the parameter you want to estimate, for instance
-\code{"sigma"}, \code{"kappa"}, etc.
-}}
+\code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -76,7 +75,7 @@ functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
 \strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
 argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
-\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,

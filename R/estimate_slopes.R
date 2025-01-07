@@ -21,7 +21,7 @@
 #' estimations (estimations based on a model). All three are built on the
 #' **emmeans** or **marginaleffects** package (depending on the `backend`
 #' argument), so reading its documentation (for instance [emmeans::emmeans()],
-#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/) is
+#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/)) is
 #' recommended to understand the idea behind these types of procedures.
 #'
 #' - Model-based **predictions** is the basis for all that follows. Indeed,

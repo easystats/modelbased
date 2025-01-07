@@ -4,12 +4,15 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
-#' @inheritParams estimate_means
-#' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
 #' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation.
+#' @param method Contrast method. When `backend = "emmeans"`, see same argument
+#' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
+#' [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#' @inheritParams estimate_means
+#' @inheritParams get_emcontrasts
 #'
 #' @inherit estimate_slopes details
 #'

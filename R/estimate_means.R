@@ -10,12 +10,12 @@
 #' `backend = "marginaleffects"`). For emmeans, see also
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #' Valid options for `predict`` are:
-#' * `backend = "emmeans"`
-#'   Can be `"link"` (default for contrasts), `"response"` (default for means),
-#'   `"mu"`, `"unlink"`, `"log"`.
-#' * `backend = "marginaleffects"`
-#'   Can be `"link"` (default for contrasts), `"response"` (default for means),
-#'   or any valid `type` option, which depends on the model-class.
+#'
+#' * `backend = "emmeans"`: `predict` can be `"link"` (default for contrasts),
+#'   `"response"` (default for means), `"mu"`, `"unlink"`, `"log"`.
+#' * `backend = "marginaleffects"`: `predict` can be `"link"`, `"response"` or
+#'   any valid `type` option, which depends on the model-class.
+#'
 #' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` will transform them on scale of the response variable. Thus
 #' for a logistic model, `"link"` will give estimations expressed in log-odds
