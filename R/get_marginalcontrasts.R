@@ -1,6 +1,7 @@
 #' @rdname get_marginalmeans
 #'
 #' @param method Contrast method.
+#' @inheritParams get_marginalmeans
 #' @inheritParams get_emcontrasts
 #' @export
 get_marginalcontrasts <- function(model,
