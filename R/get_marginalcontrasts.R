@@ -9,7 +9,7 @@
 get_marginalcontrasts <- function(model,
                                   contrast = NULL,
                                   by = NULL,
-                                  predict = NULL,
+                                  predict = "response",
                                   method = "pairwise",
                                   ci = 0.95,
                                   ...) {

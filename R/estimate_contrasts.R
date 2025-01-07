@@ -77,7 +77,7 @@
 estimate_contrasts <- function(model,
                                contrast = NULL,
                                by = NULL,
-                               predict = NULL,
+                               predict = "response",
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
