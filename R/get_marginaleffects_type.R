@@ -27,6 +27,8 @@
   }
 
   if (isTRUE(is.na(predict))) {
+    # add modelbased-options to valid types
+    valid_types <- unique(c("response", "link", valid_types))
     insight::format_error(paste0(
       "The option provided in the `", error_arg, "` argument is not recognized.",
       " Valid options are: ",

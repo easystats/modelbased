@@ -63,7 +63,7 @@ get_emmeans <- function(model,
   my_args <- .guess_emmeans_arguments(model, by, ...)
 
   # find default response-type
-  predict <- .get_emmeans_type_argument(model, predict, ...)
+  predict <- .get_emmeans_type_argument(model, predict, type = "means", ...)
 
   # setup arguments
   fun_args <- list(
@@ -173,9 +173,13 @@ model_emmeans <- get_emmeans
 }
 
 
-.get_emmeans_type_argument <- function(model, predict, ...) {
+## TODO: validate predict argument to make sure it only has valid options
+.get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
   if (is.null(predict)) {
-    predict <- "response"
+    predict <- switch(type,
+      means = "response",
+      "none"
+    )
   } else if (predict == "link") {
     predict <- "none"
   }

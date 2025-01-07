@@ -42,7 +42,7 @@ get_emcontrasts <- function(model,
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, ...)
 
   # find default response-type
-  predict <- .get_emmeans_type_argument(model, predict, ...)
+  predict <- .get_emmeans_type_argument(model, predict, type = "contrast", ...)
 
   # Run emmeans
   estimated <- emmeans::emmeans(

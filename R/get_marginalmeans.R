@@ -9,15 +9,16 @@
 #'
 #' @param model A statistical model.
 #' @param predict Can be used to easily modulate the `type` argument in
-#' `marginaleffects::avg_predictions()`. Can be `"link"` or `"response"`.
-#' `"link"` will leave the values on scale of the linear predictors.
-#' `"response"` will transform them on scale of the response variable. Thus for
-#' a logistic model, `"link"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities. To
-#' predict distributional parameters (called "dpar" in other packages), for
-#' instance when using complex formulae in `brms` models, the `predict` argument
-#' can take the value of the parameter you want to estimate, for instance
-#' `"sigma"`, `"kappa"`, etc.
+#' `marginaleffects::avg_predictions()`. Can be `"link"`, `"response"` or any
+#' valid `type` option supported by **marginaleffects** (which depends on the
+#' model-class). `"link"` will leave the values on scale of the linear
+#' predictors. `"response"` will transform them on scale of the response
+#' variable. Thus for a logistic model, `"link"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities. To predict distributional parameters (called "dpar" in other
+#' packages), for instance when using complex formulae in `brms` models, the
+#' `predict` argument can take the value of the parameter you want to estimate,
+#' for instance `"sigma"`, `"kappa"`, etc.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #' / mean / contrasts. Other predictors of the model that are not included
 #' here will be collapsed and "averaged" over (the effect will be estimated

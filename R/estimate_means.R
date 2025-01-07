@@ -5,14 +5,33 @@
 #' other related functions such as [estimate_contrasts()] and
 #' [estimate_slopes()].
 #'
-#' @inheritParams get_emmeans
-#' @inheritParams parameters::model_parameters.default
-#' @inheritParams estimate_expectation
+#' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
+#' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
+#' `backend = "marginaleffects"`). For emmeans, see also
+#' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#' Valid options for `predict`` are:
+#' * `backend = "emmeans"`
+#'   Can be `"link"` (default for contrasts), `"response"` (default for means),
+#'   `"mu"`, `"unlink"`, `"log"`.
+#' * `backend = "marginaleffects"`
+#'   Can be `"link"` (default for contrasts), `"response"` (default for means),
+#'   or any valid `type` option, which depends on the model-class.
+#' `"link"` will leave the values on scale of the linear predictors.
+#' `"response"` will transform them on scale of the response variable. Thus
+#' for a logistic model, `"link"` will give estimations expressed in log-odds
+#' (probabilities on logit scale) and `"response"` in terms of probabilities.
+#' To predict distributional parameters (called "dpar" in other packages), for
+#' instance when using complex formulae in `brms` models, the `predict` argument
+#' can take the value of the parameter you want to estimate, for instance
+#' `"sigma"`, `"kappa"`, etc.
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
 #' effects levels, producing "marginal predictions" (instead of "conditional
 #' predictions", see Heiss 2022).
+#' @inheritParams get_emmeans
+#' @inheritParams parameters::model_parameters.default
+#' @inheritParams estimate_expectation
 #' @inherit estimate_slopes details
 #'
 #' @return A data frame of estimated marginal means.

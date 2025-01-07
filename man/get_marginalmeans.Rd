@@ -61,15 +61,16 @@ here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
 \item{predict}{Can be used to easily modulate the \code{type} argument in
-\code{marginaleffects::avg_predictions()}. Can be \code{"link"} or \code{"response"}.
-\code{"link"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable. Thus for
-a logistic model, \code{"link"} will give estimations expressed in log-odds
-(probabilities on logit scale) and \code{"response"} in terms of probabilities. To
-predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in \code{brms} models, the \code{predict} argument
-can take the value of the parameter you want to estimate, for instance
-\code{"sigma"}, \code{"kappa"}, etc.}
+\code{marginaleffects::avg_predictions()}. Can be \code{"link"}, \code{"response"} or any
+valid \code{type} option supported by \strong{marginaleffects} (which depends on the
+model-class). \code{"link"} will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{method}{Contrast method.}
 
