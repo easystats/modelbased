@@ -44,7 +44,7 @@ test_that("estimate_contrasts - glmmTMB", {
   estim2 <- ggeffects::test_predictions(pr)
   expect_identical(dim(estim1), c(1L, 9L))
   expect_equal(estim1$Difference, 0.40247, tolerance = 1e-1)
-  expect_identical(c(estim$Level1[1], estim1$Level2[1]), c("yes", "no"))
+  expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
   expect_equal(estim1$Difference, estim2$Contrast, tolerance = 1e-1)
 })
 
