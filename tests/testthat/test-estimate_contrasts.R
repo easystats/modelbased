@@ -251,7 +251,6 @@ test_that("estimate_contrasts - marginaleffects", {
   out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
   pr <- ggeffects::predict_response(model, "Species")
   out3 <- ggeffects::test_predictions(pr)
-
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
   expect_equal(out1$Difference, out3$Contrast, tolerance = 1e-4)
 
@@ -260,4 +259,14 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
   expect_equal(out4$Difference, out3$Contrast, tolerance = 1e-4)
   expect_equal(out4$CI_low, out3$conf.low, tolerance = 1e-2)
+
+  # validate against emmeans
+  out_emm <- emmeans::emmeans(model, "Species", type = "response")
+  out_emm <- emmeans::regrid(out_emm)
+  out6 <- as.data.frame(emmeans::contrast(out_emm, method = "pairwise"))
+  expect_equal(out6$estimate, out1$Difference, tolerance = 1e-3)
+
+  # validate against marginaleffects
+  out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = "pairwise")
+  expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
 })
