@@ -42,6 +42,7 @@ Imports:
     performance (>= 0.12.4),
     graphics,
     stats,
+    tools,
     utils
 Suggests:
     BH,
