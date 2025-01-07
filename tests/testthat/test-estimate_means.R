@@ -266,8 +266,8 @@ test_that("estimate_means() - glm", {
   expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-2)
 
-  estim1 <- suppressMessages(estimate_means(model, transform = "none"))
-  estim2 <- suppressMessages(estimate_means(model, transform = "none", verbose = FALSE, backend = "marginaleffects"))
+  estim1 <- suppressMessages(estimate_means(model, predict = "link"))
+  estim2 <- suppressMessages(estimate_means(model, predict = "link", verbose = FALSE, backend = "marginaleffects"))
   expect_identical(dim(estim1), c(3L, 5L))
   expect_identical(dim(estim2), c(3L, 5L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)

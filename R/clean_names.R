@@ -20,27 +20,29 @@
 }
 
 
-
-
 #' @keywords internal
-.clean_names_bayesian <- function(means, model, transform, type = "mean") {
+.clean_names_bayesian <- function(means, model, predict, type = "mean") {
   vars <- names(means)[names(means) %in% c("Median", "Mean", "MAP")]
 
   if (length(vars) == 1) {
     if (type == "contrast") {
-      if (insight::model_info(model)$is_logit && transform == "response") {
+      if (insight::model_info(model)$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Odds_ratio"
-      } else if (insight::model_info(model)$is_poisson && transform == "response") {
+      } else if (insight::model_info(model)$is_poisson && predict == "response") {
         names(means)[names(means) == vars] <- "Ratio"
       } else {
         names(means)[names(means) == vars] <- "Difference"
       }
     } else if (type == "mean") {
-      if (insight::model_info(model)$is_logit && transform == "response") {
+      if (insight::model_info(model)$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"
+      } else if (!is.null(predict) && predict %in% .brms_aux_elements()) {
+        names(means)[names(means) == vars] <- tools::toTitleCase(predict)
       } else {
         names(means)[names(means) == vars] <- "Mean"
       }
+    } else if (predict %in% .brms_aux_elements()) {
+      names(means)[names(means) == vars] <- tools::toTitleCase(predict)
     } else {
       names(means)[names(means) == vars] <- "Coefficient"
     }

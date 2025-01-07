@@ -3,27 +3,15 @@
 %   R/get_marginaleffects.R, R/get_marginalmeans.R
 \name{get_marginalcontrasts}
 \alias{get_marginalcontrasts}
-\alias{model_marginalcontrasts}
 \alias{get_marginaleffects}
 \alias{get_marginalmeans}
-\alias{model_marginalmeans}
 \title{Easy 'avg_predictions' and 'avg_slopes'}
 \usage{
 get_marginalcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  transform = "none",
-  method = "pairwise",
-  ci = 0.95,
-  ...
-)
-
-model_marginalcontrasts(
-  model,
-  contrast = NULL,
-  by = NULL,
-  transform = "none",
+  predict = NULL,
   method = "pairwise",
   ci = 0.95,
   ...
@@ -31,9 +19,14 @@ model_marginalcontrasts(
 
 get_marginaleffects(model, trend = NULL, by = NULL, ...)
 
-get_marginalmeans(model, by = "auto", transform = NULL, ci = 0.95, ...)
-
-model_marginalmeans(model, by = "auto", transform = NULL, ci = 0.95, ...)
+get_marginalmeans(
+  model,
+  by = "auto",
+  predict = NULL,
+  ci = 0.95,
+  transform = NULL,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -46,14 +39,21 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{transform}{Can be used to easily modulate the \code{type} argument in
-\code{marginaleffects::avg_predictions()}. Can be \code{"none"} or \code{"response"}.
-\code{"none"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable. Thus for
-a logistic model, \code{"none"} will give estimations expressed in log-odds
-(probabilities on logit scale) and \code{"response"} in terms of probabilities.}
+\item{predict}{Can be used to easily modulate the \code{type} argument in
+\code{marginaleffects::avg_predictions()}. Can be \code{"link"}, \code{"response"} or any
+valid \code{type} option supported by \strong{marginaleffects} (which depends on the
+model-class). \code{"link"} will leave the values on scale of the linear
+predictors. \code{"response"} will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
-\item{method}{Contrast method.}
+\item{method}{Contrast method, respectively a formulation of the hypothesis
+to test. See \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_predictions()}.}
 
 \item{ci}{Level for confidence intervals.}
 
@@ -62,6 +62,8 @@ or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
+
+\item{transform}{Deprecated, please use \code{predict} instead.}
 }
 \description{
 The \code{get_marginalmeans()} function is a wrapper to facilitate the usage of

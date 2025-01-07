@@ -7,9 +7,10 @@
 estimate_means(
   model,
   by = "auto",
-  transform = "response",
+  predict = NULL,
   ci = 0.95,
   backend = "emmeans",
+  transform = NULL,
   ...
 )
 }
@@ -21,14 +22,26 @@ estimate_means(
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
-See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
-\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
-linear predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations expressed
-in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities.}
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
+\code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
+\code{backend = "marginaleffects"}). For emmeans, see also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Valid options for `predict`` are:
+\itemize{
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"link"} (default for contrasts),
+\code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"link"}, \code{"response"} or
+any valid \code{type} option, which depends on the model-class.
+}
+
+\code{"link"} will leave the values on scale of the linear predictors.
+\code{"response"} will transform them on scale of the response variable. Thus
+for a logistic model, \code{"link"} will give estimations expressed in log-odds
+(probabilities on logit scale) and \code{"response"} in terms of probabilities.
+To predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in \code{brms} models, the \code{predict} argument
+can take the value of the parameter you want to estimate, for instance
+\code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -37,6 +50,8 @@ Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
 predictions", see Heiss 2022).}
+
+\item{transform}{Deprecated, please use \code{predict} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
@@ -60,7 +75,7 @@ functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
 \strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
 argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
-\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,

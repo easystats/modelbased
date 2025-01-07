@@ -8,60 +8,83 @@
 #' functions.
 #'
 #' @param model A statistical model.
-#' @param transform Is passed to the `type` argument in `emmeans::emmeans()`.
-#' See [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Can be `"none"` (default for contrasts), `"response"` (default for means),
-#' `"mu"`, `"unlink"`, `"log"`. `"none"` will leave the values on scale of the
+#' @param predict Is passed to the `type` argument in `emmeans::emmeans()`. See
+#' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#' Can be `"link"` (default for contrasts), `"response"` (default for means),
+#' `"mu"`, `"unlink"`, `"log"`. `"link"` will leave the values on scale of the
 #' linear predictors. `"response"` will transform them on scale of the response
-#' variable. Thus for a logistic model, `"none"` will give estimations expressed
+#' variable. Thus for a logistic model, `"link"` will give estimations expressed
 #' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities.
+#' probabilities. To predict distributional parameters (called "dpar" in other
+#' packages), for instance when using complex formulae in `brms` models, the
+#' `predict` argument can take the value of the parameter you want to estimate,
+#' for instance `"sigma"`, `"kappa"`, etc.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #' / mean / contrasts. Other predictors of the model that are not included
 #' here will be collapsed and "averaged" over (the effect will be estimated
 #' across them).
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @param transform Deprecated, please use `predict` instead.
 #'
-#' @examples
+#' @examplesIf require("emmeans", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 #'
-#' if (require("emmeans", quietly = TRUE)) {
-#'   # By default, 'by' is set to "Species"
-#'   get_emmeans(model)
+#' # By default, 'by' is set to "Species"
+#' get_emmeans(model)
 #'
-#'   # Overall mean (close to 'mean(iris$Sepal.Length)')
-#'   get_emmeans(model, by = NULL)
+#' # Overall mean (close to 'mean(iris$Sepal.Length)')
+#' get_emmeans(model, by = NULL)
 #'
-#'   # One can estimate marginal means at several values of a 'modulate' variable
-#'   get_emmeans(model, by = "Petal.Width", length = 3)
+#' # One can estimate marginal means at several values of a 'modulate' variable
+#' get_emmeans(model, by = "Petal.Width", length = 3)
 #'
-#'   # Interactions
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' # Interactions
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#'   get_emmeans(model)
-#'   get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
-#'   get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
-#' }
+#' get_emmeans(model)
+#' get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
+#' get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' @export
 get_emmeans <- function(model,
                         by = "auto",
-                        transform = "response",
+                        predict = NULL,
+                        transform = NULL,
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
+  ## TODO: remove deprecation warning later
+  if (!is.null(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   # Guess arguments
   my_args <- .guess_emmeans_arguments(model, by, ...)
 
+  # find default response-type
+  predict <- .get_emmeans_type_argument(model, predict, type = "means", ...)
 
-  # Run emmeans
-  estimated <- emmeans::emmeans(
+  # setup arguments
+  fun_args <- list(
     model,
     specs = my_args$emmeans_specs,
-    at = my_args$emmeans_at,
-    type = transform,
-    ...
+    at = my_args$emmeans_at
   )
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
+
+  # add dots
+  dots <- list(...)
+  fun_args <- insight::compact_list(c(fun_args, dots))
+
+  # Run emmeans
+  estimated <- suppressWarnings(do.call(emmeans::emmeans, fun_args))
 
   # Special behaviour for transformations #138 (see below)
   if ("retransform" %in% names(my_args) && length(my_args$retransform) > 0) {
@@ -73,13 +96,9 @@ get_emmeans <- function(model,
 
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
+  attr(estimated, "predict") <- predict
   estimated
 }
-
-#' @rdname get_emmeans
-#' @export
-model_emmeans <- get_emmeans
-
 
 
 # =========================================================================
@@ -89,11 +108,12 @@ model_emmeans <- get_emmeans
 # in estimate_means
 
 #' @keywords internal
-.format_emmeans_means <- function(estimated, model, ci = 0.95, transform = "response", ...) {
+.format_emmeans_means <- function(model, estimated, ci = 0.95, ...) {
+  predict <- attributes(estimated)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     means <- parameters::parameters(estimated, ci = ci, ...)
-    means <- .clean_names_bayesian(means, model, transform, type = "mean")
+    means <- .clean_names_bayesian(means, model, predict, type = "mean")
     em_grid <- as.data.frame(estimated@grid)
     em_grid[[".wgt."]] <- NULL # Drop the weight column
     colums_to_add <- setdiff(colnames(em_grid), colnames(means))
@@ -118,7 +138,6 @@ model_emmeans <- get_emmeans
   attr(means, "by") <- info$by
   means
 }
-
 
 
 # =========================================================================
@@ -147,6 +166,20 @@ model_emmeans <- get_emmeans
 
   my_args <- list(by = by)
   .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
+}
+
+
+## TODO: validate predict argument to make sure it only has valid options
+.get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
+  if (is.null(predict)) {
+    predict <- switch(type,
+      means = "response",
+      "none"
+    )
+  } else if (predict == "link") {
+    predict <- "none"
+  }
+  predict
 }
 
 

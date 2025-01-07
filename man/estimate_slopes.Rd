@@ -43,7 +43,7 @@ functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
 \strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
 argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
-\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,

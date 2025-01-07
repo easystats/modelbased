@@ -29,8 +29,6 @@ describe_nonlinear <- function(data, ...) {
 }
 
 
-
-
 #' @export
 describe_nonlinear.estimate_predicted <- function(data,
                                                   x = NULL,
@@ -75,8 +73,6 @@ describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
 #' @rdname describe_nonlinear
 #' @export
 estimate_smooth <- describe_nonlinear
-
-
 
 
 # Utils -------------------------------------------------------------------

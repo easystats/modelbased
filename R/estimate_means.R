@@ -5,13 +5,33 @@
 #' other related functions such as [estimate_contrasts()] and
 #' [estimate_slopes()].
 #'
-#' @inheritParams get_emmeans
-#' @inheritParams parameters::model_parameters.default
+#' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
+#' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
+#' `backend = "marginaleffects"`). For emmeans, see also
+#' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
+#' Valid options for `predict`` are:
+#'
+#' * `backend = "emmeans"`: `predict` can be `"link"` (default for contrasts),
+#'   `"response"` (default for means), `"mu"`, `"unlink"`, `"log"`.
+#' * `backend = "marginaleffects"`: `predict` can be `"link"`, `"response"` or
+#'   any valid `type` option, which depends on the model-class.
+#'
+#' `"link"` will leave the values on scale of the linear predictors.
+#' `"response"` will transform them on scale of the response variable. Thus
+#' for a logistic model, `"link"` will give estimations expressed in log-odds
+#' (probabilities on logit scale) and `"response"` in terms of probabilities.
+#' To predict distributional parameters (called "dpar" in other packages), for
+#' instance when using complex formulae in `brms` models, the `predict` argument
+#' can take the value of the parameter you want to estimate, for instance
+#' `"sigma"`, `"kappa"`, etc.
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
 #' effects levels, producing "marginal predictions" (instead of "conditional
 #' predictions", see Heiss 2022).
+#' @inheritParams get_emmeans
+#' @inheritParams parameters::model_parameters.default
+#' @inheritParams estimate_expectation
 #' @inherit estimate_slopes details
 #'
 #' @return A data frame of estimated marginal means.
@@ -55,18 +75,34 @@
 #' @export
 estimate_means <- function(model,
                            by = "auto",
-                           transform = "response",
+                           predict = NULL,
                            ci = 0.95,
                            backend = "emmeans",
+                           transform = NULL,
                            ...) {
+  ## TODO: remove deprecation warning later
+  if (!is.null(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by, transform = transform, ...)
-    means <- .format_emmeans_means(estimated, model, ci, transform, ...)
+    estimated <- get_emmeans(model, by = by, predict = predict, ...)
+    means <- .format_emmeans_means(
+      model,
+      estimated = estimated,
+      ci = ci,
+      ...
+    )
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by, transform = transform, ci = ci, ...)
-    means <- .format_marginaleffects_means(estimated, model, transform, ...)
+    estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
+    means <- .format_marginaleffects_means(
+      model,
+      estimated = estimated,
+      ...
+    )
   }
 
 
@@ -78,17 +114,18 @@ estimate_means <- function(model,
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
-  attr(means, "transform") <- transform
+  attr(means, "transform") <- predict
 
-  attr(means, "coef_name") <- intersect(c("Mean", "Probability"), names(means))
+  attr(means, "coef_name") <- intersect(
+    c("Mean", "Probability", tools::toTitleCase(.brms_aux_elements())),
+    names(means)
+  )
 
 
   # Output
   class(means) <- c("estimate_means", class(means))
   means
 }
-
-
 
 
 # Table Formating ----------------------------------------------------------

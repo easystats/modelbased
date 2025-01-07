@@ -21,7 +21,7 @@
 #' estimations (estimations based on a model). All three are built on the
 #' **emmeans** or **marginaleffects** package (depending on the `backend`
 #' argument), so reading its documentation (for instance [emmeans::emmeans()],
-#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/) is
+#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/)) is
 #' recommended to understand the idea behind these types of procedures.
 #'
 #' - Model-based **predictions** is the basis for all that follows. Indeed,
@@ -116,7 +116,7 @@ estimate_slopes <- function(model,
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     trends <- parameters::parameters(estimated, ci = ci, ...)
-    trends <- .clean_names_bayesian(trends, model, transform = "none", type = "trend")
+    trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
     em_grid <- as.data.frame(estimated@grid)
     em_grid[[".wgt."]] <- NULL # Drop the weight column
     colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
@@ -191,7 +191,6 @@ summary.estimate_slopes <- function(object, ...) {
 }
 
 
-
 # Utilities ---------------------------------------------------------------
 .estimate_slopes_summarize <- function(data, trend, ...) {
   # Find beginnings and ends -----------------------
@@ -227,7 +226,6 @@ summary.estimate_slopes <- function(object, ...) {
   }
   out
 }
-
 
 
 .estimate_slopes_sig <- function(x, confidence = "auto", ...) {

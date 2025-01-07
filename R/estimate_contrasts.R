@@ -4,12 +4,15 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
-#' @inheritParams estimate_means
-#' @inheritParams get_emcontrasts
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
 #' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation.
+#' @param method Contrast method. When `backend = "emmeans"`, see same argument
+#' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
+#' [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#' @inheritParams estimate_means
+#' @inheritParams get_emcontrasts
 #'
 #' @inherit estimate_slopes details
 #'
@@ -74,30 +77,37 @@
 estimate_contrasts <- function(model,
                                contrast = NULL,
                                by = NULL,
-                               transform = "none",
+                               predict = NULL,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
                                backend = "emmeans",
+                               transform = NULL,
                                ...) {
+  ## TODO: remove deprecation warning later
+  if (!is.null(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
+      predict = predict,
       method = method,
       adjust = p_adjust,
       ...
     )
-    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, ...)
+    out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
     info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
+      predict = predict,
       method = method,
       p_adjust = p_adjust,
       ci = ci,
@@ -122,7 +132,7 @@ estimate_contrasts <- function(model,
   attr(out, "model") <- model
   attr(out, "response") <- insight::find_response(model)
   attr(out, "ci") <- ci
-  attr(out, "transform") <- transform
+  attr(out, "transform") <- predict
   attr(out, "at") <- info$by
   attr(out, "by") <- info$by
   attr(out, "contrast") <- info$contrast
@@ -134,15 +144,15 @@ estimate_contrasts <- function(model,
 }
 
 
-
 # Table formatting emmeans ----------------------------------------------------
 
 
-.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, ...) {
+.format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
+  predict <- attributes(estimated)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
-    out <- .clean_names_bayesian(out, model, transform, type = "contrast")
+    out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
     out <- as.data.frame(merge(
       as.data.frame(estimated),
@@ -172,11 +182,11 @@ estimate_contrasts <- function(model,
 }
 
 
-
 # Table formatting marginal effects -------------------------------------------
 
 
 .format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
+  predict <- attributes(estimated)$predict
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
   focal_terms <- attributes(estimated)$focal_terms
@@ -189,7 +199,6 @@ estimate_contrasts <- function(model,
   )
 
   if (!is.null(method) && is.character(method) && method %in% valid_methods) {
-
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
     # These are examples of what {marginaleffects} returns, a single parmater

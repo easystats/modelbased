@@ -3,38 +3,23 @@
 %   R/get_emtrends.R
 \name{get_emcontrasts}
 \alias{get_emcontrasts}
-\alias{model_emcontrasts}
 \alias{get_emmeans}
-\alias{model_emmeans}
 \alias{get_emtrends}
-\alias{model_emtrends}
 \title{Easy 'emmeans' and 'emtrends'}
 \usage{
 get_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  transform = "none",
+  predict = "link",
   method = "pairwise",
+  transform = NULL,
   ...
 )
 
-model_emcontrasts(
-  model,
-  contrast = NULL,
-  by = NULL,
-  transform = "none",
-  method = "pairwise",
-  ...
-)
-
-get_emmeans(model, by = "auto", transform = "response", ...)
-
-model_emmeans(model, by = "auto", transform = "response", ...)
+get_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
 
 get_emtrends(model, trend = NULL, by = NULL, ...)
-
-model_emtrends(model, trend = NULL, by = NULL, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -47,16 +32,21 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
-See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
-\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Can be \code{"link"} (default for contrasts), \code{"response"} (default for means),
+\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"link"} will leave the values on scale of the
 linear predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities.}
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
+
+\item{transform}{Deprecated, please use \code{predict} instead.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
@@ -90,25 +80,25 @@ estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 \dontshow{\}) # examplesIf}
+\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
-if (require("emmeans", quietly = TRUE)) {
-  # By default, 'by' is set to "Species"
-  get_emmeans(model)
+# By default, 'by' is set to "Species"
+get_emmeans(model)
 
-  # Overall mean (close to 'mean(iris$Sepal.Length)')
-  get_emmeans(model, by = NULL)
+# Overall mean (close to 'mean(iris$Sepal.Length)')
+get_emmeans(model, by = NULL)
 
-  # One can estimate marginal means at several values of a 'modulate' variable
-  get_emmeans(model, by = "Petal.Width", length = 3)
+# One can estimate marginal means at several values of a 'modulate' variable
+get_emmeans(model, by = "Petal.Width", length = 3)
 
-  # Interactions
-  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+# Interactions
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
-  get_emmeans(model)
-  get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
-  get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
-}
+get_emmeans(model)
+get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
+get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+\dontshow{\}) # examplesIf}
 if (require("emmeans")) {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 

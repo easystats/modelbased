@@ -1,39 +1,64 @@
 #' @keywords internal
-.get_type_argument <- function(model, transform = NULL, ...) {
+.get_marginaleffects_type_argument <- function(model, predict = NULL, ...) {
   dots <- list(...)
-  model_class <- class(model)[1]
 
   # no transformation always returns link-scale
-  if (identical(transform, "none")) {
+  if (identical(predict, "link")) {
     return("link")
   }
 
+  # handle distributional parameters
+  if (!is.null(predict) && predict %in% .brms_aux_elements()) {
+    return(predict)
+  }
+
+  # extract all valid types for model class
+  valid_types <- .valid_marginaleffects_types(model)
+
+  # check if user supplied type- or predict argument, and if it's valid
+  if (!is.null(dots$type) && !dots$type %in% valid_types) {
+    # if not, indicate wrong argument
+    predict <- NA
+    error_arg <- "type"
+  } else if (!is.null(predict) && !predict %in% valid_types) {
+    # if not, indicate wrong argument
+    predict <- NA
+    error_arg <- "predict"
+  }
+
+  if (isTRUE(is.na(predict))) {
+    # add modelbased-options to valid types
+    valid_types <- unique(c("response", "link", valid_types))
+    insight::format_error(paste0(
+      "The option provided in the `", error_arg, "` argument is not recognized.",
+      " Valid options are: ",
+      datawizard::text_concatenate(valid_types, enclose = "`"),
+      "."
+    ))
+  }
+
+  # return default type
+  if (is.null(dots$type)) {
+    if (is.null(predict)) {
+      valid_types[1]
+    } else {
+      predict
+    }
+  } else {
+    dots$type
+  }
+}
+
+
+# return default "type" argument - this differs, depending on model class
+.valid_marginaleffects_types <- function(model) {
+  model_class <- class(model)[1]
   # for unrecognized model classes, return "response"
   if (!model_class %in% .typedic$class) {
     return("response")
   }
-
   # extract all valid types for model class
-  valid_types <- .typedic$type[.typedic$class == model_class]
-
-  # check if user supplied type-argument
-  if (!is.null(dots$type)) {
-    if (!dots$type %in% valid_types) {
-      insight::format_error(paste0(
-        "The option provided in the `type` argument is not recognized.",
-        " Valid options are: ",
-        datawizard::text_concatenate(valid_types, enclose = "`"),
-        "."
-      ))
-    } else {
-      type <- dots$type
-    }
-  } else {
-    type <- valid_types[1]
-  }
-
-  # return default type
-  type
+  .typedic$type[.typedic$class == model_class]
 }
 
 

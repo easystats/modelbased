@@ -11,6 +11,7 @@ estimate_expectation(
   model,
   data = NULL,
   by = NULL,
+  predict = "expectation",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -20,6 +21,7 @@ estimate_link(
   model,
   data = "grid",
   by = NULL,
+  predict = "link",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -29,6 +31,7 @@ estimate_prediction(
   model,
   data = NULL,
   by = NULL,
+  predict = "prediction",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -38,6 +41,7 @@ estimate_relation(
   model,
   data = "grid",
   by = NULL,
+  predict = "expectation",
   ci = 0.95,
   keep_iterations = FALSE,
   ...
@@ -57,7 +61,18 @@ types). The \code{by} argument will be used to create a data grid via
 \code{insight::get_datagrid()}, which will then be used as \code{data} argument. Thus,
 you cannot specify both \code{data} and \code{by} but only of these two arguments.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+\item{predict}{This parameter controls what is predicted (and gets internally
+passed to \code{\link[insight:get_predicted]{insight::get_predicted()}}). In most cases, you don't need to care
+about it: it is changed automatically according to the different predicting
+functions (i.e., \code{estimate_expectation()}, \code{estimate_prediction()}, \code{estimate_link()}
+or \code{estimate_relation()}). The only time you might be interested in manually
+changing it is to estimate other distributional parameters (called "dpar" in
+other packages) - for instance when using complex formulae in \code{brms} models.
+The \code{predict} argument can then be set to the parameter you want to
+estimate, for instance \code{"sigma"}, \code{"kappa"}, etc.}
+
+\item{ci}{Value or vector of probability of the CI (between 0 and 1)
+to be estimated. Default to \code{0.95} (\verb{95\%}).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

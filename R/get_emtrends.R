@@ -42,9 +42,6 @@ get_emtrends <- function(model,
   estimated
 }
 
-#' @rdname get_emmeans
-#' @export
-model_emtrends <- get_emtrends
 
 # =========================================================================
 # HELPERS (guess arguments) -----------------------------------------------

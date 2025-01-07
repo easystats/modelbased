@@ -1,12 +1,15 @@
 #' @rdname get_marginalmeans
 #'
-#' @param method Contrast method.
+#' @param method Contrast method, respectively a formulation of the hypothesis
+#' to test. See [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#' Will be passed to the `hypothesis` argument in `marginaleffects::avg_predictions()`.
+#' @inheritParams get_marginalmeans
 #' @inheritParams get_emcontrasts
 #' @export
 get_marginalcontrasts <- function(model,
                                   contrast = NULL,
                                   by = NULL,
-                                  transform = "none",
+                                  predict = NULL,
                                   method = "pairwise",
                                   ci = 0.95,
                                   ...) {
@@ -18,7 +21,7 @@ get_marginalcontrasts <- function(model,
     by = c(contrast, by),
     ci = ci,
     hypothesis = method,
-    transform = "response",
+    predict = predict,
     backend = "marginaleffects",
     ...
   )
@@ -26,10 +29,6 @@ get_marginalcontrasts <- function(model,
   attr(out, "contrast") <- contrast
   out
 }
-
-#' @rdname get_marginalmeans
-#' @export
-model_marginalcontrasts <- get_marginalcontrasts
 
 
 # p-value adjustment -------------------

@@ -25,21 +25,31 @@
 get_emcontrasts <- function(model,
                             contrast = NULL,
                             by = NULL,
-                            transform = "none",
+                            predict = "link",
                             method = "pairwise",
+                            transform = NULL,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
+  ## TODO: remove deprecation warning later
+  if (!is.null(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   # Guess arguments
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, ...)
+
+  # find default response-type
+  predict <- .get_emmeans_type_argument(model, predict, type = "contrast", ...)
 
   # Run emmeans
   estimated <- emmeans::emmeans(
     model,
     specs = my_args$emmeans_specs,
     at = my_args$emmeans_at,
-    type = transform,
+    type = predict,
     ...
   )
 
@@ -50,14 +60,11 @@ get_emcontrasts <- function(model,
   out <- emmeans::contrast(estimated, by = emm_by, method = method, ...)
 
   attr(out, "contrast") <- my_args$contrast
+  attr(out, "predict") <- predict
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
   out
 }
-
-#' @rdname get_emmeans
-#' @export
-model_emcontrasts <- get_emcontrasts
 
 
 # =========================================================================

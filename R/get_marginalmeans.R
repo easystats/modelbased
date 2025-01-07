@@ -8,12 +8,17 @@
 #' `estimate_*()` series of functions.
 #'
 #' @param model A statistical model.
-#' @param transform Can be used to easily modulate the `type` argument in
-#' `marginaleffects::avg_predictions()`. Can be `"none"` or `"response"`.
-#' `"none"` will leave the values on scale of the linear predictors.
-#' `"response"` will transform them on scale of the response variable. Thus for
-#' a logistic model, `"none"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities.
+#' @param predict Can be used to easily modulate the `type` argument in
+#' `marginaleffects::avg_predictions()`. Can be `"link"`, `"response"` or any
+#' valid `type` option supported by **marginaleffects** (which depends on the
+#' model-class). `"link"` will leave the values on scale of the linear
+#' predictors. `"response"` will transform them on scale of the response
+#' variable. Thus for a logistic model, `"link"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities. To predict distributional parameters (called "dpar" in other
+#' packages), for instance when using complex formulae in `brms` models, the
+#' `predict` argument can take the value of the parameter you want to estimate,
+#' for instance `"sigma"`, `"kappa"`, etc.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #' / mean / contrasts. Other predictors of the model that are not included
 #' here will be collapsed and "averaged" over (the effect will be estimated
@@ -21,6 +26,7 @@
 #' @param ci Level for confidence intervals.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
 #' or [marginaleffects::avg_predictions()].
+#' @param transform Deprecated, please use `predict` instead.
 #'
 #' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -43,18 +49,25 @@
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
-                              transform = NULL,
+                              predict = NULL,
                               ci = 0.95,
+                              transform = NULL,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
 
+  ## TODO: remove deprecation warning later
+  if (!is.null(transform)) {
+    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
+    predict <- transform
+  }
+
   # Guess arguments
   my_args <- .guess_arguments_means(model, by, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, transform, ...)
+  predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
   # setup arguments
   dg_args <- list(
@@ -84,9 +97,16 @@ get_marginalmeans <- function(model,
     by = at_specs$varname,
     newdata = as.data.frame(datagrid),
     conf_level = ci,
-    df = dof,
-    type = type
+    df = dof
   )
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
+
   # add user-arguments from "...", but remove those arguments that are already set
   dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
@@ -103,24 +123,23 @@ get_marginalmeans <- function(model,
   attr(means, "by") <- my_args$by
   attr(means, "focal_terms") <- at_specs$varname
   attr(means, "datagrid") <- datagrid
+  attr(means, "predict") <- predict
   means
 }
-
-#' @rdname get_marginalmeans
-#' @export
-model_marginalmeans <- get_marginalmeans
 
 
 # Format ------------------------------------------------------------------
 
 
 #' @keywords internal
-.format_marginaleffects_means <- function(means, model, transform = NULL, ...) {
+.format_marginaleffects_means <- function(model, estimated, predict = NULL, ...) {
+  predict <- attributes(estimated)$predict
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
-  non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
+  non_focal <- setdiff(colnames(model_data), attr(estimated, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
+  predict_type <- attributes(estimated)$predict
 
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is_contrast_analysis) {
@@ -129,7 +148,10 @@ model_marginalmeans <- get_marginalmeans
   } else {
     remove_column <- "p"
     # estimate name
-    if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
+    if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+      # for Bayesian models with distributional parameter
+      estimate_name <- tools::toTitleCase(predict_type)
+    } else if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
       estimate_name <- "Probability"
     } else {
       estimate_name <- "Mean"
@@ -137,7 +159,7 @@ model_marginalmeans <- get_marginalmeans
   }
 
   # Format
-  params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
+  params <- suppressWarnings(parameters::model_parameters(estimated, verbose = FALSE))
   # add ci?
   params <- .add_contrasts_ci(is_contrast_analysis, params)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
@@ -149,8 +171,8 @@ model_marginalmeans <- get_marginalmeans
   params <- datawizard::data_restoretype(params, model_data)
 
   # Store info
-  attr(params, "at") <- attr(means, "by")
-  attr(params, "by") <- attr(means, "by")
+  attr(params, "at") <- attr(estimated, "by")
+  attr(params, "by") <- attr(estimated, "by")
   params
 }
 
@@ -181,7 +203,6 @@ model_marginalmeans <- get_marginalmeans
   }
   params
 }
-
 
 
 # Guess -------------------------------------------------------------------
