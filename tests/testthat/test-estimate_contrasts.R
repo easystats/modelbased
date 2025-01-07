@@ -247,6 +247,7 @@ test_that("estimate_contrasts - marginaleffects", {
 
   expect_message(estimate_contrasts(model), regex = "No variable was")
 
+  ## emmeans backend works and has proper default
   out1 <- suppressMessages(estimate_contrasts(model))
   out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
   pr <- ggeffects::predict_response(model, "Species")
@@ -254,6 +255,7 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
   expect_equal(out1$Difference, out3$Contrast, tolerance = 1e-4)
 
+  ## marginaleffects backend works and has proper default
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
   expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
