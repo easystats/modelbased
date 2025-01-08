@@ -15,6 +15,8 @@
 get_marginaltrends <- function(model,
                          trend = NULL,
                          by = NULL,
+                         predict = NULL,
+                         ci = 0.95,
                          ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -40,15 +42,33 @@ get_marginaltrends <- function(model,
   datagrid <- do.call(insight::get_datagrid, dg_args)
   at_specs <- attributes(datagrid)$at_specs
 
+  # model df
+  dof <- insight::get_df(model, verbose = FALSE)
+
   # setup arguments
   fun_args <- list(
     model,
     by = at_specs$varname,
     newdata = as.data.frame(datagrid),
-    variables =  my_args$trend
-    # conf_level = ci,
-    # df = dof
+    variables =  my_args$trend,
+    conf_level = ci,
+    df = dof
   )
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
+
+  # add user-arguments from "...", but remove those arguments that are already set
+  dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
+  fun_args <- insight::compact_list(c(fun_args, dots))
+
+  ## TODO: need to check against different mixed models results from other packages
+  # set to NULL
+  fun_args$re.form <- NULL
 
   # Run marginaleffects
   slopes <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
