@@ -1,6 +1,6 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
-#' Estimate average value of response variable at each factor levels. For
+#' Estimate average value of response variable at each factor level. For
 #' plotting, check the examples in [visualisation_recipe()]. See also
 #' other related functions such as [estimate_contrasts()] and
 #' [estimate_slopes()].
