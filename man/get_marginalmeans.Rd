@@ -46,7 +46,11 @@ model-class). \code{"link"} will leave the values on scale of the linear
 predictors. \code{"response"} will transform them on scale of the response
 variable. Thus for a logistic model, \code{"link"} will give estimations expressed
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
+probabilities. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually returns predictions or contrasts
+on the response scale).
+
+To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}

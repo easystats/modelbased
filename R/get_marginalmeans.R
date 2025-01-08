@@ -15,7 +15,11 @@
 #' predictors. `"response"` will transform them on scale of the response
 #' variable. Thus for a logistic model, `"link"` will give estimations expressed
 #' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities. To predict distributional parameters (called "dpar" in other
+#' probabilities. If `predict = NULL` (default), the most appropriate
+#' transformation is selected (which usually returns predictions or contrasts
+#' on the response scale).
+#'
+#' To predict distributional parameters (called "dpar" in other
 #' packages), for instance when using complex formulae in `brms` models, the
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.

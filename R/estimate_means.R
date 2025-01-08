@@ -11,19 +11,23 @@
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #' Valid options for `predict`` are:
 #'
-#' * `backend = "emmeans"`: `predict` can be `"link"` (default for contrasts),
-#'   `"response"` (default for means), `"mu"`, `"unlink"`, `"log"`.
-#' * `backend = "marginaleffects"`: `predict` can be `"link"`, `"response"` or
-#'   any valid `type` option, which depends on the model-class.
+#' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
+#'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
+#'   transformation is selected (which usually is `"response"`).
+#' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
+#'   any valid `type` option supported by model's class `predict()` method. By
+#'   default, when `predict = NULL`, the most appropriate transformation is
+#'   selected, which usually returns predictions or contrasts on the
+#'   response-scale.
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
-#' `"response"` will transform them on scale of the response variable. Thus
-#' for a logistic model, `"link"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities.
-#' To predict distributional parameters (called "dpar" in other packages), for
-#' instance when using complex formulae in `brms` models, the `predict` argument
-#' can take the value of the parameter you want to estimate, for instance
-#' `"sigma"`, `"kappa"`, etc.
+#' `"response"` (or `NULL`) will transform them on scale of the response
+#' variable. Thus for a logistic model, `"link"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities. To predict distributional parameters (called "dpar" in other
+#' packages), for instance when using complex formulae in `brms` models, the
+#' `predict` argument can take the value of the parameter you want to estimate,
+#' for instance `"sigma"`, `"kappa"`, etc.
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random

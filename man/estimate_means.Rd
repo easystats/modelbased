@@ -28,20 +28,24 @@ across them).}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for `predict`` are:
 \itemize{
-\item \code{backend = "emmeans"}: \code{predict} can be \code{"link"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"link"}, \code{"response"} or
-any valid \code{type} option, which depends on the model-class.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
+any valid \code{type} option supported by model's class \code{predict()} method. By
+default, when \code{predict = NULL}, the most appropriate transformation is
+selected, which usually returns predictions or contrasts on the
+response-scale.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable. Thus
-for a logistic model, \code{"link"} will give estimations expressed in log-odds
-(probabilities on logit scale) and \code{"response"} in terms of probabilities.
-To predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in \code{brms} models, the \code{predict} argument
-can take the value of the parameter you want to estimate, for instance
-\code{"sigma"}, \code{"kappa"}, etc.}
+\code{"response"} (or \code{NULL}) will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
