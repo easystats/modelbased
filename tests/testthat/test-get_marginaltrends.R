@@ -1,7 +1,7 @@
-test_that("get_marginaltrends", {
-  skip_if_not_installed("marginaleffects")
-  skip_if_not_installed("emmeans")
+skip_if_not_installed("marginaleffects")
+skip_if_not_installed("emmeans")
 
+test_that("get_marginaltrends", {
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
   out <- get_marginaltrends(model, trend = "Petal.Length", by = "Species")
   expect_identical(nrow(out), 3L)
@@ -12,9 +12,6 @@ test_that("get_marginaltrends", {
 
 
 test_that("get_marginaltrends", {
-  skip_if_not_installed("marginaleffects")
-  skip_if_not_installed("emmeans")
-
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
   # TODO: fix this
