@@ -4,6 +4,8 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
+#' @param contrast A character vector indicating the name of the variable(s)
+#' for which to compute the contrasts.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
@@ -13,7 +15,6 @@
 #' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
 #' [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #' @inheritParams estimate_means
-#' @inheritParams get_emcontrasts
 #'
 #' @inherit estimate_slopes details
 #'
