@@ -90,6 +90,6 @@
       setosa - virginica     |      -0.50 | [-0.67, -0.33] | < .001
       versicolor - virginica |       0.18 | [ 0.01,  0.35] | 0.035 
       
-      Marginal contrasts estimated at 
+      Marginal contrasts estimated at Species
       p-value adjustment method: Holm (1979)
 
