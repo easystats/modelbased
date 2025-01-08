@@ -6,9 +6,9 @@
 #'
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. If
-#' `backend = "emmeans"`, `"tukey"` is also supported. See the p-value
-#' adjustment section in the `emmeans::test` documentation or `?stats::p.adjust`.
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
+#' p-value adjustment section in the `emmeans::test` documentation or
+#' `?stats::p.adjust`.
 #' @param method Contrast method. When `backend = "emmeans"`, see same argument
 #' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
 #' [this website](https://marginaleffects.com/bonus/hypothesis.html).
@@ -192,6 +192,8 @@ estimate_contrasts <- function(model,
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
   focal_terms <- attributes(estimated)$focal_terms
+
+  estimated <- .p_adjust(model, estimated, p_adjust, ...)
 
   valid_methods <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",

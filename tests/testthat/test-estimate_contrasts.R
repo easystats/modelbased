@@ -199,8 +199,7 @@ test_that("estimate_contrasts - dfs", {
   estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite"))
   estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
 
-  # TODO: check out why this test is failing
-  # expect_true(any(estim1$CI_low != estim2$CI_low))
+  expect_true(all(estim1$CI_low != estim2$CI_low))
 })
 
 
@@ -271,4 +270,8 @@ test_that("estimate_contrasts - marginaleffects", {
   # validate against marginaleffects
   out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = "pairwise")
   expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
+
+  # test p-adjust
+  expect_snapshot(estimate_contrasts(model))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
 })
