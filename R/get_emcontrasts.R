@@ -2,7 +2,12 @@
 #'
 #' @param contrast A character vector indicating the name of the variable(s)
 #' for which to compute the contrasts.
-#' @param method Contrast method. See same argument in [emmeans::contrast].
+#' @param method Contrast method. When `backend = "emmeans"`, will be passed
+#' to the argument in [emmeans::contrast]. For `backend = "marginaleffects"`,
+#' a string describing the contrast method, respectively a formulation of the
+#' hypothesis to test. See [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#' Will be passed to the `hypothesis` argument in `marginaleffects::avg_predictions()`.
+#' @inheritParams estimate_contrasts
 #'
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' # Basic usage
