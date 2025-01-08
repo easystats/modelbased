@@ -27,7 +27,6 @@ get_marginalmeans <- function(model,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-  dots <- list(...)
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -54,6 +53,7 @@ get_marginalmeans <- function(model,
     dg_args$preserve_range <- FALSE
   }
   # add user-arguments from "...", but remove those arguments that are already set
+  dots <- list(...)
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
