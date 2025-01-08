@@ -14,6 +14,7 @@ get_marginalcontrasts(
   predict = NULL,
   method = "pairwise",
   ci = 0.95,
+  p_adjust = "holm",
   ...
 )
 

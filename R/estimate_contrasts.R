@@ -5,9 +5,10 @@
 #' and [estimate_slopes()].
 #'
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
-#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
-#' p-value adjustment section in the `emmeans::test` documentation.
+#' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. If
+#' `backend = "emmeans"`, `"tukey"` is also supported. See the p-value
+#' adjustment section in the `emmeans::test` documentation or `?stats::p.adjust`.
 #' @param method Contrast method. When `backend = "emmeans"`, see same argument
 #' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
 #' [this website](https://marginaleffects.com/bonus/hypothesis.html).

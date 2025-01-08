@@ -56,9 +56,10 @@ for instance \code{"sigma"}, \code{"kappa"}, etc.}
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochberg"},
-\code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation.}
+comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. If
+\code{backend = "emmeans"}, \code{"tukey"} is also supported. See the p-value
+adjustment section in the \code{emmeans::test} documentation or \code{?stats::p.adjust}.}
 
 \item{method}{Contrast method. When \code{backend = "emmeans"}, see same argument
 in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see

@@ -12,7 +12,7 @@ get_marginalcontrasts <- function(model,
                                   predict = NULL,
                                   method = "pairwise",
                                   ci = 0.95,
-                                  p_adjust = NULL,
+                                  p_adjust = "holm",
                                   ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -20,6 +20,9 @@ get_marginalcontrasts <- function(model,
   # set default, if NULL
   if (is.null(contrast)) {
     contrast <- "auto"
+  }
+  if (identical(p_adjust, "none")) {
+    p_adjust <- NULL
   }
 
   # Guess arguments
