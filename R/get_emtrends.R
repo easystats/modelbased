@@ -1,8 +1,4 @@
 #' @rdname get_emmeans
-#'
-#' @param trend A character indicating the name of the variable
-#'   for which to compute the slopes.
-#'
 #' @examples
 #' if (require("emmeans")) {
 #'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

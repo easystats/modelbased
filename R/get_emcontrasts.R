@@ -1,9 +1,4 @@
 #' @rdname get_emmeans
-#'
-#' @param contrast A character vector indicating the name of the variable(s)
-#' for which to compute the contrasts.
-#' @param method Contrast method. See same argument in [emmeans::contrast].
-#'
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)

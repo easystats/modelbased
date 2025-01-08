@@ -1,36 +1,4 @@
-#' Easy 'avg_predictions' and 'avg_slopes'
-#'
-#' The `get_marginalmeans()` function is a wrapper to facilitate the usage of
-#' `marginaleffects::avg_predictions()` and `marginaleffects::avg_slopes()`,
-#' providing a somewhat simpler and intuitive API to find the specifications and
-#' variables of interest. It is meanly made to for the developers to facilitate
-#' the organization and debugging, and end-users should rather use the
-#' `estimate_*()` series of functions.
-#'
-#' @param model A statistical model.
-#' @param predict Can be used to easily modulate the `type` argument in
-#' `marginaleffects::avg_predictions()`. Can be `"link"`, `"response"` or any
-#' valid `type` option supported by **marginaleffects** (which depends on the
-#' model-class). `"link"` will leave the values on scale of the linear
-#' predictors. `"response"` will transform them on scale of the response
-#' variable. Thus for a logistic model, `"link"` will give estimations expressed
-#' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities. If `predict = NULL` (default), the most appropriate
-#' transformation is selected (which usually returns predictions or contrasts
-#' on the response scale).
-#'
-#' To predict distributional parameters (called "dpar" in other
-#' packages), for instance when using complex formulae in `brms` models, the
-#' `predict` argument can take the value of the parameter you want to estimate,
-#' for instance `"sigma"`, `"kappa"`, etc.
-#' @param by The predictor variable(s) at which to evaluate the desired effect
-#' / mean / contrasts. Other predictors of the model that are not included
-#' here will be collapsed and "averaged" over (the effect will be estimated
-#' across them).
-#' @param ci Level for confidence intervals.
-#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
-#' or [marginaleffects::avg_predictions()].
-#' @param transform Deprecated, please use `predict` instead.
+#' @rdname get_emmeans
 #'
 #' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -59,7 +27,6 @@ get_marginalmeans <- function(model,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-  dots <- list(...)
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -81,6 +48,7 @@ get_marginalmeans <- function(model,
     include_random = TRUE,
     verbose = FALSE
   )
+  dots <- list(...)
   # always show all theoretical values by default
   if (is.null(dots$preserve_range)) {
     dg_args$preserve_range <- FALSE

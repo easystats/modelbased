@@ -1,11 +1,4 @@
-#' @rdname get_marginalmeans
-#'
-#' @param method Contrast method, respectively a formulation of the hypothesis
-#' to test. See [this website](https://marginaleffects.com/bonus/hypothesis.html).
-#' Will be passed to the `hypothesis` argument in `marginaleffects::avg_predictions()`.
-#' @inheritParams estimate_contrasts
-#' @inheritParams get_marginalmeans
-#' @inheritParams get_emcontrasts
+#' @rdname get_emmeans
 #' @export
 get_marginalcontrasts <- function(model,
                                   contrast = NULL,
