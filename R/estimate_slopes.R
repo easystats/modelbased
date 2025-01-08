@@ -110,7 +110,6 @@ estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             ci = 0.95,
-                            backend = getOption("modelbased_backend", "emmeans"),
                             ...) {
   # Sanitize arguments
   estimated <- get_emtrends(model, trend, by, ...)
