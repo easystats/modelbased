@@ -27,6 +27,7 @@ get_marginalmeans <- function(model,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
+  dots <- list(...)
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -40,39 +41,50 @@ get_marginalmeans <- function(model,
   # find default response-type
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
-  # setup arguments
-  dg_args <- list(
-    model,
-    by = my_args$by,
-    factors = "all",
-    include_random = TRUE,
-    verbose = FALSE
-  )
-  dots <- list(...)
-  # always show all theoretical values by default
-  if (is.null(dots$preserve_range)) {
-    dg_args$preserve_range <- FALSE
-  }
-  # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "factors", "include_random", "verbose")] <- NULL
-  dg_args <- insight::compact_list(c(dg_args, dots))
+  # exception: by = NULL computes overall mean
+  if (is.null(by)) {
+    datagrid <- at_specs <- NULL
+  } else {
+    # setup arguments
+    dg_args <- list(
+      model,
+      by = my_args$by,
+      factors = "all",
+      include_random = TRUE,
+      verbose = FALSE
+    )
+    # always show all theoretical values by default
+    if (is.null(dots$preserve_range)) {
+      dg_args$preserve_range <- FALSE
+    }
+    # add user-arguments from "...", but remove those arguments that are already set
+    dots[c("by", "factors", "include_random", "verbose")] <- NULL
+    dg_args <- insight::compact_list(c(dg_args, dots))
 
-  # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- do.call(insight::get_datagrid, dg_args)
-  at_specs <- attributes(datagrid)$at_specs
+    # Get corresponding datagrid (and deal with particular ats)
+    datagrid <- do.call(insight::get_datagrid, dg_args)
+    at_specs <- attributes(datagrid)$at_specs
+
+    # add user-arguments from "...", but remove those arguments that are already set
+    dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
+  }
 
   # model df
   dof <- insight::get_df(model, verbose = FALSE)
+
+  # sanity check
+  if (!is.null(datagrid)) {
+    datagrid <- as.data.frame(datagrid)
+  }
 
   # setup arguments
   fun_args <- list(
     model,
     by = at_specs$varname,
-    newdata = as.data.frame(datagrid),
+    newdata = datagrid,
     conf_level = ci,
     df = dof
   )
-
   # handle distributional parameters
   if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
@@ -80,8 +92,6 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
-  # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
