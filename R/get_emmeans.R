@@ -1,4 +1,4 @@
-#' Easy 'emmeans' and 'emtrends'
+#' Consistent API for 'emmeans' and 'marginaleffects'
 #'
 #' @description
 #' These functions are convenient wrappers around the `emmeans` and the

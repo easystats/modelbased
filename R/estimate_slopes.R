@@ -12,7 +12,6 @@
 #' and [README examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and use cases.
 #'
-#' @inheritParams get_emmeans
 #' @inheritParams estimate_means
 #'
 #' @details

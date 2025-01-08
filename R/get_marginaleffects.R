@@ -1,6 +1,4 @@
-#' @rdname get_marginalmeans
-#'
-#' @inheritParams get_emmeans
+#' @rdname get_emmeans
 #'
 #' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
