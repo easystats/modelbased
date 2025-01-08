@@ -1,6 +1,6 @@
 pandoc: 3.6.1
 pkgdown: 2.1.1.9000
-pkgdown_sha: 4519ca0ae415b415eb8c1c142a6d4d39d8a5b80d
+pkgdown_sha: 6615322cb2ce15b1effcecf894123c88fa10b9c9
 articles:
   derivatives: derivatives.html
   describe_nonlinear: describe_nonlinear.html
@@ -14,7 +14,7 @@ articles:
   overview_of_vignettes: overview_of_vignettes.html
   transformations: transformations.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2025-01-08T16:55Z
+last_built: 2025-01-08T18:38Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
