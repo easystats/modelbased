@@ -48,12 +48,12 @@ get_marginalmeans <- function(model,
     include_random = TRUE,
     verbose = FALSE
   )
+  dots <- list(...)
   # always show all theoretical values by default
   if (is.null(dots$preserve_range)) {
     dg_args$preserve_range <- FALSE
   }
   # add user-arguments from "...", but remove those arguments that are already set
-  dots <- list(...)
   dots[c("by", "factors", "include_random", "verbose")] <- NULL
   dg_args <- insight::compact_list(c(dg_args, dots))
 
