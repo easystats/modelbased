@@ -102,7 +102,7 @@ p-value adjustment section in the \code{emmeans::test} documentation or
 }
 \description{
 These functions are convenient wrappers around the \code{emmeans} and the
-\code{marginaleffects} packages. They are mostly available for developpers who want
+\code{marginaleffects} packages. They are mostly available for developers who want
 to leverage a unified API for getting model-based estimates, and regular users
 should use the \verb{estimate_*} set of functions.
 
