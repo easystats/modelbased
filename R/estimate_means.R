@@ -11,24 +11,33 @@
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #' Valid options for `predict`` are:
 #'
-#' * `backend = "emmeans"`: `predict` can be `"link"` (default for contrasts),
-#'   `"response"` (default for means), `"mu"`, `"unlink"`, `"log"`.
-#' * `backend = "marginaleffects"`: `predict` can be `"link"`, `"response"` or
-#'   any valid `type` option, which depends on the model-class.
+#' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
+#'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
+#'   transformation is selected (which usually is `"response"`).
+#' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
+#'   any valid `type` option supported by model's class `predict()` method. By
+#'   default, when `predict = NULL`, the most appropriate transformation is
+#'   selected, which usually returns predictions or contrasts on the
+#'   response-scale.
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
-#' `"response"` will transform them on scale of the response variable. Thus
-#' for a logistic model, `"link"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities.
-#' To predict distributional parameters (called "dpar" in other packages), for
-#' instance when using complex formulae in `brms` models, the `predict` argument
-#' can take the value of the parameter you want to estimate, for instance
-#' `"sigma"`, `"kappa"`, etc.
+#' `"response"` (or `NULL`) will transform them on scale of the response
+#' variable. Thus for a logistic model, `"link"` will give estimations expressed
+#' in log-odds (probabilities on logit scale) and `"response"` in terms of
+#' probabilities. To predict distributional parameters (called "dpar" in other
+#' packages), for instance when using complex formulae in `brms` models, the
+#' `predict` argument can take the value of the parameter you want to estimate,
+#' for instance `"sigma"`, `"kappa"`, etc.
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
 #' effects levels, producing "marginal predictions" (instead of "conditional
 #' predictions", see Heiss 2022).
+#'
+#' You can set a default backend via `options()`, e.g. use
+#' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
+#' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
+#' as default backend.
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
@@ -77,7 +86,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           backend = "emmeans",
+                           backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
                            ...) {
   ## TODO: remove deprecation warning later
@@ -108,19 +117,24 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(means, type = "means")
+  attr(means, "table_footer") <- .estimate_means_footer(
+    means,
+    type = "means",
+    predict = attributes(estimated)$predict,
+    model_info = insight::model_info(model)
+  )
 
   # Add attributes
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "transform") <- predict
+  attr(means, "backend") <- backend
 
   attr(means, "coef_name") <- intersect(
     c("Mean", "Probability", tools::toTitleCase(.brms_aux_elements())),
     names(means)
   )
-
 
   # Output
   class(means) <- c("estimate_means", class(means))
@@ -131,7 +145,12 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, by = NULL, type = "means", p_adjust = NULL) {
+.estimate_means_footer <- function(x,
+                                   by = NULL,
+                                   type = "means",
+                                   p_adjust = NULL,
+                                   predict = NULL,
+                                   model_info = NULL) {
   table_footer <- paste("\nMarginal", type)
 
   # Levels
@@ -150,6 +169,26 @@ estimate_means <- function(model,
     }
   }
 
-  if (all(table_footer == "")) table_footer <- NULL # nolint
+  # tell user about scale of predictions / contrasts
+  if (!is.null(predict) && isFALSE(model_info$is_linear)) {
+    result_type <- switch(
+      type,
+      means = "Predictions",
+      contrasts = "Contrasts"
+    )
+    # exceptions
+    predict <- switch(
+      predict,
+      none = "link",
+      `invlink(link)` = "response",
+      predict
+    )
+    table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
+  }
+
+  if (all(table_footer == "")) { # nolint
+    table_footer <- NULL
+  }
+
   c(table_footer, "blue")
 }

@@ -5,9 +5,10 @@
 #' and [estimate_slopes()].
 #'
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
-#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
-#' p-value adjustment section in the `emmeans::test` documentation.
+#' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
+#' p-value adjustment section in the `emmeans::test` documentation or
+#' `?stats::p.adjust`.
 #' @param method Contrast method. When `backend = "emmeans"`, see same argument
 #' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
 #' [this website](https://marginaleffects.com/bonus/hypothesis.html).
@@ -81,7 +82,7 @@ estimate_contrasts <- function(model,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
-                               backend = "emmeans",
+                               backend = getOption("modelbased_backend", "emmeans"),
                                transform = NULL,
                                ...) {
   ## TODO: remove deprecation warning later
@@ -125,7 +126,9 @@ estimate_contrasts <- function(model,
     out,
     info$contrast,
     type = "contrasts",
-    p_adjust = p_adjust
+    p_adjust = p_adjust,
+    predict = attributes(estimated)$predict,
+    model_info = insight::model_info(model)
   )
 
   # Add attributes
@@ -137,6 +140,7 @@ estimate_contrasts <- function(model,
   attr(out, "by") <- info$by
   attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
+  attr(out, "backend") <- backend
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
@@ -190,8 +194,6 @@ estimate_contrasts <- function(model,
   groups <- attributes(estimated)$by
   contrast <- attributes(estimated)$contrast
   focal_terms <- attributes(estimated)$focal_terms
-
-  estimated <- .p_adjust(model, estimated, p_adjust, ...)
 
   valid_methods <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",

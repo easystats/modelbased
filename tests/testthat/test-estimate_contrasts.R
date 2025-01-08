@@ -90,10 +90,16 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model))
-  expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
-  expect_identical(dim(estim), c(3L, 9L))
+  estim1 <- suppressMessages(estimate_contrasts(model))
+  expect_identical(dim(estim1), c(3L, 9L))
+  estim2 <- suppressMessages(estimate_contrasts(model, predict = "link"))
+  expect_identical(dim(estim2), c(3L, 9L))
+  expect_true(all(estim1$Difference != estim2$Difference))
+
+  estim3 <- suppressWarnings(suppressMessages(estimate_contrasts(model, backend = "marginaleffects")))
+  expect_identical(estim3$Difference, estim1$Difference)
+  estim4 <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", backend = "marginaleffects")))
+  expect_identical(estim4$Difference, estim2$Difference)
 
   # GLM - poisson
   dat <- data.frame(
@@ -160,12 +166,12 @@ test_that("estimate_contrasts - Bayesian", {
 
   estim <- suppressMessages(estimate_contrasts(model))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "link"))
   expect_identical(dim(estim), c(3L, 7L))
 
   estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf")))
   expect_identical(dim(estim), c(3L, 6L))
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "response", test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf")))
   expect_identical(dim(estim), c(3L, 6L))
 })
 
@@ -185,6 +191,8 @@ test_that("estimate_contrasts - p.adjust", {
 test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
+  skip_if_not_installed("pbkrtest")
+  skip_if_not_installed("lmerTest")
 
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -193,8 +201,9 @@ test_that("estimate_contrasts - dfs", {
   estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite"))
   estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
 
-  # TODO: check out why this test is failing
-  # expect_true(any(estim1$CI_low != estim2$CI_low))
+  expect_true(all(estim1$CI_low != estim2$CI_low))
+  expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
 })
 
 
@@ -226,4 +235,47 @@ test_that("estimate_contrasts - marginaleffects", {
     method = "(b2-b1)=(b4-b3)"
   )
   expect_snapshot(print(out, zap_small = TRUE))
+})
+
+
+test_that("estimate_contrasts - marginaleffects", {
+  skip_if_not_installed("emmeans")
+  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("ggeffects")
+
+  data(iris)
+  dat <- iris
+  dat$y <- as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))
+  model <- glm(y ~ Species, family = "binomial", data = dat)
+
+  expect_message(estimate_contrasts(model), regex = "No variable was")
+
+  ## emmeans backend works and has proper default
+  out1 <- suppressMessages(estimate_contrasts(model))
+  out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  pr <- ggeffects::predict_response(model, "Species")
+  out3 <- ggeffects::test_predictions(pr)
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$Difference, out3$Contrast, tolerance = 1e-4)
+
+  ## marginaleffects backend works and has proper default
+  out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
+  out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
+  expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
+  expect_equal(out4$Difference, out3$Contrast, tolerance = 1e-4)
+  expect_equal(out4$CI_low, out3$conf.low, tolerance = 1e-2)
+
+  # validate against emmeans
+  out_emm <- emmeans::emmeans(model, "Species", type = "response")
+  out_emm <- emmeans::regrid(out_emm)
+  out6 <- as.data.frame(emmeans::contrast(out_emm, method = "pairwise"))
+  expect_equal(out6$estimate, out1$Difference, tolerance = 1e-3)
+
+  # validate against marginaleffects
+  out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = "pairwise")
+  expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
+
+  # test p-adjust
+  expect_snapshot(estimate_contrasts(model))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
 })

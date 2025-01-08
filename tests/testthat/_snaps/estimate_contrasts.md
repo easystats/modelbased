@@ -57,3 +57,39 @@
       Marginal contrasts estimated at time, coffee
       p-values are uncorrected.
 
+---
+
+    Code
+      estimate_contrasts(model)
+    Message
+      No variable was specified for contrast estimation. Selecting `contrast =
+        "Species"`.
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     |     Level2 | Difference |         95% CI |   SE |  df |     z |      p
+      -----------------------------------------------------------------------------------
+      setosa     | versicolor |      -0.68 | [-0.86, -0.50] | 0.07 | Inf | -9.27 | < .001
+      setosa     |  virginica |      -0.50 | [-0.70, -0.30] | 0.08 | Inf | -5.90 | < .001
+      versicolor |  virginica |       0.18 | [-0.02,  0.38] | 0.08 | Inf |  2.12 | 0.034 
+      
+      Marginal contrasts estimated at Species
+      p-value adjustment method: Holm (1979)
+      Contrasts are on the response-scale.
+
+---
+
+    Code
+      estimate_contrasts(model, backend = "marginaleffects")
+    Output
+      Marginal Contrasts Analysis
+      
+      Parameter              | Difference |         95% CI |      p
+      -------------------------------------------------------------
+      setosa - versicolor    |      -0.68 | [-0.82, -0.54] | < .001
+      setosa - virginica     |      -0.50 | [-0.67, -0.33] | < .001
+      versicolor - virginica |       0.18 | [ 0.01,  0.35] | 0.035 
+      
+      Marginal contrasts estimated at 
+      p-value adjustment method: Holm (1979)
+

@@ -10,15 +10,16 @@
 #' @param model A statistical model.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()`. See
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Can be `"link"` (default for contrasts), `"response"` (default for means),
-#' `"mu"`, `"unlink"`, `"log"`. `"link"` will leave the values on scale of the
-#' linear predictors. `"response"` will transform them on scale of the response
-#' variable. Thus for a logistic model, `"link"` will give estimations expressed
-#' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities. To predict distributional parameters (called "dpar" in other
-#' packages), for instance when using complex formulae in `brms` models, the
-#' `predict` argument can take the value of the parameter you want to estimate,
-#' for instance `"sigma"`, `"kappa"`, etc.
+#' Can be `"response"`, `"link"` or other option supported such as `"mu"`,
+#' `"unlink"`, `"log"`. If `predict = NULL` (default), the most appropriate
+#'   transformation is selected (which usually is `"response"`). `"link"` will
+#' leave the values on scale of the linear predictors. `"response"` will
+#' transform them on scale of the response variable. Thus for a logistic model,
+#' `"link"` will give estimations expressed in log-odds (probabilities on logit
+#' scale) and `"response"` in terms of probabilities. To predict distributional
+#' parameters (called "dpar" in other packages), for instance when using complex
+#' formulae in `brms` models, the `predict` argument can take the value of the
+#' parameter you want to estimate, for instance `"sigma"`, `"kappa"`, etc.
 #' @param by The predictor variable(s) at which to evaluate the desired effect
 #' / mean / contrasts. Other predictors of the model that are not included
 #' here will be collapsed and "averaged" over (the effect will be estimated
@@ -174,6 +175,7 @@ get_emmeans <- function(model,
   if (is.null(predict)) {
     predict <- switch(type,
       means = "response",
+      contrasts = "response",
       "none"
     )
   } else if (predict == "link") {

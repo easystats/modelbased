@@ -25,7 +25,7 @@
 get_emcontrasts <- function(model,
                             contrast = NULL,
                             by = NULL,
-                            predict = "link",
+                            predict = NULL,
                             method = "pairwise",
                             transform = NULL,
                             ...) {
@@ -42,7 +42,7 @@ get_emcontrasts <- function(model,
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, ...)
 
   # find default response-type
-  predict <- .get_emmeans_type_argument(model, predict, type = "contrast", ...)
+  predict <- .get_emmeans_type_argument(model, predict, type = "contrasts", ...)
 
   # Run emmeans
   estimated <- emmeans::emmeans(
@@ -52,6 +52,11 @@ get_emcontrasts <- function(model,
     type = predict,
     ...
   )
+
+  # If means are on the response scale (e.g., probabilities), need to regrid
+  if (predict == "response") {
+    estimated <- emmeans::regrid(estimated)
+  }
 
   # Find by variables
   emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]

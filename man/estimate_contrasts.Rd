@@ -12,7 +12,7 @@ estimate_contrasts(
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
-  backend = "emmeans",
+  backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
   ...
 )
@@ -34,27 +34,32 @@ across them).}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for `predict`` are:
 \itemize{
-\item \code{backend = "emmeans"}: \code{predict} can be \code{"link"} (default for contrasts),
-\code{"response"} (default for means), \code{"mu"}, \code{"unlink"}, \code{"log"}.
-\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"link"}, \code{"response"} or
-any valid \code{type} option, which depends on the model-class.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
+any valid \code{type} option supported by model's class \code{predict()} method. By
+default, when \code{predict = NULL}, the most appropriate transformation is
+selected, which usually returns predictions or contrasts on the
+response-scale.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
-\code{"response"} will transform them on scale of the response variable. Thus
-for a logistic model, \code{"link"} will give estimations expressed in log-odds
-(probabilities on logit scale) and \code{"response"} in terms of probabilities.
-To predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in \code{brms} models, the \code{predict} argument
-can take the value of the parameter you want to estimate, for instance
-\code{"sigma"}, \code{"kappa"}, etc.}
+\code{"response"} (or \code{NULL}) will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochberg"},
-\code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation.}
+comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
 
 \item{method}{Contrast method. When \code{backend = "emmeans"}, see same argument
 in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
@@ -64,7 +69,12 @@ in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffe
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).}
+predictions", see Heiss 2022).
+
+You can set a default backend via \code{options()}, e.g. use
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
+as default backend.}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
 

@@ -11,7 +11,7 @@ get_emcontrasts(
   model,
   contrast = NULL,
   by = NULL,
-  predict = "link",
+  predict = NULL,
   method = "pairwise",
   transform = NULL,
   ...
@@ -34,15 +34,16 @@ across them).}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"link"} (default for contrasts), \code{"response"} (default for means),
-\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"link"} will leave the values on scale of the
-linear predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"link"} will give estimations expressed
-in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
-packages), for instance when using complex formulae in \code{brms} models, the
-\code{predict} argument can take the value of the parameter you want to estimate,
-for instance \code{"sigma"}, \code{"kappa"}, etc.}
+Can be \code{"response"}, \code{"link"} or other option supported such as \code{"mu"},
+\code{"unlink"}, \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}). \code{"link"} will
+leave the values on scale of the linear predictors. \code{"response"} will
+transform them on scale of the response variable. Thus for a logistic model,
+\code{"link"} will give estimations expressed in log-odds (probabilities on logit
+scale) and \code{"response"} in terms of probabilities. To predict distributional
+parameters (called "dpar" in other packages), for instance when using complex
+formulae in \code{brms} models, the \code{predict} argument can take the value of the
+parameter you want to estimate, for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 

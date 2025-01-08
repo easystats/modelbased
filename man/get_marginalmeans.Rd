@@ -14,6 +14,7 @@ get_marginalcontrasts(
   predict = NULL,
   method = "pairwise",
   ci = 0.95,
+  p_adjust = "holm",
   ...
 )
 
@@ -46,7 +47,11 @@ model-class). \code{"link"} will leave the values on scale of the linear
 predictors. \code{"response"} will transform them on scale of the response
 variable. Thus for a logistic model, \code{"link"} will give estimations expressed
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
+probabilities. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually returns predictions or contrasts
+on the response scale).
+
+To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
@@ -56,6 +61,12 @@ to test. See \href{https://marginaleffects.com/bonus/hypothesis.html}{this websi
 Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_predictions()}.}
 
 \item{ci}{Level for confidence intervals.}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
 
 \item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
 or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}.}
