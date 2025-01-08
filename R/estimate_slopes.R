@@ -116,13 +116,13 @@ estimate_slopes <- function(model,
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emtrends(model, trend, by, ...)
-    info <- attributes(estimated)
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
-    trends <- get_marginaltrends(model, trend, by, ...)
-    ## TODO: needs to be fixed
-    info <- list(by = by, trend = trend)
+    estimated <- get_marginaltrends(model, trend, by, ...)
+    trends <- .format_marginaleffects_slopes(model, estimated, ci, ...)
   }
+
+  info <- attributes(estimated)
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
@@ -162,6 +162,17 @@ estimate_slopes <- function(model,
   # Remove the "1 - overall" column that can appear in cases like y ~ x
   trends <- trends[names(trends) != "1"]
 
+  # Restore factor levels
+  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+}
+
+
+.format_marginaleffects_slopes <- function(model, estimated, ci, ...) {
+  # Summarize and clean
+  trends <- parameters::parameters(estimated, ci = ci, ...)
+  # remove redundant columns
+  trends <- datawizard::data_remove(trends, c("Parameter", "Statistic", "SE", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
+  trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
   # Restore factor levels
   datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 }

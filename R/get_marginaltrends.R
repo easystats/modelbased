@@ -16,43 +16,73 @@ get_marginaltrends <- function(model,
   dots <- list(...)
 
   # Guess arguments
-  if (is.null(trend)) {
-    trend <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)[1]
-    insight::format_warning(
-      paste0("`trend` cannot be NULL when using marginaleffects to compute overall effects. Selecting '", trend, "'.")
-    )
-  }
+  trend <- .guess_marginaltrends_arguments(model, trend, by, ...)
 
+  # data grid only when we have by predictors
   if (is.null(by)) {
-    by <- insight::find_predictors(model, effects = "fixed", flatten = TRUE)
-    by <- by[!by %in% trend]
+    datagrid <- at_specs <- NULL
+  } else {
+    # setup arguments
+    dg_args <- list(
+      model,
+      by = by,
+      verbose = FALSE
+    )
+    # add user-arguments from "...", but remove those arguments that are already set
+    dots[c("by", "verbose")] <- NULL
+    dg_args <- insight::compact_list(c(dg_args, dots))
+
+    # Get corresponding datagrid (and deal with particular ats)
+    datagrid <- do.call(insight::get_datagrid, dg_args)
+    at_specs <- attributes(datagrid)$at_specs
   }
 
-  # setup arguments
-  dg_args <- list(
-    model,
-    by = by,
-    verbose = FALSE
-  )
-  # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "verbose")] <- NULL
-  dg_args <- insight::compact_list(c(dg_args, dots))
-
-  # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- do.call(insight::get_datagrid, dg_args)
-  at_specs <- attributes(datagrid)$at_specs
-
-  # Compute stuff
-  estimated <- marginaleffects::avg_slopes(
+  # setup arguments again
+  fun_args <- insight::compact_list(list(
     model,
     variables = trend,
     by = at_specs$varname,
-    newdata = datagrid,
-    ...
-  )
+    newdata = datagrid
+  ))
+
+  # Compute stuff
+  estimated <- do.call(marginaleffects::avg_slopes, fun_args)
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
   attr(estimated, "by") <- by
   estimated
+}
+
+
+# =========================================================================
+# HELPERS (guess arguments) -----------------------------------------------
+# =========================================================================
+
+#' @keywords internal
+.guess_marginaltrends_arguments <- function(model,
+                                            trend = NULL,
+                                            by = NULL,
+                                            ...) {
+  # Gather info
+  model_data <- insight::get_data(model, verbose = FALSE)
+  predictors <- intersect(
+    colnames(model_data),
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  )
+
+  # Guess arguments
+  if (is.null(trend)) {
+    trend <- predictors[sapply(model_data[predictors], is.numeric)][1]
+    if (!length(trend) || is.na(trend)) {
+      insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
+    }
+    insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+  }
+  if (length(trend) > 1) {
+    insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
+    trend <- trend[1]
+  }
+
+  trend
 }
