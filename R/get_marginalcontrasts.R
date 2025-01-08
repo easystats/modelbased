@@ -1,4 +1,4 @@
-#' @rdname get_marginalmeans
+#' @rdname get_emmeans
 #'
 #' @param method Contrast method, respectively a formulation of the hypothesis
 #' to test. See [this website](https://marginaleffects.com/bonus/hypothesis.html).
