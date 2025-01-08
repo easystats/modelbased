@@ -83,9 +83,9 @@ packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
-\item{method}{Contrast method, respectively a formulation of the hypothesis
-to test. See \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
-Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_predictions()}.}
+\item{method}{Contrast method. When \code{backend = "emmeans"}, see same argument
+in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
 
@@ -93,8 +93,6 @@ Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_p
 
 \item{trend}{A character indicating the name of the variable
 for which to compute the slopes.}
-
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},

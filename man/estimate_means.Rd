@@ -68,7 +68,7 @@ as default backend.}
 A data frame of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor levels. For
+Estimate average value of response variable at each factor level. For
 plotting, check the examples in \code{\link[=visualisation_recipe]{visualisation_recipe()}}. See also
 other related functions such as \code{\link[=estimate_contrasts]{estimate_contrasts()}} and
 \code{\link[=estimate_slopes]{estimate_slopes()}}.

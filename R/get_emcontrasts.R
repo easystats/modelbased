@@ -1,8 +1,6 @@
 #' @rdname get_emmeans
 #'
-#' @param contrast A character vector indicating the name of the variable(s)
-#' for which to compute the contrasts.
-#' @param method Contrast method. See same argument in [emmeans::contrast].
+#' @inheritParams estimate_contrasts
 #'
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' # Basic usage
