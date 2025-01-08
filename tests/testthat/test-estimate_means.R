@@ -351,3 +351,14 @@ test_that("estimate_means() - mixed models", {
   expect_equal(estim2$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
   expect_equal(estim2$CI_low, c(0.14056, 0.04352, 0.0349, 0.0116), tolerance = 1e-3)
 })
+
+
+test_that("get_marginaleffects, overall mean", {
+  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("emmeans")
+
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  out1 <- as.data.frame(get_emmeans(model, by = NULL))
+  out2 <- as.data.frame(get_marginalmeans(model, by = NULL))
+  expect_equal(out1$emmean, out2$estimate, tolerance = 0.2)
+})
