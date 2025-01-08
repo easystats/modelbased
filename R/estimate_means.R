@@ -117,7 +117,12 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(means, type = "means")
+  attr(means, "table_footer") <- .estimate_means_footer(
+    means,
+    type = "means",
+    predict = attributes(estimated)$predict,
+    model_info = insight::model_info(model)
+  )
 
   # Add attributes
   attr(means, "model") <- model
@@ -140,7 +145,12 @@ estimate_means <- function(model,
 # Table Formating ----------------------------------------------------------
 
 
-.estimate_means_footer <- function(x, by = NULL, type = "means", p_adjust = NULL) {
+.estimate_means_footer <- function(x,
+                                   by = NULL,
+                                   type = "means",
+                                   p_adjust = NULL,
+                                   predict = NULL,
+                                   model_info = NULL) {
   table_footer <- paste("\nMarginal", type)
 
   # Levels
@@ -159,6 +169,22 @@ estimate_means <- function(model,
     }
   }
 
-  if (all(table_footer == "")) table_footer <- NULL # nolint
+  # tell user about scale of predictions / contrasts
+  if (!is.null(predict) && isFALSE(model_info$is_linear)) {
+    result_type <- switch(
+      type,
+      means = "Predictions",
+      contrasts = "Contrasts"
+    )
+    if (predict == "none") {
+      predict <- "link"
+    }
+    table_footer <- paste0(table_footer, "\nPredictions are on the ", predict, "-scale.")
+  }
+
+  if (all(table_footer == "")) { # nolint
+    table_footer <- NULL
+  }
+
   c(table_footer, "blue")
 }
