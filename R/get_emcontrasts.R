@@ -82,7 +82,7 @@ get_emcontrasts <- function(model,
                                          by = NULL,
                                          ...) {
   # Gather info
-  model_data <- insight::get_data(model, verbose = FALSE)
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   predictors <- intersect(
     colnames(model_data),
     insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
