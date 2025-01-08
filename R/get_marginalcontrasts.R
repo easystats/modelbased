@@ -3,6 +3,7 @@
 #' @param method Contrast method, respectively a formulation of the hypothesis
 #' to test. See [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #' Will be passed to the `hypothesis` argument in `marginaleffects::avg_predictions()`.
+#' @inheritParams estimate_contrasts
 #' @inheritParams get_marginalmeans
 #' @inheritParams get_emcontrasts
 #' @export
@@ -90,14 +91,14 @@ get_marginalcontrasts <- function(model,
         if (all(is.na(params[["p"]]))) {
           params[["p"]] <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
         }
-      } else if (verbose) {
+      } else {
         insight::format_alert("No test-statistic found. P-values were not adjusted.")
       }
     } else if (tolower(p_adjust) == "sidak") {
       # sidak adjustment
       params[["p"]] <- 1 - (1 - params[["p"]])^rank_adjust
     }
-  } else if (verbose) {
+  } else {
     insight::format_alert(paste0("`p_adjust` must be one of ", toString(all_methods)))
   }
   params

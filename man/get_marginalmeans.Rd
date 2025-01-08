@@ -62,6 +62,12 @@ Will be passed to the \code{hypothesis} argument in \code{marginaleffects::avg_p
 
 \item{ci}{Level for confidence intervals.}
 
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
+
 \item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
 or \code{\link[marginaleffects:predictions]{marginaleffects::avg_predictions()}}.}
 
