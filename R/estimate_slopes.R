@@ -112,7 +112,6 @@ estimate_slopes <- function(model,
                             ci = 0.95,
                             backend = getOption("modelbased_backend", "emmeans"),
                             ...) {
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emtrends(model, trend, by, ...)
