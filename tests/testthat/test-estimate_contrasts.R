@@ -191,6 +191,8 @@ test_that("estimate_contrasts - p.adjust", {
 test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("emmeans")
+  skip_if_not_installed("pbkrtest")
+  skip_if_not_installed("lmerTest")
 
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
@@ -200,6 +202,8 @@ test_that("estimate_contrasts - dfs", {
   estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
+  expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
 })
 
 
