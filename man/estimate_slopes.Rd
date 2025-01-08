@@ -4,7 +4,14 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, ...)
+estimate_slopes(
+  model,
+  trend = NULL,
+  by = NULL,
+  ci = 0.95,
+  backend = getOption("modelbased_backend", "emmeans"),
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -18,6 +25,17 @@ here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where \code{backend = "marginaleffects"} will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).
+
+You can set a default backend via \code{options()}, e.g. use
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
+as default backend.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
