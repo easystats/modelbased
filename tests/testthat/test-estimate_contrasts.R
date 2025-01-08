@@ -279,3 +279,25 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_snapshot(estimate_contrasts(model))
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
 })
+
+
+test_that("estimate_contrasts - on-the-fly factors", {
+  data(mtcars)
+  model <- lm(mpg ~ as.factor(cyl) + wt * hp, mtcars)
+  out1 <- estimate_contrasts(model)
+  out2 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
+
+  expect_identical(nrow(out1), 3L)
+  expect_identical(nrow(out2), 3L)
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+
+  mtcars2 <- mtcars
+  mtcars2$cyl <- as.factor(mtcars2$cyl)
+  model <- lm(mpg ~ cyl + wt * hp, mtcars2)
+  out3 <- estimate_contrasts(model)
+  out4 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
+
+  expect_identical(nrow(out3), 3L)
+  expect_identical(nrow(out4), 3L)
+  expect_equal(out3$Difference, out4$Difference, tolerance = 1e-4)
+})
