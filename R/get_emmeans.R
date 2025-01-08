@@ -1,31 +1,15 @@
 #' Easy 'emmeans' and 'emtrends'
 #'
-#' The `get_emmeans()` function is a wrapper to facilitate the usage of
-#' `emmeans::emmeans()` and `emmeans::emtrends()`, providing a somewhat simpler
-#' and intuitive API to find the specifications and variables of interest. It is
-#' meanly made to for the developers to facilitate the organization and
-#' debugging, and end-users should rather use the `estimate_*()` series of
-#' functions.
+#' @description
+#' These functions are convenient wrappers around the `emmeans` and the
+#' `marginaleffects` packages. They are mostly available for developpers who want
+#' to leverage a unified API for getting model-based estimates, and regular users
+#' should use the `estimate_*` set of functions.
 #'
-#' @param model A statistical model.
-#' @param predict Is passed to the `type` argument in `emmeans::emmeans()`. See
-#' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Can be `"response"`, `"link"` or other option supported such as `"mu"`,
-#' `"unlink"`, `"log"`. If `predict = NULL` (default), the most appropriate
-#'   transformation is selected (which usually is `"response"`). `"link"` will
-#' leave the values on scale of the linear predictors. `"response"` will
-#' transform them on scale of the response variable. Thus for a logistic model,
-#' `"link"` will give estimations expressed in log-odds (probabilities on logit
-#' scale) and `"response"` in terms of probabilities. To predict distributional
-#' parameters (called "dpar" in other packages), for instance when using complex
-#' formulae in `brms` models, the `predict` argument can take the value of the
-#' parameter you want to estimate, for instance `"sigma"`, `"kappa"`, etc.
-#' @param by The predictor variable(s) at which to evaluate the desired effect
-#' / mean / contrasts. Other predictors of the model that are not included
-#' here will be collapsed and "averaged" over (the effect will be estimated
-#' across them).
-#' @param ... Other arguments passed for instance to [insight::get_datagrid()].
-#' @param transform Deprecated, please use `predict` instead.
+#' The `get_emmeans()`, `get_emcontrasts()` and `get_emtrends()` functions are
+#' wrappers around `emmeans::emmeans()` and `emmeans::emtrends()`.
+#'
+#' @inheritParams estimate_means
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)

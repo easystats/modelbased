@@ -32,18 +32,30 @@ for which to compute the contrasts.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
-\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}. See
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
+\code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
+\code{backend = "marginaleffects"}). For emmeans, see also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"response"}, \code{"link"} or other option supported such as \code{"mu"},
-\code{"unlink"}, \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}). \code{"link"} will
-leave the values on scale of the linear predictors. \code{"response"} will
-transform them on scale of the response variable. Thus for a logistic model,
-\code{"link"} will give estimations expressed in log-odds (probabilities on logit
-scale) and \code{"response"} in terms of probabilities. To predict distributional
-parameters (called "dpar" in other packages), for instance when using complex
-formulae in \code{brms} models, the \code{predict} argument can take the value of the
-parameter you want to estimate, for instance \code{"sigma"}, \code{"kappa"}, etc.}
+Valid options for `predict`` are:
+\itemize{
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
+any valid \code{type} option supported by model's class \code{predict()} method. By
+default, when \code{predict = NULL}, the most appropriate transformation is
+selected, which usually returns predictions or contrasts on the
+response-scale.
+}
+
+\code{"link"} will leave the values on scale of the linear predictors.
+\code{"response"} (or \code{NULL}) will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
+in log-odds (probabilities on logit scale) and \code{"response"} in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
 
@@ -55,12 +67,13 @@ parameter you want to estimate, for instance \code{"sigma"}, \code{"kappa"}, etc
 for which to compute the slopes.}
 }
 \description{
-The \code{get_emmeans()} function is a wrapper to facilitate the usage of
-\code{emmeans::emmeans()} and \code{emmeans::emtrends()}, providing a somewhat simpler
-and intuitive API to find the specifications and variables of interest. It is
-meanly made to for the developers to facilitate the organization and
-debugging, and end-users should rather use the \verb{estimate_*()} series of
-functions.
+These functions are convenient wrappers around the \code{emmeans} and the
+\code{marginaleffects} packages. They are mostly available for developpers who want
+to leverage a unified API for getting model-based estimates, and regular users
+should use the \verb{estimate_*} set of functions.
+
+The \code{get_emmeans()}, \code{get_emcontrasts()} and \code{get_emtrends()} functions are
+wrappers around \code{emmeans::emmeans()} and \code{emmeans::emtrends()}.
 }
 \examples{
 \dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

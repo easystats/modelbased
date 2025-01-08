@@ -5,6 +5,11 @@
 #' other related functions such as [estimate_contrasts()] and
 #' [estimate_slopes()].
 #'
+#' @param model A statistical model.
+#' @param by The predictor variable(s) at which to evaluate the desired effect
+#' / mean / contrasts. Other predictors of the model that are not included
+#' here will be collapsed and "averaged" over (the effect will be estimated
+#' across them).
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
@@ -38,7 +43,9 @@
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
 #' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
 #' as default backend.
-#' @inheritParams get_emmeans
+#' @param transform Deprecated, please use `predict` instead.
+#' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
 #' @inherit estimate_slopes details
