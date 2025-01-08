@@ -33,6 +33,11 @@
 #' models, where `backend = "marginaleffects"` will also average across random
 #' effects levels, producing "marginal predictions" (instead of "conditional
 #' predictions", see Heiss 2022).
+#'
+#' You can set a default backend via `options()`, e.g. use
+#' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
+#' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
+#' as default backend.
 #' @inheritParams get_emmeans
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
@@ -81,7 +86,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           backend = "emmeans",
+                           backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
                            ...) {
   ## TODO: remove deprecation warning later
@@ -119,12 +124,12 @@ estimate_means <- function(model,
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "transform") <- predict
+  attr(means, "backend") <- backend
 
   attr(means, "coef_name") <- intersect(
     c("Mean", "Probability", tools::toTitleCase(.brms_aux_elements())),
     names(means)
   )
-
 
   # Output
   class(means) <- c("estimate_means", class(means))

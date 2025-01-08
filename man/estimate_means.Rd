@@ -9,7 +9,7 @@ estimate_means(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  backend = "emmeans",
+  backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
   ...
 )
@@ -53,7 +53,12 @@ for instance \code{"sigma"}, \code{"kappa"}, etc.}
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).}
+predictions", see Heiss 2022).
+
+You can set a default backend via \code{options()}, e.g. use
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
+as default backend.}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
 

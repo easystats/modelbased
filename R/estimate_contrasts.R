@@ -82,7 +82,7 @@ estimate_contrasts <- function(model,
                                ci = 0.95,
                                p_adjust = "holm",
                                method = "pairwise",
-                               backend = "emmeans",
+                               backend = getOption("modelbased_backend", "emmeans"),
                                transform = NULL,
                                ...) {
   ## TODO: remove deprecation warning later
@@ -138,6 +138,7 @@ estimate_contrasts <- function(model,
   attr(out, "by") <- info$by
   attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
+  attr(out, "backend") <- backend
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
