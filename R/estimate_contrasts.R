@@ -195,8 +195,6 @@ estimate_contrasts <- function(model,
   contrast <- attributes(estimated)$contrast
   focal_terms <- attributes(estimated)$focal_terms
 
-  estimated <- .p_adjust(model, estimated, p_adjust, ...)
-
   valid_methods <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"

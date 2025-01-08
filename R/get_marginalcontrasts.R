@@ -38,6 +38,9 @@ get_marginalcontrasts <- function(model,
     ...
   )
 
+  # adjust p-values
+  out <- .p_adjust(model, out, p_adjust, ...)
+
   attr(out, "contrast") <- my_args$contrast
   attr(out, "predict") <- predict
   attr(out, "p_adjust") <- p_adjust
