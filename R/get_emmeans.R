@@ -11,6 +11,7 @@
 #'
 #' @inheritParams estimate_means
 #' @inheritParams estimate_slopes
+#' @inheritParams estimate_contrasts
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)

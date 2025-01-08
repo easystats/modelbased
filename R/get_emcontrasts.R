@@ -1,7 +1,4 @@
 #' @rdname get_emmeans
-#'
-#' @inheritParams estimate_contrasts
-#'
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
