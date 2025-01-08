@@ -75,8 +75,7 @@ you are directly predicting the value of some distributional parameter), and
 the corresponding functions will then only differ in the default value of
 their \code{data} argument.}
 
-\item{ci}{Value or vector of probability of the CI (between 0 and 1)
-to be estimated. Default to \code{0.95} (\verb{95\%}).}
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

@@ -17,6 +17,8 @@ compute the slopes.}
 here will be collapsed and "averaged" over (the effect will be estimated
 across them).}
 
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{

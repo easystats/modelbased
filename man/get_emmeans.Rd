@@ -94,6 +94,8 @@ in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffe
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
 \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the

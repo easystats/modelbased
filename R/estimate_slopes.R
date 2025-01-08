@@ -15,6 +15,7 @@
 #' @param trend A character indicating the name of the variable for which to
 #' compute the slopes.
 #' @inheritParams estimate_means
+#' @inheritParams parameters::model_parameters.default
 #'
 #' @details
 #' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]
