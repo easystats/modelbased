@@ -17,7 +17,7 @@ functions."><meta property="og:image" content="https://easystats.github.io/model
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -91,7 +91,7 @@ functions.</p>
 <span>  <span class="va">model</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  predict <span class="op">=</span> <span class="st">"link"</span>,</span>
+<span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -125,15 +125,16 @@ across them).</p></dd>
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Is passed to the <code>type</code> argument in <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code>. See
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Can be <code>"link"</code> (default for contrasts), <code>"response"</code> (default for means),
-<code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>. <code>"link"</code> will leave the values on scale of the
-linear predictors. <code>"response"</code> will transform them on scale of the response
-variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
-in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
-packages), for instance when using complex formulae in <code>brms</code> models, the
-<code>predict</code> argument can take the value of the parameter you want to estimate,
-for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
+Can be <code>"response"</code>, <code>"link"</code> or other option supported such as <code>"mu"</code>,
+<code>"unlink"</code>, <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
+transformation is selected (which usually is <code>"response"</code>). <code>"link"</code> will
+leave the values on scale of the linear predictors. <code>"response"</code> will
+transform them on scale of the response variable. Thus for a logistic model,
+<code>"link"</code> will give estimations expressed in log-odds (probabilities on logit
+scale) and <code>"response"</code> in terms of probabilities. To predict distributional
+parameters (called "dpar" in other packages), for instance when using complex
+formulae in <code>brms</code> models, the <code>predict</code> argument can take the value of the
+parameter you want to estimate, for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>

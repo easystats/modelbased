@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,7 +86,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
 <span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
-<span>  backend <span class="op">=</span> <span class="st">"emmeans"</span>,</span>
+<span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"emmeans"</span><span class="op">)</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -117,18 +117,22 @@ across them).</p></dd>
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
 <code>backend = "marginaleffects"</code>). For emmeans, see also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for `predict“ are:</p><ul><li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"link"</code> (default for contrasts),
-<code>"response"</code> (default for means), <code>"mu"</code>, <code>"unlink"</code>, <code>"log"</code>.</p></li>
-<li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"link"</code>, <code>"response"</code> or
-any valid <code>type</code> option, which depends on the model-class.</p></li>
+Valid options for `predict“ are:</p><ul><li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
+<code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
+transformation is selected (which usually is <code>"response"</code>).</p></li>
+<li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
+any valid <code>type</code> option supported by model's class <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method. By
+default, when <code>predict = NULL</code>, the most appropriate transformation is
+selected, which usually returns predictions or contrasts on the
+response-scale.</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
-<code>"response"</code> will transform them on scale of the response variable. Thus
-for a logistic model, <code>"link"</code> will give estimations expressed in log-odds
-(probabilities on logit scale) and <code>"response"</code> in terms of probabilities.
-To predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in <code>brms</code> models, the <code>predict</code> argument
-can take the value of the parameter you want to estimate, for instance
-<code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
+<code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
+variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
+in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in <code>brms</code> models, the
+<code>predict</code> argument can take the value of the parameter you want to estimate,
+for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -137,9 +141,10 @@ can take the value of the parameter you want to estimate, for instance
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
 <dd><p>The p-values adjustment method for frequentist multiple
-comparisons. Can be one of <code>"holm"</code> (default), <code>"tukey"</code>, <code>"hochberg"</code>,
-<code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code> or <code>"none"</code>. See the
-p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation.</p></dd>
+comparisons. Can be one of <code>"holm"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>,
+<code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code> or <code>"none"</code>. See the
+p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation or
+<code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">?stats::p.adjust</a></code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -153,7 +158,11 @@ in <a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="ex
 Results are usually very similar. The major difference will be found for mixed
 models, where <code>backend = "marginaleffects"</code> will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).</p></dd>
+predictions", see Heiss 2022).</p>
+<p>You can set a default backend via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. use
+<code>options(modelbased_backend = "emmeans")</code> to use the <strong>emmeans</strong> package or
+<code>options(modelbased_backend = "marginaleffects")</code> to set <strong>marginaleffects</strong>
+as default backend.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
@@ -426,15 +435,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast =</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   "Species"`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot use mode = "kenward-roger" because *pbkrtest* package is not installed</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Cannot use mode = "satterthwaite" because *lmerTest* package is not installed</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE |  df |     z |      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE |   df |     t |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.87 | [ 0.66, 1.08] | 0.09 | Inf | 10.11 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.80 | [ 0.53, 1.07] | 0.11 | Inf |  7.11 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.07 | [-0.25, 0.10] | 0.07 | Inf | -1.00 | 0.318 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.87 | [-2.63, 4.37] | 0.09 | 1.00 |  9.54 | 0.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.80 | [-2.53, 4.13] | 0.12 | 1.11 |  6.52 | 0.200</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.07 | [-2.98, 2.83] | 0.08 | 1.00 | -0.97 | 0.510</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
