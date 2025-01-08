@@ -48,7 +48,14 @@ get_marginalmeans(
   ...
 )
 
-get_marginaltrends(model, trend = NULL, by = NULL, ...)
+get_marginaltrends(
+  model,
+  trend = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
