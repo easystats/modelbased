@@ -1,17 +1,15 @@
 #' @rdname get_emmeans
-#' @examples
-#' if (require("emmeans")) {
-#'   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+#' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
+#' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
-#'   get_emtrends(model)
-#'   get_emtrends(model, by = "Species")
-#'   get_emtrends(model, by = "Petal.Length")
-#'   get_emtrends(model, by = c("Species", "Petal.Length"))
+#' get_emtrends(model)
+#' get_emtrends(model, by = "Species")
+#' get_emtrends(model, by = "Petal.Length")
+#' get_emtrends(model, by = c("Species", "Petal.Length"))
 #'
-#'   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#'   get_emtrends(model)
-#'   get_emtrends(model, by = "Sepal.Width")
-#' }
+#' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
+#' get_emtrends(model)
+#' get_emtrends(model, by = "Sepal.Width")
 #' @export
 get_emtrends <- function(model,
                          trend = NULL,
