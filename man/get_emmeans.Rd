@@ -91,8 +91,8 @@ in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffe
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
-\item{trend}{A character indicating the name of the variable
-for which to compute the slopes.}
+\item{trend}{A character indicating the name of the variable for which to
+compute the slopes.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},

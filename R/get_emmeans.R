@@ -10,6 +10,7 @@
 #' wrappers around `emmeans::emmeans()` and `emmeans::emtrends()`.
 #'
 #' @inheritParams estimate_means
+#' @inheritParams estimate_slopes
 #'
 #' @examplesIf require("emmeans", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)

@@ -12,6 +12,8 @@
 #' and [README examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and use cases.
 #'
+#' @param trend A character indicating the name of the variable for which to
+#' compute the slopes.
 #' @inheritParams estimate_means
 #'
 #' @details
