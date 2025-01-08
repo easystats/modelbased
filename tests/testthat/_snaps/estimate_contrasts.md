@@ -75,6 +75,7 @@
       
       Marginal contrasts estimated at Species
       p-value adjustment method: Holm (1979)
+      Contrasts are on the response-scale.
 
 ---
 

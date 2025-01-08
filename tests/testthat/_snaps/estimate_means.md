@@ -23,6 +23,7 @@
       no    |    DF | 1.95 | 0.30 | [ 1.36, 2.55]
       
       Marginal means estimated at mined
+      Predictions are on the response-scale.
 
 ---
 
@@ -49,4 +50,5 @@
       no    |    DF | 2.18 | [1.81, 2.61]
       
       Marginal means estimated at mined
+      Predictions are on the response-scale.
 

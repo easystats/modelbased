@@ -176,10 +176,14 @@ estimate_means <- function(model,
       means = "Predictions",
       contrasts = "Contrasts"
     )
-    if (predict == "none") {
-      predict <- "link"
-    }
-    table_footer <- paste0(table_footer, "\nPredictions are on the ", predict, "-scale.")
+    # exceptions
+    predict <- switch(
+      predict,
+      none = "link",
+      `invlink(link)` = "response",
+      predict
+    )
+    table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
   }
 
   if (all(table_footer == "")) { # nolint
