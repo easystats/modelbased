@@ -29,6 +29,11 @@
 - `estimate_expectation()` and related functions also get a `by` argument, as
   alternative to create a datagrid for the `data` argument.
 
+## Bug fixes
+
+* `estimate_contrasts()` did not calculate contrasts for all levels when the
+  predictor of interest was converted to a factor inside the model formula.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.
