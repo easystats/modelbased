@@ -120,3 +120,61 @@ test_that("plots marginalmeans, show_data", {
     plot(modelbased::visualisation_recipe(x, show_data = TRUE))
   )
 })
+
+
+test_that("plots relation", {
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+
+  # Estimate means -------------------------------------
+  x <- estimate_relation(model, by = "Species")
+  vdiffr::expect_doppelganger(
+    "plot-relation-1",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+  )
+  x <- estimate_relation(model, by = "Sepal.Width")
+  vdiffr::expect_doppelganger(
+    "plot-relation-2",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+  )
+  x <- estimate_relation(model, by = c("Sepal.Width", "Species"))
+  vdiffr::expect_doppelganger(
+    "plot-relation-3",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+  )
+  x <- estimate_relation(model, by = c("Species", "Sepal.Width"))
+  vdiffr::expect_doppelganger(
+    "plot-relation-4",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE))
+  )
+})
+
+
+test_that("plots, relation show_data", {
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+
+  # Estimate means -------------------------------------
+  x <- estimate_relation(model, by = "Species")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-showdata-1",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_relation(model, by = "Sepal.Width")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-showdata-2",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_relation(model, by = c("Sepal.Width", "Species"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-showdata-3",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_relation(model, by = c("Species", "Sepal.Width"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-showdata-4",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+})
