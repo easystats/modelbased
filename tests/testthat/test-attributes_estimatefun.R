@@ -58,6 +58,7 @@ test_that("attributes_means, slopes", {
       "model", "response", "ci", "focal_terms", "trend"
     )
   )
+  ## FIXME: should be more attributes here
   estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
   expect_named(
     attributes(estim),
