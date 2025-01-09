@@ -196,7 +196,7 @@ estimate_means <- function(model,
     estimate_name <- "Difference"
   } else {
     # for simple means, we don't want p-values
-    remove_columns <- c(remove_column, "p")
+    remove_columns <- c(remove_columns, "p")
     # estimate name
     if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
       # for Bayesian models with distributional parameter
