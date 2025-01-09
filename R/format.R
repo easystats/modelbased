@@ -8,6 +8,9 @@ format.marginaleffects_means <- function(x, model, ...) {
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
   predict_type <- attributes(x)$predict
 
+  # define all columns that should be removed
+  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
+
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is_contrast_analysis) {
     estimate_name <- "Difference"
@@ -24,9 +27,6 @@ format.marginaleffects_means <- function(x, model, ...) {
       estimate_name <- "Mean"
     }
   }
-
-  # define all columns that should be removed
-  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
 
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
