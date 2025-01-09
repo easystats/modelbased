@@ -311,3 +311,38 @@ test_that("estimate_contrasts - works with slopes", {
   expect_equal(out3$Coefficient, as.data.frame(out5$emtrends)$Petal.Length.trend, tolerance = 1e-3)
   expect_equal(out4$Coefficient, as.data.frame(out5$contrasts)$estimate, tolerance = 1e-3)
 })
+
+
+test_that("estimate_contrasts - different options for comparison", {
+  set.seed(123)
+  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+
+  # emmeans
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff")
+  expect_named(
+    out,
+    c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
+  )
+  expect_equal(out$Difference, c(0.2, 0.55, -0.6, -0.15), tolerance = 1e-3)
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly")
+  expect_named(
+    out,
+    c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
+  )
+  expect_equal(out$Difference, c(3.1, -2.2, 0.1), tolerance = 1e-3)
+
+  # marginaleffects
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "pairwise", backend = "marginaleffects")
+  expect_named(
+    out,
+    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+  expect_equal(out$Difference, c(-0.35, 0.8, 0.35, 1.15, 0.7, -0.45), tolerance = 1e-3)
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "reference", backend = "marginaleffects")
+  expect_named(
+    out,
+    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
+  expect_equal(out$Difference, c(0.35, -0.8, -0.35), tolerance = 1e-3)
+})
