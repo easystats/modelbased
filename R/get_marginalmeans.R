@@ -78,7 +78,7 @@ get_marginalmeans <- function(model,
   # ---------------------------------------------------------------------------
 
   # model df
-  dof <- insight::get_df(model, verbose = FALSE)
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
   # sanity check
   if (!is.null(datagrid)) {

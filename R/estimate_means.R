@@ -215,7 +215,12 @@ estimate_means <- function(model,
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"), after = -1, verbose = FALSE) # nolint
   # move p to the end
   params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
-  params <- datawizard::data_rename(params, "Predicted", estimate_name)
+  # rename
+  params <- datawizard::data_rename(
+    params,
+    select = c("Predicted", "Statistic"),
+    replacement = c(estimate_name, gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE))
+  )
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)

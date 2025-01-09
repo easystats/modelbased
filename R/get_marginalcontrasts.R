@@ -88,7 +88,7 @@ get_marginalcontrasts <- function(model,
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$contrast
   statistic <- insight::get_statistic(model)$Statistic
-  dof <- insight::get_df(model)
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
   # exit on NULL, or if no p-adjustment requested
   if (is.null(p_adjust) || identical(p_adjust, "none")) {
