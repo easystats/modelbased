@@ -38,9 +38,12 @@
     data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
     aes$group <- ".group"
   }
+  if(length(by) > 3) {
+    warning("Only the first three `by` predictors will be visualized.")
+  }
 
   # CI
-  if("CI_low" %in% names(x)) {
+  if("CI_low" %in% data) {
     aes$ymin <- x$CI_low
     aes$ymax <- x$CI_high
   }
