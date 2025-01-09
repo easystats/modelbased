@@ -133,7 +133,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  estimate_name = NULL,
                                                  is_contrast_analysis = FALSE) {
   # tidy output
-  params <- suppressWarnings(as.data.frame(parameters::model_parameters(x, verbose = FALSE)))
+  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
   coefficient_name <- intersect(
     c(attributes(params)$coefficient_name, "Coefficient", "Predicted"),
     colnames(params)
@@ -175,7 +175,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   }
 
   # finally, make sure we have original data types
-  datawizard::data_restoretype(params, model_data)
+  data.frame(datawizard::data_restoretype(params, model_data))
 }
 
 
