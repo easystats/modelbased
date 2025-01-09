@@ -103,7 +103,6 @@ estimate_contrasts <- function(model,
       ...
     )
     out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
-    info <- attributes(estimated)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalcontrasts(model,
@@ -116,10 +115,9 @@ estimate_contrasts <- function(model,
       ...
     )
     out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
-    ## TODO: needs to be fixed
-    info <- list(contrast = contrast, by = by)
   }
 
+  info <- attributes(estimated)
 
   # Table formatting
   attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")

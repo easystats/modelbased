@@ -110,29 +110,18 @@ estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             ci = 0.95,
+                            backend = getOption("modelbased_backend", "emmeans"),
                             ...) {
-  # Sanitize arguments
-  estimated <- get_emtrends(model, trend, by, ...)
-  info <- attributes(estimated)
-
-  # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
-    trends <- parameters::parameters(estimated, ci = ci, ...)
-    trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
-    em_grid <- as.data.frame(estimated@grid)
-    em_grid[[".wgt."]] <- NULL # Drop the weight column
-    colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
-    if (length(colums_to_add)) {
-      trends <- cbind(em_grid[colums_to_add], trends)
-    }
+  if (backend == "emmeans") {
+    # Emmeans ------------------------------------------------------------------
+    estimated <- get_emtrends(model, trend, by, ...)
+    trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
-    trends <- parameters::parameters(estimated, ci = ci, ...)
+    estimated <- get_marginaltrends(model, trend, by, ...)
+    trends <- .format_marginaleffects_slopes(model, estimated, ci, ...)
   }
-  # Remove the "1 - overall" column that can appear in cases like y ~ x
-  trends <- trends[names(trends) != "1"]
 
-  # Restore factor levels
-  trends <- datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+  info <- attributes(estimated)
 
   # Table formatting
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
@@ -151,7 +140,41 @@ estimate_slopes <- function(model,
   trends
 }
 
+
 # Engine ===============================================================
+
+
+.format_emmeans_slopes <- function(model, estimated, ci, ...) {
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+    trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
+    if (length(colums_to_add)) {
+      trends <- cbind(em_grid[colums_to_add], trends)
+    }
+  } else {
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+  }
+  # Remove the "1 - overall" column that can appear in cases like y ~ x
+  trends <- trends[names(trends) != "1"]
+
+  # Restore factor levels
+  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+}
+
+
+.format_marginaleffects_slopes <- function(model, estimated, ci, ...) {
+  # Summarize and clean
+  trends <- parameters::parameters(estimated, ci = ci, ...)
+  # remove redundant columns
+  trends <- datawizard::data_remove(trends, c("Parameter", "Statistic", "SE", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
+  trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
+  # Restore factor levels
+  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+}
 
 
 # Summary Method ===============================================================

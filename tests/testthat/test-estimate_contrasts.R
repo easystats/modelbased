@@ -1,7 +1,9 @@
+skip_if_not_installed("emmeans")
+skip_if_not_installed("marginaleffects")
+
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
 
   # One factor
   dat <<- iris
@@ -118,7 +120,6 @@ test_that("estimate_contrasts - Bayesian", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
   skip_if_not_installed("coda")
 
   dat <- iris
@@ -177,8 +178,6 @@ test_that("estimate_contrasts - Bayesian", {
 
 
 test_that("estimate_contrasts - p.adjust", {
-  skip_if_not_installed("emmeans")
-
   model <- lm(Petal.Width ~ Species, data = iris)
 
   p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none"))
@@ -190,7 +189,6 @@ test_that("estimate_contrasts - p.adjust", {
 
 test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
-  skip_if_not_installed("emmeans")
   skip_if_not_installed("pbkrtest")
   skip_if_not_installed("lmerTest")
 
@@ -208,8 +206,6 @@ test_that("estimate_contrasts - dfs", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
-  skip_if_not_installed("marginaleffects")
-  skip_if_not_installed("ggeffects")
   skip_if_not_installed("Formula")
 
   data(coffee_data, package = "ggeffects")
@@ -239,8 +235,6 @@ test_that("estimate_contrasts - marginaleffects", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
-  skip_if_not_installed("emmeans")
-  skip_if_not_installed("marginaleffects")
   skip_if_not_installed("ggeffects")
 
   data(iris)

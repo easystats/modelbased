@@ -105,22 +105,12 @@ estimate_means <- function(model,
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, by = by, predict = predict, ...)
-    means <- .format_emmeans_means(
-      model,
-      estimated = estimated,
-      ci = ci,
-      ...
-    )
+    means <- .format_emmeans_means(model, estimated = estimated, ci = ci, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
-    means <- .format_marginaleffects_means(
-      model,
-      estimated = estimated,
-      ...
-    )
+    means <- .format_marginaleffects_means(model, estimated = estimated, ...)
   }
-
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
