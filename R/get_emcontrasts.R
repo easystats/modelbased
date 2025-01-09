@@ -129,7 +129,7 @@ get_emcontrasts <- function(model,
   level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
 
   # other comparison methods than "pairwise" do not return two columns
-  if (ncols(level_cols) == 2) {
+  if (ncol(level_cols) == 2) {
     colnames(level_cols) <- c("Level1", "Level2")
     level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
     level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
