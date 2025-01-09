@@ -22,19 +22,33 @@ get_marginalcontrasts <- function(model,
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
 
-
-  out <- estimate_means(
-    model = model,
-    ## TODO: once .format_marginaleffects_contrasts() is working, we have to
-    ## pass only "contrast" to the `by` argument, and use `my_args$by` for
-    ## filtering...
-    by = unique(c(my_args$contrast, my_args$by)),
-    ci = ci,
-    hypothesis = method,
-    predict = predict,
-    backend = "marginaleffects",
-    ...
-  )
+  if (is.numeric(model_data[[contrast[1]]])) {
+    out <- estimate_slopes(
+      model = model,
+      trend = my_args$contrast,
+      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
+      ## filtering...
+      by = my_args$by,
+      ci = ci,
+      hypothesis = method,
+      backend = "marginaleffects",
+      ...
+    )
+  } else {
+    out <- estimate_means(
+      model = model,
+      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
+      ## filtering...
+      by = unique(c(my_args$contrast, my_args$by)),
+      ci = ci,
+      hypothesis = method,
+      predict = predict,
+      backend = "marginaleffects",
+      ...
+    )
+  }
 
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, ...)
