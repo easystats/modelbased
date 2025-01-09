@@ -60,7 +60,7 @@
 #' @keywords internal
 .visualization_recipe <- function(x,
                                   show_data=TRUE,
-                                  points=NULL,
+                                  point=NULL,
                                   line=NULL,
                                   pointrange=NULL,
                                   ribbon=NULL,
@@ -78,44 +78,12 @@
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
     # Update with additional args
-    if (!is.null(points)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], points)
+    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
 
-
-  # Line -----------------------------------
-  layers[[paste0("l", l)]] <- list(
-    geom = "line",
-    data = data,
-    aes = list(
-      y = aes$y,
-      x = aes$x,
-      color = aes$color,
-      group = aes$group,
-      alpha = aes$alpha
-    )
-  )
-  if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
-  l <- l + 1
 
   # Main -----------------------------------
-  if(aes$type == "pointrange") {
-    layers[[paste0("l", l)]] <- list(
-      geom = "pointrange",
-      data = data,
-      aes = list(
-        y = aes$y,
-        x = aes$x,
-        ymin = aes$ymin,
-        ymax = aes$ymax,
-        color = aes$color,
-        group = aes$group,
-        alpha = aes$alpha
-      )
-    )
-    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
-    l <- l + 1
-  }
   if(aes$type == "ribbon" & is.null(aes$alpha)) {
     layers[[paste0("l", l)]] <- list(
       geom = "ribbon",
@@ -132,6 +100,39 @@
       alpha = 1/3
     )
     if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+    l <- l + 1
+  }
+
+  layers[[paste0("l", l)]] <- list(
+    geom = "line",
+    data = data,
+    aes = list(
+      y = aes$y,
+      x = aes$x,
+      color = aes$color,
+      group = aes$group,
+      alpha = aes$alpha
+    )
+  )
+  if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+  l <- l + 1
+
+
+  if(aes$type == "pointrange") {
+    layers[[paste0("l", l)]] <- list(
+      geom = "pointrange",
+      data = data,
+      aes = list(
+        y = aes$y,
+        x = aes$x,
+        ymin = aes$ymin,
+        ymax = aes$ymax,
+        color = aes$color,
+        group = aes$group,
+        alpha = aes$alpha
+      )
+    )
+    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
     l <- l + 1
   }
   if(!is.null(aes$facet)) {
