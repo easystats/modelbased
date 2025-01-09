@@ -43,6 +43,13 @@ test_that("visualization_recipe", {
   expect_equal(aes$color, "fac")
 
 
+  x <- estimate_means(model, by=c("Species", "Sepal.Width", "fac"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Mean")
+  expect_equal(aes$x, "Species")
+  expect_equal(aes$color, "Sepal.Width")
+
   # Estimate predictions ---------------------------
   x <- estimate_relation(model, by=c("Sepal.Width"))
   # plot(modelbased:::.visualization_recipe(x))

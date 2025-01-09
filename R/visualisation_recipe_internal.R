@@ -1,3 +1,45 @@
+#' @rdname visualisation_recipe.estimate_predicted
+#'
+#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
+#' # Simple Model ---------------
+#' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by = "Species")
+#' layers <- visualisation_recipe(x)
+#' layers
+#' plot(layers)
+#'
+#' # Customize aesthetics
+#' layers <- visualisation_recipe(x,
+#'   points = list(width = 0.03, color = "red"),
+#'   pointrange = list(size=2, linewidth=2),
+#'   line = list(linetype = "dashed", color="blue")
+#' )
+#' plot(layers)
+#'
+#' # Two levels ---------------
+#' data <- mtcars
+#' data$cyl <- as.factor(data$cyl)
+#'
+#' model <- lm(mpg ~ cyl * wt, data = data)
+#'
+#' x <- estimate_means(model, by = c("cyl", "wt"))
+#' plot(visualisation_recipe(x))
+#'
+#'
+#' # GLMs ---------------------
+#' data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
+#' x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
+#' plot(visualisation_recipe(x))
+#' @export
+visualisation_recipe.estimate_means <- function(x, show_data = TRUE, ...) {
+  .visualization_recipe(x, show_data=show_data, ...)
+}
+
+
+
+
+# Find aes ----------------------------------------------------------------
+
+
 #' @keywords internal
 .find_aes <- function(x) {
   data <- as.data.frame(x)
@@ -31,7 +73,7 @@
     aes$color <- by[2]
     aes$group <- by[2]
     # If color is a numeric variable, convert it to a factor
-    if(is.numeric(data[[by[2]]])) data[[by[2]]] <- as.factor(data[[by[2]]])
+    # if(is.numeric(data[[by[2]]])) data[[by[2]]] <- as.factor(data[[by[2]]])
   }
   if(length(by) > 2) {
     aes$alpha <- by[3]
@@ -55,7 +97,14 @@
 
 
 #' @keywords internal
-.visualization_recipe <- function(x) {
+.visualization_recipe <- function(x,
+                                  show_data=TRUE,
+                                  points=NULL,
+                                  line=NULL,
+                                  pointrange=NULL,
+                                  ribbon=NULL,
+                                  facet=NULL,
+                                  ...) {
 
   aes <- .find_aes(x)
   data <- aes$data
@@ -64,7 +113,14 @@
   l <- 1
 
 
-  # TODO: add raw data plotting
+  # TODO: Don't plot raw data if `predict` is not on the response scale
+  if (show_data) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
+    # Update with additional args
+    if (!is.null(points)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], points)
+    l <- l + 1
+  }
+
 
   # Line -----------------------------------
   layers[[paste0("l", l)]] <- list(
@@ -78,6 +134,7 @@
       alpha = aes$alpha
     )
   )
+  if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
   l <- l + 1
 
   # Main -----------------------------------
@@ -95,6 +152,7 @@
         alpha = aes$alpha
       )
     )
+    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
     l <- l + 1
   }
   if(aes$type == "ribbon" & is.null(aes$alpha)) {
@@ -112,6 +170,7 @@
       ),
       alpha = 1/3
     )
+    if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
     l <- l + 1
   }
   if(!is.null(aes$facet)) {
@@ -120,6 +179,7 @@
       data = data,
       facets = aes$facet
     )
+    if (!is.null(facet)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
     l <- l + 1
   }
 
@@ -127,5 +187,51 @@
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
   layers
+}
+
+
+
+
+# Raw data ----------------------------------------------------------------
+
+
+#' @keywords internal
+.visualization_recipe_rawdata <- function(x, aes) {
+  # TODO: In the main function, don't forget to NOT add raw data when `predict` is not "response"
+
+  model <- attributes(x)$model
+  rawdata <- insight::get_data(model, verbose = FALSE)
+
+  # Add response to data if not there
+  y <- insight::find_response(attributes(x)$model)
+  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+
+  if(aes$type == "pointrange" & !is.numeric(rawdata[[aes$x]])) {
+    geom <- "jitter"
+  } else {
+    geom <- "point"
+  }
+
+  # Default changes for binomial models
+  shape <- 16
+  stroke <- 0
+  if (insight::model_info(model)$is_binomial) {
+    shape <- "|"
+    stroke <- 1
+  }
+
+  list(
+    geom = geom,
+    data = rawdata,
+    aes = list(
+      y = y,
+      x = aes$x,
+      color = aes$color,
+      alpha = aes$alpha
+    ),
+    height = 0,
+    shape = shape,
+    stroke = stroke
+  )
 }
 
