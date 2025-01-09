@@ -65,6 +65,56 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 }
 
 
+#' @export
+format.marginaleffects_contrasts <- function(x, model, p_adjust, method, ...) {
+  predict <- attributes(x)$predict
+  groups <- attributes(x)$by
+  contrast <- attributes(x)$contrast
+  focal_terms <- attributes(x)$focal_terms
+
+  valid_methods <- c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential"
+  )
+
+  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
+    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
+
+    # These are examples of what {marginaleffects} returns, a single parmater
+    # column that includes all levels, comma- and dash-separated, or with /
+    # see also https://github.com/easystats/modelbased/pull/280
+    #
+    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> Parameter                              | Difference |          95% CI |      p
+    # #> ------------------------------------------------------------------------------
+    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
+    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
+    #
+    # estimate_contrasts(
+    #   m,
+    #   c("time", "coffee"),
+    #   backend = "marginaleffects",
+    #   p_adjust = "none",
+    #   method = ratio ~ reference | coffee
+    # )
+    # #> Marginal Contrasts Analysis
+    # #>
+    # #> coffee  |              hypothesis | Difference |       95% CI |      p
+    # #> ----------------------------------------------------------------------
+    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
+    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
+    #
+    # We need to split the "Parameter" or "hypothesis" columns into one column
+    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
+    # argument, which is used for filtering by levels of given focal terms.
+  }
+
+  x
+}
+
+
 # Helper ----------------------------------------------------------------------
 # -----------------------------------------------------------------------------
 
