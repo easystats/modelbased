@@ -133,7 +133,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  estimate_name = NULL,
                                                  is_contrast_analysis = FALSE) {
   # tidy output
-  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+  params <- suppressWarnings(as.data.frame(parameters::model_parameters(x, verbose = FALSE)))
   coefficient_name <- intersect(
     c(attributes(params)$coefficient_name, "Coefficient", "Predicted"),
     colnames(params)
@@ -184,14 +184,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
 #' @keywords internal
 .set_back_attributes <- function(x, formatted_params) {
-  attr(formatted_params, "at") <- attr(x, "by")
-  attr(formatted_params, "by") <- attr(x, "by")
-  attr(formatted_params, "predict") <- attr(x, "predict")
-  attr(formatted_params, "contrast") <- attr(x, "contrast")
-  attr(formatted_params, "trend") <- attr(x, "trend")
-  attr(formatted_params, "focal_terms") <- attr(x, "focal_terms")
-  attr(formatted_params, "datagrid") <- attr(x, "datagrid")
-
+  attributes(formatted_params) <- utils::modifyList(
+    attributes(formatted_params),
+    attributes(x)[c("by", "at", "predict", "contrast", "trend", "datagrid", "focal_terms")]
+  )
   formatted_params
 }
 

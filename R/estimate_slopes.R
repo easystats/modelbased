@@ -124,6 +124,7 @@ estimate_slopes <- function(model,
     trends <- format(estimated, model, ci, ...)
   }
 
+  # restore attributes later
   info <- attributes(estimated)
 
   # Table formatting
@@ -134,9 +135,12 @@ estimate_slopes <- function(model,
   attr(trends, "model") <- model
   attr(trends, "response") <- insight::find_response(model)
   attr(trends, "ci") <- ci
-  attr(trends, "trend") <- info$trend
-  attr(trends, "at") <- info$by
-  attr(trends, "by") <- info$by
+
+  # add attributes from workhorse function
+  attributes(trends) <- utils::modifyList(
+    attributes(trends),
+    info[c("at", "by", "datagrid", "focal_terms", "trend")]
+  )
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
