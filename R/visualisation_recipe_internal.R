@@ -33,6 +33,11 @@
     # If color is a numeric variable, convert it to a factor
     if(is.numeric(data[[by[2]]])) data[[by[2]]] <- as.factor(data[[by[2]]])
   }
+  if(length(by) > 2) {
+    aes$alpha <- by[3]
+    data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
+    aes$group <- ".group"
+  }
 
   # CI
   if("CI_low" %in% names(x)) {
@@ -66,7 +71,8 @@
       y = aes$y,
       x = aes$x,
       color = aes$color,
-      group = aes$group
+      group = aes$group,
+      alpha = aes$alpha
     )
   )
   l <- l + 1
@@ -81,12 +87,14 @@
         x = aes$x,
         ymin = aes$ymin,
         ymax = aes$ymax,
-        color = aes$color
+        color = aes$color,
+        group = aes$group,
+        alpha = aes$alpha
       )
     )
     l <- l + 1
   }
-  if(aes$type == "ribbon") {
+  if(aes$type == "ribbon" & is.null(aes$alpha)) {
     layers[[paste0("l", l)]] <- list(
       geom = "ribbon",
       data = data,
@@ -96,7 +104,8 @@
         ymin = aes$ymin,
         ymax = aes$ymax,
         fill = aes$color,
-        color = NULL
+        color = NULL,
+        group = aes$group
       ),
       alpha = 1/3
     )

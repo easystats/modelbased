@@ -1,11 +1,13 @@
-test_that("visualization_recipe - .find_aes", {
+test_that("visualization_recipe", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("marginaleffects")
 
   # library(see)
   # library(modelbased)
-  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
+  data <- iris
+  data$fac <- rep(c("A", "B"), length.out=150)
+  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width, data = data)
 
   # Estimate means -------------------------------------
   x <- estimate_means(model, by="Species")
@@ -31,6 +33,13 @@ test_that("visualization_recipe - .find_aes", {
   aes <- modelbased:::.find_aes(x)$aes
   expect_equal(aes$y, "Mean")
   expect_equal(aes$x, "Species")
+
+  x <- estimate_means(model, by=c("Species", "fac", "Sepal.Width"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Mean")
+  expect_equal(aes$x, "Species")
+  expect_equal(aes$color, "fac")
 
 
   # Estimate predictions ---------------------------
@@ -62,6 +71,31 @@ test_that("visualization_recipe - .find_aes", {
   expect_equal(aes$x, "Species")
   expect_equal(aes$color, "Sepal.Width")
 
+  x <- estimate_relation(model, by=c("Species", "fac", "Sepal.Width"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Predicted")
+  expect_equal(aes$x, "Species")
+  expect_equal(aes$color, "fac")
+  expect_equal(aes$alpha, "Sepal.Width")
+
+  x <- estimate_relation(model, by=c("Species", "Sepal.Width", "fac"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Predicted")
+  expect_equal(aes$x, "Species")
+  expect_equal(aes$color, "Sepal.Width")
+  expect_equal(aes$alpha, "fac")
+
+  x <- lm(Sepal.Length ~ Petal.Width * Species * Sepal.Width, data = iris) |>
+    estimate_relation(by=c("Petal.Width", "Species", "Sepal.Width"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Predicted")
+  expect_equal(aes$x, "Petal.Width")
+  expect_equal(aes$color, "Species")
+  expect_equal(aes$alpha, "Sepal.Width")
+
   # Estimate slopes --------------------------------
   x <- estimate_slopes(model, trend="Sepal.Width")
   expect_error(modelbased:::.find_aes(x)$aes)
@@ -69,9 +103,12 @@ test_that("visualization_recipe - .find_aes", {
   x <- estimate_slopes(model, trend="Sepal.Width", by="Species")
   # plot(modelbased:::.visualization_recipe(x))
   aes <- modelbased:::.find_aes(x)$aes
-  expect_equal(aes$y, "Predicted")
+  expect_equal(aes$y, "Coefficient")
   expect_equal(aes$x, "Species")
   expect_true(is.null(aes$color))
 
-})
+  # broken
+  # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
+  # plot(modelbased:::.visualization_recipe(x))
 
+})
