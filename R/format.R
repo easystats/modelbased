@@ -37,17 +37,7 @@ format.marginaleffects_means <- function(x, model, ...) {
     estimate_name
   )
 
-  ## TODO: check if we can use modifyList()
-  # Store info
-  attr(params, "at") <- attr(x, "by")
-  attr(params, "by") <- attr(x, "by")
-  attr(params, "predict") <- attr(x, "predict")
-  attr(params, "contrast") <- attr(x, "contrast")
-  attr(params, "trend") <- attr(x, "trend")
-  attr(params, "focal_terms") <- attr(x, "focal_terms")
-  attr(params, "datagrid") <- attr(x, "datagrid")
-
-  params
+  .set_back_attributes(x, params)
 }
 
 
@@ -68,17 +58,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     info
   )
 
-  ## TODO: check if we can use modifyList()
-  # Store info
-  attr(params, "at") <- attr(x, "by")
-  attr(params, "by") <- attr(x, "by")
-  attr(params, "predict") <- attr(x, "predict")
-  attr(params, "contrast") <- attr(x, "contrast")
-  attr(params, "trend") <- attr(x, "trend")
-  attr(params, "focal_terms") <- attr(x, "focal_terms")
-  attr(params, "datagrid") <- attr(x, "datagrid")
-
-  params
+  .set_back_attributes(x, params)
 }
 
 
@@ -117,6 +97,20 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     params <- datawizard::data_rename(params, "group", "Response")
   }
   datawizard::data_restoretype(params, model_data)
+}
+
+
+#' @keywords internal
+.set_back_attributes <- function(x, formatted_params) {
+  attr(formatted_params, "at") <- attr(x, "by")
+  attr(formatted_params, "by") <- attr(x, "by")
+  attr(formatted_params, "predict") <- attr(x, "predict")
+  attr(formatted_params, "contrast") <- attr(x, "contrast")
+  attr(formatted_params, "trend") <- attr(x, "trend")
+  attr(formatted_params, "focal_terms") <- attr(x, "focal_terms")
+  attr(formatted_params, "datagrid") <- attr(x, "datagrid")
+
+  formatted_params
 }
 
 
