@@ -91,20 +91,21 @@
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = TRUE,
-                                                    point=NULL,
-                                                    line=NULL,
-                                                    pointrange=NULL,
-                                                    ribbon=NULL,
-                                                    facet=NULL,
+                                                    point = NULL,
+                                                    line = NULL,
+                                                    pointrange = NULL,
+                                                    ribbon = NULL,                                                     facet=NULL,
                                                     ...) {
-  .visualization_recipe(x,
-                        show_data=show_data,
-                        point=point,
-                        line=line,
-                        pointrange=pointrange,
-                        ribbon=ribbon,
-                        facet=facet,
-                        ...)
+  .visualization_recipe(
+    x,
+    show_data = show_data,
+    point = point,
+    line = line,
+    pointrange = pointrange,
+    ribbon = ribbon,
+    facet = facet,
+    ...
+  )
 }
 
 
@@ -144,18 +145,20 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' plot(visualisation_recipe(x))
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,
-                                                 line=NULL,
-                                                 pointrange=NULL,
-                                                 ribbon=NULL,
-                                                 facet=NULL,
+                                                 line = NULL,
+                                                 pointrange = NULL,
+                                                 ribbon = NULL,
+                                                 facet = NULL,
                                                  ...) {
-  .visualization_recipe(x,
-                        show_data=FALSE,
-                        line=line,
-                        pointrange=pointrange,
-                        ribbon=ribbon,
-                        facet=facet,
-                        ...)
+  .visualization_recipe(
+    x,
+    show_data = FALSE,
+    line = line,
+    pointrange = pointrange,
+    ribbon = ribbon,
+    facet = facet,
+    ...
+  )
 }
 
 
@@ -187,23 +190,24 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' plot(x)
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,
-                                                     line=NULL,
-                                                     pointrange=NULL,
-                                                     ribbon=NULL,
-                                                     facet=NULL,
+                                                     line = NULL,
+                                                     pointrange = NULL,
+                                                     ribbon = NULL,
+                                                     facet = NULL,
                                                      ...) {
-
-  if(is.null(facet)) {
+  if (is.null(facet)) {
     facet <- list("scales" = "free")
   } else {
     facet <- utils::modifyList(facet, list("scales" = "free"))
   }
 
-  .visualization_recipe(x,
-                        show_data=FALSE,
-                        line=line,
-                        pointrange=pointrange,
-                        ribbon=ribbon,
-                        facet=facet,
-                        ...)
+  .visualization_recipe(
+    x,
+    show_data = FALSE,
+    line = line,
+    pointrange = pointrange,
+    ribbon = ribbon,
+    facet = facet,
+    ...
+  )
 }

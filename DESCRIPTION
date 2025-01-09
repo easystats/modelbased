@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.9.14
+Version: 0.8.9.15
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -73,7 +73,8 @@ Suggests:
     rstanarm,
     rtdists,
     see (>= 0.8.4),
-    testthat (>= 3.2.1)
+    testthat (>= 3.2.1),
+    vdiffr
 VignetteBuilder:
     knitr
 Encoding: UTF-8
