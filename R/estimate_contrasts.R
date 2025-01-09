@@ -139,6 +139,7 @@ estimate_contrasts <- function(model,
     out <- format(estimated, model, p_adjust, comparison, ...)
   }
 
+  # restore attributes later
   info <- attributes(estimated)
 
   # Table formatting
@@ -156,12 +157,14 @@ estimate_contrasts <- function(model,
   attr(out, "model") <- model
   attr(out, "response") <- insight::find_response(model)
   attr(out, "ci") <- ci
-  attr(out, "transform") <- predict
-  attr(out, "at") <- info$by
-  attr(out, "by") <- info$by
-  attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
   attr(out, "backend") <- backend
+
+  # add attributes from workhorse function
+  attributes(out) <- utils::modifyList(
+    attributes(out),
+    info[c("at", "by", "contrast", "predict", "p_adjust")]
+  )
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))

@@ -175,7 +175,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   }
 
   # finally, make sure we have original data types
-  datawizard::data_restoretype(params, model_data)
+  data.frame(datawizard::data_restoretype(params, model_data))
 }
 
 
@@ -184,14 +184,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
 #' @keywords internal
 .set_back_attributes <- function(x, formatted_params) {
-  attr(formatted_params, "at") <- attr(x, "by")
-  attr(formatted_params, "by") <- attr(x, "by")
-  attr(formatted_params, "predict") <- attr(x, "predict")
-  attr(formatted_params, "contrast") <- attr(x, "contrast")
-  attr(formatted_params, "trend") <- attr(x, "trend")
-  attr(formatted_params, "focal_terms") <- attr(x, "focal_terms")
-  attr(formatted_params, "datagrid") <- attr(x, "datagrid")
-
+  attributes(formatted_params) <- utils::modifyList(
+    attributes(formatted_params),
+    attributes(x)[c("by", "at", "predict", "contrast", "trend", "datagrid", "focal_terms")]
+  )
   formatted_params
 }
 

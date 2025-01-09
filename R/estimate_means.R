@@ -112,6 +112,9 @@ estimate_means <- function(model,
     means <- format(estimated, model, ...)
   }
 
+  # restore attributes later
+  info <- attributes(estimated)
+
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(
@@ -125,12 +128,16 @@ estimate_means <- function(model,
   attr(means, "model") <- model
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
-  attr(means, "transform") <- predict
   attr(means, "backend") <- backend
-
   attr(means, "coef_name") <- intersect(
     c("Mean", "Probability", "Difference", tools::toTitleCase(.brms_aux_elements())),
     colnames(means)
+  )
+
+  # add attributes from workhorse function
+  attributes(means) <- utils::modifyList(
+    attributes(means),
+    info[c("at", "by", "datagrid", "predict", "focal_terms")]
   )
 
   # Output
