@@ -2,6 +2,8 @@ skip_on_os(c("mac", "solaris"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
+skip_if_not_installed("emmeans")
+skip_if_not_installed("marginaleffects")
 skip_on_cran()
 
 test_that("plots emmeans", {
