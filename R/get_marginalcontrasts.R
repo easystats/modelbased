@@ -24,7 +24,7 @@ get_marginalcontrasts <- function(model,
   on_the_fly_factors <- attributes(model_data)$factors
 
   # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[contrast[1]]]) && !identical(contrast[1], on_the_fly_factors)) {
+  if (is.numeric(model_data[[my_args$contrast[1]]]) && !identical(my_args$contrast[1], on_the_fly_factors)) {
     out <- estimate_slopes(
       model = model,
       trend = my_args$contrast,
