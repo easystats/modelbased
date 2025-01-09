@@ -139,7 +139,163 @@ estimate_means <- function(model,
 }
 
 
-# Table Formating ----------------------------------------------------------
+# Formatting ===============================================================
+
+
+#' @keywords internal
+.format_marginaleffects_means <- function(model, estimated, predict = NULL, ...) {
+  predict <- attributes(estimated)$predict
+  # model information
+  model_data <- insight::get_data(model)
+  info <- insight::model_info(model, verbose = FALSE)
+  non_focal <- setdiff(colnames(model_data), attr(estimated, "focal_terms"))
+  is_contrast_analysis <- !is.null(list(...)$hypothesis)
+  predict_type <- attributes(estimated)$predict
+
+  # do we have contrasts? For contrasts, we want to keep p-values
+  if (is_contrast_analysis) {
+    remove_column <- "SE"
+    estimate_name <- "Difference"
+  } else {
+    remove_column <- "p"
+    # estimate name
+    if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+      # for Bayesian models with distributional parameter
+      estimate_name <- tools::toTitleCase(predict_type)
+    } else if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
+      estimate_name <- "Probability"
+    } else {
+      estimate_name <- "Mean"
+    }
+  }
+
+  # Format
+  params <- suppressWarnings(parameters::model_parameters(estimated, verbose = FALSE))
+  # add ci?
+  params <- .add_contrasts_ci(is_contrast_analysis, params)
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
+  # move p to the end
+  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
+  params <- datawizard::data_rename(params, "Predicted", estimate_name)
+  # remove redundant columns
+  params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
+  params <- datawizard::data_restoretype(params, model_data)
+
+  # Store info
+  attr(params, "at") <- attr(estimated, "by")
+  attr(params, "by") <- attr(estimated, "by")
+  params
+}
+
+
+#' @keywords internal
+.format_emmeans_arguments <- function(model, args, data, ...) {
+  # Create the data_matrix
+  # ---------------------------
+  # data <- insight::get_data(model)
+  predictors <- insight::find_predictors(
+    model,
+    effects = "fixed",
+    flatten = TRUE,
+    ...
+  )
+  data <- data[intersect(predictors, colnames(data))]
+
+  # Deal with 'at'
+  if (is.null(args$by)) {
+    args$data_matrix <- NULL
+  } else if (is.data.frame(args$by)) {
+    args$data_matrix <- args$by
+    args$by <- names(args$by)
+  } else if (is.list(args$by)) {
+    args$data_matrix <- expand.grid(args$by)
+    args$by <- names(args$data_matrix)
+  } else if (inherits(args$by, "formula")) {
+    args$data_matrix <- stats::model.frame(args$by, data = data)
+    args$by <- names(args$data_matrix)
+  } else {
+    if (!is.null(args$by) && all(args$by == "all")) {
+      target <- intersect(predictors, colnames(data))
+    } else {
+      target <- args$by
+    }
+    datagrid <- insight::get_datagrid(data, by = target, ...)
+    args$by <- attributes(datagrid)$at_specs$varname
+    args$data_matrix <- as.data.frame(datagrid[args$by])
+    if (length(args$by) == 0) args$by <- NULL # Post-clean
+  }
+
+  # Deal with 'contrast'
+  if (!is.null(args$contrast)) {
+    contrast <- insight::get_datagrid(data, by = args$contrast, ...)
+    args$contrast <- attributes(contrast)$at_specs$varname
+    contrast <- as.data.frame(contrast[args$contrast])
+    if (is.null(args$data_matrix)) {
+      args$data_matrix <- contrast
+    } else {
+      contrast <- contrast[!names(contrast) %in% names(args$data_matrix)]
+      if (ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
+    }
+  }
+
+  # Get 'specs' and 'at'
+  # --------------------
+  if (is.null(args$data_matrix)) {
+    args$emmeans_specs <- ~1
+    args$emmeans_at <- NULL
+  } else {
+    args$emmeans_specs <- names(args$data_matrix)
+    args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
+  }
+
+  # Special behaviour for transformations #138
+  # It's annoying and an ugly fix, not sure how to address
+  if (!is.null(args$emmeans_at)) {
+    args$retransform <- list()
+    model_terms <- insight::find_terms(model)$conditional
+    for (var_at in names(args$emmeans_at)) {
+      term <- model_terms[grepl(var_at, model_terms, fixed = TRUE)]
+      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
+        any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
+        args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
+        args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
+      }
+    }
+  }
+
+  args
+}
+
+
+#' @keywords internal
+.add_contrasts_ci <- function(is_contrast_analysis, params) {
+  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
+    # extract ci-level
+    if ("CI" %in% colnames(params)) {
+      ci <- params[["CI"]][1]
+    } else {
+      ci <- attributes(params)$ci
+    }
+    if (is.null(ci)) {
+      ci <- 0.95
+    }
+    # get degrees of freedom
+    if ("df" %in% colnames(params)) {
+      dof <- params[["df"]]
+    } else {
+      dof <- Inf
+    }
+    # critical test value
+    crit <- stats::qt((1 + ci) / 2, df = dof)
+    # add CI
+    params$CI_low <- params$Predicted - crit * params$SE
+    params$CI_high <- params$Predicted + crit * params$SE
+  }
+  params
+}
+
+
+# Table footer ===============================================================
 
 
 .estimate_means_footer <- function(x,
