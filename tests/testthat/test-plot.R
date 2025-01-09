@@ -87,3 +87,34 @@ test_that("plots marginalmeans", {
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
   )
 })
+
+
+test_that("plots marginalmeans, show_data", {
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+
+  # Estimate means -------------------------------------
+  x <- estimate_means(model, by = "Species", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-me-means-showdata-1",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_means(model, by = "Sepal.Width", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-me-means-showdata-2",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-me-means-showdata-3",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+  x <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-me-means-showdata-4",
+    plot(modelbased::visualisation_recipe(x, show_data = TRUE))
+  )
+})
