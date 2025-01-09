@@ -21,7 +21,7 @@ get_emcontrasts <- function(model,
                             contrast = NULL,
                             by = NULL,
                             predict = NULL,
-                            method = "pairwise",
+                            comparison = "pairwise",
                             transform = NULL,
                             ...) {
   # check if available
@@ -57,7 +57,7 @@ get_emcontrasts <- function(model,
   emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
   if (length(emm_by) == 0) emm_by <- NULL
 
-  out <- emmeans::contrast(estimated, by = emm_by, method = method, ...)
+  out <- emmeans::contrast(estimated, by = emm_by, method = comparison, ...)
 
   attr(out, "contrast") <- my_args$contrast
   attr(out, "predict") <- predict
