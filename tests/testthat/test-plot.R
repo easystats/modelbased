@@ -194,3 +194,15 @@ test_that("plots, grouplevel lme4", {
     plot(estimate_grouplevel(model))
   )
 })
+
+
+test_that("plots, relation, multiple CI", {
+  data(mtcars)
+  m <- lm(mpg ~ qsec, data = mtcars)
+  em <- estimate_relation(m, ci = c(0.5, 0.8, 0.9))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-multiple-ci-1",
+    plot(em)
+  )
+})

@@ -19,7 +19,7 @@
 #'   [emmeans::contrast] and the `?emmeans::emmc-functions`.
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
-#'   maming the comparison method, a formula, or a function. Strings, string
+#'   naming the comparison method, a formula, or a function. Strings, string
 #'   equations and formula are probably the most common options and described
 #'   below. For other options and detailed descriptions of those options, see
 #'   also [marginaleffects::comparisons] and
