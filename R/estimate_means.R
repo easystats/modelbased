@@ -180,6 +180,8 @@ estimate_means <- function(model,
   # remove redundant columns
   params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)
+  # Rename for Categorical family
+  if(info$is_categorical) params <- datawizard::data_rename(params, "group", "Response")
 
   # Store info
   attr(params, "at") <- attr(estimated, "by")
