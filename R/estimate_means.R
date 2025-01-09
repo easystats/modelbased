@@ -217,9 +217,16 @@ format.marginaleffects_means <- function(x, model, ...) {
   # rename
   params <- datawizard::data_rename(
     params,
-    select = c("Predicted", "Statistic"),
-    replacement = c(estimate_name, gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE))
+    select = "Predicted",
+    replacement = estimate_name
   )
+  if ("Statistic" %in% colnames(params)) {
+    params <- datawizard::data_rename(
+      params,
+      select = "Statistic",
+      replacement = gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE)
+    )
+  }
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)

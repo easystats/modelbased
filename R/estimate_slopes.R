@@ -174,7 +174,7 @@ estimate_slopes <- function(model,
   # Summarize and clean
   trends <- parameters::parameters(estimated, ci = ci, ...)
   # define all columns that should be removed
-  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
+  remove_columns <- c("s.value", "S", "CI", "rowid_dedup")
   # remove redundant columns
   trends <- datawizard::data_remove(trends, remove_columns, verbose = FALSE) # nolint
   trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
