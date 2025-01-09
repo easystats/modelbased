@@ -123,6 +123,8 @@ get_marginalmeans <- function(model,
   attr(means, "focal_terms") <- at_specs$varname
   attr(means, "datagrid") <- datagrid
   attr(means, "predict") <- predict
+  class(means) <- unique(c("marginaleffects_means", class(means)))
+
   means
 }
 

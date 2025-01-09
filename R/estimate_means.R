@@ -105,14 +105,14 @@ estimate_means <- function(model,
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, by = by, predict = predict, ...)
-    means <- .format_emmeans_means(model, estimated = estimated, ci = ci, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
-    means <- .format_marginaleffects_means(model, estimated = estimated, ...)
   }
 
   # Table formatting
+  means <- format(estimated, model, ci = ci, ...)
+
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(
     means,
@@ -134,7 +134,7 @@ estimate_means <- function(model,
   )
 
   # Output
-  class(means) <- c("estimate_means", class(means))
+  class(means) <- unique(c("estimate_means", class(means)))
   means
 }
 
@@ -142,8 +142,8 @@ estimate_means <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-#' @keywords internal
-.format_emmeans_means <- function(model, estimated, ci = 0.95, ...) {
+#' @export
+format.emmeans_means <- function(x, model, ci = 0.95, ...) {
   predict <- attributes(estimated)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
@@ -178,8 +178,8 @@ estimate_means <- function(model,
 # Table formatting marginaleffects --------------------------------------------
 
 
-#' @keywords internal
-.format_marginaleffects_means <- function(model, estimated, predict = NULL, ...) {
+#' @export
+format.marginaleffects_means <- function(x, model, ...) {
   predict <- attributes(estimated)$predict
   # model information
   model_data <- insight::get_data(model)

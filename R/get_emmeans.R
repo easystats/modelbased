@@ -85,6 +85,7 @@ get_emmeans <- function(model,
   attr(estimated, "by") <- my_args$by
   attr(estimated, "predict") <- predict
   attr(estimated, "focal_terms") <- my_args$emmeans_specs
+  class(estimated) <- unique(c("emmeans_means", class(estimated)))
 
   estimated
 }
