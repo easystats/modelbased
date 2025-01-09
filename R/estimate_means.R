@@ -175,14 +175,12 @@ estimate_means <- function(model,
 
   # tell user about scale of predictions / contrasts
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
-    result_type <- switch(
-      type,
+    result_type <- switch(type,
       means = "Predictions",
       contrasts = "Contrasts"
     )
     # exceptions
-    predict <- switch(
-      predict,
+    predict <- switch(predict,
       none = "link",
       `invlink(link)` = "response",
       predict

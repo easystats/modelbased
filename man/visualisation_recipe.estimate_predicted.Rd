@@ -50,7 +50,7 @@ aesthetics and parameters for the geoms (see customization example).}
 Visualisation Recipe for 'modelbased' Objects
 }
 \examples{
-\dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_relation, estimate_expectation, ...
 # ==============================================
@@ -65,7 +65,7 @@ plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 
 # And can be used in a pipe workflow
 lm(mpg ~ qsec, data = mtcars) |>
-  estimate_relation(ci=c(0.5, 0.8, 0.9)) |>
+  estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
   plot()
 
 # Customize aesthetics ----------
@@ -76,15 +76,15 @@ plot(x,
   ribbon = list(fill = "green", alpha = 0.7)
 ) +
   theme_minimal() +
-  labs(title="Relationship between MPG and WT")
+  labs(title = "Relationship between MPG and WT")
 
 
 # Customize raw data -------------
 
-plot(x, point = list(geom="density_2d_filled"), line=list(color="white")) +
+plot(x, point = list(geom = "density_2d_filled"), line = list(color = "white")) +
   scale_x_continuous(expand = c(0, 0)) +
   scale_y_continuous(expand = c(0, 0)) +
-  theme(legend.position="none")
+  theme(legend.position = "none")
 
 # Single predictors examples -----------
 
@@ -112,8 +112,8 @@ plot(layers)
 # Customize aesthetics
 layers <- visualisation_recipe(x,
   point = list(width = 0.03, color = "red"),
-  pointrange = list(size=2, linewidth=2),
-  line = list(linetype = "dashed", color="blue")
+  pointrange = list(size = 2, linewidth = 2),
+  line = list(linetype = "dashed", color = "blue")
 )
 plot(layers)
 
@@ -144,11 +144,11 @@ layers
 plot(layers)
 
 # Customize aesthetics and add horizontal line and theme
-layers <- visualisation_recipe(x, pointrange = list(size=2, linewidth=2))
+layers <- visualisation_recipe(x, pointrange = list(size = 2, linewidth = 2))
 plot(layers) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
   theme_minimal() +
-  labs(y="Effect of Petal.Length", title="Marginal Effects")
+  labs(y = "Effect of Petal.Length", title = "Marginal Effects")
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 x <- estimate_slopes(model, by = "Sepal.Width", length = 20)

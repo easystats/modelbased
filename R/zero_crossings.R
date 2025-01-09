@@ -43,7 +43,7 @@ zero_crossings <- function(x) {
   }
 
   if (!is.numeric(lower) || !is.numeric(upper) || lower >= upper) {
-      insight::format_error("`lower` is not smaller than `upper`.")
+    insight::format_error("`lower` is not smaller than `upper`.")
   }
 
   ## subdivide interval in n subintervals and estimate the function values
