@@ -28,6 +28,11 @@ format.marginaleffects_means <- function(x, model, ...) {
     }
   }
 
+  # tidy output
+  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+  # add back ci? these are missing when contrasts are computed
+  params <- .add_contrasts_ci(is_contrast_analysis, params)
+
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     params,
@@ -66,6 +71,10 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 # -----------------------------------------------------------------------------
 
 
+# This function renames columns to have a consistent naming scheme,
+# and relocates columns to get a standardized column order across all
+# outputs from {marginaleffects}
+
 #' @keywords internal
 .standardize_marginaleffects_columns <- function(params,
                                                  remove_columns,
@@ -100,6 +109,9 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 }
 
 
+# This function ensures that the formatted object still has all relevant
+# information saved as attributes
+
 #' @keywords internal
 .set_back_attributes <- function(x, formatted_params) {
   attr(formatted_params, "at") <- attr(x, "by")
@@ -113,6 +125,9 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   formatted_params
 }
 
+
+# for contrasts analysis, CIs are not computed automatically. The `format()`
+# methods adds back those CIs by calling this function.
 
 #' @keywords internal
 .add_contrasts_ci <- function(is_contrast_analysis, params) {
