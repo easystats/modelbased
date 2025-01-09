@@ -228,6 +228,34 @@ estimate_means <- function(model,
 }
 
 
+#' @keywords internal
+.add_contrasts_ci <- function(is_contrast_analysis, params) {
+  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
+    # extract ci-level
+    if ("CI" %in% colnames(params)) {
+      ci <- params[["CI"]][1]
+    } else {
+      ci <- attributes(params)$ci
+    }
+    if (is.null(ci)) {
+      ci <- 0.95
+    }
+    # get degrees of freedom
+    if ("df" %in% colnames(params)) {
+      dof <- params[["df"]]
+    } else {
+      dof <- Inf
+    }
+    # critical test value
+    crit <- stats::qt((1 + ci) / 2, df = dof)
+    # add CI
+    params$CI_low <- params$Predicted - crit * params$SE
+    params$CI_high <- params$Predicted + crit * params$SE
+  }
+  params
+}
+
+
 # Bring arguments in shape for emmeans ----------------------------------------
 
 
@@ -307,34 +335,6 @@ estimate_means <- function(model,
   }
 
   args
-}
-
-
-#' @keywords internal
-.add_contrasts_ci <- function(is_contrast_analysis, params) {
-  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
-    # extract ci-level
-    if ("CI" %in% colnames(params)) {
-      ci <- params[["CI"]][1]
-    } else {
-      ci <- attributes(params)$ci
-    }
-    if (is.null(ci)) {
-      ci <- 0.95
-    }
-    # get degrees of freedom
-    if ("df" %in% colnames(params)) {
-      dof <- params[["df"]]
-    } else {
-      dof <- Inf
-    }
-    # critical test value
-    crit <- stats::qt((1 + ci) / 2, df = dof)
-    # add CI
-    params$CI_low <- params$Predicted - crit * params$SE
-    params$CI_high <- params$Predicted + crit * params$SE
-  }
-  params
 }
 
 
