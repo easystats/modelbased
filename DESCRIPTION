@@ -73,7 +73,8 @@ Suggests:
     rstanarm,
     rtdists,
     see (>= 0.8.4),
-    testthat (>= 3.2.1)
+    testthat (>= 3.2.1),
+    withr
 VignetteBuilder:
     knitr
 Encoding: UTF-8
