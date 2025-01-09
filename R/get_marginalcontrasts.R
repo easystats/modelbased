@@ -23,8 +23,11 @@ get_marginalcontrasts <- function(model,
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   on_the_fly_factors <- attributes(model_data)$factors
 
+  # extract first focal term
+  first_focal <- my_args$contrast[1]
+
   # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[my_args$contrast[1]]]) && !any(my_args$contrast[1] %in% on_the_fly_factors)) {
+  if (is.numeric(model_data[[first_focal]]) && !any(first_focal %in% on_the_fly_factors)) {
     out <- estimate_slopes(
       model = model,
       trend = my_args$contrast,
