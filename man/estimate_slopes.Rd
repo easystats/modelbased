@@ -44,18 +44,20 @@ A data.frame of class \code{estimate_slopes}.
 }
 \description{
 Estimate the slopes (i.e., the coefficient) of a predictor over or within
-different factor levels, or alongside a numeric variable . In other words, to
-assess the effect of a predictor \emph{at} specific configurations data. Other
-related functions based on marginal estimations includes
+different factor levels, or alongside a numeric variable. In other words, to
+assess the effect of a predictor \emph{at} specific configurations data. It corresponds
+to the derivative and can be useful to understand where a predictor has a
+significant role when interactions or non-linear relationships are present.
+
+Other related functions based on marginal estimations includes
 \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_means]{estimate_means()}}.
-\cr\cr
-}
-\details{
+
 See the \strong{Details} section below, and don't forget to also check out the
 \href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes}
 and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for
 various examples, tutorials and use cases.
-
+}
+\details{
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the

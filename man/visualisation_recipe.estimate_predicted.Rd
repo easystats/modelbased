@@ -103,7 +103,7 @@ plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Simple Model ---------------
-x <- estimate_means(lm(Sepal.Width ~ Species, data = iris))
+x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by="Species")
 layers <- visualisation_recipe(x)
 layers
 plot(layers)
@@ -123,16 +123,16 @@ data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$new_factor <- as.factor(rep(c("A", "B"), length.out = nrow(mtcars)))
 
+model <- lm(mpg ~ new_factor * cyl * wt, data = data)
+
 # Modulations --------------
 x <- estimate_means(model, by = c("new_factor", "wt"))
 plot(visualisation_recipe(x))
 
-# x <- estimate_means(model, by =c("new_factor", "cyl", "wt"))
-# plot(visualisation_recipe(x))  # TODO: broken
 
-#'   # GLMs ---------------------
+# GLMs ---------------------
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
-x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"))
+x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 plot(visualisation_recipe(x))
 }
 \dontshow{\}) # examplesIf}

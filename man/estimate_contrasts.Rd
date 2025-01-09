@@ -89,11 +89,6 @@ factor. See also other related functions such as \code{\link[=estimate_means]{es
 and \code{\link[=estimate_slopes]{estimate_slopes()}}.
 }
 \details{
-See the \strong{Details} section below, and don't forget to also check out the
-\href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes}
-and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for
-various examples, tutorials and use cases.
-
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
