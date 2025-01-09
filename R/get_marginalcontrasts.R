@@ -21,8 +21,10 @@ get_marginalcontrasts <- function(model,
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+  on_the_fly_factors <- attributes(model_data)$factors
 
-  if (is.numeric(model_data[[contrast[1]]])) {
+  # if first focal term is numeric, we contrast slopes
+  if (is.numeric(model_data[[contrast[1]]]) && !identical(contrast[1], on_the_fly_factors)) {
     out <- estimate_slopes(
       model = model,
       trend = my_args$contrast,
@@ -36,6 +38,7 @@ get_marginalcontrasts <- function(model,
       ...
     )
   } else {
+    # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
       model = model,
       ## TODO: once .format_marginaleffects_contrasts() is working, we have to
