@@ -141,7 +141,7 @@ estimate_slopes <- function(model,
 }
 
 
-# Engine ===============================================================
+# Formatting ===============================================================
 
 
 .format_emmeans_slopes <- function(model, estimated, ci, ...) {

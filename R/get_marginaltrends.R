@@ -38,15 +38,18 @@ get_marginaltrends <- function(model,
   }
 
   # setup arguments again
-  fun_args <- insight::compact_list(list(
-    model,
-    variables = trend,
-    by = at_specs$varname,
-    newdata = datagrid
+  fun_args <- insight::compact_list(c(
+    list(
+      model,
+      variables = trend,
+      by = at_specs$varname,
+      newdata = datagrid
+    ),
+    dots
   ))
 
   # Compute stuff
-  estimated <- do.call(marginaleffects::avg_slopes, fun_args)
+  estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
