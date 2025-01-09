@@ -84,7 +84,7 @@ get_emmeans <- function(model,
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
   attr(estimated, "predict") <- predict
-  attr(estimated, "focal_terms") <- at_specs$varname
+  attr(estimated, "focal_terms") <- my_args$emmeans_specs
 
   estimated
 }
