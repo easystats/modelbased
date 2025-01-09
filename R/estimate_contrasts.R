@@ -11,7 +11,7 @@
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
-#' @param comparison Specifiy the type of contrasts or tests that should be
+#' @param comparison Specify the type of contrasts or tests that should be
 #' carried out. When `backend = "emmeans"`, see `method` argument in
 #' [emmeans::contrast]. For `backend = "marginaleffects"`, see
 #' [this website](https://marginaleffects.com/bonus/hypothesis.html) for the

@@ -83,7 +83,7 @@ packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
-\item{comparison}{Specifiy the type of contrasts or tests that should be
+\item{comparison}{Specify the type of contrasts or tests that should be
 carried out. When \code{backend = "emmeans"}, see \code{method} argument in
 \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} for the

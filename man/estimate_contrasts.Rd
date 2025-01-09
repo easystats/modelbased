@@ -61,7 +61,7 @@ comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"ho
 p-value adjustment section in the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}.}
 
-\item{comparison}{Specifiy the type of contrasts or tests that should be
+\item{comparison}{Specify the type of contrasts or tests that should be
 carried out. When \code{backend = "emmeans"}, see \code{method} argument in
 \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website} for the
