@@ -70,7 +70,7 @@ get_marginaltrends <- function(model,
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
   attr(estimated, "by") <- by
-  class(estimated) <- unique("marginaleffects_slopes", class(estimated))
+  class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
 
   estimated
 }

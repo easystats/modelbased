@@ -1,5 +1,5 @@
 #' @export
-format.marginaleffects_means <- function(x, model, ...) {
+format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   predict <- attributes(x)$predict
   # model information
   model_data <- insight::get_data(model)
@@ -28,19 +28,16 @@ format.marginaleffects_means <- function(x, model, ...) {
     }
   }
 
-  # tidy output
-  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
-  # add back ci? these are missing when contrasts are computed
-  params <- .add_contrasts_ci(is_contrast_analysis, params)
-
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
-    params,
+    x,
     remove_columns,
     model,
     model_data,
     info,
-    estimate_name
+    ci,
+    estimate_name,
+    is_contrast_analysis
   )
 
   .set_back_attributes(x, params)
@@ -52,17 +49,16 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
   info <- insight::model_info(model, verbose = FALSE)
   model_data <- insight::get_data(model)
-  # Summarize and clean
-  params <- parameters::parameters(x, ci = ci, ...)
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup")
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
-    params,
+    x,
     remove_columns,
     model,
     model_data,
-    info
+    info,
+    ci
   )
 
   .set_back_attributes(x, params)
@@ -78,20 +74,37 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 # outputs from {marginaleffects}
 
 #' @keywords internal
-.standardize_marginaleffects_columns <- function(params,
+.standardize_marginaleffects_columns <- function(x,
                                                  remove_columns,
                                                  model,
                                                  model_data,
                                                  info,
-                                                 estimate_name = NULL) {
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"), after = -1, verbose = FALSE) # nolint
-  # move p to the end
+                                                 ci = 0.95,
+                                                 estimate_name = NULL,
+                                                 is_contrast_analysis = FALSE) {
+  # tidy output
+  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+  coefficient_name <- intersect(
+    c(attributes(params)$coefficient_name, "Coefficient", "Predicted"),
+    colnames(params)
+  )[1]
+
+  # add back ci? these are missing when contrasts are computed
+  params <- .add_contrasts_ci(is_contrast_analysis, params)
+
+  # relocate columns
+  relocate_columns <- intersect(
+    c(coefficient_name, "Coefficient", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
+    colnames(params)
+  )
+  params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint
   params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
-  # rename
+
+  # rename columns
   if (!is.null(estimate_name)) {
     params <- datawizard::data_rename(
       params,
-      select = "Predicted",
+      select = coefficient_name,
       replacement = estimate_name
     )
   }
@@ -102,12 +115,16 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
       replacement = gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE)
     )
   }
+
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
+
   # Rename for Categorical family
   if (info$is_categorical) {
     params <- datawizard::data_rename(params, "group", "Response")
   }
+
+  # finally, make sure we have original data types
   datawizard::data_restoretype(params, model_data)
 }
 
