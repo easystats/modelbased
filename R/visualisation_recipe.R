@@ -63,16 +63,6 @@
 #' x <- estimate_relation(lm(Sepal.Width ~ Sepal.Length * Species, data = iris))
 #' plot(x)
 #'
-#'
-#' # Multiple CIs ---------------------
-#' plot(estimate_relation(lm(mpg ~ disp, data = mtcars),
-#'   ci = c(.50, .80, .95)
-#' ))
-#' plot(estimate_relation(lm(Sepal.Length ~ Species, data = iris),
-#'   ci = c(0.5, 0.7, 0.95)
-#' ))
-#'
-#'
 #' # ==============================================
 #' # estimate_means
 #' # ==============================================
@@ -97,13 +87,13 @@
 #' model <- lm(mpg ~ cyl * wt, data = data)
 #'
 #' x <- estimate_means(model, by = c("cyl", "wt"))
-#' plot(visualisation_recipe(x))
+#' plot(x)
 #'
 #'
 #' # GLMs ---------------------
 #' data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 #' x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
-#' plot(visualisation_recipe(x))
+#' plot(x)
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = TRUE,
@@ -175,3 +165,51 @@ visualisation_recipe.estimate_slopes <- function(x,
 }
 
 
+
+#' @rdname visualisation_recipe.estimate_predicted
+#'
+#' @examplesIf require("see") && require("lme4") && require("emmeans")
+#' # ==============================================
+#' # estimate_grouplevel
+#' # ==============================================
+#' data <- lme4::sleepstudy
+#' data <- rbind(data, data)
+#' data$Newfactor <- rep(c("A", "B", "C", "D"))
+#'
+#' # 1 random intercept
+#' model <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = data)
+#' x <- estimate_grouplevel(model)
+#' layers <- visualisation_recipe(x)
+#' layers
+#' plot(layers)
+#'
+#' # 2 random intercepts
+#' model <- lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
+#' x <- estimate_grouplevel(model)
+#' plot(x)
+#'
+#' model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
+#' x <- estimate_grouplevel(model)
+#' plot(x)
+#' @export
+visualisation_recipe.estimate_grouplevel <- function(x,
+                                                     line=NULL,
+                                                     pointrange=NULL,
+                                                     ribbon=NULL,
+                                                     facet=NULL,
+                                                     ...) {
+
+  if(is.null(facet)) {
+    facet <- list("scales" = "free")
+  } else {
+    facet <- utils::modifyList(facet, list("scales" = "free"))
+  }
+
+  .visualization_recipe(x,
+                        show_data=FALSE,
+                        line=line,
+                        pointrange=pointrange,
+                        ribbon=ribbon,
+                        facet=facet,
+                        ...)
+}

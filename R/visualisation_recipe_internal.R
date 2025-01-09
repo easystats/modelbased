@@ -19,6 +19,14 @@
     aes$type <- "pointrange"
   } else if("estimate_slopes" %in% att$class) {
     aes$y <- "Coefficient"
+  } else if("estimate_grouplevel" %in% att$class) {
+    aes$y <- "Level"
+    aes$x <- "Coefficient"
+    aes$type <- "grouplevel"
+    if(length(unique(data$Parameter)) > 1) aes$color <- "Parameter"
+    if(length(unique(data$Group)) > 1) aes$facet <- "Group"
+    aes <- .find_aes_ci(aes, data)
+    return(list(aes=aes, data=data))
   }
 
   # Find predictors
@@ -42,21 +50,29 @@
     aes$group <- ".group"
   }
   if(length(by) > 3) {
-    aes$facet <- as.formula(paste("~", paste(tail(by, -3), collapse = " * ")))
+    aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -3), collapse = " * ")))
   }
 
   # CI
+  aes <- .find_aes_ci(aes, data)
+
+  list(aes=aes, data=data)
+}
+
+
+#' @keywords internal
+.find_aes_ci <- function(aes, data) {
   ci_lows <- rev(grep("CI_low", names(data), fixed = TRUE, value = TRUE))
   ci_highs <- rev(grep("CI_high", names(data), fixed = TRUE, value = TRUE))
   if(length(ci_lows) > 0) {
     aes$ymin <- ci_lows
     aes$ymax <- ci_highs
   }
-
-  list(aes=aes, data=data)
+  aes
 }
 
 
+# Workhorse function ------------------------------------------------------
 
 
 #' @keywords internal
@@ -108,19 +124,21 @@
   }
 
   # Main ----------------------------------
-  layers[[paste0("l", l)]] <- list(
-    geom = "line",
-    data = data,
-    aes = list(
-      y = aes$y,
-      x = aes$x,
-      color = aes$color,
-      group = aes$group,
-      alpha = aes$alpha
+  if(aes$type != "grouplevel") {
+    layers[[paste0("l", l)]] <- list(
+      geom = "line",
+      data = data,
+      aes = list(
+        y = aes$y,
+        x = aes$x,
+        color = aes$color,
+        group = aes$group,
+        alpha = aes$alpha
+      )
     )
-  )
-  if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
-  l <- l + 1
+    if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+    l <- l + 1
+  }
 
 
   if(aes$type == "pointrange") {
@@ -132,6 +150,23 @@
         x = aes$x,
         ymin = aes$ymin,
         ymax = aes$ymax,
+        color = aes$color,
+        group = aes$group,
+        alpha = aes$alpha
+      )
+    )
+    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    l <- l + 1
+  }
+  if(aes$type == "grouplevel") {
+    layers[[paste0("l", l)]] <- list(
+      geom = "pointrange",
+      data = data,
+      aes = list(
+        y = aes$y,
+        x = aes$x,
+        xmin = aes$ymin,
+        xmax = aes$ymax,
         color = aes$color,
         group = aes$group,
         alpha = aes$alpha
