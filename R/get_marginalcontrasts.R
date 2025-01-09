@@ -19,6 +19,10 @@ get_marginalcontrasts <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, ...)
 
+  # check whether contrasts should be made for numerics or categorical
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+
+
   out <- estimate_means(
     model = model,
     ## TODO: once .format_marginaleffects_contrasts() is working, we have to
