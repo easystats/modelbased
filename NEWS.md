@@ -9,6 +9,8 @@
 
 - Argument `transform` is deprecated. Please use `predict` instead.
 
+- Argument `method` in `estimate_contrasts()` was renamed into `comparison`.
+
 - All `model_*()` alias names have been removed. Use the related `get_*()`
   functions instead.
 
