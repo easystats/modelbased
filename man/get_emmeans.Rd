@@ -16,7 +16,7 @@ get_emcontrasts(
   contrast = NULL,
   by = NULL,
   predict = NULL,
-  method = "pairwise",
+  comparison = "pairwise",
   transform = NULL,
   ...
 )
@@ -30,7 +30,7 @@ get_marginalcontrasts(
   contrast = NULL,
   by = NULL,
   predict = NULL,
-  method = "pairwise",
+  comparison = "pairwise",
   ci = 0.95,
   p_adjust = "holm",
   ...
@@ -83,9 +83,11 @@ packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
-\item{method}{Contrast method. When \code{backend = "emmeans"}, see same argument
-in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.}
+\item{comparison}{Specifiy the type of contrasts or tests that should be
+carried out. When \code{backend = "emmeans"}, see \code{method} argument in
+\link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} for the
+different comparison options.}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
 

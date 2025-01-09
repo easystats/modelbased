@@ -66,18 +66,18 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 
 
 #' @export
-format.marginaleffects_contrasts <- function(x, model, p_adjust, method, ...) {
+format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...) {
   predict <- attributes(x)$predict
   groups <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
 
-  valid_methods <- c(
+  valid_options <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"
   )
 
-  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
+  if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
     # These are examples of what {marginaleffects} returns, a single parmater
@@ -97,7 +97,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, method, ...) {
     #   c("time", "coffee"),
     #   backend = "marginaleffects",
     #   p_adjust = "none",
-    #   method = ratio ~ reference | coffee
+    #   comparison = ratio ~ reference | coffee
     # )
     # #> Marginal Contrasts Analysis
     # #>

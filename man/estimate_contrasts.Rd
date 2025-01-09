@@ -11,7 +11,7 @@ estimate_contrasts(
   predict = NULL,
   ci = 0.95,
   p_adjust = "holm",
-  method = "pairwise",
+  comparison = "pairwise",
   backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
   ...
@@ -61,9 +61,11 @@ comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"ho
 p-value adjustment section in the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}.}
 
-\item{method}{Contrast method. When \code{backend = "emmeans"}, see same argument
-in \link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.}
+\item{comparison}{Specifiy the type of contrasts or tests that should be
+carried out. When \code{backend = "emmeans"}, see \code{method} argument in
+\link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} for the
+different comparison options.}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed

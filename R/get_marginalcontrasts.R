@@ -4,7 +4,7 @@ get_marginalcontrasts <- function(model,
                                   contrast = NULL,
                                   by = NULL,
                                   predict = NULL,
-                                  method = "pairwise",
+                                  comparison = "pairwise",
                                   ci = 0.95,
                                   p_adjust = "holm",
                                   ...) {
@@ -44,7 +44,7 @@ get_marginalcontrasts <- function(model,
       ## filtering...
       by = my_args$by,
       ci = ci,
-      hypothesis = method,
+      hypothesis = comparison,
       backend = "marginaleffects",
       ...
     )
@@ -57,7 +57,7 @@ get_marginalcontrasts <- function(model,
       ## filtering...
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
-      hypothesis = method,
+      hypothesis = comparison,
       predict = predict,
       backend = "marginaleffects",
       ...
