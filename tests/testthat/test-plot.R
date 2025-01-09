@@ -178,3 +178,19 @@ test_that("plots, relation show_data", {
     plot(modelbased::visualisation_recipe(x, show_data = TRUE))
   )
 })
+
+
+test_that("plots, grouplevel lme4", {
+  skip_if_not_installed("lme4")
+  d <- rbind(lme4::sleepstudy, lme4::sleepstudy)
+  d$Newfactor <- rep(c("A", "B", "C", "D"))
+  model <- lme4::lmer(
+    Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor),
+    data = d
+  )
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-lme4-1",
+    plot(estimate_grouplevel(model))
+  )
+})
