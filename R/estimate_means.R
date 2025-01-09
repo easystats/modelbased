@@ -129,8 +129,8 @@ estimate_means <- function(model,
   attr(means, "backend") <- backend
 
   attr(means, "coef_name") <- intersect(
-    c("Mean", "Probability", tools::toTitleCase(.brms_aux_elements())),
-    names(means)
+    c("Mean", "Probability", "Difference", tools::toTitleCase(.brms_aux_elements())),
+    colnames(means)
   )
 
   # Output
@@ -188,12 +188,15 @@ estimate_means <- function(model,
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
   predict_type <- attributes(estimated)$predict
 
+  # define all columns that should be removed
+  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
+
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is_contrast_analysis) {
-    remove_column <- "SE"
     estimate_name <- "Difference"
   } else {
-    remove_column <- "p"
+    # for simple means, we don't want p-values
+    remove_columns <- c(remove_column, "p")
     # estimate name
     if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
       # for Bayesian models with distributional parameter
@@ -209,21 +212,28 @@ estimate_means <- function(model,
   params <- suppressWarnings(parameters::model_parameters(estimated, verbose = FALSE))
   # add ci?
   params <- .add_contrasts_ci(is_contrast_analysis, params)
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
+  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"), after = -1, verbose = FALSE) # nolint
   # move p to the end
   params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
   params <- datawizard::data_rename(params, "Predicted", estimate_name)
   # remove redundant columns
-  params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
+  params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
   params <- datawizard::data_restoretype(params, model_data)
   # Rename for Categorical family
   if (info$is_categorical) {
     params <- datawizard::data_rename(params, "group", "Response")
   }
 
+  ## TODO: check if we can use modifyList()
   # Store info
   attr(params, "at") <- attr(estimated, "by")
   attr(params, "by") <- attr(estimated, "by")
+  attr(params, "predict") <- attr(estimated, "predict")
+  attr(params, "contrast") <- attr(estimated, "contrast")
+  attr(params, "trend") <- attr(estimated, "trend")
+  attr(params, "focal_terms") <- attr(estimated, "focal_terms")
+  attr(params, "datagrid") <- attr(estimated, "datagrid")
+
   params
 }
 
