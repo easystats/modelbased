@@ -109,7 +109,7 @@ get_emmeans <- function(model,
   if (!is.null(by) && length(by) == 1 && by == "auto") {
     by <- predictors[!sapply(model_data[predictors], is.numeric)]
     if (!length(by) || all(is.na(by))) {
-      stop("Model contains no categorical factor. Please specify 'by'.", call. = FALSE)
+      insight::format_error("Model contains no categorical factor. Please specify `by`.")
     }
     insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
   }

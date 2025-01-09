@@ -35,12 +35,11 @@ zero_crossings <- function(x) {
                          ...) {
   ## error checking as in uniroot...
   if (!missing(interval) && length(interval) != 2) {
-    stop("'interval' must be a vector of length 2", call. = FALSE)
+    insight::format_error("`interval` must be a vector of length two.")
   }
 
-  if (!is.numeric(lower) || !is.numeric(upper) || lower >=
-    upper) {
-    stop("lower < upper  is not fulfilled", call. = FALSE)
+  if (!is.numeric(lower) || !is.numeric(upper) || lower >= upper) {
+      insight::format_error("`lower` is not smaller than `upper`.")
   }
 
   ## subdivide interval in n subintervals and estimate the function values
@@ -57,7 +56,7 @@ zero_crossings <- function(x) {
     Equi <- c(Equi, stats::uniroot(f, lower = xseq[i], upper = xseq[i + 1], ...)$root)
   }
 
-  return(Equi)
+  Equi
 }
 
 

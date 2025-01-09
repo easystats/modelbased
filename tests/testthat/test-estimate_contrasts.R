@@ -219,7 +219,7 @@ test_that("estimate_contrasts - marginaleffects", {
     c("time", "coffee"),
     backend = "marginaleffects",
     p_adjust = "none",
-    method = ratio ~ reference | coffee
+    comparison = ratio ~ reference | coffee
   )
   expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
 
@@ -228,7 +228,7 @@ test_that("estimate_contrasts - marginaleffects", {
     c("time", "coffee"),
     backend = "marginaleffects",
     p_adjust = "none",
-    method = "(b2-b1)=(b4-b3)"
+    comparison = "(b2-b1)=(b4-b3)"
   )
   expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
 })

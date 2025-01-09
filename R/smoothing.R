@@ -63,7 +63,7 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   } else if (method == "smooth") {
     smoothed <- stats::smooth(x, ...)
   } else {
-    stop('method must be one of c("loess", "smooth")', call. = FALSE)
+    insight::format_error("`method` must be one of c(\"loess\", \"smooth\")")
   }
   smoothed
 }

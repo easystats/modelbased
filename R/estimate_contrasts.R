@@ -11,9 +11,11 @@
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
-#' @param method Contrast method. When `backend = "emmeans"`, see same argument
-#' in [emmeans::contrast]. For `backend = "marginaleffects"`, see
-#' [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#' @param comparison Specify the type of contrasts or tests that should be
+#' carried out. When `backend = "emmeans"`, see `method` argument in
+#' [emmeans::contrast]. For `backend = "marginaleffects"`, see
+#' [this website](https://marginaleffects.com/bonus/hypothesis.html) for the
+#' different comparison options.
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details
@@ -82,7 +84,7 @@ estimate_contrasts <- function(model,
                                predict = NULL,
                                ci = 0.95,
                                p_adjust = "holm",
-                               method = "pairwise",
+                               comparison = "pairwise",
                                backend = getOption("modelbased_backend", "emmeans"),
                                transform = NULL,
                                ...) {
@@ -98,7 +100,7 @@ estimate_contrasts <- function(model,
       contrast = contrast,
       by = by,
       predict = predict,
-      method = method,
+      comparison = comparison,
       adjust = p_adjust,
       ...
     )
@@ -109,12 +111,12 @@ estimate_contrasts <- function(model,
       contrast = contrast,
       by = by,
       predict = predict,
-      method = method,
+      comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
       ...
     )
-    out <- format(estimated, model, p_adjust, method, ...)
+    out <- format(estimated, model, p_adjust, comparison, ...)
   }
 
   info <- attributes(estimated)
