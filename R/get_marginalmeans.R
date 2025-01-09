@@ -41,6 +41,10 @@ get_marginalmeans <- function(model,
   # find default response-type
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
+
+  # First step: create a data grid --------------------------------------------
+  # ---------------------------------------------------------------------------
+
   # exception: by = NULL computes overall mean
   if (is.null(by)) {
     datagrid <- at_specs <- NULL
@@ -68,6 +72,10 @@ get_marginalmeans <- function(model,
     # add user-arguments from "...", but remove those arguments that are already set
     dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   }
+
+
+  # Second step: prepare arguments for marginaleffects ------------------------
+  # ---------------------------------------------------------------------------
 
   # model df
   dof <- insight::get_df(model, verbose = FALSE)
@@ -98,9 +106,17 @@ get_marginalmeans <- function(model,
   # set to NULL
   fun_args$re.form <- NULL
 
+
+  # Third step: compute marginal means ----------------------------------------
+  # ---------------------------------------------------------------------------
+
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
   means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+
+
+  # Last step: Save information in attributes  --------------------------------
+  # ---------------------------------------------------------------------------
 
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
