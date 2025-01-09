@@ -37,6 +37,7 @@ format.marginaleffects_means <- function(x, model, ...) {
   params <- .standardize_marginaleffects_columns(
     params,
     remove_columns,
+    model,
     model_data,
     info,
     estimate_name
@@ -59,6 +60,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   params <- .standardize_marginaleffects_columns(
     params,
     remove_columns,
+    model,
     model_data,
     info
   )
@@ -78,6 +80,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 #' @keywords internal
 .standardize_marginaleffects_columns <- function(params,
                                                  remove_columns,
+                                                 model,
                                                  model_data,
                                                  info,
                                                  estimate_name = NULL) {
