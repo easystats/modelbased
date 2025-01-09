@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -92,7 +92,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -106,7 +106,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  method <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -167,10 +167,12 @@ packages), for instance when using complex formulae in <code>brms</code> models,
 for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 
-<dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
-<dd><p>Contrast method. When <code>backend = "emmeans"</code>, see same argument
-in <a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a>. For <code>backend = "marginaleffects"</code>, see
-<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p></dd>
+<dt id="arg-comparison">comparison<a class="anchor" aria-label="anchor" href="#arg-comparison"></a></dt>
+<dd><p>Specify the type of contrasts or tests that should be
+carried out. When <code>backend = "emmeans"</code>, see <code>method</code> argument in
+<a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a>. For <code>backend = "marginaleffects"</code>, see
+<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> for the
+different comparison options.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
