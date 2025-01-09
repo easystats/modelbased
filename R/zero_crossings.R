@@ -1,7 +1,8 @@
 #' Find zero crossings of a vector
 #'
 #' Find zero crossings of a vector, i.e., indices when the numeric variable
-#' crosses 0.
+#' crosses 0. It is useful for finding the points where a function changes by
+#' looking at the zero crossings of its derivative.
 #'
 #' @param x A numeric vector.
 #'

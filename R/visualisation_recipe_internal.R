@@ -46,9 +46,11 @@
   }
 
   # CI
-  if("CI_low" %in% names(data)) {
-    aes$ymin <- x$CI_low
-    aes$ymax <- x$CI_high
+  ci_lows <- rev(grep("CI_low", names(data), fixed = TRUE, value = TRUE))
+  ci_highs <- rev(grep("CI_high", names(data), fixed = TRUE, value = TRUE))
+  if(length(ci_lows) > 0) {
+    aes$ymin <- ci_lows
+    aes$ymax <- ci_highs
   }
 
   list(aes=aes, data=data)
@@ -83,26 +85,29 @@
   }
 
 
-  # Main -----------------------------------
+  # Uncertainty -----------------------------------
   if(aes$type == "ribbon" & is.null(aes$alpha)) {
-    layers[[paste0("l", l)]] <- list(
-      geom = "ribbon",
-      data = data,
-      aes = list(
-        y = aes$y,
-        x = aes$x,
-        ymin = aes$ymin,
-        ymax = aes$ymax,
-        fill = aes$color,
-        color = NULL,
-        group = aes$group
-      ),
-      alpha = 1/3
-    )
-    if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
-    l <- l + 1
+    for (i in seq_len(length(aes$ymin))) {
+      layers[[paste0("l", l)]] <- list(
+        geom = "ribbon",
+        data = data,
+        aes = list(
+          y = aes$y,
+          x = aes$x,
+          ymin = aes$ymin[i],
+          ymax = aes$ymax[i],
+          fill = aes$color,
+          color = NULL,
+          group = aes$group
+        ),
+        alpha = 1/3
+      )
+      if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+      l <- l + 1
+    }
   }
 
+  # Main ----------------------------------
   layers[[paste0("l", l)]] <- list(
     geom = "line",
     data = data,
