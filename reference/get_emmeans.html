@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.12</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.13</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -169,10 +169,30 @@ for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 <dt id="arg-comparison">comparison<a class="anchor" aria-label="anchor" href="#arg-comparison"></a></dt>
 <dd><p>Specify the type of contrasts or tests that should be
-carried out. When <code>backend = "emmeans"</code>, see <code>method</code> argument in
-<a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a>. For <code>backend = "marginaleffects"</code>, see
-<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> for the
-different comparison options.</p></dd>
+carried out.</p><ul><li><p>When <code>backend = "emmeans"</code>, can be one of <code>"pairwise"</code>, <code>"poly"</code>,
+<code>"consec"</code>, <code>"eff"</code>, <code>"del.eff"</code>, <code>"mean_chg"</code>, <code>"trt.vs.ctrl"</code>,
+<code>"dunnett"</code>, <code>"wtcon"</code> and some more. See also <code>method</code> argument in
+<a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a> and the <code>?emmeans::emmc-functions</code>.</p></li>
+<li><p>For <code>backend = "marginaleffects"</code>, can be a numeric value, vector, or
+matrix, a string equation specifying the hypothesis to test, a string
+maming the comparison method, a formula, or a function. Strings, string
+equations and formula are probably the most common options and described
+below. For other options and detailed descriptions of those options, see
+also <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
+<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
+<code>"meanotherdev"</code> and the inverse options <code>"revpairwise"</code>, <code>"revreference"</code>,
+and <code>"revsequential"</code>.</p></li>
+<li><p>String equation: To identify parameters from the output, either specify
+the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
+<code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
+<li><p>Formula: A formula like <code>comparison ~ pairs | group</code>, where the left-hand
+side indicates the type of comparison (<code>difference</code> or <code>ratio</code>), the
+right-hand side determines the pairs of estimates to compare (<code>reference</code>,
+<code>sequential</code>, or <code>meandev</code>). Optionally, comparisons can be carried out
+within subsets by indicating the grouping variable after a vertical bar
+( <code>|</code>).</p></li>
+</ul></li>
+</ul></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
