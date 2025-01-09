@@ -97,3 +97,41 @@ get_emcontrasts <- function(model,
   my_args <- list(contrast = contrast, by = by)
   .process_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
+
+
+# Table formatting emmeans ----------------------------------------------------
+
+
+.format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
+  predict <- attributes(estimated)$predict
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
+    out <- .clean_names_bayesian(out, model, predict, type = "contrast")
+  } else {
+    out <- as.data.frame(merge(
+      as.data.frame(estimated),
+      stats::confint(estimated, level = ci, adjust = p_adjust)
+    ))
+    out <- .clean_names_frequentist(out)
+  }
+  out$null <- NULL # introduced in emmeans 1.6.1 (#115)
+  out <- datawizard::data_relocate(
+    out,
+    c("CI_low", "CI_high"),
+    after = c("Difference", "Odds_ratio", "Ratio")
+  )
+
+
+  # Format contrasts names
+  # Split by either " - " or "/"
+  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
+  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
+  names(level_cols) <- c("Level1", "Level2")
+  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
+  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
+
+  # Merge levels and rest
+  out$contrast <- NULL
+  cbind(level_cols, out)
+}

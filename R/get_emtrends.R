@@ -69,3 +69,28 @@ get_emtrends <- function(model,
   my_args <- list(trend = trend, by = by)
   .process_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
+
+
+# Formatting ===============================================================
+
+
+.format_emmeans_slopes <- function(model, estimated, ci, ...) {
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+    trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(trends))
+    if (length(colums_to_add)) {
+      trends <- cbind(em_grid[colums_to_add], trends)
+    }
+  } else {
+    trends <- parameters::parameters(estimated, ci = ci, ...)
+  }
+  # Remove the "1 - overall" column that can appear in cases like y ~ x
+  trends <- trends[names(trends) != "1"]
+
+  # Restore factor levels
+  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+}
