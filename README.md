@@ -462,7 +462,7 @@ See [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 for a walkthrough on how to do that.
 
-<img src="https://github.com/easystats/modelbased/raw/master/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
+<img src="https://raw.githubusercontent.com/easystats/modelbased/refs/heads/main/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
 
 ## Understand interactions between two continuous variables
 

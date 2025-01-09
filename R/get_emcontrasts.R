@@ -95,5 +95,5 @@ get_emcontrasts <- function(model,
   }
 
   my_args <- list(contrast = contrast, by = by)
-  .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
+  .process_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }
