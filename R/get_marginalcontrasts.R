@@ -11,6 +11,10 @@ get_marginalcontrasts <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
+
+  # First step: prepare arguments ---------------------------------------------
+  # ---------------------------------------------------------------------------
+
   # set default, if NULL
   if (is.null(contrast)) {
     contrast <- "auto"
@@ -25,6 +29,10 @@ get_marginalcontrasts <- function(model,
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
+
+
+  # Second step: compute contrasts, for slopes or categorical -----------------
+  # ---------------------------------------------------------------------------
 
   # if first focal term is numeric, we contrast slopes
   if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
@@ -59,6 +67,10 @@ get_marginalcontrasts <- function(model,
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, ...)
 
+
+  # Last step: Save information in attributes  --------------------------------
+  # ---------------------------------------------------------------------------
+
   attr(out, "contrast") <- my_args$contrast
   attr(out, "predict") <- predict
   attr(out, "p_adjust") <- p_adjust
@@ -76,7 +88,7 @@ get_marginalcontrasts <- function(model,
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$contrast
   statistic <- insight::get_statistic(model)$Statistic
-  dof <- insight::get_df(model)
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
   # exit on NULL, or if no p-adjustment requested
   if (is.null(p_adjust) || identical(p_adjust, "none")) {

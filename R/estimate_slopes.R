@@ -1,11 +1,14 @@
 #' Estimate Marginal Effects
 #'
+#' @description
 #' Estimate the slopes (i.e., the coefficient) of a predictor over or within
-#' different factor levels, or alongside a numeric variable . In other words, to
-#' assess the effect of a predictor *at* specific configurations data. Other
-#' related functions based on marginal estimations includes
+#' different factor levels, or alongside a numeric variable. In other words, to
+#' assess the effect of a predictor *at* specific configurations data. It corresponds
+#' to the derivative and can be useful to understand where a predictor has a
+#' significant role when interactions or non-linear relationships are present.
+#'
+#' Other related functions based on marginal estimations includes
 #' [estimate_contrasts()] and [estimate_means()].
-#' \cr\cr
 #'
 #' See the **Details** section below, and don't forget to also check out the
 #' [Vignettes](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
@@ -118,7 +121,7 @@ estimate_slopes <- function(model,
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
     estimated <- get_marginaltrends(model, trend, by, ...)
-    trends <- .format_marginaleffects_slopes(model, estimated, ci, ...)
+    trends <- format(estimated, model, ci, ...)
   }
 
   info <- attributes(estimated)
@@ -161,17 +164,6 @@ estimate_slopes <- function(model,
   # Remove the "1 - overall" column that can appear in cases like y ~ x
   trends <- trends[names(trends) != "1"]
 
-  # Restore factor levels
-  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
-}
-
-
-.format_marginaleffects_slopes <- function(model, estimated, ci, ...) {
-  # Summarize and clean
-  trends <- parameters::parameters(estimated, ci = ci, ...)
-  # remove redundant columns
-  trends <- datawizard::data_remove(trends, c("Statistic", "SE", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
-  trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
   # Restore factor levels
   datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 }

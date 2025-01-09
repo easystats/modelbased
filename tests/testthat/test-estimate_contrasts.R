@@ -212,7 +212,7 @@ test_that("estimate_contrasts - marginaleffects", {
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
 
   out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-  expect_snapshot(print(out, zap_small = TRUE))
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
 
   out <- estimate_contrasts(
     m,
@@ -221,7 +221,7 @@ test_that("estimate_contrasts - marginaleffects", {
     p_adjust = "none",
     method = ratio ~ reference | coffee
   )
-  expect_snapshot(print(out, zap_small = TRUE))
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
 
   out <- estimate_contrasts(
     m,
@@ -230,7 +230,7 @@ test_that("estimate_contrasts - marginaleffects", {
     p_adjust = "none",
     method = "(b2-b1)=(b4-b3)"
   )
-  expect_snapshot(print(out, zap_small = TRUE))
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
 })
 
 

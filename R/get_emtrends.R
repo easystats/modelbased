@@ -67,5 +67,5 @@ get_emtrends <- function(model,
   }
 
   my_args <- list(trend = trend, by = by)
-  .format_emmeans_arguments(model, args = my_args, data = model_data, ...)
+  .process_emmeans_arguments(model, args = my_args, data = model_data, ...)
 }

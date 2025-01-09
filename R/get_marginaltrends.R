@@ -18,6 +18,10 @@ get_marginaltrends <- function(model,
   # Guess arguments
   trend <- .guess_marginaltrends_arguments(model, trend, by, ...)
 
+
+  # First step: create a data grid --------------------------------------------
+  # ---------------------------------------------------------------------------
+
   # data grid only when we have by predictors
   if (is.null(by)) {
     datagrid <- at_specs <- NULL
@@ -37,6 +41,10 @@ get_marginaltrends <- function(model,
     at_specs <- attributes(datagrid)$at_specs
   }
 
+
+  # Second step: prepare arguments for marginaleffects ------------------------
+  # ---------------------------------------------------------------------------
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(
@@ -48,12 +56,22 @@ get_marginaltrends <- function(model,
     dots
   ))
 
+
+  # Third step: compute marginal slopes ---------------------------------------
+  # ---------------------------------------------------------------------------
+
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
+
+
+  # Last step: Save information in attributes  --------------------------------
+  # ---------------------------------------------------------------------------
 
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- by
   attr(estimated, "by") <- by
+  class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
+
   estimated
 }
 
