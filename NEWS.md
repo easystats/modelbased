@@ -36,6 +36,9 @@
 * `estimate_contrasts()` did not calculate contrasts for all levels when the
   predictor of interest was converted to a factor inside the model formula.
 
+* Fixed issue in `estimate_contrasts()` when `comparsison` (formerly: `method`)
+  was not `"pairwise"`.
+
 # modelbased 0.8.9
 
 - Fixed issues related to updates of other *easystats* packages.

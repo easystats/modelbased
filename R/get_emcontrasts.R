@@ -127,9 +127,15 @@ get_emcontrasts <- function(model,
   # Split by either " - " or "/"
   level_cols <- strsplit(as.character(out$contrast), " - |\\/")
   level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
-  names(level_cols) <- c("Level1", "Level2")
-  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
-  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
+
+  # other comparison methods than "pairwise" do not return two columns
+  if (ncol(level_cols) == 2) {
+    colnames(level_cols) <- c("Level1", "Level2")
+    level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
+    level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
+  } else {
+    colnames(level_cols)[1] <- "Level"
+  }
 
   # Merge levels and rest
   out$contrast <- NULL

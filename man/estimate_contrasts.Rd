@@ -62,10 +62,34 @@ p-value adjustment section in the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
-carried out. When \code{backend = "emmeans"}, see \code{method} argument in
-\link[emmeans:contrast]{emmeans::contrast}. For \code{backend = "marginaleffects"}, see
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} for the
-different comparison options.}
+carried out.
+\itemize{
+\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
+\code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
+\code{"dunnett"}, \code{"wtcon"} and some more. See also \code{method} argument in
+\link[emmeans:contrast]{emmeans::contrast} and the \code{?emmeans::emmc-functions}.
+\item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
+matrix, a string equation specifying the hypothesis to test, a string
+maming the comparison method, a formula, or a function. Strings, string
+equations and formula are probably the most common options and described
+below. For other options and detailed descriptions of those options, see
+also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+\itemize{
+\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
+\code{"meanotherdev"} and the inverse options \code{"revpairwise"}, \code{"revreference"},
+and \code{"revsequential"}.
+\item String equation: To identify parameters from the output, either specify
+the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
+\code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
+\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
+side indicates the type of comparison (\code{difference} or \code{ratio}), the
+right-hand side determines the pairs of estimates to compare (\code{reference},
+\code{sequential}, or \code{meandev}). Optionally, comparisons can be carried out
+within subsets by indicating the grouping variable after a vertical bar
+( \code{|}).
+}
+}}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed
