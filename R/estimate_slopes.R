@@ -170,11 +170,14 @@ estimate_slopes <- function(model,
 
 
 .format_marginaleffects_slopes <- function(model, estimated, ci, ...) {
+  info <- insight::model_info(model, verbose = FALSE)
   # Summarize and clean
   trends <- parameters::parameters(estimated, ci = ci, ...)
   # remove redundant columns
   trends <- datawizard::data_remove(trends, c("Parameter", "Statistic", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
   trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
+  # Rename for Categorical family
+  if(info$is_categorical) trends <- datawizard::data_rename(trends, "group", "Response")
   # Restore factor levels
   datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 }
