@@ -57,9 +57,9 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
     )
 
     # If nested, separate groups
-    if (grepl(":", g)) {
-      groups <- as.data.frame(t(sapply(strsplit(data_wide[[g]], ":"), function(x) as.data.frame(t(x)))))
-      names(groups) <- unlist(strsplit(g, ":"))
+    if (grepl(":", g, fixed = TRUE)) {
+      groups <- as.data.frame(t(sapply(strsplit(data_wide[[g]], ":", fixed = TRUE), function(x) as.data.frame(t(x)))))
+      names(groups) <- unlist(strsplit(g, ":", fixed = TRUE))
       data_wide <- cbind(groups, data_wide)
       data_wide[g] <- NULL
       g <- names(groups)
