@@ -39,11 +39,11 @@
     aes$group <- ".group"
   }
   if(length(by) > 3) {
-    warning("Only the first three `by` predictors will be visualized.")
+    aes$facet <- as.formula(paste("~", paste(tail(by, -3), collapse = " * ")))
   }
 
   # CI
-  if("CI_low" %in% data) {
+  if("CI_low" %in% names(data)) {
     aes$ymin <- x$CI_low
     aes$ymax <- x$CI_high
   }
@@ -111,6 +111,14 @@
         group = aes$group
       ),
       alpha = 1/3
+    )
+    l <- l + 1
+  }
+  if(!is.null(aes$facet)) {
+    layers[[paste0("l", l)]] <- list(
+      geom = "facet_wrap",
+      data = data,
+      facets = aes$facet
     )
     l <- l + 1
   }

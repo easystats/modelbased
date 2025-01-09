@@ -7,7 +7,8 @@ test_that("visualization_recipe", {
 
   data <- iris
   data$fac <- rep(c("A", "B"), length.out=150)
-  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width, data = data)
+  data$fac2 <- rep(c("X", "X", "X", "Y", "Y", "Y"), length.out=150)
+  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width * fac2, data = data)
 
   # Estimate means -------------------------------------
   x <- estimate_means(model, by="Species")
@@ -95,6 +96,15 @@ test_that("visualization_recipe", {
   expect_equal(aes$x, "Petal.Width")
   expect_equal(aes$color, "Species")
   expect_equal(aes$alpha, "Sepal.Width")
+
+  x <- estimate_relation(model, by=c("Species", "Sepal.Width", "fac", "fac2"))
+  # plot(modelbased:::.visualization_recipe(x))
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_equal(aes$y, "Predicted")
+  expect_equal(aes$x, "Species")
+  expect_equal(aes$color, "Sepal.Width")
+  expect_equal(aes$alpha, "fac")
+  expect_true("fac2" %in% as.character(aes$facet))
 
   # Estimate slopes --------------------------------
   x <- estimate_slopes(model, trend="Sepal.Width")
