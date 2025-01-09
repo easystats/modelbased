@@ -144,19 +144,19 @@ estimate_means <- function(model,
 
 #' @export
 format.emmeans_means <- function(x, model, ci = 0.95, ...) {
-  predict <- attributes(estimated)$predict
+  predict <- attributes(x)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
-    means <- parameters::parameters(estimated, ci = ci, ...)
+    means <- parameters::parameters(x, ci = ci, ...)
     means <- .clean_names_bayesian(means, model, predict, type = "mean")
-    em_grid <- as.data.frame(estimated@grid)
+    em_grid <- as.data.frame(x@grid)
     em_grid[[".wgt."]] <- NULL # Drop the weight column
     colums_to_add <- setdiff(colnames(em_grid), colnames(means))
     if (length(colums_to_add)) {
       means <- cbind(em_grid[colums_to_add], means)
     }
   } else {
-    means <- as.data.frame(stats::confint(estimated, level = ci))
+    means <- as.data.frame(stats::confint(x, level = ci))
     means$df <- NULL
     means <- .clean_names_frequentist(means)
   }
@@ -167,7 +167,7 @@ format.emmeans_means <- function(x, model, ci = 0.95, ...) {
   means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
 
 
-  info <- attributes(estimated)
+  info <- attributes(x)
 
   attr(means, "at") <- info$by
   attr(means, "by") <- info$by
@@ -180,13 +180,13 @@ format.emmeans_means <- function(x, model, ci = 0.95, ...) {
 
 #' @export
 format.marginaleffects_means <- function(x, model, ...) {
-  predict <- attributes(estimated)$predict
+  predict <- attributes(x)$predict
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
-  non_focal <- setdiff(colnames(model_data), attr(estimated, "focal_terms"))
+  non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
-  predict_type <- attributes(estimated)$predict
+  predict_type <- attributes(x)$predict
 
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
@@ -209,7 +209,7 @@ format.marginaleffects_means <- function(x, model, ...) {
   }
 
   # Format
-  params <- suppressWarnings(parameters::model_parameters(estimated, verbose = FALSE))
+  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
   # add ci?
   params <- .add_contrasts_ci(is_contrast_analysis, params)
   params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"), after = -1, verbose = FALSE) # nolint
@@ -231,13 +231,13 @@ format.marginaleffects_means <- function(x, model, ...) {
 
   ## TODO: check if we can use modifyList()
   # Store info
-  attr(params, "at") <- attr(estimated, "by")
-  attr(params, "by") <- attr(estimated, "by")
-  attr(params, "predict") <- attr(estimated, "predict")
-  attr(params, "contrast") <- attr(estimated, "contrast")
-  attr(params, "trend") <- attr(estimated, "trend")
-  attr(params, "focal_terms") <- attr(estimated, "focal_terms")
-  attr(params, "datagrid") <- attr(estimated, "datagrid")
+  attr(params, "at") <- attr(x, "by")
+  attr(params, "by") <- attr(x, "by")
+  attr(params, "predict") <- attr(x, "predict")
+  attr(params, "contrast") <- attr(x, "contrast")
+  attr(params, "trend") <- attr(x, "trend")
+  attr(params, "focal_terms") <- attr(x, "focal_terms")
+  attr(params, "datagrid") <- attr(x, "datagrid")
 
   params
 }
