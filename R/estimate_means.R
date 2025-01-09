@@ -139,7 +139,43 @@ estimate_means <- function(model,
 }
 
 
-# Formatting ===============================================================
+# Table formatting emmeans ----------------------------------------------------
+
+
+#' @keywords internal
+.format_emmeans_means <- function(model, estimated, ci = 0.95, ...) {
+  predict <- attributes(estimated)$predict
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    means <- parameters::parameters(estimated, ci = ci, ...)
+    means <- .clean_names_bayesian(means, model, predict, type = "mean")
+    em_grid <- as.data.frame(estimated@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(means))
+    if (length(colums_to_add)) {
+      means <- cbind(em_grid[colums_to_add], means)
+    }
+  } else {
+    means <- as.data.frame(stats::confint(estimated, level = ci))
+    means$df <- NULL
+    means <- .clean_names_frequentist(means)
+  }
+  # Remove the "1 - overall" column that can appear in cases like at = NULL
+  means <- means[names(means) != "1"]
+
+  # Restore factor levels
+  means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
+
+
+  info <- attributes(estimated)
+
+  attr(means, "at") <- info$by
+  attr(means, "by") <- info$by
+  means
+}
+
+
+# Table formatting marginaleffects --------------------------------------------
 
 
 #' @keywords internal
@@ -192,8 +228,11 @@ estimate_means <- function(model,
 }
 
 
+# Bring arguments in shape for emmeans ----------------------------------------
+
+
 #' @keywords internal
-.format_emmeans_arguments <- function(model, args, data, ...) {
+.process_emmeans_arguments <- function(model, args, data, ...) {
   # Create the data_matrix
   # ---------------------------
   # data <- insight::get_data(model)
