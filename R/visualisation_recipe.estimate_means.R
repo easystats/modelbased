@@ -2,7 +2,7 @@
 #'
 #' @examplesIf require("ggplot2") && require("emmeans") && require("see")
 #' # Simple Model ---------------
-#' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by="Species")
+#' x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by = "Species")
 #' layers <- visualisation_recipe(x)
 #' layers
 #' plot(layers)

@@ -103,7 +103,7 @@ plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # Simple Model ---------------
-x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by="Species")
+x <- estimate_means(lm(Sepal.Width ~ Species, data = iris), by = "Species")
 layers <- visualisation_recipe(x)
 layers
 plot(layers)
