@@ -12,10 +12,30 @@
 #' p-value adjustment section in the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
 #' @param comparison Specify the type of contrasts or tests that should be
-#' carried out. When `backend = "emmeans"`, see `method` argument in
-#' [emmeans::contrast]. For `backend = "marginaleffects"`, see
-#' [this website](https://marginaleffects.com/bonus/hypothesis.html) for the
-#' different comparison options.
+#' carried out.
+#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
+#'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
+#'   `"dunnett"`, `"wtcon"` and some more. See also `method` argument in
+#'   [emmeans::contrast] and the `?emmeans::emmc-functions`.
+#' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
+#'   matrix, a string equation specifying the hypothesis to test, a string
+#'   maming the comparison method, a formula, or a function. Strings, string
+#'   equations and formula are probably the most common options and described
+#'   below. For other options and detailed descriptions of those options, see
+#'   also [marginaleffects::comparisons] and
+#'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
+#'     `"meanotherdev"` and the inverse options `"revpairwise"`, `"revreference"`,
+#'     and `"revsequential"`.
+#'   * String equation: To identify parameters from the output, either specify
+#'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
+#'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
+#'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
+#'     side indicates the type of comparison (`difference` or `ratio`), the
+#'     right-hand side determines the pairs of estimates to compare (`reference`,
+#'     `sequential`, or `meandev`). Optionally, comparisons can be carried out
+#'     within subsets by indicating the grouping variable after a vertical bar
+#'     ( `|`).
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details
