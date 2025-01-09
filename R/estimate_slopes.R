@@ -1,11 +1,14 @@
 #' Estimate Marginal Effects
 #'
+#' @description
 #' Estimate the slopes (i.e., the coefficient) of a predictor over or within
-#' different factor levels, or alongside a numeric variable . In other words, to
-#' assess the effect of a predictor *at* specific configurations data. Other
-#' related functions based on marginal estimations includes
+#' different factor levels, or alongside a numeric variable. In other words, to
+#' assess the effect of a predictor *at* specific configurations data. It corresponds
+#' to the derivative and can be useful to understand where a predictor has a
+#' significant role when interactions or non-linear relationships are present.
+#'
+#' Other related functions based on marginal estimations includes
 #' [estimate_contrasts()] and [estimate_means()].
-#' \cr\cr
 #'
 #' See the **Details** section below, and don't forget to also check out the
 #' [Vignettes](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
