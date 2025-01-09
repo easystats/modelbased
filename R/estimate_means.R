@@ -142,7 +142,6 @@ estimate_means <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-#' @keyword internal
 .format_emmeans_means <- function(x, model, ci = 0.95, ...) {
   predict <- attributes(x)$predict
   # Summarize and clean
