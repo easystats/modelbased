@@ -132,3 +132,120 @@ get_emmeans <- function(model,
   }
   predict
 }
+
+
+# Table formatting emmeans ----------------------------------------------------
+
+
+.format_emmeans_means <- function(x, model, ci = 0.95, ...) {
+  predict <- attributes(x)$predict
+  # Summarize and clean
+  if (insight::model_info(model)$is_bayesian) {
+    means <- parameters::parameters(x, ci = ci, ...)
+    means <- .clean_names_bayesian(means, model, predict, type = "mean")
+    em_grid <- as.data.frame(x@grid)
+    em_grid[[".wgt."]] <- NULL # Drop the weight column
+    colums_to_add <- setdiff(colnames(em_grid), colnames(means))
+    if (length(colums_to_add)) {
+      means <- cbind(em_grid[colums_to_add], means)
+    }
+  } else {
+    means <- as.data.frame(stats::confint(x, level = ci))
+    means$df <- NULL
+    means <- .clean_names_frequentist(means)
+  }
+  # Remove the "1 - overall" column that can appear in cases like at = NULL
+  means <- means[names(means) != "1"]
+
+  # Restore factor levels
+  means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
+
+
+  info <- attributes(x)
+
+  attr(means, "at") <- info$by
+  attr(means, "by") <- info$by
+  means
+}
+
+
+# Bring arguments in shape for emmeans ----------------------------------------
+
+
+#' @keywords internal
+.process_emmeans_arguments <- function(model, args, data, ...) {
+  # Create the data_matrix
+  # ---------------------------
+  # data <- insight::get_data(model)
+  predictors <- insight::find_predictors(
+    model,
+    effects = "fixed",
+    flatten = TRUE,
+    ...
+  )
+  data <- data[intersect(predictors, colnames(data))]
+
+  # Deal with 'at'
+  if (is.null(args$by)) {
+    args$data_matrix <- NULL
+  } else if (is.data.frame(args$by)) {
+    args$data_matrix <- args$by
+    args$by <- names(args$by)
+  } else if (is.list(args$by)) {
+    args$data_matrix <- expand.grid(args$by)
+    args$by <- names(args$data_matrix)
+  } else if (inherits(args$by, "formula")) {
+    args$data_matrix <- stats::model.frame(args$by, data = data)
+    args$by <- names(args$data_matrix)
+  } else {
+    if (!is.null(args$by) && all(args$by == "all")) {
+      target <- intersect(predictors, colnames(data))
+    } else {
+      target <- args$by
+    }
+    datagrid <- insight::get_datagrid(data, by = target, ...)
+    args$by <- attributes(datagrid)$at_specs$varname
+    args$data_matrix <- as.data.frame(datagrid[args$by])
+    if (length(args$by) == 0) args$by <- NULL # Post-clean
+  }
+
+  # Deal with 'contrast'
+  if (!is.null(args$contrast)) {
+    contrast <- insight::get_datagrid(data, by = args$contrast, ...)
+    args$contrast <- attributes(contrast)$at_specs$varname
+    contrast <- as.data.frame(contrast[args$contrast])
+    if (is.null(args$data_matrix)) {
+      args$data_matrix <- contrast
+    } else {
+      contrast <- contrast[!names(contrast) %in% names(args$data_matrix)]
+      if (ncol(contrast) > 0) args$data_matrix <- merge(args$data_matrix, contrast)
+    }
+  }
+
+  # Get 'specs' and 'at'
+  # --------------------
+  if (is.null(args$data_matrix)) {
+    args$emmeans_specs <- ~1
+    args$emmeans_at <- NULL
+  } else {
+    args$emmeans_specs <- names(args$data_matrix)
+    args$emmeans_at <- sapply(as.list(args$data_matrix), unique, simplify = FALSE)
+  }
+
+  # Special behaviour for transformations #138
+  # It's annoying and an ugly fix, not sure how to address
+  if (!is.null(args$emmeans_at)) {
+    args$retransform <- list()
+    model_terms <- insight::find_terms(model)$conditional
+    for (var_at in names(args$emmeans_at)) {
+      term <- model_terms[grepl(var_at, model_terms, fixed = TRUE)]
+      if (any(grepl(paste0("as.factor(", var_at, ")"), term, fixed = TRUE)) ||
+        any(grepl(paste0("as.character(", var_at, ")"), term, fixed = TRUE))) {
+        args$retransform[[var_at]] <- args$emmeans_at[[var_at]]
+        args$emmeans_at[[var_at]] <- as.numeric(as.character(args$emmeans_at[[var_at]]))
+      }
+    }
+  }
+
+  args
+}

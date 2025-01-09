@@ -78,11 +78,3 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
   class(data) <- c("reshape_grouplevel", class(data))
   data
 }
-
-
-#' @export
-summary.reshape_grouplevel <- function(object, ...) {
-  x <- object[!duplicated(object), ]
-  row.names(x) <- NULL
-  x
-}

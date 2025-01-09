@@ -114,7 +114,7 @@ estimate_contrasts <- function(model,
       ci = ci,
       ...
     )
-    out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
+    out <- format(estimated, model, p_adjust, method, ...)
   }
 
   info <- attributes(estimated)
@@ -144,94 +144,4 @@ estimate_contrasts <- function(model,
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
   out
-}
-
-
-# Table formatting emmeans ----------------------------------------------------
-
-
-.format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
-  predict <- attributes(estimated)$predict
-  # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
-    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
-    out <- .clean_names_bayesian(out, model, predict, type = "contrast")
-  } else {
-    out <- as.data.frame(merge(
-      as.data.frame(estimated),
-      stats::confint(estimated, level = ci, adjust = p_adjust)
-    ))
-    out <- .clean_names_frequentist(out)
-  }
-  out$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  out <- datawizard::data_relocate(
-    out,
-    c("CI_low", "CI_high"),
-    after = c("Difference", "Odds_ratio", "Ratio")
-  )
-
-
-  # Format contrasts names
-  # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
-  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
-  names(level_cols) <- c("Level1", "Level2")
-  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
-  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
-
-  # Merge levels and rest
-  out$contrast <- NULL
-  cbind(level_cols, out)
-}
-
-
-# Table formatting marginal effects -------------------------------------------
-
-
-.format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
-  predict <- attributes(estimated)$predict
-  groups <- attributes(estimated)$by
-  contrast <- attributes(estimated)$contrast
-  focal_terms <- attributes(estimated)$focal_terms
-
-  valid_methods <- c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential"
-  )
-
-  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
-    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
-
-    # These are examples of what {marginaleffects} returns, a single parmater
-    # column that includes all levels, comma- and dash-separated, or with /
-    # see also https://github.com/easystats/modelbased/pull/280
-    #
-    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> Parameter                              | Difference |          95% CI |      p
-    # #> ------------------------------------------------------------------------------
-    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
-    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
-    #
-    # estimate_contrasts(
-    #   m,
-    #   c("time", "coffee"),
-    #   backend = "marginaleffects",
-    #   p_adjust = "none",
-    #   method = ratio ~ reference | coffee
-    # )
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> coffee  |              hypothesis | Difference |       95% CI |      p
-    # #> ----------------------------------------------------------------------
-    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
-    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
-    #
-    # We need to split the "Parameter" or "hypothesis" columns into one column
-    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
-    # argument, which is used for filtering by levels of given focal terms.
-  }
-
-  estimated
 }

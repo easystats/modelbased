@@ -39,7 +39,7 @@ get_marginalcontrasts <- function(model,
     out <- estimate_slopes(
       model = model,
       trend = my_args$contrast,
-      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## TODO: once format.marginaleffects_contrasts() is working, we have to
       ## pass only "contrast" to the `by` argument, and use `my_args$by` for
       ## filtering...
       by = my_args$by,
@@ -52,7 +52,7 @@ get_marginalcontrasts <- function(model,
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
       model = model,
-      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## TODO: once format.marginaleffects_contrasts() is working, we have to
       ## pass only "contrast" to the `by` argument, and use `my_args$by` for
       ## filtering...
       by = unique(c(my_args$contrast, my_args$by)),
@@ -76,7 +76,7 @@ get_marginalcontrasts <- function(model,
   attr(out, "p_adjust") <- p_adjust
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
-
+  class(out) <- unique(c("marginaleffects_contrasts", class(out)))
   out
 }
 
