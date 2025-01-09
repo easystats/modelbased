@@ -2,15 +2,18 @@
 % Please edit documentation in R/zero_crossings.R
 \name{zero_crossings}
 \alias{zero_crossings}
-\title{Find zero crossings of a vector}
+\alias{find_inversions}
+\title{Find zero-crossings and inversion points}
 \usage{
 zero_crossings(x)
+
+find_inversions(x)
 }
 \arguments{
 \item{x}{A numeric vector.}
 }
 \value{
-Vector of zero crossings.
+Vector of zero crossings or points of inversion.
 }
 \description{
 Find zero crossings of a vector, i.e., indices when the numeric variable
@@ -19,8 +22,10 @@ looking at the zero crossings of its derivative.
 }
 \examples{
 x <- sin(seq(0, 4 * pi, length.out = 100))
-plot(x)
+plot(x, type = "b")
+
 zero_crossings(x)
+find_inversions(x)
 }
 \seealso{
 Based on the \code{uniroot.all} function from the rootSolve package.

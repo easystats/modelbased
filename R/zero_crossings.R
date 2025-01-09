@@ -1,4 +1,4 @@
-#' Find zero crossings of a vector
+#' Find zero-crossings and inversion points
 #'
 #' Find zero crossings of a vector, i.e., indices when the numeric variable
 #' crosses 0. It is useful for finding the points where a function changes by
@@ -6,12 +6,15 @@
 #'
 #' @param x A numeric vector.
 #'
+#' @return Vector of zero crossings or points of inversion.
+#' @seealso Based on the `uniroot.all` function from the rootSolve package.
+#'
 #' @examples
 #' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x)
+#' plot(x, type = "b")
+#'
 #' zero_crossings(x)
-#' @return Vector of zero crossings.
-#' @seealso Based on the `uniroot.all` function from the rootSolve package.
+#' find_inversions(x)
 #' @export
 zero_crossings <- function(x) {
   # Estimate gradient
@@ -61,17 +64,8 @@ zero_crossings <- function(x) {
 }
 
 
-#' Find points of inversion
+#' @rdname zero_crossings
 #'
-#' Find points of inversion of a curve.
-#'
-#' @param x A numeric vector.
-#'
-#' @examples
-#' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x, type = "b")
-#' find_inversions(x)
-#' @return Vector of inversion points.
 #' @export
 find_inversions <- function(x) {
   zero_crossings(diff(x))
