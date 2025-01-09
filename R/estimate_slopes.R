@@ -121,7 +121,7 @@ estimate_slopes <- function(model,
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
     estimated <- get_marginaltrends(model, trend, by, ...)
-    trends <- .format_marginaleffects_slopes(model, estimated, ci, ...)
+    trends <- format(estimated, model, ci, ...)
   }
 
   info <- attributes(estimated)
@@ -164,24 +164,6 @@ estimate_slopes <- function(model,
   # Remove the "1 - overall" column that can appear in cases like y ~ x
   trends <- trends[names(trends) != "1"]
 
-  # Restore factor levels
-  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
-}
-
-
-.format_marginaleffects_slopes <- function(model, estimated, ci, ...) {
-  info <- insight::model_info(model, verbose = FALSE)
-  # Summarize and clean
-  trends <- parameters::parameters(estimated, ci = ci, ...)
-  # define all columns that should be removed
-  remove_columns <- c("s.value", "S", "CI", "rowid_dedup")
-  # remove redundant columns
-  trends <- datawizard::data_remove(trends, remove_columns, verbose = FALSE) # nolint
-  trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
-  # Rename for Categorical family
-  if (info$is_categorical) {
-    trends <- datawizard::data_rename(trends, "group", "Response")
-  }
   # Restore factor levels
   datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
 }
