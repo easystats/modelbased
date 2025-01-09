@@ -55,7 +55,7 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "focal_terms", "trend"
+      "model", "response", "ci", "focal_terms", "trend", "coef_name"
     )
   )
   ## FIXME: should be more attributes here
@@ -64,7 +64,7 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "class", "row.names", "trend", "table_title", "table_footer",
-      "model", "response", "ci"
+      "model", "response", "ci", "coef_name"
     )
   )
 })
