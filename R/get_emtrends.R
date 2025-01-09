@@ -34,6 +34,7 @@ get_emtrends <- function(model,
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
   attr(estimated, "focal_terms") <- my_args$emmeans_specs
+  attr(estimated, "coef_name") <- "Coefficient"
 
   estimated
 }
