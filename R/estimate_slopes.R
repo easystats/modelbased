@@ -174,7 +174,7 @@ estimate_slopes <- function(model,
   # Summarize and clean
   trends <- parameters::parameters(estimated, ci = ci, ...)
   # remove redundant columns
-  trends <- datawizard::data_remove(trends, c("Parameter", "Statistic", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
+  trends <- datawizard::data_remove(trends, c("Statistic", "SE", "S", "CI", "df", "rowid_dedup"), verbose = FALSE) # nolint
   trends <- datawizard::data_relocate(trends, "p", after = -1, verbose = FALSE)
   # Rename for Categorical family
   if(info$is_categorical) trends <- datawizard::data_rename(trends, "group", "Response")

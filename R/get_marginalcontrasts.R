@@ -19,18 +19,42 @@ get_marginalcontrasts <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, ...)
 
-  out <- estimate_means(
-    model = model,
-    ## TODO: once .format_marginaleffects_contrasts() is working, we have to
-    ## pass only "contrast" to the `by` argument, and use `my_args$by` for
-    ## filtering...
-    by = unique(c(my_args$contrast, my_args$by)),
-    ci = ci,
-    hypothesis = method,
-    predict = predict,
-    backend = "marginaleffects",
-    ...
-  )
+  # check whether contrasts should be made for numerics or categorical
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+  on_the_fly_factors <- attributes(model_data)$factors
+
+  # extract first focal term
+  first_focal <- my_args$contrast[1]
+
+  # if first focal term is numeric, we contrast slopes
+  if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
+    out <- estimate_slopes(
+      model = model,
+      trend = my_args$contrast,
+      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
+      ## filtering...
+      by = my_args$by,
+      ci = ci,
+      hypothesis = method,
+      backend = "marginaleffects",
+      ...
+    )
+  } else {
+    # for contrasts of categorical predictors, we call avg_predictions
+    out <- estimate_means(
+      model = model,
+      ## TODO: once .format_marginaleffects_contrasts() is working, we have to
+      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
+      ## filtering...
+      by = unique(c(my_args$contrast, my_args$by)),
+      ci = ci,
+      hypothesis = method,
+      predict = predict,
+      backend = "marginaleffects",
+      ...
+    )
+  }
 
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, ...)
