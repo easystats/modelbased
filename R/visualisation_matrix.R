@@ -51,6 +51,9 @@ visualisation_matrix.data.frame <- function(x,
                                             preserve_range = FALSE,
                                             reference = x,
                                             ...) {
+  ## TODO: remove visualisation_matrix latest for version 1.0.0
+  insight::format_warning("`visualisation_matrix()` is deprecated. Please use `insight::get_datagrid()` instead.")
+
   insight::get_datagrid(x,
     by = by,
     factors = factors,
@@ -65,6 +68,9 @@ visualisation_matrix.data.frame <- function(x,
 #' @rdname visualisation_matrix
 #' @export
 visualisation_matrix.numeric <- function(x, ...) {
+  ## TODO: remove visualisation_matrix latest for version 1.0.0
+  insight::format_warning("`visualisation_matrix()` is deprecated. Please use `insight::get_datagrid()` instead.")
+
   insight::get_datagrid(x, ...)
 }
 
