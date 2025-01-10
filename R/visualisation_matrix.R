@@ -8,31 +8,7 @@
 #' @return Reference grid data frame.
 #'
 #' @examples
-#' library(modelbased)
-#'
-#' # Add one row to change the "mode" of Species
-#' data <- rbind(iris, iris[149, ], make.row.names = FALSE)
-#'
-#' # Single variable is of interest; all others are "fixed"
-#' visualisation_matrix(data, by = "Sepal.Length")
-#' visualisation_matrix(data, by = "Sepal.Length", length = 3)
-#' visualisation_matrix(data, by = "Sepal.Length", range = "ci", ci = 0.90)
-#' visualisation_matrix(data, by = "Sepal.Length", factors = "mode")
-#'
-#' # Multiple variables are of interest, creating a combination
-#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), length = 3)
-#' visualisation_matrix(data, by = c(1, 3), length = 3)
-#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), preserve_range = TRUE)
-#' visualisation_matrix(data, by = c("Sepal.Length", "Species"), numerics = 0)
-#' visualisation_matrix(data, by = c("Sepal.Length = 3", "Species"))
-#' visualisation_matrix(data, by = c("Sepal.Length = c(3, 1)", "Species = 'setosa'"))
-#'
-#' # with list-style at-argument
-#' visualisation_matrix(data, by = list(Sepal.Length = c(1, 3), Species = "setosa"))
-#'
-#' # Standardize
-#' vizdata <- visualisation_matrix(data, by = "Sepal.Length")
-#' standardize(vizdata)
+#' # See `?insight::get_datagrid`
 #' @export
 visualisation_matrix <- function(x, ...) {
   UseMethod("visualisation_matrix")
