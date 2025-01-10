@@ -81,6 +81,8 @@
 
     Code
       estimate_contrasts(model, backend = "marginaleffects")
+    Message
+      We selected `contrast=c("Species")`.
     Output
       Marginal Contrasts Analysis
       
