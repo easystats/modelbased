@@ -193,9 +193,9 @@ visualisation_recipe.estimate_grouplevel <- function(x,
                                                      facet = NULL,
                                                      ...) {
   if (is.null(facet)) {
-    facet <- list("scales" = "free")
+    facet <- list(scales = "free")
   } else {
-    facet <- utils::modifyList(facet, list("scales" = "free"))
+    facet <- utils::modifyList(facet, list(scales = "free"))
   }
 
   .visualization_recipe(

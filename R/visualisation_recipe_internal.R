@@ -13,7 +13,7 @@
 
   # Main geom
   if ("estimate_contrasts" %in% att$class) {
-    stop("Automated plotting is not yet implemented for this class.")
+    insight::format_error("Automated plotting is not yet implemented for this class.")
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
     aes$type <- "pointrange"
@@ -32,7 +32,7 @@
   # Find predictors
   by <- att$by
   if (length(by) == 0) {
-    stop("No `by` variable was detected, so nothing to put in the x-axis.")
+    insight::format_error("No `by` variable was detected, so nothing to put in the x-axis.")
   } else if (length(by) > 0) {
     aes$x <- by[1]
     # If x is a not-numeric, make pointrange
@@ -101,7 +101,7 @@
 
 
   # Uncertainty -----------------------------------
-  if (aes$type == "ribbon" & is.null(aes$alpha)) {
+  if (aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
@@ -205,7 +205,7 @@
   y <- insight::find_response(attributes(x)$model)
   if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
 
-  if (aes$type == "pointrange" & !is.numeric(rawdata[[aes$x]])) {
+  if (aes$type == "pointrange" && !is.numeric(rawdata[[aes$x]])) {
     geom <- "jitter"
   } else {
     geom <- "point"
