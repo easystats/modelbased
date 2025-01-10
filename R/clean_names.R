@@ -9,6 +9,7 @@
   names(means)[names(means) == "estimate"] <- "Difference"
   names(means)[names(means) == "odds.ratio"] <- "Odds_ratio"
   names(means)[names(means) == "ratio"] <- "Ratio"
+  names(means)[names(means) == "rate"] <- "Rate"
   names(means)[names(means) == "t.ratio"] <- "t"
   names(means)[names(means) == "z.ratio"] <- "z"
   names(means)[names(means) == "p.value"] <- "p"

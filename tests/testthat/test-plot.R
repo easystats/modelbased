@@ -10,22 +10,22 @@ test_that("plots emmeans", {
   model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
   # Estimate means -------------------------------------
-  x <- estimate_means(model, by = "Species")
+  x <- estimate_means(model, by = "Species", backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-1",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
   )
-  x <- estimate_means(model, by = "Sepal.Width")
+  x <- estimate_means(model, by = "Sepal.Width", backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-2",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
   )
-  x <- estimate_means(model, by = c("Sepal.Width", "Species"))
+  x <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-3",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
   )
-  x <- estimate_means(model, by = c("Species", "Sepal.Width"))
+  x <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "emmeans")
   vdiffr::expect_doppelganger(
     "plot-means-4",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE))
@@ -204,5 +204,24 @@ test_that("plots, relation, multiple CI", {
   vdiffr::expect_doppelganger(
     "plot-relation-multiple-ci-1",
     plot(em)
+  )
+})
+
+
+test_that("plots, estimate_means works with Poisson", {
+  set.seed(123)
+  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+  x <- estimate_means(dat_glm, "fa", backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-poisson-1",
+    plot(x)
+  )
+  x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-poisson-1",
+    plot(x)
   )
 })
