@@ -51,6 +51,7 @@ get_marginalmeans(
   predict = NULL,
   ci = 0.95,
   transform = NULL,
+  verbose = TRUE,
   ...
 )
 

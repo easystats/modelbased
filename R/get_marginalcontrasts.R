@@ -22,7 +22,7 @@ get_marginalcontrasts <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, contrast, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose, ...)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)

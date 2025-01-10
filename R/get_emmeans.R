@@ -48,7 +48,7 @@ get_emmeans <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_emmeans_arguments(model, by, ...)
+  my_args <- .guess_emmeans_arguments(model, by, verbose, ...)
 
   # find default response-type
   predict <- .get_emmeans_type_argument(model, predict, type = "means", ...)
