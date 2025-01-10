@@ -225,3 +225,33 @@ test_that("plots, estimate_means works with Poisson", {
     plot(x)
   )
 })
+
+
+test_that("plots, estimate_means, order of predictors", {
+  data(iris)
+  model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
+  pr <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-1",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-2",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(model, by = c("Species", "Sepal.Width"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-3",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(model, by = c("Sepal.Width", "Species"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-means-predictor-order-4",
+    plot(pr, show_data = FALSE)
+  )
+})
