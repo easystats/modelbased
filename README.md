@@ -79,7 +79,7 @@ The package is built around 5 main functions:
   Predict the response variable using the model
 
 These functions are powered by the
-[`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html)
+[`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)
 function, a smart tool for guessing the appropriate reference grid.
 
 ## Create smart grids to represent complex interactions
@@ -105,7 +105,7 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, by = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
+vizdata <- insight::get_datagrid(model, by = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
 
 # 3. Revert from expected SD to actual values
 vizdata <- unstandardize(vizdata, select = "Petal.Width")
