@@ -37,7 +37,7 @@ get_marginalmeans <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, verbose, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
   predict <- .get_marginaleffects_type_argument(model, predict, ...)

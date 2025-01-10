@@ -112,7 +112,7 @@ estimate_means <- function(model,
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
+    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, verbose = verbose, ...)
     means <- format(estimated, model, ...)
   }
 

@@ -136,6 +136,7 @@ estimate_contrasts <- function(model,
       comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
+      verbose = verbose,
       ...
     )
     out <- format(estimated, model, p_adjust, comparison, ...)
