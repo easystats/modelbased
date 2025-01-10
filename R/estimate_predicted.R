@@ -81,7 +81,7 @@
 #'   - Generates **expected values** (conditional average) on the **link scale**.
 #'   - The uncertainty interval is a *confidence interval*.
 #'   - By default, values are computed using a reference grid spanning the
-#'     observed range of predictor values (see [visualisation_matrix()]).
+#'     observed range of predictor values (see [insight::get_datagrid()]).
 #'
 #' - **`estimate_prediction()`**:
 #'   - Generates **predicted values** (for individual cases) on the **response scale**.
@@ -94,14 +94,14 @@
 #'   - Generates **expected values** (conditional average) on the **response scale**.
 #'   - The uncertainty interval is a *confidence interval*.
 #'   - By default, values are computed using a reference grid spanning the
-#'     observed range of predictor values (see [visualisation_matrix()]).
+#'     observed range of predictor values (see [insight::get_datagrid()]).
 #'
 #' @section Data for predictions:
 #'
 #' If the `data = NULL`, values are estimated using the data used to fit the
 #' model. If `data = "grid"`, values are computed using a reference grid
 #' spanning the observed range of predictor values with
-#' [visualisation_matrix()]. This can be useful for model visualization. The
+#' [insight::get_datagrid()]. This can be useful for model visualization. The
 #' number of predictor values used for each variable can be controlled with the
 #' `length` argument. `data` can also be a data frame containing columns with
 #' names matching the model frame (see [insight::get_data()]). This can be used
@@ -358,7 +358,7 @@ estimate_relation <- function(model,
     data <- model_data
   } else if (!is.data.frame(data)) {
     if (is_grid) {
-      data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
+      data <- insight::get_datagrid(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
       insight::format_error(
         "The `data` argument must either NULL, \"grid\" or another data frame."

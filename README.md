@@ -79,7 +79,7 @@ The package is built around 5 main functions:
   Predict the response variable using the model
 
 These functions are powered by the
-[`visualisation_matrix()`](https://easystats.github.io/modelbased/reference/visualisation_matrix.html)
+[`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)
 function, a smart tool for guessing the appropriate reference grid.
 
 ## Create smart grids to represent complex interactions
@@ -105,7 +105,7 @@ library(modelbased)
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
 # 2. Create a visualisation matrix with expected Z-score values of Petal.Width
-vizdata <- modelbased::visualisation_matrix(model, by = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
+vizdata <- insight::get_datagrid(model, by = c("Petal.Length", "Petal.Width = c(-1, 0, 1)"))
 
 # 3. Revert from expected SD to actual values
 vizdata <- unstandardize(vizdata, select = "Petal.Width")
@@ -459,25 +459,18 @@ for a walkthrough on how to do that.
 
 <img src="https://raw.githubusercontent.com/easystats/modelbased/refs/heads/main/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
 
-## Understand interactions between two continuous variables
-
-Also referred to as **Johnson-Neyman intervals**, this plot shows how
-the effect (the “slope”) of one variable varies depending on another
-variable. It is useful in the case of complex interactions between
-continuous variables.
-
-For instance, the plot below shows that the effect of `hp` (the y-axis)
-is significantly negative only when `wt` is low (`< ~4`).
-
+<!-- Needs to be re-implemented after revision of visualisation_recipe()
+&#10;## Understand interactions between two continuous variables
+&#10;Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
+&#10;For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
+&#10;
 ``` r
 model <- lm(mpg ~ hp * wt, data = mtcars)
-
-slopes <- estimate_slopes(model, trend = "hp", by = "wt")
-
-plot(slopes)
+&#10;slopes <- estimate_slopes(model, trend = "hp", by = "wt")
+&#10;plot(slopes)
 ```
-
-<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+&#10;<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+-->
 
 ## Visualize predictions with random effects
 
