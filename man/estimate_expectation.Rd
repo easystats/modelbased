@@ -194,7 +194,7 @@ estimates and their uncertainty:
 \item Generates \strong{expected values} (conditional average) on the \strong{link scale}.
 \item The uncertainty interval is a \emph{confidence interval}.
 \item By default, values are computed using a reference grid spanning the
-observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+observed range of predictor values (see \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).
 }
 \item \strong{\code{estimate_prediction()}}:
 \itemize{
@@ -209,7 +209,7 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 \item Generates \strong{expected values} (conditional average) on the \strong{response scale}.
 \item The uncertainty interval is a \emph{confidence interval}.
 \item By default, values are computed using a reference grid spanning the
-observed range of predictor values (see \code{\link[=visualisation_matrix]{visualisation_matrix()}}).
+observed range of predictor values (see \code{\link[insight:get_datagrid]{insight::get_datagrid()}}).
 }
 }
 }
@@ -220,7 +220,7 @@ observed range of predictor values (see \code{\link[=visualisation_matrix]{visua
 If the \code{data = NULL}, values are estimated using the data used to fit the
 model. If \code{data = "grid"}, values are computed using a reference grid
 spanning the observed range of predictor values with
-\code{\link[=visualisation_matrix]{visualisation_matrix()}}. This can be useful for model visualization. The
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}}. This can be useful for model visualization. The
 number of predictor values used for each variable can be controlled with the
 \code{length} argument. \code{data} can also be a data frame containing columns with
 names matching the model frame (see \code{\link[insight:get_data]{insight::get_data()}}). This can be used

@@ -34,7 +34,7 @@
 #' (see [estimate_link()]). This corresponds to the predicted response (or
 #' "outcome variable") given specific predictor values of the predictors (i.e.,
 #' given a specific data configuration). This is why the concept of [`reference
-#' grid()`][visualisation_matrix] is so important for direct predictions.
+#' grid()`][insight::get_datagrid()] is so important for direct predictions.
 #'
 #' - **Marginal "means"**, obtained via [estimate_means()], are an extension
 #' of such predictions, allowing to "average" (collapse) some of the predictors,
