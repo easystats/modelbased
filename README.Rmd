@@ -350,6 +350,7 @@ See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate
 knitr::include_graphics("https://raw.githubusercontent.com/easystats/modelbased/refs/heads/main/man/figures/gganimate_figure.gif")
 ```
 
+<!-- Needs to be re-implemented after revision of visualisation_recipe()
 
 ## Understand interactions between two continuous variables
 
@@ -364,9 +365,7 @@ slopes <- estimate_slopes(model, trend = "hp", by = "wt")
 
 plot(slopes)
 ```
-
-
-
+-->
 
 ## Visualize predictions with random effects
 
