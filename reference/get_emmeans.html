@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.15</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.16</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,12 +94,20 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"auto"</span>, predict <span class="op">=</span> <span class="cn">NULL</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_emmeans</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
+<span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_marginalcontrasts</span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
@@ -109,6 +117,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -118,10 +127,11 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_marginaltrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">get_marginaltrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -153,10 +163,12 @@ Valid options for `predict“ are:</p><ul><li><p><code>backend = "emmeans"</code
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>).</p></li>
 <li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
-any valid <code>type</code> option supported by model's class <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method. By
-default, when <code>predict = NULL</code>, the most appropriate transformation is
-selected, which usually returns predictions or contrasts on the
-response-scale.</p></li>
+any valid <code>type</code> option supported by model's class <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g.,
+for zero-inflation models from package <strong>glmmTMB</strong>, you can choose
+<code>predict = "zprob"</code> or <code>predict = "conditional"</code> etc., see
+<a href="https://rdrr.io/pkg/glmmTMB/man/predict.glmmTMB.html" class="external-link">glmmTMB::predict.glmmTMB</a>). By default, when <code>predict = NULL</code>, the most
+appropriate transformation is selected, which usually returns predictions
+or contrasts on the response-scale.</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
@@ -197,6 +209,10 @@ within subsets by indicating the grouping variable after a vertical bar
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
 <dd><p>Deprecated, please use <code>predict</code> instead.</p></dd>
+
+
+<dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
+<dd><p>Use <code>FALSE</code> to silence messages and warnings.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -532,6 +548,7 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># By default, 'by' is set to "Species"</span></span></span>
 <span class="r-in"><span><span class="fu">get_marginalmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `by=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Species Estimate Std. Error    t Pr(&gt;|t|)     S 2.5 % 97.5 %  Df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa         5.88     0.1969 29.9   &lt;0.001 210.3  5.49   6.27 146</span>
@@ -572,6 +589,7 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_marginalmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `by=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Species Estimate Std. Error     t Pr(&gt;|t|)     S 2.5 % 97.5 %  Df</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa         4.32     0.5990  7.21   &lt;0.001  35.0  3.13   5.50 144</span>
