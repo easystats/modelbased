@@ -7,7 +7,6 @@
   att <- attributes(x)
   aes <- list(
     y = "Predicted",
-    type = "ribbon",
     group = 1
   )
 
@@ -16,7 +15,6 @@
     insight::format_error("Automated plotting is not yet implemented for this class.")
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
-    aes$type <- "pointrange"
   } else if ("estimate_slopes" %in% att$class) {
     aes$y <- "Coefficient"
   } else if ("estimate_grouplevel" %in% att$class) {
@@ -36,7 +34,11 @@
   } else if (length(by) > 0) {
     aes$x <- by[1]
     # If x is a not-numeric, make pointrange
-    if (!is.numeric(data[[by[1]]])) aes$type <- "pointrange"
+    if (!is.numeric(data[[by[1]]])) {
+      aes$type <- "pointrange"
+    } else {
+      aes$type <- "ribbon"
+    }
   }
   if (length(by) > 1) {
     aes$color <- by[2]
