@@ -255,3 +255,36 @@ test_that("plots, estimate_means, order of predictors", {
     plot(pr, show_data = FALSE)
   )
 })
+
+
+test_that("plots, numeric or categorical predictors are detected", {
+  data(mtcars)
+  dat <- mtcars
+  dat$cyl <- factor(dat$cyl)
+  m_cat <- lm(mpg ~ cyl, data = dat)
+  pr <- estimate_expectation(m_cat, by = "cyl")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-1",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(m_cat, by = "cyl", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-2",
+    plot(pr, show_data = FALSE)
+  )
+  m_cat <- lm(mpg ~ cyl, data = mtcars)
+  pr <- estimate_expectation(m_cat, by = "cyl")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-3",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(m_cat, by = "cyl", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-4",
+    plot(pr, show_data = FALSE)
+  )
+})
