@@ -10,6 +10,7 @@ estimate_slopes(
   by = NULL,
   ci = 0.95,
   backend = getOption("modelbased_backend", "emmeans"),
+  verbose = TRUE,
   ...
 )
 }
@@ -36,6 +37,8 @@ You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
 \code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
 as default backend.}
+
+\item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

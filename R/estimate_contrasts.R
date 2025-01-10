@@ -107,6 +107,7 @@ estimate_contrasts <- function(model,
                                comparison = "pairwise",
                                backend = getOption("modelbased_backend", "emmeans"),
                                transform = NULL,
+                               verbose = TRUE,
                                ...) {
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -122,6 +123,7 @@ estimate_contrasts <- function(model,
       predict = predict,
       comparison = comparison,
       adjust = p_adjust,
+      verbose = verbose,
       ...
     )
     out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
@@ -134,6 +136,7 @@ estimate_contrasts <- function(model,
       comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
+      verbose = verbose,
       ...
     )
     out <- format(estimated, model, p_adjust, comparison, ...)

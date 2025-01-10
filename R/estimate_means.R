@@ -20,10 +20,12 @@
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
 #'   transformation is selected (which usually is `"response"`).
 #' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
-#'   any valid `type` option supported by model's class `predict()` method. By
-#'   default, when `predict = NULL`, the most appropriate transformation is
-#'   selected, which usually returns predictions or contrasts on the
-#'   response-scale.
+#'   any valid `type` option supported by model's class `predict()` method (e.g.,
+#'   for zero-inflation models from package **glmmTMB**, you can choose
+#'   `predict = "zprob"` or `predict = "conditional"` etc., see
+#'   [glmmTMB::predict.glmmTMB]). By default, when `predict = NULL`, the most
+#'   appropriate transformation is selected, which usually returns predictions
+#'   or contrasts on the response-scale.
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` (or `NULL`) will transform them on scale of the response
@@ -44,6 +46,7 @@
 #' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
 #' as default backend.
 #' @param transform Deprecated, please use `predict` instead.
+#' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
 #'
 #' @inheritParams parameters::model_parameters.default
@@ -95,6 +98,7 @@ estimate_means <- function(model,
                            ci = 0.95,
                            backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
+                           verbose = TRUE,
                            ...) {
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -104,11 +108,11 @@ estimate_means <- function(model,
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by = by, predict = predict, ...)
-    means <- .format_emmeans_means(estimated, model, ci = ci, ...)
+    estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
+    means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)
+    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, verbose = verbose, ...)
     means <- format(estimated, model, ...)
   }
 

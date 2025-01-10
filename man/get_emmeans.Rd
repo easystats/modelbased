@@ -18,12 +18,20 @@ get_emcontrasts(
   predict = NULL,
   comparison = "pairwise",
   transform = NULL,
+  verbose = TRUE,
   ...
 )
 
-get_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
+get_emmeans(
+  model,
+  by = "auto",
+  predict = NULL,
+  transform = NULL,
+  verbose = TRUE,
+  ...
+)
 
-get_emtrends(model, trend = NULL, by = NULL, ...)
+get_emtrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
 
 get_marginalcontrasts(
   model,
@@ -33,6 +41,7 @@ get_marginalcontrasts(
   comparison = "pairwise",
   ci = 0.95,
   p_adjust = "holm",
+  verbose = TRUE,
   ...
 )
 
@@ -42,10 +51,11 @@ get_marginalmeans(
   predict = NULL,
   ci = 0.95,
   transform = NULL,
+  verbose = TRUE,
   ...
 )
 
-get_marginaltrends(model, trend = NULL, by = NULL, ...)
+get_marginaltrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -68,10 +78,12 @@ Valid options for `predict`` are:
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
 transformation is selected (which usually is \code{"response"}).
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
-any valid \code{type} option supported by model's class \code{predict()} method. By
-default, when \code{predict = NULL}, the most appropriate transformation is
-selected, which usually returns predictions or contrasts on the
-response-scale.
+any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
+for zero-inflation models from package \strong{glmmTMB}, you can choose
+\code{predict = "zprob"} or \code{predict = "conditional"} etc., see
+\link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
+appropriate transformation is selected, which usually returns predictions
+or contrasts on the response-scale.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
@@ -114,6 +126,8 @@ within subsets by indicating the grouping variable after a vertical bar
 }}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
+
+\item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 

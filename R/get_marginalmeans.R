@@ -24,6 +24,7 @@ get_marginalmeans <- function(model,
                               predict = NULL,
                               ci = 0.95,
                               transform = NULL,
+                              verbose = TRUE,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -36,7 +37,7 @@ get_marginalmeans <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
@@ -132,7 +133,7 @@ get_marginalmeans <- function(model,
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal
-.guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, ...) {
+.guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, verbose = TRUE, ...) {
   # Gather info and data from model
   model_data <- insight::get_data(model)
   predictors <- intersect(
@@ -147,6 +148,11 @@ get_marginalmeans <- function(model,
       if (!length(spec_value) || all(is.na(spec_value))) {
         insight::format_error(paste0(
           "Model contains no categorical predictor. Please specify `", spec_name, "`."
+        ))
+      }
+      if (verbose) {
+        insight::format_alert(paste0(
+          "We selected `", spec_name, "=c(", toString(paste0('"', spec_value, '"')), ")`."
         ))
       }
     }

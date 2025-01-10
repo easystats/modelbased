@@ -14,12 +14,13 @@
 get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
+                         verbose = TRUE,
                          ...) {
   # check if available
   insight::check_if_installed("emmeans")
 
   # Guess arguments
-  my_args <- .guess_emtrends_arguments(model, trend, by, ...)
+  my_args <- .guess_emtrends_arguments(model, trend, by, verbose, ...)
 
   # Run emtrends
   estimated <- emmeans::emtrends(
@@ -48,6 +49,7 @@ get_emtrends <- function(model,
 .guess_emtrends_arguments <- function(model,
                                       trend = NULL,
                                       by = NULL,
+                                      verbose = TRUE,
                                       ...) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
@@ -62,11 +64,15 @@ get_emtrends <- function(model,
     if (!length(trend) || is.na(trend)) {
       insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
     }
-    insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+    if (verbose) {
+      insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+    }
   }
   if (length(trend) > 1) {
-    insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
     trend <- trend[1]
+    if (verbose) {
+      insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
+    }
   }
 
   my_args <- list(trend = trend, by = by)

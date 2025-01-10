@@ -7,6 +7,7 @@ get_marginalcontrasts <- function(model,
                                   comparison = "pairwise",
                                   ci = 0.95,
                                   p_adjust = "holm",
+                                  verbose = TRUE,
                                   ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
@@ -21,7 +22,7 @@ get_marginalcontrasts <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, contrast, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -46,6 +47,7 @@ get_marginalcontrasts <- function(model,
       ci = ci,
       hypothesis = comparison,
       backend = "marginaleffects",
+      verbose = verbose,
       ...
     )
   } else {
@@ -60,12 +62,13 @@ get_marginalcontrasts <- function(model,
       hypothesis = comparison,
       predict = predict,
       backend = "marginaleffects",
+      verbose = verbose,
       ...
     )
   }
 
   # adjust p-values
-  out <- .p_adjust(model, out, p_adjust, ...)
+  out <- .p_adjust(model, out, p_adjust, verbose, ...)
 
 
   # Last step: Save information in attributes  --------------------------------
@@ -83,7 +86,7 @@ get_marginalcontrasts <- function(model,
 
 # p-value adjustment --------------------------------------
 
-.p_adjust <- function(model, params, p_adjust, ...) {
+.p_adjust <- function(model, params, p_adjust, verbose = TRUE, ...) {
   # extract information
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$contrast
@@ -120,7 +123,7 @@ get_marginalcontrasts <- function(model,
         if (all(is.na(params[["p"]]))) {
           params[["p"]] <- 2 * stats::pt(abs(statistic), df = dof, lower.tail = FALSE)
         }
-      } else {
+      } else if (verbose) {
         insight::format_alert("No test-statistic found. P-values were not adjusted.")
       }
     } else if (tolower(p_adjust) == "sidak") {
@@ -128,7 +131,7 @@ get_marginalcontrasts <- function(model,
       params[["p"]] <- 1 - (1 - params[["p"]])^rank_adjust
     }
   } else {
-    insight::format_alert(paste0("`p_adjust` must be one of ", toString(all_methods)))
+    insight::format_error(paste0("`p_adjust` must be one of ", toString(all_methods)))
   }
   params
 }
