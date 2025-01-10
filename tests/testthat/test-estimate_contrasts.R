@@ -315,8 +315,8 @@ test_that("estimate_contrasts - works with slopes", {
 
 test_that("estimate_contrasts - different options for comparison", {
   set.seed(123)
-  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
-  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+  dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
 
   # emmeans
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff")

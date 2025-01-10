@@ -129,10 +129,7 @@ estimate_means <- function(model,
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "backend") <- backend
-  attr(means, "coef_name") <- intersect(
-    c("Mean", "Probability", "Difference", tools::toTitleCase(.brms_aux_elements())),
-    colnames(means)
-  )
+  attr(means, "coef_name") <- intersect(.valid_coefficient_names(), colnames(means))
 
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(
@@ -175,14 +172,12 @@ estimate_means <- function(model,
 
   # tell user about scale of predictions / contrasts
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
-    result_type <- switch(
-      type,
+    result_type <- switch(type,
       means = "Predictions",
       contrasts = "Contrasts"
     )
     # exceptions
-    predict <- switch(
-      predict,
+    predict <- switch(predict,
       none = "link",
       `invlink(link)` = "response",
       predict

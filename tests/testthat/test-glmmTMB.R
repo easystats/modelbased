@@ -23,12 +23,12 @@ test_that("estimate_means - glmmTMB", {
   ## emmeans for zero-inflated model, count component
   estim <- suppressMessages(estimate_means(model))
   estim2 <- as.data.frame(emmeans::emmeans(model, ~mined, type = "response"))
-  expect_equal(estim$rate, estim2$rate, tolerance = 1e-3)
+  expect_equal(estim$Rate, estim2$rate, tolerance = 1e-3)
 
   ## emmeans for zero-inflated model, zero-inflated component
   estim <- suppressMessages(estimate_means(model, component = "zi"))
   estim2 <- as.data.frame(emmeans::emmeans(model, ~mined, component = "zi", type = "response"))
-  expect_equal(estim$rate, estim2$rate, tolerance = 1e-3)
+  expect_equal(estim$Rate, estim2$rate, tolerance = 1e-3)
 
   ## marginaleffects for zero-inflated model, count component
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects")

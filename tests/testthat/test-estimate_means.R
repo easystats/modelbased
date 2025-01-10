@@ -319,14 +319,14 @@ test_that("estimate_means() - mixed models", {
   expect_snapshot(print(out))
   out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"))
-  expect_equal(out1$Mean[order(out1$spp)], out2$rate, tolerance = 1e-1)
+  expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-1)
 
   m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   expect_snapshot(print(out))
   out1 <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"))
-  expect_equal(out1$Mean[order(out1$spp)], out2$rate, tolerance = 1e-3)
+  expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-3)
 
   data(sleepstudy, package = "lme4")
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)

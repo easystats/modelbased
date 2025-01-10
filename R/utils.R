@@ -16,3 +16,13 @@
     "kappa", "bias", "bs", "zi", "alpha", "xi"
   )
 }
+
+
+#' @keywords internal
+#' @noRd
+.valid_coefficient_names <- function() {
+  c(
+    "Mean", "Probability", "Difference", "Ratio", "Rate",
+    tools::toTitleCase(.brms_aux_elements())
+  )
+}
