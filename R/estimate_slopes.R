@@ -118,10 +118,10 @@ estimate_slopes <- function(model,
                             ...) {
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emtrends(model, trend, by, verbose, ...)
+    estimated <- get_emtrends(model, trend = trend, by = by, verbose = verbose, ...)
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
-    estimated <- get_marginaltrends(model, trend, by, verbose, ...)
+    estimated <- get_marginaltrends(model, trend = trend, by = by, verbose = verbose, ...)
     trends <- format(estimated, model, ci, ...)
   }
 
