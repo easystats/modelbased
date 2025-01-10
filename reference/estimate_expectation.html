@@ -19,7 +19,7 @@ for predictions about individual cases. See below for details."><meta property="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.18</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -273,7 +273,7 @@ estimates and their uncertainty:</p><ul><li><p><strong><code>estimate_expectatio
 <li><p><strong><code>estimate_link()</code></strong>:</p><ul><li><p>Generates <strong>expected values</strong> (conditional average) on the <strong>link scale</strong>.</p></li>
 <li><p>The uncertainty interval is a <em>confidence interval</em>.</p></li>
 <li><p>By default, values are computed using a reference grid spanning the
-observed range of predictor values (see <code><a href="visualisation_matrix.html">visualisation_matrix()</a></code>).</p></li>
+observed range of predictor values (see <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>).</p></li>
 </ul></li>
 <li><p><strong><code>estimate_prediction()</code></strong>:</p><ul><li><p>Generates <strong>predicted values</strong> (for individual cases) on the <strong>response scale</strong>.</p></li>
 <li><p>The uncertainty interval is a <em>prediction interval</em>.</p></li>
@@ -284,7 +284,7 @@ observed range of predictor values (see <code><a href="visualisation_matrix.html
 <li><p>Generates <strong>expected values</strong> (conditional average) on the <strong>response scale</strong>.</p></li>
 <li><p>The uncertainty interval is a <em>confidence interval</em>.</p></li>
 <li><p>By default, values are computed using a reference grid spanning the
-observed range of predictor values (see <code><a href="visualisation_matrix.html">visualisation_matrix()</a></code>).</p></li>
+observed range of predictor values (see <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>).</p></li>
 </ul></li>
 </ul></div>
     <div class="section level2">
@@ -295,7 +295,7 @@ observed range of predictor values (see <code><a href="visualisation_matrix.html
 <p>If the <code>data = NULL</code>, values are estimated using the data used to fit the
 model. If <code>data = "grid"</code>, values are computed using a reference grid
 spanning the observed range of predictor values with
-<code><a href="visualisation_matrix.html">visualisation_matrix()</a></code>. This can be useful for model visualization. The
+<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>. This can be useful for model visualization. The
 number of predictor values used for each variable can be controlled with the
 <code>length</code> argument. <code>data</code> can also be a data frame containing columns with
 names matching the model frame (see <code><a href="https://easystats.github.io/insight/reference/get_data.html" class="external-link">insight::get_data()</a></code>). This can be used
