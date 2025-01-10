@@ -33,10 +33,12 @@ Valid options for `predict`` are:
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
 transformation is selected (which usually is \code{"response"}).
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
-any valid \code{type} option supported by model's class \code{predict()} method. By
-default, when \code{predict = NULL}, the most appropriate transformation is
-selected, which usually returns predictions or contrasts on the
-response-scale.
+any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
+for zero-inflation models from package \strong{glmmTMB}, you can choose
+\code{predict = "zprob"} or \code{predict = "conditional"} etc., see
+\link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
+appropriate transformation is selected, which usually returns predictions
+or contrasts on the response-scale.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.

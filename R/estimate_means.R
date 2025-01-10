@@ -20,10 +20,12 @@
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
 #'   transformation is selected (which usually is `"response"`).
 #' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
-#'   any valid `type` option supported by model's class `predict()` method. By
-#'   default, when `predict = NULL`, the most appropriate transformation is
-#'   selected, which usually returns predictions or contrasts on the
-#'   response-scale.
+#'   any valid `type` option supported by model's class `predict()` method (e.g.,
+#'   for zero-inflation models from package **glmmTMB**, you can choose
+#'   `predict = "zprob"` or `predict = "conditional"` etc., see
+#'   [glmmTMB::predict.glmmTMB]). By default, when `predict = NULL`, the most
+#'   appropriate transformation is selected, which usually returns predictions
+#'   or contrasts on the response-scale.
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` (or `NULL`) will transform them on scale of the response
