@@ -2,9 +2,6 @@ test_that("visualization_recipe", {
   skip_if_not_installed("emmeans")
   skip_if_not_installed("marginaleffects")
 
-  # library(see)
-  # library(modelbased)
-
   data <- iris
   data$fac <- rep(c("A", "B"), length.out = 150)
   data$fac2 <- rep(c("X", "X", "X", "Y", "Y", "Y"), length.out = 150)

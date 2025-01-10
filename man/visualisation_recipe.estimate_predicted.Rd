@@ -151,11 +151,11 @@ plot(layers) +
   labs(y = "Effect of Petal.Length", title = "Marginal Effects")
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-x <- estimate_slopes(model, by = "Sepal.Width", length = 20)
+x <- estimate_slopes(model, trend="Sepal.Width", by = "Sepal.Width", length = 20)
 plot(visualisation_recipe(x))
 
 model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-x <- estimate_slopes(model, by = c("Sepal.Width", "Species"))
+x <- estimate_slopes(model, trend="Sepal.Width", by = c("Sepal.Width", "Species"))
 plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("see") && require("lme4") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

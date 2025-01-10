@@ -18,10 +18,13 @@
   } else if ("estimate_slopes" %in% att$class) {
     aes$y <- "Coefficient"
   } else if ("estimate_grouplevel" %in% att$class) {
-    aes$y <- "Level"
-    aes$x <- "Coefficient"
+    aes$x <- "Level"
+    aes$y <- "Coefficient"
     aes$type <- "grouplevel"
-    if (length(unique(data$Parameter)) > 1) aes$color <- "Parameter"
+    if (length(unique(data$Parameter)) > 1) {
+      aes$color <- "Parameter"
+      aes$group <- "Parameter"
+    }
     if (length(unique(data$Group)) > 1) aes$facet <- "Group"
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
@@ -43,8 +46,6 @@
   if (length(by) > 1) {
     aes$color <- by[2]
     aes$group <- by[2]
-    # If color is a numeric variable, convert it to a factor
-    # if(is.numeric(data[[by[2]]])) data[[by[2]]] <- as.factor(data[[by[2]]])
   }
   if (length(by) > 2) {
     aes$alpha <- by[3]
@@ -137,12 +138,16 @@
         alpha = aes$alpha
       )
     )
+    if (!is.null(aes$color) & aes$type == "pointrange") {
+      layers[[paste0("l", l)]]$position <- "dodge"
+      layers[[paste0("l", l)]]$width <- 0.2
+    }
     if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
     l <- l + 1
   }
 
 
-  if (aes$type == "pointrange") {
+  if (aes$type %in% c("pointrange", "grouplevel")) {
     layers[[paste0("l", l)]] <- list(
       geom = "pointrange",
       data = data,
@@ -156,24 +161,15 @@
         alpha = aes$alpha
       )
     )
+    if (!is.null(aes$color)) {
+      layers[[paste0("l", l)]]$position <- "dodge"
+      layers[[paste0("l", l)]]$width <- 0.2
+    }
     if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
     l <- l + 1
   }
   if (aes$type == "grouplevel") {
-    layers[[paste0("l", l)]] <- list(
-      geom = "pointrange",
-      data = data,
-      aes = list(
-        y = aes$y,
-        x = aes$x,
-        xmin = aes$ymin,
-        xmax = aes$ymax,
-        color = aes$color,
-        group = aes$group,
-        alpha = aes$alpha
-      )
-    )
-    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    layers[[paste0("l", l)]] <- list(geom = "coord_flip")
     l <- l + 1
   }
   if (!is.null(aes$facet)) {
