@@ -44,6 +44,7 @@
 #' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
 #' as default backend.
 #' @param transform Deprecated, please use `predict` instead.
+#' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed for instance to [insight::get_datagrid()].
 #'
 #' @inheritParams parameters::model_parameters.default
@@ -95,6 +96,7 @@ estimate_means <- function(model,
                            ci = 0.95,
                            backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
+                           verbose = TRUE,
                            ...) {
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -104,8 +106,8 @@ estimate_means <- function(model,
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by = by, predict = predict, ...)
-    means <- .format_emmeans_means(estimated, model, ci = ci, ...)
+    estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
+    means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalmeans(model, by = by, predict = predict, ci, ...)

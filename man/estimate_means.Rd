@@ -11,6 +11,7 @@ estimate_means(
   ci = 0.95,
   backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
+  verbose = TRUE,
   ...
 )
 }
@@ -61,6 +62,8 @@ You can set a default backend via \code{options()}, e.g. use
 as default backend.}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
+
+\item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }

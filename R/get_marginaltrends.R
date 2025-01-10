@@ -10,13 +10,14 @@
 get_marginaltrends <- function(model,
                                trend = NULL,
                                by = NULL,
+                               verbose = TRUE,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
 
   # Guess arguments
-  trend <- .guess_marginaltrends_arguments(model, trend, by, ...)
+  trend <- .guess_marginaltrends_arguments(model, trend, by, verbose, ...)
 
 
   # First step: create a data grid --------------------------------------------
@@ -87,6 +88,7 @@ get_marginaltrends <- function(model,
 .guess_marginaltrends_arguments <- function(model,
                                             trend = NULL,
                                             by = NULL,
+                                            verbose = TRUE,
                                             ...) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
@@ -101,11 +103,15 @@ get_marginaltrends <- function(model,
     if (!length(trend) || is.na(trend)) {
       insight::format_error("Model contains no numeric predictor. Please specify `trend`.")
     }
-    insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+    if (verbose) {
+      insight::format_alert(paste0("No numeric variable was specified for slope estimation. Selecting `trend = \"", trend, "\"`.")) # nolint
+    }
   }
   if (length(trend) > 1) {
-    insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
     trend <- trend[1]
+    if (verbose) {
+      insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
+    }
   }
 
   trend

@@ -23,6 +23,7 @@ get_emcontrasts <- function(model,
                             predict = NULL,
                             comparison = "pairwise",
                             transform = NULL,
+                            verbose = TRUE,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
@@ -34,7 +35,7 @@ get_emcontrasts <- function(model,
   }
 
   # Guess arguments
-  my_args <- .guess_emcontrasts_arguments(model, contrast, by, ...)
+  my_args <- .guess_emcontrasts_arguments(model, contrast, by, verbose, ...)
 
   # find default response-type
   predict <- .get_emmeans_type_argument(model, predict, type = "contrasts", ...)
@@ -75,6 +76,7 @@ get_emcontrasts <- function(model,
 .guess_emcontrasts_arguments <- function(model,
                                          contrast = NULL,
                                          by = NULL,
+                                         verbose = TRUE,
                                          ...) {
   # Gather info
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -89,7 +91,9 @@ get_emcontrasts <- function(model,
     if (!length(contrast) || is.na(contrast)) {
       contrast <- predictors[1]
     }
-    insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
+    if (verbose) {
+      insight::format_alert(paste0("No variable was specified for contrast estimation. Selecting `contrast = \"", contrast, "\"`.")) # nolint
+    }
   } else if (all(contrast == "all")) {
     contrast <- predictors
   }

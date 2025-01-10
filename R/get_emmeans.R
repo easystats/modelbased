@@ -36,6 +36,7 @@ get_emmeans <- function(model,
                         by = "auto",
                         predict = NULL,
                         transform = NULL,
+                        verbose = TRUE,
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
@@ -97,6 +98,7 @@ get_emmeans <- function(model,
 #' @keywords internal
 .guess_emmeans_arguments <- function(model,
                                      by = NULL,
+                                     verbose = TRUE,
                                      ...) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
@@ -111,7 +113,9 @@ get_emmeans <- function(model,
     if (!length(by) || all(is.na(by))) {
       insight::format_error("Model contains no categorical factor. Please specify `by`.")
     }
-    insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
+    if (verbose) {
+      insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
+    }
   }
 
   my_args <- list(by = by)
@@ -137,7 +141,7 @@ get_emmeans <- function(model,
 # Table formatting emmeans ----------------------------------------------------
 
 
-.format_emmeans_means <- function(x, model, ci = 0.95, ...) {
+.format_emmeans_means <- function(x, model, ci = 0.95, verbose = TRUE, ...) {
   predict <- attributes(x)$predict
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {

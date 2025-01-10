@@ -18,12 +18,20 @@ get_emcontrasts(
   predict = NULL,
   comparison = "pairwise",
   transform = NULL,
+  verbose = TRUE,
   ...
 )
 
-get_emmeans(model, by = "auto", predict = NULL, transform = NULL, ...)
+get_emmeans(
+  model,
+  by = "auto",
+  predict = NULL,
+  transform = NULL,
+  verbose = TRUE,
+  ...
+)
 
-get_emtrends(model, trend = NULL, by = NULL, ...)
+get_emtrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
 
 get_marginalcontrasts(
   model,
@@ -33,6 +41,7 @@ get_marginalcontrasts(
   comparison = "pairwise",
   ci = 0.95,
   p_adjust = "holm",
+  verbose = TRUE,
   ...
 )
 
@@ -45,7 +54,7 @@ get_marginalmeans(
   ...
 )
 
-get_marginaltrends(model, trend = NULL, by = NULL, ...)
+get_marginaltrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -114,6 +123,8 @@ within subsets by indicating the grouping variable after a vertical bar
 }}
 
 \item{transform}{Deprecated, please use \code{predict} instead.}
+
+\item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
 \item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 

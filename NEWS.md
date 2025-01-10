@@ -31,6 +31,8 @@
 - `estimate_expectation()` and related functions also get a `by` argument, as
   alternative to create a datagrid for the `data` argument.
 
+- Many functions get a `verbose` argument, to silence warnings and messages.
+
 ## Bug fixes
 
 * `estimate_contrasts()` did not calculate contrasts for all levels when the
