@@ -37,10 +37,10 @@
   } else if (length(by) > 0) {
     aes$x <- by[1]
     # If x is a not-numeric, make pointrange
-    if (!is.numeric(data[[by[1]]])) {
-      aes$type <- "pointrange"
-    } else {
+    if (is.numeric(data[[by[1]]])) {
       aes$type <- "ribbon"
+    } else {
+      aes$type <- "pointrange"
     }
   }
   if (length(by) > 1) {
