@@ -46,7 +46,6 @@ format.visualisation_matrix <- function(x, ...) {
 
 #' @export
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
-  predict <- attributes(x)$predict
   # model information
   model_data <- insight::get_data(model)
   info <- insight::model_info(model, verbose = FALSE)
@@ -64,14 +63,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     # for simple means, we don't want p-values
     remove_columns <- c(remove_columns, "p")
     # estimate name
-    if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
-      # for Bayesian models with distributional parameter
-      estimate_name <- tools::toTitleCase(predict_type)
-    } else if (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
-      estimate_name <- "Probability"
-    } else {
-      estimate_name <- "Mean"
-    }
+    estimate_name <- .guess_estimate_name(predict_type, info)
   }
 
   # reshape and format columns
@@ -266,4 +258,24 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     params$CI_high <- params$Predicted + crit * params$SE
   }
   params
+}
+
+
+# this function tries to find the most approriate name of the estimates / predictions,
+# based on on which scale predictions were requested
+
+#' @keywords internal
+.guess_estimate_name <- function(predict_type, info) {
+  # estimate name
+  if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+    # for Bayesian models with distributional parameter
+    estimate_name <- tools::toTitleCase(predict_type)
+  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
+    estimate_name <- "Probability"
+  } else if (predict_type %in% c("zprob", "zero")) {
+    estimate_name <- "Probability" ## TODO: could be renamed into ZI-Probability?
+  } else {
+    estimate_name <- "Mean"
+  }
+  estimate_name
 }

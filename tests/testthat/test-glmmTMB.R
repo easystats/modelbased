@@ -39,8 +39,8 @@ test_that("estimate_means - glmmTMB", {
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
   estim2 <- ggeffects::predict_response(model, "mined", type = "zi_prob")
   estim3 <- estimate_means(model, backend = "marginaleffects", predict = "zprob")
-  expect_equal(estim1$Mean, estim2$predicted, tolerance = 1e-3)
-  expect_equal(estim1$Mean, estim3$Mean, tolerance = 1e-3)
+  expect_equal(estim1$Probability , estim2$predicted, tolerance = 1e-3)
+  expect_equal(estim1$Probability, estim3$Probability, tolerance = 1e-3)
 })
 
 
