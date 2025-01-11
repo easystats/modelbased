@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 
 [![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
 
-***Taking your models to new heights***
+***Make the most out of your models***
 
 ---
 
@@ -56,12 +56,9 @@ Once you have downloaded the package, you can then load it using:
 library("modelbased")
 ```
 
-> **Tip**
->
-> **Instead of `library(modelbased)`, use `library(easystats)`.**
-> **This will make all features of the  easystats-ecosystem available.**
->
-> **To stay updated, use `easystats::install_latest()`.**
+> [!TIP]
+> Instead of `library(modelbased)`, use `library(easystats)`, which will make all features of the  easystats-ecosystem available. You can also use `easystats::install_latest()` to stay updated.
+
 
 ## Documentation
 
@@ -77,19 +74,118 @@ Access the package [**documentation**](https://easystats.github.io/modelbased/),
 - [**Estimate and re-use random effects**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 - [**The modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
-# Features
+## Features
 
-The package is built around 5 main functions:
+The core idea behind the `modelbased` package is that statistical models often contain a lot more insights than what you get from simply looking at the model parameters. In many cases, like models with multiple interactions, non-linear effects, non-standard families, complex random effect structures, the parameters can be hard to interpret. This is where the `modelbased` package comes in.
+
+To give a very simply example, imagine that you are interested in the effect of 3 conditions *A*, *B* and *C* on a variable *Y*. A simple linear model `Y ~ Condition` will give you 3 parameters: the intercept (the average value of *Y* in condition *A*), and the relative effect of condition *B* and *C*. But what you would like to also get is the average value of *Y* in the other conditions too. Many people will compute the average "by hand" (i.e., the *empirical average*) by directly averaging their observed data in these groups. But did you know that the *estimated average* (which can be much more relevant, e.g., if you adjust for other variables in the model) is contained in your model, and that you can get them easily by running `estimate_means()`?
+
+The `modelbased` package is built around 4 main functions:
 
 - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.html): Estimates the average values at each factor levels
 - [`estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html): Estimates and tests contrasts between different factor levels
 - [`estimate_slopes()`](https://easystats.github.io/modelbased/reference/estimate_slopes.html): Estimates the slopes of numeric predictors at different factor levels or alongside a numeric predictor
-- [`estimate_expectation()`](https://easystats.github.io/modelbased/articles/estimate_response.html): Predict the response variable using the model
+- [`estimate_prediction()`](https://easystats.github.io/modelbased/reference/estimate_expectation.html): Make predictions using the model
 
-These functions are powered by the [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html) function, a smart tool for guessing the appropriate reference grid.
+These functions are based on important statistical concepts, like [data grids](https://easystats.github.io/insight/reference/get_datagrid.html), [predictions](https://easystats.github.io/insight/reference/get_predicted.html) and *marginal effects*, and leverages other packages like [emmeans](https://rvlenth.github.io/emmeans/) and [marginaleffects](https://marginaleffects.com/). We recommend reading about all of that to get a deeper understanding of the hidden power of your models.
+
+## Examples
+
+### Estimate marginal means
+
+- **Problem**: My model has a factor as a predictor, and the parameters only return the difference between levels and the intercept. I want to see the values *at* each factor level.
+- **Solution**: Estimate model-based means ("marginal means"). You can visualize them by plotting their confidence interval and the original data.
+
+Check-out the function [**documentation**](https://easystats.github.io/modelbased/reference/estimate_means.html) and [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
+
+```{r}
+library(modelbased)
+library(ggplot2)
+
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Obtain estimated means
+means <- estimate_means(model, by = "Species")
+means
+
+# 3. Custom plot
+ggplot(iris, aes(x = Species, y = Sepal.Width)) +
+  # Add base data
+  geom_violin(aes(fill = Species), color = "white") +
+  geom_jitter(width = 0.1, height=0, alpha = 0.5, size=3) +
+  # Add pointrange and line for means
+  geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1) +
+  geom_pointrange(
+    data = means,
+    aes(y = Mean, ymin = CI_low, ymax = CI_high),
+    size = 1,
+    color = "white"
+  ) +
+  # Improve colors
+  scale_fill_manual(values = c("pink", "lightblue", "lightgreen")) +
+  theme_minimal()
+```
 
 
-## Create smart grids to represent complex interactions
+
+### Contrast analysis
+
+- **Problem**: The parameters of my model only return the difference between some of the factor levels and the intercept. I want to see the differences between each levels, as I would do with post-hoc comparison tests in ANOVAs.
+- **Solution**: Estimate model-based contrasts ("marginal contrasts"). You can visualize them by plotting their confidence interval.
+
+Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) for a detailed walkthrough on *contrast analysis*.
+
+```{r}
+# 1. The model
+model <- lm(Sepal.Width ~ Species, data = iris)
+
+# 2. Estimate marginal contrasts
+contrasts <- estimate_contrasts(model, contrast = "Species")
+contrasts
+```
+
+
+```{r, echo = FALSE}
+library(see)
+
+plot(contrasts, estimate_means(model, by = "Species")) +
+  theme_modern()
+```
+
+
+### Check the contrasts at different points of another linear predictor
+
+- **Problem**: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.
+- **Solution**: You can estimate the marginal contrasts at different values of a continuous variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
+
+
+```{r}
+model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+
+estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 3)
+```
+
+```{r}
+# Recompute contrasts with a higher precision (for a smoother plot)
+contrasts <- estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 20)
+
+# Add Contrast column by concatenating
+contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
+
+# Plot
+ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
+  # Add line and CI band
+  geom_line(aes(color = Contrast)) +
+  geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = Contrast), alpha = 0.2) +
+  # Add line at 0, indicating no difference
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  # Colors
+  theme_modern()
+```
+
+
+### Create smart grids to represent complex interactions
 
 - **Problem**: I want to graphically represent the interaction between two continuous variable. On top of that, I would like to express one of them in terms of standardized change (i.e., standard deviation relative to the mean).
 - **Solution**: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using `ggplot`.
@@ -97,10 +193,6 @@ These functions are powered by the [`insight::get_datagrid()`](https://easystats
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html) for a detailed walkthrough on *visualisation matrices*.
 
 ```{r}
-library(ggplot2)
-library(see)
-library(modelbased)
-
 # 1. Fit model and get visualization matrix
 model <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
 
@@ -119,114 +211,18 @@ vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, refer
 # 6. Plot
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   # Add points from original dataset (only shapes 21-25 have a fill aesthetic)
-  geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
+  geom_point(aes(fill = Petal.Width), size = 5, shape = 21) +
   # Add relationship lines
   geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), linewidth = 1) +
   # Improve colors / themes
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = "none") +
-  theme_modern()
+  theme_minimal()
 ```
 
 
 
-
-## Estimate marginal means
-
-- **Problem**: My model has a factor as a predictor, and the parameters only return the difference between levels and the intercept. I want to see the values *at* each factor level.
-- **Solution**: Estimate model-based means ("marginal means"). You can visualize them by plotting their confidence interval and the original data.
-
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_means.html) for a detailed walkthrough on *marginal means*.
-
-```{r}
-# 1. The model
-model <- lm(Sepal.Width ~ Species, data = iris)
-
-# 2. Obtain estimated means
-means <- estimate_means(model)
-means
-
-# 3. Plot
-ggplot(iris, aes(x = Species, y = Sepal.Width)) +
-  # Add base data
-  geom_violin(aes(fill = Species), color = "white") +
-  geom_jitter2(width = 0.05, alpha = 0.5) +
-
-  # Add pointrange and line from means
-  geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1) +
-  geom_pointrange(
-    data = means,
-    aes(y = Mean, ymin = CI_low, ymax = CI_high),
-    size = 1,
-    color = "white"
-  ) +
-  # Improve colors
-  scale_fill_material() +
-  theme_modern()
-```
-
-
-
-## Contrast analysis
-
-- **Problem**: The parameters of my model only return the difference between some of the factor levels and the intercept. I want to see the differences between each levels, as I would do with post-hoc comparison tests in ANOVAs.
-- **Solution**: Estimate model-based contrasts ("marginal contrasts"). You can visualize them by plotting their confidence interval.
-
-Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html) for a detailed walkthrough on *contrast analysis*.
-
-```{r}
-# 1. The model
-model <- lm(Sepal.Width ~ Species, data = iris)
-
-# 2. Estimate marginal contrasts
-contrasts <- estimate_contrasts(model)
-contrasts
-```
-
-
-```{r, echo = FALSE}
-library(see)
-
-plot(contrasts, estimate_means(model)) +
-  theme_modern()
-```
-
-
-
-
-
-## Check the contrasts at different points of another linear predictor
-
-- **Problem**: In the case of an interaction between a factor and a continuous variable, you might be interested in computing how the differences between the factor levels (the contrasts) change depending on the other continuous variable.
-- **Solution**: You can estimate the marginal contrasts at different values of a continuous variable (the *modulator*), and plot these differences (they are significant if their 95\% CI doesn't cover 0).
-
-
-```{r}
-model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, by = "Petal.Length", length = 3)
-```
-
-```{r}
-# Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, by = "Petal.Length", length = 20)
-
-# Add Contrast column by concatenating
-contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
-
-# Plot
-ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
-  # Add line and CI band
-  geom_line(aes(color = Contrast)) +
-  geom_ribbon(aes(ymin = CI_low, ymax = CI_high, fill = Contrast), alpha = 0.2) +
-  # Add line at 0, indicating no difference
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  # Colors
-  theme_modern()
-```
-
-
-## Generate predictions from your model to compare it with original data
+### Generate predictions from your model to compare it with original data
 
 - **Problem**: You fitted different models, and you want to intuitively visualize how they compare in terms of fit quality and prediction accuracy, so that you don't only rely on abstract indices of performance.
 - **Solution**: You can predict the response variable from different models and plot them against the original true response. The closest the points are on the identity line (the diagonal), the closest they are from a perfect fit.
@@ -261,7 +257,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-## Extract and format group-level random effects
+### Extract and format group-level random effects
 
 - **Problem**: You have a mixed model and you would like to easily access the random part, i.e., the group-level effects (e.g., the individuals scores).
 - **Solution**: You can apply `estimate_grouplevel` on a mixed model.
@@ -276,13 +272,13 @@ model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
 random <- estimate_grouplevel(model)
 random
 
-plot(random)
+plot(random) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal()
 ```
 
-<!-- TODO: add plotting example once 'see' on cran -->
 
-
-## Estimate derivative of non-linear relationships (e.g., in GAMs)
+### Estimate derivative of non-linear relationships (e.g., in GAMs)
 
 - **Problem**:  You model a non-linear relationship using polynomials, splines or GAMs. You want to know which parts of the curve are significant positive or negative trends.
 - **Solution**: You can estimate the *derivative* of smooth using `estimate_slopes`.
@@ -292,7 +288,9 @@ The two plots below represent the modeled (non-linear) effect estimated by the m
 Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_slopes.html) for a detailed walkthrough on *marginal effects*.
 
 <!-- TODO: currently fails with emmeans 1.8.0 //-->
-```{r, fig.height=10, fig.width=8, eval=FALSE}
+```{r}
+library(patchwork)
+
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
@@ -304,16 +302,14 @@ deriv <- estimate_slopes(model,
 )
 
 # 2. Visualize predictions and derivative
-see::plots(
-  plot(estimate_relation(model)),
-  plot(deriv),
-  n_rows = 2
-)
+plot(estimate_relation(model, length = 100)) /
+  plot(deriv) +
+  geom_hline(yintercept = 0, linetype = "dashed") 
 ```
 
 
 
-## Describe the smooth term by its linear parts
+### Describe the smooth term by its linear parts
 
 - **Problem**: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.
 - **Solution**: You can apply `describe_nonlinear` on a predicted relationship that will return the different parts of increase and decrease.
@@ -341,7 +337,7 @@ describe_nonlinear(vizdata, x = "Petal.Length")
 ```
 
 
-## Plot all posterior draws for Bayesian models predictions
+### Plot all posterior draws for Bayesian models predictions
 
 See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a walkthrough on how to do that.
 
@@ -367,7 +363,7 @@ plot(slopes)
 ```
 -->
 
-## Visualize predictions with random effects
+### Visualize predictions with random effects
 
 Aside from plotting the coefficient of each random effect (as done [here](https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects)), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with `estimate_relation` and setting `include_random` to `TRUE`.
 

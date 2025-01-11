@@ -5,7 +5,7 @@
 \alias{estimate_link}
 \alias{estimate_prediction}
 \alias{estimate_relation}
-\title{Model-based response estimates and uncertainty}
+\title{Model-based predictions}
 \usage{
 estimate_expectation(
   model,
@@ -94,12 +94,35 @@ and \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} are available
 \description{
 After fitting a model, it is useful generate model-based estimates of the
 response variables for different combinations of predictor values. Such
-estimates can be used to make inferences about relationships between
-variables and to make predictions about individual cases.
+estimates can be used to make inferences about \strong{relationships} between
+variables, to make predictions about individual cases, or to compare the
+\strong{predicted} values against the observed data.
 
-Model-based response estimates and uncertainty can be generated for both the
-conditional average response values (the regression line or expectation) and
-for predictions about individual cases. See below for details.
+The \code{modelbased} package includes 4 "related" functions, that mostly differ in
+their default arguments (in particular, \code{data} and \code{predict}):
+\itemize{
+\item \code{estimate_prediction(data = NULL, predict = "prediction")}
+\item \code{estimate_expectation(data = NULL, predict = "expectation")}
+\item \code{estimate_relation(data = "grid", predict = "expectation")}
+\item \code{estimate_link(data = "grid", predict = "link")}
+}
+
+While they are all based on model-based predictions (using \code{\link[insight:get_predicted]{insight::get_predicted()}}),
+they differ in terms of the \strong{type} of predictions they make by default. For
+instance, \code{estimate_prediction}/\code{estimate_expectation} return predictions for
+the original data used to fit the model, while \code{estimate_relation}/\code{estimate_link}
+return predictions on a \code{\link[insight:get_datagrid]{insight::get_datagrid()}}. Similarly, \code{estimate_link}
+returns predictions on the link scale, while the others return predictions on
+the response scale. Note that the relevance of these differences depends on the
+model family (for instance, for linear models, \code{estimate_relation} is equivalent
+to \code{estimate_link}, since there is no difference between the link-scale and the
+response scale).
+
+Note that you can run \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} on
+the output of these functions to get some visual insights (see the
+\link[=visualisation_recipe.estimate_predicted]{plotting examples}).
+
+See the \strong{details} section below for details about the different possibilities.
 }
 \note{
 These functions are built on top of \code{\link[insight:get_predicted]{insight::get_predicted()}} and correspond

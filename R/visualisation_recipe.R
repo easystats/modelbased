@@ -1,4 +1,8 @@
-#' Visualisation Recipe for 'modelbased' Objects
+#' Automated plotting for 'modelbased' objects
+#'
+#' Most 'modelbased' objects can be visualized using the `plot()` function, which
+#' internally calls the `visualisation_recipe()` function. See the **examples**
+#' below for more information and examples on how to create and customize plots.
 #'
 #' @param x A modelbased object.
 #' @param show_data Display the "raw" data as a background to the model-based
@@ -180,7 +184,10 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' # 2 random intercepts
 #' model <- lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
 #' x <- estimate_grouplevel(model)
-#' plot(x)
+#' plot(x) +
+#'   geom_hline(yintercept = 0, linetype = "dashed") +
+#'   theme_minimal()
+#' # Note: we need to use hline instead of vline because the axes is flipped
 #'
 #' model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 #' x <- estimate_grouplevel(model)

@@ -4,7 +4,7 @@
 \alias{visualisation_recipe.estimate_predicted}
 \alias{visualisation_recipe.estimate_slopes}
 \alias{visualisation_recipe.estimate_grouplevel}
-\title{Visualisation Recipe for 'modelbased' Objects}
+\title{Automated plotting for 'modelbased' objects}
 \usage{
 \method{visualisation_recipe}{estimate_predicted}(
   x,
@@ -47,7 +47,9 @@ aesthetics and parameters for the geoms (see customization example).}
 \item{...}{Not used.}
 }
 \description{
-Visualisation Recipe for 'modelbased' Objects
+Most 'modelbased' objects can be visualized using the \code{plot()} function, which
+internally calls the \code{visualisation_recipe()} function. See the \strong{examples}
+below for more information and examples on how to create and customize plots.
 }
 \examples{
 \dontshow{if (require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
