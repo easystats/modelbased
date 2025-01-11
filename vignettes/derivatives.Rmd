@@ -1,5 +1,5 @@
 ---
-title: "Interpret simple and complex models using the power of Effect Derivatives"
+title: "Interpret simple and complex models using the power of effect derivatives"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     fig_height: 6
 tags: [r, estimate, estimate response, predictions, non linear, polynomial]
 vignette: >
-  %\VignetteIndexEntry{Interpret simple and complex models using the power of Effect Derivatives}
+  %\VignetteIndexEntry{Interpret simple and complex models using the power of effect derivatives}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -38,9 +38,9 @@ set.seed(333)
 ```
 
 
-One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...), and that simple models are enough for simple tasks. **Why shoot a fly with a bazooka?** In this vignette, we are going to show that, sometimes, the bazooka can be so versatile that it works just as easily on a fly as a flyswatter. In particular, we will investigate how the combination **GAM + Effect Derivative** can be used, even in simple contexts, to **make your data analysis easier**.
+One floating assumption that can be encountered is that "complex models" should be used for "complex" stuff (data, designs, ...), and that simple models are enough for simple tasks. **Why shoot a fly with a bazooka?** In this vignette, we are going to show that, sometimes, the bazooka can be so versatile that it works just as easily on a fly as a flyswatter. In particular, we will investigate how the combination **GAM + Effects Derivative** can be used, even in simple contexts, to **make your data analysis easier**.
 
-# The Traditional Approach
+## The Traditional Approach
 
 Let's say we are interested in the relationship between *y* and *x* in the following dataset:
 
@@ -50,13 +50,7 @@ library(mgcv)
 
 # Tidyverse
 library(ggplot2)
-
-# Easystats
-library(datawizard)
-library(parameters)
-library(modelbased)
-library(report)
-library(see)
+library(easystats)
 
 set.seed(333)
 
@@ -67,7 +61,7 @@ ggplot(data, aes(x, y)) +
   geom_point()
 ```
 
-Upon visualizing the data, some people might say: "well, the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further here). Let's do that:
+Upon visualizing the data, some people might say: "well, the most straightforward thing to do is to run a **correlation analysis**" (they might not be wrong, but for the sake of the demonstration, we will push things further here). Let's start with that:
 
 ```{r eval=FALSE}
 rez <- cor.test(data$y, data$x)
@@ -88,7 +82,8 @@ Let's fit a linear regression model, visualize it, and describe its parameters.
 ```{r}
 model_lm <- lm(y ~ x, data = data)
 
-plot(modelbased::estimate_relation(model_lm))
+modelbased::estimate_relation(model_lm) |> 
+  plot()
 
 parameters::parameters(model_lm)
 ```
@@ -97,7 +92,7 @@ The parameters table shows us that the **effect of x** is `12.75`. This means th
 
 Congrats, we've answered our question!
 
-# GAMs can be used for linear relationships too!
+## GAMs can be used for linear relationships too!
 
 > *A new player has entered the game.*
 
@@ -108,7 +103,8 @@ GAMs can be fitted using the `mgcv` package, and the only change is that we need
 ```{r}
 model_gam <- mgcv::gam(y ~ s(x), data = data)
 
-plot(modelbased::estimate_relation(model_gam), line = list(color = "blue"))
+modelbased::estimate_relation(model_gam) |> 
+  plot(line = list(color = "blue"))
 
 parameters::parameters(model_gam)
 ```
@@ -117,13 +113,12 @@ Wow, the GAM-based modeled relationship is near-exactly the same as that of the 
 
 Okay, that's cool, but there's one *slight* issue. If you look at the parameters table, there is indeed one line for the "smooth term", but it has... **no coefficient!** Indeed, because GAMs don't model straight lines, it doesn't return the value of the slope. That's why some people consider GAMs complicated to discuss statistically, as their parameters are not easily interpretable.
 
-
 > Owww, so it is an issue considering our question about the effect of *x* on *y* 😕
 
 Or **is it?**
 
 
-# Effect Derivatives
+## Effect Derivatives
 
 Let us introduce another concept that is likely to get very popular in the near future within the world of regressions. **Derivatives**. You might remember from your math class in high school that derivatives are basically the *pattern of the slope of a pattern* <sub>(pattern-ception much)</sub>.
 
@@ -159,9 +154,7 @@ By running `summary()` on the derivative, we obtain a summary by "segments" (pos
 
 Such as GAMs. Lets' to the same for our GAM model:
 
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
-
-```{r, eval=FALSE}
+```{r}
 deriv <- modelbased::estimate_slopes(model_gam, trend = "x", by = "x")
 
 plot(deriv, line = list(color = "blue")) +
@@ -175,7 +168,7 @@ Isn't that amazing, the results are *identical*. The moral of the story is that 
 Let's jump to another example!
 
 
-# GAM + Derivatives > LM: a polynomial regression example
+## GAM + Derivatives > LM: a polynomial regression example
 
 We mentioned that one of the GAMs "limitation" is that their parameters are not easily interpretable. We were assuming that for other classes of models, such as GLMs, it was the case.
 
@@ -194,7 +187,8 @@ Let us fit a polynomial regression:
 model_poly <- lm(y2 ~ poly(x, 2), data = data)
 
 # Length is increased to have a smoother line
-plot(modelbased::estimate_relation(model_poly, length = 30))
+modelbased::estimate_relation(model_poly, length = 30) |> 
+  plot()
 
 parameters::parameters(model_poly)
 ```
@@ -205,7 +199,7 @@ Instead, we can rely on our *good ol'* derivatives to obtain the "linear slope" 
 
 
 ```{r}
-deriv <- modelbased::estimate_slopes(model_poly, trend = "x", by = "x")
+deriv <- modelbased::estimate_slopes(model_poly, trend = "x", by = "x", length=100)
 
 plot(deriv) +
   geom_hline(yintercept = 0, linetype = "dashed")
@@ -220,9 +214,8 @@ Moral of the story? **Derivatives can be used to easily interpret and draw concl
 But, if you've been attentive up to this point, you might wonder: **why bother with polynomials at all when GAMs can do the trick?**
 
 
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
 
-```{r, eval=FALSE}
+```{r}
 model_gam2 <- mgcv::gam(y2 ~ s(x), data = data)
 
 plot(modelbased::estimate_relation(model_gam2, length = 100), line = list(color = "blue"))
@@ -241,9 +234,8 @@ The conclusion is very similar, it shows a significant effect that goes from neg
 
 What about *3rd-degree-type* relationships? It works the same way:
 
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
 
-```{r, eval=FALSE}
+```{r}
 data$y3 <- data$x^3 + rnorm(nrow(data), sd = 1)
 
 model_gam3 <- mgcv::gam(y3 ~ s(x), data = data)

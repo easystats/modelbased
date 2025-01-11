@@ -101,10 +101,10 @@ variables, to make predictions about individual cases, or to compare the
 The \code{modelbased} package includes 4 "related" functions, that mostly differ in
 their default arguments (in particular, \code{data} and \code{predict}):
 \itemize{
-\item \code{estimate_prediction(data = NULL, predict = "prediction")}
-\item \code{estimate_expectation(data = NULL, predict = "expectation")}
-\item \code{estimate_relation(data = "grid", predict = "expectation")}
-\item \code{estimate_link(data = "grid", predict = "link")}
+\item \code{estimate_prediction(data = NULL, predict = "prediction", ...)}
+\item \code{estimate_expectation(data = NULL, predict = "expectation", ...)}
+\item \code{estimate_relation(data = "grid", predict = "expectation", ...)}
+\item \code{estimate_link(data = "grid", predict = "link", ...)}
 }
 
 While they are all based on model-based predictions (using \code{\link[insight:get_predicted]{insight::get_predicted()}}),

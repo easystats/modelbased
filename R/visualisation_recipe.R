@@ -4,6 +4,16 @@
 #' internally calls the `visualisation_recipe()` function. See the **examples**
 #' below for more information and examples on how to create and customize plots.
 #'
+#' The plotting works by mapping any predictors from the `by` argument to the x-axis,
+#' colors, alpha (transparency) and facets. Thus, the appearance of the plot depends
+#' on the order of the variables that you specify in the `by` argument. For instance,
+#' the plots corresponding to `estimate_relation(model, by=c("Species", "Sepal.Length"))`
+#' and `estimate_relation(model, by=c("Sepal.Length", "Species"))` will look different.
+#'
+#' The automated plotting is primarily meant for convenient visual checks, but
+#' for publication-ready figures, we recommend re-creating the figures using the
+#' `ggplot2` package directly.
+#'
 #' @param x A modelbased object.
 #' @param show_data Display the "raw" data as a background to the model-based
 #'   estimation.
