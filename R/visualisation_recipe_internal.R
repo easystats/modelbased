@@ -115,7 +115,6 @@
           ymin = aes$ymin[i],
           ymax = aes$ymax[i],
           fill = aes$color,
-          color = NULL,
           group = aes$group
         ),
         alpha = 1 / 3
