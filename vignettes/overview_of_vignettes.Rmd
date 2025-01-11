@@ -26,12 +26,11 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 
 ## Function Overview
 
-* [Function Reference](https://easystats.github.io/modelbased/reference/index.html)
+* [Function Documentation](https://easystats.github.io/modelbased/reference/index.html)
 
 ## Articles
 
 * [Interpret simple and complex models using the power of Effect Derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
-* [Model and describe non-linear relationships](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
 * [Contrast analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
 * [How to use Mixed models to Estimate Individuals' Scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 * [What are, why use and how to get marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html)
