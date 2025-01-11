@@ -113,7 +113,7 @@ means
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   # Add base data
   geom_violin(aes(fill = Species), color = "white") +
-  geom_jitter(width = 0.1, height=0, alpha = 0.5, size=3) +
+  geom_jitter(width = 0.1, height = 0, alpha = 0.5, size = 3) +
   # Add pointrange and line for means
   geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1) +
   geom_pointrange(
@@ -304,7 +304,7 @@ deriv <- estimate_slopes(model,
 # 2. Visualize predictions and derivative
 plot(estimate_relation(model, length = 100)) /
   plot(deriv) +
-  geom_hline(yintercept = 0, linetype = "dashed") 
+  geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
 

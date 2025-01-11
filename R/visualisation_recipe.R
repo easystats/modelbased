@@ -139,11 +139,11 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #'   labs(y = "Effect of Petal.Length", title = "Marginal Effects")
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-#' x <- estimate_slopes(model, trend="Sepal.Width", by = "Sepal.Width", length = 20)
+#' x <- estimate_slopes(model, trend = "Sepal.Width", by = "Sepal.Width", length = 20)
 #' plot(visualisation_recipe(x))
 #'
 #' model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-#' x <- estimate_slopes(model, trend="Sepal.Width", by = c("Sepal.Width", "Species"))
+#' x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 #' plot(visualisation_recipe(x))
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,

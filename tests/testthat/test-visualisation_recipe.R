@@ -49,8 +49,8 @@ test_that("visualization_recipe", {
 
   # works with glm-Poisson
   set.seed(123)
-  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
-  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+  dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   vr <- visualisation_recipe(x)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))

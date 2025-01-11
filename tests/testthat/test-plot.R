@@ -210,8 +210,8 @@ test_that("plots, relation, multiple CI", {
 
 test_that("plots, estimate_means works with Poisson", {
   set.seed(123)
-  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
-  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+  dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   set.seed(123)
   vdiffr::expect_doppelganger(
