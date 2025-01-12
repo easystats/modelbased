@@ -148,7 +148,7 @@ data_anova$Category <- recode_into(
 )
 data_anova$Category <- factor(data_anova$Category, levels = c("Low", "Middle", "High"))
 
-data_anova <- data_anova |>
+data_anova <<- data_anova |>
   data_group(c("Participant", "Condition", "Category")) |>
   data_summary(RT = mean(RT))
 
