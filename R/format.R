@@ -95,7 +95,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   info <- insight::model_info(model, verbose = FALSE)
   model_data <- insight::get_data(model)
   # define all columns that should be removed
-  remove_columns <- c("Parameter", "s.value", "S", "CI", "rowid_dedup")
+  remove_columns <- c("Parameter", "Predicted", "s.value", "S", "CI", "rowid_dedup")
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,

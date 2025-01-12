@@ -83,8 +83,8 @@
     Output
       Estimated Marginal Effects
       
-      Predicted | Coefficient |   SE |       95% CI |    t |      p
-      -------------------------------------------------------------
-      4.97      |        0.79 | 0.10 | [0.59, 0.99] | 7.69 | < .001
+      Coefficient |   SE |       95% CI |    t |      p
+      -------------------------------------------------
+      0.79        | 0.10 | [0.59, 0.99] | 7.69 | < .001
       Marginal effects estimated for Petal.Length
 
