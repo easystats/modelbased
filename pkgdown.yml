@@ -1,4 +1,4 @@
-pandoc: 3.6.1
+pandoc: 3.6.2
 pkgdown: 2.1.1.9000
 pkgdown_sha: 6615322cb2ce15b1effcecf894123c88fa10b9c9
 articles:
@@ -12,7 +12,7 @@ articles:
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2025-01-12T20:39Z
+last_built: 2025-01-12T23:49Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles

@@ -11,7 +11,7 @@ below for more information and examples on how to create and customize plots."><
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,6 +87,8 @@ below for more information and examples on how to create and customize plots.</p
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribbon <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  join_dots <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -97,6 +99,7 @@ below for more information and examples on how to create and customize plots.</p
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribbon <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -107,6 +110,7 @@ below for more information and examples on how to create and customize plots.</p
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribbon <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -124,9 +128,16 @@ below for more information and examples on how to create and customize plots.</p
 estimation.</p></dd>
 
 
-<dt id="arg-point-line-pointrange-ribbon-facet">point, line, pointrange, ribbon, facet<a class="anchor" aria-label="anchor" href="#arg-point-line-pointrange-ribbon-facet"></a></dt>
+<dt id="arg-point-line-pointrange-ribbon-facet-grid">point, line, pointrange, ribbon, facet, grid<a class="anchor" aria-label="anchor" href="#arg-point-line-pointrange-ribbon-facet-grid"></a></dt>
 <dd><p>Additional
 aesthetics and parameters for the geoms (see customization example).</p></dd>
+
+
+<dt id="arg-join-dots">join_dots<a class="anchor" aria-label="anchor" href="#arg-join-dots"></a></dt>
+<dd><p>Logical, if <code>TRUE</code> and for categorical focal terms in <code>by</code>,
+dots (estimates) are connected by lines, i.e. plots will be a combination of
+dots with error bars and connecting lines. If <code>FALSE</code>, only dots and error
+bars are shown.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -165,6 +176,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> height = 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> shape = 16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stroke = 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
@@ -257,6 +269,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> height = 0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> shape = 16</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> stroke = 0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>

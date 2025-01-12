@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.20</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.21</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,7 +107,7 @@
 <p><a href="https://github.com/easystats/modelbased/blob/master/inst/CITATION" class="external-link"><img src="https://img.shields.io/badge/Cite-Unpublished-yellow" alt="publication"></a></p>
 <p><strong><em>Make the most out of your models</em></strong></p>
 <hr>
-<p><code>modelbased</code> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
+<p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -149,23 +149,23 @@
 </h2>
 <p>Access the package <a href="https://easystats.github.io/modelbased/"><strong>documentation</strong></a>, and check-out these vignettes:</p>
 <ul>
-<li><a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>Visualisation matrix</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html"><strong>Marginal means</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html"><strong>Contrast analysis</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html"><strong>Marginal effects</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>Use a model to make predictions</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html"><strong>Describe non-linear curves</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/derivatives.html"><strong>Interpret models using Effect Derivatives</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/estimate_grouplevel.html"><strong>Estimate and re-use random effects</strong></a></li>
-<li><a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html"><strong>The modelisation approach</strong></a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">Data grids</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_means.html">What are, why use and how to get marginal means</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_contrasts.html">Contrast analysis</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_response.html">Use a model to make predictions</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/derivatives.html">Interpret simple and complex models using the power of effect derivatives</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_grouplevel.html">How to use mixed models to estimate individuals’ scores</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/estimate_relation.html">Visualize effects and interactions</a></li>
+<li><a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html">The modelisation approach to statistics</a></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="features">Features<a class="anchor" aria-label="anchor" href="#features"></a>
 </h2>
-<p>The core idea behind the <code>modelbased</code> package is that statistical models often contain a lot more insights than what you get from simply looking at the model parameters. In many cases, like models with multiple interactions, non-linear effects, non-standard families, complex random effect structures, the parameters can be hard to interpret. This is where the <code>modelbased</code> package comes in.</p>
+<p>The core idea behind the <strong>modelbased</strong> package is that statistical models often contain a lot more insights than what you get from simply looking at the model parameters. In many cases, like models with multiple interactions, non-linear effects, non-standard families, complex random effect structures, the parameters can be hard to interpret. This is where the <strong>modelbased</strong> package comes in.</p>
 <p>To give a very simply example, imagine that you are interested in the effect of 3 conditions <em>A</em>, <em>B</em> and <em>C</em> on a variable <em>Y</em>. A simple linear model <code>Y ~ Condition</code> will give you 3 parameters: the intercept (the average value of <em>Y</em> in condition <em>A</em>), and the relative effect of condition <em>B</em> and <em>C</em>. But what you would like to also get is the average value of <em>Y</em> in the other conditions too. Many people will compute the average “by hand” (i.e., the <em>empirical average</em>) by directly averaging their observed data in these groups. But did you know that the <em>estimated average</em> (which can be much more relevant, e.g., if you adjust for other variables in the model) is contained in your model, and that you can get them easily by running <code><a href="reference/estimate_means.html">estimate_means()</a></code>?</p>
-<p>The <code>modelbased</code> package is built around 4 main functions:</p>
+<p>The <strong>modelbased</strong> package is built around 4 main functions:</p>
 <ul>
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_means.html"><code>estimate_means()</code></a>: Estimates the average values at each factor levels</li>
@@ -176,7 +176,7 @@
 <li>
 <a href="https://easystats.github.io/modelbased/reference/estimate_expectation.html"><code>estimate_prediction()</code></a>: Make predictions using the model</li>
 </ul>
-<p>These functions are based on important statistical concepts, like <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a>, <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">predictions</a> and <em>marginal effects</em>, and leverages other packages like <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> and <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a>. We recommend reading about all of that to get a deeper understanding of the hidden power of your models.</p>
+<p>These functions are based on important statistical concepts, like <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a>, <a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">predictions</a> and <em>marginal effects</em>, and leverages other packages like <a href="https://rvlenth.github.io/emmeans/" class="external-link"><strong>emmeans</strong></a> and <a href="https://marginaleffects.com/" class="external-link"><strong>marginaleffects</strong></a>. We recommend reading about all of that to get a deeper understanding of the hidden power of your models.</p>
 </div>
 <div class="section level2">
 <h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
@@ -324,7 +324,7 @@
 <li>
 <strong>Problem</strong>: I want to graphically represent the interaction between two continuous variable. On top of that, I would like to express one of them in terms of standardized change (i.e., standard deviation relative to the mean).</li>
 <li>
-<strong>Solution</strong>: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using <code>ggplot</code>.</li>
+<strong>Solution</strong>: Create a data grid following the desired specifications, and feed it to the model to obtain predictions. Format some of the columns for better readability, and plot using <strong>ggplot</strong>.</li>
 </ul>
 <p>Check-out <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html"><strong>this vignette</strong></a> for a detailed walkthrough on <em>visualisation matrices</em>.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -473,9 +473,8 @@
 <li>
 <strong>Problem</strong>: You model a non-linear relationship using polynomials, splines or GAMs. You want to describe it in terms of linear parts: where does it decrease, how much, where does it increase, etc.</li>
 <li>
-<strong>Solution</strong>: You can apply <code>describe_nonlinear</code> on a predicted relationship that will return the different parts of increase and decrease.</li>
+<strong>Solution</strong>: You can apply <code><a href="reference/describe_nonlinear.html">describe_nonlinear()</a></code> on a predicted relationship that will return the different parts of increase and decrease.</li>
 </ul>
-<p>See <a href="https://easystats.github.io/modelbased/articles/describe_nonlinear.html"><strong>this vignette</strong></a> for more information.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">Petal.Length</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
@@ -520,7 +519,7 @@ model <- lm(mpg ~ hp * wt, data = mtcars)
 <div class="section level3">
 <h3 id="visualize-predictions-with-random-effects">Visualize predictions with random effects<a class="anchor" aria-label="anchor" href="#visualize-predictions-with-random-effects"></a>
 </h3>
-<p>Aside from plotting the coefficient of each random effect (as done <a href="https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects" class="external-link">here</a>), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with <code>estimate_relation</code> and setting <code>include_random</code> to <code>TRUE</code>.</p>
+<p>Aside from plotting the coefficient of each random effect (as done <a href="https://github.com/easystats/modelbased#extract-and-format-group-level-random-effects" class="external-link">here</a>), we can also visualize the predictions of the model for each of these levels, which can be useful to diagnostic or see how they contribute to the fixed effects. We will do that by making predictions with <code><a href="reference/estimate_expectation.html">estimate_relation()</a></code> and setting <code>include_random</code> to <code>TRUE</code>.</p>
 <p>Let’s model the reaction time with the number of days of sleep deprivation as fixed effect and the participants as random intercept.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
