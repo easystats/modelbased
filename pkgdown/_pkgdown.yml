@@ -44,6 +44,8 @@ navbar:
           href: articles/derivatives.html
         - text: "Estimate and re-use Random Effects"
           href: articles/estimate_grouplevel.html
+        - text: "Visualize effects and interactions"
+          href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
         - text: "Transformations"
