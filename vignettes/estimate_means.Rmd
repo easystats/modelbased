@@ -73,7 +73,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
 However, these **raw means** might be biased, as the number of observations in
 each group might be different. Moreover, there might be some hidden covariance or
 mediation with other variables in the dataset, creating a "spurious" influence
-(counfounding) on the means.
+(confounding) on the means.
 
 **How can we take these influences into account while calculating means?**
 
@@ -90,6 +90,7 @@ predictor variable (here, `Species`).
 
 
 ```{r}
+library(modelbased)
 model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
 means
