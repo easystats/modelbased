@@ -22,10 +22,7 @@ knitr::opts_chunk$set(comment = ">", dpi = 300)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
-  !requireNamespace("poorman", quietly = TRUE) ||
-  !requireNamespace("see", quietly = TRUE) ||
-  !requireNamespace("gganimate", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE)) {
+  !requireNamespace("see", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 
@@ -37,78 +34,45 @@ This vignette will present how to visualize the effects and interactions using
 
 Note that the statistically correct name of `estimate_relation` is `estimate_expectation` (which can be used as an alias), as it refers to expected predictions (read [more](https://easystats.github.io/insight/reference/get_predicted.html)). 
 
-# Simple regression
+## Simple regression
 
-## Linear relationship
+### Linear relationship
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r}
 library(modelbased)
 
-model <- glm(Sepal.Length ~ Sepal.Width, data = iris)
+model <- lm(Sepal.Length ~ Sepal.Width, data = iris)
 
 visualization_data <- estimate_relation(model)
 head(visualization_data)
 ```
 
-<!-- Demo using 'see' instead? -->
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-library(ggplot2)
-library(see)
-library(poorman)
-
-visualization_data %>%
-  ggplot(aes(x = Sepal.Width, y = Predicted)) +
-  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
-  geom_line() +
-  see::theme_modern()
+```{r}
+plot(visualization_data, line = list(color = "red")) +
+  theme_minimal()
 ```
 
-# More complex regressions
-
-## Non-linear relationships
-
-Note that non-linear relationships can be also described by linear
-approximations using
-[**describe_nonlinear**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html).
+## More complex regressions
 
 ### Polynomial
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
-glm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) %>%
-  modelbased::estimate_relation(length = 50) %>%
-  ggplot(aes(x = Sepal.Width, y = Predicted)) +
-  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
-  geom_line() +
-  see::theme_modern()
+```{r}
+lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris)  |> 
+  modelbased::estimate_relation(length = 50) |> 
+  plot()
 ```
 
 ### Additive Models
 
-```{r message=FALSE, warning=FALSE, eval=FALSE}
+```{r}
 library(mgcv)
 
-mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) %>%
-  modelbased::estimate_relation(length = 50) %>%
-  ggplot(aes(x = Sepal.Width, y = Predicted)) +
-  geom_ribbon(aes(ymin = CI_low, ymax = CI_high), alpha = 0.2) +
-  geom_line() +
-  see::theme_modern()
+mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |> 
+  modelbased::estimate_relation(length = 50) |> 
+  plot()
 ```
 
-# Interactions
 
-## Interaction with a factor
-
-TODO.
-
-## Interaction with another continuous variable
-
-TODO.
-
-# Supported Models
-
-TODO.
-
-# References
+## References
 
