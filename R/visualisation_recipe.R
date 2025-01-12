@@ -17,7 +17,7 @@
 #' @param x A modelbased object.
 #' @param show_data Display the "raw" data as a background to the model-based
 #'   estimation.
-#' @param point,line,pointrange,ribbon,facet Additional
+#' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
 #'
@@ -110,6 +110,7 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     pointrange = NULL,
                                                     ribbon = NULL,
                                                     facet = NULL,
+                                                    grid = NULL,
                                                     ...) {
   .visualization_recipe(
     x,
@@ -119,6 +120,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
     ...
   )
 }
@@ -161,6 +163,7 @@ visualisation_recipe.estimate_slopes <- function(x,
                                                  pointrange = NULL,
                                                  ribbon = NULL,
                                                  facet = NULL,
+                                                 grid = NULL,
                                                  ...) {
   .visualization_recipe(
     x,
@@ -169,6 +172,7 @@ visualisation_recipe.estimate_slopes <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
     ...
   )
 }
@@ -208,6 +212,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
                                                      pointrange = NULL,
                                                      ribbon = NULL,
                                                      facet = NULL,
+                                                     grid = NULL,
                                                      ...) {
   if (is.null(facet)) {
     facet <- list(scales = "free")
@@ -222,6 +227,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
     ...
   )
 }

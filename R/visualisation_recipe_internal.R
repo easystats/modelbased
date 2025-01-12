@@ -52,12 +52,17 @@
     aes$group <- by[2]
   }
   if (length(by) > 2) {
-    aes$alpha <- by[3]
+    if (is.numeric(data[[by[3]]])) {
+      aes$alpha <- by[3]
+    } else {
+      aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -2), collapse = " * ")))
+    }
     data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
     aes$group <- ".group"
   }
   if (length(by) > 3) {
-    aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -3), collapse = " * ")))
+    aes$facet <- NULL
+    aes$grid <- stats::as.formula(paste(by[3], "~", paste(utils::tail(by, -3), collapse = "*")))
   }
 
   # CI
@@ -90,6 +95,7 @@
                                   pointrange = NULL,
                                   ribbon = NULL,
                                   facet = NULL,
+                                  grid = NULL,
                                   ...) {
   aes <- .find_aes(x)
   data <- aes$data
@@ -182,6 +188,16 @@
       facets = aes$facet
     )
     if (!is.null(facet)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    l <- l + 1
+  }
+  if (!is.null(aes$grid)) {
+    layers[[paste0("l", l)]] <- list(
+      geom = "facet_grid",
+      data = data,
+      rows = aes$grid,
+      scales = "free_x"
+    )
+    if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
     l <- l + 1
   }
 

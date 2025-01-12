@@ -14,6 +14,7 @@
   pointrange = NULL,
   ribbon = NULL,
   facet = NULL,
+  grid = NULL,
   ...
 )
 
@@ -23,6 +24,7 @@
   pointrange = NULL,
   ribbon = NULL,
   facet = NULL,
+  grid = NULL,
   ...
 )
 
@@ -32,6 +34,7 @@
   pointrange = NULL,
   ribbon = NULL,
   facet = NULL,
+  grid = NULL,
   ...
 )
 }
@@ -41,7 +44,7 @@
 \item{show_data}{Display the "raw" data as a background to the model-based
 estimation.}
 
-\item{point, line, pointrange, ribbon, facet}{Additional
+\item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
 
 \item{...}{Not used.}
