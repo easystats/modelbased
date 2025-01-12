@@ -252,7 +252,7 @@ vizdata$Predicted <- get_predicted(model, vizdata)
 iris |>
   ggplot(aes(x = Petal.Length, y = Sepal.Length, color = Petal.Width)) +
   geom_point() +
-  geom_line(data = vizdata, aes(y = Predicted, group = Petal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted, group = Petal.Width), linewidth = 1) +
   scale_color_viridis_c() +
   theme_minimal()
 ```
