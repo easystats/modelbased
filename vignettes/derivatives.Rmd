@@ -200,7 +200,7 @@ Instead, we can rely on our *good ol'* derivatives to obtain the "linear slope" 
 
 
 ```{r}
-deriv <- modelbased::estimate_slopes(model_poly, trend = "x", by = "x", length=100)
+deriv <- modelbased::estimate_slopes(model_poly, trend = "x", by = "x", length = 100)
 
 plot(deriv) +
   geom_hline(yintercept = 0, linetype = "dashed")
