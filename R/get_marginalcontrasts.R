@@ -70,7 +70,6 @@ get_marginalcontrasts <- function(model,
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, verbose, ...)
 
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -79,7 +78,6 @@ get_marginalcontrasts <- function(model,
   attr(out, "p_adjust") <- p_adjust
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
-  attr(out, "focal_terms") <- at_specs$varname
   class(out) <- unique(c("marginaleffects_contrasts", class(out)))
   out
 }

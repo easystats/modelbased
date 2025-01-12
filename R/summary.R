@@ -50,7 +50,7 @@ summary.reshape_grouplevel <- function(object, ...) {
   # First row - starting point
   centrality_columns <- datawizard::extract_column_names(
     data,
-    c("Coefficient", "Median", "Mean", "MAP_Estimate"),
+    c("Coefficient", "Slope", "Median", "Mean", "MAP_Estimate"),
     verbose = FALSE
   )
   centrality_signs <- sign(data[[centrality_columns]])

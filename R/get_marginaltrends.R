@@ -73,7 +73,8 @@ get_marginaltrends <- function(model,
   attr(estimated, "by") <- at_specs$varname
   attr(estimated, "focal_terms") <- at_specs$varname
   attr(estimated, "datagrid") <- datagrid
-  attr(estimated, "coef_name") <- "Coefficient"
+  attr(estimated, "coef_name") <- "Slope"
+  attr(estimated, "preserve_range") <- attributes(datagrid)$preserve_range
 
   class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
 

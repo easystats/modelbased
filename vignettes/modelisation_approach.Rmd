@@ -79,17 +79,15 @@ But here are some problems with this approach:
 Thus, we will describe below another approach to statistics, centered around
 statistical modelisation.
 
-# The Empirical Approach (Classic)
+## The Empirical Approach (Classic)
 
 ```{r}
-library(datawizard)
+library(easystats)
 library(emmeans)
-library(parameters)
-library(modelbased)
 library(ggplot2)
 ```
 
-## Data Simulation
+### Data Simulation
 
 
 First we will run the function below to simulate some data. There's no need to
@@ -128,18 +126,16 @@ data <- generate_data(effect = rnorm(30, 2, 2), noise = rnorm(30, 0, 0.4))
 </details>
 
 
-## Preprocessing
+### Preprocessing
 
 
-## ANOVAs
+### ANOVAs
 
 In ANOVAs, it's all about groups. Even though people also add in continuous
 variables (creating these ANCOVAs, MANOVAs and other monstrosities), it's not
 really "in their spirit": ANOVAs were made to compare groups.
 
 So we will take, for each participant, its 20...
-
-**TO DO: COMPLETE THIS VIGNETTE**.
 
 
 ```{r}
@@ -152,7 +148,7 @@ data_anova$Category <- recode_into(
 )
 data_anova$Category <- factor(data_anova$Category, levels = c("Low", "Middle", "High"))
 
-data_anova <- data_anova |>
+data_anova <<- data_anova |>
   data_group(c("Participant", "Condition", "Category")) |>
   data_summary(RT = mean(RT))
 
@@ -162,7 +158,7 @@ parameters(results)
 
 What can we conclude from that? Absolutely **nothing**! We need to investigate in more details, for instance by running post-hoc comparison tests. This uninformativeness is one reason why ANOVA should be banned from psychological science.
 
-## Post-hoc comparison tests
+### Post-hoc comparison tests
 
 ```{r}
 posthoc <- get_emmeans(results, by = c("Condition", "Category")) |>
@@ -174,18 +170,18 @@ parameters(posthoc)
 data_anova |>
   ggplot(aes(x = Category, y = RT, fill = Condition)) +
   geom_boxplot() +
-  see::theme_modern()
+  theme_minimal()
 ```
 
 
-# The Modelisation Approach
+## The Modelisation Approach
 
 A model is made of parameters, which have 'real' meaning, as opposed to indices
 of significance (which are abstract).
 
-## Summary
+### Summary
 
-## 1. Draw what you want to visualize
+### 1. Draw what you want to visualize
 
 We can use `geom_smooth()`, which can fit non-linear relationships in an empirical way, to give us an idea of the shape of the relationships.
 
@@ -195,21 +191,19 @@ data |>
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
   geom_jitter(alpha = 0.4) +
   geom_smooth(method = "loess", se = FALSE) +
-  see::theme_modern()
+  theme_minimal()
 ```
 
 
 
-## 2. Make models for it
+### 2. Make models for it
 
 
 
-## 3. Select the best Model
+### 3. Select the best Model
 
-## 4. Visualize the best model
+### 4. Visualize the best model
 
-## 5. Investigate its Parameters
+### 5. Investigate its Parameters
 
-# References
-
-<!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
+## References

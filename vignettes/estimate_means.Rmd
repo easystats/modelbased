@@ -27,11 +27,12 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-if (!requireNamespace("ggplot2", quietly = TRUE) ||
-  !requireNamespace("see", quietly = TRUE) ||
-  !requireNamespace("rstanarm", quietly = TRUE) ||
-  !requireNamespace("poorman", quietly = TRUE)) {
+pkgs <- c("ggplot2", "easystats", "marginaleffects", "emmeans")
+successfully_loaded <- vapply(pkgs, requireNamespace, TRUE, quietly = TRUE)
+
+if (getRversion() < "4.1.0") { # for native pipe
   knitr::opts_chunk$set(eval = FALSE)
+  successfully_loaded[pkgs] <- FALSE
 }
 
 set.seed(333)
@@ -39,51 +40,45 @@ set.seed(333)
 
 This vignette will introduce the concept of **marginal means**.
 
-# Raw Means
+## Raw Means
 
 The [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset,
-available in base `R`, contains observations of 3 types of *iris* flowers (the
+available in base `R`, contains observations of three types of *iris* flowers (the
 `Species` variable); *Setosa*, *Versicolor* and *Virginica*, for which different
 features were measured, such as the length and width of the sepals and petals.
 
 A traditional starting point, when reporting such data, is to start by
-descriptive statistics. For instance, **what is the mean `Sepal.Width` for each
-of the 3 species**.
+descriptive statistics. For instance, **what is the mean `Sepal.Width` for each of the three species**.
 
 We can compute the means very easily by grouping the observations by species,
-and then computing the mean and the SD:
+and then computing the mean and the standard deviation (SD):
 
-```{r}
-library(poorman)
+```{r eval=successfully_loaded["easystats"]}
+library(easystats)
 
-iris %>%
-  group_by(Species) %>%
-  summarise(
-    Mean_Sepal.Width = mean(Sepal.Width),
-    SD_Sepal.Width = sd(Sepal.Width)
-  )
+iris |>
+  data_group("Species") |>
+  describe_distribution(select = "Sepal.Width")
 ```
 
-We can also provide a plot:
+We can also visualize it with a plot:
 
-```{r}
+```{r eval=successfully_loaded["ggplot2"]}
 library(ggplot2)
-library(see)
-
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
-  geom_jitter2(width = 0.05) +
+  geom_jitter(width = 0.05) +
   theme_modern()
 ```
 
 However, these **raw means** might be biased, as the number of observations in
 each group might be different. Moreover, there might be some hidden covariance or
 mediation with other variables in the dataset, creating a "spurious" influence
-on the means.
+(confounding) on the means.
 
 **How can we take these influences into account while calculating means?**
 
-# Marginal Means
+## Marginal Means
 
 Another way of analysing the means is to actually **statistically model them**,
 rather than simply describe them as they appear in the data. For instance, we
@@ -95,11 +90,10 @@ represent average of response variable (here, `Sepal.Width`) for each level of
 predictor variable (here, `Species`).
 
 
-```{r}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects")])}
 library(modelbased)
-
 model <- lm(Sepal.Width ~ Species, data = iris)
-means <- estimate_means(model)
+means <- estimate_means(model, by = "Species")
 means
 ```
 
@@ -112,69 +106,61 @@ We can now add these means, as well as the [**credible interval (CI)**](https://
 representing the uncertainty of the estimation, as an overlay on the previous
 plot:
 
-```{r}
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
+p <- ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
-  geom_jitter2(width = 0.05, alpha = 0.5) +
-  geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1) +
+  geom_jitter(width = 0.05) +
+  geom_line(data = means, aes(y = Mean, group = 1)) +
   geom_pointrange(
     data = means,
     aes(y = Mean, ymin = CI_low, ymax = CI_high),
     size = 1,
     color = "white"
   ) +
-  theme_modern()
+  theme_minimal()
+p
 ```
 
-# Complex Models
+
+Note that *modelbased* provides some automated plotting capabilities for quick visual checks:
+
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
+plot(means)
+```
+
+
+## Complex Models
 
 The power of marginal means resides in the fact that they can be estimated from
 much more complex models. For instance, we could fit a model that takes into
 account the interaction with the other variable, `Petal.Width`. The estimated means will be "adjusted" (or will take into
 account) for variations of these other components.
 
-```{r}
-model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-means_complex <- estimate_means(model)
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects")])}
+model <- lm(Sepal.Width ~ Species + Petal.Width, data = iris)
+means_complex <- estimate_means(model, by = "Species")
 
 means_complex
 ```
 
-Now let's plot the marginal means from the simple linear model (shown in white
-dots) we saw above and the marginal means from the more complex model (shown in
-yellow dots) next to each other, which should help us notice how the adjusted
-means change depending on the predictors.
+Now let's add to our previous plot the marginal means from the more complex model (shown in purple) next to each other, which should help us notice how the adjusted means change depending on the predictors.
 
-<!-- The following figure is really difficult to make sense of -->
-<!-- We need to think of a simpler way to visualize these -->
-
-```{r}
-ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
-  geom_violin() +
-  geom_jitter2(width = 0.05, alpha = 0.5) +
-  geom_line(data = means, aes(y = Mean, group = 1), linewidth = 1, alpha = 0.25) +
-  geom_pointrange(
-    data = means,
-    aes(y = Mean, ymin = CI_low, ymax = CI_high),
-    size = 1,
-    color = "white"
-  ) +
-  geom_line(data = means_complex, aes(y = Mean, group = 1), linewidth = 1) +
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
+p +
+  geom_line(data = means_complex, aes(y = Mean, group = 1), color = "purple") +
   geom_pointrange(
     data = means_complex,
     aes(y = Mean, ymin = CI_low, ymax = CI_high),
     size = 1,
-    color = "orange"
-  ) +
-  theme_modern()
+    color = "purple"
+  )
 ```
 
-That's interesting! It seems that after adjusting the model for petal
-characteristics, the differences between `Species` seems to be even bigger!
+That's interesting! It seems that after adjusting ("controlling for") the model for petal
+characteristics, the differences between `Species` seem to be magnified!
 
 **But are these differences "significant"?**
 
-That's where the contrast analysis comes into play! Click [here to read the tutorial on **contrast
-analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html).
+That's where the contrast analysis comes into play! Click [here to read the tutorial on **contrast analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html).
 
-# References
+## References

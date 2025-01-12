@@ -1,14 +1,36 @@
-#' Model-based response estimates and uncertainty
+#' Model-based predictions
 #'
 #' @description
 #' After fitting a model, it is useful generate model-based estimates of the
 #' response variables for different combinations of predictor values. Such
-#' estimates can be used to make inferences about relationships between
-#' variables and to make predictions about individual cases.
+#' estimates can be used to make inferences about **relationships** between
+#' variables, to make predictions about individual cases, or to compare the
+#' **predicted** values against the observed data.
 #'
-#' Model-based response estimates and uncertainty can be generated for both the
-#' conditional average response values (the regression line or expectation) and
-#' for predictions about individual cases. See below for details.
+#' The `modelbased` package includes 4 "related" functions, that mostly differ in
+#' their default arguments (in particular, `data` and `predict`):
+#'
+#' - `estimate_prediction(data = NULL, predict = "prediction", ...)`
+#' - `estimate_expectation(data = NULL, predict = "expectation", ...)`
+#' - `estimate_relation(data = "grid", predict = "expectation", ...)`
+#' - `estimate_link(data = "grid", predict = "link", ...)`
+#'
+#' While they are all based on model-based predictions (using [insight::get_predicted()]),
+#' they differ in terms of the **type** of predictions they make by default. For
+#' instance, `estimate_prediction`/`estimate_expectation` return predictions for
+#' the original data used to fit the model, while `estimate_relation`/`estimate_link`
+#' return predictions on a [insight::get_datagrid()]. Similarly, `estimate_link`
+#' returns predictions on the link scale, while the others return predictions on
+#' the response scale. Note that the relevance of these differences depends on the
+#' model family (for instance, for linear models, `estimate_relation` is equivalent
+#' to `estimate_link`, since there is no difference between the link-scale and the
+#' response scale).
+#'
+#' Note that you can run [`plot()`][visualisation_recipe.estimate_predicted] on
+#' the output of these functions to get some visual insights (see the
+#' [plotting examples][visualisation_recipe.estimate_predicted]).
+#'
+#' See the **details** section below for details about the different possibilities.
 #'
 #' @section Expected (average) values:
 #'
@@ -410,6 +432,8 @@ estimate_relation <- function(model,
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "model") <- model
+  attr(out, "focal_terms") <- grid_specs$at_specs$varname
+  attr(out, "preserve_range") <- grid_specs$preserve_range
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
   attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])

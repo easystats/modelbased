@@ -16,7 +16,7 @@
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
-    aes$y <- "Coefficient"
+    aes$y <- "Slope"
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
     aes$y <- "Coefficient"
@@ -31,7 +31,11 @@
   }
 
   # Find predictors
-  by <- att$by
+  by <- att$focal_terms
+  # 2nd try
+  if (is.null(by)) {
+    by <- att$by
+  }
   if (length(by) == 0) {
     insight::format_error("No `by` variable was detected, so nothing to put in the x-axis.")
   } else if (length(by) > 0) {
@@ -115,7 +119,6 @@
           ymin = aes$ymin[i],
           ymax = aes$ymax[i],
           fill = aes$color,
-          color = NULL,
           group = aes$group
         ),
         alpha = 1 / 3
@@ -138,7 +141,7 @@
         alpha = aes$alpha
       )
     )
-    if (!is.null(aes$color) & aes$type == "pointrange") {
+    if (!is.null(aes$color) && aes$type == "pointrange") {
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }

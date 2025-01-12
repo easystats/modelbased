@@ -1,5 +1,5 @@
 ---
-title: "Estimate marginal effects and derivatives"
+title: "Estimate marginal effects"
 output:
   rmarkdown::html_vignette:
     toc: true
@@ -7,7 +7,7 @@ output:
     fig_height: 6
 tags: [r, estimate, estimate slopes, marginal effects]
 vignette: >
-  %\VignetteIndexEntry{Estimate marginal effects and derivatives}
+  %\VignetteIndexEntry{Estimate marginal effects}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options:
@@ -43,18 +43,20 @@ This vignette will present how to estimate marginal effects and derivatives usin
 
 Let's see some examples.
 
-# Marginal effects over a factor's levels
+## Marginal effects over a factor's levels
 
 Let's fit a linear model with a factor interacting with a continuous predictor and visualize it.
 
 ```{r}
+library(ggplot2)
 library(parameters)
 library(performance)
 library(modelbased)
 
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
 
-plot(estimate_relation(model))
+estimate_relation(model) |>
+  plot()
 ```
 
 It seems like the slope of the effect is roughly similar (in the same direction) across the different factor levels.
@@ -81,18 +83,19 @@ slopes
 
 We can see that the effect of `Petal.Length`, **marginalized over Species**, is positive and significant.
 
-# Effects for each factor's levels
+## Effects for each factor's levels
 
 
 ```{r}
 slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 
 slopes
+
 plot(slopes)
 ```
 
 
-# Interactions between two continuous variables
+## Interactions between two continuous variables
 
 Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.
 
@@ -101,16 +104,16 @@ Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effec
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
 ```{r}
-library(modelbased)
-
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
 slopes <- estimate_slopes(model, trend = "hp", by = "wt")
 
-plot(slopes)
+plot(slopes) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  theme_minimal()
 ```
 
-# Describing and reporting non-linear relationships (e.g., in GAMs)
+## Describing and reporting non-linear relationships (e.g., in GAMs)
 
 **Complex problems require modern solutions.**
 
@@ -122,7 +125,8 @@ Let's take for instance the following model:
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
-plot(estimate_relation(model, length = 50))
+estimate_relation(model, length = 50) |>
+  plot()
 ```
 
 The GAMs nicely models the complex relationship between the two variables (if we don't take into account the different species of course).
@@ -138,9 +142,8 @@ The problem with GAMs is that their parameters (i.e., the coefficients), are not
 
 Because the meaning of these parameters is somewhat disconnected with our need for relationship understanding, another possibility is to compute the **marginal linear effect** of the smooth term, i.e., the "derivative", using `estimate_slopes`.
 
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
 
-```{r, eval=FALSE}
+```{r}
 # Compute derivative
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
@@ -149,7 +152,9 @@ deriv <- estimate_slopes(model,
 )
 
 # Visualise
-plot(deriv)
+plot(deriv) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
+  theme_minimal()
 ```
 
 This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). **Marginal derivatives** allow us to make inferences at each point of point of the relationship!
@@ -164,4 +169,4 @@ summary(deriv)
 We can conclude that Petal.Length shares significantly negative relationship with the outcome variable between 2.01 and 3.15 (*average marginal effect* = -0.76, 95\% CI [-1.14, -0.37], p < .01) and significantly positive between 3.74 and 4.28 (*average marginal effect* = 0.54, 95\% CI [0.14,  0.93], p < .05).
 
 
-# References
+## References

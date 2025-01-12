@@ -138,7 +138,7 @@ estimate_means <- function(model,
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(
     attributes(means),
-    info[c("at", "by", "datagrid", "predict", "focal_terms")]
+    info[c("at", "by", "datagrid", "predict", "focal_terms", "preserve_range")]
   )
 
   # Output

@@ -1,4 +1,4 @@
-skip_on_os(c("mac", "solaris"))
+skip_on_os(c("mac", "solaris", "linux"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
@@ -210,8 +210,8 @@ test_that("plots, relation, multiple CI", {
 
 test_that("plots, estimate_means works with Poisson", {
   set.seed(123)
-  dat <- data.frame(y =  rpois(100, 3), fa =  gl(4, 20, 100))
-  dat_glm <- glm(y ~ fa, data =  dat, family = poisson(link =  "log"))
+  dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
+  dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   set.seed(123)
   vdiffr::expect_doppelganger(
@@ -286,5 +286,55 @@ test_that("plots, numeric or categorical predictors are detected", {
   vdiffr::expect_doppelganger(
     "plot-cat-num-predictor-4",
     plot(pr, show_data = FALSE)
+  )
+})
+
+
+test_that("plots, at special values", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
+  pr <- estimate_expectation(
+    model,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  )
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-expectation-fivenum",
+    plot(pr, show_data = FALSE)
+  )
+})
+
+test_that("plots, estimate_slope", {
+  data(iris)
+
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species", backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-1",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "emmeans")
+  vdiffr::expect_doppelganger(
+    "plot-slopes-2",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-3",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-slopes-4",
+    plot(slopes)
   )
 })

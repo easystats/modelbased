@@ -303,13 +303,13 @@ test_that("estimate_contrasts - works with slopes", {
 
   out1 <- estimate_slopes(fit, trend = "Petal.Length", backend = "marginaleffects")
   out2 <- suppressMessages(as.data.frame(emmeans::emtrends(fit, specs = ~Petal.Length, var = "Petal.Length")))
-  expect_equal(out1$Coefficient, out2$Petal.Length.trend, tolerance = 1e-3)
+  expect_equal(out1$Slope, out2$Petal.Length.trend, tolerance = 1e-3)
 
   out3 <- estimate_slopes(fit, trend = "Petal.Length", by = "Species", backend = "marginaleffects")
   out4 <- estimate_contrasts(fit, contrast = "Petal.Length", by = "Species", backend = "marginaleffects")
   out5 <- emmeans::emtrends(fit, specs = pairwise ~ Species, var = "Petal.Length")
-  expect_equal(out3$Coefficient, as.data.frame(out5$emtrends)$Petal.Length.trend, tolerance = 1e-3)
-  expect_equal(out4$Coefficient, as.data.frame(out5$contrasts)$estimate, tolerance = 1e-3)
+  expect_equal(out3$Slope, as.data.frame(out5$emtrends)$Petal.Length.trend, tolerance = 1e-3)
+  expect_equal(out4$Difference, as.data.frame(out5$contrasts)$estimate, tolerance = 1e-3)
 })
 
 

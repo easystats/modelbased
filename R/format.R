@@ -9,6 +9,12 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
     x[adjusted_for] <- NULL
   }
 
+  # arrange columns (not for contrast now)
+  by <- rev(attr(x, "focal_terms", exact = TRUE))
+  if (!is.null(by) && all(by %in% colnames(x))) {
+    x <- datawizard::data_arrange(x, select = by)
+  }
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(x, ci_brackets = c("(", ")"), ...)
   } else {
@@ -43,6 +49,7 @@ format.estimate_smooth <- function(x, ...) {
 format.visualisation_matrix <- function(x, ...) {
   x
 }
+
 
 #' @export
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
@@ -88,7 +95,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   info <- insight::model_info(model, verbose = FALSE)
   model_data <- insight::get_data(model)
   # define all columns that should be removed
-  remove_columns <- c("s.value", "S", "CI", "rowid_dedup")
+  remove_columns <- c("Parameter", "Predicted", "s.value", "S", "CI", "rowid_dedup")
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,
@@ -96,7 +103,8 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     model,
     model_data,
     info,
-    ci
+    ci,
+    estimate_name = "Slope"
   )
 
   .set_back_attributes(x, params)
@@ -114,6 +122,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"
   )
+
+  # Column name for coefficient - fix needed for contrasting slopes
+  colnames(x)[colnames(x) == "Slope"] <- "Difference"
 
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
@@ -173,7 +184,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # tidy output
   params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
   coefficient_name <- intersect(
-    c(attributes(params)$coefficient_name, "Coefficient", "Predicted"),
+    c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
     colnames(params)
   )[1]
 
@@ -182,7 +193,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # relocate columns
   relocate_columns <- intersect(
-    c(coefficient_name, "Coefficient", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
+    c(coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
     colnames(params)
   )
   params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint

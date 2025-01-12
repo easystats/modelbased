@@ -4,7 +4,7 @@
 \alias{visualisation_recipe.estimate_predicted}
 \alias{visualisation_recipe.estimate_slopes}
 \alias{visualisation_recipe.estimate_grouplevel}
-\title{Visualisation Recipe for 'modelbased' Objects}
+\title{Automated plotting for 'modelbased' objects}
 \usage{
 \method{visualisation_recipe}{estimate_predicted}(
   x,
@@ -47,7 +47,20 @@ aesthetics and parameters for the geoms (see customization example).}
 \item{...}{Not used.}
 }
 \description{
-Visualisation Recipe for 'modelbased' Objects
+Most 'modelbased' objects can be visualized using the \code{plot()} function, which
+internally calls the \code{visualisation_recipe()} function. See the \strong{examples}
+below for more information and examples on how to create and customize plots.
+}
+\details{
+The plotting works by mapping any predictors from the \code{by} argument to the x-axis,
+colors, alpha (transparency) and facets. Thus, the appearance of the plot depends
+on the order of the variables that you specify in the \code{by} argument. For instance,
+the plots corresponding to \code{estimate_relation(model, by=c("Species", "Sepal.Length"))}
+and \code{estimate_relation(model, by=c("Sepal.Length", "Species"))} will look different.
+
+The automated plotting is primarily meant for convenient visual checks, but
+for publication-ready figures, we recommend re-creating the figures using the
+\code{ggplot2} package directly.
 }
 \examples{
 \dontshow{if (require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -151,11 +164,11 @@ plot(layers) +
   labs(y = "Effect of Petal.Length", title = "Marginal Effects")
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
-x <- estimate_slopes(model, trend="Sepal.Width", by = "Sepal.Width", length = 20)
+x <- estimate_slopes(model, trend = "Sepal.Width", by = "Sepal.Width", length = 20)
 plot(visualisation_recipe(x))
 
 model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
-x <- estimate_slopes(model, trend="Sepal.Width", by = c("Sepal.Width", "Species"))
+x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("see") && require("lme4") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -176,7 +189,10 @@ plot(layers)
 # 2 random intercepts
 model <- lme4::lmer(Reaction ~ Days + (1 | Subject) + (1 | Newfactor), data = data)
 x <- estimate_grouplevel(model)
-plot(x)
+plot(x) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  theme_minimal()
+# Note: we need to use hline instead of vline because the axes is flipped
 
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 x <- estimate_grouplevel(model)

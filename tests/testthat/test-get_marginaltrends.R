@@ -7,7 +7,7 @@ test_that("get_marginaltrends", {
   expect_identical(nrow(out), 3L)
 
   out2 <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
-  expect_equal(out$estimate, out2$Coefficient, tolerance = 1e-3)
+  expect_equal(out$estimate, out2$Slope, tolerance = 1e-3)
 })
 
 
