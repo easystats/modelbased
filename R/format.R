@@ -13,7 +13,7 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
 
   # arrange columns (not for contrast now)
   if (!inherits(x, "estimate_contrasts")) {
-    by <- rev(attr(x, "by", exact = TRUE))
+    by <- rev(attr(x, "focal_terms", exact = TRUE))
     x <- datawizard::data_arrange(x, select = by)
   }
 
