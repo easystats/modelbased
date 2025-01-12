@@ -82,7 +82,7 @@ test_that("estimate_slope - glmmTMB", {
     by = "mined", regrid = "response"
   ))
   estim2 <- as.data.frame(emmeans::emtrends(model2, "mined", var = "cover", regrid = "response"))
-  expect_equal(estim$Coefficient, estim2$cover.trend, tolerance = 1e-2)
+  expect_equal(estim$Slope, estim2$cover.trend, tolerance = 1e-2)
 })
 
 
