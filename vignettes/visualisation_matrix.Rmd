@@ -335,7 +335,7 @@ vizdata$Petal.Width <- effectsize::format_standardize(vizdata$Petal.Width, refer
 # 6. Plot
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   geom_point2(aes(fill = Petal.Width), shape = 21, size = 5) +
-  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted, color = Petal.Width), linewidth = 1) +
   scale_color_viridis_d(direction = -1) +
   scale_fill_viridis_c(guide = "none") +
   theme_minimal()
