@@ -208,8 +208,10 @@ The slower they are in the accuracy condition, the bigger the difference with th
 
 ### Reliability
 
+<!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
+
 Extracting random effects is also useful to compute the ***reliability*** of a given paradigm.
-The key idea is to compare the inter-individual variability in the random effects to their intra-individual variability in the data. 
+The key idea is to compare the inter-individual variability in the random effects to their intra-individual variability in the data (Williams et al., 2020). 
 
 For that, we first need to compute the variability (SD) of the point-estimates across participants.
 
