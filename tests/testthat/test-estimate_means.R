@@ -236,6 +236,25 @@ test_that("estimate_means() - lm", {
 })
 
 
+test_that("estimate_means() - at specific values", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
+  estim1 <- estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE, backend = "emmeans")
+  estim2 <- estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE, backend = "marginaleffects")
+  expect_equal(estim1$Predicted, estim2$Predicted, tolerance = 1e-4)
+  expect_equal(
+    estim1$Petal.Width,
+    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3,  1.3, 1.8, 2.5),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    estim2$Petal.Width,
+    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3,  1.3, 1.8, 2.5),
+    tolerance = 1e-4
+  )
+})
+
+
 test_that("estimate_means() - glm", {
   data(iris)
   # GLM
