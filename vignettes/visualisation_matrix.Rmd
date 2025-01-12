@@ -208,7 +208,7 @@ vizdata$Predicted_Sepal.Width <- get_predicted(model, vizdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point() +
-  geom_line(data = vizdata, aes(y = Predicted_Sepal.Width), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted_Sepal.Width), linewidth = 1) +
   theme_minimal()
 ```
 
