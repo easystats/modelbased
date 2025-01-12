@@ -84,6 +84,7 @@ statistical modelisation.
 ```{r}
 library(easystats)
 library(emmeans)
+library(ggplot2)
 ```
 
 ### Data Simulation
@@ -169,7 +170,7 @@ parameters(posthoc)
 data_anova |>
   ggplot(aes(x = Category, y = RT, fill = Condition)) +
   geom_boxplot() +
-  theme_minimal()()
+  theme_minimal()
 ```
 
 
