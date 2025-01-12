@@ -7,7 +7,7 @@ skip_if_not_installed("marginaleffects")
 skip_if_not_installed("ggeffects")
 skip_on_cran()
 
-test_that("plots emmeans", {
+test_that("plots facets", {
   data(efc, package = "ggeffects")
 
   # make categorical
@@ -82,6 +82,29 @@ test_that("plots emmeans", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-interaction-facets-10",
+    plot(pr, show_data = FALSE)
+  )
+})
+
+
+test_that("plots facets", {
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-1",
+    plot(pr, show_data = FALSE)
+  )
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-2",
     plot(pr, show_data = FALSE)
   )
 })
