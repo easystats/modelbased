@@ -248,6 +248,7 @@
     height = 0,
     shape = shape,
     stroke = stroke,
+    # set default alpha, it not mapped by aes
     alpha = ifelse(is.null(aes$alpha), 1 / 3, NULL)
   )
 }
