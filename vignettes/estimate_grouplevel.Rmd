@@ -53,7 +53,8 @@ library(rtdists)
 
 # Remove outliers &  Keep only word condition
 data <- rtdists::speed_acc |>
-  data_filter(rt < 1.5 & stim_cat == "word" & frequency == "low")
+  data_filter(rt < 1.5 & stim_cat == "word" & frequency == "low") |>
+  data_rename(select = c(reaction_time = "rt"))
 
 # Add new 'error' column that is 1 if the response doesn't match the category
 data <- data_modify(
@@ -74,7 +75,7 @@ For the reaction time, we will start by removing all the incorrect responses, si
 library(ggplot2)
 data_rt <- data_filter(data, error == 0)
 
-ggplot(data = data_rt, aes(y = rt, x = condition, fill = condition)) +
+ggplot(data = data_rt, aes(y = reaction_time, x = condition, fill = condition)) +
   geom_violin()
 ```
 
@@ -85,12 +86,12 @@ Let's verify that using the [**modelisation approach**](https://easystats.github
 ```{r}
 library(lme4)
 model_full <- lmer(
-  rt ~ condition + (1 + condition | id) + (1 | stim),
+  reaction_time ~ condition + (1 + condition | id) + (1 | stim),
   data = data_rt
 )
 ```
 
-Let's unpack the formula of this model. We're tying to predict `rt` using different terms. These can be separated into two groups, the *fixed* effects and the *random* effects. Having `condition` as a fixed effect means that we are interested in estimating the **"general"** effect of the condition, across all subjects and items (i.e., at the ***population level***). On top of that effect of condition, a second 'fixed' parameter was implicitly specified and will be estimated, the **intercept** (as you might know, one has to explicitly remove it through `rt ~ 0 + condition`, otherwise it is added automatically).
+Let's unpack the formula of this model. We're tying to predict `reaction_time` using different terms. These can be separated into two groups, the *fixed* effects and the *random* effects. Having `condition` as a fixed effect means that we are interested in estimating the **"general"** effect of the condition, across all subjects and items (i.e., at the ***population level***). On top of that effect of condition, a second 'fixed' parameter was implicitly specified and will be estimated, the **intercept** (as you might know, one has to explicitly remove it through `reaction_time ~ 0 + condition`, otherwise it is added automatically).
 
 Let's investigate these two fixed parameters first:
 
@@ -98,9 +99,9 @@ Let's investigate these two fixed parameters first:
 parameters(model_full, effects = "fixed")
 ```
 
-Because `condition` is a factor with two levels, these parameters are easily interpretable. The *intercept* corresponds to the `rt` at the baseline level of the factor (accuracy), and the effect of condition corresponds to the change in `rt` between the intercept and the speed condition. In other words, the effect of `condition` refers to the difference between the two conditions, `speed - accuracy`.
+Because `condition` is a factor with two levels, these parameters are easily interpretable. The *intercept* corresponds to the `reaction_time` at the baseline level of the factor (accuracy), and the effect of condition corresponds to the change in `reaction_time` between the intercept and the speed condition. In other words, the effect of `condition` refers to the difference between the two conditions, `speed - accuracy`.
 
-As we can see, this difference is significant, and people have, **in general**, a lower `rt` (the sign is negative) in the speed condition.
+As we can see, this difference is significant, and people have, **in general**, a lower `reaction_time` (the sign is negative) in the speed condition.
 
 Let's visualize the [marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html) estimated by the model:
 
@@ -111,12 +112,12 @@ plot(means, point = list(alpha = 0.1, width = 0.1)) +
   theme_minimal()
 ```
 
-Now, what's up with the **random effects**. In the formula, we specified random intercepts (i.e., the right part of the bar `|` symbol) for `id` (the participants) and `stim`. That means that **each participant and each stimulus will have its own "Intercept" parameter** (which, as we've seen before, corresponds to the `rt` in the accuracy condition). Additionally, we've specified the random effect ("random slope" - the left side of the bar) of `condition` for each participant. That means that **each participant will have its own effect of condition** computed.
+Now, what's up with the **random effects**. In the formula, we specified random intercepts (i.e., the right part of the bar `|` symbol) for `id` (the participants) and `stim`. That means that **each participant and each stimulus will have its own "Intercept" parameter** (which, as we've seen before, corresponds to the `reaction_time` in the accuracy condition). Additionally, we've specified the random effect ("random slope" - the left side of the bar) of `condition` for each participant. That means that **each participant will have its own effect of condition** computed.
 
 But do we need such a complex model? Let's compare it to a model without specifying random intercepts for the stimuli.
 
 ```{r}
-model <- lmer(rt ~ condition + (condition | id), data = data_rt)
+model <- lmer(reaction_time ~ condition + (condition | id), data = data_rt)
 
 test_performance(model_full, model)
 ```
@@ -170,11 +171,11 @@ Nevertheless, let's compute some **empirical scores**, such as the condition ave
 We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
 
 ```{r}
-data_sub <- aggregate(rt ~ id + condition, data_rt, mean)
+data_sub <- aggregate(reaction_time ~ id + condition, data_rt, mean)
 data_sub <- data_rt |>
-  data_summary(rt = mean(rt), by = c("id", "condition")) |>
+  data_summary(reaction_time = mean(reaction_time), by = c("id", "condition")) |>
   reshape_wider(
-    names_from = "condition", values_from = "rt", names_prefix = "empirical_"
+    names_from = "condition", values_from = "reaction_time", names_prefix = "empirical_"
   ) |>
   data_modify(empirical_speed = empirical_accuracy - empirical_speed)
 data_sub
