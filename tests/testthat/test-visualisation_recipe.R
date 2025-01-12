@@ -117,7 +117,7 @@ test_that("visualization_recipe", {
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Species")
   expect_identical(aes$color, "Sepal.Width")
-  expect_identical(aes$alpha, "fac")
+  expect_identical(deparse(aes$facet), "~fac")
 
   x <- lm(Sepal.Length ~ Petal.Width * Species * Sepal.Width, data = iris) |>
     estimate_relation(by = c("Petal.Width", "Species", "Sepal.Width"))
@@ -134,8 +134,8 @@ test_that("visualization_recipe", {
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Species")
   expect_identical(aes$color, "Sepal.Width")
-  expect_identical(aes$alpha, "fac")
-  expect_true("fac2" %in% as.character(aes$facet))
+  expect_identical(deparse(aes$grid), "fac ~ fac2")
+  expect_null(aes$facet)
 
   # Estimate slopes --------------------------------
   x <- estimate_slopes(model, trend = "Sepal.Width")
