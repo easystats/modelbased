@@ -48,6 +48,7 @@ Let's see some examples.
 Let's fit a linear model with a factor interacting with a continuous predictor and visualize it.
 
 ```{r}
+library(ggplot2)
 library(parameters)
 library(performance)
 library(modelbased)

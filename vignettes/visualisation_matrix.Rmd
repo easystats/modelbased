@@ -141,7 +141,7 @@ vizdata$Predicted <- get_predicted(model, vizdata)
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width)) +
   geom_point(aes(color = Species)) +
-  geom_line(data = vizdata, aes(y = Predicted), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted), linewidth = 1) +
   theme_minimal()
 ```
 
