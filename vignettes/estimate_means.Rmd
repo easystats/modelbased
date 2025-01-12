@@ -43,15 +43,15 @@ This vignette will introduce the concept of **marginal means**.
 ## Raw Means
 
 The [`iris`](https://en.wikipedia.org/wiki/Iris_flower_data_set) dataset,
-available in base `R`, contains observations of 3 types of *iris* flowers (the
+available in base `R`, contains observations of three types of *iris* flowers (the
 `Species` variable); *Setosa*, *Versicolor* and *Virginica*, for which different
 features were measured, such as the length and width of the sepals and petals.
 
 A traditional starting point, when reporting such data, is to start by
-descriptive statistics. For instance, **what is the mean `Sepal.Width` for each of the 3 species**.
+descriptive statistics. For instance, **what is the mean `Sepal.Width` for each of the three species**.
 
 We can compute the means very easily by grouping the observations by species,
-and then computing the mean and the SD:
+and then computing the mean and the standard deviation (SD):
 
 ```{r eval=successfully_loaded["easystats"]}
 library(easystats)
@@ -73,7 +73,7 @@ ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
 However, these **raw means** might be biased, as the number of observations in
 each group might be different. Moreover, there might be some hidden covariance or
 mediation with other variables in the dataset, creating a "spurious" influence
-on the means.
+(counfounding) on the means.
 
 **How can we take these influences into account while calculating means?**
 
