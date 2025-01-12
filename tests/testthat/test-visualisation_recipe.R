@@ -3,8 +3,8 @@ test_that("visualization_recipe", {
   skip_if_not_installed("marginaleffects")
 
   data <- iris
-  data$fac <- rep(c("A", "B"), length.out = 150)
-  data$fac2 <- rep(c("X", "X", "X", "Y", "Y", "Y"), length.out = 150)
+  data$fac <- rep_len(c("A", "B"), 150)
+  data$fac2 <- rep_len(c("X", "X", "X", "Y", "Y", "Y"), 150)
   model <- lm(Sepal.Length ~ Species * fac * Sepal.Width * fac2, data = data)
 
   # Estimate means -------------------------------------
@@ -75,14 +75,14 @@ test_that("visualization_recipe", {
 
 
   # Estimate predictions ---------------------------
-  x <- estimate_relation(model, by = c("Sepal.Width"))
+  x <- estimate_relation(model, by = "Sepal.Width")
   # plot(modelbased:::.visualization_recipe(x))
   aes <- modelbased:::.find_aes(x)$aes
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Sepal.Width")
   expect_null(aes$color)
 
-  x <- estimate_relation(model, by = c("Species"))
+  x <- estimate_relation(model, by = "Species")
   # plot(modelbased:::.visualization_recipe(x))
   aes <- modelbased:::.find_aes(x)$aes
   expect_identical(aes$y, "Predicted")
