@@ -82,7 +82,6 @@ statistical modelisation.
 ## The Empirical Approach (Classic)
 
 ```{r}
-library(tidyverse)
 library(easystats)
 library(emmeans)
 ```
@@ -191,7 +190,7 @@ data |>
   ggplot(aes(x = Experimental_Variable, y = RT, color = Condition)) +
   geom_jitter(alpha = 0.4) +
   geom_smooth(method = "loess", se = FALSE) +
-  theme_minimal()()
+  theme_minimal()
 ```
 
 
@@ -207,5 +206,3 @@ data |>
 ### 5. Investigate its Parameters
 
 ## References
-
-
