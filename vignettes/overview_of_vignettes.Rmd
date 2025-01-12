@@ -39,4 +39,3 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [How to use Mixed models to Estimate Individuals' Scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
-* [Transformations](https://easystats.github.io/modelbased/articles/transformations.html)
