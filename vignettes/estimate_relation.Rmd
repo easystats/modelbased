@@ -60,7 +60,7 @@ plot(visualization_data, line = list(color = "red")) +
 ### Polynomial
 
 ```{r}
-lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris)  |>
+lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris) |>
   modelbased::estimate_relation(length = 50) |>
   plot()
 ```

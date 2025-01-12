@@ -71,7 +71,7 @@ test_that("estimate_means() - lm", {
   expect_identical(dim(estim1), c(10L, 5L))
   expect_identical(dim(estim2), c(10L, 7L))
   # Note that the absolute values are different here... for unclear reasons
-  expect_true(max(diff(estim1$Mean) - diff(estim2$Mean)) < 1e-10)
+  expect_lt(max(diff(estim1$Mean) - diff(estim2$Mean)), 1e-10)
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
 
   model <- lm(Petal.Length ~ Sepal.Width + Species, data = iris)
@@ -245,12 +245,12 @@ test_that("estimate_means() - at specific values", {
   expect_equal(estim1$Predicted, estim2$Predicted, tolerance = 1e-4)
   expect_equal(
     estim1$Petal.Width,
-    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3,  1.3, 1.8, 2.5),
+    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5),
     tolerance = 1e-4
   )
   expect_equal(
     estim2$Petal.Width,
-    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3,  1.3, 1.8, 2.5),
+    c(0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5, 0.1, 0.3, 1.3, 1.8, 2.5),
     tolerance = 1e-4
   )
 })

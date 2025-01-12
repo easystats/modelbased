@@ -53,7 +53,7 @@ library(rtdists)
 library(lme4)
 
 # Remove outliers &  Keep only word condition
-data <- rtdists::speed_acc |> 
+data <- rtdists::speed_acc |>
   data_filter(rt < 1.5 & stim_cat == "word" & frequency == "low")
 
 # Add new 'error' column that is 1 if the response doesn't match the category
@@ -166,9 +166,9 @@ Nevertheless, let's compute some **empirical scores**, such as the condition ave
 We will group the data by participant and condition, get the mean RT, and then reshape the data so that we have, for each participant, the two means as two columns. Then, we will create a new dataframe (we will use the same - and overwrite it - to keep it concise), in which we will only keep the mean RT in the **accuracy** condition, and the difference with the **speed** condition *(reminds you of something?)*.
 
 ```{r}
-data_sub <- data_rt |> 
-  summarize(rt = mean(rt), .by = c("id", "condition")) |> 
-  pivot_wider(names_from = "condition", values_from = "rt", names_prefix = "empirical_") |> 
+data_sub <- data_rt |>
+  summarize(rt = mean(rt), .by = c("id", "condition")) |>
+  pivot_wider(names_from = "condition", values_from = "rt", names_prefix = "empirical_") |>
   mutate(empirical_speed = empirical_accuracy - empirical_speed)
 data_sub
 ```
@@ -185,9 +185,9 @@ data_sub
 Let's run a correlation between the model-based scores and the empirical scores.
 
 ```{r}
-correlation::correlation(data_sub) |> 
-  summary(redundant = TRUE) |> 
-  correlation::cor_sort() |> 
+correlation::correlation(data_sub) |>
+  summary(redundant = TRUE) |>
+  correlation::cor_sort() |>
   plot()
 ```
 
@@ -216,16 +216,16 @@ The key idea is to compare the inter-individual variability in the random effect
 For that, we first need to compute the variability (SD) of the point-estimates across participants.
 
 ```{r}
-reliability <- random |> 
-  summarize(sd_between = sd(Coefficient), .by = "Parameter") 
+reliability <- random |>
+  summarize(sd_between = sd(Coefficient), .by = "Parameter")
 reliability
 ```
 
 Then, we compute the average variability (SE) of the random effects within participants, and add it to the previous table.
 
 ```{r}
-reliability <- random |> 
-  summarize(sd_within = mean(SE), .by = "Parameter") |> 
+reliability <- random |>
+  summarize(sd_within = mean(SE), .by = "Parameter") |>
   datawizard::data_join(reliability)
 reliability
 ```
@@ -234,7 +234,7 @@ The reliability is then the ratio of the between-participants variability to the
 The more any estimate varies in-between participants compared to within participants, the more reliable it is.
 
 ```{r}
-reliability |> 
+reliability |>
   mutate(reliability = sd_between / sd_within)
 ```
 

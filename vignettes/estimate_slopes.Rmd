@@ -54,7 +54,7 @@ library(modelbased)
 
 model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
 
-estimate_relation(model) |> 
+estimate_relation(model) |>
   plot()
 ```
 
@@ -124,7 +124,7 @@ Let's take for instance the following model:
 # Fit a non-linear General Additive Model (GAM)
 model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 
-estimate_relation(model, length = 50) |> 
+estimate_relation(model, length = 50) |>
   plot()
 ```
 

@@ -58,7 +58,7 @@ library(modelbased)
 model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
 
-plot(means, point = list(width=0.1)) +
+plot(means, point = list(width = 0.1)) +
   theme_minimal()
 ```
 
