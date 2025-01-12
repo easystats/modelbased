@@ -354,7 +354,7 @@ Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
-```{r}
+```{r eval=FALSE}
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
 slopes <- estimate_slopes(model, trend = "hp", by = "wt")
