@@ -1,4 +1,5 @@
 test_that("estimate_slopes - print summary", {
+  skip_if_not_installed("MASS")
   set.seed(333)
   # Generate data
   data <- bayestestR::simulate_correlation(r = 0.85, n = 1000, names = c("y", "x"), mean = c(100, 0), sd = c(15, 1))

@@ -64,6 +64,7 @@ iris |>
 We can also visualize it with a plot:
 
 ```{r eval=successfully_loaded["ggplot2"]}
+library(ggplot2)
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter(width = 0.05) +

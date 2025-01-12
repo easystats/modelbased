@@ -63,6 +63,7 @@ Suggests:
     lme4,
     lmerTest,
     logspline,
+    MASS,
     marginaleffects,
     mgcv,
     patchwork,
