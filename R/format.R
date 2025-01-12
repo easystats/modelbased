@@ -9,6 +9,14 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
     x[adjusted_for] <- NULL
   }
 
+  ## TODO: once `by` works in estimate_contrasts(), re-enable this
+
+  # arrange columns (not for contrast now)
+  if (!inherits(x, "estimate_contrasts")) {
+    by <- rev(attr(x, "by", exact = TRUE))
+    x <- datawizard::data_arrange(x, select = by)
+  }
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(x, ci_brackets = c("(", ")"), ...)
   } else {
