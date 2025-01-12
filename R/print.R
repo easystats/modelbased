@@ -5,7 +5,7 @@ print.estimate_contrasts <- function(x, ...) {
 
   # remove redundant labels, for "by" variables
   ## TODO: once `by` works in estimate_contrasts(), re-enable this
-  if (!inherits(x, "estimate_contrasts")) {
+  if (!inherits(x, "estimate_contrasts") && nrow(out) > 1) {
     by <- attributes(x)$by
     # for estimate_means, we don't want to remove labels for first focal term
     # only for grouping variable. in `estimate_slopes()`, the first variable
