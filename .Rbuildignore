@@ -7,6 +7,7 @@
 ^LICENSE
 ^data/.
 ^docs/.
+^paper/.
 ^vignettes/d.
 ^vignettes/e.
 ^vignettes/m.
