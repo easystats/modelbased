@@ -104,6 +104,11 @@
   layers <- list()
   l <- 1
 
+  # if range it preserved, no joined dots
+  if (isTRUE(attributes(x)$preserve_range)) {
+    join_dots <- FALSE
+  }
+
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
   if (!join_dots) {
