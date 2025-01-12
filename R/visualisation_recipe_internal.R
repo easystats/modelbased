@@ -247,6 +247,7 @@
     ),
     height = 0,
     shape = shape,
-    stroke = stroke
+    stroke = stroke,
+    alpha = ifelse(is.null(aes$alpha), 1 / 3, NULL)
   )
 }
