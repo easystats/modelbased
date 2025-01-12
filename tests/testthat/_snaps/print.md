@@ -34,7 +34,7 @@
 ---
 
     Code
-      deriv
+      deriv2
     Output
       Estimated Marginal Effects
       
@@ -55,7 +55,7 @@
 ---
 
     Code
-      summary(deriv)
+      summary(deriv2)
     Output
       Average Marginal Effects
       
@@ -79,7 +79,7 @@
 ---
 
     Code
-      print(slopes)
+      print(slopes2)
     Output
       Estimated Marginal Effects
       

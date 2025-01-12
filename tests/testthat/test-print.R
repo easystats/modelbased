@@ -12,9 +12,9 @@ test_that("estimate_slopes - print summary", {
   expect_snapshot(deriv)
   expect_snapshot(summary(deriv))
 
-  deriv <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects")
-  expect_snapshot(deriv)
-  expect_snapshot(summary(deriv))
+  deriv2 <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects")
+  expect_snapshot(deriv2)
+  expect_snapshot(summary(deriv2))
 })
 
 test_that("estimate_slopes - print regular", {
@@ -22,6 +22,6 @@ test_that("estimate_slopes - print regular", {
   model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
   slopes <- estimate_slopes(model, trend = "Petal.Length", backend = "emmeans")
   expect_snapshot(print(slopes))
-  slopes <- estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects")
-  expect_snapshot(print(slopes))
+  slopes2 <- estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects")
+  expect_snapshot(print(slopes2))
 })
