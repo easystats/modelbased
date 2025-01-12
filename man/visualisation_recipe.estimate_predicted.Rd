@@ -15,6 +15,7 @@
   ribbon = NULL,
   facet = NULL,
   grid = NULL,
+  join_dots = TRUE,
   ...
 )
 
@@ -46,6 +47,11 @@ estimation.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
+
+\item{join_dots}{Logical, if \code{TRUE} and for categorical focal terms in \code{by},
+dots (estimates) are connected by lines, i.e. plots will be a combination of
+dots with error bars and connecting lines. If \code{FALSE}, only dots and error
+bars are shown.}
 
 \item{...}{Not used.}
 }

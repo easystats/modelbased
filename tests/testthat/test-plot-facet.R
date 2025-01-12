@@ -107,4 +107,10 @@ test_that("plots facets", {
     "plot-interaction-facets-cat-2",
     plot(pr, show_data = FALSE)
   )
+  # no connecting lines
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-3",
+    plot(pr, show_data = FALSE, join_dots = FALSE)
+  )
 })

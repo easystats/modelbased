@@ -96,6 +96,7 @@
                                   ribbon = NULL,
                                   facet = NULL,
                                   grid = NULL,
+                                  join_dots = TRUE,
                                   ...) {
   aes <- .find_aes(x)
   data <- aes$data
@@ -103,6 +104,11 @@
   layers <- list()
   l <- 1
 
+  # check whether point-geoms should be connected by lines
+  do_not_join <- "grouplevel"
+  if (!join_dots) {
+    do_not_join <- c(do_not_join, "pointrange")
+  }
 
   # TODO: Don't plot raw data if `predict` is not on the response scale
   if (show_data) {
@@ -135,7 +141,7 @@
   }
 
   # Main ----------------------------------
-  if (aes$type != "grouplevel") {
+  if (!aes$type %in% do_not_join) {
     layers[[paste0("l", l)]] <- list(
       geom = "line",
       data = data,
