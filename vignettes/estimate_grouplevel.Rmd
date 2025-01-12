@@ -83,7 +83,7 @@ The descriptive visualisation indeed seems to suggest that people are slower in 
 Let's verify that using the [**modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html).
 
 ```{r}
-libray(lme4)
+library(lme4)
 model_full <- lmer(
   rt ~ condition + (1 + condition | id) + (1 | stim),
   data = data_rt
