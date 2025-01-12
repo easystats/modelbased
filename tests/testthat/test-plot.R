@@ -288,3 +288,19 @@ test_that("plots, numeric or categorical predictors are detected", {
     plot(pr, show_data = FALSE)
   )
 })
+
+
+test_that("plots, at special values", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
+  pr <- estimate_expectation(
+    model,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  )
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-expectation-fivenum",
+    plot(pr, show_data = FALSE)
+  )
+})

@@ -31,7 +31,11 @@
   }
 
   # Find predictors
-  by <- att$by
+  by <- att$focal_terms
+  # 2nd try
+  if (is.null(by)) {
+    by <- att$by
+  }
   if (length(by) == 0) {
     insight::format_error("No `by` variable was detected, so nothing to put in the x-axis.")
   } else if (length(by) > 0) {

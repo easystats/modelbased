@@ -4,7 +4,7 @@ skip_if_not_installed("marginaleffects")
 test_that("attributes_means", {
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
-  estim <- suppressMessages(estimate_means(model, "Species"))
+  estim <- suppressMessages(estimate_means(model, "Species", backend = "emmeans"))
   expect_named(
     attributes(estim),
     c(
@@ -27,7 +27,7 @@ test_that("attributes_means", {
 test_that("attributes_means, contrasts", {
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
-  estim <- suppressMessages(estimate_contrasts(model, "Species"))
+  estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "emmeans"))
   expect_named(
     attributes(estim),
     c(
@@ -50,7 +50,7 @@ test_that("attributes_means, contrasts", {
 test_that("attributes_means, slopes", {
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
-  estim <- suppressMessages(estimate_slopes(model, "Sepal.Width"))
+  estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "emmeans"))
   expect_named(
     attributes(estim),
     c(
@@ -65,6 +65,25 @@ test_that("attributes_means, slopes", {
     c(
       "names", "class", "row.names", "trend", "table_title", "table_footer",
       "model", "response", "ci", "coef_name"
+    )
+  )
+})
+
+
+test_that("attributes_means", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
+  estim <- estimate_expectation(
+    model,
+    by = c("Species", "Petal.Width = [fivenum]"),
+    preserve_range = FALSE
+  )
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "class", "row.names", "ci", "keep_iterations", "response",
+      "model", "focal_terms", "table_title", "table_footer", "adjusted_for",
+      "at_specs", "at", "by", "preserve_range", "reference", "data"
     )
   )
 })

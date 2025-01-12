@@ -432,6 +432,7 @@ estimate_relation <- function(model,
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "model") <- model
+  attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
   attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
