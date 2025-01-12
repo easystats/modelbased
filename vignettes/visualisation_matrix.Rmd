@@ -185,7 +185,7 @@ vizdata
 
 ggplot(iris, aes(x = Sepal.Length, y = Sepal.Width, color = Species)) +
   geom_point() +
-  geom_line(data = vizdata, aes(y = Predicted), size = 1) +
+  geom_line(data = vizdata, aes(y = Predicted), linewidth = 1) +
   theme_minimal()
 ```
 
