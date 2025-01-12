@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +48,9 @@
     <li><a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
-    <li><a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a></li>
     <li><a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a></li>
+    <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul>
 </li>
@@ -128,26 +128,19 @@ speed condition.</p>
 <p>In the following, we will load the necessary packages and clean the
 data by removing outliers and out-of-scope data.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># easystats packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/correlation/" class="external-link">correlation</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># other packages</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/" class="external-link">easystats</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rtdists/rtdists/" class="external-link">rtdists</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Remove outliers &amp;  Keep only word condition</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_filter</a></span><span class="op">(</span></span>
-<span>  <span class="fu">rtdists</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/rtdists/man/speed_acc.html" class="external-link">speed_acc</a></span>,</span>
-<span>  <span class="va">rt</span> <span class="op">&lt;</span> <span class="fl">1.5</span> <span class="op">&amp;</span> <span class="va">stim_cat</span> <span class="op">==</span> <span class="st">"word"</span> <span class="op">&amp;</span> <span class="va">frequency</span> <span class="op">==</span> <span class="st">"low"</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">rtdists</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/rtdists/man/speed_acc.html" class="external-link">speed_acc</a></span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_filter</span><span class="op">(</span><span class="va">rt</span> <span class="op">&lt;</span> <span class="fl">1.5</span> <span class="op">&amp;</span> <span class="va">stim_cat</span> <span class="op">==</span> <span class="st">"word"</span> <span class="op">&amp;</span> <span class="va">frequency</span> <span class="op">==</span> <span class="st">"low"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_rename</span><span class="op">(</span>select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>reaction_time <span class="op">=</span> <span class="st">"rt"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
 <span><span class="co"># Add new 'error' column that is 1 if the response doesn't match the category</span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_modify.html" class="external-link">data_modify</a></span><span class="op">(</span><span class="va">data</span>, error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span> <span class="op">!=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">stim_cat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">data_modify</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  error <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span> <span class="op">!=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">stim_cat</span><span class="op">)</span>, <span class="fl">1</span>, <span class="fl">0</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="speed-rt">Speed (RT)<a class="anchor" aria-label="anchor" href="#speed-rt"></a>
 </h2>
@@ -159,9 +152,10 @@ responses, since they are not reflective of a “successful” cognitive
 process. Then, and we will plot the RT according to the condition and
 stimulus category.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_match.html" class="external-link">data_filter</a></span><span class="op">(</span><span class="va">data</span>, <span class="va">error</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu">data_filter</span><span class="op">(</span><span class="va">data</span>, <span class="va">error</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_rt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">rt</span>, <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">data_rt</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">reaction_time</span>, x <span class="op">=</span> <span class="va">condition</span>, fill <span class="op">=</span> <span class="va">condition</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_violin.html" class="external-link">geom_violin</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-3-1.png" width="2187.5"></p>
 <p>The descriptive visualisation indeed seems to suggest that people are
@@ -171,24 +165,26 @@ effect of <strong>frequency</strong>.</p>
 <p>Let’s verify that using the <a href="https://easystats.github.io/modelbased/articles/modelisation_approach.html"><strong>modelisation
 approach</strong></a>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
-<span>  <span class="va">rt</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">stim</span><span class="op">)</span>,</span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/" class="external-link">lme4</a></span><span class="op">)</span></span>
+<span><span class="va">model_full</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span></span>
+<span>  <span class="va">reaction_time</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">stim</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">data_rt</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Let’s unpack the formula of this model. We’re tying to predict
-<code>rt</code> using different terms. These can be separated into two
-groups, the <em>fixed</em> effects and the <em>random</em> effects.
-Having <code>condition</code> as a fixed effect means that we are
-interested in estimating the <strong>“general”</strong> effect of the
-condition, across all subjects and items (i.e., at the
+<code>reaction_time</code> using different terms. These can be separated
+into two groups, the <em>fixed</em> effects and the <em>random</em>
+effects. Having <code>condition</code> as a fixed effect means that we
+are interested in estimating the <strong>“general”</strong> effect of
+the condition, across all subjects and items (i.e., at the
 <strong><em>population level</em></strong>). On top of that effect of
 condition, a second ‘fixed’ parameter was implicitly specified and will
 be estimated, the <strong>intercept</strong> (as you might know, one has
-to explicitly remove it through <code>rt ~ 0 + condition</code>,
-otherwise it is added automatically).</p>
+to explicitly remove it through
+<code>reaction_time ~ 0 + condition</code>, otherwise it is added
+automatically).</p>
 <p>Let’s investigate these two fixed parameters first:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model_full</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">parameters</span><span class="op">(</span><span class="va">model_full</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; # Fixed Effects
 &gt; 
 &gt; Parameter         | Coefficient |   SE |         95% CI | t(4506) |      p
@@ -197,36 +193,39 @@ otherwise it is added automatically).</p>
 &gt; condition [speed] |       -0.16 | 0.02 | [-0.19, -0.12] |   -8.53 | &lt; .001</code></pre>
 <p>Because <code>condition</code> is a factor with two levels, these
 parameters are easily interpretable. The <em>intercept</em> corresponds
-to the <code>rt</code> at the baseline level of the factor (accuracy),
-and the effect of condition corresponds to the change in <code>rt</code>
-between the intercept and the speed condition. In other words, the
-effect of <code>condition</code> refers to the difference between the
-two conditions, <code>speed - accuracy</code>.</p>
+to the <code>reaction_time</code> at the baseline level of the factor
+(accuracy), and the effect of condition corresponds to the change in
+<code>reaction_time</code> between the intercept and the speed
+condition. In other words, the effect of <code>condition</code> refers
+to the difference between the two conditions,
+<code>speed - accuracy</code>.</p>
 <p>As we can see, this difference is significant, and people have,
-<strong>in general</strong>, a lower <code>rt</code> (the sign is
-negative) in the speed condition.</p>
+<strong>in general</strong>, a lower <code>reaction_time</code> (the
+sign is negative) in the speed condition.</p>
 <p>Let’s visualize the <a href="https://easystats.github.io/modelbased/articles/estimate_means.html">marginal
 means</a> estimated by the model:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">em</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model_full</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">em</span>, show_data <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model_full</span>, by <span class="op">=</span> <span class="st">"condition"</span>, backend <span class="op">=</span> <span class="st">"marginaleffects"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">means</span>, point <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.1</span>, width <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-6-1.png" width="2187.5"></p>
 <p>Now, what’s up with the <strong>random effects</strong>. In the
 formula, we specified random intercepts (i.e., the right part of the bar
 <code>|</code> symbol) for <code>id</code> (the participants) and
 <code>stim</code>. That means that <strong>each participant and each
 stimulus will have its own “Intercept” parameter</strong> (which, as
-we’ve seen before, corresponds to the <code>rt</code> in the accuracy
-condition). Additionally, we’ve specified the random effect (“random
-slope” - the left side of the bar) of <code>condition</code> for each
-participant. That means that <strong>each participant will have its own
-effect of condition</strong> computed.</p>
+we’ve seen before, corresponds to the <code>reaction_time</code> in the
+accuracy condition). Additionally, we’ve specified the random effect
+(“random slope” - the left side of the bar) of <code>condition</code>
+for each participant. That means that <strong>each participant will have
+its own effect of condition</strong> computed.</p>
 <p>But do we need such a complex model? Let’s compare it to a model
 without specifying random intercepts for the stimuli.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_rt</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">reaction_time</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data_rt</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://easystats.github.io/performance/reference/test_performance.html" class="external-link">test_performance</a></span><span class="op">(</span><span class="va">model_full</span>, <span class="va">model</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">test_performance</span><span class="op">(</span><span class="va">model_full</span>, <span class="va">model</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Name       |   Model |      BF | df | df_diff |  Chi2 |      p
 &gt; --------------------------------------------------------------
 &gt; model_full | lmerMod |         |  7 |         |       |       
@@ -234,7 +233,7 @@ without specifying random intercepts for the stimuli.</p>
 &gt; Models were detected as nested (in terms of fixed parameters) and are compared in sequential order.</code></pre>
 <p>Mmmh, it seems that the simpler model performs <strong>a lot
 worse</strong> (the Bayes Factor is lower than 1). We could run
-<code><a href="https://easystats.github.io/performance/reference/compare_performance.html" class="external-link">compare_performance()</a></code> to learn more details, but for this
+<code>compare_performance()</code> to learn more details, but for this
 example we will go ahead and keep the <strong>worse model</strong> (for
 simplicity and conciseness when inspecting the random effects later, but
 keep in mind that in real life it’s surely not the best thing to
@@ -289,6 +288,15 @@ to these group-level scores. We can use the
 from 1 to 17, has two rows, corresponding to its own deviation from the
 main effect of the <strong>intercept</strong> and <strong>condition
 effect</strong>.</p>
+<p>We can easily visualize the random effects:</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_lucid</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-9-1.png" width="2187.5"></p>
+<p><em>Note: we need to use <code>hline</code> to effectively add a
+<code>vline</code> at 0 because the coordinates are flipped in the
+plot.</em></p>
 <p>We can also use <code><a href="../reference/estimate_grouplevel.html">reshape_grouplevel()</a></code> to select only the
 <em>Coefficient</em> column (and skip the information about the
 uncertainty - which in real life is equally important!) and make it
@@ -296,7 +304,7 @@ match the original data. The resulting table has the same length as the
 original dataset and can be merged with it: <strong>it’s a convenient
 way to re-incorporate the random effects into the data for further
 re-use</strong>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">reshaped</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">reshape_grouplevel</a></span><span class="op">(</span><span class="va">random</span>, indices <span class="op">=</span> <span class="st">"Coefficient"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">reshaped</span><span class="op">)</span></span></code></pre></div>
@@ -311,13 +319,8 @@ re-use</strong>.</p>
 same participant (so the random effects are the same). Note that we can
 use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to remove all the duplicate rows. Let’s add
 it to the original data.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_merge.html" class="external-link">data_join</a></span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, join <span class="op">=</span> <span class="st">"full"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
-<p>We can also visualize the random effects:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_lucid.html" class="external-link">theme_lucid</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-11-1.png" width="2187.5"></p>
+<code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu">data_join</span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, join <span class="op">=</span> <span class="st">"full"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
 <p>Wow! As we can see, there is a lot of between-participants
 variability. But what do these random parameters correspond to?</p>
 </div>
@@ -343,44 +346,69 @@ keep the mean RT in the <strong>accuracy</strong> condition, and the
 difference with the <strong>speed</strong> condition <em>(reminds you of
 something?)</em>.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">rt</span> <span class="op">~</span> <span class="va">id</span> <span class="op">+</span> <span class="va">condition</span>, <span class="va">data_rt</span>, <span class="va">mean</span><span class="op">)</span></span>
-<span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_to_wide.html" class="external-link">reshape_wider</a></span><span class="op">(</span></span>
-<span>  <span class="va">data_sub</span>,</span>
-<span>  names_from <span class="op">=</span> <span class="st">"condition"</span>,</span>
-<span>  values_from <span class="op">=</span> <span class="st">"rt"</span>,</span>
-<span>  names_prefix <span class="op">=</span> <span class="st">"rt_"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">id</span>,</span>
-<span>  empirical_accuracy <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_accuracy</span>,</span>
-<span>  empirical_condition <span class="op">=</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_speed</span> <span class="op">-</span> <span class="va">data_sub</span><span class="op">$</span><span class="va">rt_accuracy</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">reaction_time</span> <span class="op">~</span> <span class="va">id</span> <span class="op">+</span> <span class="va">condition</span>, <span class="va">data_rt</span>, <span class="va">mean</span><span class="op">)</span></span>
+<span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="va">data_rt</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_summary</span><span class="op">(</span>reaction_time <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">reaction_time</span><span class="op">)</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"condition"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">reshape_wider</span><span class="op">(</span></span>
+<span>    names_from <span class="op">=</span> <span class="st">"condition"</span>, values_from <span class="op">=</span> <span class="st">"reaction_time"</span>, names_prefix <span class="op">=</span> <span class="st">"empirical_"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_modify</span><span class="op">(</span>empirical_speed <span class="op">=</span> <span class="va">empirical_accuracy</span> <span class="op">-</span> <span class="va">empirical_speed</span><span class="op">)</span></span>
+<span><span class="va">data_sub</span></span></code></pre></div>
+<pre><code>&gt;    id empirical_accuracy empirical_speed
+&gt; 1   1               0.59           0.053
+&gt; 2   2               0.77           0.165
+&gt; 3   3               0.72           0.175
+&gt; 4   4               0.56           0.086
+&gt; 5   5               0.64           0.165
+&gt; 6   6               0.62           0.130
+&gt; 7   7               0.59           0.042
+&gt; 8   8               0.91           0.353
+&gt; 9   9               0.72           0.174
+&gt; 10 10               0.59           0.089
+&gt; 11 11               0.60           0.078
+&gt; 12 12               0.69           0.153
+&gt; 13 13               0.77           0.214
+&gt; 14 14               0.72           0.195
+&gt; 15 15               0.78           0.229
+&gt; 16 16               0.73           0.164
+&gt; 17 17               0.75           0.206</code></pre>
 <p>Now, how to these <strong>empirical scores</strong> compare with the
 <strong>random effects</strong> estimated by the model? Let’s merge the
 empirical scores with the random effects scores. For that, we will run
 <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> on the <strong>reshaped</strong> random effects
 to remove all the duplicate rows (and have only one row per participant,
 so that it matches the format of <code>data_sub</code>).</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_merge.html" class="external-link">data_join</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">reshaped</span><span class="op">)</span>, join <span class="op">=</span> <span class="st">"full"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
+<p>We can now reshape the random effects to have the same format as
+<code>data_sub</code> and merge them.</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data_sub</span> <span class="op">&lt;-</span> <span class="fu">data_join</span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">reshaped</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
+<span><span class="va">data_sub</span></span></code></pre></div>
+<pre><code>&gt;    id empirical_accuracy empirical_speed Intercept conditionspeed
+&gt; 1   1               0.59           0.053  -0.09676         0.0941
+&gt; 2   2               0.77           0.165   0.07896        -0.0324
+&gt; 3   3               0.72           0.175   0.02481        -0.0176
+&gt; 4   4               0.56           0.086  -0.12699         0.0784
+&gt; 5   5               0.64           0.165  -0.05216         0.0067
+&gt; 6   6               0.62           0.130  -0.07711         0.0372
+&gt; 7   7               0.59           0.042  -0.09326         0.0973
+&gt; 8   8               0.91           0.353   0.21236        -0.1785
+&gt; 9   9               0.72           0.174   0.02704        -0.0173
+&gt; 10 10               0.59           0.089  -0.10344         0.0711
+&gt; 11 11               0.60           0.078  -0.08936         0.0749
+&gt; 12 12               0.69           0.153  -0.00065         0.0036
+&gt; 13 13               0.77           0.214   0.07838        -0.0564
+&gt; 14 14               0.72           0.195   0.03066        -0.0324
+&gt; 15 15               0.78           0.229   0.09098        -0.0690
+&gt; 16 16               0.73           0.164   0.04005        -0.0143
+&gt; 17 17               0.75           0.206   0.05650        -0.0454</code></pre>
 <p>Let’s run a correlation between the model-based scores and the
 empirical scores.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/correlation/reference/correlation.html" class="external-link">correlation</a></span><span class="op">(</span><span class="va">data_sub</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; # Correlation Matrix (pearson-method)
-&gt; 
-&gt; Parameter1          |          Parameter2 |     r |         95% CI |  t(15) |         p
-&gt; ---------------------------------------------------------------------------------------
-&gt; empirical_accuracy  | empirical_condition | -0.94 | [-0.98, -0.84] | -10.72 | &lt; .001***
-&gt; empirical_accuracy  |           Intercept |  1.00 | [ 1.00,  1.00] | 198.45 | &lt; .001***
-&gt; empirical_accuracy  |      conditionspeed | -0.98 | [-0.99, -0.93] | -17.37 | &lt; .001***
-&gt; empirical_condition |           Intercept | -0.93 | [-0.98, -0.82] | -10.10 | &lt; .001***
-&gt; empirical_condition |      conditionspeed |  0.99 | [ 0.98,  1.00] |  29.16 | &lt; .001***
-&gt; Intercept           |      conditionspeed | -0.97 | [-0.99, -0.92] | -15.95 | &lt; .001***
-&gt; 
-&gt; p-value adjustment method: Holm (1979)
-&gt; Observations: 17</code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">correlation</span><span class="op">(</span><span class="va">data_sub</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span>redundant <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">cor_sort</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-14-1.png" width="2187.5"></p>
 <p>First thing to notice is that <strong>everything is significantly and
 strongly correlated</strong>!.</p>
 <p>Then, the empirical scores for accuracy and condition, corresponding
@@ -393,14 +421,59 @@ to estimate some intuitive parameters!</p>
 correlation (which is even more salient with model-based indices)
 between the RT in the accuracy condition and the effect of the speed
 condition:</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data_sub</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Intercept</span>, y <span class="op">=</span> <span class="va">conditionspeed</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-15-1.png" width="2187.5"></p>
 <p>The slower they are in the accuracy condition, the bigger the
 difference with the speed condition.</p>
+</div>
+<div class="section level3">
+<h3 id="reliability">Reliability<a class="anchor" aria-label="anchor" href="#reliability"></a>
+</h3>
+<!-- ESTIMATION OF INTERINDIVIDUAL VARIABILITY see Williams, D. R., Mulder, J., Rouder, J. N., & Rast, P. (2020). Beneath the surface: Unearthing within-person variability and mean relations with Bayesian mixed models. Psychological Methods. -->
+<p>Extracting random effects is also useful to compute the
+<strong><em>reliability</em></strong> of a given paradigm. The key idea
+is to compare the inter-individual variability in the random effects to
+their intra-individual variability in the data (Williams et al.,
+2020).</p>
+<p>For that, we first need to compute the variability (SD) of the
+point-estimates across participants.</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reliability</span> <span class="op">&lt;-</span> <span class="va">random</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_summary</span><span class="op">(</span>sd_between <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html" class="external-link">sd</a></span><span class="op">(</span><span class="va">Coefficient</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"Parameter"</span><span class="op">)</span></span>
+<span><span class="va">reliability</span></span></code></pre></div>
+<pre><code>&gt; Parameter      | sd_between
+&gt; ---------------------------
+&gt; (Intercept)    |       0.09
+&gt; conditionspeed |       0.07</code></pre>
+<p>Then, we compute the average variability (SE) of the random effects
+within participants, and add it to the previous table.</p>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reliability</span> <span class="op">&lt;-</span> <span class="va">random</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_summary</span><span class="op">(</span>sd_within <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">SE</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"Parameter"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_join</span><span class="op">(</span><span class="va">reliability</span><span class="op">)</span></span>
+<span><span class="va">reliability</span></span></code></pre></div>
+<pre><code>&gt; Parameter      | sd_within | sd_between
+&gt; ---------------------------------------
+&gt; (Intercept)    |      0.01 |       0.09
+&gt; conditionspeed |      0.02 |       0.07</code></pre>
+<p>The reliability is then the ratio of the between-participants
+variability to the within-participants variability. The more any
+estimate varies in-between participants compared to within participants,
+the more reliable it is.</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">reliability</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">data_modify</span><span class="op">(</span>reliability <span class="op">=</span> <span class="va">sd_between</span> <span class="op">/</span> <span class="va">sd_within</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; Parameter      | sd_within | sd_between | reliability
+&gt; -----------------------------------------------------
+&gt; (Intercept)    |      0.01 |       0.09 |        7.24
+&gt; conditionspeed |      0.02 |       0.07 |        4.39</code></pre>
+<p>Reliability values of more than 1 suggest a higher variability
+between participants than within participants, which is a good sign for
+the reliability of the estimates.</p>
 </div>
 </div>
 <div class="section level2">
@@ -415,14 +488,14 @@ section).</p>
 making error depending on the condition. Similarly, we specified a
 random intercept and random effect of condition for the
 participants.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
 <span>  <span class="va">error</span> <span class="op">~</span> <span class="va">condition</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">condition</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  family <span class="op">=</span> <span class="st">"binomial"</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">parameters</span><span class="op">(</span><span class="va">model</span>, effects <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; # Fixed Effects
 &gt; 
 &gt; Parameter         | Log-Odds |   SE |         95% CI |      z |      p
@@ -433,62 +506,17 @@ participants.</p>
 errors in the speed condition as compared to the accuracy condition. We
 can visualize the average probability (i.e., the <strong>marginal
 means</strong>) of making errors in the two conditions.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>, show_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-17-1.png" width="2187.5"></p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"condition"</span><span class="op">)</span>, show_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-20-1.png" width="2187.5"></p>
 <p>Similarly, we can extract the group-level effects, clean them (rename
 the columns, otherwise it will be the same names as for the RT model),
 and merge them with the previous ones.</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span><span class="va">random</span></span></code></pre></div>
-<pre><code>&gt; Group | Level |      Parameter | Coefficient |   SE |         95% CI
-&gt; --------------------------------------------------------------------
-&gt; id    |     1 |    (Intercept) |   -4.68e-03 | 0.28 | [-0.55,  0.54]
-&gt; id    |     1 | conditionspeed |       -0.32 | 0.30 | [-0.90,  0.26]
-&gt; id    |     2 |    (Intercept) |       -0.54 | 0.41 | [-1.34,  0.26]
-&gt; id    |     2 | conditionspeed |        0.11 | 0.36 | [-0.61,  0.82]
-&gt; id    |     3 |    (Intercept) |       -0.26 | 0.30 | [-0.85,  0.32]
-&gt; id    |     3 | conditionspeed |        0.22 | 0.30 | [-0.38,  0.81]
-&gt; id    |     4 |    (Intercept) |       -0.63 | 0.33 | [-1.28,  0.01]
-&gt; id    |     4 | conditionspeed |        0.21 | 0.32 | [-0.43,  0.84]
-&gt; id    |     5 |    (Intercept) |       -0.28 | 0.31 | [-0.88,  0.32]
-&gt; id    |     5 | conditionspeed |       -0.51 | 0.31 | [-1.12,  0.11]
-&gt; id    |     6 |    (Intercept) |        0.17 | 0.26 | [-0.35,  0.69]
-&gt; id    |     6 | conditionspeed |       -0.04 | 0.28 | [-0.60,  0.51]
-&gt; id    |     7 |    (Intercept) |        0.91 | 0.21 | [ 0.49,  1.32]
-&gt; id    |     7 | conditionspeed |        0.12 | 0.24 | [-0.35,  0.58]
-&gt; id    |     8 |    (Intercept) |        1.18 | 0.21 | [ 0.77,  1.59]
-&gt; id    |     8 | conditionspeed |       -0.03 | 0.24 | [-0.50,  0.43]
-&gt; id    |     9 |    (Intercept) |       -0.24 | 0.30 | [-0.83,  0.35]
-&gt; id    |     9 | conditionspeed |        0.19 | 0.31 | [-0.41,  0.79]
-&gt; id    |    10 |    (Intercept) |       -0.20 | 0.29 | [-0.78,  0.37]
-&gt; id    |    10 | conditionspeed |        0.29 | 0.30 | [-0.30,  0.88]
-&gt; id    |    11 |    (Intercept) |        0.43 | 0.24 | [-0.05,  0.91]
-&gt; id    |    11 | conditionspeed |        0.12 | 0.26 | [-0.39,  0.64]
-&gt; id    |    12 |    (Intercept) |        1.00 | 0.21 | [ 0.59,  1.41]
-&gt; id    |    12 | conditionspeed |       -0.77 | 0.25 | [-1.25, -0.29]
-&gt; id    |    13 |    (Intercept) |        0.45 | 0.25 | [-0.04,  0.93]
-&gt; id    |    13 | conditionspeed |       -0.12 | 0.27 | [-0.65,  0.40]
-&gt; id    |    14 |    (Intercept) |       -0.32 | 0.31 | [-0.93,  0.29]
-&gt; id    |    14 | conditionspeed |       -0.12 | 0.32 | [-0.73,  0.50]
-&gt; id    |    15 |    (Intercept) |       -0.27 | 0.30 | [-0.86,  0.32]
-&gt; id    |    15 | conditionspeed |        0.18 | 0.31 | [-0.42,  0.78]
-&gt; id    |    16 |    (Intercept) |        0.21 | 0.26 | [-0.30,  0.73]
-&gt; id    |    16 | conditionspeed |        0.13 | 0.28 | [-0.42,  0.68]
-&gt; id    |    17 |    (Intercept) |       -1.16 | 0.38 | [-1.90, -0.42]
-&gt; id    |    17 | conditionspeed |        0.17 | 0.35 | [-0.52,  0.86]</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></span></code></pre></div>
-<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-18-1.png" width="2187.5"></p>
-</div>
-<div class="section level2">
-<h2 id="log-shifted-model">Log-shifted Model<a class="anchor" aria-label="anchor" href="#log-shifted-model"></a>
-</h2>
-</div>
-<div class="section level2">
-<h2 id="scale-location-model">Scale-Location Model<a class="anchor" aria-label="anchor" href="#scale-location-model"></a>
-</h2>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_grouplevel_files/figure-html/unnamed-chunk-21-1.png" width="2187.5"></p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Interpret simple and complex models using the power of Effect Derivatives • modelbased</title>
+<title>Interpret simple and complex models using the power of effect derivatives • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../favicon-48x48.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
-<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interpret simple and complex models using the power of Effect Derivatives">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Interpret simple and complex models using the power of effect derivatives">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +48,9 @@
     <li><a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
-    <li><a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a></li>
     <li><a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a></li>
+    <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul>
 </li>
@@ -98,7 +98,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Interpret simple and complex models using the power of Effect Derivatives</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Interpret simple and complex models using the power of effect derivatives</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/derivatives.Rmd" class="external-link"><code>vignettes/derivatives.Rmd</code></a></small>
@@ -113,7 +113,7 @@ simple models are enough for simple tasks. <strong>Why shoot a fly with
 a bazooka?</strong> In this vignette, we are going to show that,
 sometimes, the bazooka can be so versatile that it works just as easily
 on a fly as a flyswatter. In particular, we will investigate how the
-combination <strong>GAM + Effect Derivative</strong> can be used, even
+combination <strong>GAM + Effects Derivative</strong> can be used, even
 in simple contexts, to <strong>make your data analysis
 easier</strong>.</p>
 <div class="section level2">
@@ -127,13 +127,7 @@ and <em>x</em> in the following dataset:</p>
 <span></span>
 <span><span class="co"># Tidyverse</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Easystats</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/datawizard/" class="external-link">datawizard</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/report/" class="external-link">report</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/easystats/" class="external-link">easystats</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">333</span><span class="op">)</span></span>
 <span></span>
@@ -146,7 +140,8 @@ and <em>x</em> in the following dataset:</p>
 <p>Upon visualizing the data, some people might say: “well, the most
 straightforward thing to do is to run a <strong>correlation
 analysis</strong>” (they might not be wrong, but for the sake of the
-demonstration, we will push things further here). Let’s do that:</p>
+demonstration, we will push things further here). Let’s start with
+that:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rez</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.test.html" class="external-link">cor.test</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">y</span>, <span class="va">data</span><span class="op">$</span><span class="va">x</span><span class="op">)</span></span>
 <span><span class="fu">report</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/report/reference/report.html" class="external-link">report</a></span><span class="op">(</span><span class="va">rez</span><span class="op">)</span></span></code></pre></div>
@@ -170,7 +165,8 @@ parameters.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_lm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_lm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model_lm</span><span class="op">)</span></span></code></pre></div>
@@ -205,7 +201,8 @@ change is that we need to specify a <strong>smooth</strong> term
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_gam</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam</span><span class="op">)</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span>line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-6-1.png" width="100%"></p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model_gam</span><span class="op">)</span></span></code></pre></div>
@@ -277,9 +274,9 @@ itself.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Average Marginal Effects
 &gt; 
-&gt; Start |  End |     x | Coefficient |   SE |         95% CI | t(998) |      p
-&gt; ----------------------------------------------------------------------------
-&gt; -3.38 | 3.28 | -0.05 |       12.75 | 0.25 | [12.26, 13.24] |  50.97 | &lt; .001
+&gt; Start |  End |     x | Slope |   SE |         95% CI | t(998) |      p
+&gt; ----------------------------------------------------------------------
+&gt; -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>The plot shows a straight horizontal line at 12.75, with a fixed
 confidence interval (the same as in the parameter table). That is
@@ -294,14 +291,20 @@ table.</strong> Indeed, all the information about the slope can be
 retrieved from the effect derivative. And guess what… it can be applied
 to <strong>any model</strong>!</p>
 <p>Such as GAMs. Lets’ to the same for our GAM model:</p>
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_gam</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="derivatives_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; Average Marginal Effects
+&gt; 
+&gt; Start |  End |     x | Slope |   SE |         95% CI | t(998.00) |      p
+&gt; -------------------------------------------------------------------------
+&gt; -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] |     50.97 | &lt; .001
+&gt; Marginal effects estimated for x</code></pre>
 <p>Isn’t that amazing, the results are <em>identical</em>. The moral of
 the story is that <strong>GAMs can be used in a wide variety of
 contexts, even for simple cases</strong>, and that derivatives are an
@@ -318,20 +321,21 @@ classes of models, such as GLMs, it was the case.</p>
 parameters in normal regression models too!</strong> Let’s take the case
 of a <strong>polynomial regression</strong>, that we could use to model
 the following data:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">y2</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span><span class="op">^</span><span class="fl">2</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
 <p>Let us fit a polynomial regression:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_poly</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">y2</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html" class="external-link">poly</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Length is increased to have a smoother line</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_poly</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_poly</span>, length <span class="op">=</span> <span class="fl">30</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-11-1.png" width="100%"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">parameters</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters</a></span><span class="op">(</span><span class="va">model_poly</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Parameter      | Coefficient |   SE |         95% CI | t(997) |      p
 &gt; ----------------------------------------------------------------------
@@ -345,19 +349,21 @@ about how polynomials work. <strong>Ain’t nobody got time for
 dat’!</strong></p>
 <p>Instead, we can rely on our <em>good ol’</em> derivatives to obtain
 the “linear slope” at every point of the curve.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_poly</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_poly</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Average Marginal Effects
 &gt; 
-&gt; Start |  End |     x | Coefficient |   SE |        95% CI | t(997) |      p
+&gt; Start |   End |     x |     Slope |   SE |         95% CI | t(997) |      p
 &gt; ---------------------------------------------------------------------------
-&gt; -3.38 | 3.28 | -0.05 |       -0.07 | 0.05 | [-0.17, 0.02] |  -1.56 | &lt; .001
+&gt; -3.38 | -0.08 | -1.73 |     -3.43 | 0.04 | [-3.51, -3.34] | -72.50 | &lt; .001
+&gt; -0.01 | -0.01 | -0.01 | -6.87e-03 | 0.02 | [-0.04,  0.02] |  -0.42 | 0.672 
+&gt; 0.05  |  3.28 |  1.67 |      3.35 | 0.04 | [ 3.26,  3.43] |  70.58 | &lt; .001
 &gt; Marginal effects estimated for x</code></pre>
 <p>If you know a bit theory about derivatives, you won’t be surprised to
 find out that the derivative of a 2nd order polynomial
@@ -372,36 +378,46 @@ parameters are not straightforward to interpret.</strong></p>
 <p>But, if you’ve been attentive up to this point, you might wonder:
 <strong>why bother with polynomials at all when GAMs can do the
 trick?</strong></p>
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model_gam2</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">y2</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam2</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Increase precision</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam2</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="derivatives_files/figure-html/unnamed-chunk-13-1.png" width="100%"></p>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Increase precision</span></span>
 <span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_gam2</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="derivatives_files/figure-html/unnamed-chunk-13-2.png" width="100%"></p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; Average Marginal Effects
+&gt; 
+&gt; Start |   End |     x |     Slope |   SE |         95% CI | t(991.26) |      p
+&gt; ------------------------------------------------------------------------------
+&gt; -3.38 | -0.08 | -1.73 |     -3.25 | 0.20 | [-3.63, -2.86] |    -16.61 | &lt; .001
+&gt; -0.01 |  0.05 |  0.02 | -1.86e-03 | 0.11 | [-0.22,  0.22] | -7.76e-03 | 0.446 
+&gt; 0.12  |  3.28 |  1.70 |      3.39 | 0.20 | [ 3.01,  3.78] |     17.37 | &lt; .001
+&gt; Marginal effects estimated for x</code></pre>
 <p>The conclusion is very similar, it shows a significant effect that
 goes from negative to positive and becomes flat (i.e., non-significant)
 around 0.</p>
 <p>What about <em>3rd-degree-type</em> relationships? It works the same
 way:</p>
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span><span class="op">$</span><span class="va">y3</span> <span class="op">&lt;-</span> <span class="va">data</span><span class="op">$</span><span class="va">x</span><span class="op">^</span><span class="fl">3</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model_gam3</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">y3</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam3</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_gam3</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model_gam3</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p><img src="derivatives_files/figure-html/unnamed-chunk-14-1.png" width="100%"></p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu">modelbased</span><span class="fu">::</span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model_gam3</span>, trend <span class="op">=</span> <span class="st">"x"</span>, by <span class="op">=</span> <span class="st">"x"</span>, length <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span>, line <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="derivatives_files/figure-html/unnamed-chunk-14-2.png" width="100%"></p>
 <p>Again, the GAM nicely recovered the shape of the relationship.</p>
 <p><strong>In summary, effects derivatives can be used to easily
 leverage the power of GAMs.</strong></p>

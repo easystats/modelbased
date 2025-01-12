@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Estimate marginal effects and derivatives • modelbased</title>
+<title>Estimate marginal effects • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="48x48" href="../favicon-48x48.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><link href="../deps/KaTex-0.16.10/katex.min.css" rel="stylesheet">
-<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimate marginal effects and derivatives">
+<script src="../deps/KaTex-0.16.10/katex.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Estimate marginal effects">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.19</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.20</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -48,9 +48,9 @@
     <li><a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
-    <li><a class="dropdown-item" href="../articles/describe_nonlinear.html">Describe non-linear curves</a></li>
     <li><a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a></li>
+    <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul>
 </li>
@@ -98,7 +98,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Estimate marginal effects and derivatives</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Estimate marginal effects</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/estimate_slopes.Rmd" class="external-link"><code>vignettes/estimate_slopes.Rmd</code></a></small>
@@ -127,13 +127,15 @@ given numeric predictor.</p>
 <p>Let’s fit a linear model with a factor interacting with a continuous
 predictor and visualize it.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/parameters/" class="external-link">parameters</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/performance/" class="external-link">performance</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-2-1.png" width="2187.5"></p>
 <p>It seems like the slope of the effect is roughly similar (in the same
 direction) across the different factor levels.</p>
@@ -182,9 +184,9 @@ that’s the idea) over the different factor levels.</p>
 <span><span class="va">slopes</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Effects
 &gt; 
-&gt; Coefficient |   SE |       95% CI | t(144) |      p
-&gt; ---------------------------------------------------
-&gt; 0.79        | 0.10 | [0.59, 0.99] |   7.69 | &lt; .001
+&gt; Slope |   SE |       95% CI | t(144) |      p
+&gt; ---------------------------------------------
+&gt; 0.79  | 0.10 | [0.59, 0.99] |   7.69 | &lt; .001
 &gt; Marginal effects estimated for Petal.Length</code></pre>
 <p>We can see that the effect of <code>Petal.Length</code>,
 <strong>marginalized over Species</strong>, is positive and
@@ -199,11 +201,11 @@ significant.</p>
 <span><span class="va">slopes</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Effects
 &gt; 
-&gt; Species    | Coefficient |   SE |        95% CI | t(144) |      p
-&gt; -----------------------------------------------------------------
-&gt; setosa     |        0.54 | 0.28 | [ 0.00, 1.09] |   1.96 | 0.052 
-&gt; versicolor |        0.83 | 0.10 | [ 0.63, 1.03] |   8.10 | &lt; .001
-&gt; virginica  |        1.00 | 0.09 | [ 0.82, 1.17] |  11.43 | &lt; .001
+&gt; Species    | Slope |   SE |        95% CI | t(144) |      p
+&gt; -----------------------------------------------------------
+&gt; setosa     |  0.54 | 0.28 | [ 0.00, 1.09] |   1.96 | 0.052 
+&gt; versicolor |  0.83 | 0.10 | [ 0.63, 1.03] |   8.10 | &lt; .001
+&gt; virginica  |  1.00 | 0.09 | [ 0.82, 1.17] |  11.43 | &lt; .001
 &gt; Marginal effects estimated for Petal.Length</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
@@ -224,13 +226,13 @@ complex interactions between continuous variables.</p>
 (the y-axis) is significantly negative only when <code>wt</code> is low
 (<code>&lt; ~4</code>).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">*</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"hp"</span>, by <span class="op">=</span> <span class="st">"wt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-7-1.png" width="2187.5"></p>
 </div>
 <div class="section level2">
@@ -246,7 +248,8 @@ able to parsimoniously model possibly non-linear relationship.</p>
 <code class="sourceCode R"><span><span class="co"># Fit a non-linear General Additive Model (GAM)</span></span>
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/s.html" class="external-link">s</a></span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-8-1.png" width="2187.5"></p>
 <p>The GAMs nicely models the complex relationship between the two
 variables (if we don’t take into account the different species of
@@ -278,7 +281,6 @@ be the same. What to do!</p>
 our need for relationship understanding, another possibility is to
 compute the <strong>marginal linear effect</strong> of the smooth term,
 i.e., the “derivative”, using <code>estimate_slopes</code>.</p>
-<!-- TODO: currently fails with emmeans 1.8.0 //-->
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute derivative</span></span>
 <span><span class="va">deriv</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>,</span>
@@ -288,7 +290,10 @@ i.e., the “derivative”, using <code>estimate_slopes</code>.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Visualise</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="2187.5"></p>
 <p>This plot represents the “slope” of the curve at each point of the
 curve. As you can see, there is a significant negative trend (after
 Petal.Length = 4), followed by a significant positive trend (around
