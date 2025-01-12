@@ -64,6 +64,7 @@ get_emcontrasts <- function(model,
   attr(out, "predict") <- predict
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
+  attr(out, "focal_terms") <- emm_by
   out
 }
 
