@@ -71,6 +71,7 @@ get_marginaltrends <- function(model,
   attr(estimated, "trend") <- trend
   attr(estimated, "at") <- at_specs$varname
   attr(estimated, "by") <- at_specs$varname
+  attr(estimated, "focal_terms") <- at_specs$varname
   attr(estimated, "datagrid") <- datagrid
   attr(estimated, "coef_name") <- "Coefficient"
 
