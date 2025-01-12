@@ -1,3 +1,4 @@
+skip_on_os(c("mac", "linux"))
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 
