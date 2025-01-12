@@ -17,7 +17,11 @@
 #' @param x A modelbased object.
 #' @param show_data Display the "raw" data as a background to the model-based
 #'   estimation.
-#' @param point,line,pointrange,ribbon,facet Additional
+#' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
+#' dots (estimates) are connected by lines, i.e. plots will be a combination of
+#' dots with error bars and connecting lines. If `FALSE`, only dots and error
+#' bars are shown.
+#' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
 #'
@@ -110,6 +114,8 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     pointrange = NULL,
                                                     ribbon = NULL,
                                                     facet = NULL,
+                                                    grid = NULL,
+                                                    join_dots = TRUE,
                                                     ...) {
   .visualization_recipe(
     x,
@@ -119,6 +125,8 @@ visualisation_recipe.estimate_predicted <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
+    join_dots = join_dots,
     ...
   )
 }
@@ -161,6 +169,7 @@ visualisation_recipe.estimate_slopes <- function(x,
                                                  pointrange = NULL,
                                                  ribbon = NULL,
                                                  facet = NULL,
+                                                 grid = NULL,
                                                  ...) {
   .visualization_recipe(
     x,
@@ -169,6 +178,7 @@ visualisation_recipe.estimate_slopes <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
     ...
   )
 }
@@ -208,6 +218,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
                                                      pointrange = NULL,
                                                      ribbon = NULL,
                                                      facet = NULL,
+                                                     grid = NULL,
                                                      ...) {
   if (is.null(facet)) {
     facet <- list(scales = "free")
@@ -222,6 +233,8 @@ visualisation_recipe.estimate_grouplevel <- function(x,
     pointrange = pointrange,
     ribbon = ribbon,
     facet = facet,
+    grid = grid,
+    join_dots = FALSE,
     ...
   )
 }

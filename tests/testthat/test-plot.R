@@ -305,6 +305,7 @@ test_that("plots, at special values", {
   )
 })
 
+
 test_that("plots, estimate_slope", {
   data(iris)
 
@@ -318,6 +319,7 @@ test_that("plots, estimate_slope", {
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
   slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "emmeans")
+  set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-slopes-2",
     plot(slopes)
@@ -333,8 +335,27 @@ test_that("plots, estimate_slope", {
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
   slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "marginaleffects")
+  set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-slopes-4",
     plot(slopes)
+  )
+})
+
+
+test_that("plots, automatically join dots", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
+  out <- estimate_expectation(m, by = c("Species", "Petal.Width"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-join-dots-1",
+    plot(out)
+  )
+  out <- estimate_expectation(m, by = c("Species", "Petal.Width"), preserve_range = FALSE)
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-join-dots-2",
+    plot(out)
   )
 })

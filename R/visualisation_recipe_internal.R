@@ -52,12 +52,17 @@
     aes$group <- by[2]
   }
   if (length(by) > 2) {
-    aes$alpha <- by[3]
+    if (is.numeric(data[[by[3]]])) {
+      aes$alpha <- by[3]
+    } else {
+      aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -2), collapse = " * ")))
+    }
     data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
     aes$group <- ".group"
   }
   if (length(by) > 3) {
-    aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -3), collapse = " * ")))
+    aes$facet <- NULL
+    aes$grid <- stats::as.formula(paste(by[3], "~", paste(utils::tail(by, -3), collapse = "*")))
   }
 
   # CI
@@ -90,6 +95,8 @@
                                   pointrange = NULL,
                                   ribbon = NULL,
                                   facet = NULL,
+                                  grid = NULL,
+                                  join_dots = TRUE,
                                   ...) {
   aes <- .find_aes(x)
   data <- aes$data
@@ -97,6 +104,11 @@
   layers <- list()
   l <- 1
 
+  # check whether point-geoms should be connected by lines
+  do_not_join <- "grouplevel"
+  if (!join_dots) {
+    do_not_join <- c(do_not_join, "pointrange")
+  }
 
   # TODO: Don't plot raw data if `predict` is not on the response scale
   if (show_data) {
@@ -129,7 +141,7 @@
   }
 
   # Main ----------------------------------
-  if (aes$type != "grouplevel") {
+  if (!aes$type %in% do_not_join) {
     layers[[paste0("l", l)]] <- list(
       geom = "line",
       data = data,
@@ -184,6 +196,16 @@
     if (!is.null(facet)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
     l <- l + 1
   }
+  if (!is.null(aes$grid)) {
+    layers[[paste0("l", l)]] <- list(
+      geom = "facet_grid",
+      data = data,
+      rows = aes$grid,
+      scales = "free_x"
+    )
+    if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    l <- l + 1
+  }
 
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
@@ -231,6 +253,8 @@
     ),
     height = 0,
     shape = shape,
-    stroke = stroke
+    stroke = stroke,
+    # set default alpha, it not mapped by aes
+    alpha = ifelse(is.null(aes$alpha), 1 / 3, NULL)
   )
 }
