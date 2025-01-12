@@ -53,3 +53,20 @@ test_that("estimate_means - print multiple by's", {
   )
   expect_snapshot(print(out, table_width = Inf), variant = "windows")
 })
+
+
+test_that("estimate_means - full labels", {
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"), backend = "marginaleffects")
+  expect_snapshot(print(pr, table_width = Inf), variant = "windows")
+  expect_snapshot(print(pr, full_labels = FALSE, table_width = Inf), variant = "windows")
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"), backend = "marginaleffects")
+  expect_snapshot(print(pr, table_width = Inf), variant = "windows")
+  expect_snapshot(print(pr, full_labels = FALSE, table_width = Inf), variant = "windows")
+})

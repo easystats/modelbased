@@ -244,3 +244,267 @@
       
       Marginal means estimated at c12hour
 
+# estimate_means - full labels
+
+    Code
+      print(pr, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
+      c161sex |                        c172code | e16sex |         nur_pst |   Mean |   SE |          95% CI | t(402)
+      ---------------------------------------------------------------------------------------------------------------
+      Male    |          low level of education |   male |    Care Level 1 |  10.00 | 2.59 | [  4.90, 15.10] |   3.85
+      Female  |          low level of education |   male |    Care Level 1 |  13.75 | 1.06 | [ 11.67, 15.83] |  12.98
+      Male    | intermediate level of education |   male |    Care Level 1 |  12.00 | 2.12 | [  7.84, 16.16] |   5.66
+      Female  | intermediate level of education |   male |    Care Level 1 |  10.55 | 0.78 | [  9.01, 12.08] |  13.48
+      Male    |         high level of education |   male |    Care Level 1 |  14.25 | 1.83 | [ 10.64, 17.86] |   7.77
+      Female  |         high level of education |   male |    Care Level 1 |  10.00 | 3.67 | [  2.79, 17.21] |   2.73
+      Male    |          low level of education | female |    Care Level 1 |  15.50 | 1.83 | [ 11.89, 19.11] |   8.45
+      Female  |          low level of education | female |    Care Level 1 |  11.56 | 0.92 | [  9.76, 13.37] |  12.60
+      Male    | intermediate level of education | female |    Care Level 1 |  10.16 | 0.84 | [  8.50, 11.81] |  12.07
+      Female  | intermediate level of education | female |    Care Level 1 |  11.22 | 0.50 | [ 10.24, 12.20] |  22.47
+      Male    |         high level of education | female |    Care Level 1 |  11.67 | 1.50 | [  8.72, 14.61] |   7.79
+      Female  |         high level of education | female |    Care Level 1 |  12.44 | 0.86 | [ 10.74, 14.14] |  14.39
+      Male    |          low level of education |   male |    Care Level 2 |  11.00 | 2.59 | [  5.90, 16.10] |   4.24
+      Female  |          low level of education |   male |    Care Level 2 |  12.23 | 1.02 | [ 10.23, 14.23] |  12.02
+      Male    | intermediate level of education |   male |    Care Level 2 |  13.25 | 1.30 | [ 10.70, 15.80] |  10.21
+      Female  | intermediate level of education |   male |    Care Level 2 |  13.00 | 0.68 | [ 11.66, 14.34] |  19.08
+      Male    |         high level of education |   male |    Care Level 2 |  10.00 | 3.67 | [  2.79, 17.21] |   2.73
+      Female  |         high level of education |   male |    Care Level 2 |  12.78 | 1.22 | [ 10.37, 15.18] |  10.45
+      Male    |          low level of education | female |    Care Level 2 |  13.75 | 1.83 | [ 10.14, 17.36] |   7.49
+      Female  |          low level of education | female |    Care Level 2 |  11.17 | 1.06 | [  9.08, 13.25] |  10.54
+      Male    | intermediate level of education | female |    Care Level 2 |  11.17 | 0.86 | [  9.47, 12.87] |  12.91
+      Female  | intermediate level of education | female |    Care Level 2 |  11.60 | 0.50 | [ 10.61, 12.59] |  23.02
+      Male    |         high level of education | female |    Care Level 2 |  11.20 | 1.16 | [  8.92, 13.48] |   9.65
+      Female  |         high level of education | female |    Care Level 2 |  14.56 | 0.92 | [ 12.76, 16.37] |  15.87
+      Male    |          low level of education |   male | Care Level 3/3+ | -13.53 | 7.92 | [-29.10,  2.04] |  -1.71
+      Female  |          low level of education |   male | Care Level 3/3+ |  12.09 | 1.11 | [  9.92, 14.27] |  10.93
+      Male    | intermediate level of education |   male | Care Level 3/3+ |  13.57 | 1.39 | [ 10.85, 16.30] |   9.79
+      Female  | intermediate level of education |   male | Care Level 3/3+ |  16.50 | 0.78 | [ 14.96, 18.04] |  21.09
+      Male    |         high level of education |   male | Care Level 3/3+ |   8.00 | 3.67 | [  0.79, 15.21] |   2.18
+      Female  |         high level of education |   male | Care Level 3/3+ |  16.33 | 2.12 | [ 12.17, 20.50] |   7.71
+      Male    |          low level of education | female | Care Level 3/3+ |  12.00 | 2.12 | [  7.84, 16.16] |   5.66
+      Female  |          low level of education | female | Care Level 3/3+ |  15.00 | 1.39 | [ 12.27, 17.73] |  10.82
+      Male    | intermediate level of education | female | Care Level 3/3+ |  11.54 | 1.02 | [  9.54, 13.54] |  11.34
+      Female  | intermediate level of education | female | Care Level 3/3+ |  13.35 | 0.77 | [ 11.84, 14.85] |  17.45
+      Male    |         high level of education | female | Care Level 3/3+ |  13.00 | 1.83 | [  9.39, 16.61] |   7.09
+      Female  |         high level of education | female | Care Level 3/3+ |  11.43 | 1.39 | [  8.70, 14.15] |   8.24
+      
+      Marginal means estimated at c161sex
+
+---
+
+    Code
+      print(pr, full_labels = FALSE, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
+      c161sex |                        c172code | e16sex |         nur_pst |   Mean |   SE |          95% CI | t(402)
+      ---------------------------------------------------------------------------------------------------------------
+      Male    |          low level of education |   male |    Care Level 1 |  10.00 | 2.59 | [  4.90, 15.10] |   3.85
+      Female  |                                 |        |                 |  13.75 | 1.06 | [ 11.67, 15.83] |  12.98
+      Male    | intermediate level of education |        |                 |  12.00 | 2.12 | [  7.84, 16.16] |   5.66
+      Female  |                                 |        |                 |  10.55 | 0.78 | [  9.01, 12.08] |  13.48
+      Male    |         high level of education |        |                 |  14.25 | 1.83 | [ 10.64, 17.86] |   7.77
+      Female  |                                 |        |                 |  10.00 | 3.67 | [  2.79, 17.21] |   2.73
+      Male    |          low level of education | female |                 |  15.50 | 1.83 | [ 11.89, 19.11] |   8.45
+      Female  |                                 |        |                 |  11.56 | 0.92 | [  9.76, 13.37] |  12.60
+      Male    | intermediate level of education |        |                 |  10.16 | 0.84 | [  8.50, 11.81] |  12.07
+      Female  |                                 |        |                 |  11.22 | 0.50 | [ 10.24, 12.20] |  22.47
+      Male    |         high level of education |        |                 |  11.67 | 1.50 | [  8.72, 14.61] |   7.79
+      Female  |                                 |        |                 |  12.44 | 0.86 | [ 10.74, 14.14] |  14.39
+      Male    |          low level of education |   male |    Care Level 2 |  11.00 | 2.59 | [  5.90, 16.10] |   4.24
+      Female  |                                 |        |                 |  12.23 | 1.02 | [ 10.23, 14.23] |  12.02
+      Male    | intermediate level of education |        |                 |  13.25 | 1.30 | [ 10.70, 15.80] |  10.21
+      Female  |                                 |        |                 |  13.00 | 0.68 | [ 11.66, 14.34] |  19.08
+      Male    |         high level of education |        |                 |  10.00 | 3.67 | [  2.79, 17.21] |   2.73
+      Female  |                                 |        |                 |  12.78 | 1.22 | [ 10.37, 15.18] |  10.45
+      Male    |          low level of education | female |                 |  13.75 | 1.83 | [ 10.14, 17.36] |   7.49
+      Female  |                                 |        |                 |  11.17 | 1.06 | [  9.08, 13.25] |  10.54
+      Male    | intermediate level of education |        |                 |  11.17 | 0.86 | [  9.47, 12.87] |  12.91
+      Female  |                                 |        |                 |  11.60 | 0.50 | [ 10.61, 12.59] |  23.02
+      Male    |         high level of education |        |                 |  11.20 | 1.16 | [  8.92, 13.48] |   9.65
+      Female  |                                 |        |                 |  14.56 | 0.92 | [ 12.76, 16.37] |  15.87
+      Male    |          low level of education |   male | Care Level 3/3+ | -13.53 | 7.92 | [-29.10,  2.04] |  -1.71
+      Female  |                                 |        |                 |  12.09 | 1.11 | [  9.92, 14.27] |  10.93
+      Male    | intermediate level of education |        |                 |  13.57 | 1.39 | [ 10.85, 16.30] |   9.79
+      Female  |                                 |        |                 |  16.50 | 0.78 | [ 14.96, 18.04] |  21.09
+      Male    |         high level of education |        |                 |   8.00 | 3.67 | [  0.79, 15.21] |   2.18
+      Female  |                                 |        |                 |  16.33 | 2.12 | [ 12.17, 20.50] |   7.71
+      Male    |          low level of education | female |                 |  12.00 | 2.12 | [  7.84, 16.16] |   5.66
+      Female  |                                 |        |                 |  15.00 | 1.39 | [ 12.27, 17.73] |  10.82
+      Male    | intermediate level of education |        |                 |  11.54 | 1.02 | [  9.54, 13.54] |  11.34
+      Female  |                                 |        |                 |  13.35 | 0.77 | [ 11.84, 14.85] |  17.45
+      Male    |         high level of education |        |                 |  13.00 | 1.83 | [  9.39, 16.61] |   7.09
+      Female  |                                 |        |                 |  11.43 | 1.39 | [  8.70, 14.15] |   8.24
+      
+      Marginal means estimated at c161sex
+
+---
+
+    Code
+      print(pr, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
+      c161sex |                        c172code | e16sex |         nur_pst | negc7d |  Mean |   SE |          95% CI | t(370)
+      -----------------------------------------------------------------------------------------------------------------------
+      Male    |          low level of education |   male |    Care Level 1 |      0 |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  |          low level of education |   male |    Care Level 1 |      0 | 10.00 | 1.02 | [  7.99, 12.01] |   9.80
+      Male    | intermediate level of education |   male |    Care Level 1 |      0 |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  | intermediate level of education |   male |    Care Level 1 |      0 |  9.13 | 0.59 | [  7.97, 10.29] |  15.50
+      Male    |         high level of education |   male |    Care Level 1 |      0 |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |         high level of education |   male |    Care Level 1 |      0 | 10.00 | 2.28 | [  5.51, 14.49] |   4.38
+      Male    |          low level of education | female |    Care Level 1 |      0 | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
+      Female  |          low level of education | female |    Care Level 1 |      0 |  8.89 | 0.76 | [  7.39, 10.38] |  11.69
+      Male    | intermediate level of education | female |    Care Level 1 |      0 |  9.21 | 0.61 | [  8.02, 10.41] |  15.11
+      Female  | intermediate level of education | female |    Care Level 1 |      0 |  9.47 | 0.40 | [  8.68, 10.26] |  23.48
+      Male    |         high level of education | female |    Care Level 1 |      0 |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
+      Female  |         high level of education | female |    Care Level 1 |      0 |  8.71 | 0.86 | [  7.02, 10.41] |  10.11
+      Male    |          low level of education |   male |    Care Level 2 |      0 |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |          low level of education |   male |    Care Level 2 |      0 |  9.50 | 0.93 | [  7.67, 11.33] |  10.20
+      Male    | intermediate level of education |   male |    Care Level 2 |      0 |  8.75 | 1.14 | [  6.51, 10.99] |   7.67
+      Female  | intermediate level of education |   male |    Care Level 2 |      0 |  9.30 | 0.72 | [  7.88, 10.72] |  12.89
+      Male    |         high level of education |   male |    Care Level 2 |      0 | 10.00 | 2.28 | [  5.51, 14.49] |   4.38
+      Female  |         high level of education |   male |    Care Level 2 |      0 |  9.00 | 1.14 | [  6.76, 11.24] |   7.89
+      Male    |          low level of education | female |    Care Level 2 |      0 | 10.50 | 1.61 | [  7.33, 13.67] |   6.51
+      Female  |          low level of education | female |    Care Level 2 |      0 |  9.17 | 0.93 | [  7.34, 11.00] |   9.84
+      Male    | intermediate level of education | female |    Care Level 2 |      0 |  8.50 | 0.66 | [  7.20,  9.80] |  12.91
+      Female  | intermediate level of education | female |    Care Level 2 |      0 |  9.30 | 0.42 | [  8.48, 10.12] |  22.33
+      Male    |         high level of education | female |    Care Level 2 |      0 |  9.43 | 0.86 | [  7.73, 11.12] |  10.93
+      Female  |         high level of education | female |    Care Level 2 |      0 |  8.00 | 1.61 | [  4.83, 11.17] |   4.96
+      Male    |          low level of education |   male | Care Level 3/3+ |      0 |  3.67 | 6.95 | [-10.00, 17.35] |   0.53
+      Female  |          low level of education |   male | Care Level 3/3+ |      0 |  9.67 | 1.32 | [  7.08, 12.26] |   7.34
+      Male    | intermediate level of education |   male | Care Level 3/3+ |      0 |  9.75 | 1.14 | [  7.51, 11.99] |   8.55
+      Female  | intermediate level of education |   male | Care Level 3/3+ |      0 |  9.50 | 1.14 | [  7.26, 11.74] |   8.33
+      Male    |         high level of education |   male | Care Level 3/3+ |      0 |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  |         high level of education |   male | Care Level 3/3+ |      0 | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
+      Male    |          low level of education | female | Care Level 3/3+ |      0 |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
+      Female  |          low level of education | female | Care Level 3/3+ |      0 |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
+      Male    | intermediate level of education | female | Care Level 3/3+ |      0 |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Female  | intermediate level of education | female | Care Level 3/3+ |      0 |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
+      Male    |         high level of education | female | Care Level 3/3+ |      0 |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |         high level of education | female | Care Level 3/3+ |      0 |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
+      Male    |          low level of education |   male |    Care Level 1 |      1 | 12.00 | 2.28 | [  7.51, 16.49] |   5.26
+      Female  |          low level of education |   male |    Care Level 1 |      1 | 16.43 | 0.86 | [ 14.73, 18.12] |  19.05
+      Male    | intermediate level of education |   male |    Care Level 1 |      1 | 14.00 | 1.61 | [ 10.83, 17.17] |   8.68
+      Female  | intermediate level of education |   male |    Care Level 1 |      1 | 13.57 | 0.86 | [ 11.88, 15.27] |  15.74
+      Male    |         high level of education |   male |    Care Level 1 |      1 | 16.00 | 1.32 | [ 13.41, 18.59] |  12.15
+      Female  |         high level of education |   male |    Care Level 1 |      1 | 27.92 | 5.08 | [ 17.93, 37.91] |   5.50
+      Male    |          low level of education | female |    Care Level 1 |      1 | 17.00 | 1.32 | [ 14.41, 19.59] |  12.91
+      Female  |          low level of education | female |    Care Level 1 |      1 | 15.00 | 0.86 | [ 13.30, 16.70] |  17.40
+      Male    | intermediate level of education | female |    Care Level 1 |      1 | 12.80 | 1.02 | [ 10.79, 14.81] |  12.55
+      Female  | intermediate level of education | female |    Care Level 1 |      1 | 13.77 | 0.49 | [ 12.82, 14.73] |  28.32
+      Male    |         high level of education | female |    Care Level 1 |      1 | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
+      Female  |         high level of education | female |    Care Level 1 |      1 | 14.82 | 0.69 | [ 13.47, 16.17] |  21.54
+      Male    |          low level of education |   male |    Care Level 2 |      1 | 13.00 | 2.28 | [  8.51, 17.49] |   5.70
+      Female  |          low level of education |   male |    Care Level 2 |      1 | 14.57 | 0.86 | [ 12.88, 16.27] |  16.90
+      Male    | intermediate level of education |   male |    Care Level 2 |      1 | 17.75 | 1.14 | [ 15.51, 19.99] |  15.56
+      Female  | intermediate level of education |   male |    Care Level 2 |      1 | 14.95 | 0.52 | [ 13.92, 15.98] |  28.56
+      Male    |         high level of education |   male |    Care Level 2 |      1 |  3.80 | 8.72 | [-13.34, 20.94] |   0.44
+      Female  |         high level of education |   male |    Care Level 2 |      1 | 15.80 | 1.02 | [ 13.79, 17.81] |  15.49
+      Male    |          low level of education | female |    Care Level 2 |      1 | 17.00 | 1.61 | [ 13.83, 20.17] |  10.54
+      Female  |          low level of education | female |    Care Level 2 |      1 | 13.17 | 0.93 | [ 11.34, 15.00] |  14.14
+      Male    | intermediate level of education | female |    Care Level 2 |      1 | 16.50 | 0.93 | [ 14.67, 18.33] |  17.72
+      Female  | intermediate level of education | female |    Care Level 2 |      1 | 14.61 | 0.48 | [ 13.67, 15.54] |  30.71
+      Male    |         high level of education | female |    Care Level 2 |      1 | 15.33 | 1.32 | [ 12.74, 17.92] |  11.64
+      Female  |         high level of education | female |    Care Level 2 |      1 | 15.50 | 0.61 | [ 14.30, 16.70] |  25.42
+      Male    |          low level of education |   male | Care Level 3/3+ |      1 |  1.78 | 7.99 | [-13.93, 17.48] |   0.22
+      Female  |          low level of education |   male | Care Level 3/3+ |      1 | 13.00 | 0.81 | [ 11.41, 14.59] |  16.12
+      Male    | intermediate level of education |   male | Care Level 3/3+ |      1 | 18.67 | 1.32 | [ 16.08, 21.26] |  14.17
+      Female  | intermediate level of education |   male | Care Level 3/3+ |      1 | 18.06 | 0.54 | [ 17.00, 19.11] |  33.58
+      Male    |         high level of education |   male | Care Level 3/3+ |      1 |  4.60 | 7.00 | [ -9.17, 18.38] |   0.66
+      Female  |         high level of education |   male | Care Level 3/3+ |      1 | 19.00 | 1.61 | [ 15.83, 22.17] |  11.78
+      Male    |          low level of education | female | Care Level 3/3+ |      1 | 19.00 | 2.28 | [ 14.51, 23.49] |   8.33
+      Female  |          low level of education | female | Care Level 3/3+ |      1 | 19.75 | 1.14 | [ 17.51, 21.99] |  17.31
+      Male    | intermediate level of education | female | Care Level 3/3+ |      1 | 15.40 | 1.02 | [ 13.39, 17.41] |  15.09
+      Female  | intermediate level of education | female | Care Level 3/3+ |      1 | 15.64 | 0.61 | [ 14.44, 16.84] |  25.65
+      Male    |         high level of education | female | Care Level 3/3+ |      1 | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
+      Female  |         high level of education | female | Care Level 3/3+ |      1 | 13.25 | 1.14 | [ 11.01, 15.49] |  11.62
+      
+      Marginal means estimated at c161sex
+
+---
+
+    Code
+      print(pr, full_labels = FALSE, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
+      c161sex |                        c172code | e16sex |         nur_pst | negc7d |  Mean |   SE |          95% CI | t(370)
+      -----------------------------------------------------------------------------------------------------------------------
+      Male    |          low level of education |   male |    Care Level 1 |      0 |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  |                                 |        |                 |        | 10.00 | 1.02 | [  7.99, 12.01] |   9.80
+      Male    | intermediate level of education |        |                 |        |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  |                                 |        |                 |        |  9.13 | 0.59 | [  7.97, 10.29] |  15.50
+      Male    |         high level of education |        |                 |        |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |                                 |        |                 |        | 10.00 | 2.28 | [  5.51, 14.49] |   4.38
+      Male    |          low level of education | female |                 |        | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
+      Female  |                                 |        |                 |        |  8.89 | 0.76 | [  7.39, 10.38] |  11.69
+      Male    | intermediate level of education |        |                 |        |  9.21 | 0.61 | [  8.02, 10.41] |  15.11
+      Female  |                                 |        |                 |        |  9.47 | 0.40 | [  8.68, 10.26] |  23.48
+      Male    |         high level of education |        |                 |        |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
+      Female  |                                 |        |                 |        |  8.71 | 0.86 | [  7.02, 10.41] |  10.11
+      Male    |          low level of education |   male |    Care Level 2 |        |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |                                 |        |                 |        |  9.50 | 0.93 | [  7.67, 11.33] |  10.20
+      Male    | intermediate level of education |        |                 |        |  8.75 | 1.14 | [  6.51, 10.99] |   7.67
+      Female  |                                 |        |                 |        |  9.30 | 0.72 | [  7.88, 10.72] |  12.89
+      Male    |         high level of education |        |                 |        | 10.00 | 2.28 | [  5.51, 14.49] |   4.38
+      Female  |                                 |        |                 |        |  9.00 | 1.14 | [  6.76, 11.24] |   7.89
+      Male    |          low level of education | female |                 |        | 10.50 | 1.61 | [  7.33, 13.67] |   6.51
+      Female  |                                 |        |                 |        |  9.17 | 0.93 | [  7.34, 11.00] |   9.84
+      Male    | intermediate level of education |        |                 |        |  8.50 | 0.66 | [  7.20,  9.80] |  12.91
+      Female  |                                 |        |                 |        |  9.30 | 0.42 | [  8.48, 10.12] |  22.33
+      Male    |         high level of education |        |                 |        |  9.43 | 0.86 | [  7.73, 11.12] |  10.93
+      Female  |                                 |        |                 |        |  8.00 | 1.61 | [  4.83, 11.17] |   4.96
+      Male    |          low level of education |   male | Care Level 3/3+ |        |  3.67 | 6.95 | [-10.00, 17.35] |   0.53
+      Female  |                                 |        |                 |        |  9.67 | 1.32 | [  7.08, 12.26] |   7.34
+      Male    | intermediate level of education |        |                 |        |  9.75 | 1.14 | [  7.51, 11.99] |   8.55
+      Female  |                                 |        |                 |        |  9.50 | 1.14 | [  7.26, 11.74] |   8.33
+      Male    |         high level of education |        |                 |        |  8.00 | 2.28 | [  3.51, 12.49] |   3.51
+      Female  |                                 |        |                 |        | 11.00 | 2.28 | [  6.51, 15.49] |   4.82
+      Male    |          low level of education | female |                 |        |  8.50 | 1.61 | [  5.33, 11.67] |   5.27
+      Female  |                                 |        |                 |        |  8.67 | 1.32 | [  6.08, 11.26] |   6.58
+      Male    | intermediate level of education |        |                 |        |  9.13 | 0.81 | [  7.54, 10.71] |  11.31
+      Female  |                                 |        |                 |        |  9.78 | 0.76 | [  8.28, 11.27] |  12.86
+      Male    |         high level of education |        |                 |        |  9.00 | 2.28 | [  4.51, 13.49] |   3.94
+      Female  |                                 |        |                 |        |  9.00 | 1.32 | [  6.41, 11.59] |   6.83
+      Male    |          low level of education |   male |    Care Level 1 |      1 | 12.00 | 2.28 | [  7.51, 16.49] |   5.26
+      Female  |                                 |        |                 |        | 16.43 | 0.86 | [ 14.73, 18.12] |  19.05
+      Male    | intermediate level of education |        |                 |        | 14.00 | 1.61 | [ 10.83, 17.17] |   8.68
+      Female  |                                 |        |                 |        | 13.57 | 0.86 | [ 11.88, 15.27] |  15.74
+      Male    |         high level of education |        |                 |        | 16.00 | 1.32 | [ 13.41, 18.59] |  12.15
+      Female  |                                 |        |                 |        | 27.92 | 5.08 | [ 17.93, 37.91] |   5.50
+      Male    |          low level of education | female |                 |        | 17.00 | 1.32 | [ 14.41, 19.59] |  12.91
+      Female  |                                 |        |                 |        | 15.00 | 0.86 | [ 13.30, 16.70] |  17.40
+      Male    | intermediate level of education |        |                 |        | 12.80 | 1.02 | [ 10.79, 14.81] |  12.55
+      Female  |                                 |        |                 |        | 13.77 | 0.49 | [ 12.82, 14.73] |  28.32
+      Male    |         high level of education |        |                 |        | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
+      Female  |                                 |        |                 |        | 14.82 | 0.69 | [ 13.47, 16.17] |  21.54
+      Male    |          low level of education |   male |    Care Level 2 |        | 13.00 | 2.28 | [  8.51, 17.49] |   5.70
+      Female  |                                 |        |                 |        | 14.57 | 0.86 | [ 12.88, 16.27] |  16.90
+      Male    | intermediate level of education |        |                 |        | 17.75 | 1.14 | [ 15.51, 19.99] |  15.56
+      Female  |                                 |        |                 |        | 14.95 | 0.52 | [ 13.92, 15.98] |  28.56
+      Male    |         high level of education |        |                 |        |  3.80 | 8.72 | [-13.34, 20.94] |   0.44
+      Female  |                                 |        |                 |        | 15.80 | 1.02 | [ 13.79, 17.81] |  15.49
+      Male    |          low level of education | female |                 |        | 17.00 | 1.61 | [ 13.83, 20.17] |  10.54
+      Female  |                                 |        |                 |        | 13.17 | 0.93 | [ 11.34, 15.00] |  14.14
+      Male    | intermediate level of education |        |                 |        | 16.50 | 0.93 | [ 14.67, 18.33] |  17.72
+      Female  |                                 |        |                 |        | 14.61 | 0.48 | [ 13.67, 15.54] |  30.71
+      Male    |         high level of education |        |                 |        | 15.33 | 1.32 | [ 12.74, 17.92] |  11.64
+      Female  |                                 |        |                 |        | 15.50 | 0.61 | [ 14.30, 16.70] |  25.42
+      Male    |          low level of education |   male | Care Level 3/3+ |        |  1.78 | 7.99 | [-13.93, 17.48] |   0.22
+      Female  |                                 |        |                 |        | 13.00 | 0.81 | [ 11.41, 14.59] |  16.12
+      Male    | intermediate level of education |        |                 |        | 18.67 | 1.32 | [ 16.08, 21.26] |  14.17
+      Female  |                                 |        |                 |        | 18.06 | 0.54 | [ 17.00, 19.11] |  33.58
+      Male    |         high level of education |        |                 |        |  4.60 | 7.00 | [ -9.17, 18.38] |   0.66
+      Female  |                                 |        |                 |        | 19.00 | 1.61 | [ 15.83, 22.17] |  11.78
+      Male    |          low level of education | female |                 |        | 19.00 | 2.28 | [ 14.51, 23.49] |   8.33
+      Female  |                                 |        |                 |        | 19.75 | 1.14 | [ 17.51, 21.99] |  17.31
+      Male    | intermediate level of education |        |                 |        | 15.40 | 1.02 | [ 13.39, 17.41] |  15.09
+      Female  |                                 |        |                 |        | 15.64 | 0.61 | [ 14.44, 16.84] |  25.65
+      Male    |         high level of education |        |                 |        | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
+      Female  |                                 |        |                 |        | 13.25 | 1.14 | [ 11.01, 15.49] |  11.62
+      
+      Marginal means estimated at c161sex
+
