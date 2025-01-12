@@ -1,3 +1,6 @@
+skip_if_not_installed("emmeans")
+skip_if_not_installed("marginaleffects")
+
 test_that("estimate_slopes - print summary", {
   skip_if_not_installed("MASS")
   set.seed(333)
