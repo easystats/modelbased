@@ -27,9 +27,12 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-if (!requireNamespace("ggplot2", quietly = TRUE) ||
-  !requireNamespace("datawizard", quietly = TRUE)) {
+pkgs <- c("ggplot2", "easystats")
+successfully_loaded <- vapply(pkgs, requireNamespace, TRUE, quietly = TRUE)
+
+if (getRversion() < "4.1.0") { # for native pipe
   knitr::opts_chunk$set(eval = FALSE)
+  successfully_loaded[pkgs] <- FALSE
 }
 
 set.seed(333)
@@ -50,17 +53,17 @@ descriptive statistics. For instance, **what is the mean `Sepal.Width` for each 
 We can compute the means very easily by grouping the observations by species,
 and then computing the mean and the SD:
 
-```{r}
-library(tidyverse)
+```{r eval=successfully_loaded["easystats"]}
 library(easystats)
 
-# TODO: wait until this works
-datawizard::describe_distribution(iris, select="Sepal.Width", by="Species")
+iris |>
+  data_group("Species") |>
+  describe_distribution(select = "Sepal.Width")
 ```
 
 We can also visualize it with a plot:
 
-```{r}
+```{r eval=successfully_loaded["ggplot2"]}
 ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter(width = 0.05) +
@@ -101,7 +104,7 @@ We can now add these means, as well as the [**credible interval (CI)**](https://
 representing the uncertainty of the estimation, as an overlay on the previous
 plot:
 
-```{r}
+```{r eval=successfully_loaded["ggplot2"]}
 p <- ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter(width = 0.05) +
@@ -119,7 +122,7 @@ p
 
 Note that *modelbased* provides some automated plotting capabilities for quick visual checks:
 
-```{r}
+```{r eval=successfully_loaded["ggplot2"]}
 plot(means)
 ```
 
@@ -140,15 +143,15 @@ means_complex
 
 Now let's add to our previous plot the marginal means from the more complex model (shown in purple) next to each other, which should help us notice how the adjusted means change depending on the predictors.
 
-```{r}
+```{r eval=successfully_loaded["ggplot2"]}
 p +
-  geom_line(data = means_complex, aes(y = Mean, group = 1), color="purple") +
+  geom_line(data = means_complex, aes(y = Mean, group = 1), color = "purple") +
   geom_pointrange(
     data = means_complex,
     aes(y = Mean, ymin = CI_low, ymax = CI_high),
     size = 1,
     color = "purple"
-  ) 
+  )
 ```
 
 That's interesting! It seems that after adjusting ("controlling for") the model for petal
