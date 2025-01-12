@@ -144,7 +144,7 @@ test_that("visualization_recipe", {
   x <- estimate_slopes(model, trend = "Sepal.Width", by = "Species")
   # plot(modelbased:::.visualization_recipe(x))
   aes <- modelbased:::.find_aes(x)$aes
-  expect_identical(aes$y, "Coefficient")
+  expect_identical(aes$y, "Slope")
   expect_identical(aes$x, "Species")
   expect_null(aes$color)
 
