@@ -9,11 +9,9 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
     x[adjusted_for] <- NULL
   }
 
-  ## TODO: once `by` works in estimate_contrasts(), re-enable this
-
   # arrange columns (not for contrast now)
-  if (!inherits(x, "estimate_contrasts")) {
-    by <- rev(attr(x, "focal_terms", exact = TRUE))
+  by <- rev(attr(x, "focal_terms", exact = TRUE))
+  if (!is.null(by) && all(by %in% colnames(x))) {
     x <- datawizard::data_arrange(x, select = by)
   }
 
