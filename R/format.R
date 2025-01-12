@@ -103,7 +103,8 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     model,
     model_data,
     info,
-    ci
+    ci,
+    estimate_name = "Slope"
   )
 
   .set_back_attributes(x, params)
@@ -180,7 +181,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # tidy output
   params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
   coefficient_name <- intersect(
-    c(attributes(params)$coefficient_name, "Coefficient", "Predicted"),
+    c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
     colnames(params)
   )[1]
 
@@ -189,7 +190,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # relocate columns
   relocate_columns <- intersect(
-    c(coefficient_name, "Coefficient", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
+    c(coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
     colnames(params)
   )
   params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint

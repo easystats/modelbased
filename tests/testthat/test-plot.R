@@ -304,3 +304,37 @@ test_that("plots, at special values", {
     plot(pr, show_data = FALSE)
   )
 })
+
+test_that("plots, estimate_slope", {
+  data(iris)
+
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species", backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-1",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "emmeans")
+  vdiffr::expect_doppelganger(
+    "plot-slopes-2",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-3",
+    plot(slopes)
+  )
+
+  model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-slopes-4",
+    plot(slopes)
+  )
+})

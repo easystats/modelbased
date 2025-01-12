@@ -16,7 +16,7 @@
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
-    aes$y <- "Coefficient"
+    aes$y <- "Slope"
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
     aes$y <- "Coefficient"

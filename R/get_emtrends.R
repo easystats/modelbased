@@ -34,8 +34,7 @@ get_emtrends <- function(model,
   attr(estimated, "trend") <- my_args$trend
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
-  attr(estimated, "focal_terms") <- my_args$trend
-  attr(estimated, "coef_name") <- "Coefficient"
+  attr(estimated, "coef_name") <- "Slope"
 
   estimated
 }
@@ -99,6 +98,9 @@ get_emtrends <- function(model,
   }
   # Remove the "1 - overall" column that can appear in cases like y ~ x
   trends <- trends[names(trends) != "1"]
+
+  # rename
+  trends <- datawizard::data_rename(trends, select = c(Slope = "Coefficient"))
 
   # Restore factor levels
   datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
