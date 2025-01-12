@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 )
 options(digits = 2)
 
-pkgs <- c("ggplot2", "easystats")
+pkgs <- c("ggplot2", "easystats", "marginaleffects", "emmeans")
 successfully_loaded <- vapply(pkgs, requireNamespace, TRUE, quietly = TRUE)
 
 if (getRversion() < "4.1.0") { # for native pipe
@@ -89,7 +89,7 @@ represent average of response variable (here, `Sepal.Width`) for each level of
 predictor variable (here, `Species`).
 
 
-```{r}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects")])}
 library(modelbased)
 model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
@@ -105,7 +105,7 @@ We can now add these means, as well as the [**credible interval (CI)**](https://
 representing the uncertainty of the estimation, as an overlay on the previous
 plot:
 
-```{r eval=successfully_loaded["ggplot2"]}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
 p <- ggplot(iris, aes(x = Species, y = Sepal.Width, fill = Species)) +
   geom_violin() +
   geom_jitter(width = 0.05) +
@@ -123,7 +123,7 @@ p
 
 Note that *modelbased* provides some automated plotting capabilities for quick visual checks:
 
-```{r eval=successfully_loaded["ggplot2"]}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
 plot(means)
 ```
 
@@ -135,7 +135,7 @@ much more complex models. For instance, we could fit a model that takes into
 account the interaction with the other variable, `Petal.Width`. The estimated means will be "adjusted" (or will take into
 account) for variations of these other components.
 
-```{r}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects")])}
 model <- lm(Sepal.Width ~ Species + Petal.Width, data = iris)
 means_complex <- estimate_means(model, by = "Species")
 
@@ -144,7 +144,7 @@ means_complex
 
 Now let's add to our previous plot the marginal means from the more complex model (shown in purple) next to each other, which should help us notice how the adjusted means change depending on the predictors.
 
-```{r eval=successfully_loaded["ggplot2"]}
+```{r eval=all(successfully_loaded[c("emmeans", "marginaleffects", "ggplot2")])}
 p +
   geom_line(data = means_complex, aes(y = Mean, group = 1), color = "purple") +
   geom_pointrange(
