@@ -137,7 +137,7 @@
         alpha = aes$alpha
       )
     )
-    if (!is.null(aes$color) & aes$type == "pointrange") {
+    if (!is.null(aes$color) && aes$type == "pointrange") {
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
