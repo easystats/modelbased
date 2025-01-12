@@ -7,7 +7,7 @@
 
 ------------------------------------------------------------------------
 
-`modelbased` is a package helping with model-based estimations, to
+**modelbased** is a package helping with model-based estimations, to
 easily compute of marginal means, contrast analysis and model
 predictions.
 
@@ -52,23 +52,23 @@ check-out these vignettes:
   derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
 - [Use a model to make
   predictions](https://easystats.github.io/modelbased/articles/estimate_response.html)
-- [Interpret simple and complex models using the power of Effect
-  Derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
-- [How to use Mixed models to Estimate Individuals’
-  Scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
+- [Interpret simple and complex models using the power of effect
+  derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
+- [How to use mixed models to estimate individuals’
+  scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
 - [Visualize effects and
   interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
-- [The Modelisation Approach to
-  Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
+- [The modelisation approach to
+  statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
 ## Features
 
-The core idea behind the `modelbased` package is that statistical models
-often contain a lot more insights than what you get from simply looking
-at the model parameters. In many cases, like models with multiple
-interactions, non-linear effects, non-standard families, complex random
-effect structures, the parameters can be hard to interpret. This is
-where the `modelbased` package comes in.
+The core idea behind the **modelbased** package is that statistical
+models often contain a lot more insights than what you get from simply
+looking at the model parameters. In many cases, like models with
+multiple interactions, non-linear effects, non-standard families,
+complex random effect structures, the parameters can be hard to
+interpret. This is where the **modelbased** package comes in.
 
 To give a very simply example, imagine that you are interested in the
 effect of 3 conditions *A*, *B* and *C* on a variable *Y*. A simple
@@ -82,7 +82,7 @@ that the *estimated average* (which can be much more relevant, e.g., if
 you adjust for other variables in the model) is contained in your model,
 and that you can get them easily by running `estimate_means()`?
 
-The `modelbased` package is built around 4 main functions:
+The **modelbased** package is built around 4 main functions:
 
 - [`estimate_means()`](https://easystats.github.io/modelbased/reference/estimate_means.html):
   Estimates the average values at each factor levels
@@ -98,10 +98,10 @@ These functions are based on important statistical concepts, like [data
 grids](https://easystats.github.io/insight/reference/get_datagrid.html),
 [predictions](https://easystats.github.io/insight/reference/get_predicted.html)
 and *marginal effects*, and leverages other packages like
-[emmeans](https://rvlenth.github.io/emmeans/) and
-[marginaleffects](https://marginaleffects.com/). We recommend reading
-about all of that to get a deeper understanding of the hidden power of
-your models.
+[**emmeans**](https://rvlenth.github.io/emmeans/) and
+[**marginaleffects**](https://marginaleffects.com/). We recommend
+reading about all of that to get a deeper understanding of the hidden
+power of your models.
 
 ## Examples
 
@@ -266,7 +266,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   relative to the mean).
 - **Solution**: Create a data grid following the desired specifications,
   and feed it to the model to obtain predictions. Format some of the
-  columns for better readability, and plot using `ggplot`.
+  columns for better readability, and plot using **ggplot**.
 
 Check-out [**this
 vignette**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
@@ -440,13 +440,9 @@ plot(estimate_relation(model, length = 100)) /
 - **Problem**: You model a non-linear relationship using polynomials,
   splines or GAMs. You want to describe it in terms of linear parts:
   where does it decrease, how much, where does it increase, etc.
-- **Solution**: You can apply `describe_nonlinear` on a predicted
+- **Solution**: You can apply `describe_nonlinear()` on a predicted
   relationship that will return the different parts of increase and
   decrease.
-
-See [**this
-vignette**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
-for more information.
 
 ``` r
 model <- lm(Sepal.Width ~ poly(Petal.Length, 2), data = iris)
@@ -503,7 +499,7 @@ Aside from plotting the coefficient of each random effect (as done
 we can also visualize the predictions of the model for each of these
 levels, which can be useful to diagnostic or see how they contribute to
 the fixed effects. We will do that by making predictions with
-`estimate_relation` and setting `include_random` to `TRUE`.
+`estimate_relation()` and setting `include_random` to `TRUE`.
 
 Let’s model the reaction time with the number of days of sleep
 deprivation as fixed effect and the participants as random intercept.
