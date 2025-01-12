@@ -64,15 +64,15 @@ library("modelbased")
 
 Access the package [**documentation**](https://easystats.github.io/modelbased/), and check-out these vignettes:
 
-- [**Visualisation matrix**](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
-- [**Marginal means**](https://easystats.github.io/modelbased/articles/estimate_means.html)
-- [**Contrast analysis**](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
-- [**Marginal effects**](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
-- [**Use a model to make predictions**](https://easystats.github.io/modelbased/articles/estimate_response.html)
-- [**Describe non-linear curves**](https://easystats.github.io/modelbased/articles/describe_nonlinear.html)
-- [**Interpret models using Effect Derivatives**](https://easystats.github.io/modelbased/articles/derivatives.html)
-- [**Estimate and re-use random effects**](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
-- [**The modelisation approach**](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
+* [Data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+* [What are, why use and how to get marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html)
+* [Contrast analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
+* [Marginal effects and derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
+* [Use a model to make predictions](https://easystats.github.io/modelbased/articles/estimate_response.html)
+* [Interpret simple and complex models using the power of Effect Derivatives](https://easystats.github.io/modelbased/articles/derivatives.html)
+* [How to use Mixed models to Estimate Individuals' Scores](https://easystats.github.io/modelbased/articles/estimate_grouplevel.html)
+* [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
+* [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
 ## Features
 
