@@ -31,3 +31,60 @@
       -3.38 | 3.28 | -0.05 |       12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
       Marginal effects estimated for x
 
+---
+
+    Code
+      deriv
+    Output
+      Estimated Marginal Effects
+      
+      x     | Coefficient |   SE |         95% CI |     t |      p
+      ------------------------------------------------------------
+      -3.38 |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      -2.64 |       12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      -1.90 |       12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      -1.16 |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      -0.42 |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      0.32  |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      1.06  |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      1.80  |       12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      2.54  |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      3.28  |       12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      Marginal effects estimated for x
+
+---
+
+    Code
+      summary(deriv)
+    Output
+      Average Marginal Effects
+      
+      Start |  End |     x | Coefficient |   SE |         95% CI |     t |      p
+      ---------------------------------------------------------------------------
+      -3.38 | 3.28 | -0.05 |       12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      Marginal effects estimated for x
+
+# estimate_slopes - print regular
+
+    Code
+      print(slopes)
+    Output
+      Estimated Marginal Effects
+      
+      Coefficient |   SE |       95% CI | t(144) |      p
+      ---------------------------------------------------
+      0.79        | 0.10 | [0.59, 0.99] |   7.69 | < .001
+      Marginal effects estimated for Petal.Length
+
+---
+
+    Code
+      print(slopes)
+    Output
+      Estimated Marginal Effects
+      
+      Predicted | Coefficient |   SE |       95% CI |    t |      p
+      -------------------------------------------------------------
+      4.97      |        0.79 | 0.10 | [0.59, 0.99] | 7.69 | < .001
+      Marginal effects estimated for Petal.Length
+
