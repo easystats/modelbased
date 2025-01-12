@@ -48,8 +48,6 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
-        - text: "Transformations"
-          href: articles/transformations.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html
