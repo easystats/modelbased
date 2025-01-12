@@ -70,7 +70,6 @@ get_marginalcontrasts <- function(model,
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, verbose, ...)
 
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 

@@ -123,6 +123,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     "revpairwise", "revreference", "revsequential"
   )
 
+  # Column name for coefficient - fix needed for contrasting slopes
+  colnames(x)[colnames(x) == "Slope"] <- "Difference"
+
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
