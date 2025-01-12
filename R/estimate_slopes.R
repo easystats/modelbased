@@ -140,7 +140,7 @@ estimate_slopes <- function(model,
   # add attributes from workhorse function
   attributes(trends) <- utils::modifyList(
     attributes(trends),
-    info[c("at", "by", "datagrid", "focal_terms", "trend", "coef_name")]
+    info[c("at", "by", "datagrid", "focal_terms", "trend", "coef_name", "preserve_range")]
   )
 
   # Output

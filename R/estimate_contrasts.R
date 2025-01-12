@@ -166,7 +166,7 @@ estimate_contrasts <- function(model,
   # add attributes from workhorse function
   attributes(out) <- utils::modifyList(
     attributes(out),
-    info[c("at", "by", "contrast", "predict", "p_adjust")]
+    info[c("at", "by", "contrast", "predict", "p_adjust", "preserve_range")]
   )
 
   # Output

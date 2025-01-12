@@ -18,7 +18,7 @@ test_that("attributes_means", {
     c(
       "names", "class", "row.names", "by", "at", "predict", "datagrid",
       "focal_terms", "table_title", "table_footer", "model", "response",
-      "ci", "backend", "coef_name"
+      "ci", "backend", "coef_name", "preserve_range"
     )
   )
 })
@@ -41,7 +41,7 @@ test_that("attributes_means, contrasts", {
     c(
       "names", "row.names", "datagrid", "focal_terms", "table_title",
       "table_footer", "model", "response", "ci", "backend", "coef_name",
-      "class", "contrast", "p_adjust"
+      "preserve_range", "class", "contrast", "p_adjust"
     )
   )
 })
@@ -55,7 +55,7 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "focal_terms", "trend", "coef_name"
+      "model", "response", "ci", "trend", "coef_name"
     )
   )
   ## FIXME: should be more attributes here
@@ -82,8 +82,8 @@ test_that("attributes_means", {
     attributes(estim),
     c(
       "names", "class", "row.names", "ci", "keep_iterations", "response",
-      "model", "focal_terms", "table_title", "table_footer", "adjusted_for",
-      "at_specs", "at", "by", "preserve_range", "reference", "data"
+      "model", "focal_terms", "preserve_range", "table_title", "table_footer",
+      "adjusted_for", "at_specs", "at", "by", "reference", "data"
     )
   )
 })
