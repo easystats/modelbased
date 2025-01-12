@@ -2,7 +2,7 @@
 
 
 #' @keywords internal
-.find_aes <- function(x) {
+.find_aes <- function(x, join_dots = TRUE) {
   data <- as.data.frame(x)
   att <- attributes(x)
   aes <- list(
@@ -65,6 +65,11 @@
     aes$grid <- stats::as.formula(paste(by[3], "~", paste(utils::tail(by, -3), collapse = "*")))
   }
 
+  # if range it preserved, no joined dots
+  if (isTRUE(attributes(x)$preserve_range) && is.numeric(data[[by[1]]])) {
+    join_dots <- FALSE
+  }
+
   # CI
   aes <- .find_aes_ci(aes, data)
 
@@ -98,16 +103,12 @@
                                   grid = NULL,
                                   join_dots = TRUE,
                                   ...) {
-  aes <- .find_aes(x)
+  aes <- .find_aes(x, join_dots)
   data <- aes$data
   aes <- aes$aes
   layers <- list()
   l <- 1
-
-  # if range it preserved, no joined dots
-  if (isTRUE(attributes(x)$preserve_range)) {
-    join_dots <- FALSE
-  }
+  join_dots <- aes$join_dots
 
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
