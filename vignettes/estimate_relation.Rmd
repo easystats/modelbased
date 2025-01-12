@@ -1,6 +1,6 @@
 ---
 title: "Visualize effects and interactions"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     fig_width: 10.08
@@ -10,7 +10,7 @@ vignette: >
   %\VignetteIndexEntry{Visualize effects and interactions}
   \usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options: 
+editor_options:
   chunk_output_type: console
 bibliography: bibliography.bib
 ---
@@ -22,6 +22,7 @@ knitr::opts_chunk$set(comment = ">", dpi = 300)
 options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
+  !requireNamespace("mgcv", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -32,7 +33,7 @@ set.seed(333)
 This vignette will present how to visualize the effects and interactions using
 `estimate_relation()`.
 
-Note that the statistically correct name of `estimate_relation` is `estimate_expectation` (which can be used as an alias), as it refers to expected predictions (read [more](https://easystats.github.io/insight/reference/get_predicted.html)). 
+Note that the statistically correct name of `estimate_relation` is `estimate_expectation` (which can be used as an alias), as it refers to expected predictions (read [more](https://easystats.github.io/insight/reference/get_predicted.html)).
 
 ## Simple regression
 
@@ -49,6 +50,7 @@ head(visualization_data)
 
 
 ```{r}
+library(ggplot2)
 plot(visualization_data, line = list(color = "red")) +
   theme_minimal()
 ```
@@ -58,8 +60,8 @@ plot(visualization_data, line = list(color = "red")) +
 ### Polynomial
 
 ```{r}
-lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris)  |> 
-  modelbased::estimate_relation(length = 50) |> 
+lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris)  |>
+  modelbased::estimate_relation(length = 50) |>
   plot()
 ```
 
@@ -68,11 +70,10 @@ lm(Sepal.Length ~ poly(Sepal.Width, 2), data = iris)  |>
 ```{r}
 library(mgcv)
 
-mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |> 
-  modelbased::estimate_relation(length = 50) |> 
+mgcv::gam(Sepal.Length ~ s(Sepal.Width), data = iris) |>
+  modelbased::estimate_relation(length = 50) |>
   plot()
 ```
 
 
 ## References
-
