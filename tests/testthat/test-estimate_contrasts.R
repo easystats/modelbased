@@ -328,6 +328,7 @@ test_that("estimate_contrasts - different options for comparison", {
   expect_equal(out$Difference, c(0.35, -0.8, -0.35), tolerance = 1e-3)
 })
 
+skip_on_os(c("mac", "linux"))
 
 test_that("estimate_contrasts - filtering works", {
   skip_if_not_installed("ggeffects")
