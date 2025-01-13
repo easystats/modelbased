@@ -91,14 +91,29 @@ get_marginalmeans <- function(model,
     datagrid <- as.data.frame(datagrid)
   }
 
-  # setup arguments
-  fun_args <- list(
-    model,
-    by = at_specs$varname,
-    newdata = datagrid,
-    conf_level = ci,
-    df = dof
-  )
+  # setup arguments - either for conditional or counterfactual predictions
+  if (isTRUE(dots$counterfactual)) {
+    # sanity check
+    if (is.null(datagrid)) {
+      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
+    }
+    fun_args <- list(
+      model,
+      variables = lapply(datagrid, unique),
+      by = at_specs$varname,
+      conf_level = ci,
+      df = dof
+    )
+  } else {
+    fun_args <- list(
+      model,
+      by = at_specs$varname,
+      newdata = datagrid,
+      conf_level = ci,
+      df = dof
+    )
+  }
+
   # handle distributional parameters
   if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
@@ -106,6 +121,8 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # cleanup
+  dots$counterfactual <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages

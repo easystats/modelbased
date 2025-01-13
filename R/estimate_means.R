@@ -123,7 +123,7 @@ estimate_means <- function(model,
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(
     means,
-    type = "means",
+    type = ifelse(isTRUE(list(...)$counterfactual), "counterfactuals", "means"),
     predict = attributes(estimated)$predict,
     model_info = insight::model_info(model)
   )
@@ -156,7 +156,11 @@ estimate_means <- function(model,
                                    p_adjust = NULL,
                                    predict = NULL,
                                    model_info = NULL) {
-  table_footer <- paste("\nMarginal", type)
+  table_footer <- switch(type,
+    counterfactuals = "Average",
+    "Marginal"
+  )
+  table_footer <- paste0("\n", table_footer, " ", type)
 
   # Levels
   if (!is.null(by) && length(by) > 0) {
@@ -177,6 +181,7 @@ estimate_means <- function(model,
   # tell user about scale of predictions / contrasts
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
     result_type <- switch(type,
+      counterfactuals = ,
       means = "Predictions",
       contrasts = "Contrasts"
     )
