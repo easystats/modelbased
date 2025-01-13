@@ -221,7 +221,7 @@ test_that("plots, estimate_means works with Poisson", {
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
-    "plot-means-poisson-1",
+    "plot-means-poisson-2",
     plot(x)
   )
 })
