@@ -140,10 +140,15 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
 
-    # we now have a data frame with each comparison-pairs as single column.
-    # next, we need to separate the levels from the different variables at the ","
-    params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
-    colnames(params) <- paste0(rep.int(focal_terms, 2), rep(seq_along(focal_terms), each = 2))
+    # for more than one term, we have comma-separated levels.
+    if (length(focal_terms) > 1) {
+      # we now have a data frame with each comparison-pairs as single column.
+      # next, we need to separate the levels from the different variables at the ","
+      params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
+      colnames(params) <- paste0(focal_terms, rep(seq_along(focal_terms), each = 2))
+    } else {
+      colnames(params) <- paste0(focal_terms, 1:2)
+    }
 
     # make sure all whitespaces are removed
     params[] <- lapply(params, insight::trim_ws)
