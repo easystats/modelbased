@@ -56,28 +56,177 @@ In line with the `easystats`' *raison d'être*, the `modelbased` package is desi
 ## Predictions
 
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
+These predictions can be of different types, depending on the model and the question at hand.
+For instance, for linear regressions, predictions can be associated with **confidence intervals** (`predict="expectation"`) or **prediction intervals** (`predict="prediction"`).
+The former corresponds to the uncertainty around the "relationship" (i.e., the estimate in the model's conditional parameters) while the second provides information about the range where observation values can actually fall.
+For logistic models, predictions can be made on the **response scale** (`predict="response"`) - in terms of probability - or on the **link scale** (`predict="link"`) - in terms of log odds.
 
-Mention types of predictions (expectations, predictions, response vs. the link scale)
+These different types of variations can be obtained for the original data, which is useful to assess the model's goodness-of-fit, or for new data (typically a "data grid"), which is useful for visualization.
+
+For convenience, the `modelbased` package includes 4 "related" functions, that mostly differ in their default arguments for `data` and `predict`:
+
+- `estimate_prediction()`: original data, prediction intervals.
+- `estimate_expectation()`: original data, confidence intervals.
+- `estimate_relation()`: data grid, predictions on the response scale. 
+- `estimate_link()`: data grid, predictions on the link scale.
+
+These functions belong to the same family, and the relevance of their output depends on the model and the research question.
 
 ## Marginal effects
 
-Concept of "marginal". 
+The concept of "marginal" in statistical modeling refers to the effect of one variable when all other variables are held constant at specific values (e.g., their reference value, or their empirical or theoretical average). 
+This is crucial for interpreting how individual predictors influence the response variable in complex models.
 
-Marginal means, contrasts and slopes.
+- `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
+- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
+- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for a one-unit change in a predictor, holding all other predictors constant. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
+
+The modelbased package simplifies the extraction of these effects, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
+
+[details about types of marginalization]
+
 
 ## Technical details
 
-It leverages the `get_datagrid()` function from the `insight` package to intuitively generate an appropriate grid of data points for which predictions will be computed.
+It leverages the `get_datagrid()` function from the `insight` package (REF) to intuitively generate an appropriate grid of data points for which predictions will be computed.
 
 The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`.
 
-Differences? 
+- `emmeans` (REF) Originally, the package was known as `lsmeans`, which stands for "Least-Squares Means". 
+  This term was coined by researchers in the statistical community to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs, which are essentially predictions averaged over specified levels of factors in the model while holding continuous variables at their means or other specified values.
+  The term "Least-Squares Means" was somewhat misleading as it suggested a method specific to least-squares estimation, hence its renaming to `emmeans` in 2016 to clarify its scope for a wider range of models including generalized linear models, mixed models, and Bayesian models.
+- `marginaleffects` (REF) was more recently introduced and also employs the delta method to approximate variance estimation.
+
+[What's the difference / benefits / drawbacks of using one or ther other?]
 
 Something about the delta method?
 
+This backend can be set as a global option with e.g., `options(modelbased_backend = "marginaleffects")`.
+
 # Examples
 
-TODO.
+Imagine the following linear model in which we predict flower's `Petal.Width` from the interaction between `Petal.Length` and `Species`.
+
+```r
+library(easystats)
+
+model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+
+parameters::parameters(model)
+```
+```
+Parameter                           | Coefficient |   SE |        95% CI | t(144) |      p
+------------------------------------------------------------------------------------------
+(Intercept)                         |       -0.05 | 0.21 | [-0.47, 0.38] |  -0.22 | 0.823 
+Petal Length                        |        0.20 | 0.15 | [-0.09, 0.49] |   1.38 | 0.170 
+Species [versicolor]                |       -0.04 | 0.32 | [-0.66, 0.59] |  -0.11 | 0.909 
+Species [virginica]                 |        1.18 | 0.33 | [ 0.52, 1.84] |   3.54 | < .001
+Petal Length × Species [versicolor] |        0.13 | 0.16 | [-0.18, 0.44] |   0.83 | 0.405 
+Petal Length × Species [virginica]  |       -0.04 | 0.15 | [-0.34, 0.26] |  -0.27 | 0.789
+```
+
+The **parameters** of this model can be a bit hard to interpret and do not offer us all the insights that we could get from this model.
+
+## Visualize relationship
+
+We can start by easily visualizing the relationship between our response variable and our predictors.
+
+```r
+estimate_relation(model, by=c("Petal.Length", "Species"), length=100) |> 
+  plot()
+```
+**ADD PLOT**
+
+But what is the **average value** of `Petal.Width` for each species?
+
+## Marginal Means
+
+The marginal means can be computed, which are the mean predictions for each level of a categorical predictor, *averaged across* all levels of other predictors (`Petal.Length` in this case).
+
+```r
+estimate_means(model, by="Species")
+```
+```
+Estimated Marginal Means
+
+Species    | Mean |   SE |       95% CI
+---------------------------------------
+setosa     | 0.71 | 0.34 | [0.04, 1.37]
+versicolor | 1.16 | 0.04 | [1.09, 1.23]
+virginica  | 1.74 | 0.09 | [1.57, 1.91]
+
+Marginal means estimated at Species
+```
+
+But are these different species **significantly different** from each other?
+
+## Marginal Contrasts
+
+We can estimate all the pairwise contrasts between the levels of the `Species` factor.
+
+```r
+estimate_contrasts(model, contrast="Species")
+```
+```
+Marginal Contrasts Analysis
+
+Level1     |     Level2 | Difference |         95% CI |   SE | t(144) |      p
+------------------------------------------------------------------------------
+setosa     | versicolor |      -0.45 | [-1.27,  0.37] | 0.34 |  -1.34 | 0.183 
+setosa     |  virginica |      -1.03 | [-1.87, -0.19] | 0.35 |  -2.97 | 0.007 
+versicolor |  virginica |      -0.58 | [-0.81, -0.35] | 0.09 |  -6.18 | < .001
+
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)
+```
+
+As we can see, the average difference betweeen *setosa* and *versicolor* is not significant.
+
+## Marginal Slopes
+
+Similarly, we can compute the marginal effect of `Petal.Length` (i.e., the "slope") for each species.
+
+```r
+estimate_slopes(model, trend="Petal.Length", by="Species")
+```
+```
+Estimated Marginal Effects
+
+Species    | Coefficient |   SE |        95% CI | t(144) |      p
+-----------------------------------------------------------------
+setosa     |        0.20 | 0.15 | [-0.09, 0.49] |   1.38 | 0.170 
+versicolor |        0.33 | 0.05 | [ 0.22, 0.44] |   6.14 | < .001
+virginica  |        0.16 | 0.05 | [ 0.07, 0.25] |   3.49 | < .001
+Marginal effects estimated for Petal.Length
+```
+
+This shows that there is a significant positive relationship between `Petal.Length` and `Petal.Width` for all species but *setosa*
+
+## Marginal Contrasts of Slopes
+
+Finally, we can even compute the contrasts between the slopes of `Petal.Length` for each species.
+
+```r
+estimate_contrasts(model, contrast="Petal.Length", by="Species")
+```
+```
+Marginal Contrasts Analysis
+
+Parameter              | Coefficient |   SE |        95% CI |     t |     p
+---------------------------------------------------------------------------
+setosa - versicolor    |       -0.13 | 0.16 | [-0.43, 0.17] | -0.83 | 0.808
+setosa - virginica     |        0.04 | 0.15 | [-0.26, 0.34] |  0.27 | 0.808
+versicolor - virginica |        0.17 | 0.07 | [ 0.03, 0.31] |  2.41 | 0.048
+
+Marginal contrasts estimated at Petal.Length
+p-value adjustment method: Holm (1979)
+```
+
+The effect of `Petal.Length` on `Petal.Width` is significantly stronger in *virginica* compared to *versicolor*.
+
+# Conclusion
+
+As we can see, the `modelbased` package provides a simple and intuitive interface to extract and visualize important information contained within statistical models.
 
 # Acknowledgements
 
