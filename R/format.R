@@ -121,7 +121,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 #' @export
 format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...) {
   predict <- attributes(x)$predict
-  groups <- attributes(x)$by
+  by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
 
@@ -140,11 +140,51 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
 
-    # we now have a data frame with each comparison-pairs as single column
-    # we now need to separate the levels from the different variables at the ","
-
+    # we now have a data frame with each comparison-pairs as single column.
+    # next, we need to separate the levels from the different variables at the ","
     params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
-    colnames(params) <- rep.int(focal_terms, 2)
+    colnames(params) <- paste0(rep.int(focal_terms, 2), rep(seq_along(focal_terms), each = 2))
+
+    # make sure all whitespaces are removed
+    params[] <- lapply(params, insight::trim_ws)
+
+    # unite back columns with focal contrasts
+    for (i in seq_along(contrast)) {
+      contrast_names <- paste0(contrast[i], 1:2)
+      params <- datawizard::data_unite(
+        params,
+        new_column = contrast[i],
+        select = contrast_names,
+        separator = " - "
+      )
+    }
+
+    # filter by "by" variables
+    if (!is.null(by)) {
+      keep_rows <- seq_len(nrow(params))
+      for (i in by) {
+        by_names <- paste0(i, 1:2)
+        keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
+          all(j == j[1])
+        })]
+      }
+
+      # here we make sure that one of the "by" column has its original column name
+      # back, so we can properly merge all variables in "contrast" and "by" to the
+      # original data
+      by_columns <- paste0(by, 1)
+      params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+
+      # filter original data and new params by "by"
+      x <- x[keep_rows, ]
+      params <- params[keep_rows, ]
+    }
+
+    # remove old column
+    x$Parameter <- NULL
+
+    # add back new columns
+    x <- cbind(params[c(contrast, by)], x)
 
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /
