@@ -107,3 +107,18 @@
       
       Marginal means estimated at c172code = c('low', 'high')
 
+# estimate_epectation - don't print empty RE columns
+
+    Code
+      print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE)
+    Output
+      spp   | Predicted |   SE |           CI
+      ---------------------------------------
+      GP    |      0.73 | 0.21 | [0.32, 1.14]
+      PR    |      0.42 | 0.16 | [0.11, 0.72]
+      DM    |      0.94 | 0.25 | [0.45, 1.43]
+      EC-A  |      0.60 | 0.19 | [0.24, 0.96]
+      EC-L  |      1.42 | 0.37 | [0.69, 2.14]
+      DES-L |      1.34 | 0.36 | [0.63, 2.04]
+      DF    |      0.78 | 0.21 | [0.37, 1.19]
+

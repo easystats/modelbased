@@ -22,6 +22,9 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
     }
   }
 
+  # remove all-NA columns
+  x <- datawizard::remove_empty_columns(x)
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(x, ci_brackets = c("(", ")"), ...)
   } else {
