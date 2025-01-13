@@ -95,12 +95,10 @@
     } else {
       colour <- NULL
     }
-    axis_labels <- list(ylab = ylab, xlab = xlab, colour = colour)
-  } else {
-    axis_labels <- NULL
+    aes$labs <- insight::compact_list(list(y = ylab, x = xlab, colour = colour))
   }
 
-  list(aes = aes, data = data, axis_labels = axis_labels)
+  list(aes = aes, data = data)
 }
 
 
@@ -132,7 +130,6 @@
                                   ...) {
   aes <- .find_aes(x)
   data <- aes$data
-  axis_labels <- aes$axis_labels
   aes <- aes$aes
   layers <- list()
   l <- 1
@@ -242,13 +239,13 @@
   }
 
   # add axis and legend labels ----------------------------------
-  if (!is.null(axis_labels)) {
+  if (!is.null(aes$labs)) {
     layers[[paste0("l", l)]] <- insight::compact_list(list(
       geom = "labs",
-      x = axis_labels$xlab,
-      y = axis_labels$ylab,
-      colour = axis_labels$colour,
-      fill =  axis_labels$colour
+      x = aes$labs$x,
+      y = aes$labs$y,
+      colour = aes$labs$colour,
+      fill =  aes$labs$colour
     ))
     l <- l + 1
   }
