@@ -371,7 +371,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
 #' @keywords internal
 .split_at_minus_outside_parentheses <- function(input_string) {
-  pattern <- "\\(([^()]*)\\)|-" #find all the parentheses and the -
+  pattern <- "\\(([^()]*)\\)|-" # find all the parentheses and the -
   matches <- gregexpr(pattern, input_string, perl = TRUE)
   match_positions <- matches[[1]]
   match_lengths <- attr(matches[[1]], "match.length")
