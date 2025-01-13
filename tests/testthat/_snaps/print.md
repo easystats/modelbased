@@ -71,3 +71,39 @@
       Marginal contrasts estimated at c172code, barthtot = [sd]
       p-value adjustment method: Holm (1979)
 
+# estimate_means - by is list
+
+    Code
+      print(estimate_means(fit, list(c172code = c("low", "high"), c161sex = c(
+        "Female", "Male")), backend = "marginaleffects"), table_width = Inf,
+      zap_small = TRUE)
+    Output
+      Estimated Marginal Means
+      
+      c172code | c161sex |  Mean |   SE |         95% CI | t(825)
+      -----------------------------------------------------------
+      low      |  Female | 12.13 | 0.33 | [11.48, 12.78] |  36.44
+      high     |  Female | 12.73 | 0.38 | [11.98, 13.48] |  33.31
+      low      |    Male | 11.09 | 0.61 | [ 9.89, 12.28] |  18.25
+      high     |    Male | 11.77 | 0.58 | [10.64, 12.90] |  20.45
+      
+      Marginal means estimated at c("low", "high")
+
+---
+
+    Code
+      print(estimate_means(fit, c("c172code = c('low', 'high')",
+        "c161sex = c('Female', 'Male')"), backend = "marginaleffects"), table_width = Inf,
+      zap_small = TRUE)
+    Output
+      Estimated Marginal Means
+      
+      c172code | c161sex |  Mean |   SE |         95% CI | t(825)
+      -----------------------------------------------------------
+      low      |  Female | 12.13 | 0.33 | [11.48, 12.78] |  36.44
+      high     |  Female | 12.73 | 0.38 | [11.98, 13.48] |  33.31
+      low      |    Male | 11.09 | 0.61 | [ 9.89, 12.28] |  18.25
+      high     |    Male | 11.77 | 0.58 | [10.64, 12.90] |  20.45
+      
+      Marginal means estimated at c172code = c('low', 'high')
+
