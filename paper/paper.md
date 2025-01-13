@@ -95,18 +95,138 @@ The algorithmic heavy lifting is done by its two backend packages, `emmeans` and
 - `emmeans` (REF) Originally, the package was known as `lsmeans`, which stands for "Least-Squares Means". 
   This term was coined by researchers in the statistical community to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs, which are essentially predictions averaged over specified levels of factors in the model while holding continuous variables at their means or other specified values.
   The term "Least-Squares Means" was somewhat misleading as it suggested a method specific to least-squares estimation, hence its renaming to `emmeans` in 2016 to clarify its scope for a wider range of models including generalized linear models, mixed models, and Bayesian models.
-- `marginaleffects` (REF) was more recently introduced and also employs the delta method for variance estimation.
+- `marginaleffects` (REF) was more recently introduced and also employs the delta method to approximate variance estimation.
 
 [What's the difference / benefits / drawbacks of using one or ther other?]
 
 Something about the delta method?
 
-This backend can be set as a  global option with e.g., `options(modelbased_backend = "marginaleffects")`.
+This backend can be set as a global option with e.g., `options(modelbased_backend = "marginaleffects")`.
 
 # Examples
 
-TODO.
-Take a few ones from README.
+Imagine the following linear model in which we predict flower's `Petal.Width` from the interaction between `Petal.Length` and `Species`.
+
+```r
+library(easystats)
+
+model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+
+parameters::parameters(model)
+```
+```
+Parameter                           | Coefficient |   SE |        95% CI | t(144) |      p
+------------------------------------------------------------------------------------------
+(Intercept)                         |       -0.05 | 0.21 | [-0.47, 0.38] |  -0.22 | 0.823 
+Petal Length                        |        0.20 | 0.15 | [-0.09, 0.49] |   1.38 | 0.170 
+Species [versicolor]                |       -0.04 | 0.32 | [-0.66, 0.59] |  -0.11 | 0.909 
+Species [virginica]                 |        1.18 | 0.33 | [ 0.52, 1.84] |   3.54 | < .001
+Petal Length × Species [versicolor] |        0.13 | 0.16 | [-0.18, 0.44] |   0.83 | 0.405 
+Petal Length × Species [virginica]  |       -0.04 | 0.15 | [-0.34, 0.26] |  -0.27 | 0.789
+```
+
+The **parameters** of this model can be a bit hard to interpret and do not offer us all the insights that we could get from this model.
+
+## Visualize relationship
+
+We can start by easily visualizing the relationship between our response variable and our predictors.
+
+```r
+estimate_relation(model, by=c("Petal.Length", "Species"), length=100) |> 
+  plot()
+```
+**ADD PLOT**
+
+But what is the **average value** of `Petal.Width` for each species?
+
+## Marginal Means
+
+The marginal means can be computed, which are the mean predictions for each level of a categorical predictor, *averaged across* all levels of other predictors (`Petal.Length` in this case).
+
+```r
+estimate_means(model, by="Species")
+```
+```
+Estimated Marginal Means
+
+Species    | Mean |   SE |       95% CI
+---------------------------------------
+setosa     | 0.71 | 0.34 | [0.04, 1.37]
+versicolor | 1.16 | 0.04 | [1.09, 1.23]
+virginica  | 1.74 | 0.09 | [1.57, 1.91]
+
+Marginal means estimated at Species
+```
+
+But are these different species **significantly different** from each other?
+
+## Marginal Contrasts
+
+We can estimate all the pairwise contrasts between the levels of the `Species` factor.
+
+```r
+estimate_contrasts(model, contrast="Species")
+```
+```
+Marginal Contrasts Analysis
+
+Level1     |     Level2 | Difference |         95% CI |   SE | t(144) |      p
+------------------------------------------------------------------------------
+setosa     | versicolor |      -0.45 | [-1.27,  0.37] | 0.34 |  -1.34 | 0.183 
+setosa     |  virginica |      -1.03 | [-1.87, -0.19] | 0.35 |  -2.97 | 0.007 
+versicolor |  virginica |      -0.58 | [-0.81, -0.35] | 0.09 |  -6.18 | < .001
+
+Marginal contrasts estimated at Species
+p-value adjustment method: Holm (1979)
+```
+
+As we can see, the average difference betweeen *setosa* and *versicolor* is not significant.
+
+## Marginal Slopes
+
+Similarly, we can compute the marginal effect of `Petal.Length` (i.e., the "slope") for each species.
+
+```r
+estimate_slopes(model, trend="Petal.Length", by="Species")
+```
+```
+Estimated Marginal Effects
+
+Species    | Coefficient |   SE |        95% CI | t(144) |      p
+-----------------------------------------------------------------
+setosa     |        0.20 | 0.15 | [-0.09, 0.49] |   1.38 | 0.170 
+versicolor |        0.33 | 0.05 | [ 0.22, 0.44] |   6.14 | < .001
+virginica  |        0.16 | 0.05 | [ 0.07, 0.25] |   3.49 | < .001
+Marginal effects estimated for Petal.Length
+```
+
+This shows that there is a significant positive relationship between `Petal.Length` and `Petal.Width` for all species but *setosa*
+
+## Marginal Contrasts of Slopes
+
+Finally, we can even compute the contrasts between the slopes of `Petal.Length` for each species.
+
+```r
+estimate_contrasts(model, contrast="Petal.Length", by="Species")
+```
+```
+Marginal Contrasts Analysis
+
+Parameter              | Coefficient |   SE |        95% CI |     t |     p
+---------------------------------------------------------------------------
+setosa - versicolor    |       -0.13 | 0.16 | [-0.43, 0.17] | -0.83 | 0.808
+setosa - virginica     |        0.04 | 0.15 | [-0.26, 0.34] |  0.27 | 0.808
+versicolor - virginica |        0.17 | 0.07 | [ 0.03, 0.31] |  2.41 | 0.048
+
+Marginal contrasts estimated at Petal.Length
+p-value adjustment method: Holm (1979)
+```
+
+The effect of `Petal.Length` on `Petal.Width` is significantly stronger in *virginica* compared to *versicolor*.
+
+# Conclusion
+
+As we can see, the `modelbased` package provides a simple and intuitive interface to extract and visualize important information contained within statistical models.
 
 # Acknowledgements
 

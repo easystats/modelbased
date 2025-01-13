@@ -127,6 +127,12 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   theme_minimal()
 ```
 
+You can also get a "quick" plot using the `plot()` function:
+
+```{r}
+plot(means)
+```
+
 
 
 ### Contrast analysis
