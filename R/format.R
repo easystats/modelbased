@@ -136,6 +136,11 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
 
+    params <- as.data.frame(do.call(
+      rbind,
+      lapply(x$Parameter, .split_at_minus_outside_parentheses)
+    ))
+
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /
     # see also https://github.com/easystats/modelbased/pull/280
@@ -312,13 +317,13 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 # parentheses
 
 #' @keywords internal
-split_at_minus_outside_parentheses <- function(input_string) {
+.split_at_minus_outside_parentheses <- function(input_string) {
   pattern <- "\\(([^()]*)\\)|-" #find all the parentheses and the -
   matches <- gregexpr(pattern, input_string, perl = TRUE)
   match_positions <- matches[[1]]
   match_lengths <- attr(matches[[1]], "match.length")
 
-  split_positions <- NULL
+  split_positions <- 0
   for (i in seq_along(match_positions)) {
     if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
       inside_parentheses <- FALSE
@@ -346,5 +351,6 @@ split_at_minus_outside_parentheses <- function(input_string) {
       )
     )
   }
-  insight::trim_ws(parts)
+  parts <- insight::trim_ws(parts)
+  gsub("(", "", gsub(")", "", parts, fixed = TRUE), fixed = TRUE)
 }
