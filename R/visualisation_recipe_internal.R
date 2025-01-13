@@ -10,6 +10,10 @@
     group = 1
   )
 
+  # extract information for labels
+  model_data <- try(insight::get_data(attributes(x)$model), silent = TRUE)
+  model_response <- attributes(x)$response
+
   # Main geom
   if ("estimate_contrasts" %in% att$class) {
     insight::format_error("Automated plotting is not yet implemented for this class.")
@@ -68,7 +72,20 @@
   # CI
   aes <- .find_aes_ci(aes, data)
 
-  list(aes = aes, data = data)
+  # axis and legend labels
+  if (!is.null(model_data) && !is.null(model_response)) {
+    ylab <- attr(model_data[[model_response]], "label", exact = TRUE)
+    if (!is.null(ylab)) ylab <- paste(aes$y, "of", ylab)
+    xlab <- attr(model_data[[by[1]]], "label", exact = TRUE)
+    if (length(by) > 1) {
+      colour <- attr(model_data[[by[[2]]]], "label", exact = TRUE)
+    }
+    axis_labels <- list(ylab = ylab, xlab = xlab, colour = colour)
+  } else {
+    axis_labels <- NULL
+  }
+
+  list(aes = aes, data = data, axis_labels = axis_labels)
 }
 
 
@@ -100,6 +117,7 @@
                                   ...) {
   aes <- .find_aes(x)
   data <- aes$data
+  axis_labels <- aes$axis_labels
   aes <- aes$aes
   layers <- list()
   l <- 1
@@ -204,6 +222,17 @@
       scales = "free_x"
     )
     if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    l <- l + 1
+  }
+  # add axis and legend labels
+  if (!is.null(axis_labels)) {
+    layers[[paste0("l", l)]] <- list(
+      geom = "labs",
+      x = axis_labels$xlab,
+      y = axis_labels$ylab,
+      colour = axis_labels$colour,
+      fill =  axis_labels$colour
+    )
     l <- l + 1
   }
 
