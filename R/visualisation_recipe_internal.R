@@ -11,7 +11,7 @@
   )
 
   # extract information for labels
-  model_data <- .safe(insight::get_data(attributes(x)$model))
+  model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
   model_response <- attributes(x)$response
 
   # Main geom
