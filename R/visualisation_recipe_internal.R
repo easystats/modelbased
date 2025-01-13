@@ -76,10 +76,16 @@
   if (!is.null(model_data) && !is.null(model_response)) {
     # response - mapped to the y-axis
     ylab <- attr(model_data[[model_response]], "label", exact = TRUE)
+    # fix default y-label, if necessary
+    y_prefix <- aes$y
+    if (y_prefix == "Predicted") {
+      y_prefix <- "Predicted value"
+    }
+    # set y-label based on labelled data, or variable name
     if (is.null(ylab)) {
-      ylab <- paste(aes$y, "of", model_response)
+      ylab <- paste(y_prefix, "of", model_response)
     } else {
-      ylab <- paste(aes$y, "of", ylab)
+      ylab <- paste(y_prefix, "of", ylab)
     }
     # main predictor - mapped to x-axis
     xlab <- attr(model_data[[by[1]]], "label", exact = TRUE)
