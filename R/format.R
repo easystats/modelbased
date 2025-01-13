@@ -12,13 +12,14 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   # arrange columns (not for contrast now)
   by <- rev(attr(x, "focal_terms", exact = TRUE))
   if (!is.null(by) && all(by %in% colnames(x))) {
+    # arrange predictions
     x <- datawizard::data_arrange(x, select = by)
-  }
-
-  # protect integers, only for focal terms
-  focal_terms <- attributes(x)$focal_terms
-  if (!is.null(focal_terms) && all(focal_terms %in% colnames(x))) {
-    x[focal_terms] <- lapply(x[focal_terms], insight::format_value, protect_integers = TRUE)
+    # protect integers, only for focal terms
+    for (i in by) {
+      if (is.numeric(x[[i]])) {
+        x[[i]] <- insight::format_value(x[[i]], protect_integers = TRUE, ...)
+      }
+    }
   }
 
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
@@ -204,6 +205,12 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   )
   params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint
   params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
+
+  # relocate focal terms to the beginning
+  by <- attr(x, "focal_terms", exact = TRUE)
+  if (!is.null(by) && all(by %in% colnames(params))) {
+    params <- datawizard::data_reorder(params, by, verbose = FALSE)
+  }
 
   # rename columns
   if (!is.null(estimate_name)) {
