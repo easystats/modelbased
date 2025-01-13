@@ -98,17 +98,24 @@
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
-estimate_contrasts <- function(model,
-                               contrast = NULL,
-                               by = NULL,
-                               predict = NULL,
-                               ci = 0.95,
-                               p_adjust = "holm",
-                               comparison = "pairwise",
-                               backend = getOption("modelbased_backend", "emmeans"),
-                               transform = NULL,
-                               verbose = TRUE,
-                               ...) {
+estimate_contrasts <- function(model, ...) {
+  UseMethod("estimate_contrasts")
+}
+
+
+#' @export
+#' @rdname estimate_contrasts
+estimate_contrasts.default <- function(model,
+                                       contrast = NULL,
+                                       by = NULL,
+                                       predict = NULL,
+                                       ci = 0.95,
+                                       p_adjust = "holm",
+                                       comparison = "pairwise",
+                                       backend = getOption("modelbased_backend", "emmeans"),
+                                       transform = NULL,
+                                       verbose = TRUE,
+                                       ...) {
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
@@ -173,3 +180,20 @@ estimate_contrasts <- function(model,
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
   out
 }
+
+
+#' @export
+estimate_contrasts.estimate_means <- function(model, ...) {
+  x <- attributes(model)$model
+  contrast <- attributes(model)$by
+  # prepare dots - `by` must be removed
+  dot_args <- list(...)
+  dot_args$by <- NULL
+  # function arguments
+  fun_args <- c(list(x, contrast = contrast), dot_args)
+  # call contrasts function
+  do.call(estimate_contrasts, insight::compact_list(fun_args))
+}
+
+#' @export
+estimate_contrasts.estimate_slopes <- estimate_contrasts.estimate_means

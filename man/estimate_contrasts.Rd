@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimate_contrasts.R
 \name{estimate_contrasts}
 \alias{estimate_contrasts}
+\alias{estimate_contrasts.default}
 \title{Estimate Marginal Contrasts}
 \usage{
-estimate_contrasts(
+estimate_contrasts(model, ...)
+
+\method{estimate_contrasts}{default}(
   model,
   contrast = NULL,
   by = NULL,
@@ -20,6 +23,8 @@ estimate_contrasts(
 }
 \arguments{
 \item{model}{A statistical model.}
+
+\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
@@ -108,8 +113,6 @@ as default backend.}
 \item{transform}{Deprecated, please use \code{predict} instead.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
-
-\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 }
 \value{
 A data frame of estimated contrasts.
