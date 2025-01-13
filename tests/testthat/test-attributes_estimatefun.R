@@ -39,9 +39,9 @@ test_that("attributes_means, contrasts", {
   expect_named(
     attributes(estim),
     c(
-      "names", "row.names", "datagrid", "focal_terms", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name",
-      "preserve_range", "class", "contrast", "p_adjust"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "contrast",
+      "preserve_range"
     )
   )
 })

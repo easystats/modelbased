@@ -335,15 +335,13 @@ test_that("estimate_means() - mixed models", {
     family = poisson(),
     data = Salamanders
   )
-  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
-  expect_snapshot(print(out))
+  expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
   out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"))
   expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-1)
 
   m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
-  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
-  expect_snapshot(print(out))
+  expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
   out1 <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"))
   expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-3)
