@@ -359,3 +359,15 @@ test_that("plots, automatically join dots", {
     plot(out)
   )
 })
+
+
+test_that("plots, logistic regression", {
+  data(mtcars)
+  model <- glm(vs ~ wt, data = mtcars, family = "binomial")
+  out <- estimate_means(model, "wt", length = 100, backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-1",
+    plot(out)
+  )
+})
