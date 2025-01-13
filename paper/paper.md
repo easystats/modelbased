@@ -63,6 +63,15 @@ For logistic models, predictions can be made on the **response scale** (`predict
 
 These different types of variations can be obtained for the original data, which is useful to assess the model's goodness-of-fit, or for new data (typically a "data grid"), which is useful for visualization.
 
+For convenience, the `modelbased` package includes 4 "related" functions, that mostly differ in their default arguments for `data` and `predict`:
+
+- `estimate_prediction()`: original data, prediction intervals.
+- `estimate_expectation()`: original data, confidence intervals.
+- `estimate_relation()`: data grid, predictions on the response scale. 
+- `estimate_link()`: data grid, predictions on the link scale.
+
+These functions belong to the same family, and the relevance of their output depends on the model and the research question.
+
 ## Marginal effects
 
 Concept of "marginal". 
@@ -73,11 +82,14 @@ Marginal means, contrasts and slopes.
 
 It leverages the `get_datagrid()` function from the `insight` package (REF) to intuitively generate an appropriate grid of data points for which predictions will be computed.
 
+
 The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`.
 
 Differences? 
 
 Something about the delta method?
+
+This backend can be set as an option with e.g., `options(modelbased_backend = "marginaleffects")`.
 
 # Examples
 
