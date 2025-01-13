@@ -151,7 +151,6 @@
     l <- l + 1
   }
 
-
   # Uncertainty -----------------------------------
   if (aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
@@ -220,6 +219,8 @@
     layers[[paste0("l", l)]] <- list(geom = "coord_flip")
     l <- l + 1
   }
+
+  # grids and facets ----------------------------------
   if (!is.null(aes$facet)) {
     layers[[paste0("l", l)]] <- list(
       geom = "facet_wrap",
@@ -239,7 +240,8 @@
     if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
     l <- l + 1
   }
-  # add axis and legend labels
+
+  # add axis and legend labels ----------------------------------
   if (!is.null(axis_labels)) {
     layers[[paste0("l", l)]] <- insight::compact_list(list(
       geom = "labs",
