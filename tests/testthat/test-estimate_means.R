@@ -223,7 +223,7 @@ test_that("estimate_means() - lm", {
   expect_identical(dim(estim2), c(8L, 9L))
   expect_equal(
     estim2$Mean,
-    c(0.27727, 0.23, 2.004, 2.6842, 1.05, 0.41818, 1.60435, 1.7),
+    c(2.004, 2.6842, 0.27727, 0.23, 1.60435, 1.7, 1.05, 0.41818),
     tolerance = 1e-4
   )
 
