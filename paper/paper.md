@@ -74,9 +74,14 @@ These functions belong to the same family, and the relevance of their output dep
 
 ## Marginal effects
 
-Concept of "marginal". 
+The concept of "marginal" in statistical modeling refers to the effect of one variable when all other variables are held constant at specific values (e.g., their reference value, or their empirical or theoretical average). 
+This is crucial for interpreting how individual predictors influence the response variable in complex models.
 
-Marginal means, contrasts and slopes.
+- `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
+- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
+- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for a one-unit change in a predictor, holding all other predictors constant. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
+
+The modelbased package simplifies the extraction of these effects, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 ## Technical details
 
