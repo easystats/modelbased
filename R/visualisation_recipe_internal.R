@@ -11,7 +11,7 @@
   )
 
   # extract information for labels
-  model_data <- try(insight::get_data(attributes(x)$model), silent = TRUE)
+  model_data <- .safe(insight::get_data(attributes(x)$model))
   model_response <- attributes(x)$response
 
   # Main geom
@@ -75,7 +75,7 @@
   # axis and legend labels
   if (!is.null(model_data) && !is.null(model_response)) {
     # response - mapped to the y-axis
-    ylab <- attr(model_data[[model_response]], "label", exact = TRUE)
+    ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
     # fix default y-label, if necessary
     y_prefix <- aes$y
     if (y_prefix == "Predicted") {
@@ -88,10 +88,10 @@
       ylab <- paste(y_prefix, "of", ylab)
     }
     # main predictor - mapped to x-axis
-    xlab <- attr(model_data[[by[1]]], "label", exact = TRUE)
+    xlab <- .safe(attr(model_data[[by[1]]], "label", exact = TRUE))
     # first grouping variable (2nd in "by") - mapped to legend
     if (length(by) > 1) {
-      colour <- attr(model_data[[by[[2]]]], "label", exact = TRUE)
+      colour <- .safe(attr(model_data[[by[[2]]]], "label", exact = TRUE))
     } else {
       colour <- NULL
     }

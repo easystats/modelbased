@@ -26,3 +26,14 @@
     tools::toTitleCase(.brms_aux_elements())
   )
 }
+
+
+#' @keywords internal
+#' @noRd
+.safe <- function(code, on_error = NULL) {
+  if (isTRUE(getOption("easystats_errors", FALSE)) && is.null(on_error)) {
+    code
+  } else {
+    tryCatch(code, error = function(e) on_error)
+  }
+}
