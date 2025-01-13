@@ -245,7 +245,7 @@
       x = aes$labs$x,
       y = aes$labs$y,
       colour = aes$labs$colour,
-      fill =  aes$labs$colour
+      fill = aes$labs$colour
     ))
     l <- l + 1
   }
