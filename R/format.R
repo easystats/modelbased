@@ -303,3 +303,48 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   }
   estimate_name
 }
+
+
+# this function is used for "estimate_contrasts()", to split the Parameter
+# column into single term columns. {marginaleffects} combines factor levels of
+# different comparisons using "-". For factor levels containing "-", the groups
+# are put in parentheses. This function splits a string at "-" if it's outside
+# parentheses
+
+#' @keywords internal
+split_at_minus_outside_parentheses <- function(input_string) {
+  pattern <- "\\(([^()]*)\\)|-" #find all the parentheses and the -
+  matches <- gregexpr(pattern, input_string, perl = TRUE)
+  match_positions <- matches[[1]]
+  match_lengths <- attr(matches[[1]], "match.length")
+
+  split_positions <- NULL
+  for (i in seq_along(match_positions)) {
+    if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
+      inside_parentheses <- FALSE
+      for (j in seq_along(match_positions)) {
+        if (i != j && match_positions[i] > match_positions[j] && match_positions[i] < (match_positions[j] + match_lengths[j])) {
+          inside_parentheses <- TRUE
+          break
+        }
+      }
+      if (!inside_parentheses) {
+        split_positions <- c(split_positions, match_positions[i])
+      }
+    }
+  }
+  split_positions <- c(split_positions, nchar(input_string) + 1)
+
+  parts <- NULL
+  for (i in 1:(length(split_positions) - 1)) {
+    parts <- c(
+      parts,
+      substring(
+        input_string,
+        split_positions[i] + 1,
+        split_positions[i + 1] - 1
+      )
+    )
+  }
+  insight::trim_ws(parts)
+}
