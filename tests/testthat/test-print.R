@@ -90,3 +90,16 @@ test_that("estimate_means - by is list", {
   expect_snapshot(print(estimate_means(fit, list(c172code = c("low", "high"), c161sex = c("Female", "Male")), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
   expect_snapshot(print(estimate_means(fit, c("c172code = c('low', 'high')", "c161sex = c('Female', 'Male')"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
 })
+
+
+test_that("estimate_epectation - don't print empty RE columns", {
+  skip_if_not_installed("glmmTMB")
+  data(Salamanders, package = "glmmTMB")
+  m <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    ziformula = ~ spp + mined,
+    family = poisson(),
+    data = Salamanders
+  )
+  expect_snapshot(print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE))
+})

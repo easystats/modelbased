@@ -110,7 +110,9 @@ get_marginalmeans <- function(model,
 
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
-  fun_args$re.form <- NULL
+  if (!"re.form" %in% names(dots)) {
+    fun_args$re.form <- NULL
+  }
 
 
   # Third step: compute marginal means ----------------------------------------
