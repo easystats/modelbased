@@ -164,89 +164,65 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       # we now have a data frame with each comparison-pairs as single column.
       # next, we need to separate the levels from the different variables at the ","
       params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
-      colnames(params) <- paste0(
+      new_colnames <- paste0(
         rep.int(focal_terms, 2),
         rep(1:2, each = length(focal_terms))
       )
     } else {
-      colnames(params) <- paste0(focal_terms, 1:2)
+      new_colnames <- paste0(focal_terms, 1:2)
     }
 
-    # make sure all whitespaces are removed
-    params[] <- lapply(params, insight::trim_ws)
+    # sanity check - for some edgecases, we have fewer columns than expected
+    # then just don't prettify anything
+    if (length(new_colnames) == ncol(params)) {
+      colnames(params) <- new_colnames
 
-    # unite back columns with focal contrasts - only needed when not slopes
-    if (inherits(x, "estimate_slopes")) {
-      contrast <- by
-      by <- NULL
-    }
+      # make sure all whitespaces are removed
+      params[] <- lapply(params, insight::trim_ws)
 
-    for (i in seq_along(contrast)) {
-      contrast_names <- paste0(contrast[i], 1:2)
-      params <- datawizard::data_unite(
-        params,
-        new_column = contrast[i],
-        select = contrast_names,
-        separator = " - "
-      )
-    }
-
-    # filter by "by" variables
-    if (!is.null(by)) {
-      keep_rows <- seq_len(nrow(params))
-      for (i in by) {
-        by_names <- paste0(i, 1:2)
-        keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
-          all(j == j[1])
-        })]
+      # unite back columns with focal contrasts - only needed when not slopes
+      if (inherits(x, "estimate_slopes")) {
+        contrast <- by
+        by <- NULL
       }
 
-      # here we make sure that one of the "by" column has its original column name
-      # back, so we can properly merge all variables in "contrast" and "by" to the
-      # original data
-      by_columns <- paste0(by, 1)
-      params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+      for (i in seq_along(contrast)) {
+        contrast_names <- paste0(contrast[i], 1:2)
+        params <- datawizard::data_unite(
+          params,
+          new_column = contrast[i],
+          select = contrast_names,
+          separator = " - "
+        )
+      }
 
-      # filter original data and new params by "by"
-      x <- x[keep_rows, ]
-      params <- params[keep_rows, ]
+      # filter by "by" variables
+      if (!is.null(by)) {
+        keep_rows <- seq_len(nrow(params))
+        for (i in by) {
+          by_names <- paste0(i, 1:2)
+          keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
+            all(j == j[1])
+          })]
+        }
+
+        # here we make sure that one of the "by" column has its original column name
+        # back, so we can properly merge all variables in "contrast" and "by" to the
+        # original data
+        by_columns <- paste0(by, 1)
+        params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+
+        # filter original data and new params by "by"
+        x <- x[keep_rows, ]
+        params <- params[keep_rows, ]
+      }
+
+      # remove old column
+      x$Parameter <- NULL
+
+      # add back new columns
+      x <- cbind(params[c(contrast, by)], x)
     }
-
-    # remove old column
-    x$Parameter <- NULL
-
-    # add back new columns
-    x <- cbind(params[c(contrast, by)], x)
-
-    # These are examples of what {marginaleffects} returns, a single parmater
-    # column that includes all levels, comma- and dash-separated, or with /
-    # see also https://github.com/easystats/modelbased/pull/280
-    #
-    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> Parameter                              | Difference |          95% CI |      p
-    # #> ------------------------------------------------------------------------------
-    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
-    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
-    #
-    # estimate_contrasts(
-    #   m,
-    #   c("time", "coffee"),
-    #   backend = "marginaleffects",
-    #   p_adjust = "none",
-    #   comparison = ratio ~ reference | coffee
-    # )
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> coffee  |              hypothesis | Difference |       95% CI |      p
-    # #> ----------------------------------------------------------------------
-    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
-    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
-    #
-    # We need to split the "Parameter" or "hypothesis" columns into one column
-    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
-    # argument, which is used for filtering by levels of given focal terms.
   }
 
   x
