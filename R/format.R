@@ -134,12 +134,17 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
 
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
-    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
-
+    # split parameter column into comparison groups
     params <- as.data.frame(do.call(
       rbind,
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
+
+    # we now have a data frame with each comparison-pairs as single column
+    # we now need to separate the levels from the different variables at the ","
+
+    params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
+    colnames(params) <- rep.int(focal_terms, 2)
 
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /
