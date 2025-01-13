@@ -92,26 +92,21 @@ get_marginalmeans <- function(model,
   }
 
   # setup arguments - either for conditional or counterfactual predictions
+  fun_args <- list(
+    model,
+    by = at_specs$varname,
+    conf_level = ci,
+    df = dof
+  )
+
   if (isTRUE(dots$counterfactual)) {
     # sanity check
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
-    fun_args <- list(
-      model,
-      variables = lapply(datagrid, unique),
-      by = at_specs$varname,
-      conf_level = ci,
-      df = dof
-    )
+    fun_args$variables <- lapply(datagrid, unique)
   } else {
-    fun_args <- list(
-      model,
-      by = at_specs$varname,
-      newdata = datagrid,
-      conf_level = ci,
-      df = dof
-    )
+    fun_args$newdata = datagrid
   }
 
   # handle distributional parameters
