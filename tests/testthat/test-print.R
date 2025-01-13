@@ -11,11 +11,11 @@ test_that("estimate_slopes - print summary", {
   model_lm <- lm(y ~ x, data = data)
 
   deriv <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "emmeans")
-  expect_snapshot(deriv, variant = "windows")
+  expect_snapshot(estimate_slopes(model_lm, trend = "x", by = "x", backend = "emmeans"), variant = "windows")
   expect_snapshot(summary(deriv), variant = "windows")
 
   deriv2 <- estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects")
-  expect_snapshot(deriv2, variant = "windows")
+  expect_snapshot(estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects"), variant = "windows")
   expect_snapshot(summary(deriv2), variant = "windows")
 })
 
@@ -23,10 +23,8 @@ test_that("estimate_slopes - print summary", {
 test_that("estimate_slopes - print regular", {
   data(iris)
   model <- lm(Sepal.Length ~ Petal.Length * Species, data = iris)
-  slopes <- estimate_slopes(model, trend = "Petal.Length", backend = "emmeans")
-  expect_snapshot(print(slopes), variant = "windows")
-  slopes2 <- estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects")
-  expect_snapshot(print(slopes2), variant = "windows")
+  expect_snapshot(print(estimate_slopes(model, trend = "Petal.Length", backend = "emmeans")), variant = "windows")
+  expect_snapshot(print(estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects")), variant = "windows")
 })
 
 
@@ -36,22 +34,10 @@ test_that("estimate_means - print multiple by's", {
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code, data = efc)
-  out <- estimate_means(
-    fit,
-    c("c12hour", "c172code", "c161sex"),
-    length = 4,
-    backend = "marginaleffects"
-  )
-  expect_snapshot(print(out, table_width = Inf), variant = "windows")
+  expect_snapshot(print(estimate_means(fit, c("c12hour", "c172code", "c161sex"), length = 4, backend = "marginaleffects"), table_width = Inf), variant = "windows") # nolint
 
   fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code * e16sex, data = efc)
-  out <- estimate_means(
-    fit,
-    c("c12hour", "barthtot = [sd]", "c161sex", "c172code", "e16sex"),
-    backend = "marginaleffects",
-    length = 3
-  )
-  expect_snapshot(print(out, table_width = Inf), variant = "windows")
+  expect_snapshot(print(estimate_means(fit, c("c12hour", "barthtot = [sd]", "c161sex", "c172code", "e16sex"), backend = "marginaleffects", length = 3), table_width = Inf), variant = "windows") # nolint
 })
 
 
@@ -61,14 +47,12 @@ test_that("estimate_means - full labels", {
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst, data = efc)
-  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"), backend = "marginaleffects")
-  expect_snapshot(print(pr, table_width = Inf), variant = "windows")
-  expect_snapshot(print(pr, full_labels = FALSE, table_width = Inf), variant = "windows")
+  expect_snapshot(print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"), backend = "marginaleffects"), table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"), backend = "marginaleffects"), full_labels = FALSE, table_width = Inf), variant = "windows") # nolint
 
   fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
-  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"), backend = "marginaleffects")
-  expect_snapshot(print(pr, table_width = Inf), variant = "windows")
-  expect_snapshot(print(pr, full_labels = FALSE, table_width = Inf), variant = "windows")
+  expect_snapshot(print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"), backend = "marginaleffects"), table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"), backend = "marginaleffects"), full_labels = FALSE, table_width = Inf), variant = "windows") # nolint
 })
 
 
@@ -79,8 +63,30 @@ test_that("estimate_means - protect integers", {
   efc$e16sex <- datawizard::to_factor(efc$e16sex)
   model <- lm(neg_c_7 ~ barthtot + c160age * c161sex + e16sex, data = efc)
 
-  out <- estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
-  expect_snapshot(print(out), variant = "windows")
-  out <- estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects")
-  expect_snapshot(print(out), variant = "windows")
+  expect_snapshot(estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex")), variant = "windows")
+  expect_snapshot(estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects"), variant = "windows")
+})
+
+
+test_that("estimate_contrasts - by with special character", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ barthtot * c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+})
+
+
+test_that("estimate_means - by is list", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
+  expect_snapshot(print(estimate_means(fit, list(c172code = c("low", "high"), c161sex = c("Female", "Male")), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_means(fit, c("c172code = c('low', 'high')", "c161sex = c('Female', 'Male')"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
 })

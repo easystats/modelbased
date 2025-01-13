@@ -207,30 +207,11 @@ test_that("estimate_contrasts - dfs", {
 
 test_that("estimate_contrasts - marginaleffects", {
   skip_if_not_installed("Formula")
-
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-
-  out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
-
-  out <- estimate_contrasts(
-    m,
-    c("time", "coffee"),
-    backend = "marginaleffects",
-    p_adjust = "none",
-    comparison = ratio ~ reference | coffee
-  )
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
-
-  out <- estimate_contrasts(
-    m,
-    c("time", "coffee"),
-    backend = "marginaleffects",
-    p_adjust = "none",
-    comparison = "(b2-b1)=(b4-b3)"
-  )
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf)) # nolint
 })
 
 
@@ -336,13 +317,69 @@ test_that("estimate_contrasts - different options for comparison", {
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "pairwise", backend = "marginaleffects")
   expect_named(
     out,
-    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("fa", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
   expect_equal(out$Difference, c(-0.35, 0.8, 0.35, 1.15, 0.7, -0.45), tolerance = 1e-3)
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "reference", backend = "marginaleffects")
   expect_named(
     out,
-    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("fa", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
   expect_equal(out$Difference, c(0.35, -0.8, -0.35), tolerance = 1e-3)
+})
+
+skip_on_os(c("mac", "linux"))
+
+test_that("estimate_contrasts - filtering works", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ e16sex + c161sex + c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+
+  fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+
+  fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
+  expect_snapshot(print(estimate_slopes(fit, "barthtot", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  # error
+  expect_error(
+    estimate_contrasts(fit, "barthtot", backend = "marginaleffects"),
+    regex = "Please specify"
+  )
+
+  fit <- lm(neg_c_7 ~ e16sex + barthtot * c172code, data = efc)
+  expect_snapshot(print(estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, "barthtot", c("c172code", "e16sex"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  # error
+  expect_error(
+    estimate_contrasts(fit, c("barthtot", "c172code"), backend = "marginaleffects"),
+    regex = "Please specify"
+  )
+})
+
+
+test_that("estimate_contrasts - simple contrasts and with - in levels works", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("ggeffects")
+
+  model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+  expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"), table_width = Inf)) # nolint
+
+  data(coffee_data, package = "ggeffects")
+  m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  expect_snapshot(print(estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  data(Salamanders, package = "glmmTMB")
+  model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson") # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 })

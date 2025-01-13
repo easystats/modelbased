@@ -102,7 +102,14 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   info <- insight::model_info(model, verbose = FALSE)
   model_data <- insight::get_data(model)
   # define all columns that should be removed
-  remove_columns <- c("Parameter", "Predicted", "s.value", "S", "CI", "rowid_dedup")
+  remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")
+  # for contrasting slope, we need to keep the "Parameter" column
+  # however, for estimating trends/slope, the "Parameter" column is usually
+  # redundant. Since we cannot check for class-attributes, we simply check if
+  # all values are identical
+  if ("term" %in% colnames(x) && insight::n_unique(x$term) == 1) {
+    remove_columns <- c("Parameter", remove_columns)
+  }
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,
@@ -121,9 +128,19 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 #' @export
 format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...) {
   predict <- attributes(x)$predict
-  groups <- attributes(x)$by
+  by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
+
+  # clean "by" and contrast variable names, for the special cases
+  for (i in focal_terms) {
+    if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
+      by[startsWith(by, i)] <- i
+    }
+    if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
+      contrast[startsWith(contrast, i)] <- i
+    }
+  }
 
   valid_options <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
@@ -133,38 +150,79 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
 
+  # for contrasting slopes, we do nothing more here. for other contrasts,
+  # we prettify labels now
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
-    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
+    # split parameter column into comparison groups
+    params <- as.data.frame(do.call(
+      rbind,
+      lapply(x$Parameter, .split_at_minus_outside_parentheses)
+    ))
 
-    # These are examples of what {marginaleffects} returns, a single parmater
-    # column that includes all levels, comma- and dash-separated, or with /
-    # see also https://github.com/easystats/modelbased/pull/280
-    #
-    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> Parameter                              | Difference |          95% CI |      p
-    # #> ------------------------------------------------------------------------------
-    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
-    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
-    #
-    # estimate_contrasts(
-    #   m,
-    #   c("time", "coffee"),
-    #   backend = "marginaleffects",
-    #   p_adjust = "none",
-    #   comparison = ratio ~ reference | coffee
-    # )
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> coffee  |              hypothesis | Difference |       95% CI |      p
-    # #> ----------------------------------------------------------------------
-    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
-    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
-    #
-    # We need to split the "Parameter" or "hypothesis" columns into one column
-    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
-    # argument, which is used for filtering by levels of given focal terms.
+    # for more than one term, we have comma-separated levels.
+    if (length(focal_terms) > 1) {
+      # we now have a data frame with each comparison-pairs as single column.
+      # next, we need to separate the levels from the different variables at the ","
+      params <- datawizard::data_separate(params, separator = ",", guess_columns = "max")
+      new_colnames <- paste0(
+        rep.int(focal_terms, 2),
+        rep(1:2, each = length(focal_terms))
+      )
+    } else {
+      new_colnames <- paste0(focal_terms, 1:2)
+    }
+
+    # sanity check - for some edgecases, we have fewer columns than expected
+    # then just don't prettify anything
+    if (length(new_colnames) == ncol(params)) {
+      colnames(params) <- new_colnames
+
+      # make sure all whitespaces are removed
+      params[] <- lapply(params, insight::trim_ws)
+
+      # unite back columns with focal contrasts - only needed when not slopes
+      if (inherits(x, "estimate_slopes")) {
+        contrast <- by
+        by <- NULL
+      }
+
+      for (i in seq_along(contrast)) {
+        contrast_names <- paste0(contrast[i], 1:2)
+        params <- datawizard::data_unite(
+          params,
+          new_column = contrast[i],
+          select = contrast_names,
+          separator = " - "
+        )
+      }
+
+      # filter by "by" variables
+      if (!is.null(by)) {
+        keep_rows <- seq_len(nrow(params))
+        for (i in by) {
+          by_names <- paste0(i, 1:2)
+          keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
+            all(j == j[1])
+          })]
+        }
+
+        # here we make sure that one of the "by" column has its original column name
+        # back, so we can properly merge all variables in "contrast" and "by" to the
+        # original data
+        by_columns <- paste0(by, 1)
+        params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+
+        # filter original data and new params by "by"
+        x <- x[keep_rows, ]
+        params <- params[keep_rows, ]
+      }
+
+      # remove old column
+      x$Parameter <- NULL
+
+      # add back new columns
+      x <- cbind(params[c(contrast, by)], x)
+    }
   }
 
   x
@@ -302,4 +360,50 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     estimate_name <- "Mean"
   }
   estimate_name
+}
+
+
+# this function is used for "estimate_contrasts()", to split the Parameter
+# column into single term columns. {marginaleffects} combines factor levels of
+# different comparisons using "-". For factor levels containing "-", the groups
+# are put in parentheses. This function splits a string at "-" if it's outside
+# parentheses
+
+#' @keywords internal
+.split_at_minus_outside_parentheses <- function(input_string) {
+  pattern <- "\\(([^()]*)\\)|-" # find all the parentheses and the -
+  matches <- gregexpr(pattern, input_string, perl = TRUE)
+  match_positions <- matches[[1]]
+  match_lengths <- attr(matches[[1]], "match.length")
+
+  split_positions <- 0
+  for (i in seq_along(match_positions)) {
+    if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
+      inside_parentheses <- FALSE
+      for (j in seq_along(match_positions)) {
+        if (i != j && match_positions[i] > match_positions[j] && match_positions[i] < (match_positions[j] + match_lengths[j])) {
+          inside_parentheses <- TRUE
+          break
+        }
+      }
+      if (!inside_parentheses) {
+        split_positions <- c(split_positions, match_positions[i])
+      }
+    }
+  }
+  split_positions <- c(split_positions, nchar(input_string) + 1)
+
+  parts <- NULL
+  for (i in 1:(length(split_positions) - 1)) {
+    parts <- c(
+      parts,
+      substring(
+        input_string,
+        split_positions[i] + 1,
+        split_positions[i + 1] - 1
+      )
+    )
+  }
+  parts <- insight::trim_ws(parts)
+  gsub("(", "", gsub(")", "", parts, fixed = TRUE), fixed = TRUE)
 }
