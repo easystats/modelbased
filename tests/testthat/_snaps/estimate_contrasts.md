@@ -1,7 +1,8 @@
 # estimate_contrasts - marginaleffects
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
+      p_adjust = "none"), zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -29,7 +30,9 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
+      p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE,
+      table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -46,7 +49,9 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
+      p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE,
+      table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -98,7 +103,8 @@
 # estimate_contrasts - filtering works
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_contrasts(fit, "c172code", backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
@@ -114,7 +120,8 @@
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
@@ -142,7 +149,8 @@
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
@@ -158,41 +166,73 @@
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_slopes(fit, "barthtot", backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Estimated Marginal Effects
       
-      Slope |       SE |         95% CI |      t |      p
-      ---------------------------------------------------
-      -0.05 | 4.20e-03 | [-0.06, -0.05] | -12.77 | < .001
+      Slope |   SE |         95% CI |      t |      p
+      -----------------------------------------------
+      -0.05 | 0.00 | [-0.06, -0.05] | -12.77 | < .001
       Marginal effects estimated for barthtot
 
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Estimated Marginal Effects
       
-      c172code | Slope |       SE |         95% CI |     t |      p
-      -------------------------------------------------------------
-      low      | -0.06 | 9.06e-03 | [-0.08, -0.05] | -7.08 | < .001
-      mid      | -0.05 | 5.28e-03 | [-0.06, -0.04] | -9.82 | < .001
-      high     | -0.05 |     0.01 | [-0.07, -0.03] | -4.51 | < .001
+      c172code | Slope |   SE |         95% CI |     t |      p
+      ---------------------------------------------------------
+      low      | -0.06 | 0.01 | [-0.08, -0.05] | -7.08 | < .001
+      mid      | -0.05 | 0.01 | [-0.06, -0.04] | -9.82 | < .001
+      high     | -0.05 | 0.01 | [-0.07, -0.03] | -4.51 | < .001
       Marginal effects estimated for barthtot
 
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
     Output
       Marginal Contrasts Analysis
       
-      Parameter  | Difference |   SE |        95% CI |     t |     p
+      c172code   | Difference |   SE |        95% CI |     t |     p
       --------------------------------------------------------------
       low - mid  |      -0.01 | 0.01 | [-0.03, 0.01] | -1.17 | 0.728
       low - high |      -0.02 | 0.01 | [-0.04, 0.01] | -1.10 | 0.728
-      mid - high |  -3.26e-03 | 0.01 | [-0.03, 0.02] | -0.27 | 0.786
+      mid - high |       0.00 | 0.01 | [-0.03, 0.02] | -0.27 | 0.786
+      
+      Marginal contrasts estimated at barthtot
+      p-value adjustment method: Holm (1979)
+
+---
+
+    Code
+      print(estimate_contrasts(fit, "barthtot", c("c172code", "e16sex"), backend = "marginaleffects"),
+      table_width = Inf, zap_small = TRUE)
+    Output
+      Marginal Contrasts Analysis
+      
+      c172code    |          e16sex | Difference |   SE |         95% CI |     t |      p
+      -----------------------------------------------------------------------------------
+      low - low   |   male - female |       0.01 | 0.02 | [-0.03,  0.04] |  0.35 | > .999
+      low - mid   |     male - male |       0.01 | 0.02 | [-0.02,  0.04] |  0.46 | > .999
+      low - mid   |   male - female |      -0.02 | 0.01 | [-0.05,  0.01] | -1.24 | > .999
+      low - high  |     male - male |       0.00 | 0.02 | [-0.04,  0.05] |  0.16 | > .999
+      low - high  |   male - female |      -0.02 | 0.02 | [-0.06,  0.01] | -1.19 | > .999
+      low - mid   |   female - male |       0.00 | 0.02 | [-0.03,  0.03] |  0.08 | > .999
+      low - mid   | female - female |      -0.02 | 0.01 | [-0.05,  0.00] | -1.76 | > .999
+      low - high  |   female - male |       0.00 | 0.02 | [-0.05,  0.04] | -0.12 | > .999
+      low - high  | female - female |      -0.03 | 0.02 | [-0.06,  0.01] | -1.58 | > .999
+      mid - mid   |   male - female |      -0.03 | 0.01 | [-0.05,  0.00] | -2.24 | 0.381 
+      mid - high  |     male - male |       0.00 | 0.02 | [-0.05,  0.04] | -0.18 | > .999
+      mid - high  |   male - female |      -0.03 | 0.02 | [-0.06,  0.00] | -1.83 | 0.943 
+      mid - high  |   female - male |       0.02 | 0.02 | [-0.02,  0.06] |  1.08 | > .999
+      mid - high  | female - female |       0.00 | 0.01 | [-0.03,  0.02] | -0.26 | > .999
+      high - high |   male - female |      -0.03 | 0.02 | [-0.07,  0.02] | -1.11 | > .999
       
       Marginal contrasts estimated at barthtot
       p-value adjustment method: Holm (1979)
@@ -200,7 +240,8 @@
 # estimate_contrasts - simple contrasts and with - in levels works
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_contrasts(model, "Species", backend = "marginaleffects"),
+      table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -216,7 +257,8 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -244,7 +286,8 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -263,7 +306,8 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
@@ -367,7 +411,8 @@
 ---
 
     Code
-      print(out, zap_small = TRUE, table_width = Inf)
+      print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       

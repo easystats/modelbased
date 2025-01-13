@@ -142,10 +142,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
-  if (!inherits(x, "estimate_slopes") && !is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
-    # save attributes
-    att <- attributes(x)
-
+  if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     # split parameter column into comparison groups
     params <- as.data.frame(do.call(
       rbind,
@@ -168,7 +165,12 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     # make sure all whitespaces are removed
     params[] <- lapply(params, insight::trim_ws)
 
-    # unite back columns with focal contrasts
+    # unite back columns with focal contrasts - only needed when not slopes
+    if (inherits(x, "estimate_slopes")) {
+      contrast <- by
+      by <- NULL
+    }
+
     for (i in seq_along(contrast)) {
       contrast_names <- paste0(contrast[i], 1:2)
       params <- datawizard::data_unite(
@@ -205,9 +207,6 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
     # add back new columns
     x <- cbind(params[c(contrast, by)], x)
-
-    # set back attr
-    attributes(x) <- utils::modifyList(attributes(x), att)
 
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /

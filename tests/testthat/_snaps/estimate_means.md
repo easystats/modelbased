@@ -1,7 +1,7 @@
 # estimate_means() - mixed models
 
     Code
-      print(out)
+      estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
       Estimated Marginal Means
       
@@ -28,7 +28,7 @@
 ---
 
     Code
-      print(out)
+      estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
       Estimated Marginal Means
       

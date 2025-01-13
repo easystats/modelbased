@@ -1,7 +1,7 @@
 # estimate_slopes - print summary
 
     Code
-      deriv
+      estimate_slopes(model_lm, trend = "x", by = "x", backend = "emmeans")
     Output
       Estimated Marginal Effects
       
@@ -34,7 +34,7 @@
 ---
 
     Code
-      deriv2
+      estimate_slopes(model_lm, trend = "x", by = "x", backend = "marginaleffects")
     Output
       Estimated Marginal Effects
       
@@ -67,7 +67,7 @@
 # estimate_slopes - print regular
 
     Code
-      print(slopes)
+      print(estimate_slopes(model, trend = "Petal.Length", backend = "emmeans"))
     Output
       Estimated Marginal Effects
       
@@ -79,7 +79,7 @@
 ---
 
     Code
-      print(slopes2)
+      print(estimate_slopes(model, trend = "Petal.Length", backend = "marginaleffects"))
     Output
       Estimated Marginal Effects
       
@@ -91,7 +91,8 @@
 # estimate_means - print multiple by's
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_means(fit, c("c12hour", "c172code", "c161sex"), length = 4,
+      backend = "marginaleffects"), table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -127,7 +128,8 @@
 ---
 
     Code
-      print(out, table_width = Inf)
+      print(estimate_means(fit, c("c12hour", "barthtot = [sd]", "c161sex", "c172code",
+        "e16sex"), backend = "marginaleffects", length = 3), table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -247,7 +249,8 @@
 # estimate_means - full labels
 
     Code
-      print(pr, table_width = Inf)
+      print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
+      backend = "marginaleffects"), table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -295,7 +298,8 @@
 ---
 
     Code
-      print(pr, full_labels = FALSE, table_width = Inf)
+      print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"),
+      backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -343,7 +347,8 @@
 ---
 
     Code
-      print(pr, table_width = Inf)
+      print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
+        "negc7d"), backend = "marginaleffects"), table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -427,7 +432,8 @@
 ---
 
     Code
-      print(pr, full_labels = FALSE, table_width = Inf)
+      print(estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst",
+        "negc7d"), backend = "marginaleffects"), full_labels = FALSE, table_width = Inf)
     Output
       Estimated Marginal Means
       
@@ -511,7 +517,7 @@
 # estimate_means - protect integers
 
     Code
-      print(out)
+      estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
     Output
       Model-based Expectation
       
@@ -533,7 +539,7 @@
 ---
 
     Code
-      print(out)
+      estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects")
     Output
       Estimated Marginal Means
       

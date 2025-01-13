@@ -207,30 +207,11 @@ test_that("estimate_contrasts - dfs", {
 
 test_that("estimate_contrasts - marginaleffects", {
   skip_if_not_installed("Formula")
-
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-
-  out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
-
-  out <- estimate_contrasts(
-    m,
-    c("time", "coffee"),
-    backend = "marginaleffects",
-    p_adjust = "none",
-    comparison = ratio ~ reference | coffee
-  )
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
-
-  out <- estimate_contrasts(
-    m,
-    c("time", "coffee"),
-    backend = "marginaleffects",
-    p_adjust = "none",
-    comparison = "(b2-b1)=(b4-b3)"
-  )
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf)) # nolint
 })
 
 
@@ -356,18 +337,14 @@ test_that("estimate_contrasts - filtering works", {
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
   fit <- lm(neg_c_7 ~ e16sex + c161sex + c172code, data = efc)
-  out <- estimate_contrasts(fit, "c172code", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(fit, "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
 
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
-  out <- estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
-  out <- estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
 
   fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
-  out <- estimate_slopes(fit, "barthtot", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(estimate_slopes(fit, "barthtot", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
   # error
   expect_error(
     estimate_contrasts(fit, "barthtot", backend = "marginaleffects"),
@@ -375,10 +352,10 @@ test_that("estimate_contrasts - filtering works", {
   )
 
   fit <- lm(neg_c_7 ~ e16sex + barthtot * c172code, data = efc)
-  out <- estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
-  out <- estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, "barthtot", c("c172code", "e16sex"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
   # error
   expect_error(
     estimate_contrasts(fit, c("barthtot", "c172code"), backend = "marginaleffects"),
@@ -392,21 +369,16 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   skip_if_not_installed("ggeffects")
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
-  out <- estimate_contrasts(model, "Species", backend = "marginaleffects")
-  expect_snapshot(print(out, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"), table_width = Inf)) # nolint
 
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-  out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
-  out <- estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  expect_snapshot(print(estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
   data(Salamanders, package = "glmmTMB")
-  model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson")
-  out <- estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
-  out <- estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects")
-  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson") # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 })
