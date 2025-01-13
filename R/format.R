@@ -102,7 +102,14 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   info <- insight::model_info(model, verbose = FALSE)
   model_data <- insight::get_data(model)
   # define all columns that should be removed
-  remove_columns <- c("Parameter", "Predicted", "s.value", "S", "CI", "rowid_dedup")
+  remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")
+  # for contrasting slope, we need to keep the "Parameter" column
+  # however, for estimating trends/slope, the "Parameter" column is usually
+  # redundant. Since we cannot check for class-attributes, we simply check if
+  # all values are identical
+  if ("term" %in% colnames(x) && insight::n_unique(x$term) == 1) {
+    remove_columns <- c("Parameter", remove_columns)
+  }
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,
@@ -133,7 +140,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
 
-  if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
+  # for contrasting slopes, we do nothing more here. for other contrasts,
+  # we prettify labels now
+  if (!inherits(x, "estimate_slopes") && !is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     # split parameter column into comparison groups
     params <- as.data.frame(do.call(
       rbind,
