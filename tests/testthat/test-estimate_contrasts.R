@@ -336,13 +336,52 @@ test_that("estimate_contrasts - different options for comparison", {
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "pairwise", backend = "marginaleffects")
   expect_named(
     out,
-    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("fa", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
   expect_equal(out$Difference, c(-0.35, 0.8, 0.35, 1.15, 0.7, -0.45), tolerance = 1e-3)
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "reference", backend = "marginaleffects")
   expect_named(
     out,
-    c("Parameter", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("fa", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
   expect_equal(out$Difference, c(0.35, -0.8, -0.35), tolerance = 1e-3)
+})
+
+
+test_that("estimate_contrasts - filtering works", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ e16sex + c161sex + c172code, data = efc)
+  out <- estimate_contrasts(fit, "c172code", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+
+  fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
+  out <- estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+  out <- estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+
+  fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
+  out <- estimate_slopes(fit, "barthtot", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+  # error
+  expect_error(
+    estimate_contrasts(fit, "barthtot", backend = "marginaleffects"),
+    regex = "Please specify"
+  )
+
+  fit <- lm(neg_c_7 ~ e16sex + barthtot * c172code, data = efc)
+  out <- estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+  out <- estimate_contrasts(fit, "barthtot", "c172code", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+  # error
+  expect_error(
+    estimate_contrasts(fit, c("barthtot", "c172code"), backend = "marginaleffects"),
+    regex = "Please specify"
+  )
 })

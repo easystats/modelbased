@@ -37,12 +37,14 @@ get_marginalcontrasts <- function(model,
 
   # if first focal term is numeric, we contrast slopes
   if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
+    # sanity check - contrast for slopes only makes sense when we have a "by" argument
+    if (is.null(my_args$by)) {
+      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+    }
+    # call slopes with hypothesis argument
     out <- estimate_slopes(
       model = model,
       trend = my_args$contrast,
-      ## TODO: once format.marginaleffects_contrasts() is working, we have to
-      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
-      ## filtering...
       by = my_args$by,
       ci = ci,
       hypothesis = comparison,
@@ -54,9 +56,6 @@ get_marginalcontrasts <- function(model,
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
       model = model,
-      ## TODO: once format.marginaleffects_contrasts() is working, we have to
-      ## pass only "contrast" to the `by` argument, and use `my_args$by` for
-      ## filtering...
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
       hypothesis = comparison,
