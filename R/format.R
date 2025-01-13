@@ -132,6 +132,16 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
 
+  # clean "by" and contrast variable names, for the special cases
+  for (i in focal_terms) {
+    if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
+      by[startsWith(by, i)] <- i
+    }
+    if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
+      contrast[startsWith(contrast, i)] <- i
+    }
+  }
+
   valid_options <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"

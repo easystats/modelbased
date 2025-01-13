@@ -66,3 +66,15 @@ test_that("estimate_means - protect integers", {
   expect_snapshot(estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex")), variant = "windows")
   expect_snapshot(estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects"), variant = "windows")
 })
+
+
+test_that("estimate_contrasts - by with special character", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ barthtot * c172code, data = efc)
+  expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+})
