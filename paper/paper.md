@@ -56,8 +56,12 @@ In line with the `easystats`' *raison d'être*, the `modelbased` package is desi
 ## Predictions
 
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
+These predictions can be of different types, depending on the model and the question at hand.
+For instance, for linear regressions, predictions can be associated with **confidence intervals** (`predict="expectation"`) or **prediction intervals** (`predict="prediction"`).
+The former corresponds to the uncertainty around the "relationship" (i.e., the estimate in the model's conditional parameters) while the second provides information about the range where observation values can actually fall.
+For logistic models, predictions can be made on the **response scale** (`predict="response"`) - in terms of probability - or on the **link scale** (`predict="link"`) - in terms of log odds.
 
-Mention types of predictions (expectations, predictions, response vs. the link scale)
+These different types of variations can be obtained for the original data, which is useful to assess the model's goodness-of-fit, or for new data (typically a "data grid"), which is useful for visualization.
 
 ## Marginal effects
 
@@ -67,7 +71,7 @@ Marginal means, contrasts and slopes.
 
 ## Technical details
 
-It leverages the `get_datagrid()` function from the `insight` package to intuitively generate an appropriate grid of data points for which predictions will be computed.
+It leverages the `get_datagrid()` function from the `insight` package (REF) to intuitively generate an appropriate grid of data points for which predictions will be computed.
 
 The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`.
 
@@ -78,6 +82,7 @@ Something about the delta method?
 # Examples
 
 TODO.
+Take a few ones from README.
 
 # Acknowledgements
 
