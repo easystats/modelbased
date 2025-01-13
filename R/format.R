@@ -15,6 +15,12 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
     x <- datawizard::data_arrange(x, select = by)
   }
 
+  # protect integers, only for focal terms
+  focal_terms <- attributes(x)$focal_terms
+  if (!is.null(focal_terms) && all(focal_terms %in% colnames(x))) {
+    x[focal_terms] <- lapply(x[focal_terms], insight::format_value, protect_integers = TRUE)
+  }
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(x, ci_brackets = c("(", ")"), ...)
   } else {

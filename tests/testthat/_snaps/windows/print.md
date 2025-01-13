@@ -131,116 +131,116 @@
     Output
       Estimated Marginal Means
       
-      c12hour | c161sex |                        c172code | e16sex | barthtot |  Mean |    SE |           95% CI | t(766)
+      c12hour | barthtot | c161sex |                        c172code | e16sex |  Mean |    SE |           95% CI | t(766)
       -------------------------------------------------------------------------------------------------------------------
-      4.00    |    Male |          low level of education |   male |    35.12 |  9.74 |  4.63 | [  0.66,  18.83] |   2.10
-      86.00   |    Male |          low level of education |   male |    35.12 | 21.80 | 21.63 | [-20.65,  64.25] |   1.01
-      168.00  |    Male |          low level of education |   male |    35.12 | 33.86 | 47.25 | [-58.90, 126.61] |   0.72
-      4.00    |    Male |          low level of education |   male |    64.73 |  9.39 |  1.90 | [  5.67,  13.11] |   4.95
-      86.00   |    Male |          low level of education |   male |    64.73 | 11.99 |  5.40 | [  1.39,  22.59] |   2.22
-      168.00  |    Male |          low level of education |   male |    64.73 | 14.59 | 12.26 | [ -9.47,  38.66] |   1.19
-      4.00    |    Male |          low level of education |   male |    94.34 |  9.03 |  2.38 | [  4.36,  13.71] |   3.79
-      86.00   |    Male |          low level of education |   male |    94.34 |  2.18 | 16.20 | [-29.62,  33.98] |   0.13
-      168.00  |    Male |          low level of education |   male |    94.34 | -4.67 | 34.34 | [-72.09,  62.75] |  -0.14
-      4.00    |  Female |          low level of education |   male |    35.12 | 14.36 |  0.86 | [ 12.67,  16.05] |  16.71
-      86.00   |  Female |          low level of education |   male |    35.12 | 13.13 |  0.54 | [ 12.07,  14.18] |  24.50
-      168.00  |  Female |          low level of education |   male |    35.12 | 11.89 |  1.03 | [  9.87,  13.91] |  11.58
-      4.00    |  Female |          low level of education |   male |    64.73 | 11.84 |  0.62 | [ 10.62,  13.07] |  18.99
-      86.00   |  Female |          low level of education |   male |    64.73 | 11.56 |  0.55 | [ 10.47,  12.64] |  20.92
-      168.00  |  Female |          low level of education |   male |    64.73 | 11.27 |  1.06 | [  9.19,  13.35] |  10.62
-      4.00    |  Female |          low level of education |   male |    94.34 |  9.32 |  0.93 | [  7.50,  11.15] |  10.05
-      86.00   |  Female |          low level of education |   male |    94.34 |  9.99 |  0.87 | [  8.29,  11.69] |  11.52
-      168.00  |  Female |          low level of education |   male |    94.34 | 10.65 |  1.62 | [  7.47,  13.82] |   6.58
-      4.00    |    Male | intermediate level of education |   male |    35.12 | 22.45 |  3.74 | [ 15.10,  29.80] |   6.00
-      86.00   |    Male | intermediate level of education |   male |    35.12 |  7.37 |  6.96 | [ -6.30,  21.03] |   1.06
-      168.00  |    Male | intermediate level of education |   male |    35.12 | -7.72 | 17.20 | [-41.47,  26.04] |  -0.45
-      4.00    |    Male | intermediate level of education |   male |    64.73 | 15.45 |  1.82 | [ 11.87,  19.03] |   8.47
-      86.00   |    Male | intermediate level of education |   male |    64.73 | 14.82 |  5.47 | [  4.08,  25.56] |   2.71
-      168.00  |    Male | intermediate level of education |   male |    64.73 | 14.19 | 12.22 | [ -9.81,  38.18] |   1.16
-      4.00    |    Male | intermediate level of education |   male |    94.34 |  8.45 |  1.17 | [  6.16,  10.74] |   7.23
-      86.00   |    Male | intermediate level of education |   male |    94.34 | 22.27 |  7.76 | [  7.05,  37.49] |   2.87
-      168.00  |    Male | intermediate level of education |   male |    94.34 | 36.09 | 16.29 | [  4.11,  68.07] |   2.22
-      4.00    |  Female | intermediate level of education |   male |    35.12 | 12.96 |  0.79 | [ 11.40,  14.52] |  16.34
-      86.00   |  Female | intermediate level of education |   male |    35.12 | 14.46 |  0.47 | [ 13.55,  15.38] |  31.06
-      168.00  |  Female | intermediate level of education |   male |    35.12 | 15.97 |  0.67 | [ 14.66,  17.27] |  24.00
-      4.00    |  Female | intermediate level of education |   male |    64.73 | 11.48 |  0.45 | [ 10.59,  12.38] |  25.25
-      86.00   |  Female | intermediate level of education |   male |    64.73 | 13.22 |  0.44 | [ 12.37,  14.08] |  30.36
-      168.00  |  Female | intermediate level of education |   male |    64.73 | 14.96 |  0.85 | [ 13.28,  16.64] |  17.53
-      4.00    |  Female | intermediate level of education |   male |    94.34 | 10.01 |  0.54 | [  8.95,  11.07] |  18.59
-      86.00   |  Female | intermediate level of education |   male |    94.34 | 11.98 |  0.66 | [ 10.69,  13.27] |  18.22
-      168.00  |  Female | intermediate level of education |   male |    94.34 | 13.95 |  1.32 | [ 11.37,  16.54] |  10.60
-      4.00    |    Male |         high level of education |   male |    35.12 | 11.88 |  2.02 | [  7.91,  15.85] |   5.88
-      86.00   |    Male |         high level of education |   male |    35.12 | 13.93 |  1.48 | [ 11.03,  16.83] |   9.44
-      168.00  |    Male |         high level of education |   male |    35.12 | 15.97 |  2.48 | [ 11.10,  20.84] |   6.44
-      4.00    |    Male |         high level of education |   male |    64.73 | 11.45 |  1.19 | [  9.11,  13.79] |   9.62
-      86.00   |    Male |         high level of education |   male |    64.73 | 12.48 |  2.02 | [  8.53,  16.44] |   6.19
-      168.00  |    Male |         high level of education |   male |    64.73 | 13.52 |  4.09 | [  5.49,  21.55] |   3.30
-      4.00    |    Male |         high level of education |   male |    94.34 | 11.02 |  1.56 | [  7.95,  14.09] |   7.05
-      86.00   |    Male |         high level of education |   male |    94.34 | 11.04 |  3.23 | [  4.70,  17.38] |   3.42
-      168.00  |    Male |         high level of education |   male |    94.34 | 11.06 |  6.59 | [ -1.88,  24.00] |   1.68
-      4.00    |  Female |         high level of education |   male |    35.12 | 15.92 |  1.51 | [ 12.96,  18.88] |  10.55
-      86.00   |  Female |         high level of education |   male |    35.12 | 14.36 |  1.08 | [ 12.23,  16.49] |  13.26
-      168.00  |  Female |         high level of education |   male |    35.12 | 12.80 |  2.20 | [  8.48,  17.12] |   5.82
-      4.00    |  Female |         high level of education |   male |    64.73 | 13.02 |  0.88 | [ 11.29,  14.75] |  14.78
-      86.00   |  Female |         high level of education |   male |    64.73 | 12.35 |  1.20 | [  9.98,  14.71] |  10.25
-      168.00  |  Female |         high level of education |   male |    64.73 | 11.67 |  2.63 | [  6.50,  16.84] |   4.43
-      4.00    |  Female |         high level of education |   male |    94.34 | 10.13 |  1.09 | [  7.99,  12.27] |   9.29
-      86.00   |  Female |         high level of education |   male |    94.34 | 10.33 |  1.88 | [  6.65,  14.01] |   5.51
-      168.00  |  Female |         high level of education |   male |    94.34 | 10.53 |  3.97 | [  2.73,  18.33] |   2.65
-      4.00    |    Male |          low level of education | female |    35.12 | 16.94 |  2.25 | [ 12.52,  21.35] |   7.53
-      86.00   |    Male |          low level of education | female |    35.12 | 13.60 |  1.19 | [ 11.26,  15.95] |  11.39
-      168.00  |    Male |          low level of education | female |    35.12 | 10.27 |  2.16 | [  6.03,  14.50] |   4.76
-      4.00    |    Male |          low level of education | female |    64.73 | 13.01 |  1.16 | [ 10.73,  15.29] |  11.20
-      86.00   |    Male |          low level of education | female |    64.73 | 10.57 |  1.77 | [  7.10,  14.04] |   5.98
-      168.00  |    Male |          low level of education | female |    64.73 |  8.13 |  4.09 | [  0.10,  16.17] |   1.99
-      4.00    |    Male |          low level of education | female |    94.34 |  9.08 |  1.81 | [  5.52,  12.65] |   5.01
-      86.00   |    Male |          low level of education | female |    94.34 |  7.54 |  2.93 | [  1.80,  13.29] |   2.58
-      168.00  |    Male |          low level of education | female |    94.34 |  6.00 |  6.44 | [ -6.64,  18.64] |   0.93
-      4.00    |  Female |          low level of education | female |    35.12 | 15.68 |  0.97 | [ 13.78,  17.58] |  16.19
-      86.00   |  Female |          low level of education | female |    35.12 | 14.22 |  0.59 | [ 13.06,  15.39] |  23.91
-      168.00  |  Female |          low level of education | female |    35.12 | 12.77 |  1.09 | [ 10.63,  14.90] |  11.74
-      4.00    |  Female |          low level of education | female |    64.73 | 12.73 |  0.58 | [ 11.60,  13.87] |  21.99
-      86.00   |  Female |          low level of education | female |    64.73 | 11.97 |  0.66 | [ 10.67,  13.26] |  18.09
-      168.00  |  Female |          low level of education | female |    64.73 | 11.20 |  1.39 | [  8.48,  13.92] |   8.07
-      4.00    |  Female |          low level of education | female |    94.34 |  9.79 |  0.70 | [  8.40,  11.17] |  13.90
-      86.00   |  Female |          low level of education | female |    94.34 |  9.71 |  1.07 | [  7.60,  11.81] |   9.05
-      168.00  |  Female |          low level of education | female |    94.34 |  9.63 |  2.25 | [  5.21,  14.05] |   4.28
-      4.00    |    Male | intermediate level of education | female |    35.12 | 12.23 |  0.91 | [ 10.45,  14.01] |  13.48
-      86.00   |    Male | intermediate level of education | female |    35.12 | 12.65 |  0.66 | [ 11.35,  13.95] |  19.13
-      168.00  |    Male | intermediate level of education | female |    35.12 | 13.08 |  1.23 | [ 10.67,  15.49] |  10.66
-      4.00    |    Male | intermediate level of education | female |    64.73 | 10.72 |  0.55 | [  9.64,  11.79] |  19.58
-      86.00   |    Male | intermediate level of education | female |    64.73 | 12.65 |  1.08 | [ 10.53,  14.77] |  11.70
-      168.00  |    Male | intermediate level of education | female |    64.73 | 14.59 |  2.32 | [ 10.03,  19.15] |   6.28
-      4.00    |    Male | intermediate level of education | female |    94.34 |  9.21 |  0.62 | [  7.99,  10.42] |  14.89
-      86.00   |    Male | intermediate level of education | female |    94.34 | 12.65 |  1.77 | [  9.18,  16.12] |   7.16
-      168.00  |    Male | intermediate level of education | female |    94.34 | 16.10 |  3.71 | [  8.81,  23.39] |   4.34
-      4.00    |  Female | intermediate level of education | female |    35.12 | 12.91 |  0.47 | [ 11.99,  13.84] |  27.33
-      86.00   |  Female | intermediate level of education | female |    35.12 | 13.14 |  0.33 | [ 12.49,  13.79] |  39.53
-      168.00  |  Female | intermediate level of education | female |    35.12 | 13.37 |  0.64 | [ 12.12,  14.62] |  20.93
-      4.00    |  Female | intermediate level of education | female |    64.73 | 11.38 |  0.29 | [ 10.83,  11.94] |  39.94
-      86.00   |  Female | intermediate level of education | female |    64.73 | 12.28 |  0.42 | [ 11.45,  13.10] |  29.25
-      168.00  |  Female | intermediate level of education | female |    64.73 | 13.17 |  0.88 | [ 11.43,  14.91] |  14.88
-      4.00    |  Female | intermediate level of education | female |    94.34 |  9.86 |  0.34 | [  9.18,  10.53] |  28.57
-      86.00   |  Female | intermediate level of education | female |    94.34 | 11.41 |  0.67 | [ 10.10,  12.72] |  17.11
-      168.00  |  Female | intermediate level of education | female |    94.34 | 12.97 |  1.40 | [ 10.22,  15.72] |   9.26
-      4.00    |    Male |         high level of education | female |    35.12 | 10.93 |  1.13 | [  8.72,  13.14] |   9.71
-      86.00   |    Male |         high level of education | female |    35.12 | 12.15 |  0.88 | [ 10.42,  13.87] |  13.84
-      168.00  |    Male |         high level of education | female |    35.12 | 13.36 |  1.55 | [ 10.32,  16.41] |   8.62
-      4.00    |    Male |         high level of education | female |    64.73 | 10.86 |  0.75 | [  9.40,  12.33] |  14.57
-      86.00   |    Male |         high level of education | female |    64.73 | 12.26 |  1.24 | [  9.82,  14.70] |   9.88
-      168.00  |    Male |         high level of education | female |    64.73 | 13.66 |  2.57 | [  8.62,  18.70] |   5.32
-      4.00    |    Male |         high level of education | female |    94.34 | 10.79 |  1.01 | [  8.80,  12.78] |  10.65
-      86.00   |    Male |         high level of education | female |    94.34 | 12.38 |  2.09 | [  8.28,  16.47] |   5.93
-      168.00  |    Male |         high level of education | female |    94.34 | 13.96 |  4.30 | [  5.51,  22.41] |   3.24
-      4.00    |  Female |         high level of education | female |    35.12 | 13.86 |  0.91 | [ 12.06,  15.65] |  15.18
-      86.00   |  Female |         high level of education | female |    35.12 | 15.00 |  0.75 | [ 13.52,  16.48] |  19.90
-      168.00  |  Female |         high level of education | female |    35.12 | 16.15 |  1.55 | [ 13.11,  19.19] |  10.43
-      4.00    |  Female |         high level of education | female |    64.73 | 12.31 |  0.52 | [ 11.29,  13.34] |  23.59
-      86.00   |  Female |         high level of education | female |    64.73 | 13.54 |  0.86 | [ 11.84,  15.24] |  15.67
-      168.00  |  Female |         high level of education | female |    64.73 | 14.76 |  1.86 | [ 11.10,  18.42] |   7.92
-      4.00    |  Female |         high level of education | female |    94.34 | 10.77 |  0.73 | [  9.34,  12.20] |  14.77
-      86.00   |  Female |         high level of education | female |    94.34 | 12.07 |  1.35 | [  9.42,  14.73] |   8.92
-      168.00  |  Female |         high level of education | female |    94.34 | 13.38 |  2.80 | [  7.87,  18.88] |   4.77
+      4       |    35.12 |    Male |          low level of education |   male |  9.74 |  4.63 | [  0.66,  18.83] |   2.10
+      86      |    35.12 |    Male |          low level of education |   male | 21.80 | 21.63 | [-20.65,  64.25] |   1.01
+      168     |    35.12 |    Male |          low level of education |   male | 33.86 | 47.25 | [-58.90, 126.61] |   0.72
+      4       |    64.73 |    Male |          low level of education |   male |  9.39 |  1.90 | [  5.67,  13.11] |   4.95
+      86      |    64.73 |    Male |          low level of education |   male | 11.99 |  5.40 | [  1.39,  22.59] |   2.22
+      168     |    64.73 |    Male |          low level of education |   male | 14.59 | 12.26 | [ -9.47,  38.66] |   1.19
+      4       |    94.34 |    Male |          low level of education |   male |  9.03 |  2.38 | [  4.36,  13.71] |   3.79
+      86      |    94.34 |    Male |          low level of education |   male |  2.18 | 16.20 | [-29.62,  33.98] |   0.13
+      168     |    94.34 |    Male |          low level of education |   male | -4.67 | 34.34 | [-72.09,  62.75] |  -0.14
+      4       |    35.12 |  Female |          low level of education |   male | 14.36 |  0.86 | [ 12.67,  16.05] |  16.71
+      86      |    35.12 |  Female |          low level of education |   male | 13.13 |  0.54 | [ 12.07,  14.18] |  24.50
+      168     |    35.12 |  Female |          low level of education |   male | 11.89 |  1.03 | [  9.87,  13.91] |  11.58
+      4       |    64.73 |  Female |          low level of education |   male | 11.84 |  0.62 | [ 10.62,  13.07] |  18.99
+      86      |    64.73 |  Female |          low level of education |   male | 11.56 |  0.55 | [ 10.47,  12.64] |  20.92
+      168     |    64.73 |  Female |          low level of education |   male | 11.27 |  1.06 | [  9.19,  13.35] |  10.62
+      4       |    94.34 |  Female |          low level of education |   male |  9.32 |  0.93 | [  7.50,  11.15] |  10.05
+      86      |    94.34 |  Female |          low level of education |   male |  9.99 |  0.87 | [  8.29,  11.69] |  11.52
+      168     |    94.34 |  Female |          low level of education |   male | 10.65 |  1.62 | [  7.47,  13.82] |   6.58
+      4       |    35.12 |    Male | intermediate level of education |   male | 22.45 |  3.74 | [ 15.10,  29.80] |   6.00
+      86      |    35.12 |    Male | intermediate level of education |   male |  7.37 |  6.96 | [ -6.30,  21.03] |   1.06
+      168     |    35.12 |    Male | intermediate level of education |   male | -7.72 | 17.20 | [-41.47,  26.04] |  -0.45
+      4       |    64.73 |    Male | intermediate level of education |   male | 15.45 |  1.82 | [ 11.87,  19.03] |   8.47
+      86      |    64.73 |    Male | intermediate level of education |   male | 14.82 |  5.47 | [  4.08,  25.56] |   2.71
+      168     |    64.73 |    Male | intermediate level of education |   male | 14.19 | 12.22 | [ -9.81,  38.18] |   1.16
+      4       |    94.34 |    Male | intermediate level of education |   male |  8.45 |  1.17 | [  6.16,  10.74] |   7.23
+      86      |    94.34 |    Male | intermediate level of education |   male | 22.27 |  7.76 | [  7.05,  37.49] |   2.87
+      168     |    94.34 |    Male | intermediate level of education |   male | 36.09 | 16.29 | [  4.11,  68.07] |   2.22
+      4       |    35.12 |  Female | intermediate level of education |   male | 12.96 |  0.79 | [ 11.40,  14.52] |  16.34
+      86      |    35.12 |  Female | intermediate level of education |   male | 14.46 |  0.47 | [ 13.55,  15.38] |  31.06
+      168     |    35.12 |  Female | intermediate level of education |   male | 15.97 |  0.67 | [ 14.66,  17.27] |  24.00
+      4       |    64.73 |  Female | intermediate level of education |   male | 11.48 |  0.45 | [ 10.59,  12.38] |  25.25
+      86      |    64.73 |  Female | intermediate level of education |   male | 13.22 |  0.44 | [ 12.37,  14.08] |  30.36
+      168     |    64.73 |  Female | intermediate level of education |   male | 14.96 |  0.85 | [ 13.28,  16.64] |  17.53
+      4       |    94.34 |  Female | intermediate level of education |   male | 10.01 |  0.54 | [  8.95,  11.07] |  18.59
+      86      |    94.34 |  Female | intermediate level of education |   male | 11.98 |  0.66 | [ 10.69,  13.27] |  18.22
+      168     |    94.34 |  Female | intermediate level of education |   male | 13.95 |  1.32 | [ 11.37,  16.54] |  10.60
+      4       |    35.12 |    Male |         high level of education |   male | 11.88 |  2.02 | [  7.91,  15.85] |   5.88
+      86      |    35.12 |    Male |         high level of education |   male | 13.93 |  1.48 | [ 11.03,  16.83] |   9.44
+      168     |    35.12 |    Male |         high level of education |   male | 15.97 |  2.48 | [ 11.10,  20.84] |   6.44
+      4       |    64.73 |    Male |         high level of education |   male | 11.45 |  1.19 | [  9.11,  13.79] |   9.62
+      86      |    64.73 |    Male |         high level of education |   male | 12.48 |  2.02 | [  8.53,  16.44] |   6.19
+      168     |    64.73 |    Male |         high level of education |   male | 13.52 |  4.09 | [  5.49,  21.55] |   3.30
+      4       |    94.34 |    Male |         high level of education |   male | 11.02 |  1.56 | [  7.95,  14.09] |   7.05
+      86      |    94.34 |    Male |         high level of education |   male | 11.04 |  3.23 | [  4.70,  17.38] |   3.42
+      168     |    94.34 |    Male |         high level of education |   male | 11.06 |  6.59 | [ -1.88,  24.00] |   1.68
+      4       |    35.12 |  Female |         high level of education |   male | 15.92 |  1.51 | [ 12.96,  18.88] |  10.55
+      86      |    35.12 |  Female |         high level of education |   male | 14.36 |  1.08 | [ 12.23,  16.49] |  13.26
+      168     |    35.12 |  Female |         high level of education |   male | 12.80 |  2.20 | [  8.48,  17.12] |   5.82
+      4       |    64.73 |  Female |         high level of education |   male | 13.02 |  0.88 | [ 11.29,  14.75] |  14.78
+      86      |    64.73 |  Female |         high level of education |   male | 12.35 |  1.20 | [  9.98,  14.71] |  10.25
+      168     |    64.73 |  Female |         high level of education |   male | 11.67 |  2.63 | [  6.50,  16.84] |   4.43
+      4       |    94.34 |  Female |         high level of education |   male | 10.13 |  1.09 | [  7.99,  12.27] |   9.29
+      86      |    94.34 |  Female |         high level of education |   male | 10.33 |  1.88 | [  6.65,  14.01] |   5.51
+      168     |    94.34 |  Female |         high level of education |   male | 10.53 |  3.97 | [  2.73,  18.33] |   2.65
+      4       |    35.12 |    Male |          low level of education | female | 16.94 |  2.25 | [ 12.52,  21.35] |   7.53
+      86      |    35.12 |    Male |          low level of education | female | 13.60 |  1.19 | [ 11.26,  15.95] |  11.39
+      168     |    35.12 |    Male |          low level of education | female | 10.27 |  2.16 | [  6.03,  14.50] |   4.76
+      4       |    64.73 |    Male |          low level of education | female | 13.01 |  1.16 | [ 10.73,  15.29] |  11.20
+      86      |    64.73 |    Male |          low level of education | female | 10.57 |  1.77 | [  7.10,  14.04] |   5.98
+      168     |    64.73 |    Male |          low level of education | female |  8.13 |  4.09 | [  0.10,  16.17] |   1.99
+      4       |    94.34 |    Male |          low level of education | female |  9.08 |  1.81 | [  5.52,  12.65] |   5.01
+      86      |    94.34 |    Male |          low level of education | female |  7.54 |  2.93 | [  1.80,  13.29] |   2.58
+      168     |    94.34 |    Male |          low level of education | female |  6.00 |  6.44 | [ -6.64,  18.64] |   0.93
+      4       |    35.12 |  Female |          low level of education | female | 15.68 |  0.97 | [ 13.78,  17.58] |  16.19
+      86      |    35.12 |  Female |          low level of education | female | 14.22 |  0.59 | [ 13.06,  15.39] |  23.91
+      168     |    35.12 |  Female |          low level of education | female | 12.77 |  1.09 | [ 10.63,  14.90] |  11.74
+      4       |    64.73 |  Female |          low level of education | female | 12.73 |  0.58 | [ 11.60,  13.87] |  21.99
+      86      |    64.73 |  Female |          low level of education | female | 11.97 |  0.66 | [ 10.67,  13.26] |  18.09
+      168     |    64.73 |  Female |          low level of education | female | 11.20 |  1.39 | [  8.48,  13.92] |   8.07
+      4       |    94.34 |  Female |          low level of education | female |  9.79 |  0.70 | [  8.40,  11.17] |  13.90
+      86      |    94.34 |  Female |          low level of education | female |  9.71 |  1.07 | [  7.60,  11.81] |   9.05
+      168     |    94.34 |  Female |          low level of education | female |  9.63 |  2.25 | [  5.21,  14.05] |   4.28
+      4       |    35.12 |    Male | intermediate level of education | female | 12.23 |  0.91 | [ 10.45,  14.01] |  13.48
+      86      |    35.12 |    Male | intermediate level of education | female | 12.65 |  0.66 | [ 11.35,  13.95] |  19.13
+      168     |    35.12 |    Male | intermediate level of education | female | 13.08 |  1.23 | [ 10.67,  15.49] |  10.66
+      4       |    64.73 |    Male | intermediate level of education | female | 10.72 |  0.55 | [  9.64,  11.79] |  19.58
+      86      |    64.73 |    Male | intermediate level of education | female | 12.65 |  1.08 | [ 10.53,  14.77] |  11.70
+      168     |    64.73 |    Male | intermediate level of education | female | 14.59 |  2.32 | [ 10.03,  19.15] |   6.28
+      4       |    94.34 |    Male | intermediate level of education | female |  9.21 |  0.62 | [  7.99,  10.42] |  14.89
+      86      |    94.34 |    Male | intermediate level of education | female | 12.65 |  1.77 | [  9.18,  16.12] |   7.16
+      168     |    94.34 |    Male | intermediate level of education | female | 16.10 |  3.71 | [  8.81,  23.39] |   4.34
+      4       |    35.12 |  Female | intermediate level of education | female | 12.91 |  0.47 | [ 11.99,  13.84] |  27.33
+      86      |    35.12 |  Female | intermediate level of education | female | 13.14 |  0.33 | [ 12.49,  13.79] |  39.53
+      168     |    35.12 |  Female | intermediate level of education | female | 13.37 |  0.64 | [ 12.12,  14.62] |  20.93
+      4       |    64.73 |  Female | intermediate level of education | female | 11.38 |  0.29 | [ 10.83,  11.94] |  39.94
+      86      |    64.73 |  Female | intermediate level of education | female | 12.28 |  0.42 | [ 11.45,  13.10] |  29.25
+      168     |    64.73 |  Female | intermediate level of education | female | 13.17 |  0.88 | [ 11.43,  14.91] |  14.88
+      4       |    94.34 |  Female | intermediate level of education | female |  9.86 |  0.34 | [  9.18,  10.53] |  28.57
+      86      |    94.34 |  Female | intermediate level of education | female | 11.41 |  0.67 | [ 10.10,  12.72] |  17.11
+      168     |    94.34 |  Female | intermediate level of education | female | 12.97 |  1.40 | [ 10.22,  15.72] |   9.26
+      4       |    35.12 |    Male |         high level of education | female | 10.93 |  1.13 | [  8.72,  13.14] |   9.71
+      86      |    35.12 |    Male |         high level of education | female | 12.15 |  0.88 | [ 10.42,  13.87] |  13.84
+      168     |    35.12 |    Male |         high level of education | female | 13.36 |  1.55 | [ 10.32,  16.41] |   8.62
+      4       |    64.73 |    Male |         high level of education | female | 10.86 |  0.75 | [  9.40,  12.33] |  14.57
+      86      |    64.73 |    Male |         high level of education | female | 12.26 |  1.24 | [  9.82,  14.70] |   9.88
+      168     |    64.73 |    Male |         high level of education | female | 13.66 |  2.57 | [  8.62,  18.70] |   5.32
+      4       |    94.34 |    Male |         high level of education | female | 10.79 |  1.01 | [  8.80,  12.78] |  10.65
+      86      |    94.34 |    Male |         high level of education | female | 12.38 |  2.09 | [  8.28,  16.47] |   5.93
+      168     |    94.34 |    Male |         high level of education | female | 13.96 |  4.30 | [  5.51,  22.41] |   3.24
+      4       |    35.12 |  Female |         high level of education | female | 13.86 |  0.91 | [ 12.06,  15.65] |  15.18
+      86      |    35.12 |  Female |         high level of education | female | 15.00 |  0.75 | [ 13.52,  16.48] |  19.90
+      168     |    35.12 |  Female |         high level of education | female | 16.15 |  1.55 | [ 13.11,  19.19] |  10.43
+      4       |    64.73 |  Female |         high level of education | female | 12.31 |  0.52 | [ 11.29,  13.34] |  23.59
+      86      |    64.73 |  Female |         high level of education | female | 13.54 |  0.86 | [ 11.84,  15.24] |  15.67
+      168     |    64.73 |  Female |         high level of education | female | 14.76 |  1.86 | [ 11.10,  18.42] |   7.92
+      4       |    94.34 |  Female |         high level of education | female | 10.77 |  0.73 | [  9.34,  12.20] |  14.77
+      86      |    94.34 |  Female |         high level of education | female | 12.07 |  1.35 | [  9.42,  14.73] |   8.92
+      168     |    94.34 |  Female |         high level of education | female | 13.38 |  2.80 | [  7.87,  18.88] |   4.77
       
       Marginal means estimated at c12hour
 
@@ -507,4 +507,48 @@
       Female  |                                 |        |                 |        | 13.25 | 1.14 | [ 11.01, 15.49] |  11.62
       
       Marginal means estimated at c161sex
+
+# estimate_means - protect integers
+
+    Code
+      print(out)
+    Output
+      Model-based Expectation
+      
+      c160age | c161sex | Predicted |   SE |         95% CI
+      -----------------------------------------------------
+      44      |    Male |     11.80 | 0.33 | [11.15, 12.45]
+      54      |    Male |     11.65 | 0.31 | [11.04, 12.26]
+      63      |    Male |     11.51 | 0.36 | [10.81, 12.21]
+      89      |    Male |     11.11 | 0.66 | [ 9.81, 12.41]
+      18      |  Female |     11.42 | 0.50 | [10.44, 12.40]
+      44      |  Female |     11.92 | 0.26 | [11.41, 12.44]
+      54      |  Female |     12.12 | 0.22 | [11.69, 12.55]
+      63      |  Female |     12.29 | 0.23 | [11.84, 12.74]
+      
+      Variable predicted: neg_c_7
+      Predictors modulated: c160age=[fivenum], c161sex
+      Predictors controlled: barthtot (65), e16sex (1)
+
+---
+
+    Code
+      print(out)
+    Output
+      Estimated Marginal Means
+      
+      c160age | c161sex |  Mean |   SE |         95% CI | t(865)
+      ----------------------------------------------------------
+      18      |    Male | 12.08 | 0.60 | [10.91, 13.26] |  20.22
+      44      |    Male | 11.68 | 0.29 | [11.12, 12.24] |  40.98
+      54      |    Male | 11.53 | 0.25 | [11.03, 12.02] |  45.75
+      63      |    Male | 11.39 | 0.30 | [10.80, 11.97] |  38.07
+      89      |    Male | 10.99 | 0.62 | [ 9.76, 12.21] |  17.64
+      18      |  Female | 11.30 | 0.44 | [10.44, 12.17] |  25.63
+      44      |  Female | 11.80 | 0.18 | [11.44, 12.17] |  63.99
+      54      |  Female | 12.00 | 0.14 | [11.72, 12.28] |  84.30
+      63      |  Female | 12.17 | 0.18 | [11.83, 12.52] |  69.56
+      89      |  Female | 12.68 | 0.43 | [11.84, 13.51] |  29.74
+      
+      Marginal means estimated at c160age=[fivenum]
 

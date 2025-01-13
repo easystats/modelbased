@@ -70,3 +70,17 @@ test_that("estimate_means - full labels", {
   expect_snapshot(print(pr, table_width = Inf), variant = "windows")
   expect_snapshot(print(pr, full_labels = FALSE, table_width = Inf), variant = "windows")
 })
+
+
+test_that("estimate_means - protect integers", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  efc$c161sex <- datawizard::to_factor(efc$c161sex)
+  efc$e16sex <- datawizard::to_factor(efc$e16sex)
+  model <- lm(neg_c_7 ~ barthtot + c160age * c161sex + e16sex, data = efc)
+
+  out <- estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
+  expect_snapshot(print(out), variant = "windows")
+  out <- estimate_means(model, by = c("c160age=[fivenum]", "c161sex"), backend = "marginaleffects")
+  expect_snapshot(print(out), variant = "windows")
+})
