@@ -456,10 +456,10 @@
 <polyline points='30.05,462.74 32.79,462.74 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
 <polyline points='30.05,407.72 32.79,407.72 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
 <polyline points='30.05,352.69 32.79,352.69 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />
-<text x='288.79' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='40.99px' lengthAdjust='spacingAndGlyphs'>c161sex</text>
-<text transform='translate(13.05,300.60) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='27.52px' lengthAdjust='spacingAndGlyphs'>Mean</text>
+<text x='288.79' y='568.24' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='69.98px' lengthAdjust='spacingAndGlyphs'>carer's gender</text>
+<text transform='translate(13.05,300.60) rotate(-90)' text-anchor='middle' style='font-size: 11.00px; font-family: sans;' textLength='182.83px' lengthAdjust='spacingAndGlyphs'>Mean of Negative impact with 7 items</text>
 <rect x='572.39' y='267.01' width='142.13' height='67.17' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<text x='572.39' y='275.72' style='font-size: 11.00px; font-family: sans;' textLength='47.72px' lengthAdjust='spacingAndGlyphs'>c172code</text>
+<text x='572.39' y='275.72' style='font-size: 11.00px; font-family: sans;' textLength='121.35px' lengthAdjust='spacingAndGlyphs'>carer's level of education</text>
 <rect x='572.39' y='282.34' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
 <line x1='574.12' y1='290.98' x2='587.94' y2='290.98' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />
 <line x1='581.03' y1='297.90' x2='581.03' y2='284.07' style='stroke-width: 1.07; stroke: #F8766D; stroke-linecap: butt;' />

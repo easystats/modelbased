@@ -221,7 +221,7 @@ test_that("plots, estimate_means works with Poisson", {
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
-    "plot-means-poisson-1",
+    "plot-means-poisson-2",
     plot(x)
   )
 })
@@ -356,6 +356,18 @@ test_that("plots, automatically join dots", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-join-dots-2",
+    plot(out)
+  )
+})
+
+
+test_that("plots, logistic regression", {
+  data(mtcars)
+  model <- glm(vs ~ wt, data = mtcars, family = "binomial")
+  out <- estimate_means(model, "wt", length = 100, backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-1",
     plot(out)
   )
 })

@@ -10,6 +10,10 @@
     group = 1
   )
 
+  # extract information for labels
+  model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
+  model_response <- attributes(x)$response
+
   # Main geom
   if ("estimate_contrasts" %in% att$class) {
     insight::format_error("Automated plotting is not yet implemented for this class.")
@@ -68,6 +72,32 @@
   # CI
   aes <- .find_aes_ci(aes, data)
 
+  # axis and legend labels
+  if (!is.null(model_data) && !is.null(model_response)) {
+    # response - mapped to the y-axis
+    ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
+    # fix default y-label, if necessary
+    y_prefix <- aes$y
+    if (y_prefix == "Predicted") {
+      y_prefix <- "Predicted value"
+    }
+    # set y-label based on labelled data, or variable name
+    if (is.null(ylab)) {
+      ylab <- paste(y_prefix, "of", model_response)
+    } else {
+      ylab <- paste(y_prefix, "of", ylab)
+    }
+    # main predictor - mapped to x-axis
+    xlab <- .safe(attr(model_data[[by[1]]], "label", exact = TRUE))
+    # first grouping variable (2nd in "by") - mapped to legend
+    if (length(by) > 1) {
+      colour <- .safe(attr(model_data[[by[[2]]]], "label", exact = TRUE))
+    } else {
+      colour <- NULL
+    }
+    aes$labs <- insight::compact_list(list(y = ylab, x = xlab, colour = colour))
+  }
+
   list(aes = aes, data = data)
 }
 
@@ -117,7 +147,6 @@
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
-
 
   # Uncertainty -----------------------------------
   if (aes$type == "ribbon" && is.null(aes$alpha)) {
@@ -187,6 +216,8 @@
     layers[[paste0("l", l)]] <- list(geom = "coord_flip")
     l <- l + 1
   }
+
+  # grids and facets ----------------------------------
   if (!is.null(aes$facet)) {
     layers[[paste0("l", l)]] <- list(
       geom = "facet_wrap",
@@ -204,6 +235,18 @@
       scales = "free_x"
     )
     if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    l <- l + 1
+  }
+
+  # add axis and legend labels ----------------------------------
+  if (!is.null(aes$labs)) {
+    layers[[paste0("l", l)]] <- insight::compact_list(list(
+      geom = "labs",
+      x = aes$labs$x,
+      y = aes$labs$y,
+      colour = aes$labs$colour,
+      fill =  aes$labs$colour
+    ))
     l <- l + 1
   }
 
