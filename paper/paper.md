@@ -83,18 +83,25 @@ This is crucial for interpreting how individual predictors influence the respons
 
 The modelbased package simplifies the extraction of these effects, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
+[details about types of marginalization]
+
+
 ## Technical details
 
 It leverages the `get_datagrid()` function from the `insight` package (REF) to intuitively generate an appropriate grid of data points for which predictions will be computed.
 
-
 The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`.
 
-Differences? 
+- `emmeans` (REF) Originally, the package was known as `lsmeans`, which stands for "Least-Squares Means". 
+  This term was coined by researchers in the statistical community to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs, which are essentially predictions averaged over specified levels of factors in the model while holding continuous variables at their means or other specified values.
+  The term "Least-Squares Means" was somewhat misleading as it suggested a method specific to least-squares estimation, hence its renaming to `emmeans` in 2016 to clarify its scope for a wider range of models including generalized linear models, mixed models, and Bayesian models.
+- `marginaleffects` (REF) was more recently introduced and also employs the delta method for variance estimation.
+
+[What's the difference / benefits / drawbacks of using one or ther other?]
 
 Something about the delta method?
 
-This backend can be set as an option with e.g., `options(modelbased_backend = "marginaleffects")`.
+This backend can be set as a  global option with e.g., `options(modelbased_backend = "marginaleffects")`.
 
 # Examples
 
