@@ -223,7 +223,7 @@ test_that("estimate_means() - lm", {
   expect_identical(dim(estim2), c(8L, 9L))
   expect_equal(
     estim2$Mean,
-    c(0.27727, 0.23, 2.004, 2.6842, 1.05, 0.41818, 1.60435, 1.7),
+    c(2.004, 2.6842, 0.27727, 0.23, 1.60435, 1.7, 1.05, 0.41818),
     tolerance = 1e-4
   )
 
@@ -381,4 +381,49 @@ test_that("get_marginaleffects, overall mean", {
   out1 <- as.data.frame(get_emmeans(model, by = NULL))
   out2 <- as.data.frame(get_marginalmeans(model, by = NULL))
   expect_equal(out1$emmean, out2$estimate, tolerance = 0.2)
+})
+
+
+test_that("get_marginaleffects, value definition in `by`", {
+  set.seed(123)
+  n <- 200
+  d <- data.frame(
+    score = rnorm(n),
+    grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
+    time = as.factor(sample(1:3, n, TRUE))
+  )
+  model2 <- lm(score ~ grp * time, data = d)
+
+  predictions <- estimate_means(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
+  expect_identical(predictions$time, structure(c(2L, 2L), levels = c("1", "2", "3"), class = "factor"))
+
+  predictions <- estimate_means(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
+  expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
+  expect_identical(predictions$time, structure(c(1L, 1L), levels = "2", class = "factor"))
+
+  difference <- estimate_contrasts(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
+  expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
+  expect_identical(difference$Parameter, "control - treatment")
+
+  difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
+  expect_identical(difference$Parameter, "control - treatment")
+
+  set.seed(123)
+  n <- 200
+  d <- data.frame(
+    score = rnorm(n),
+    grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
+    time = as.numeric(sample(1:3, n, TRUE))
+  )
+  model2 <- lm(score ~ grp * as.factor(time), data = d)
+
+  predictions <- estimate_means(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  expect_equal(predictions$Mean, c(0.23165, 0.17628), tolerance = 1e-4)
+  expect_identical(predictions$time, c(2, 2))
+
+  difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
+  expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
+  expect_identical(difference$Parameter, "control - treatment")
 })

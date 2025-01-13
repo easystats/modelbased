@@ -70,6 +70,11 @@ get_marginalmeans <- function(model,
     datagrid <- do.call(insight::get_datagrid, dg_args)
     at_specs <- attributes(datagrid)$at_specs
 
+    # restore data types -  if we have defined numbers in `by`, like
+    # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
+    # numeric in the data grid. Fix this here, else marginal effects will fail
+    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model))
+
     # add user-arguments from "...", but remove those arguments that are already set
     dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   }
