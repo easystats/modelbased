@@ -385,3 +385,28 @@ test_that("estimate_contrasts - filtering works", {
     regex = "Please specify"
   )
 })
+
+
+test_that("estimate_contrasts - simple contrasts and with - in levels works", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("ggeffects")
+
+  model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+  out <- estimate_contrasts(model, "Species", backend = "marginaleffects")
+  expect_snapshot(print(out, table_width = Inf))
+
+  data(coffee_data, package = "ggeffects")
+  m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
+  out <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects")
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+
+  out <- estimate_contrasts(m, contrast = "time", by = "coffee", backend = "marginaleffects")
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+
+  data(Salamanders, package = "glmmTMB")
+  model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson")
+  out <- estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects")
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+  out <- estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects")
+  expect_snapshot(print(out, zap_small = TRUE, table_width = Inf))
+})

@@ -143,6 +143,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
   if (!inherits(x, "estimate_slopes") && !is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
+    # save attributes
+    att <- attributes(x)
+
     # split parameter column into comparison groups
     params <- as.data.frame(do.call(
       rbind,
@@ -202,6 +205,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
     # add back new columns
     x <- cbind(params[c(contrast, by)], x)
+
+    # set back attr
+    attributes(x) <- utils::modifyList(attributes(x), att)
 
     # These are examples of what {marginaleffects} returns, a single parmater
     # column that includes all levels, comma- and dash-separated, or with /
