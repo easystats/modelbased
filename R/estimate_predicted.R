@@ -330,6 +330,7 @@ estimate_relation <- function(model,
   # call "get_data()" only once...
   model_data <- insight::get_data(model, verbose = FALSE)
   is_model <- insight::is_model(model)
+  dots <- list(...)
 
   # model and data properties
   if (is_model) {
@@ -337,11 +338,13 @@ estimate_relation <- function(model,
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
     is_nullmodel <- insight::is_nullmodel(model)
+    grouplevel_effects <- insight::find_random(model, flatten = TRUE)
   } else {
     # for stuff like data frame, no response and no null model
     variables <- colnames(model_data)
     model_response <- NULL
     is_nullmodel <- FALSE
+    grouplevel_effects <- NULL
   }
 
   # if "by" is provided, get datagrid
@@ -408,12 +411,18 @@ estimate_relation <- function(model,
   data <- datawizard::data_restoretype(data, model_data)
 
   # Get predicted ----------------
-  predictions <- insight::get_predicted(model,
+  prediction_args <- list(
+    model,
     data = data,
     predict = predict,
-    ci = ci,
-    ...
+    ci = ci
   )
+  # for predicting grouplevel random effects, add "allow.new.levels"
+  if (!is.null(grouplevel_effects) && any(grouplevel_effects %in% grid_specs$at_spec$varname)) {
+    prediction_args$allow.new.levels = TRUE
+    dots$allow.new.levels <- NULL
+  }
+  predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
   out <- cbind(data, out)
 
