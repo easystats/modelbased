@@ -95,21 +95,43 @@ within subsets by indicating the grouping variable after a vertical bar
 }
 }}
 
-\item{marginalize}{String. Options:
+\item{marginalize}{Character string, indicating how to marginalize over the
+non-focal predictors, i.e. those variables that are not specified in \code{by}
+or \code{contrast}.
 \itemize{
-\item \code{"reference"}: 0 for numerics and ref for factors
-\item \code{"mean"}: mean for numerics, mode for factors
-\item \code{"theorethical"}: Marginalizing over the factor levels of non-focal terms
-computes a kind of "weighted average" for the values at which these terms
-are hold constant.
-\item \code{"empirical"}: non-focal predictors are marginalized over the observations
-in your sample. Technically, ggaverage() calculates predicted values for
-each observation in the data multiple times (the data is duplicated once
-for all unique values of the focal terms), each time fixing one unique
-value or level of the focal terms and then takes the average of these
-predicted values (aggregated/grouped by the focal terms). These kind of
-predictions are also called "counterfactual" predictions (\emph{Dickerman and
-Hernan 2020}).
+\item \code{"mean"}: Takes the mean value for non-focal numeric predictors and
+marginalizes over the factor levels of non-focal terms, which computes a
+kind of "weighted average" for the values at which these terms are hold
+constant. These predictions are a good representation of the sample,
+because all possible values and levels of the non-focal predictors are
+taken into account. It would answer the question, "What is the predicted
+(or: expected) value of the response at meaningful values or levels of my
+focal terms for an 'average' observation in my data?". It refers to
+randomly picking a subject of your sample and the result you get on average.
+\item \code{"mode"}: Takes the mean value for non-focal numeric predictors and the
+mode for non-focal categorical predictors. The mode is the most frequent
+value in the sample. These predictons represent a rather "theoretical" view
+on your data, which does not necessarily exactly reflect the characteristics
+of your sample. It helps answer the question, "What is the predicted (or:
+expected) value of the response at meaningful values or levels of the focal
+terms for a 'typical' observation in my data?", where 'typical' refers to
+certain characteristics of the remaining predictors. To use the reference
+level of non-focal categorical predictors (instead of the mode), use
+\code{estimate_relation()} instead.
+\item \code{"empirical"}: Non-focal predictors are marginalized over the observations
+in the sample. Technically, calculates predicted values for each
+observation in the data multiple times (the data is duplicated once for all
+unique values of the focal terms), each time fixing one unique value or
+level of the focal terms and then takes the average of these predicted
+values (aggregated/grouped by the focal terms). These kind of predictions
+are also called "counterfactual" predictions (\emph{Dickerman and Hernan 2020}).
+Counterfactual predictions are useful, insofar as the results can also be
+transferred to other contexts. It answers the question, "What is the
+predicted (or: expected) value of the response at meaningful values or levels
+of my focal terms for the 'average' observation in the population?". It does
+not only refer to the actual data in your sample, but also "what would be if"
+we had more data, or if we had data from a different population. This is
+where "counterfactual" refers to.
 }}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
