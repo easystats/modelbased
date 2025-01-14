@@ -38,7 +38,7 @@
 #' @param marginalize Character string, indicating the type of marginalization.
 #' This dictates how the predictions are "averaged" over the non-focal predictors,
 #' i.e. those variables that are not specified in `by` or `contrast`.
-#' - `"average"`: Takes the mean value for non-focal numeric predictors and
+#' - `"average"` (default): Takes the mean value for non-focal numeric predictors and
 #'   marginalizes over the factor levels of non-focal terms, which computes a
 #'   kind of "weighted average" for the values at which these terms are hold
 #'   constant. These predictions are a good representation of the sample,
@@ -46,6 +46,7 @@
 #'   taken into account. It answer sthe question, "What is the predicted value
 #'   of the response for an 'average' observation in *my data*?". It refers to
 #'   randomly picking a subject of your sample and the result you get on average.
+#'   This approach is the one taken by default in the `emmeans` package.
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
@@ -53,16 +54,17 @@
 #'   extrapolation to the population. Counterfactual predictions are useful,
 #'   insofar as the results can also be transferred to other contexts
 #'   (Dickerman and Hernan, 2020). It answers the question, "What is the
-#'   predicted value of the response for the 'average' observation in *the population?*".
-#'   It does not only refer to the actual data in your sample, but also "what
-#'   would be if" we had more data, or if we had data from a different
-#'   population. This is where "counterfactual" refers to.
+#'   predicted value of the response for the 'average' observation in
+#'   *the general population?*". It does not only refer to the actual data in
+#'   your sample, but also "what would be if" we had more data, or if we had data
+#'   from a different sample.
 #'
-#' In other words, the distinction between marginalizations in a nutshell is
-#' about
-#' - specific individuals (`estimate_relation()`)
-#' - average individuals (`estimate_means()`)
-#' - "general population" (`estimate_means(marginalize = "population")`)
+#' In other words, the distinction between marginalization types resides in whether
+#' the prediction are made for:
+#' - A specific "individual" (i.e., specific combination of predictor values):
+#'   this is what is obtained when using `estimate_relation()`.
+#' - An average individual: obtained woth `estimate_means(..., marginalize = "average")`
+#' - The "general population": obtained with (`estimate_means(marginalize = "population")`)
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
