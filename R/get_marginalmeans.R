@@ -106,7 +106,7 @@ get_marginalmeans <- function(model,
     }
     fun_args$variables <- lapply(datagrid, unique)
   } else {
-    fun_args$newdata = datagrid
+    fun_args$newdata <- datagrid
   }
 
   # handle distributional parameters
