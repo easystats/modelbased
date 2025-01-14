@@ -23,7 +23,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              marginalize = "mean",
+                              marginalize = "average",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -38,7 +38,7 @@ get_marginalmeans <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(marginalize, c("mean", "mode", "empirical"))
+  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -54,17 +54,11 @@ get_marginalmeans <- function(model,
   if (is.null(by)) {
     datagrid <- at_specs <- NULL
   } else {
-    # set datagrid arguments based on how to marginalize over non-focal -------
-    # -------------------------------------------------------------------------
-    datagrid_factors <- switch(marginalize,
-      mode = "mode",
-      "all"
-    )
     # setup arguments to create the data grid
     dg_args <- list(
       model,
       by = my_args$by,
-      factors = datagrid_factors,
+      factors = "all",
       include_random = TRUE,
       verbose = FALSE
     )
@@ -73,7 +67,7 @@ get_marginalmeans <- function(model,
       dg_args$preserve_range <- FALSE
     }
     # add user-arguments from "...", but remove those arguments that are already set
-    dots[c("by", "factors", "numerics", "include_random", "verbose")] <- NULL
+    dots[c("by", "factors", "include_random", "verbose")] <- NULL
     dg_args <- insight::compact_list(c(dg_args, dots))
 
     # Get corresponding datagrid (and deal with particular ats)
@@ -110,7 +104,7 @@ get_marginalmeans <- function(model,
   )
 
   # counterfactual predictions - we need the "variables" argument
-  if (marginalize == "empirical") {
+  if (marginalize == "population") {
     # sanity check
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint

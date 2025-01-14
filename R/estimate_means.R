@@ -38,7 +38,7 @@
 #' @param marginalize Character string, indicating how to marginalize over the
 #' non-focal predictors, i.e. those variables that are not specified in `by`
 #' or `contrast`.
-#' - `"mean"`: Takes the mean value for non-focal numeric predictors and
+#' - `"average"`: Takes the mean value for non-focal numeric predictors and
 #'   marginalizes over the factor levels of non-focal terms, which computes a
 #'   kind of "weighted average" for the values at which these terms are hold
 #'   constant. These predictions are a good representation of the sample,
@@ -47,30 +47,24 @@
 #'   (or: expected) value of the response at meaningful values or levels of my
 #'   focal terms for an 'average' observation in my data?". It refers to
 #'   randomly picking a subject of your sample and the result you get on average.
-#' - `"mode"`: Takes the mean value for non-focal numeric predictors and the
-#'   mode for non-focal categorical predictors. The mode is the most frequent
-#'   value in the sample. These predictons represent a rather "theoretical" view
-#'   on your data, which does not necessarily exactly reflect the characteristics
-#'   of your sample. It helps answer the question, "What is the predicted (or:
-#'   expected) value of the response at meaningful values or levels of the focal
-#'   terms for a 'typical' observation in my data?", where 'typical' refers to
-#'   certain characteristics of the remaining predictors. To use the reference
-#'   level of non-focal categorical predictors (instead of the mode), use
-#'   `estimate_relation()` instead.
-#' - `"empirical"`: Non-focal predictors are marginalized over the observations
-#'   in the sample. Technically, calculates predicted values for each
-#'   observation in the data multiple times (the data is duplicated once for all
-#'   unique values of the focal terms), each time fixing one unique value or
-#'   level of the focal terms and then takes the average of these predicted
-#'   values (aggregated/grouped by the focal terms). These kind of predictions
-#'   are also called "counterfactual" predictions (*Dickerman and Hernan 2020*).
-#'   Counterfactual predictions are useful, insofar as the results can also be
-#'   transferred to other contexts. It answers the question, "What is the
-#'   predicted (or: expected) value of the response at meaningful values or levels
-#'   of my focal terms for the 'average' observation in the population?". It does
-#'   not only refer to the actual data in your sample, but also "what would be if"
-#'   we had more data, or if we had data from a different population. This is
-#'   where "counterfactual" refers to.
+#' - `"population"`: Non-focal predictors are marginalized over the observations
+#'   in the sample, where the sample is repliacted multiple times to produce
+#'   "counterfactuals" and then takes the average of these predicted values
+#'   (aggregated/grouped by the focal terms). It can be considered as
+#'   extrapolation to the population. Counterfactual predictions are useful,
+#'   insofar as the results can also be transferred to other contexts
+#'   (*Dickerman and Hernan 2020*). It answers the question, "What is the
+#'   predicted (or: expected) value of the response at meaningful values or
+#'   levels of my focal terms for the 'average' observation in the population?".
+#'   It does not only refer to the actual data in your sample, but also "what
+#'   would be if" we had more data, or if we had data from a different
+#'   population. This is where "counterfactual" refers to.
+#'
+#' In other words, the distinction between marginalizations in a nutshell is
+#' about
+#' - specific individuals (`estimate_relation()`)
+#' - average individuals (`estimate_means()`)
+#' - "general population" (`estimate_means(marginalize = "population")`)
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
@@ -132,7 +126,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           marginalize = "mean",
+                           marginalize = "average",
                            backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
                            verbose = TRUE,
@@ -144,7 +138,7 @@ estimate_means <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(marginalize, c("mean", "mode", "empirical"))
+  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
@@ -163,7 +157,7 @@ estimate_means <- function(model,
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(
     means,
-    type = ifelse(marginalize == "empirical", "counterfactuals", "means"),
+    type = ifelse(marginalize == "population", "counterfactuals", "means"),
     predict = attributes(estimated)$predict,
     model_info = insight::model_info(model)
   )

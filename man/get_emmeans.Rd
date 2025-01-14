@@ -39,7 +39,7 @@ get_marginalcontrasts(
   by = NULL,
   predict = NULL,
   comparison = "pairwise",
-  marginalize = "mean",
+  marginalize = "average",
   ci = 0.95,
   p_adjust = "holm",
   verbose = TRUE,
@@ -51,7 +51,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  marginalize = "mean",
+  marginalize = "average",
   transform = NULL,
   verbose = TRUE,
   ...
@@ -140,7 +140,7 @@ compute the slopes.}
 non-focal predictors, i.e. those variables that are not specified in \code{by}
 or \code{contrast}.
 \itemize{
-\item \code{"mean"}: Takes the mean value for non-focal numeric predictors and
+\item \code{"average"}: Takes the mean value for non-focal numeric predictors and
 marginalizes over the factor levels of non-focal terms, which computes a
 kind of "weighted average" for the values at which these terms are hold
 constant. These predictions are a good representation of the sample,
@@ -149,30 +149,26 @@ taken into account. It would answer the question, "What is the predicted
 (or: expected) value of the response at meaningful values or levels of my
 focal terms for an 'average' observation in my data?". It refers to
 randomly picking a subject of your sample and the result you get on average.
-\item \code{"mode"}: Takes the mean value for non-focal numeric predictors and the
-mode for non-focal categorical predictors. The mode is the most frequent
-value in the sample. These predictons represent a rather "theoretical" view
-on your data, which does not necessarily exactly reflect the characteristics
-of your sample. It helps answer the question, "What is the predicted (or:
-expected) value of the response at meaningful values or levels of the focal
-terms for a 'typical' observation in my data?", where 'typical' refers to
-certain characteristics of the remaining predictors. To use the reference
-level of non-focal categorical predictors (instead of the mode), use
-\code{estimate_relation()} instead.
-\item \code{"empirical"}: Non-focal predictors are marginalized over the observations
-in the sample. Technically, calculates predicted values for each
-observation in the data multiple times (the data is duplicated once for all
-unique values of the focal terms), each time fixing one unique value or
-level of the focal terms and then takes the average of these predicted
-values (aggregated/grouped by the focal terms). These kind of predictions
-are also called "counterfactual" predictions (\emph{Dickerman and Hernan 2020}).
-Counterfactual predictions are useful, insofar as the results can also be
-transferred to other contexts. It answers the question, "What is the
-predicted (or: expected) value of the response at meaningful values or levels
-of my focal terms for the 'average' observation in the population?". It does
-not only refer to the actual data in your sample, but also "what would be if"
-we had more data, or if we had data from a different population. This is
-where "counterfactual" refers to.
+\item \code{"population"}: Non-focal predictors are marginalized over the observations
+in the sample, where the sample is repliacted multiple times to produce
+"counterfactuals" and then takes the average of these predicted values
+(aggregated/grouped by the focal terms). It can be considered as
+extrapolation to the population. Counterfactual predictions are useful,
+insofar as the results can also be transferred to other contexts
+(\emph{Dickerman and Hernan 2020}). It answers the question, "What is the
+predicted (or: expected) value of the response at meaningful values or
+levels of my focal terms for the 'average' observation in the population?".
+It does not only refer to the actual data in your sample, but also "what
+would be if" we had more data, or if we had data from a different
+population. This is where "counterfactual" refers to.
+}
+
+In other words, the distinction between marginalizations in a nutshell is
+about
+\itemize{
+\item specific individuals (\code{estimate_relation()})
+\item average individuals (\code{estimate_means()})
+\item "general population" (\code{estimate_means(marginalize = "population")})
 }}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
