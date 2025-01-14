@@ -48,7 +48,7 @@
 #'   focal terms for an 'average' observation in my data?". It refers to
 #'   randomly picking a subject of your sample and the result you get on average.
 #' - `"population"`: Non-focal predictors are marginalized over the observations
-#'   in the sample, where the sample is repliacted multiple times to produce
+#'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
 #'   (aggregated/grouped by the focal terms). It can be considered as
 #'   extrapolation to the population. Counterfactual predictions are useful,

@@ -39,6 +39,7 @@ ception
 codecov
 computable
 conditionspeed
+counterfactuals
 dat
 datagrid
 datawizard
@@ -69,6 +70,7 @@ io
 lifecycle
 loess
 marginaleffects
+marginalizations
 mattansb
 modelisation
 modelling
