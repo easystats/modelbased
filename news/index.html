@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,8 @@
 <div class="section level3">
 <h3 id="major-changes-0-9-0">Major Changes<a class="anchor" aria-label="anchor" href="#major-changes-0-9-0"></a></h3>
 <ul><li><p>All <code>estimate_*()</code> functions get a <code>predict</code> argument, which can be used to modulate the type of transformation applied to the predictions (i.e. whether predictions should be on the response scale, link scale, etc.). It can also be used to predict auxiliary (distributional) parameters.</p></li>
-<li><p>The <code>"marginaleffects"</code> backend for <code><a href="../reference/estimate_means.html">estimate_means()</a></code> is now fully implemented and no longer work-in-progress.</p></li>
+<li><p><code><a href="../reference/estimate_means.html">estimate_means()</a></code> and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> get a `<code>marginalize</code> argument, to specify how to marginalize over non-focal terms. This results in slightly different predicted values, each approach answering a different question.</p></li>
+<li><p>The <code>"marginaleffects"</code> backend is now fully implemented and no longer work-in-progress.</p></li>
 <li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gains a <code>backend</code> argument. This defaults to <code>"emmeans"</code>, but can be set to <code>"marginaleffects"</code> to use features of that package to estimate contrasts and pairwise comparisons.</p></li>
 <li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> and related functions also get a <code>by</code> argument, as alternative to create a datagrid for the <code>data</code> argument.</p></li>
 <li><p>Many functions get a <code>verbose</code> argument, to silence warnings and messages.</p></li>

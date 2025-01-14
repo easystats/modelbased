@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,6 +115,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -126,6 +127,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -222,6 +224,37 @@ within subsets by indicating the grouping variable after a vertical bar
 <dt id="arg-trend">trend<a class="anchor" aria-label="anchor" href="#arg-trend"></a></dt>
 <dd><p>A character indicating the name of the variable for which to
 compute the slopes.</p></dd>
+
+
+<dt id="arg-marginalize">marginalize<a class="anchor" aria-label="anchor" href="#arg-marginalize"></a></dt>
+<dd><p>Character string, indicating the type of marginalization.
+This dictates how the predictions are "averaged" over the non-focal predictors,
+i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric predictors and
+marginalizes over the factor levels of non-focal terms, which computes a
+kind of "weighted average" for the values at which these terms are hold
+constant. These predictions are a good representation of the sample,
+because all possible values and levels of the non-focal predictors are
+taken into account. It answers the question, "What is the predicted value
+for an 'average' observation in <em>my data</em>?". It refers to
+randomly picking a subject of your sample and the result you get on average.
+This approach is the one taken by default in the <code>emmeans</code> package.</p></li>
+<li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
+in the sample, where the sample is replicated multiple times to produce
+"counterfactuals" and then takes the average of these predicted values
+(aggregated/grouped by the focal terms). It can be considered as
+extrapolation to the population. Counterfactual predictions are useful,
+insofar as the results can also be transferred to other contexts
+(Dickerman and Hernan, 2020). It answers the question, "What is the
+predicted for the 'average' observation in <em>the general population</em>?".
+It does not only refer to the actual data in your observed sample, but also
+"what would be if" we had more data, or if we had data from a different sample.</p></li>
+</ul><p>In other words, the distinction between marginalization types resides in whether
+the prediction are made for:</p><ul><li><p>A specific "individual" (i.e., a specific combination of predictor values):
+this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other
+prediction functions.</p></li>
+<li><p>An average individual: obtained with <code>estimate_means(..., marginalize = "average")</code></p></li>
+<li><p>The "general population": obtained with <code>estimate_means(..., marginalize = "population")</code></p></li>
+</ul></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -352,6 +385,7 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal contrasts estimated at Species, Petal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># Or modulate it</span></span></span>
 <span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast =</span>

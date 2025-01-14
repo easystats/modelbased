@@ -13,7 +13,7 @@ estimate_slopes()."><meta property="og:image" content="https://easystats.github.
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.25</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.26</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,7 @@ other related functions such as <code><a href="estimate_contrasts.html">estimate
 <span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"emmeans"</span><span class="op">)</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -135,6 +136,37 @@ for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
 <dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
+
+
+<dt id="arg-marginalize">marginalize<a class="anchor" aria-label="anchor" href="#arg-marginalize"></a></dt>
+<dd><p>Character string, indicating the type of marginalization.
+This dictates how the predictions are "averaged" over the non-focal predictors,
+i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric predictors and
+marginalizes over the factor levels of non-focal terms, which computes a
+kind of "weighted average" for the values at which these terms are hold
+constant. These predictions are a good representation of the sample,
+because all possible values and levels of the non-focal predictors are
+taken into account. It answers the question, "What is the predicted value
+for an 'average' observation in <em>my data</em>?". It refers to
+randomly picking a subject of your sample and the result you get on average.
+This approach is the one taken by default in the <code>emmeans</code> package.</p></li>
+<li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
+in the sample, where the sample is replicated multiple times to produce
+"counterfactuals" and then takes the average of these predicted values
+(aggregated/grouped by the focal terms). It can be considered as
+extrapolation to the population. Counterfactual predictions are useful,
+insofar as the results can also be transferred to other contexts
+(Dickerman and Hernan, 2020). It answers the question, "What is the
+predicted for the 'average' observation in <em>the general population</em>?".
+It does not only refer to the actual data in your observed sample, but also
+"what would be if" we had more data, or if we had data from a different sample.</p></li>
+</ul><p>In other words, the distinction between marginalization types resides in whether
+the prediction are made for:</p><ul><li><p>A specific "individual" (i.e., a specific combination of predictor values):
+this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other
+prediction functions.</p></li>
+<li><p>An average individual: obtained with <code>estimate_means(..., marginalize = "average")</code></p></li>
+<li><p>The "general population": obtained with <code>estimate_means(..., marginalize = "population")</code></p></li>
+</ul></dd>
 
 
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
@@ -240,6 +272,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | 5.61 | 0.06 | [5.50, 5.72]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -263,6 +296,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | 1.43 | 0.08 | [1.28, 1.58]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width=c(2, 4)"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
@@ -273,6 +307,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4           | 4.35 | 0.10 | [4.15, 4.55]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -296,6 +331,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4.40        | 4.57 | 0.14 | [4.30, 4.84]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width=c(2, 4)"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
@@ -306,6 +342,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4           | 4.35 | 0.10 | [4.15, 4.55]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods that can be applied to it:</span></span></span>
 <span class="r-in"><span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -342,6 +379,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | 5.25 | 0.34 | [ 1.37, 9.13]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -352,6 +390,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4.40        | 4.15 | 0.35 | [ 1.28, 7.02]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal means estimated at Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
