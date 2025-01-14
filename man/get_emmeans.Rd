@@ -136,39 +136,40 @@ within subsets by indicating the grouping variable after a vertical bar
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
-\item{marginalize}{Character string, indicating how to marginalize over the
-non-focal predictors, i.e. those variables that are not specified in \code{by}
-or \code{contrast}.
+\item{marginalize}{Character string, indicating the type of marginalization.
+This dictates how the predictions are "averaged" over the non-focal predictors,
+i.e. those variables that are not specified in \code{by} or \code{contrast}.
 \itemize{
-\item \code{"average"}: Takes the mean value for non-focal numeric predictors and
+\item \code{"average"} (default): Takes the mean value for non-focal numeric predictors and
 marginalizes over the factor levels of non-focal terms, which computes a
 kind of "weighted average" for the values at which these terms are hold
 constant. These predictions are a good representation of the sample,
 because all possible values and levels of the non-focal predictors are
-taken into account. It would answer the question, "What is the predicted
-(or: expected) value of the response at meaningful values or levels of my
-focal terms for an 'average' observation in my data?". It refers to
+taken into account. It answer sthe question, "What is the predicted value
+of the response for an 'average' observation in \emph{my data}?". It refers to
 randomly picking a subject of your sample and the result you get on average.
+This approach is the one taken by default in the \code{emmeans} package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
 (aggregated/grouped by the focal terms). It can be considered as
 extrapolation to the population. Counterfactual predictions are useful,
 insofar as the results can also be transferred to other contexts
-(\emph{Dickerman and Hernan 2020}). It answers the question, "What is the
-predicted (or: expected) value of the response at meaningful values or
-levels of my focal terms for the 'average' observation in the population?".
-It does not only refer to the actual data in your sample, but also "what
-would be if" we had more data, or if we had data from a different
-population. This is where "counterfactual" refers to.
+(Dickerman and Hernan, 2020). It answers the question, "What is the
+predicted value of the response for the 'average' observation in
+\emph{the general population?}". It does not only refer to the actual data in
+your sample, but also "what would be if" we had more data, or if we had data
+from a different sample.
 }
 
-In other words, the distinction between marginalizations in a nutshell is
-about
+In other words, the distinction between marginalization types resides in whether
+the prediction are made for:
 \itemize{
-\item specific individuals (\code{estimate_relation()})
-\item average individuals (\code{estimate_means()})
-\item "general population" (\code{estimate_means(marginalize = "population")})
+\item A specific "individual" (i.e., a specific combination of predictor values):
+this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}} and the other
+prediction functions.
+\item An average individual: obtained wiith \code{estimate_means(..., marginalize = "average")}
+\item The "general population": obtained with \code{estimate_means(..., marginalize = "population")}
 }}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}

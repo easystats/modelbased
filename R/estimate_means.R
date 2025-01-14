@@ -61,10 +61,11 @@
 #'
 #' In other words, the distinction between marginalization types resides in whether
 #' the prediction are made for:
-#' - A specific "individual" (i.e., specific combination of predictor values):
-#'   this is what is obtained when using `estimate_relation()`.
-#' - An average individual: obtained woth `estimate_means(..., marginalize = "average")`
-#' - The "general population": obtained with (`estimate_means(marginalize = "population")`)
+#' - A specific "individual" (i.e., a specific combination of predictor values):
+#'   this is what is obtained when using [`estimate_relation()`] and the other
+#'   prediction functions.
+#' - An average individual: obtained wiith `estimate_means(..., marginalize = "average")`
+#' - The "general population": obtained with `estimate_means(..., marginalize = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
