@@ -13,8 +13,15 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 9L))
   expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
+  estim <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
+  expect_identical(dim(estim), c(3L, 8L))
+  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
+
   estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')"))
   expect_identical(dim(estim), c(1L, 9L))
+
+  estim <- suppressMessages(estimate_contrasts(model, contrast = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
+  expect_identical(dim(estim), c(1L, 8L))
 
   # Two factors
   dat <- iris
@@ -29,6 +36,10 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 9L))
   estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "fac='A'")))
   expect_identical(dim(estim), c(3L, 10L))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = "Species", backend = "marginaleffects"))
+  expect_identical(dim(estim), c(3L, 8L))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = "Species", by = "fac='A'", backend = "marginaleffects"))
+  expect_identical(dim(estim), c(3L, 8L))
 
   # One factor and one continuous
   model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
@@ -38,6 +49,8 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
   expect_identical(dim(estim), c(12L, 10L))
+  estim <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width=0", backend = "marginaleffects")
+  expect_identical(dim(estim), c(3L, 8L))
 
 
   # Contrast between continuous
