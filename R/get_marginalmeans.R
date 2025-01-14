@@ -104,7 +104,7 @@ get_marginalmeans <- function(model,
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
     ## FIXME: this should only contain those variables of the grid specified in `by`
-    fun_args$variables <- lapply(datagrid, unique)
+    fun_args$variables <- lapply(datagrid, unique)[at_specs$varname]
   } else {
     fun_args$newdata <- datagrid
     fun_args$by <- at_specs$varname
