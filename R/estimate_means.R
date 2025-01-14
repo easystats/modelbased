@@ -63,7 +63,7 @@
 #' - A specific "individual" (i.e., a specific combination of predictor values):
 #'   this is what is obtained when using [`estimate_relation()`] and the other
 #'   prediction functions.
-#' - An average individual: obtained wiith `estimate_means(..., marginalize = "average")`
+#' - An average individual: obtained with `estimate_means(..., marginalize = "average")`
 #' - The "general population": obtained with `estimate_means(..., marginalize = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed

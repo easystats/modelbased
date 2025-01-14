@@ -126,7 +126,7 @@ the prediction are made for:
 \item A specific "individual" (i.e., a specific combination of predictor values):
 this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}} and the other
 prediction functions.
-\item An average individual: obtained wiith \code{estimate_means(..., marginalize = "average")}
+\item An average individual: obtained with \code{estimate_means(..., marginalize = "average")}
 \item The "general population": obtained with \code{estimate_means(..., marginalize = "population")}
 }}
 
