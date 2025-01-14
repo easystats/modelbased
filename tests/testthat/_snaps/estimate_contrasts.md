@@ -61,7 +61,7 @@
       
       Marginal contrasts estimated at time, coffee
       p-values are uncorrected.
-      Parameter names:
+      Parameters:
       b2 = time [noon], coffee [coffee], sex [male]
       b1 = time [morning], coffee [coffee], sex [male]
       b4 = time [morning], coffee [control], sex [male]

@@ -256,7 +256,7 @@ estimate_means <- function(model,
       table_footer <- paste0(
         table_footer,
         "\n",
-        paste0("Parameter names:\n", paste(unlist(hypothesis_labels), collapse = "\n"))
+        paste0("Parameters:\n", paste(unlist(hypothesis_labels), collapse = "\n"))
       )
     }
   }

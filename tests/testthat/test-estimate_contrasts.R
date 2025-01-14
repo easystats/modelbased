@@ -60,6 +60,10 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(1L, 9L))
   estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Length=c(2, 3, 4)"))
   expect_identical(dim(estim), c(3L, 9L))
+  estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2.3, 3)", backend = "marginaleffects")
+  expect_identical(dim(estim), c(1L, 8L))
+  estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2, 3, 4)", backend = "marginaleffects")
+  expect_identical(dim(estim), c(3L, 8L))
 
 
   # Three factors
