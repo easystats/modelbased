@@ -23,7 +23,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              marginalize = "theoretical",
+                              marginalize = "mean",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -38,10 +38,7 @@ get_marginalmeans <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(
-    marginalize,
-    c("reference", "mean", "theoretical", "empirical")
-  )
+  marginalize <- insight::validate_argument(marginalize, c("mean", "mode", "empirical"))
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -60,20 +57,14 @@ get_marginalmeans <- function(model,
     # set datagrid arguments based on how to marginalize over non-focal -------
     # -------------------------------------------------------------------------
     datagrid_factors <- switch(marginalize,
-      reference = "reference",
-      mean = "mode",
+      mode = "mode",
       "all"
-    )
-    datagrid_numerics <- switch(marginalize,
-      reference = 0,
-      "mean"
     )
     # setup arguments to create the data grid
     dg_args <- list(
       model,
       by = my_args$by,
       factors = datagrid_factors,
-      numerics = datagrid_numerics,
       include_random = TRUE,
       verbose = FALSE
     )

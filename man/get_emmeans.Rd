@@ -39,6 +39,7 @@ get_marginalcontrasts(
   by = NULL,
   predict = NULL,
   comparison = "pairwise",
+  marginalize = "mean",
   ci = 0.95,
   p_adjust = "holm",
   verbose = TRUE,
@@ -50,7 +51,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  marginalize = "theoretical",
+  marginalize = "mean",
   transform = NULL,
   verbose = TRUE,
   ...
@@ -135,14 +136,6 @@ within subsets by indicating the grouping variable after a vertical bar
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
-
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
-
 \item{marginalize}{String. Options:
 \itemize{
 \item \code{"reference"}: 0 for numerics and ref for factors
@@ -159,6 +152,14 @@ predicted values (aggregated/grouped by the focal terms). These kind of
 predictions are also called "counterfactual" predictions (\emph{Dickerman and
 Hernan 2020}).
 }}
+
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
 }
 \description{
 These functions are convenient wrappers around the \code{emmeans} and the

@@ -110,7 +110,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           marginalize = "theoretical",
+                           marginalize = "mean",
                            backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
                            verbose = TRUE,
@@ -122,10 +122,7 @@ estimate_means <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(
-    marginalize,
-    c("reference", "mean", "theoretical", "empirical")
-  )
+  marginalize <- insight::validate_argument(marginalize, c("mean", "mode", "empirical"))
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
@@ -216,8 +213,8 @@ estimate_means <- function(model,
   }
 
   if (all(table_footer == "")) { # nolint
-    table_footer <- NULL
+    return(NULL)
   }
 
-  c(table_footer, "blue")
+  c(paste0(table_footer, "\n"), "blue")
 }

@@ -9,7 +9,7 @@ estimate_means(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  marginalize = "theoretical",
+  marginalize = "mean",
   backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
   verbose = TRUE,
