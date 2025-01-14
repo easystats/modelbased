@@ -23,6 +23,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
+                              marginalize = "theoretical",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -35,6 +36,12 @@ get_marginalmeans <- function(model,
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
+
+  # validate input
+  marginalize <- insight::validate_argument(
+    marginalize,
+    c("reference", "mean", "theoretical", "empirical")
+  )
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -50,11 +57,23 @@ get_marginalmeans <- function(model,
   if (is.null(by)) {
     datagrid <- at_specs <- NULL
   } else {
+    # set datagrid arguments based on how to marginalize over non-focal -------
+    # -------------------------------------------------------------------------
+    datagrid_factors <- switch(marginalize,
+      reference = "reference",
+      mean = "mode",
+      "all"
+    )
+    datagrid_numerics <- switch(marginalize,
+      reference = 0,
+      "mean"
+    )
     # setup arguments
     dg_args <- list(
       model,
       by = my_args$by,
-      factors = "all",
+      factors = datagrid_factors,
+      numerics = datagrid_numerics,
       include_random = TRUE,
       verbose = FALSE
     )
@@ -98,12 +117,11 @@ get_marginalmeans <- function(model,
     df = dof
   )
 
-  if (isTRUE(dots$counterfactual)) {
+  if (marginalize == "empirical") {
     # sanity check
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
-    ## FIXME: this should only contain those variables of the grid specified in `by`
     fun_args$variables <- lapply(datagrid, unique)[at_specs$varname]
   } else {
     fun_args$newdata <- datagrid

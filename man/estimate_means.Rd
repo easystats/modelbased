@@ -9,6 +9,7 @@ estimate_means(
   by = "auto",
   predict = NULL,
   ci = 0.95,
+  marginalize = "theoretical",
   backend = getOption("modelbased_backend", "emmeans"),
   transform = NULL,
   verbose = TRUE,
@@ -51,6 +52,23 @@ packages), for instance when using complex formulae in \code{brms} models, the
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{marginalize}{String. Options:
+\itemize{
+\item \code{"reference"}: 0 for numerics and ref for factors
+\item \code{"mean"}: mean for numerics, mode for factors
+\item \code{"theorethical"}: Marginalizing over the factor levels of non-focal terms
+computes a kind of "weighted average" for the values at which these terms
+are hold constant.
+\item \code{"empirical"}: non-focal predictors are marginalized over the observations
+in your sample. Technically, ggaverage() calculates predicted values for
+each observation in the data multiple times (the data is duplicated once
+for all unique values of the focal terms), each time fixing one unique
+value or level of the focal terms and then takes the average of these
+predicted values (aggregated/grouped by the focal terms). These kind of
+predictions are also called "counterfactual" predictions (\emph{Dickerman and
+Hernan 2020}).
+}}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed

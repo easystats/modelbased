@@ -50,6 +50,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
+  marginalize = "theoretical",
   transform = NULL,
   verbose = TRUE,
   ...
@@ -141,6 +142,23 @@ comparisons. Can be one of \code{"holm"} (default), \code{"hochberg"}, \code{"ho
 \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"none"}. See the
 p-value adjustment section in the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}.}
+
+\item{marginalize}{String. Options:
+\itemize{
+\item \code{"reference"}: 0 for numerics and ref for factors
+\item \code{"mean"}: mean for numerics, mode for factors
+\item \code{"theorethical"}: Marginalizing over the factor levels of non-focal terms
+computes a kind of "weighted average" for the values at which these terms
+are hold constant.
+\item \code{"empirical"}: non-focal predictors are marginalized over the observations
+in your sample. Technically, ggaverage() calculates predicted values for
+each observation in the data multiple times (the data is duplicated once
+for all unique values of the focal terms), each time fixing one unique
+value or level of the focal terms and then takes the average of these
+predicted values (aggregated/grouped by the focal terms). These kind of
+predictions are also called "counterfactual" predictions (\emph{Dickerman and
+Hernan 2020}).
+}}
 }
 \description{
 These functions are convenient wrappers around the \code{emmeans} and the
