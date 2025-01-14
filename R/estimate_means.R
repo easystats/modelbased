@@ -35,6 +35,36 @@
 #' packages), for instance when using complex formulae in `brms` models, the
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.
+#' @param marginalize Character string, indicating the type of marginalization.
+#' This dictates how the predictions are "averaged" over the non-focal predictors,
+#' i.e. those variables that are not specified in `by` or `contrast`.
+#' - `"average"` (default): Takes the mean value for non-focal numeric predictors and
+#'   marginalizes over the factor levels of non-focal terms, which computes a
+#'   kind of "weighted average" for the values at which these terms are hold
+#'   constant. These predictions are a good representation of the sample,
+#'   because all possible values and levels of the non-focal predictors are
+#'   taken into account. It answers the question, "What is the predicted value
+#'   for an 'average' observation in *my data*?". It refers to
+#'   randomly picking a subject of your sample and the result you get on average.
+#'   This approach is the one taken by default in the `emmeans` package.
+#' - `"population"`: Non-focal predictors are marginalized over the observations
+#'   in the sample, where the sample is replicated multiple times to produce
+#'   "counterfactuals" and then takes the average of these predicted values
+#'   (aggregated/grouped by the focal terms). It can be considered as
+#'   extrapolation to the population. Counterfactual predictions are useful,
+#'   insofar as the results can also be transferred to other contexts
+#'   (Dickerman and Hernan, 2020). It answers the question, "What is the
+#'   predicted for the 'average' observation in *the general population*?".
+#'   It does not only refer to the actual data in your observed sample, but also
+#'   "what would be if" we had more data, or if we had data from a different sample.
+#'
+#' In other words, the distinction between marginalization types resides in whether
+#' the prediction are made for:
+#' - A specific "individual" (i.e., a specific combination of predictor values):
+#'   this is what is obtained when using [`estimate_relation()`] and the other
+#'   prediction functions.
+#' - An average individual: obtained with `estimate_means(..., marginalize = "average")`
+#' - The "general population": obtained with `estimate_means(..., marginalize = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
@@ -96,6 +126,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
+                           marginalize = "average",
                            backend = getOption("modelbased_backend", "emmeans"),
                            transform = NULL,
                            verbose = TRUE,
@@ -106,13 +137,16 @@ estimate_means <- function(model,
     predict <- transform
   }
 
+  # validate input
+  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
+
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, verbose = verbose, ...)
+    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, marginalize = marginalize, verbose = verbose, ...) # nolint
     means <- format(estimated, model, ...)
   }
 
@@ -123,7 +157,7 @@ estimate_means <- function(model,
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
   attr(means, "table_footer") <- .estimate_means_footer(
     means,
-    type = "means",
+    type = ifelse(marginalize == "population", "counterfactuals", "means"),
     predict = attributes(estimated)$predict,
     model_info = insight::model_info(model)
   )
@@ -156,7 +190,11 @@ estimate_means <- function(model,
                                    p_adjust = NULL,
                                    predict = NULL,
                                    model_info = NULL) {
-  table_footer <- paste("\nMarginal", type)
+  table_footer <- switch(type,
+    counterfactuals = "Average",
+    "Marginal"
+  )
+  table_footer <- paste0("\n", table_footer, " ", type)
 
   # Levels
   if (!is.null(by) && length(by) > 0) {
@@ -177,6 +215,7 @@ estimate_means <- function(model,
   # tell user about scale of predictions / contrasts
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
     result_type <- switch(type,
+      counterfactuals = ,
       means = "Predictions",
       contrasts = "Contrasts"
     )
@@ -190,8 +229,8 @@ estimate_means <- function(model,
   }
 
   if (all(table_footer == "")) { # nolint
-    table_footer <- NULL
+    return(NULL)
   }
 
-  c(table_footer, "blue")
+  c(paste0(table_footer, "\n"), "blue")
 }

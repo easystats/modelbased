@@ -23,6 +23,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
+                              marginalize = "average",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -35,6 +36,9 @@ get_marginalmeans <- function(model,
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
+
+  # validate input
+  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -50,7 +54,7 @@ get_marginalmeans <- function(model,
   if (is.null(by)) {
     datagrid <- at_specs <- NULL
   } else {
-    # setup arguments
+    # setup arguments to create the data grid
     dg_args <- list(
       model,
       by = my_args$by,
@@ -75,7 +79,8 @@ get_marginalmeans <- function(model,
     # numeric in the data grid. Fix this here, else marginal effects will fail
     datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model))
 
-    # add user-arguments from "...", but remove those arguments that are already set
+    # add user-arguments from "...", but remove those arguments that are
+    # already used (see below) when calling marginaleffects
     dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   }
 
@@ -94,11 +99,23 @@ get_marginalmeans <- function(model,
   # setup arguments
   fun_args <- list(
     model,
-    by = at_specs$varname,
-    newdata = datagrid,
     conf_level = ci,
     df = dof
   )
+
+  # counterfactual predictions - we need the "variables" argument
+  if (marginalize == "population") {
+    # sanity check
+    if (is.null(datagrid)) {
+      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
+    }
+    fun_args$variables <- lapply(datagrid, unique)[at_specs$varname]
+  } else {
+    # all other "marginalizations"
+    fun_args$newdata <- datagrid
+    fun_args$by <- at_specs$varname
+  }
+
   # handle distributional parameters
   if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
@@ -106,11 +123,14 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
-  fun_args$re.form <- NULL
+  if (!"re.form" %in% names(dots)) {
+    fun_args$re.form <- NULL
+  }
 
 
   # Third step: compute marginal means ----------------------------------------
