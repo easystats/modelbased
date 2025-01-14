@@ -151,13 +151,10 @@ estimate_contrasts <- function(model,
   attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
   attr(out, "table_footer") <- .estimate_means_footer(
     out,
-    info$contrast,
+    by = info$contrast,
     type = "contrasts",
-    p_adjust = p_adjust,
-    predict = attributes(estimated)$predict,
     model_info = insight::model_info(model),
-    comparison = info$comparison,
-    datagrid = info$datagrid
+    info = info
   )
 
   # Add attributes

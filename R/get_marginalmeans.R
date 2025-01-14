@@ -147,9 +147,11 @@ get_marginalmeans <- function(model,
   attr(means, "at") <- my_args$by
   attr(means, "by") <- my_args$by
   attr(means, "focal_terms") <- at_specs$varname
+  attr(means, "predict") <- predict
   attr(means, "datagrid") <- datagrid
   attr(means, "preserve_range") <- attributes(datagrid)$preserve_range
-  attr(means, "predict") <- predict
+  attr(means, "marginalize") <- marginalize
+
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
   means

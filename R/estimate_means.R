@@ -158,8 +158,8 @@ estimate_means <- function(model,
   attr(means, "table_footer") <- .estimate_means_footer(
     means,
     type = ifelse(marginalize == "population", "counterfactuals", "means"),
-    predict = attributes(estimated)$predict,
-    model_info = insight::model_info(model)
+    model_info = insight::model_info(model),
+    info = info
   )
 
   # Add attributes
@@ -187,11 +187,14 @@ estimate_means <- function(model,
 .estimate_means_footer <- function(x,
                                    by = NULL,
                                    type = "means",
-                                   p_adjust = NULL,
-                                   predict = NULL,
                                    model_info = NULL,
-                                   comparison = NULL,
-                                   datagrid = NULL) {
+                                   info = NULL) {
+  # extract necessary information from attributes
+  predict <- info$predict
+  comparison <- info$comparison
+  datagrid <- info$datagrid
+  p_adjust <- info$p_adjust
+
   table_footer <- switch(type,
     counterfactuals = "Average",
     "Marginal"
