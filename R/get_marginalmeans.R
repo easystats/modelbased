@@ -94,7 +94,6 @@ get_marginalmeans <- function(model,
   # setup arguments - either for conditional or counterfactual predictions
   fun_args <- list(
     model,
-    by = at_specs$varname,
     conf_level = ci,
     df = dof
   )
@@ -104,9 +103,11 @@ get_marginalmeans <- function(model,
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
+    ## FIXME: this should only contain those variables of the grid specified in `by`
     fun_args$variables <- lapply(datagrid, unique)
   } else {
     fun_args$newdata <- datagrid
+    fun_args$by <- at_specs$varname
   }
 
   # handle distributional parameters
