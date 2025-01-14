@@ -35,17 +35,16 @@
 #' packages), for instance when using complex formulae in `brms` models, the
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.
-#' @param marginalize Character string, indicating how to marginalize over the
-#' non-focal predictors, i.e. those variables that are not specified in `by`
-#' or `contrast`.
+#' @param marginalize Character string, indicating the type of marginalization.
+#' This dictates how the predictions are "averaged" over the non-focal predictors,
+#' i.e. those variables that are not specified in `by` or `contrast`.
 #' - `"average"`: Takes the mean value for non-focal numeric predictors and
 #'   marginalizes over the factor levels of non-focal terms, which computes a
 #'   kind of "weighted average" for the values at which these terms are hold
 #'   constant. These predictions are a good representation of the sample,
 #'   because all possible values and levels of the non-focal predictors are
-#'   taken into account. It would answer the question, "What is the predicted
-#'   (or: expected) value of the response at meaningful values or levels of my
-#'   focal terms for an 'average' observation in my data?". It refers to
+#'   taken into account. It answer sthe question, "What is the predicted value
+#'   of the response for an 'average' observation in *my data*?". It refers to
 #'   randomly picking a subject of your sample and the result you get on average.
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
@@ -53,9 +52,8 @@
 #'   (aggregated/grouped by the focal terms). It can be considered as
 #'   extrapolation to the population. Counterfactual predictions are useful,
 #'   insofar as the results can also be transferred to other contexts
-#'   (*Dickerman and Hernan 2020*). It answers the question, "What is the
-#'   predicted (or: expected) value of the response at meaningful values or
-#'   levels of my focal terms for the 'average' observation in the population?".
+#'   (Dickerman and Hernan, 2020). It answers the question, "What is the
+#'   predicted value of the response for the 'average' observation in *the population?*".
 #'   It does not only refer to the actual data in your sample, but also "what
 #'   would be if" we had more data, or if we had data from a different
 #'   population. This is where "counterfactual" refers to.
