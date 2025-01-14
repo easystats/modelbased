@@ -143,7 +143,7 @@ estimate_means <- function(model,
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
-    means <- format(estimated, model, ci = ci, verbose = verbose, ...)
+    means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, marginalize = marginalize, verbose = verbose, ...) # nolint
