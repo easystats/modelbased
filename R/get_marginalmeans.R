@@ -68,7 +68,7 @@ get_marginalmeans <- function(model,
       reference = 0,
       "mean"
     )
-    # setup arguments
+    # setup arguments to create the data grid
     dg_args <- list(
       model,
       by = my_args$by,
@@ -82,7 +82,7 @@ get_marginalmeans <- function(model,
       dg_args$preserve_range <- FALSE
     }
     # add user-arguments from "...", but remove those arguments that are already set
-    dots[c("by", "factors", "include_random", "verbose")] <- NULL
+    dots[c("by", "factors", "numerics", "include_random", "verbose")] <- NULL
     dg_args <- insight::compact_list(c(dg_args, dots))
 
     # Get corresponding datagrid (and deal with particular ats)
@@ -94,7 +94,8 @@ get_marginalmeans <- function(model,
     # numeric in the data grid. Fix this here, else marginal effects will fail
     datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model))
 
-    # add user-arguments from "...", but remove those arguments that are already set
+    # add user-arguments from "...", but remove those arguments that are
+    # already used (see below) when calling marginaleffects
     dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
   }
 
@@ -110,13 +111,14 @@ get_marginalmeans <- function(model,
     datagrid <- as.data.frame(datagrid)
   }
 
-  # setup arguments - either for conditional or counterfactual predictions
+  # setup arguments
   fun_args <- list(
     model,
     conf_level = ci,
     df = dof
   )
 
+  # counterfactual predictions - we need the "variables" argument
   if (marginalize == "empirical") {
     # sanity check
     if (is.null(datagrid)) {
@@ -124,6 +126,7 @@ get_marginalmeans <- function(model,
     }
     fun_args$variables <- lapply(datagrid, unique)[at_specs$varname]
   } else {
+    # all other "marginalizations"
     fun_args$newdata <- datagrid
     fun_args$by <- at_specs$varname
   }
