@@ -419,7 +419,7 @@ estimate_relation <- function(model,
   )
   # for predicting grouplevel random effects, add "allow.new.levels"
   if (!is.null(grouplevel_effects) && any(grouplevel_effects %in% grid_specs$at_spec$varname)) {
-    prediction_args$allow.new.levels = TRUE
+    prediction_args$allow.new.levels <- TRUE
     dots$allow.new.levels <- NULL
   }
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
