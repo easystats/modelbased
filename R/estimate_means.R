@@ -189,7 +189,9 @@ estimate_means <- function(model,
                                    type = "means",
                                    p_adjust = NULL,
                                    predict = NULL,
-                                   model_info = NULL) {
+                                   model_info = NULL,
+                                   comparison = NULL,
+                                   datagrid = NULL) {
   table_footer <- switch(type,
     counterfactuals = "Average",
     "Marginal"
@@ -226,6 +228,37 @@ estimate_means <- function(model,
       predict
     )
     table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
+  }
+
+  # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
+  # add information about the parameter names
+  if (!is.null(comparison) && grepl("=", comparison, fixed = TRUE) && grepl("\\bb\\d+\\b", comparison)) {
+    # find all "b" strings
+    matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
+    match_lengths <- attr(matches, "match.length")
+
+    # extract all "b" strings, so we have a vector of all "b" used in the comparison
+    parameter_names <- unlist(lapply(seq_along(matches), function(i) {
+      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
+    }), use.names = FALSE)
+
+    # datagrid contains all parameters, so we just need to find out the rows
+    # and combine column names with row values
+    if (!is.null(datagrid)) {
+      # transpose, so we can easier extract information
+      transposed_dg <- t(datagrid)
+      # interate over all parameters and create labels with proper names
+      hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
+        row <- as.numeric(sub(".", "", i))
+        paste0(i, " = ", toString(paste0(colnames(datagrid), " [", transposed_dg[, row], "]")))
+      }), use.names = FALSE)
+      # add all names to the footer
+      table_footer <- paste0(
+        table_footer,
+        "\n",
+        paste0("Parameter names:\n", paste(unlist(hypothesis_labels), collapse = "\n"))
+      )
+    }
   }
 
   if (all(table_footer == "")) { # nolint

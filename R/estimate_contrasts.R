@@ -155,7 +155,9 @@ estimate_contrasts <- function(model,
     type = "contrasts",
     p_adjust = p_adjust,
     predict = attributes(estimated)$predict,
-    model_info = insight::model_info(model)
+    model_info = insight::model_info(model),
+    comparison = info$comparison,
+    datagrid = info$datagrid
   )
 
   # Add attributes
