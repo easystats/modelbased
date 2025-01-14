@@ -136,7 +136,6 @@ get_marginalmeans <- function(model,
   }
 
   # cleanup
-  dots$counterfactual <- NULL
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
