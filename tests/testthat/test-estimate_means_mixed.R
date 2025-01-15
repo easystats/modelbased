@@ -41,14 +41,14 @@ test_that("estimate_means() - mixed models", {
   m <- glm(count ~ mined + spp, family = poisson(), data = Salamanders)
   expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
   out1 <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
-  out2 <- estimate_means(m, c("mined", "spp"))
+  out2 <- estimate_means(m, c("mined", "spp"), backend = "emmeans")
   expect_equal(out1$Mean[order(out1$spp)], out2$Rate, tolerance = 1e-3)
 
   data(sleepstudy, package = "lme4")
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
-  estim1 <- suppressMessages(estimate_means(model, by = "Days"))
-  estim2 <- suppressMessages(estimate_means(model, by = "Days", backend = "marginaleffects"))
+  estim1 <- estimate_means(model, by = "Days", backend = "emmeans")
+  estim2 <- estimate_means(model, by = "Days", backend = "marginaleffects")
   expect_identical(dim(estim1), c(10L, 5L))
   expect_identical(dim(estim2), c(10L, 7L))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
@@ -60,8 +60,8 @@ test_that("estimate_means() - mixed models", {
     data = cbpp,
     family = "binomial"
   )
-  estim1 <- suppressMessages(estimate_means(gm1))
-  estim2 <- suppressMessages(estimate_means(gm1, backend = "marginaleffects"))
+  estim1 <- estimate_means(gm1, backend = "emmeans", verbose = FALSE)
+  estim2 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE)
   expect_identical(dim(estim1), c(4L, 5L))
   expect_identical(dim(estim2), c(4L, 6L))
   expect_equal(estim2$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
