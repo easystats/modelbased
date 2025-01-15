@@ -76,8 +76,7 @@ Suggests:
     rtdists,
     see (>= 0.8.4),
     testthat (>= 3.2.1),
-    vdiffr,
-    withr
+    vdiffr
 VignetteBuilder:
     knitr
 Encoding: UTF-8
@@ -87,4 +86,4 @@ Config/testthat/edition: 3
 Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
 Config/Needs/website: easystats/easystatstemplate
-Remotes: easystats/insight, easystats/bayestestR, easystats/datawizard, easystats/parameters
+Remotes: easystats/bayestestR
