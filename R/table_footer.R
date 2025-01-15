@@ -23,7 +23,8 @@
   # modulated predictors (focal terms) ---------------------------------------
 
   if (!is.null(by)) {
-    table_footer <- paste0(table_footer, "\nPredictors modulated: ", toString(by))
+    control_string <- switch(type, contrasts = "contrasted", "controlled")
+    table_footer <- paste0(table_footer, "\nPredictors ", control_string, ": ", toString(by))
   }
 
 
@@ -43,17 +44,8 @@
         adjusted_for <- sprintf("%s (%s)", adjusted_for, adjusted_values)
       }
     }
-    average_string <- switch(type,
-      predictions = "controlled",
-      "averaged"
-    )
-    table_footer <- paste0(
-      table_footer,
-      "\nPredictors ",
-      average_string,
-      ": ",
-      toString(adjusted_for)
-    )
+    average_string <- switch(type, predictions = "controlled", "averaged")
+    table_footer <- paste0(table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for))
   }
 
 
