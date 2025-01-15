@@ -25,7 +25,7 @@
       noon - afternoon      | control - control |       0.00 | 1.99 | [ -3.95,  3.95] |   0.00 | > .999
       
       Variable predicted: alertness
-      Predictors modulated: time, coffee
+      Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-values are uncorrected.
 
@@ -46,7 +46,7 @@
       control | (afternoon) / (morning) |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
       
       Variable predicted: alertness
-      Predictors modulated: time, coffee
+      Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-values are uncorrected.
 
@@ -64,7 +64,7 @@
       (b2-b1)=(b4-b3) |      -7.71 | 2.82 | [-13.30, -2.12] |  -2.73 | 0.007
       
       Variable predicted: alertness
-      Predictors modulated: time, coffee
+      Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-values are uncorrected.
       Parameters:
@@ -90,7 +90,7 @@
       versicolor |  virginica |       0.18 | [-0.02,  0.38] | 0.08 | Inf |  2.12 | 0.034 
       
       Variable predicted: y
-      Predictors modulated: Species
+      Predictors contrasted: Species
       p-value adjustment method: Holm (1979)
       Contrasts are on the response-scale.
 
@@ -110,7 +110,7 @@
       versicolor - virginica |       0.18 | 0.08 | [ 0.01,  0.35] |  2.12 | 0.034 
       
       Variable predicted: y
-      Predictors modulated: Species
+      Predictors contrasted: Species
       p-value adjustment method: Holm (1979)
       Contrasts are on the response-scale.
 
@@ -129,7 +129,7 @@
       mid - high |      -0.69 | 0.36 | [-1.40, 0.02] |  -1.92 | 0.166
       
       Variable predicted: neg_c_7
-      Predictors modulated: c172code
+      Predictors contrasted: c172code
       Predictors averaged: e16sex, c161sex
       p-value adjustment method: Holm (1979)
 
@@ -160,7 +160,7 @@
       Male - Female   | high - high |      -0.96 | 0.69 | [-2.30,  0.39] |  -1.40 | > .999
       
       Variable predicted: neg_c_7
-      Predictors modulated: c161sex, c172code
+      Predictors contrasted: c161sex, c172code
       Predictors averaged: e16sex
       p-value adjustment method: Holm (1979)
 
@@ -179,7 +179,7 @@
       Male - Female |     high |      -0.96 | 0.69 | [-2.30, 0.39] |  -1.40 | > .999
       
       Variable predicted: neg_c_7
-      Predictors modulated: c161sex
+      Predictors contrasted: c161sex
       Predictors averaged: e16sex
       p-value adjustment method: Holm (1979)
 
@@ -226,7 +226,7 @@
       mid - high |       0.00 | 0.01 | [-0.03, 0.02] | -0.27 | 0.786
       
       Variable predicted: neg_c_7
-      Predictors modulated: barthtot
+      Predictors contrasted: barthtot
       Predictors averaged: e16sex, barthtot
       p-value adjustment method: Holm (1979)
 
@@ -257,7 +257,7 @@
       mid - high  | female - female |       0.00 | 0.01 | [-0.03,  0.02] | -0.26 | > .999
       
       Variable predicted: neg_c_7
-      Predictors modulated: barthtot
+      Predictors contrasted: barthtot
       Predictors averaged: barthtot
       p-value adjustment method: Holm (1979)
 
@@ -276,7 +276,7 @@
       versicolor - virginica |      -0.49 | 0.09 | [-0.67, -0.31] |  -5.41 | < .001
       
       Variable predicted: Sepal.Length
-      Predictors modulated: Species
+      Predictors contrasted: Species
       Predictors averaged: Sepal.Width
       p-value adjustment method: Holm (1979)
 
@@ -307,7 +307,7 @@
       noon - afternoon      | control - control |       0.00 | 1.99 | [ -3.95,  3.95] |   0.00 | > .999
       
       Variable predicted: alertness
-      Predictors modulated: time, coffee
+      Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-value adjustment method: Holm (1979)
 
@@ -329,7 +329,7 @@
       noon - afternoon    | control |       0.00 | 1.99 | [-3.95,  3.95] |   0.00 | > .999
       
       Variable predicted: alertness
-      Predictors modulated: time
+      Predictors contrasted: time
       Predictors averaged: sex
       p-value adjustment method: Holm (1979)
 
@@ -436,7 +436,7 @@
       yes - no  |       DF - DF |      -1.81 | 0.52 | [-2.83, -0.78] | -3.45 | 0.024 
       
       Variable predicted: count
-      Predictors modulated: mined, spp
+      Predictors contrasted: mined, spp
       Predictors averaged: cover, site
       p-value adjustment method: Holm (1979)
       Contrasts are on the response-scale.
@@ -460,7 +460,7 @@
       yes - no |    DF |      -1.81 | 0.52 | [-2.83, -0.78] | -3.45 | 0.024 
       
       Variable predicted: count
-      Predictors modulated: mined
+      Predictors contrasted: mined
       Predictors averaged: cover, site
       p-value adjustment method: Holm (1979)
       Contrasts are on the response-scale.
