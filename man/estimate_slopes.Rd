@@ -40,7 +40,8 @@ as default backend.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
-\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
+or functions from the \strong{emmeans} or \strong{marginaleffects} package.}
 }
 \value{
 A data.frame of class \code{estimate_slopes}.

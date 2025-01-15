@@ -65,6 +65,8 @@ get_emcontrasts <- function(model,
   attr(out, "at") <- my_args$by
   attr(out, "by") <- my_args$by
   attr(out, "focal_terms") <- emm_by
+  attr(out, "p_adjust") <- list(...)$adjust
+  attr(out, "comparison") <- comparison
   out
 }
 

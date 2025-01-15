@@ -77,7 +77,8 @@
 #' as default backend.
 #' @param transform Deprecated, please use `predict` instead.
 #' @param verbose Use `FALSE` to silence messages and warnings.
-#' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
+#' or functions from the **emmeans** or **marginaleffects** package.
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
@@ -155,11 +156,11 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(
+  attr(means, "table_footer") <- .table_footer(
     means,
-    type = ifelse(marginalize == "population", "counterfactuals", "means"),
-    predict = attributes(estimated)$predict,
-    model_info = insight::model_info(model)
+    by = info$by,
+    model = model,
+    info = info
   )
 
   # Add attributes
@@ -170,67 +171,9 @@ estimate_means <- function(model,
   attr(means, "coef_name") <- intersect(.valid_coefficient_names(), colnames(means))
 
   # add attributes from workhorse function
-  attributes(means) <- utils::modifyList(
-    attributes(means),
-    info[c("at", "by", "datagrid", "predict", "focal_terms", "preserve_range")]
-  )
+  attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
 
   # Output
   class(means) <- unique(c("estimate_means", class(means)))
   means
-}
-
-
-# Table footer ===============================================================
-
-
-.estimate_means_footer <- function(x,
-                                   by = NULL,
-                                   type = "means",
-                                   p_adjust = NULL,
-                                   predict = NULL,
-                                   model_info = NULL) {
-  table_footer <- switch(type,
-    counterfactuals = "Average",
-    "Marginal"
-  )
-  table_footer <- paste0("\n", table_footer, " ", type)
-
-  # Levels
-  if (!is.null(by) && length(by) > 0) {
-    table_footer <- paste0(table_footer, " estimated at ", toString(by))
-  } else {
-    table_footer <- paste0(table_footer, " estimated at ", attr(x, "by"))
-  }
-
-  # P-value adjustment footer
-  if (!is.null(p_adjust) && "p" %in% names(x)) {
-    if (p_adjust == "none") {
-      table_footer <- paste0(table_footer, "\np-values are uncorrected.")
-    } else {
-      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(p_adjust))
-    }
-  }
-
-  # tell user about scale of predictions / contrasts
-  if (!is.null(predict) && isFALSE(model_info$is_linear)) {
-    result_type <- switch(type,
-      counterfactuals = ,
-      means = "Predictions",
-      contrasts = "Contrasts"
-    )
-    # exceptions
-    predict <- switch(predict,
-      none = "link",
-      `invlink(link)` = "response",
-      predict
-    )
-    table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
-  }
-
-  if (all(table_footer == "")) { # nolint
-    return(NULL)
-  }
-
-  c(paste0(table_footer, "\n"), "blue")
 }

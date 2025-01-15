@@ -52,7 +52,7 @@ get_marginalmeans <- function(model,
 
   # exception: by = NULL computes overall mean
   if (is.null(by)) {
-    datagrid <- at_specs <- NULL
+    datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
     dg_args <- list(
@@ -72,7 +72,7 @@ get_marginalmeans <- function(model,
 
     # Get corresponding datagrid (and deal with particular ats)
     datagrid <- do.call(insight::get_datagrid, dg_args)
-    at_specs <- attributes(datagrid)$at_specs
+    datagrid_info <- attributes(datagrid)
 
     # restore data types -  if we have defined numbers in `by`, like
     # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
@@ -109,11 +109,11 @@ get_marginalmeans <- function(model,
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
-    fun_args$variables <- lapply(datagrid, unique)[at_specs$varname]
+    fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
     fun_args$newdata <- datagrid
-    fun_args$by <- at_specs$varname
+    fun_args$by <- datagrid_info$at_specs$varname
   }
 
   # handle distributional parameters
@@ -144,15 +144,48 @@ get_marginalmeans <- function(model,
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
-  attr(means, "at") <- my_args$by
-  attr(means, "by") <- my_args$by
-  attr(means, "focal_terms") <- at_specs$varname
-  attr(means, "datagrid") <- datagrid
-  attr(means, "preserve_range") <- attributes(datagrid)$preserve_range
-  attr(means, "predict") <- predict
+  means <- .add_attributes(
+    means,
+    by = my_args$by,
+    info = c(
+      datagrid_info,
+      list(predict = predict, marginalize = marginalize, datagrid = datagrid)
+    )
+  )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
   means
+}
+
+
+# handle attributes -----------------------------------------------------------
+
+#' @keywords internal
+.add_attributes <- function(x, by = NULL, info = NULL) {
+  attr(x, "at") <- by
+  attr(x, "by") <- by
+
+  # compact list
+  info <- insight::compact_list(info)
+
+  if (!is.null(info) && length(info)) {
+    if (!is.null(info$at_specs$varname)) {
+      attr(x, "focal_terms") <- info$at_specs$varname
+    }
+    for (i in .info_elements()) {
+      if (!is.null(info[[i]])) {
+        attr(x, i) <- info[[i]]
+      }
+    }
+  }
+  x
+}
+
+.info_elements <- function() {
+  c(
+    "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
+    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range", "coef_name"
+  )
 }
 
 

@@ -16,7 +16,9 @@
       DES-L | 2.44 | 0.41 | [1.64, 3.24] | 5.99
       DF    | 1.34 | 0.24 | [0.87, 1.81] | 5.62
       
-      Marginal means estimated at spp
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
       Predictions are on the response-scale.
 
 ---
@@ -37,7 +39,9 @@
       DES-L | 2.31 | 0.38 | [1.56, 3.06] | 6.04
       DF    | 1.27 | 0.22 | [0.83, 1.71] | 5.66
       
-      Average counterfactuals estimated at spp
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
       Predictions are on the response-scale.
 
 ---
@@ -61,7 +65,9 @@
       8    | 332.62 | 14.54 | [303.91, 361.33] |  22.87
       9    | 342.78 | 16.01 | [311.19, 374.37] |  21.41
       
-      Marginal means estimated at Days
+      Variable predicted: Reaction
+      Predictors modulated: Days
+      Predictors averaged: Subject
 
 ---
 
@@ -84,5 +90,7 @@
       8    | 330.73 | 14.54 | [302.02, 359.43] |  22.74
       9    | 340.97 | 16.01 | [309.37, 372.56] |  21.30
       
-      Average counterfactuals estimated at Days
+      Variable predicted: Reaction
+      Predictors modulated: Days
+      Predictors averaged: Subject
 

@@ -131,7 +131,8 @@ within subsets by indicating the grouping variable after a vertical bar
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
-\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
+or functions from the \strong{emmeans} or \strong{marginaleffects} package.}
 
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}

@@ -123,7 +123,9 @@
       113.33  |         high level of education |  Female | 13.31 | 0.97 | [11.40, 15.21] |  13.72
       168.00  |         high level of education |  Female | 13.71 | 1.53 | [10.71, 16.71] |   8.97
       
-      Marginal means estimated at c12hour
+      Variable predicted: neg_c_7
+      Predictors modulated: c12hour, c172code, c161sex
+      Predictors averaged: barthtot
 
 ---
 
@@ -244,7 +246,8 @@
       86      |    94.34 |  Female |         high level of education | female | 12.07 |  1.35 | [  9.42,  14.73] |   8.92
       168     |    94.34 |  Female |         high level of education | female | 13.38 |  2.80 | [  7.87,  18.88] |   4.77
       
-      Marginal means estimated at c12hour
+      Variable predicted: neg_c_7
+      Predictors modulated: c12hour, barthtot = [sd], c161sex, c172code, e16sex
 
 # estimate_means - full labels
 
@@ -293,7 +296,8 @@
       Male    |         high level of education | female | Care Level 3/3+ |  13.00 | 1.83 | [  9.39, 16.61] |   7.09
       Female  |         high level of education | female | Care Level 3/3+ |  11.43 | 1.39 | [  8.70, 14.15] |   8.24
       
-      Marginal means estimated at c161sex
+      Variable predicted: neg_c_7
+      Predictors modulated: c161sex, c172code, e16sex, nur_pst
 
 ---
 
@@ -342,7 +346,8 @@
       Male    |         high level of education |        |                 |  13.00 | 1.83 | [  9.39, 16.61] |   7.09
       Female  |                                 |        |                 |  11.43 | 1.39 | [  8.70, 14.15] |   8.24
       
-      Marginal means estimated at c161sex
+      Variable predicted: neg_c_7
+      Predictors modulated: c161sex, c172code, e16sex, nur_pst
 
 ---
 
@@ -427,7 +432,8 @@
       Male    |         high level of education | female | Care Level 3/3+ |      1 | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
       Female  |         high level of education | female | Care Level 3/3+ |      1 | 13.25 | 1.14 | [ 11.01, 15.49] |  11.62
       
-      Marginal means estimated at c161sex
+      Variable predicted: neg_c_7
+      Predictors modulated: c161sex, c172code, e16sex, nur_pst, negc7d
 
 ---
 
@@ -512,7 +518,8 @@
       Male    |         high level of education |        |                 |        | 14.33 | 1.32 | [ 11.74, 16.92] |  10.88
       Female  |                                 |        |                 |        | 13.25 | 1.14 | [ 11.01, 15.49] |  11.62
       
-      Marginal means estimated at c161sex
+      Variable predicted: neg_c_7
+      Predictors modulated: c161sex, c172code, e16sex, nur_pst, negc7d
 
 # estimate_means - protect integers
 
@@ -556,5 +563,7 @@
       63      |  Female | 12.17 | 0.18 | [11.83, 12.52] |  69.56
       89      |  Female | 12.68 | 0.43 | [11.84, 13.51] |  29.74
       
-      Marginal means estimated at c160age=[fivenum]
+      Variable predicted: neg_c_7
+      Predictors modulated: c160age=[fivenum], c161sex
+      Predictors averaged: barthtot, e16sex
 

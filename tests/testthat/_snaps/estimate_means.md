@@ -22,7 +22,9 @@
       yes   |    DF | 0.46 | 0.13 | [ 0.21, 0.71] | 3.58
       no    |    DF | 1.95 | 0.30 | [ 1.36, 2.55] | 6.43
       
-      Marginal means estimated at mined
+      Variable predicted: count
+      Predictors modulated: mined, spp
+      Predictors averaged: site
       Predictions are on the response-scale.
 
 ---
@@ -49,6 +51,7 @@
       yes   |    DF | 0.28 | [0.22, 0.37]
       no    |    DF | 2.18 | [1.81, 2.61]
       
-      Marginal means estimated at mined
+      Variable predicted: count
+      Predictors modulated: mined, spp
       Predictions are on the response-scale.
 
