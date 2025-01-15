@@ -13,16 +13,16 @@ test_that("estimate_means() - mixed models", {
 
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat)
 
-  estim1 <- suppressMessages(estimate_means(model))
+  estim1 <- estimate_means(model, backend = "emmeans", verbose = FALSE)
   expect_identical(dim(estim1), c(3L, 5L))
-  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  estim2 <- estimate_means(model, backend = "marginaleffects", verbose = FALSE)
   expect_identical(dim(estim2), c(3L, 7L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
   model <- lme4::glmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = dat, family = "Gamma")
-  estim1 <- suppressMessages(estimate_means(model))
+  estim1 <- estimate_means(model, backend = "emmeans", verbose = FALSE)
   expect_identical(dim(estim1), c(3L, 5L))
-  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  estim2 <- estimate_means(model, backend = "marginaleffects", verbose = FALSE)
   expect_identical(dim(estim2), c(3L, 7L))
   expect_lt(max(estim1$Mean - estim2$Mean), 1e-10)
 
