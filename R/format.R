@@ -231,6 +231,11 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
       # add back new columns
       x <- cbind(params[c(contrast, by)], x)
+
+      # make sure terms are factors, for data_arrange later
+      for (i in focal_terms) {
+        x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+      }
     }
   }
 
@@ -315,7 +320,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 .set_back_attributes <- function(x, formatted_params) {
   attributes(formatted_params) <- utils::modifyList(
     attributes(formatted_params),
-    attributes(x)[c("by", "at", "predict", "contrast", "trend", "datagrid", "focal_terms")]
+    attributes(x)[.info_elements()]
   )
   formatted_params
 }
