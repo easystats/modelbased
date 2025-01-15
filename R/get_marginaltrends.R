@@ -77,10 +77,7 @@ get_marginaltrends <- function(model,
     estimated,
     info = c(
       datagrid_info,
-      list(
-        trend = trend,
-        marginalize = marginalize
-      )
+      list(trend = trend)
     ),
     datagrid = datagrid,
     coef_name = "Slope"
