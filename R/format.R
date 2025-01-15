@@ -315,7 +315,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 .set_back_attributes <- function(x, formatted_params) {
   attributes(formatted_params) <- utils::modifyList(
     attributes(formatted_params),
-    attributes(x)[c("by", "at", "predict", "contrast", "trend", "datagrid", "focal_terms")]
+    attributes(x)[.info_elements()]
   )
   formatted_params
 }

@@ -149,11 +149,11 @@ estimate_contrasts <- function(model,
 
   # Table formatting
   attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(out, "table_footer") <- .estimate_means_footer(
+  attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,
     type = "contrasts",
-    model_info = insight::model_info(model),
+    model = model,
     info = info
   )
 
@@ -165,10 +165,7 @@ estimate_contrasts <- function(model,
   attr(out, "backend") <- backend
 
   # add attributes from workhorse function
-  attributes(out) <- utils::modifyList(
-    attributes(out),
-    info[c("at", "by", "contrast", "predict", "p_adjust", "preserve_range")]
-  )
+  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))

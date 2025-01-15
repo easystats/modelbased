@@ -25,7 +25,7 @@ get_marginaltrends <- function(model,
 
   # data grid only when we have by predictors
   if (is.null(by)) {
-    datagrid <- at_specs <- NULL
+    datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments
     dg_args <- list(
@@ -39,19 +39,24 @@ get_marginaltrends <- function(model,
 
     # Get corresponding datagrid (and deal with particular ats)
     datagrid <- do.call(insight::get_datagrid, dg_args)
-    at_specs <- attributes(datagrid)$at_specs
+    datagrid_info <- attributes(datagrid)
   }
 
 
   # Second step: prepare arguments for marginaleffects ------------------------
   # ---------------------------------------------------------------------------
 
+  # sanity check
+  if (!is.null(datagrid)) {
+    datagrid <- as.data.frame(datagrid)
+  }
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(
       model,
       variables = trend,
-      by = at_specs$varname,
+      by = datagrid_info$at_specs$varname,
       newdata = datagrid
     ),
     dots
@@ -68,14 +73,18 @@ get_marginaltrends <- function(model,
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
-  attr(estimated, "at") <- at_specs$varname
-  attr(estimated, "by") <- at_specs$varname
-  attr(estimated, "focal_terms") <- at_specs$varname
-  attr(estimated, "trend") <- trend
-  attr(estimated, "datagrid") <- datagrid
-  attr(estimated, "preserve_range") <- attributes(datagrid)$preserve_range
-  attr(estimated, "coef_name") <- "Slope"
-
+  estimated <- .add_attributes(
+    estimated,
+    info = c(
+      datagrid_info,
+      list(
+        trend = trend,
+        marginalize = marginalize
+      )
+    ),
+    datagrid = datagrid,
+    coef_name = "Slope"
+  )
   class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
 
   estimated

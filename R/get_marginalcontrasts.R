@@ -74,13 +74,18 @@ get_marginalcontrasts <- function(model,
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
-  attr(out, "at") <- my_args$by
-  attr(out, "by") <- my_args$by
-  attr(out, "contrast") <- my_args$contrast
-  attr(out, "predict") <- predict
-  attr(out, "p_adjust") <- p_adjust
-  attr(out, "comparison") <- comparison
-  attr(out, "marginalize") <- marginalize
+  out <- .add_attributes(
+    out,
+    by = my_args$by,
+    info = list(
+      contrast = my_args$contrast,
+      predict = predict,
+      comparison = comparison,
+      marginalize = marginalize,
+      p_adjust = p_adjust
+    )
+  )
+
   class(out) <- unique(c("marginaleffects_contrasts", class(out)))
   out
 }

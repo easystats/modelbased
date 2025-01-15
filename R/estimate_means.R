@@ -156,10 +156,10 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
-  attr(means, "table_footer") <- .estimate_means_footer(
+  attr(means, "table_footer") <- .table_footer(
     means,
-    type = ifelse(marginalize == "population", "counterfactuals", "means"),
-    model_info = insight::model_info(model),
+    by = info$by,
+    model = model,
     info = info
   )
 
@@ -171,103 +171,9 @@ estimate_means <- function(model,
   attr(means, "coef_name") <- intersect(.valid_coefficient_names(), colnames(means))
 
   # add attributes from workhorse function
-  attributes(means) <- utils::modifyList(
-    attributes(means),
-    info[c("at", "by", "datagrid", "predict", "focal_terms", "preserve_range")]
-  )
+  attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
 
   # Output
   class(means) <- unique(c("estimate_means", class(means)))
   means
-}
-
-
-# Table footer ===============================================================
-
-
-.estimate_means_footer <- function(x,
-                                   by = NULL,
-                                   type = "means",
-                                   model_info = NULL,
-                                   info = NULL) {
-  # extract necessary information from attributes
-  predict <- info$predict
-  comparison <- info$comparison
-  datagrid <- info$datagrid
-  p_adjust <- info$p_adjust
-
-  table_footer <- switch(type,
-    counterfactuals = "Average",
-    "Marginal"
-  )
-  table_footer <- paste0("\n", table_footer, " ", type)
-
-  # Levels
-  if (!is.null(by) && length(by) > 0) {
-    table_footer <- paste0(table_footer, " estimated at ", toString(by))
-  } else {
-    table_footer <- paste0(table_footer, " estimated at ", attr(x, "by"))
-  }
-
-  # P-value adjustment footer
-  if (!is.null(p_adjust) && "p" %in% names(x)) {
-    if (p_adjust == "none") {
-      table_footer <- paste0(table_footer, "\np-values are uncorrected.")
-    } else {
-      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(p_adjust))
-    }
-  }
-
-  # tell user about scale of predictions / contrasts
-  if (!is.null(predict) && isFALSE(model_info$is_linear)) {
-    result_type <- switch(type,
-      counterfactuals = ,
-      means = "Predictions",
-      contrasts = "Contrasts"
-    )
-    # exceptions
-    predict <- switch(predict,
-      none = "link",
-      `invlink(link)` = "response",
-      predict
-    )
-    table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
-  }
-
-  # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
-  # add information about the parameter names
-  if (!is.null(comparison) && is.character(comparison) && grepl("=", comparison, fixed = TRUE) && grepl("\\bb\\d+\\b", comparison)) { # nolint
-    # find all "b" strings
-    matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
-    match_lengths <- attr(matches, "match.length")
-
-    # extract all "b" strings, so we have a vector of all "b" used in the comparison
-    parameter_names <- unlist(lapply(seq_along(matches), function(i) {
-      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
-    }), use.names = FALSE)
-
-    # datagrid contains all parameters, so we just need to find out the rows
-    # and combine column names with row values
-    if (!is.null(datagrid)) {
-      # transpose, so we can easier extract information
-      transposed_dg <- t(datagrid)
-      # interate over all parameters and create labels with proper names
-      hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
-        rows <- as.numeric(sub(".", "", i))
-        paste0(i, " = ", toString(paste0(colnames(datagrid), " [", transposed_dg[, rows], "]")))
-      }), use.names = FALSE)
-      # add all names to the footer
-      table_footer <- paste0(
-        table_footer,
-        "\n",
-        paste0("Parameters:\n", paste(unlist(hypothesis_labels), collapse = "\n"))
-      )
-    }
-  }
-
-  if (all(table_footer == "")) { # nolint
-    return(NULL)
-  }
-
-  c(paste0(table_footer, "\n"), "blue")
 }
