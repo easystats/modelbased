@@ -19,7 +19,7 @@
       mid - high | 94.39569 |      -0.65 | 0.48 | [-1.60,  0.30] |  -1.34 | > .999
       
       Variable predicted: neg_c_7
-      Predictors modulated: c172code
+      Predictors contrasted: c172code
       p-value adjustment method: Holm (1979)
 
 ---
@@ -70,7 +70,7 @@
       mid - high  | 94.39569 - 94.39569 |      -0.65 | 0.48 | [-1.60,  0.30] |  -1.34 | > .999
       
       Variable predicted: neg_c_7
-      Predictors modulated: c172code, barthtot = [sd]
+      Predictors contrasted: c172code, barthtot = [sd]
       p-value adjustment method: Holm (1979)
 
 # estimate_means - by is list
