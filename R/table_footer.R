@@ -23,8 +23,8 @@
   # modulated predictors (focal terms) ---------------------------------------
 
   if (!is.null(by)) {
-    control_string <- switch(type, contrasts = "contrasted", "controlled")
-    table_footer <- paste0(table_footer, "\nPredictors ", control_string, ": ", toString(by))
+    modulate_string <- switch(type, contrasts = "contrasted", "modulated")
+    table_footer <- paste0(table_footer, "\nPredictors ", modulate_string, ": ", toString(by))
   }
 
 
