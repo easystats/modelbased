@@ -77,7 +77,8 @@
 #' as default backend.
 #' @param transform Deprecated, please use `predict` instead.
 #' @param verbose Use `FALSE` to silence messages and warnings.
-#' @param ... Other arguments passed for instance to [insight::get_datagrid()].
+#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
+#' or functions from the **emmeans** or **marginaleffects** package.
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
