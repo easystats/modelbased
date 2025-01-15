@@ -9,16 +9,17 @@ test_that("attributes_means", {
     attributes(estim),
     c(
       "names", "row.names", "class", "at", "by", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "predict", "focal_terms"
+      "model", "response", "ci", "backend", "coef_name", "focal_terms",
+      "predict"
     )
   )
   estim <- suppressMessages(estimate_means(model, "Species", backend = "marginaleffects"))
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "by", "at", "predict", "datagrid",
-      "focal_terms", "table_title", "table_footer", "model", "response",
-      "ci", "backend", "coef_name", "preserve_range"
+      "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
+      "predict", "marginalize", "datagrid", "preserve_range", "table_title",
+      "table_footer", "model", "response", "ci", "backend", "coef_name"
     )
   )
 })
@@ -32,7 +33,8 @@ test_that("attributes_means, contrasts", {
     attributes(estim),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "contrast", "predict"
+      "model", "response", "ci", "p_adjust", "backend", "predict",
+      "comparison", "contrast"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "marginaleffects"))
@@ -40,9 +42,10 @@ test_that("attributes_means, contrasts", {
     attributes(estim),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "contrast",
-      "preserve_range"
-    )
+      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "adjusted_for", "predict", "comparison", "contrast", "marginalize",
+      "datagrid", "preserve_range", "coef_name"
+      )
   )
 })
 
@@ -58,13 +61,12 @@ test_that("attributes_means, slopes", {
       "model", "response", "ci", "trend", "coef_name"
     )
   )
-  ## FIXME: should be more attributes here
   estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "trend", "table_title", "table_footer",
-      "model", "response", "ci", "coef_name"
+      "names", "class", "row.names", "trend", "comparison", "coef_name",
+      "table_title", "table_footer", "model", "response", "ci"
     )
   )
 })
