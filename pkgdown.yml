@@ -12,7 +12,7 @@ articles:
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2025-01-15T11:21Z
+last_built: 2025-01-15T11:33Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
