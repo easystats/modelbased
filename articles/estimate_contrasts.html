@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.27</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.28</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -145,7 +145,8 @@ previous tutorial:</p>
 &gt; setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001
 &gt; versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 
 &gt; 
-&gt; Marginal contrasts estimated at Species
+&gt; Variable predicted: Sepal.Width
+&gt; Predictors contrasted: Species
 &gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>We can conclude that all pairwise differences are statistically
 significant.</p>
@@ -167,7 +168,8 @@ applied to more complex models:</p>
 &gt; setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
 &gt; versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 
 &gt; 
-&gt; Marginal contrasts estimated at Species
+&gt; Variable predicted: Sepal.Width
+&gt; Predictors contrasted: Species
 &gt; p-value adjustment method: Holm (1979)</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can
 see that the difference between <em>versicolor</em> and
