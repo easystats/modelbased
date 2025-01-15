@@ -444,44 +444,18 @@ estimate_relation <- function(model,
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
   attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
-  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
+  attr(out, "table_footer") <- .table_footer(
+    out,
+    by = grid_specs$at,
+    type = "predictions",
+    model = model,
+    info = c(grid_specs, list(predict = predict))
+  )
+
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
 
   # Class
   class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
 
   out
-}
-
-
-# Utils -------------------------------------------------------------------
-
-#' @keywords internal
-.estimate_predicted_footer <- function(model, grid_specs, predictions) {
-  footer <- paste0("\nVariable predicted: ", insight::find_response(model), "\n")
-
-  if ("at" %in% names(grid_specs)) {
-    footer <- paste0(footer, "Predictors modulated: ", toString(grid_specs$at), "\n")
-  }
-
-  if ("adjusted_for" %in% names(grid_specs) &&
-    length(grid_specs$adjusted_for) >= 1 &&
-    !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
-    # if we have values of adjusted terms, add these here
-    if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
-      # get values at which non-focal terms are hold constant
-      adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
-        predictions[[i]][1]
-      })
-      # at values to names of non-focal terms (footer)
-      if (is.numeric(adjusted_values)) {
-        grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
-      } else {
-        grid_specs$adjusted_for <- sprintf("%s (%s)", grid_specs$adjusted_for, adjusted_values)
-      }
-    }
-    footer <- paste0(footer, "Predictors controlled: ", toString(grid_specs$adjusted_for), "\n")
-  }
-
-  c(footer, "blue")
 }

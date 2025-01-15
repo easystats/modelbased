@@ -138,10 +138,7 @@ estimate_slopes <- function(model,
   attr(trends, "ci") <- ci
 
   # add attributes from workhorse function
-  attributes(trends) <- utils::modifyList(
-    attributes(trends),
-    info[c("at", "by", "datagrid", "focal_terms", "trend", "coef_name", "preserve_range")]
-  )
+  attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))
