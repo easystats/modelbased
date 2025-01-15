@@ -162,7 +162,8 @@ get_marginalmeans <- function(model,
 
 #' @keywords internal
 .add_attributes <- function(x, by = NULL, info = NULL) {
-  attr(x, "at") <- attr(x, "by") <- by
+  attr(x, "at") <- by
+  attr(x, "by") <- by
 
   # compact list
   info <- insight::compact_list(info)
