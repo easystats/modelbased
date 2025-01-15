@@ -149,12 +149,8 @@ get_marginalmeans <- function(model,
     by = my_args$by,
     info = c(
       datagrid_info,
-      list(
-        predict = predict,
-        marginalize = marginalize
-      )
-    ),
-    datagrid = datagrid
+      list(predict = predict, marginalize = marginalize, datagrid = datagrid)
+    )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
@@ -179,21 +175,11 @@ get_marginalmeans <- function(model,
     if (!is.null(info$at_specs$varname)) {
       attr(x, "focal_terms") <- info$at_specs$varname
     }
-    elements <- c(
-      "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-      "contrast", "marginalize", "p_adjust", "preserve_range"
-    )
-    for (i in elements) {
+    for (i in .info_elements()) {
       if (!is.null(info[[i]])) {
         attr(x, i) <- info[[i]]
       }
     }
-  }
-  if (!is.null(datagrid)) {
-    attr(x, "datagrid") <- datagrid
-  }
-  if (!is.null(coef_name)) {
-    attr(x, "coef_name") <- coef_name
   }
   x
 }
