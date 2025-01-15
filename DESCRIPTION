@@ -76,7 +76,8 @@ Suggests:
     rtdists,
     see (>= 0.8.4),
     testthat (>= 3.2.1),
-    vdiffr
+    vdiffr,
+    withr
 VignetteBuilder:
     knitr
 Encoding: UTF-8
