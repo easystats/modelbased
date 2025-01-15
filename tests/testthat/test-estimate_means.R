@@ -94,6 +94,9 @@ test_that("estimate_means() - lm", {
   # model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
   # estim <- suppressMessages(estimate_means(model))
   # expect_equal(dim(estim), c(3L, 5L))
+  model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
+  estim <- estimate_means(model, by = c("wt","gear"), backend = "marginalmeans")
+  expect_identical(dim(estim), c(30L, 8L))
 
   # One continuous and one factor
   model <- lm(Petal.Length ~ Species * Sepal.Width, data = iris)
