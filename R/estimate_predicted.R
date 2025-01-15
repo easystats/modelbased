@@ -338,7 +338,7 @@ estimate_relation <- function(model,
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
     is_nullmodel <- insight::is_nullmodel(model)
-    grouplevel_effects <- insight::find_random(model, flatten = TRUE)
+    grouplevel_effects <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
   } else {
     # for stuff like data frame, no response and no null model
     variables <- colnames(model_data)
