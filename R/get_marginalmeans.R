@@ -161,11 +161,7 @@ get_marginalmeans <- function(model,
 # handle attributes -----------------------------------------------------------
 
 #' @keywords internal
-.add_attributes <- function(x,
-                            by = NULL,
-                            info = NULL,
-                            datagrid = NULL,
-                            coef_name = NULL) {
+.add_attributes <- function(x, by = NULL, info = NULL) {
   attr(x, "at") <- attr(x, "by") <- by
 
   # compact list
