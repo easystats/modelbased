@@ -231,6 +231,11 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
       # add back new columns
       x <- cbind(params[c(contrast, by)], x)
+
+      # make sure terms are factors, for data_arrange later
+      for (i in focal_terms) {
+        x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+      }
     }
   }
 
