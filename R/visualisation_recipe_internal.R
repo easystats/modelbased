@@ -66,7 +66,13 @@
   }
   if (length(by) > 3) {
     aes$facet <- NULL
-    aes$grid <- stats::as.formula(paste(by[3], "~", paste(utils::tail(by, -3), collapse = "*")))
+    # we have to switch variables 3 and 4, due to regression formula
+    remaining <- paste(utils::tail(by, -2))
+    aes$grid <- stats::as.formula(paste(
+      remaining[2],
+      "~",
+      paste(setdiff(remaining, remaining[2]), collapse = "*")
+    ))
   }
 
   # CI
@@ -285,7 +291,7 @@
     stroke <- 1
   }
 
-  list(
+  out <- list(
     geom = geom,
     data = rawdata,
     aes = list(
@@ -296,8 +302,15 @@
     ),
     height = 0,
     shape = shape,
-    stroke = stroke,
-    # set default alpha, it not mapped by aes
-    alpha = ifelse(is.null(aes$alpha), 1 / 3, NULL)
+    stroke = stroke
   )
+
+  # set default alpha, it not mapped by aes
+  if (is.null(aes$alpha)) {
+    out$alpha <- 1 / 3
+  } else {
+    out$alpha <- NULL
+  }
+
+  out
 }

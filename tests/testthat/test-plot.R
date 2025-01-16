@@ -371,3 +371,21 @@ test_that("plots, logistic regression", {
     plot(out)
   )
 })
+
+
+test_that("plots, 4-way with numeric", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ e16sex + c161sex + c172code * barthtot + c12hour, data = efc)
+  by <- c("c12hour", "c161sex", "c172code", "barthtot = [fivenum]")
+  estim <- estimate_means(m, by = by, backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-4way-numeric-1",
+    plot(estim, show_data = FALSE)
+  )
+
+})
