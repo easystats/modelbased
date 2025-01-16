@@ -32,6 +32,11 @@ get_marginalcontrasts <- function(model,
   # extract first focal term
   first_focal <- my_args$contrast[1]
 
+  # sanity check - is it a list? if so, use name
+  if (is.list(first_focal)) {
+    first_focal <- names(first_focal)
+  }
+
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
@@ -69,7 +74,9 @@ get_marginalcontrasts <- function(model,
   }
 
   # adjust p-values
-  out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  if (!insight::model_info(model)$is_bayesian) {
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
