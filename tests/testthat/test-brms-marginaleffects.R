@@ -146,17 +146,49 @@ withr::with_options(
 
     # numeric -------------------------------------------------------------
 
+    out <- estimate_slopes(m, trend = "c12hour")
+    expect_named(
+      out,
+      c(
+        "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+        "ROPE_high", "ROPE_Percentage"
+      )
+    )
+    expect_equal(out$Median, -0.07303, tolerance = 1e-4)
+
 
     # numeric * categorical -------------------------------------------------
+
+    out <- estimate_slopes(m, trend = "c160age", by = "c172code")
+    expect_named(
+      out,
+      c(
+        "c172code", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+        "ROPE_high", "ROPE_Percentage"
+      )
+    )
+    expect_equal(out$Median, c(0.01271, -0.0795, -0.0629), tolerance = 1e-4)
   })
 )
 
-# dput(colnames(out))
-# dput(round(out$Median, 5))
-# dput(round(out$MAP, 5))
 
-# library(modelbased)
-# library(testthat)
-# options(modelbased_backend = "marginaleffects")
+withr::with_options(
+  list(modelbased_backend = "marginaleffects"),
+  test_that("estimate_contrasts - brms, logistic", {
+    m <- insight::download_model("brms_logistic_1")
+    skip_if(!is.null(m))
 
-# attributes(out)$backend
+
+    # categorical -------------------------------------------------------------
+
+    out <- estimate_means(m, "e42dep")
+    expect_named(
+      out,
+      c(
+        "e42dep", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+        "ROPE_high", "ROPE_Percentage"
+      )
+    )
+    expect_equal(out$Median, c(0.11468, 0.26105, 0.42753, 0.62302), tolerance = 1e-4)
+  })
+)

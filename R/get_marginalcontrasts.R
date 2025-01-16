@@ -32,6 +32,11 @@ get_marginalcontrasts <- function(model,
   # extract first focal term
   first_focal <- my_args$contrast[1]
 
+  # sanity check - is it a list? if so, use name
+  if (is.list(first_focal)) {
+    first_focal <- names(first_focal)
+  }
+
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
