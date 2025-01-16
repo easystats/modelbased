@@ -50,6 +50,7 @@ Suggests:
     coda,
     collapse,
     correlation,
+    curl,
     easystats,
     emmeans (>= 1.10.2),
     Formula,
