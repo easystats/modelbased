@@ -68,10 +68,10 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-  ## FIXME: skip for Bayesian models
-
   # adjust p-values
-  out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  if (!insight::model_info(model)$is_bayesian) {
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
