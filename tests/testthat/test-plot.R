@@ -387,5 +387,4 @@ test_that("plots, 4-way with numeric", {
     "plot-4way-numeric-1",
     plot(estim, show_data = FALSE)
   )
-
 })
