@@ -92,7 +92,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     info,
     ci,
     estimate_name,
-    is_contrast_analysis
+    is_contrast_analysis,
+    ...
   )
 
   .set_back_attributes(x, params)
@@ -121,7 +122,8 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     model_data,
     info,
     ci,
-    estimate_name = "Slope"
+    estimate_name = "Slope",
+    ...
   )
 
   .set_back_attributes(x, params)
@@ -259,7 +261,8 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  info,
                                                  ci = 0.95,
                                                  estimate_name = NULL,
-                                                 is_contrast_analysis = FALSE) {
+                                                 is_contrast_analysis = FALSE,
+                                                ...) {
   # tidy output
   if (is.null(attributes(x)$posterior_draws)) {
     # frequentist
@@ -270,11 +273,15 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     )[1]
   } else {
     # Bayesian
-    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE))
+    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE, ...))
     coefficient_name <- intersect(
       c(attributes(params)$coefficient_name, "Median", "Mean", "MAP"),
       colnames(params)
     )[1]
+    # we need to remove some more columns
+    remove_columns <- c(remove_columns, "rowid")
+    # and modify the estimate name
+    estimate_name <- coefficient_name
   }
 
   # add back ci? these are missing when contrasts are computed
@@ -282,14 +289,14 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # relocate columns
   relocate_columns <- intersect(
-    c(
-      coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low",
-      "CI_high", "Statistic", "df", "df_error", "ROPE_low" "ROPE_high", "ROPE_Percentage"
-    ),
+    unique(c(
+      coefficient_name, "Coefficient", "Slope", "Predicted", "Median", "Mean",
+      "MAP", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error", "pd",
+      "ROPE_low", "ROPE_high", "ROPE_Percentage", "p"
+    )),
     colnames(params)
   )
-  params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint
-  params <- datawizard::data_relocate(params, c("p", "pd"), after = -1, verbose = FALSE)
+  params <- params[c(setdiff(colnames(params), relocate_columns), relocate_columns)]
 
   # relocate focal terms to the beginning
   by <- attr(x, "focal_terms", exact = TRUE)
