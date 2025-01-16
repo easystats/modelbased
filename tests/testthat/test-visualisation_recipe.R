@@ -134,7 +134,7 @@ test_that("visualization_recipe", {
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Species")
   expect_identical(aes$color, "Sepal.Width")
-  expect_identical(deparse(aes$grid), "fac ~ fac2")
+  expect_identical(deparse(aes$grid), "fac2 ~ fac")
   expect_null(aes$facet)
 
   # Estimate slopes --------------------------------
