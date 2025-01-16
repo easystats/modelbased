@@ -280,8 +280,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     )[1]
     # we need to remove some more columns
     remove_columns <- c(remove_columns, "rowid")
-    # and modify the estimate name
-    estimate_name <- coefficient_name
+    # and modify the estimate name - if it's not a dpar
+    if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
+      estimate_name <- coefficient_name
+    }
     # and rename the "term" column (which we get from contrasts)
     colnames(params)[colnames(params) == "term"] <- "Parameter"
   }
