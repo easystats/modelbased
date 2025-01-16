@@ -125,7 +125,6 @@ withr::with_options(
     expect_equal(out$Median, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
 
 
-
     # two categorical -------------------------------------------------------------
 
     out <- estimate_slopes(m, "e42dep", by = "e16sex")
@@ -148,7 +147,6 @@ withr::with_options(
 
 
     # numeric * categorical -------------------------------------------------
-
   })
 )
 
