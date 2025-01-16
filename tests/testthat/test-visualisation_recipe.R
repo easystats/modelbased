@@ -148,8 +148,6 @@ test_that("visualization_recipe", {
   expect_identical(aes$x, "Species")
   expect_null(aes$color)
 
-  ## FIXME: broken
-  # works with margialeffects-backend, though
-  # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
+  x <- estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "marginaleffects")
   # plot(modelbased:::.visualization_recipe(x))
 })
