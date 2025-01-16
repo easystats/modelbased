@@ -246,7 +246,7 @@ test_that("estimate_means() - lm", {
 })
 
 
-test_that("estimate_means() - at specific values", {
+test_that("estimate_expectation() - at specific values", {
   data(iris)
   m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
   expect_silent(estimate_expectation(m, by = c("Species", "Petal.Width = [fivenum]"), preserve_range = FALSE))
