@@ -262,7 +262,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  ci = 0.95,
                                                  estimate_name = NULL,
                                                  is_contrast_analysis = FALSE,
-                                                ...) {
+                                                 ...) {
   # tidy output
   if (is.null(attributes(x)$posterior_draws)) {
     # frequentist
