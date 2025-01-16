@@ -87,5 +87,6 @@ RoxygenNote: 7.3.2
 Config/testthat/edition: 3
 Config/testthat/parallel: true
 Roxygen: list(markdown = TRUE)
+Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 Remotes: easystats/bayestestR
