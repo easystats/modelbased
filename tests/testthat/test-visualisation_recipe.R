@@ -149,6 +149,7 @@ test_that("visualization_recipe", {
   expect_null(aes$color)
 
   ## FIXME: broken
+  # works with margialeffects-backend, though
   # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
   # plot(modelbased:::.visualization_recipe(x))
 })
