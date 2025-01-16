@@ -134,7 +134,7 @@ test_that("visualization_recipe", {
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Species")
   expect_identical(aes$color, "Sepal.Width")
-  expect_identical(deparse(aes$grid), "fac ~ fac2")
+  expect_identical(deparse(aes$grid), "fac2 ~ fac")
   expect_null(aes$facet)
 
   # Estimate slopes --------------------------------
@@ -148,7 +148,10 @@ test_that("visualization_recipe", {
   expect_identical(aes$x, "Species")
   expect_null(aes$color)
 
-  # broken
-  # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
+  x <- estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "marginaleffects")
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_identical(aes$y, "Slope")
+  expect_identical(aes$x, "Sepal.Width")
+  expect_null(aes$color)
   # plot(modelbased:::.visualization_recipe(x))
 })
