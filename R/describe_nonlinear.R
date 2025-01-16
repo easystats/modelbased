@@ -13,7 +13,7 @@
 #'   (`x`).
 #' @param ... Other arguments to be passed to or from.
 #'
-#' @examples
+#' @examplesIf insight::check_if_installed("performance", quietly = TRUE)
 #' # Create data
 #' data <- data.frame(x = rnorm(200))
 #' data$y <- data$x^2 + rnorm(200, 0, 0.5)
