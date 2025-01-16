@@ -148,7 +148,7 @@ test_that("visualization_recipe", {
   expect_identical(aes$x, "Species")
   expect_null(aes$color)
 
-  # broken
+  ## FIXME: broken
   # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
   # plot(modelbased:::.visualization_recipe(x))
 })
