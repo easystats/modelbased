@@ -68,6 +68,8 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+  ## FIXME: skip for Bayesian models
+
   # adjust p-values
   out <- .p_adjust(model, out, p_adjust, verbose, ...)
 

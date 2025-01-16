@@ -261,22 +261,35 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  estimate_name = NULL,
                                                  is_contrast_analysis = FALSE) {
   # tidy output
-  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
-  coefficient_name <- intersect(
-    c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
-    colnames(params)
-  )[1]
+  if (is.null(attributes(x)$posterior_draws)) {
+    # frequentist
+    params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+    coefficient_name <- intersect(
+      c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
+      colnames(params)
+    )[1]
+  } else {
+    # Bayesian
+    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE))
+    coefficient_name <- intersect(
+      c(attributes(params)$coefficient_name, "Median", "Mean", "MAP"),
+      colnames(params)
+    )[1]
+  }
 
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
 
   # relocate columns
   relocate_columns <- intersect(
-    c(coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
+    c(
+      coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low",
+      "CI_high", "Statistic", "df", "df_error", "ROPE_low" "ROPE_high", "ROPE_Percentage"
+    ),
     colnames(params)
   )
   params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint
-  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
+  params <- datawizard::data_relocate(params, c("p", "pd"), after = -1, verbose = FALSE)
 
   # relocate focal terms to the beginning
   by <- attr(x, "focal_terms", exact = TRUE)
