@@ -82,6 +82,8 @@ summary.reshape_grouplevel <- function(object, ...) {
 
 
 .estimate_slopes_sig <- function(x, confidence = "auto", ...) {
+  insight::check_if_installed("effectsize")
+
   if (confidence == "auto") {
     # TODO: make sure all of these work
     if ("BF" %in% names(x)) confidence <- "BF"
