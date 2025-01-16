@@ -92,7 +92,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     info,
     ci,
     estimate_name,
-    is_contrast_analysis
+    is_contrast_analysis,
+    ...
   )
 
   .set_back_attributes(x, params)
@@ -121,7 +122,8 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
     model_data,
     info,
     ci,
-    estimate_name = "Slope"
+    estimate_name = "Slope",
+    ...
   )
 
   .set_back_attributes(x, params)
@@ -135,7 +137,8 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
 
-  # clean "by" and contrast variable names, for the special cases
+  # clean "by" and contrast variable names, for the special cases. for example,
+  # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
     if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
       by[startsWith(by, i)] <- i
@@ -145,6 +148,8 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     }
   }
 
+  # only when we have a comparison based on these options from marginaleffects,
+  # we want to "clean" the parameter names
   valid_options <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential"
@@ -156,7 +161,12 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
-    # split parameter column into comparison groups
+    #  the goal here is to create tidy columns with the comparisons.
+    # marginaleffects returns a single column that contains all levels that
+    # are contrastet. We want to have the contrasted levels per predictor in
+    # a separate column. This is what we do here...
+
+    # split parameter column into comparison groups.
     params <- as.data.frame(do.call(
       rbind,
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
@@ -215,9 +225,9 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
           })]
         }
 
-        # here we make sure that one of the "by" column has its original column name
-        # back, so we can properly merge all variables in "contrast" and "by" to the
-        # original data
+        # here we make sure that one of the "by" column has its original
+        # column name back, so we can properly merge all variables in
+        # "contrast" and "by" to the original data
         by_columns <- paste0(by, 1)
         params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
 
@@ -259,24 +269,50 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
                                                  info,
                                                  ci = 0.95,
                                                  estimate_name = NULL,
-                                                 is_contrast_analysis = FALSE) {
-  # tidy output
-  params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
-  coefficient_name <- intersect(
-    c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
-    colnames(params)
-  )[1]
+                                                 is_contrast_analysis = FALSE,
+                                                 ...) {
+  # tidy output - we want to tidy the output, using `model_parameters()` or
+  # `describe_posterior()` for Bayesian models. We also need to know how the
+  # coefficient column is named, because we replace that column name with an
+  # appropriate name of the predictions (e.g. "Difference", "Probability" or
+  # "Mean")
+  if (is.null(attributes(x)$posterior_draws)) {
+    # frequentist
+    params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+    coefficient_name <- intersect(
+      c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
+      colnames(params)
+    )[1]
+  } else {
+    # Bayesian
+    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE, ...))
+    coefficient_name <- intersect(
+      c(attributes(params)$coefficient_name, "Median", "Mean", "MAP"),
+      colnames(params)
+    )[1]
+    # we need to remove some more columns
+    remove_columns <- c(remove_columns, "rowid")
+    # and modify the estimate name - if it's not a dpar
+    if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
+      estimate_name <- coefficient_name
+    }
+    # and rename the "term" column (which we get from contrasts)
+    colnames(params)[colnames(params) == "term"] <- "Parameter"
+  }
 
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
 
-  # relocate columns
+  # relocate columns - this is the standardized column order for all outputs
   relocate_columns <- intersect(
-    c(coefficient_name, "Coefficient", "Slope", "Predicted", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error"),
+    unique(c(
+      coefficient_name, "Coefficient", "Slope", "Predicted", "Median", "Mean",
+      "MAP", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error", "pd",
+      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p"
+    )),
     colnames(params)
   )
-  params <- datawizard::data_relocate(params, relocate_columns, after = -1, verbose = FALSE) # nolint
-  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
+  params <- params[c(setdiff(colnames(params), relocate_columns), relocate_columns)]
 
   # relocate focal terms to the beginning
   by <- attr(x, "focal_terms", exact = TRUE)
@@ -284,7 +320,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     params <- datawizard::data_reorder(params, by, verbose = FALSE)
   }
 
-  # rename columns
+  # rename coefficient name and statistics columns
   if (!is.null(estimate_name)) {
     params <- datawizard::data_rename(
       params,
