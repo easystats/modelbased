@@ -296,7 +296,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     unique(c(
       coefficient_name, "Coefficient", "Slope", "Predicted", "Median", "Mean",
       "MAP", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error", "pd",
-      "ROPE_low", "ROPE_high", "ROPE_Percentage", "p"
+      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p"
     )),
     colnames(params)
   )
