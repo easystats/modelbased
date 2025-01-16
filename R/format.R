@@ -283,7 +283,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     # and modify the estimate name
     estimate_name <- coefficient_name
     # and rename the "term" column (which we get from contrasts)
-    params <- datawizard::data_rename(params, "term", "Parameter")
+    colnames(params)[colnames(params) == "term"] <- "Parameter"
   }
 
   # add back ci? these are missing when contrasts are computed
