@@ -196,7 +196,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
     # value in the data grid, anyway. so we need to keep them
-    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid, is.numeric, logical(1)) # nolint
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
     contrast <- contrast[keep_contrasts]
 
     # set to NULL, if all by-values have been removed here
