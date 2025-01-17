@@ -6,10 +6,12 @@
 #' [estimate_slopes()].
 #'
 #' @param model A statistical model.
-#' @param by The predictor variable(s) at which to evaluate the desired effect
-#' / mean / contrasts. Other predictors of the model that are not included
-#' here will be collapsed and "averaged" over (the effect will be estimated
-#' across them).
+#' @param by The (focal) predictor variable(s) at which to evaluate the desired
+#' effect / mean / contrasts. Other predictors of the model that are not
+#' included here will be collapsed and "averaged" over (the effect will be
+#' estimated across them). `by` can a character (vector) naming the focal
+#' predictors (and optionally, representative values or levels), or a list of named
+#' elements. See details in [`insight::get_datagrid()`].
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
@@ -77,8 +79,20 @@
 #' as default backend.
 #' @param transform Deprecated, please use `predict` instead.
 #' @param verbose Use `FALSE` to silence messages and warnings.
-#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
-#' or functions from the **emmeans** or **marginaleffects** package.
+#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
+#' to functions from the **emmeans** or **marginaleffects** package, or to process
+#' Bayesian models via [bayestestR::describe_posterior()]. Examples:
+#' - `insight::get_datagrid()`: Argument such as `length` or `range` can be used
+#'   to control the (number of) representative values.
+#' - **marginaleffects**: Internally used functions are `avg_predictions()` for
+#'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments
+#'   for instance like `vcov`, `transform`, `equivalence` or `slope` can be
+#'   passed to those functions.
+#' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
+#'   Additional arguments can be passed to these functions.
+#' - Bayesian models: For Bayesian models, parameters are cleaned using
+#'   `describe_posterior()`, thus, arguments like, for example, `centrality`,
+#'   `rope_range`, or `test` are passed to that function.
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation

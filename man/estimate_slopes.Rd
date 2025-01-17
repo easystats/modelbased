@@ -20,10 +20,12 @@ estimate_slopes(
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
-\item{by}{The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
+\item{by}{The (focal) predictor variable(s) at which to evaluate the desired
+effect / mean / contrasts. Other predictors of the model that are not
+included here will be collapsed and "averaged" over (the effect will be
+estimated across them). \code{by} can a character (vector) naming the focal
+predictors (and optionally, representative values or levels), or a list of named
+elements. See details in \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -40,8 +42,22 @@ as default backend.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
-\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}
-or functions from the \strong{emmeans} or \strong{marginaleffects} package.}
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
+to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
+Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
+\itemize{
+\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
+to control the (number of) representative values.
+\item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
+for instance like \code{vcov}, \code{transform}, \code{equivalence} or \code{slope} can be
+passed to those functions.
+\item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
+Additional arguments can be passed to these functions.
+\item Bayesian models: For Bayesian models, parameters are cleaned using
+\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
+\code{rope_range}, or \code{test} are passed to that function.
+}}
 }
 \value{
 A data.frame of class \code{estimate_slopes}.
