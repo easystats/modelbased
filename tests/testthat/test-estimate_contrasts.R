@@ -9,7 +9,7 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- iris
   model <- lm(Sepal.Width ~ Species, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
   expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
@@ -17,7 +17,7 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 8L))
   expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
-  estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')"))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')", backend = "emmeans"))
   expect_identical(dim(estim), c(1L, 9L))
 
   estim <- suppressMessages(estimate_contrasts(model, contrast = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
