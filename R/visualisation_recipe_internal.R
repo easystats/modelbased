@@ -4,15 +4,20 @@
 #' @keywords internal
 .find_aes <- function(x) {
   data <- as.data.frame(x)
+  data$.group <- 1
+
   att <- attributes(x)
   aes <- list(
     y = "Predicted",
-    group = 1
+    group = ".group"
   )
 
   # extract information for labels
   model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
   model_response <- attributes(x)$response
+
+  # Find predictors
+  by <- att$focal_terms
 
   # Main geom
   if ("estimate_contrasts" %in% att$class) {
@@ -21,22 +26,26 @@
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
     aes$y <- "Slope"
+    if("Comparison" %in% names(data)) {
+      # Insert "Comparison" column as the 2nd by so that it gets plotted as color
+      if(length(by) > 1) by[3:(length(by)+1)] <- by[2:length(by)]
+      by[2] <- "Comparison"
+    }
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
     aes$y <- "Coefficient"
     aes$type <- "grouplevel"
     if (length(unique(data$Parameter)) > 1) {
       aes$color <- "Parameter"
-      aes$group <- "Parameter"
+      data$.group <- paste(data$.group, data$Parameter)
     }
     if (length(unique(data$Group)) > 1) aes$facet <- "Group"
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
   }
 
-  # Find predictors
-  by <- att$focal_terms
-  # 2nd try
+
+  # Assign predictors to aes
   if (is.null(by)) {
     by <- att$by
   }
@@ -53,7 +62,7 @@
   }
   if (length(by) > 1) {
     aes$color <- by[2]
-    aes$group <- by[2]
+    data$.group <- paste(data$.group, data[[by[2]]])
   }
   if (length(by) > 2) {
     if (is.numeric(data[[by[3]]])) {
@@ -61,8 +70,7 @@
     } else {
       aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -2), collapse = " * ")))
     }
-    data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
-    aes$group <- ".group"
+    data$.group <- paste(data$.group, data[[by[3]]])
   }
   if (length(by) > 3) {
     aes$facet <- NULL
@@ -296,14 +304,22 @@
     data = rawdata,
     aes = list(
       y = y,
-      x = aes$x,
-      color = aes$color,
-      alpha = aes$alpha
+      x = aes$x
     ),
     height = 0,
     shape = shape,
     stroke = stroke
   )
+
+  # check if we have matching columns in the raw data - some functions,
+  # likes slopes, have mapped these aes to other columns that are not part
+  # of the raw data
+  if (!is.null(aes$color) && aes$color %in% colnames(rawdata)) {
+    out$aes$color <- aes$color
+  }
+  if (!is.null(aes$alpha) && aes$alpha %in% colnames(rawdata)) {
+    out$aes$alpha <- aes$alpha
+  }
 
   # set default alpha, it not mapped by aes
   if (is.null(aes$alpha)) {
