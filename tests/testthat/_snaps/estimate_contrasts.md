@@ -76,6 +76,26 @@
 ---
 
     Code
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
+      p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Parameter | Difference |   SE |        95% CI | t(113) |     p
+      --------------------------------------------------------------
+      b5=b3     |      -1.93 | 1.99 | [-5.88, 2.02] |  -0.97 | 0.336
+      
+      Variable predicted: alertness
+      Predictors contrasted: time, coffee
+      Predictors averaged: sex
+      p-values are uncorrected.
+      Parameters:
+      b5 = time [noon], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
+
+---
+
+    Code
       estimate_contrasts(model, backend = "emmeans")
     Message
       No variable was specified for contrast estimation. Selecting `contrast =
