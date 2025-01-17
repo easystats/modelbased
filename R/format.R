@@ -114,6 +114,13 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   if ("term" %in% colnames(x) && insight::n_unique(x$term) == 1) {
     remove_columns <- c("Parameter", remove_columns)
   }
+  # there are some exceptions for `estimate_slope()`, when the `Comparison`
+  # column contains information about the type of slope (dx/dy etc.). we want
+  # to remove this here, but add information as attribute.
+  if ("contrast" %in% colnames(x) && all(x$contrast %in% .marginaleffects_slopes())) {
+    remove_columns <- c("Comparison", remove_columns)
+    attr(x, "slope") <- unique(x$contrast)
+  }
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,
