@@ -47,7 +47,7 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 9L))
   estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 10L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4), backend = "emmeans")
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4, backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 10L))
   estim <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width=0", backend = "marginaleffects")
   expect_identical(dim(estim), c(3L, 8L))
@@ -165,11 +165,10 @@ test_that("estimate_contrasts - Bayesian", {
   )
   estim <- suppressMessages(estimate_contrasts(model, contrast = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(15L, 7L))
-  estim <- estimate_contrasts(model, contrast = c("Species", "Petal.Length_factor"), backend = "marginaleffects")
-  expect_identical(dim(estim), c(15L, 10L))
-
   estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 8L))
+  estim <- estimate_contrasts(model, contrast = c("Species", "Petal.Length_factor"), backend = "marginaleffects")
+  expect_identical(dim(estim), c(15L, 10L))
   expect_named(
     estim,
     c(
@@ -186,6 +185,7 @@ test_that("estimate_contrasts - Bayesian", {
     ),
     tolerance = 1e-4
   )
+
 
   set.seed(123)
   model <- suppressWarnings(
