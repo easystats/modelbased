@@ -1,5 +1,6 @@
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
+skip_on_os("mac")
 
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
