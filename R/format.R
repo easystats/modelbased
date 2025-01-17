@@ -210,7 +210,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
     # contrasts can't be longer than focal terms - make sure we have not
     # removed too much (and that we now have captured all exceptions...)
-    if (length(contrasts) > length(focal_terms)) focal_terms <- contrasts
+    if (length(contrast) > length(focal_terms)) focal_terms <- contrast
 
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
