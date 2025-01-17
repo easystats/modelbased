@@ -52,7 +52,7 @@ test_that("visualization_recipe", {
   dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
-  vr <- visualisation_recipe(x)
+  vr <- visualisation_recipe(x, show_data = TRUE)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
   expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
@@ -63,12 +63,22 @@ test_that("visualization_recipe", {
     )
   )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
+  vr <- visualisation_recipe(x, show_data = TRUE)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
-  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = ".group", alpha = NULL))
+  expect_identical(vr$l2$aes, list(y = "Mean", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
     vr$l3$aes,
     list(
-      y = "Rate", x = "fa", ymin = "CI_low", ymax = "CI_high",
+      y = "Mean", x = "fa", ymin = "CI_low", ymax = "CI_high",
+      color = NULL, group = ".group", alpha = NULL
+    )
+  )
+  vr <- visualisation_recipe(x, show_data = FALSE)
+  expect_identical(vr$l1$aes, list(y = "Mean", x = "fa", color = NULL, group = ".group", alpha = NULL))
+  expect_identical(
+    vr$l2$aes,
+    list(
+      y = "Mean", x = "fa", ymin = "CI_low", ymax = "CI_high",
       color = NULL, group = ".group", alpha = NULL
     )
   )
