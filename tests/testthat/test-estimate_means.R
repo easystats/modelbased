@@ -95,7 +95,7 @@ test_that("estimate_means() - lm", {
   # estim <- suppressMessages(estimate_means(model))
   # expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  estim <- estimate_means(model, by = c("wt","gear"), backend = "marginalmeans")
+  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginalmeans")
   expect_identical(dim(estim), c(30L, 8L))
 
   # One continuous and one factor
@@ -330,7 +330,7 @@ test_that("get_marginaleffects, value definition in `by`", {
   d <- data.frame(
     score = rnorm(n),
     grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-    time = as.factor(sample(1:3, n, TRUE))
+    time = as.factor(sample.int(3, n, TRUE))
   )
   model2 <- lm(score ~ grp * time, data = d)
 
@@ -355,7 +355,7 @@ test_that("get_marginaleffects, value definition in `by`", {
   d <- data.frame(
     score = rnorm(n),
     grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-    time = as.numeric(sample(1:3, n, TRUE))
+    time = as.numeric(sample.int(3, n, TRUE))
   )
   model2 <- lm(score ~ grp * as.factor(time), data = d)
 

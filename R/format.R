@@ -179,6 +179,21 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
 
+    # When we filter contrasts, e.g. `contrast = c("vs", "am='1'")` or
+    # `contrast = c("vs", "am"), by = "gear='5'"`, we get no contrasts if one
+    # of the focal terms only has one unique value in the data grid. Thus,
+    # we need to exclude all those focal terms that only have one unique value
+    # in the data grid now. Fingers crossed that it works...
+    focal_terms <- focal_terms[lengths(lapply(attributes(x)$datagrid[focal_terms], unique)) > 1]
+    # in the second example, `contrast = c("vs", "am"), by = "gear='5'"`, the
+    # `by` column is the one with one unique value only, we thus have to update
+    # `by` as well...
+    by <- by[lengths(lapply(attributes(x)$datagrid[by], unique)) > 1]
+    # set to NULL, if all by-values have been removed here
+    if (!length(by)) {
+      by <- NULL
+    }
+
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
       # we now have a data frame with each comparison-pairs as single column.
