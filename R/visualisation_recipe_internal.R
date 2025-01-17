@@ -323,7 +323,7 @@
     out$aes$alpha <- NULL
   }
 
-  # set default alpha, it not mapped by aes
+  # set default alpha, if not mapped by aes
   if (is.null(aes$alpha)) {
     out$alpha <- 1 / 3
   } else {
