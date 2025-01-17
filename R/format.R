@@ -118,7 +118,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # column contains information about the type of slope (dx/dy etc.). we want
   # to remove this here, but add information as attribute.
   if ("contrast" %in% colnames(x) && all(x$contrast %in% .marginaleffects_slopes())) {
-    remove_columns <- c("Comparison", remove_columns)
+    remove_columns <- c("Comparison", "contrast", remove_columns)
     attr(x, "slope") <- unique(x$contrast)
   }
   # reshape and format columns

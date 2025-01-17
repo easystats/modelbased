@@ -35,7 +35,7 @@ withr::with_options(
 
     out <- estimate_means(m, "e42dep", test = "ps", centrality = "MAP")
     expect_named(out, c("e42dep", "MAP", "CI_low", "CI_high", "ps"))
-    expect_equal(out$Median, c(91.45967, 83.39408, 71.70011, 34.34934), tolerance = 1e-4)
+    expect_equal(out$MAP, c(91.45967, 83.39408, 71.70011, 34.34934), tolerance = 1e-4)
 
 
     # two categorical -------------------------------------------------------------
@@ -125,7 +125,7 @@ withr::with_options(
 
     out <- estimate_slopes(m, "e42dep", test = "ps", centrality = "MAP")
     expect_named(out, c("contrast", "MAP", "CI_low", "CI_high", "ps"))
-    expect_equal(out$Median, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
+    expect_equal(out$MAP, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
 
 
     # two categorical -------------------------------------------------------------
