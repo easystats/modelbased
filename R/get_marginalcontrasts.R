@@ -102,6 +102,7 @@ get_marginalcontrasts <- function(model,
 
 .is_custom_comparison <- function(comparison) {
   !is.null(comparison) &&
+    length(comparison) == 1 &&
     is.character(comparison) &&
     grepl("=", comparison, fixed = TRUE) &&
     grepl("\\bb\\d+\\b", comparison)
