@@ -4,6 +4,7 @@ skip_if_not_installed("marginaleffects")
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
+  data(iris)
 
   # One factor
   dat <<- iris
@@ -147,6 +148,7 @@ test_that("estimate_contrasts - Bayesian", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
   skip_if_not_installed("coda")
+  data(iris)
 
   dat <- iris
   dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
@@ -227,6 +229,7 @@ test_that("estimate_contrasts - Bayesian", {
 
 
 test_that("estimate_contrasts - p.adjust", {
+  data(iris)
   model <- lm(Petal.Width ~ Species, data = iris)
 
   p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "emmeans"))
@@ -243,6 +246,7 @@ test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("pbkrtest")
   skip_if_not_installed("lmerTest")
+  data(iris)
 
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")

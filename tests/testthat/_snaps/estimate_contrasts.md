@@ -76,7 +76,7 @@
 ---
 
     Code
-      estimate_contrasts(model)
+      estimate_contrasts(model, backend = "emmeans")
     Message
       No variable was specified for contrast estimation. Selecting `contrast =
         "Species"`.
