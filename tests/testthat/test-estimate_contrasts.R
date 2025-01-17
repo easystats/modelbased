@@ -277,6 +277,7 @@ test_that("estimate_contrasts - marginaleffects", {
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
   out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
   expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
 })
 
 

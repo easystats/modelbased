@@ -59,19 +59,19 @@
     Output
       Marginal Contrasts Analysis
       
-      Parameter       | Difference |   SE |          95% CI | t(113) |     p
-      ----------------------------------------------------------------------
-      (b2-b1)=(b4-b3) |      -7.71 | 2.82 | [-13.30, -2.12] |  -2.73 | 0.007
+      Parameter       | Difference |   SE |        95% CI | t(113) |     p
+      --------------------------------------------------------------------
+      (b2-b1)=(b4-b3) |       5.78 | 2.82 | [0.20, 11.37] |   2.05 | 0.043
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-values are uncorrected.
       Parameters:
-      b2 = time [noon], coffee [coffee], sex [male]
-      b1 = time [morning], coffee [coffee], sex [male]
-      b4 = time [morning], coffee [control], sex [male]
-      b3 = time [afternoon], coffee [coffee], sex [male]
+      b2 = time [noon], coffee [coffee]
+      b1 = time [morning], coffee [coffee]
+      b4 = time [morning], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
 
 ---
 

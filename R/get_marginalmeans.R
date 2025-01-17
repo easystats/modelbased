@@ -124,6 +124,9 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
   # for custom hypothesis, like "b2=b5" or "(b2-b1)=(b4-b3)", we need to renumber
   # the b-values internally, because we have a different sorting in our output
   # compared to what "avg_predictions()" returns... so let's check if we have to
@@ -154,6 +157,13 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # fix term label for custom hypothesis
+  if (.is_custom_comparison(comparison)) {
+    means$term <- gsub(" ", "", comparison, fixed = TRUE)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
