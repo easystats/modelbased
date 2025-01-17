@@ -315,10 +315,10 @@
   # likes slopes, have mapped these aes to other columns that are not part
   # of the raw data
   if (!is.null(aes$color) && aes$color %in% colnames(rawdata)) {
-    out$aes$color = aes$color
+    out$aes$color <- aes$color
   }
   if (!is.null(aes$alpha) && aes$alpha %in% colnames(rawdata)) {
-    out$aes$alpha = aes$alpha
+    out$aes$alpha <- aes$alpha
   }
 
   # set default alpha, it not mapped by aes
