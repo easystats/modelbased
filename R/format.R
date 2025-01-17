@@ -143,6 +143,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
+  dgrid <- attributes(x)$datagrid
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
@@ -184,12 +185,20 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     # of the focal terms only has one unique value in the data grid. Thus,
     # we need to exclude all those focal terms that only have one unique value
     # in the data grid now. Fingers crossed that it works...
-    focal_terms <- focal_terms[lengths(lapply(attributes(x)$datagrid[focal_terms], unique)) > 1]
+    focal_terms <- focal_terms[lengths(lapply(dgrid[focal_terms], unique)) > 1]
+
     # in the second example, `contrast = c("vs", "am"), by = "gear='5'"`, the
     # `by` column is the one with one unique value only, we thus have to update
-    # `by` as well, and also `contrast`...
-    by <- by[lengths(lapply(attributes(x)$datagrid[by], unique)) > 1]
-    contrast <- contrast[lengths(lapply(attributes(x)$datagrid[contrast], unique)) > 1]
+    # `by` as well, and also `contrast` (the latter not(!) for numerics)...
+    by <- by[lengths(lapply(dgrid[by], unique)) > 1]
+
+        # for contrasts, we also filter variables with one unique value, but we
+    # keep numeric variables. When these are hold constant in the data grid,
+    # they are set to their mean value - meaning, they only have one unique
+    # value in the data grid, anyway. so we need to keep them
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid, is.numeric, logical(1)) # nolint
+    contrast <- contrast[keep_contrasts]
+
     # set to NULL, if all by-values have been removed here
     if (!length(by)) by <- NULL
 
