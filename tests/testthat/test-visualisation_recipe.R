@@ -54,22 +54,22 @@ test_that("visualization_recipe", {
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
   vr <- visualisation_recipe(x)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
-  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = 1, alpha = NULL))
+  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
     vr$l3$aes,
     list(
       y = "Rate", x = "fa", ymin = "CI_low", ymax = "CI_high",
-      color = NULL, group = 1, alpha = NULL
+      color = NULL, group = ".group", alpha = NULL
     )
   )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
-  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = 1, alpha = NULL))
+  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
     vr$l3$aes,
     list(
       y = "Rate", x = "fa", ymin = "CI_low", ymax = "CI_high",
-      color = NULL, group = 1, alpha = NULL
+      color = NULL, group = ".group", alpha = NULL
     )
   )
 
@@ -152,6 +152,6 @@ test_that("visualization_recipe", {
   aes <- modelbased:::.find_aes(x)$aes
   expect_identical(aes$y, "Slope")
   expect_identical(aes$x, "Sepal.Width")
-  expect_null(aes$color)
+  expect_identical(aes$color, "Comparison")
   # plot(modelbased:::.visualization_recipe(x))
 })

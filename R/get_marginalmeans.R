@@ -184,7 +184,8 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range", "coef_name"
+    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range",
+    "coef_name", "slope"
   )
 }
 

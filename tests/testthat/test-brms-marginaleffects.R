@@ -1,3 +1,5 @@
+## TODO: skip for marginaleffects 0.24.0?
+
 skip_on_cran()
 skip_if_offline()
 skip_if_not_installed("curl")
@@ -11,8 +13,8 @@ skip_if_not_installed("withr")
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_means - brms", {
-    m <- insight::download_model("brms_linear_1")
-    skip_if(!is.null(m))
+    m <- suppressWarnings(insight::download_model("brms_linear_1"))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------
@@ -33,7 +35,7 @@ withr::with_options(
 
     out <- estimate_means(m, "e42dep", test = "ps", centrality = "MAP")
     expect_named(out, c("e42dep", "MAP", "CI_low", "CI_high", "ps"))
-    expect_equal(out$Median, c(91.45967, 83.39408, 71.70011, 34.34934), tolerance = 1e-4)
+    expect_equal(out$MAP, c(91.45967, 83.39408, 71.70011, 34.34934), tolerance = 1e-4)
 
 
     # two categorical -------------------------------------------------------------
@@ -98,8 +100,8 @@ withr::with_options(
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_slopes - brms", {
-    m <- insight::download_model("brms_linear_1")
-    skip_if(!is.null(m))
+    m <- suppressWarnings(insight::download_model("brms_linear_1"))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------
@@ -123,7 +125,7 @@ withr::with_options(
 
     out <- estimate_slopes(m, "e42dep", test = "ps", centrality = "MAP")
     expect_named(out, c("contrast", "MAP", "CI_low", "CI_high", "ps"))
-    expect_equal(out$Median, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
+    expect_equal(out$MAP, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
 
 
     # two categorical -------------------------------------------------------------
@@ -176,7 +178,7 @@ withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_contrasts - brms, logistic", {
     m <- insight::download_model("brms_logistic_1")
-    skip_if(!is.null(m))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------

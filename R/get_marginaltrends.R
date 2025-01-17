@@ -122,3 +122,9 @@ get_marginaltrends <- function(model,
 
   trend
 }
+
+
+#' @keywords internal
+.marginaleffects_slopes <- function() {
+  c("dY/dX", "eY/eX", "eY/dX", "dY/eX")
+}

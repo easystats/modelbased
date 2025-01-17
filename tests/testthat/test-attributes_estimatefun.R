@@ -1,7 +1,10 @@
+## TODO: skip for marginaleffects 0.24.0?
+
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 
 test_that("attributes_means", {
+  data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
   estim <- suppressMessages(estimate_means(model, "Species", backend = "emmeans"))
@@ -26,6 +29,7 @@ test_that("attributes_means", {
 
 
 test_that("attributes_means, contrasts", {
+  data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
   estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "emmeans"))
@@ -51,6 +55,7 @@ test_that("attributes_means, contrasts", {
 
 
 test_that("attributes_means, slopes", {
+  data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
   estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "emmeans"))
@@ -66,7 +71,7 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "class", "row.names", "trend", "comparison", "coef_name",
-      "table_title", "table_footer", "model", "response", "ci"
+      "slope", "table_title", "table_footer", "model", "response", "ci"
     )
   )
 })

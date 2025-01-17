@@ -340,6 +340,18 @@ test_that("plots, estimate_slope", {
     "plot-slopes-4",
     plot(slopes)
   )
+
+  data(iris)
+  x <- iris
+  x$fac <- rep_len(c("A", "B"), 150)
+  x$fac2 <- rep_len(c("X", "X", "X", "Y", "Y", "Y"), 150)
+  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width * fac2, data = x)
+  slopes <- estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-5",
+    plot(slopes)
+  )
 })
 
 

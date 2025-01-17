@@ -114,6 +114,13 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   if ("term" %in% colnames(x) && insight::n_unique(x$term) == 1) {
     remove_columns <- c("Parameter", remove_columns)
   }
+  # there are some exceptions for `estimate_slope()`, when the `Comparison`
+  # column contains information about the type of slope (dx/dy etc.). we want
+  # to remove this here, but add information as attribute.
+  if ("contrast" %in% colnames(x) && all(x$contrast %in% .marginaleffects_slopes())) {
+    remove_columns <- c("Comparison", "contrast", remove_columns)
+    attr(x, "slope") <- unique(x$contrast)
+  }
   # reshape and format columns
   params <- .standardize_marginaleffects_columns(
     x,
@@ -136,6 +143,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
+  dgrid <- attributes(x)$datagrid
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
@@ -163,7 +171,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
-    # are contrastet. We want to have the contrasted levels per predictor in
+    # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
 
     # split parameter column into comparison groups.
@@ -171,6 +179,38 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       rbind,
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
+
+    # When we filter contrasts, e.g. `contrast = c("vs", "am='1'")` or
+    # `contrast = c("vs", "am"), by = "gear='5'"`, we get no contrasts if one
+    # of the focal terms only has one unique value in the data grid. Thus,
+    # we need to exclude all those focal terms that only have one unique value
+    # in the data grid now. Fingers crossed that it works...
+    focal_terms <- focal_terms[lengths(lapply(dgrid[focal_terms], unique)) > 1]
+
+    # in the second example, `contrast = c("vs", "am"), by = "gear='5'"`, the
+    # `by` column is the one with one unique value only, we thus have to update
+    # `by` as well, and also `contrast` (the latter not(!) for numerics)...
+    by <- by[lengths(lapply(dgrid[by], unique)) > 1]
+
+    # for contrasts, we also filter variables with one unique value, but we
+    # keep numeric variables. When these are hold constant in the data grid,
+    # they are set to their mean value - meaning, they only have one unique
+    # value in the data grid, anyway. so we need to keep them
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+    contrast <- contrast[keep_contrasts]
+
+    # set to NULL, if all by-values have been removed here
+    if (!length(by)) by <- NULL
+
+    # if we have no contrasts left, e.g. due to `contrast = "time = factor(2)"`,
+    # we error here - we have no contrasts to show
+    if (!length(contrast)) {
+      insight::format_error("No contrasts to show. Please adjust `contrast`.")
+    }
+
+    # contrasts can't be longer than focal terms - make sure we have not
+    # removed too much (and that we now have captured all exceptions...)
+    if (length(contrast) > length(focal_terms)) focal_terms <- contrast
 
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
