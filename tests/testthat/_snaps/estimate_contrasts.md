@@ -38,12 +38,12 @@
     Output
       Marginal Contrasts Analysis
       
-      coffee  |              hypothesis | Difference |   SE |       95% CI | t(113) |      p
+      hypothesis              |  coffee | Difference |   SE |       95% CI | t(113) |      p
       --------------------------------------------------------------------------------------
-      coffee  |      (noon) / (morning) |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
-      coffee  | (afternoon) / (morning) |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
-      control |      (noon) / (morning) |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
-      control | (afternoon) / (morning) |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      (noon) / (morning)      |  coffee |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
+      (afternoon) / (morning) |  coffee |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
+      (noon) / (morning)      | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      (afternoon) / (morning) | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
@@ -194,7 +194,9 @@
       Slope |   SE |         95% CI |      t |      p
       -----------------------------------------------
       -0.05 | 0.00 | [-0.06, -0.05] | -12.77 | < .001
+      
       Marginal effects estimated for barthtot
+      Type of slope was dY/dX
 
 ---
 
@@ -209,7 +211,9 @@
       low      | -0.06 | 0.01 | [-0.08, -0.05] | -7.08 | < .001
       mid      | -0.05 | 0.01 | [-0.06, -0.04] | -9.82 | < .001
       high     | -0.05 | 0.01 | [-0.07, -0.03] | -4.51 | < .001
+      
       Marginal effects estimated for barthtot
+      Type of slope was dY/dX
 
 ---
 
