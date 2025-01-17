@@ -304,7 +304,9 @@
     data = rawdata,
     aes = list(
       y = y,
-      x = aes$x
+      x = aes$x,
+      color = aes$color,
+      alpha = aes$alpha
     ),
     height = 0,
     shape = shape,
@@ -313,12 +315,12 @@
 
   # check if we have matching columns in the raw data - some functions,
   # likes slopes, have mapped these aes to other columns that are not part
-  # of the raw data
-  if (!is.null(aes$color) && aes$color %in% colnames(rawdata)) {
-    out$aes$color <- aes$color
+  # of the raw data - we set them to NULL
+  if (!is.null(aes$color) && !aes$color %in% colnames(rawdata)) {
+    out$aes$color <- NULL
   }
-  if (!is.null(aes$alpha) && aes$alpha %in% colnames(rawdata)) {
-    out$aes$alpha <- aes$alpha
+  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
+    out$aes$alpha <- NULL
   }
 
   # set default alpha, it not mapped by aes
