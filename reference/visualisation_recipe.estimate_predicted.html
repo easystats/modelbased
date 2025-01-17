@@ -11,7 +11,7 @@ below for more information and examples on how to create and customize plots."><
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.32</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.33</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -81,7 +81,7 @@ below for more information and examples on how to create and customize plots.</p
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'estimate_predicted'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
-<span>  show_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  show_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  point <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -167,19 +167,6 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-in"><span><span class="va">layers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: point</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [32 x 2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'mpg'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'wt'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> height = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> shape = 16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> stroke = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: ribbon</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
@@ -191,7 +178,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 6]</span>
@@ -201,7 +188,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: labs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Predicted value of mpg'</span>
@@ -265,19 +252,6 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-in"><span><span class="va">layers</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: jitter</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [150 x 2]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Sepal.Width'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> height = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> shape = 16</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> stroke = 0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
@@ -286,7 +260,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 6]</span>
@@ -298,7 +272,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 4</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: labs</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> y = 'Mean of Sepal.Width'</span>
