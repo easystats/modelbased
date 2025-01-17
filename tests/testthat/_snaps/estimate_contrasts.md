@@ -38,12 +38,12 @@
     Output
       Marginal Contrasts Analysis
       
-      hypothesis              |  coffee | Difference |   SE |       95% CI | t(113) |      p
+      coffee  |              hypothesis | Difference |   SE |       95% CI | t(113) |      p
       --------------------------------------------------------------------------------------
-      (noon) / (morning)      |  coffee |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
-      (afternoon) / (morning) |  coffee |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
-      (noon) / (morning)      | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
-      (afternoon) / (morning) | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      coffee  |      (noon) / (morning) |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
+      coffee  | (afternoon) / (morning) |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
+      control |      (noon) / (morning) |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      control | (afternoon) / (morning) |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
@@ -92,6 +92,26 @@
       Parameters:
       b5 = time [noon], coffee [control]
       b3 = time [afternoon], coffee [coffee]
+
+---
+
+    Code
+      estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0",
+      backend = "marginaleffects")
+    Output
+      Marginal Contrasts Analysis
+      
+      Parameter | Difference |   SE |        95% CI | t(800) |     p
+      --------------------------------------------------------------
+      b6-b3=0   |      -0.34 | 0.56 | [-1.44, 0.77] |  -0.60 | 0.552
+      
+      Variable predicted: neg_c_7
+      Predictors contrasted: e42dep, c172code
+      Predictors averaged: c12hour, barthtot, c161sex
+      p-value adjustment method: Holm (1979)
+      Parameters:
+      b6 = e42dep [slightly dependent], c172code [intermediate level of education]
+      b3 = e42dep [moderately dependent], c172code [low level of education]
 
 ---
 

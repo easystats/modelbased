@@ -278,6 +278,12 @@ test_that("estimate_contrasts - marginaleffects", {
   out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
   expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  # validated against ggeffects::test_predictions()
+  data(efc, package = "ggeffects")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
+  expect_snapshot(estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects"))
 })
 
 
