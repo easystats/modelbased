@@ -208,6 +208,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       insight::format_error("No contrasts to show. Please adjust `contrast`.")
     }
 
+    # contrasts can't be longer than focal terms - make sure we have not
+    # removed too much (and that we now have captured all exceptions...)
+    if (length(contrasts) > length(focal_terms)) focal_terms <- contrasts
+
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
       # we now have a data frame with each comparison-pairs as single column.
