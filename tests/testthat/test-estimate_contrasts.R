@@ -253,12 +253,19 @@ test_that("estimate_contrasts - dfs", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", backend = "emmeans"))
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", p_adjust = "holm", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", p_adjust = "holm", backend = "emmeans"))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
   expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
   expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
+
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", backend = "emmeans"))
+
+  expect_true(all(estim1$CI_low != estim2$CI_low))
+  expect_equal(estim1$CI_low, c(-0.22624, -0.33383, -1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(-0.29193, -0.4364, -1.04019), tolerance = 1e-4)
 })
 
 
@@ -325,6 +332,8 @@ test_that("estimate_contrasts - marginaleffects", {
   # test p-adjust
   expect_snapshot(estimate_contrasts(model, backend = "emmeans"))
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans", p_adjust = "holm"))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects", p_adjust = "holm"))
 })
 
 
