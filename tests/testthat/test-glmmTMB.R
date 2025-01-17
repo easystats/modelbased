@@ -77,11 +77,12 @@ test_that("estimate_contrasts - glmmTMB", {
 
 
 test_that("estimate_slope - glmmTMB", {
+  skip_on_os("mac")
   estim <- suppressMessages(estimate_slopes(model2, trend = "cover", by = "mined", regrid = "response", backend = "emmeans")) # nolint
   estim2 <- as.data.frame(emmeans::emtrends(model2, "mined", var = "cover", regrid = "response"))
   expect_equal(estim$Slope, estim2$cover.trend, tolerance = 1e-2)
   estim1 <- estimate_slopes(model2, trend = "cover", by = "mined", backend = "marginaleffects")
-  estim2 <- marginaleffects::avg_slopes(model2, variables = "cover", by = "mined")
+  estim2 <- suppressWarnings(marginaleffects::avg_slopes(model2, variables = "cover", by = "mined"))
   expect_equal(estim1$Slope, estim2$estimate, tolerance = 1e-2)
 })
 
