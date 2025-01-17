@@ -123,6 +123,15 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # for custom hypothesis, like "b2=b5" or "(b2-b1)=(b4-b3)", we need to renumber
+  # the b-values internally, because we have a different sorting in our output
+  # compared to what "avg_predictions()" returns... so let's check if we have to
+  # take care of this
+  comparison <- dots$hypothesis
+  if (!is.null(comparison)) {
+    dots$hypothesis <- .reorder_custom_hypothesis(comparison, datagrid)
+  }
+
   # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 

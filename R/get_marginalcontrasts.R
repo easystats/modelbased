@@ -108,6 +108,33 @@ get_marginalcontrasts <- function(model,
 }
 
 
+.extract_custom_comparison <- function(comparison) {
+  # find all "b" strings
+  matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
+  match_lengths <- attr(matches, "match.length")
+
+  # extract all "b" strings, so we have a vector of all "b" used in the comparison
+  unlist(lapply(seq_along(matches), function(i) {
+    substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
+  }), use.names = FALSE)
+}
+
+
+.reorder_custom_hypothesis <- function(comparison, datagrid) {
+  # this is the row-order we use in modelbased
+  datagrid$.rowid <- 1:nrow(datagrid)
+  # this is the row-order in marginaleffects
+  datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+  # we need to extract all b's
+  b <- .extract_custom_comparison(comparison)
+  new_b <- paste0("b", datagrid$.rowid[as.numeric(gsub("b", "", b, fixed = TRUE))])
+
+  ## TODO: we need to replace all occurences of "b" in comparuson with new_b
+
+  comparison
+}
+
+
 # p-value adjustment --------------------------------------
 
 .p_adjust <- function(model, params, p_adjust, verbose = TRUE, ...) {

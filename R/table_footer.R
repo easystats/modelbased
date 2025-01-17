@@ -90,14 +90,8 @@
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
   if (.is_custom_comparison(comparison)) {
-    # find all "b" strings
-    matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
-    match_lengths <- attr(matches, "match.length")
-
     # extract all "b" strings, so we have a vector of all "b" used in the comparison
-    parameter_names <- unlist(lapply(seq_along(matches), function(i) {
-      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
-    }), use.names = FALSE)
+    parameter_names <- .extract_custom_comparison(comparison)
 
     # datagrid contains all parameters, so we just need to find out the rows
     # and combine column names with row values
