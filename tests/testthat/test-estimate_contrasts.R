@@ -137,7 +137,7 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(counts ~ treatment, data = dat, family = poisson())
 
-  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
 })
 
@@ -152,34 +152,57 @@ test_that("estimate_contrasts - Bayesian", {
   dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
   dat <<- dat
 
+  set.seed(123)
   model <- suppressWarnings(
     rstanarm::stan_glm(
       Sepal.Width ~ Species * Petal.Length_factor,
       data = dat,
       refresh = 0,
       iter = 200,
-      chains = 2
+      chains = 2,
+      seed = 123
     )
   )
-  estim <- suppressMessages(estimate_contrasts(model, contrast = "all"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(15L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'")))
-  expect_identical(dim(estim), c(3L, 8L))
+  estim <- estimate_contrasts(model, contrast = c("Species", "Petal.Length_factor"), backend = "marginaleffects")
+  expect_identical(dim(estim), c(15L, 10L))
 
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'"), backend = "emmeans"))
+  expect_identical(dim(estim), c(3L, 8L))
+  expect_named(
+    estim,
+    c(
+      "Species", "Petal.Length_factor", "ROPE_CI", "Median", "CI_low",
+      "CI_high", "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+    )
+  )
+  expect_equal(
+    estim$Median,
+    c(
+      0.05025, 0.89132, 0.52141, 0.27182, 0.45085, 0.83305, 0.47175,
+      -0.00022, 0.45184, -0.36936, -0.60636, -0.43568, -0.20898, -0.068,
+      0.18029
+    ),
+    tolerance = 1e-4
+  )
+
+  set.seed(123)
   model <- suppressWarnings(
     rstanarm::stan_glm(
       Sepal.Width ~ Species * Petal.Width,
       data = iris,
       refresh = 0,
       iter = 200,
-      chains = 2
+      chains = 2,
+      seed = 123
     )
   )
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0")))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 8L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4, backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 8L))
 
   # GLM
@@ -191,14 +214,14 @@ test_that("estimate_contrasts - Bayesian", {
     prior = rstanarm::normal(scale = 0.5)
   ))
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, predict = "link"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "link", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
 
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf", backend = "emmeans")))
   expect_identical(dim(estim), c(3L, 6L))
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf", backend = "emmeans")))
   expect_identical(dim(estim), c(3L, 6L))
 })
 
@@ -206,10 +229,13 @@ test_that("estimate_contrasts - Bayesian", {
 test_that("estimate_contrasts - p.adjust", {
   model <- lm(Petal.Width ~ Species, data = iris)
 
-  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none"))
-  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey"))
+  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "emmeans"))
+  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "emmeans"))
+  expect_true(any(p_none$p != p_tuk$p))
 
-  expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
+  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "marginaleffects"))
+  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "marginaleffects"))
+  expect_true(any(p_none$p != p_tuk$p))
 })
 
 
