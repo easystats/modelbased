@@ -253,8 +253,8 @@ test_that("estimate_contrasts - dfs", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite"))
-  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", backend = "emmeans"))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
   expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
@@ -325,7 +325,7 @@ test_that("estimate_contrasts - marginaleffects", {
 test_that("estimate_contrasts - on-the-fly factors", {
   data(mtcars)
   model <- lm(mpg ~ as.factor(cyl) + wt * hp, mtcars)
-  out1 <- estimate_contrasts(model)
+  out1 <- estimate_contrasts(model, backend = "emmeans")
   out2 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out1), 3L)
@@ -335,7 +335,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
   model <- lm(mpg ~ cyl + wt * hp, mtcars2)
-  out3 <- estimate_contrasts(model)
+  out3 <- estimate_contrasts(model, backend = "emmeans")
   out4 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out3), 3L)
@@ -366,13 +366,13 @@ test_that("estimate_contrasts - different options for comparison", {
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
 
   # emmeans
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
   )
   expect_equal(out$Difference, c(0.2, 0.55, -0.6, -0.15), tolerance = 1e-3)
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")

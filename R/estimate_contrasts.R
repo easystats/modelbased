@@ -7,8 +7,8 @@
 #' @param contrast A character vector indicating the name of the variable(s)
 #' for which to compute the contrasts.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
+#' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"holm"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
 #' @param comparison Specify the type of contrasts or tests that should be
@@ -103,7 +103,7 @@ estimate_contrasts <- function(model,
                                by = NULL,
                                predict = NULL,
                                ci = 0.95,
-                               p_adjust = "holm",
+                               p_adjust = "none",
                                comparison = "pairwise",
                                marginalize = "average",
                                backend = getOption("modelbased_backend", "emmeans"),
