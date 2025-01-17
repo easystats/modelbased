@@ -128,10 +128,11 @@ get_marginalcontrasts <- function(model,
     datagrid$.rowid <- 1:nrow(datagrid)
     # this is the row-order in marginaleffects
     datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
-    # we need to extract all b's
+    # we need to extract all b's and the former parameter numbers
     b <- .extract_custom_comparison(comparison)
+    old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
     # these are the new numbers of the b-values
-    new_b_numbers <- datagrid$.rowid[as.numeric(gsub("b", "", b, fixed = TRUE))]
+    new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
     new_b <- paste0("b", new_b_numbers)
     # we need to replace all occurences of "b" in comparison with "new_b".
     # however, to avoid overwriting already replaced values with "gsub()", we

@@ -265,11 +265,18 @@ test_that("estimate_contrasts - dfs", {
 test_that("estimate_contrasts - marginaleffects", {
   ## TODO: skip for marginaleffects 0.24.0?
   skip_if_not_installed("Formula")
+  skip_if_not_installed("ggeffects")
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf)) # nolint
+  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
+  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "(b2-b1)=(b4-b3)")
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
+  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
 })
 
 

@@ -30,6 +30,7 @@ get_marginalmeans <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
+  comparison <- dots$hypothesis
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -127,9 +128,13 @@ get_marginalmeans <- function(model,
   # the b-values internally, because we have a different sorting in our output
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
-  comparison <- dots$hypothesis
   if (!is.null(comparison)) {
-    dots$hypothesis <- .reorder_custom_hypothesis(comparison, datagrid)
+    # create a data frame with the same sorting as the data grid, but only
+    # for the focal terms
+    custom_grid <- data.frame(expand.grid(
+      lapply(datagrid[datagrid_info$at_specs$varname], unique)
+    ))
+    dots$hypothesis <- .reorder_custom_hypothesis(comparison, custom_grid)
   }
 
   # cleanup
