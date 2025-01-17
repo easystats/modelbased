@@ -162,8 +162,14 @@ plot(contrasts, estimate_means(model, by = "Species")) +
 
 ```{r}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 3)
+difference <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Length",
+  length = 3
+)
+# no line break for table
+print(difference, table_width = Inf)
 ```
 
 ```{r}

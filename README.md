@@ -208,33 +208,27 @@ contrasts
 
 ``` r
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 3)
+difference <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Length",
+  length = 3
+)
+# no line break for table
+print(difference, table_width = Inf)
 ## Marginal Contrasts Analysis
 ## 
-## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE
-## --------------------------------------------------------------------------
-## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34
-## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40
-## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49
-## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65
-## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66
-## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15
-## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44
-## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42
-## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28
-## 
-## Level1     | t(144) |      p
-## ----------------------------
-## setosa     |   4.97 | < .001
-## setosa     |   3.38 | 0.002 
-## versicolor |  -0.73 | 0.468 
-## setosa     |   2.67 | 0.023 
-## setosa     |   2.70 | 0.023 
-## versicolor |   0.37 | 0.710 
-## setosa     |   1.24 | 0.304 
-## setosa     |   1.58 | 0.304 
-## versicolor |   1.65 | 0.304 
+## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p
+## --------------------------------------------------------------------------------------------
+## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34 |   4.97 | < .001
+## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40 |   3.38 | 0.002 
+## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49 |  -0.73 | 0.468 
+## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65 |   2.67 | 0.023 
+## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66 |   2.70 | 0.023 
+## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.710 
+## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44 |   1.24 | 0.304 
+## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42 |   1.58 | 0.304 
+## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.304 
 ## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species

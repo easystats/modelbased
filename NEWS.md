@@ -14,6 +14,8 @@
 - All `model_*()` alias names have been removed. Use the related `get_*()`
   functions instead.
 
+- The `show_data` argument in `plot()` defaults to `FALSE`.
+
 ## Major Changes
 
 - All `estimate_*()` functions get a `predict` argument, which can be used

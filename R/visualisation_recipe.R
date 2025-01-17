@@ -108,7 +108,7 @@
 #' plot(x)
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
-                                                    show_data = TRUE,
+                                                    show_data = FALSE,
                                                     point = NULL,
                                                     line = NULL,
                                                     pointrange = NULL,
