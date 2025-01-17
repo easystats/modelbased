@@ -59,19 +59,39 @@
     Output
       Marginal Contrasts Analysis
       
-      Parameter       | Difference |   SE |          95% CI | t(113) |     p
-      ----------------------------------------------------------------------
-      (b2-b1)=(b4-b3) |      -7.71 | 2.82 | [-13.30, -2.12] |  -2.73 | 0.007
+      Parameter       | Difference |   SE |        95% CI | t(113) |     p
+      --------------------------------------------------------------------
+      (b2-b1)=(b4-b3) |       5.78 | 2.82 | [0.20, 11.37] |   2.05 | 0.043
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
       Predictors averaged: sex
       p-values are uncorrected.
       Parameters:
-      b2 = time [noon], coffee [coffee], sex [male]
-      b1 = time [morning], coffee [coffee], sex [male]
-      b4 = time [morning], coffee [control], sex [male]
-      b3 = time [afternoon], coffee [coffee], sex [male]
+      b2 = time [noon], coffee [coffee]
+      b1 = time [morning], coffee [coffee]
+      b4 = time [morning], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
+
+---
+
+    Code
+      print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
+      p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Parameter | Difference |   SE |        95% CI | t(113) |     p
+      --------------------------------------------------------------
+      b5=b3     |      -1.93 | 1.99 | [-5.88, 2.02] |  -0.97 | 0.336
+      
+      Variable predicted: alertness
+      Predictors contrasted: time, coffee
+      Predictors averaged: sex
+      p-values are uncorrected.
+      Parameters:
+      b5 = time [noon], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
 
 ---
 

@@ -97,11 +97,11 @@
     # and combine column names with row values
     if (!is.null(datagrid)) {
       # transpose, so we can easier extract information
-      transposed_dg <- t(datagrid)
+      transposed_dg <- t(datagrid[info$focal_terms])
       # interate over all parameters and create labels with proper names
       hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
         rows <- as.numeric(sub(".", "", i))
-        paste0(i, " = ", toString(paste0(colnames(datagrid), " [", transposed_dg[, rows], "]")))
+        paste0(i, " = ", toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]")))
       }), use.names = FALSE)
       # add all names to the footer
       table_footer <- paste0(

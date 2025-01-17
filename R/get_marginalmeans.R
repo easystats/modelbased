@@ -30,6 +30,7 @@ get_marginalmeans <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
+  comparison <- dots$hypothesis
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -123,13 +124,20 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
   # for custom hypothesis, like "b2=b5" or "(b2-b1)=(b4-b3)", we need to renumber
   # the b-values internally, because we have a different sorting in our output
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
-  comparison <- dots$hypothesis
   if (!is.null(comparison)) {
-    dots$hypothesis <- .reorder_custom_hypothesis(comparison, datagrid)
+    # create a data frame with the same sorting as the data grid, but only
+    # for the focal terms
+    custom_grid <- data.frame(expand.grid(
+      lapply(datagrid[datagrid_info$at_specs$varname], unique)
+    ))
+    dots$hypothesis <- .reorder_custom_hypothesis(comparison, custom_grid)
   }
 
   # cleanup
@@ -149,6 +157,13 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # fix term label for custom hypothesis
+  if (.is_custom_comparison(comparison)) {
+    means$term <- gsub(" ", "", comparison, fixed = TRUE)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
