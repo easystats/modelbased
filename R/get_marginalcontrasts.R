@@ -98,6 +98,16 @@ get_marginalcontrasts <- function(model,
 }
 
 
+# check for custom hypothesis  --------------------------------------
+
+.is_custom_comparison <- function(comparison) {
+  !is.null(comparison) &&
+    is.character(comparison) &&
+    grepl("=", comparison, fixed = TRUE) &&
+    grepl("\\bb\\d+\\b", comparison)
+}
+
+
 # p-value adjustment --------------------------------------
 
 .p_adjust <- function(model, params, p_adjust, verbose = TRUE, ...) {

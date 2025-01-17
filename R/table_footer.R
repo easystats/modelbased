@@ -89,7 +89,7 @@
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
-  if (!is.null(comparison) && is.character(comparison) && grepl("=", comparison, fixed = TRUE) && grepl("\\bb\\d+\\b", comparison)) { # nolint
+  if (.is_custom_comparison(comparison)) {
     # find all "b" strings
     matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
     match_lengths <- attr(matches, "match.length")
