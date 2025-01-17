@@ -344,11 +344,11 @@ test_that("get_marginaleffects, value definition in `by`", {
 
   difference <- estimate_contrasts(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
   expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
-  expect_identical(difference$Parameter, "control - treatment")
+  expect_identical(difference$grp, "control - treatment")
 
   difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
   expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
-  expect_identical(difference$Parameter, "control - treatment")
+  expect_identical(difference$grp, "control - treatment")
 
   expect_error(
     estimate_contrasts(model2, "time = factor(2)", by = "grp", backend = "marginaleffects"),
