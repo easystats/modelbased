@@ -262,6 +262,7 @@ test_that("estimate_contrasts - dfs", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
+  ## TODO: skip for marginaleffects 0.24.0?
   skip_if_not_installed("Formula")
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)

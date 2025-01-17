@@ -1,3 +1,5 @@
+## TODO: skip for marginaleffects 0.24.0?
+
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 
