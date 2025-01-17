@@ -278,8 +278,8 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_message(estimate_contrasts(model), regex = "No variable was")
 
   ## emmeans backend works and has proper default
-  out1 <- suppressMessages(estimate_contrasts(model))
-  out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  out1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
+  out2 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "emmeans"))
   pr <- ggeffects::predict_response(model, "Species")
   out3 <- ggeffects::test_predictions(pr)
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
@@ -303,7 +303,7 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
 
   # test p-adjust
-  expect_snapshot(estimate_contrasts(model))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans"))
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
 })
 
@@ -420,6 +420,7 @@ test_that("estimate_contrasts - filtering works", {
 test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("ggeffects")
+  data(iris)
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"), table_width = Inf)) # nolint
