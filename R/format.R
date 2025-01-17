@@ -192,7 +192,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     # `by` as well, and also `contrast` (the latter not(!) for numerics)...
     by <- by[lengths(lapply(dgrid[by], unique)) > 1]
 
-        # for contrasts, we also filter variables with one unique value, but we
+    # for contrasts, we also filter variables with one unique value, but we
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
     # value in the data grid, anyway. so we need to keep them
