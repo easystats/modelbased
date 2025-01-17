@@ -170,7 +170,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
-    # are contrastet. We want to have the contrasted levels per predictor in
+    # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
 
     # split parameter column into comparison groups.
@@ -187,11 +187,16 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     focal_terms <- focal_terms[lengths(lapply(attributes(x)$datagrid[focal_terms], unique)) > 1]
     # in the second example, `contrast = c("vs", "am"), by = "gear='5'"`, the
     # `by` column is the one with one unique value only, we thus have to update
-    # `by` as well...
+    # `by` as well, and also `contrast`...
     by <- by[lengths(lapply(attributes(x)$datagrid[by], unique)) > 1]
+    contrast <- contrast[lengths(lapply(attributes(x)$datagrid[contrast], unique)) > 1]
     # set to NULL, if all by-values have been removed here
-    if (!length(by)) {
-      by <- NULL
+    if (!length(by)) by <- NULL
+
+    # if we have no contrasts left, e.g. due to `contrast = "time = factor(2)"`,
+    # we error here - we have no contrasts to show
+    if (!length(contrast)) {
+      insight::format_error("No contrasts to show. Please adjust `contrast`.")
     }
 
     # for more than one term, we have comma-separated levels.
