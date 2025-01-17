@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.32</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,10 +150,12 @@ for which to compute the contrasts.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).</p></dd>
+<dd><p>The (focal) predictor variable(s) at which to evaluate the desired
+effect / mean / contrasts. Other predictors of the model that are not
+included here will be collapsed and "averaged" over (the effect will be
+estimated across them). <code>by</code> can a character (vector) naming the focal
+predictors (and optionally, representative values or levels), or a list of named
+elements. See details in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>.</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
@@ -218,8 +220,20 @@ within subsets by indicating the grouping variable after a vertical bar
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>
-or functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package.</p></dd>
+<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
+to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
+Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code> or <code>range</code> can be used
+to control the (number of) representative values.</p></li>
+<li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
+means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
+for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
+passed to those functions.</p></li>
+<li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
+Additional arguments can be passed to these functions.</p></li>
+<li><p>Bayesian models: For Bayesian models, parameters are cleaned using
+<code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
+<code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
+</ul></dd>
 
 
 <dt id="arg-trend">trend<a class="anchor" aria-label="anchor" href="#arg-trend"></a></dt>
@@ -590,13 +604,8 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa         5.88     0.1969 29.9   &lt;0.001 210.3  5.49   6.27 146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor     5.82     0.0723 80.5   &lt;0.001 405.6  5.68   5.96 146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica      5.83     0.1741 33.5   &lt;0.001 231.4  5.49   6.17 146</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Width</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          1.2</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, Species, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df, Petal.Width, Sepal.Length </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Overall mean (close to 'mean(iris$Sepal.Length)')</span></span></span>
@@ -606,7 +615,6 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>      5.84     0.0393 149   &lt;0.001 533.4  5.77   5.92 146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># One can estimate marginal means at several values of a 'modulate' variable</span></span></span>
@@ -618,7 +626,6 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>          2.5     7.04     0.2552  27.6   &lt;0.001 196.1  6.53   7.54 146</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: Petal.Width, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Interactions</span></span></span>
@@ -631,13 +638,8 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa         4.32     0.5990  7.21   &lt;0.001  35.0  3.13   5.50 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor     2.58     0.0658 39.24   &lt;0.001 259.3  2.45   2.71 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica      2.55     0.1535 16.63   &lt;0.001 115.0  2.25   2.86 144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          3.76</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, Species, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df, Petal.Length, Sepal.Width </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">get_marginalmeans</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -657,7 +659,6 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>  144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, Species, Petal.Length, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df, Sepal.Width </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">get_marginalmeans</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length = c(1, 3, 5)"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -671,74 +672,56 @@ p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmea
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica      1.91     0.3753  5.08   &lt;0.001  19.7 1.165   2.65 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica      2.38     0.2137 11.12   &lt;0.001  67.8 1.954   2.80 144</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  virginica      2.84     0.0636 44.74   &lt;0.001 284.5 2.719   2.97 144</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>             5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: rowid, Species, Petal.Length, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high, df, Sepal.Width </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_marginaltrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Term    Species Estimate Std. Error    z Pr(&gt;|z|)    S   2.5 % 97.5 %</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length setosa        0.388     0.2602 1.49  0.13606  2.9 -0.1221  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica     0.234     0.0819 2.86  0.00421  7.9  0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Species Estimate Std. Error    z Pr(&gt;|z|)    S   2.5 % 97.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa        0.388     0.2602 1.49  0.13606  2.9 -0.1221  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica     0.234     0.0819 2.86  0.00421  7.9  0.0739  0.395</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Term: Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: term, Species, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Comparison: dY/dX</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">get_marginaltrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Term Petal.Length Estimate Std. Error    z Pr(&gt;|z|)   S  2.5 % 97.5 %</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         1.00    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         1.66    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         2.31    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         2.97    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         3.62    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         4.28    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         4.93    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         5.59    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         6.24    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length         6.90    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length Estimate Std. Error    z Pr(&gt;|z|)   S  2.5 % 97.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1.00    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          1.66    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          2.31    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          2.97    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          3.62    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          4.28    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          4.93    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          5.59    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          6.24    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>          6.90    0.388       0.26 1.49    0.136 2.9 -0.122  0.898</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Term: Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: term, Petal.Length, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Comparison: dY/dX</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">get_marginaltrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          Term    Species Petal.Length Estimate Std. Error    z Pr(&gt;|z|)    S</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length setosa             1.00    0.388     0.2602 1.49  0.13601  2.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length setosa             1.66    0.388     0.2601 1.49  0.13596  2.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         3.62    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         4.28    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length versicolor         4.93    0.374     0.0963 3.89  &lt; 0.001 13.3</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          4.93    0.234     0.0819 2.86  0.00420  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          5.59    0.234     0.0819 2.86  0.00421  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          6.24    0.234     0.0818 2.86  0.00418  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length virginica          6.90    0.234     0.0819 2.86  0.00420  7.9</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    2.5 % 97.5 %</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1221  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  -0.1220  0.898</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.1856  0.563</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0740  0.395</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     Species Petal.Length Estimate Std. Error    z Pr(&gt;|z|)    S   2.5 % 97.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             1.00    0.388     0.2602 1.49  0.13601  2.9 -0.1221  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa             1.66    0.388     0.2601 1.49  0.13596  2.9 -0.1220  0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         3.62    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         4.28    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor         4.93    0.374     0.0963 3.89  &lt; 0.001 13.3  0.1856  0.563</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          4.93    0.234     0.0819 2.86  0.00420  7.9  0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          5.59    0.234     0.0819 2.86  0.00421  7.9  0.0739  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          6.24    0.234     0.0818 2.86  0.00418  7.9  0.0740  0.395</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica          6.90    0.234     0.0819 2.86  0.00420  7.9  0.0739  0.395</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Term: Petal.Length</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Type:  response </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Columns: term, Species, Petal.Length, estimate, std.error, statistic, p.value, s.value, conf.low, conf.high </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Comparison: dY/dX</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>

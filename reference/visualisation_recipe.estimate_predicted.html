@@ -11,7 +11,7 @@ below for more information and examples on how to create and customize plots."><
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.32</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,24 +181,24 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: ribbon</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Predicted'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'wt'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymin = 'CI_low'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymax = 'CI_high'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> alpha = 0.3333333</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [10 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Predicted'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'wt'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 4</span></span>
@@ -279,23 +279,23 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Mean'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 5]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 6]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Mean'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymin = 'CI_low'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymax = 'CI_high'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 4</span></span>
@@ -342,23 +342,23 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: line</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 10]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Slope'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 9]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [3 x 10]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Slope'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Species'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymin = 'CI_low'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymax = 'CI_high'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 3</span></span>
@@ -401,13 +401,13 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 1</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">--------</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Geom type: pointrange</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> data = [18 x 8]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> data = [18 x 9]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> aes_string(</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   y = 'Coefficient'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   x = 'Level'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymin = 'CI_low'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ymax = 'CI_high'</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   group = 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   group = '.group'</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> )</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Layer 2</span></span>

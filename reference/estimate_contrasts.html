@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.31</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.32</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -108,10 +108,12 @@ for which to compute the contrasts.</p></dd>
 
 
 <dt id="arg-by">by<a class="anchor" aria-label="anchor" href="#arg-by"></a></dt>
-<dd><p>The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).</p></dd>
+<dd><p>The (focal) predictor variable(s) at which to evaluate the desired
+effect / mean / contrasts. Other predictors of the model that are not
+included here will be collapsed and "averaged" over (the effect will be
+estimated across them). <code>by</code> can a character (vector) naming the focal
+predictors (and optionally, representative values or levels), or a list of named
+elements. See details in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>.</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
@@ -231,8 +233,20 @@ as default backend.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>
-or functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package.</p></dd>
+<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
+to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
+Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code> or <code>range</code> can be used
+to control the (number of) representative values.</p></li>
+<li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
+means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
+for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
+passed to those functions.</p></li>
+<li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
+Additional arguments can be passed to these functions.</p></li>
+<li><p>Bayesian models: For Bayesian models, parameters are cleaned using
+<code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
+<code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
+</ul></dd>
 
 </dl></div>
     <div class="section level2">
