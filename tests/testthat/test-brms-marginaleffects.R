@@ -12,7 +12,7 @@ withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_means - brms", {
     m <- insight::download_model("brms_linear_1")
-    skip_if(!is.null(m))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------
@@ -99,7 +99,7 @@ withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_slopes - brms", {
     m <- insight::download_model("brms_linear_1")
-    skip_if(!is.null(m))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------
@@ -176,7 +176,7 @@ withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_contrasts - brms, logistic", {
     m <- insight::download_model("brms_logistic_1")
-    skip_if(!is.null(m))
+    skip_if(is.null(m))
 
 
     # categorical -------------------------------------------------------------
