@@ -26,9 +26,9 @@
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
     aes$y <- "Slope"
-    if("Comparison" %in% names(data)) {
+    if ("Comparison" %in% names(data)) {
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
-      if(length(by) > 1) by[3:(length(by)+1)] <- by[2:length(by)]
+      if (length(by) > 1) by[3:(length(by) + 1)] <- by[2:length(by)]
       by[2] <- "Comparison"
     }
   } else if ("estimate_grouplevel" %in% att$class) {
