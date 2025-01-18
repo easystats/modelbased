@@ -68,8 +68,8 @@
 #' In other words, the distinction between marginalization types resides in whether
 #' the prediction are made for:
 #' - A specific "individual" from the sample (i.e., a specific combination of
-#'   predictor values): this is what is obtained when using
-#'   [`estimate_relation()`] and the other prediction functions.
+#'   predictor values): this is what is obtained when using [`estimate_relation()`]
+#'   and the other prediction functions.
 #' - An average individual from the sample: obtained with
 #'   `estimate_means(..., marginalize = "average")`
 #' - The broader, hypothetical target population: obtained with

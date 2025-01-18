@@ -15,16 +15,17 @@
 #' - `estimate_relation(data = "grid", predict = "expectation", ...)`
 #' - `estimate_link(data = "grid", predict = "link", ...)`
 #'
-#' While they are all based on model-based predictions (using [insight::get_predicted()]),
-#' they differ in terms of the **type** of predictions they make by default. For
-#' instance, `estimate_prediction`/`estimate_expectation` return predictions for
-#' the original data used to fit the model, while `estimate_relation`/`estimate_link`
-#' return predictions on a [insight::get_datagrid()]. Similarly, `estimate_link`
+#' While they are all based on model-based predictions (using
+#' [insight::get_predicted()]), they differ in terms of the **type** of
+#' predictions they make by default. For instance, `estimate_prediction()` and
+#' `estimate_expectation()` return predictions for the original data used to fit
+#' the model, while `estimate_relation()` and `estimate_link()` return
+#' predictions on a [insight::get_datagrid()]. Similarly, `estimate_link`
 #' returns predictions on the link scale, while the others return predictions on
-#' the response scale. Note that the relevance of these differences depends on the
-#' model family (for instance, for linear models, `estimate_relation` is equivalent
-#' to `estimate_link`, since there is no difference between the link-scale and the
-#' response scale).
+#' the response scale. Note that the relevance of these differences depends on
+#' the model family (for instance, for linear models, `estimate_relation` is
+#' equivalent to `estimate_link()`, since there is no difference between the
+#' link-scale and the response scale).
 #'
 #' Note that you can run [`plot()`][visualisation_recipe.estimate_predicted] on
 #' the output of these functions to get some visual insights (see the
