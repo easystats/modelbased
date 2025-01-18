@@ -7,17 +7,12 @@ skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")
 skip_if_not_installed("marginaleffects")
-skip_if_not_installed("ggeffects")
 skip_if_not_installed("httr2")
 skip_if_not_installed("withr")
 
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_means - brms", {
-    data(efc, package = "ggeffects")
-    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
-    levels(efc$c172code) <- c("low", "mid", "high")
-
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
 
@@ -105,10 +100,6 @@ withr::with_options(
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_slopes - brms", {
-    data(efc, package = "ggeffects")
-    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
-    levels(efc$c172code) <- c("low", "mid", "high")
-
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
 
@@ -186,9 +177,6 @@ withr::with_options(
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_contrasts - brms, logistic", {
-    data(efc, package = "ggeffects")
-    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
-    levels(efc$c172code) <- c("low", "mid", "high")
     m <- insight::download_model("brms_logistic_1")
     skip_if(is.null(m))
 
