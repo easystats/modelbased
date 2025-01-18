@@ -326,6 +326,11 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   } else {
     # Bayesian
     params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE, ...))
+    ## FIXME: needs to be fixed in bayestestR: categorical models don't return group column
+    # see https://github.com/easystats/bayestestR/issues/692
+    if (info$is_categorical) {
+      params$group <- .safe(x$group)
+    }
     coefficient_name <- intersect(
       c(attributes(params)$coefficient_name, "Median", "Mean", "MAP"),
       colnames(params)
@@ -381,7 +386,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # Rename for Categorical family
   if (info$is_categorical) {
-    params <- datawizard::data_rename(params, "group", "Response")
+    params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
   }
 
   # finally, make sure we have original data types
