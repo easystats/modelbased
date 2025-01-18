@@ -8,7 +8,7 @@
 \usage{
 \method{visualisation_recipe}{estimate_predicted}(
   x,
-  show_data = TRUE,
+  show_data = FALSE,
   point = NULL,
   line = NULL,
   pointrange = NULL,

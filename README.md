@@ -138,7 +138,8 @@ means
 ## versicolor | 2.77 | 0.05 | [2.68, 2.86]
 ## virginica  | 2.97 | 0.05 | [2.88, 3.07]
 ## 
-## Marginal means estimated at Species
+## Variable predicted: Sepal.Width
+## Predictors modulated: Species
 
 # 3. Custom plot
 ggplot(iris, aes(x = Species, y = Sepal.Width)) +
@@ -188,7 +189,8 @@ contrasts
 ## setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | < .001
 ## versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 
 ## 
-## Marginal contrasts estimated at Species
+## Variable predicted: Sepal.Width
+## Predictors contrasted: Species
 ## p-value adjustment method: Holm (1979)
 ```
 
@@ -206,35 +208,30 @@ contrasts
 
 ``` r
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
-
-estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 3)
+difference <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Length",
+  length = 3
+)
+# no line break for table
+print(difference, table_width = Inf)
 ## Marginal Contrasts Analysis
 ## 
-## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE
-## --------------------------------------------------------------------------
-## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34
-## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65
-## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44
-## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40
-## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66
-## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42
-## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49
-## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15
-## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28
+## Level1     |     Level2 | Petal.Length | Difference |        95% CI |   SE | t(144) |      p
+## --------------------------------------------------------------------------------------------
+## setosa     | versicolor |         1.00 |       1.70 | [ 0.87, 2.53] | 0.34 |   4.97 | < .001
+## setosa     |  virginica |         1.00 |       1.34 | [ 0.38, 2.30] | 0.40 |   3.38 | 0.002 
+## versicolor |  virginica |         1.00 |      -0.36 | [-1.55, 0.83] | 0.49 |  -0.73 | 0.468 
+## setosa     | versicolor |         3.95 |       1.74 | [ 0.16, 3.32] | 0.65 |   2.67 | 0.023 
+## setosa     |  virginica |         3.95 |       1.79 | [ 0.19, 3.40] | 0.66 |   2.70 | 0.023 
+## versicolor |  virginica |         3.95 |       0.06 | [-0.30, 0.42] | 0.15 |   0.37 | 0.710 
+## setosa     | versicolor |         6.90 |       1.78 | [-1.71, 5.26] | 1.44 |   1.24 | 0.304 
+## setosa     |  virginica |         6.90 |       2.25 | [-1.19, 5.69] | 1.42 |   1.58 | 0.304 
+## versicolor |  virginica |         6.90 |       0.47 | [-0.22, 1.16] | 0.28 |   1.65 | 0.304 
 ## 
-## Level1     | t(144) |      p
-## ----------------------------
-## setosa     |   4.97 | < .001
-## setosa     |   2.67 | 0.023 
-## setosa     |   1.24 | 0.304 
-## setosa     |   3.38 | 0.002 
-## setosa     |   2.70 | 0.023 
-## setosa     |   1.58 | 0.304 
-## versicolor |  -0.73 | 0.468 
-## versicolor |   0.37 | 0.710 
-## versicolor |   1.65 | 0.304 
-## 
-## Marginal contrasts estimated at Species
+## Variable predicted: Sepal.Width
+## Predictors contrasted: Species
 ## p-value adjustment method: Holm (1979)
 ```
 

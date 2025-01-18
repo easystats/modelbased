@@ -7,7 +7,7 @@ get_marginalcontrasts <- function(model,
                                   comparison = "pairwise",
                                   marginalize = "average",
                                   ci = 0.95,
-                                  p_adjust = "holm",
+                                  p_adjust = "none",
                                   verbose = TRUE,
                                   ...) {
   # check if available
@@ -31,6 +31,11 @@ get_marginalcontrasts <- function(model,
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
+
+  # sanity check - is it a list? if so, use name
+  if (is.list(first_focal)) {
+    first_focal <- names(first_focal)
+  }
 
 
   # Second step: compute contrasts, for slopes or categorical -----------------
@@ -69,7 +74,9 @@ get_marginalcontrasts <- function(model,
   }
 
   # adjust p-values
-  out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  if (!insight::model_info(model)$is_bayesian) {
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
@@ -88,6 +95,60 @@ get_marginalcontrasts <- function(model,
 
   class(out) <- unique(c("marginaleffects_contrasts", class(out)))
   out
+}
+
+
+# check for custom hypothesis  --------------------------------------
+
+.is_custom_comparison <- function(comparison) {
+  !is.null(comparison) &&
+    length(comparison) == 1 &&
+    is.character(comparison) &&
+    grepl("=", comparison, fixed = TRUE) &&
+    grepl("\\bb\\d+\\b", comparison)
+}
+
+
+.extract_custom_comparison <- function(comparison) {
+  # find all "b" strings
+  matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
+  match_lengths <- attr(matches, "match.length")
+
+  # extract all "b" strings, so we have a vector of all "b" used in the comparison
+  unlist(lapply(seq_along(matches), function(i) {
+    substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
+  }), use.names = FALSE)
+}
+
+
+.reorder_custom_hypothesis <- function(comparison, datagrid) {
+  # only proceed if we have a custom hypothesis
+  if (.is_custom_comparison(comparison)) {
+    # this is the row-order we use in modelbased
+    datagrid$.rowid <- 1:nrow(datagrid)
+    # this is the row-order in marginaleffects
+    datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+    # we need to extract all b's and the former parameter numbers
+    b <- .extract_custom_comparison(comparison)
+    old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
+    # these are the new numbers of the b-values
+    new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
+    new_b <- paste0("b", new_b_numbers)
+    # we need to replace all occurences of "b" in comparison with "new_b".
+    # however, to avoid overwriting already replaced values with "gsub()", we
+    # first replace with a non-existing pattern "new_b_letters", which we will
+    # replace with "new_b" in a second step
+    new_b_letters <- paste0("b", letters[new_b_numbers])
+    # first, numbers to letters
+    for (i in seq_along(b)) {
+      comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
+    }
+    # next, letters to new numbers
+    for (i in seq_along(b)) {
+      comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
+    }
+  }
+  comparison
 }
 
 

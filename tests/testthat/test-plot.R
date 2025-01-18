@@ -203,7 +203,7 @@ test_that("plots, relation, multiple CI", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-relation-multiple-ci-1",
-    plot(em)
+    plot(em, show_data = TRUE)
   )
 })
 
@@ -216,13 +216,13 @@ test_that("plots, estimate_means works with Poisson", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-poisson-1",
-    plot(x)
+    plot(x, show_data = TRUE)
   )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-means-poisson-2",
-    plot(x)
+    plot(x, show_data = TRUE)
   )
 })
 
@@ -340,6 +340,18 @@ test_that("plots, estimate_slope", {
     "plot-slopes-4",
     plot(slopes)
   )
+
+  data(iris)
+  x <- iris
+  x$fac <- rep_len(c("A", "B"), 150)
+  x$fac2 <- rep_len(c("X", "X", "X", "Y", "Y", "Y"), 150)
+  model <- lm(Sepal.Length ~ Species * fac * Sepal.Width * fac2, data = x)
+  slopes <- estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-5",
+    plot(slopes)
+  )
 })
 
 
@@ -350,13 +362,13 @@ test_that("plots, automatically join dots", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-join-dots-1",
-    plot(out)
+    plot(out, show_data = TRUE)
   )
   out <- estimate_expectation(m, by = c("Species", "Petal.Width"), preserve_range = FALSE)
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-join-dots-2",
-    plot(out)
+    plot(out, show_data = TRUE)
   )
 })
 
@@ -368,6 +380,50 @@ test_that("plots, logistic regression", {
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-glm-logistic-1",
-    plot(out)
+    plot(out, show_data = TRUE)
+  )
+  out <- estimate_means(model, "wt", length = 100, predict = "link", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-2",
+    plot(out, show_data = TRUE)
+  )
+})
+
+
+test_that("plots, 4-way with numeric", {
+  skip_if_not_installed("ggeffects")
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ e16sex + c161sex + c172code * barthtot + c12hour, data = efc)
+  by <- c("c12hour", "c161sex", "c172code", "barthtot = [fivenum]")
+  estim <- estimate_means(m, by = by, backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-4way-numeric-1",
+    plot(estim, show_data = FALSE)
+  )
+})
+
+
+test_that("plots, glm logistic inside bound", {
+  set.seed(5)
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = as.factor(rbinom(100, 1, 0.1)),
+    var2 = rnorm(100, 10, 7)
+  )
+  m <- glm(
+    outcome ~ var1 * var2,
+    data = data,
+    family = binomial(link = "logit")
+  )
+  out1 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-logistic-bounds-1",
+    plot(out1, show_data = FALSE)
   )
 })

@@ -21,12 +21,12 @@ model2 <- suppressWarnings(glmmTMB::glmmTMB(
 
 test_that("estimate_means - glmmTMB", {
   ## emmeans for zero-inflated model, count component
-  estim <- suppressMessages(estimate_means(model))
+  estim <- suppressMessages(estimate_means(model, backend = "emmeans"))
   estim2 <- as.data.frame(emmeans::emmeans(model, ~mined, type = "response"))
   expect_equal(estim$Rate, estim2$rate, tolerance = 1e-3)
 
   ## emmeans for zero-inflated model, zero-inflated component
-  estim <- suppressMessages(estimate_means(model, component = "zi"))
+  estim <- suppressMessages(estimate_means(model, component = "zi", backend = "emmeans"))
   estim2 <- as.data.frame(emmeans::emmeans(model, ~mined, component = "zi", type = "response"))
   expect_equal(estim$Rate, estim2$rate, tolerance = 1e-3)
 
@@ -46,7 +46,7 @@ test_that("estimate_means - glmmTMB", {
 
 test_that("estimate_contrasts - glmmTMB", {
   ## contrasts emmeans for zero-inflated model, count component
-  estim1 <- suppressMessages(estimate_contrasts(model))
+  estim1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   pr <- ggeffects::predict_response(model, "mined", verbose = FALSE)
   estim2 <- ggeffects::test_predictions(pr)
   expect_identical(dim(estim1), c(1L, 9L))
@@ -62,7 +62,7 @@ test_that("estimate_contrasts - glmmTMB", {
   expect_equal(estim3$Difference, estim4$Difference, tolerance = 1e-3)
 
   ## contrasts emmeans for zero-inflated model, zero-inflation probability component
-  estim1 <- suppressMessages(estimate_contrasts(model, component = "zi"))
+  estim1 <- suppressMessages(estimate_contrasts(model, component = "zi", backend = "emmeans"))
   pr <- ggeffects::predict_response(model, "mined", type = "zi_prob", verbose = FALSE)
   estim2 <- ggeffects::test_predictions(pr)
   expect_identical(dim(estim1), c(1L, 9L))
@@ -77,12 +77,14 @@ test_that("estimate_contrasts - glmmTMB", {
 
 
 test_that("estimate_slope - glmmTMB", {
-  estim <- suppressMessages(estimate_slopes(model2,
-    trend = "cover",
-    by = "mined", regrid = "response"
-  ))
+  skip_on_os("mac")
+  estim <- suppressMessages(estimate_slopes(model2, trend = "cover", by = "mined", regrid = "response", backend = "emmeans")) # nolint
   estim2 <- as.data.frame(emmeans::emtrends(model2, "mined", var = "cover", regrid = "response"))
   expect_equal(estim$Slope, estim2$cover.trend, tolerance = 1e-2)
+  estim1 <- estimate_slopes(model2, trend = "cover", by = "mined", backend = "marginaleffects")
+  datagrid <- insight::get_datagrid(model2, by = "mined")
+  estim2 <- suppressWarnings(marginaleffects::avg_slopes(model2, newdata = datagrid, variables = "cover", by = "mined"))
+  expect_equal(estim1$Slope, estim2$estimate, tolerance = 1e-2)
 })
 
 

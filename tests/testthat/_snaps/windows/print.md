@@ -17,6 +17,7 @@
       1.80  | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
       2.54  | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
       3.28  | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
+      
       Marginal effects estimated for x
 
 ---
@@ -29,6 +30,7 @@
       Start |  End |     x | Slope |   SE |         95% CI | t(998) |      p
       ----------------------------------------------------------------------
       -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
+      
       Marginal effects estimated for x
 
 ---
@@ -50,7 +52,9 @@
       1.80  | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
       2.54  | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
       3.28  | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      
       Marginal effects estimated for x
+      Type of slope was dY/dX
 
 ---
 
@@ -62,7 +66,9 @@
       Start |  End |     x | Slope |   SE |         95% CI |     t |      p
       ---------------------------------------------------------------------
       -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      
       Marginal effects estimated for x
+      Type of slope was dY/dX
 
 # estimate_slopes - print regular
 
@@ -74,6 +80,7 @@
       Slope |   SE |       95% CI | t(144) |      p
       ---------------------------------------------
       0.79  | 0.10 | [0.59, 0.99] |   7.69 | < .001
+      
       Marginal effects estimated for Petal.Length
 
 ---
@@ -86,7 +93,9 @@
       Slope |   SE |       95% CI |    t |      p
       -------------------------------------------
       0.79  | 0.10 | [0.59, 0.99] | 7.69 | < .001
+      
       Marginal effects estimated for Petal.Length
+      Type of slope was dY/dX
 
 # estimate_means - print multiple by's
 
@@ -526,7 +535,7 @@
     Code
       estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
     Output
-      Model-based Expectation
+      Model-based Predictions
       
       c160age | c161sex | Predicted |   SE |         95% CI
       -----------------------------------------------------

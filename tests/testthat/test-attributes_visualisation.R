@@ -2,10 +2,10 @@ test_that("attributes_means", {
   skip_if_not_installed("emmeans")
   model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
-  estim <- suppressMessages(estimate_means(model))
+  estim <- suppressMessages(estimate_means(model, backend = "emmeans"))
   expect_identical(attributes(estim)$by, "Species")
 
-  estim <- suppressMessages(estimate_means(model, by = "all"))
+  estim <- suppressMessages(estimate_means(model, by = "all", backend = "emmeans"))
   expect_identical(attributes(estim)$by, c("Species", "Sepal.Width"))
 })
 
@@ -14,7 +14,7 @@ test_that("attributes_contrasts", {
   skip_if_not_installed("emmeans")
   model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(attributes(estim)$contrast, "Species")
   expect_null(attributes(estim)$by)
 })

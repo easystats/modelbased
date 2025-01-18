@@ -30,6 +30,7 @@ get_marginalmeans <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
+  comparison <- dots$hypothesis
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
@@ -38,7 +39,10 @@ get_marginalmeans <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
+  marginalize <- insight::validate_argument(
+    marginalize,
+    c("average", "population", "individual")
+  )
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -55,10 +59,14 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
+    dg_factors <- switch(marginalize,
+      individual = "reference",
+      "all"
+    )
     dg_args <- list(
       model,
       by = my_args$by,
-      factors = "all",
+      factors = dg_factors,
       include_random = TRUE,
       verbose = FALSE
     )
@@ -123,6 +131,22 @@ get_marginalmeans <- function(model,
     fun_args$type <- predict
   }
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # for custom hypothesis, like "b2=b5" or "(b2-b1)=(b4-b3)", we need to renumber
+  # the b-values internally, because we have a different sorting in our output
+  # compared to what "avg_predictions()" returns... so let's check if we have to
+  # take care of this
+  if (!is.null(comparison)) {
+    # create a data frame with the same sorting as the data grid, but only
+    # for the focal terms
+    custom_grid <- data.frame(expand.grid(
+      lapply(datagrid[datagrid_info$at_specs$varname], unique)
+    ))
+    dots$hypothesis <- .reorder_custom_hypothesis(comparison, custom_grid)
+  }
+
   # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 
@@ -140,6 +164,13 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
 
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # fix term label for custom hypothesis
+  if (.is_custom_comparison(comparison)) {
+    means$term <- gsub(" ", "", comparison, fixed = TRUE)
+  }
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
@@ -184,7 +215,8 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range", "coef_name"
+    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range",
+    "coef_name", "slope"
   )
 }
 

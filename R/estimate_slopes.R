@@ -77,7 +77,7 @@
 #'
 #' @return A data.frame of class `estimate_slopes`.
 #'
-#' @examplesIf all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))
 #' library(ggplot2)
 #' # Get an idea of the data
 #' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -129,8 +129,12 @@ estimate_slopes <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
+  table_footer <- paste("\nMarginal effects estimated for", info$trend)
+  if (!is.null(attributes(trends)$slope)) {
+    table_footer <- paste0(table_footer, "\nType of slope was ", attributes(trends)$slope)
+  }
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
-  attr(trends, "table_footer") <- c(paste("Marginal effects estimated for", info$trend), "blue")
+  attr(trends, "table_footer") <- c(table_footer, "blue")
 
   # Add attributes
   attr(trends, "model") <- model

@@ -14,19 +14,24 @@
 - All `model_*()` alias names have been removed. Use the related `get_*()`
   functions instead.
 
+- The `show_data` argument in `plot()` defaults to `FALSE`.
+
 ## Major Changes
+
+- The `"marginaleffects"` backend is now fully implemented and no longer
+  work-in-progress. You can set your preferred package as backend using
+  either the `backend` argument, or in general by setting
+  `options(modelbased_backend = "marginaleffects")` or
+  `options(modelbased_backend = "emmeans")`.
 
 - All `estimate_*()` functions get a `predict` argument, which can be used
   to modulate the type of transformation applied to the predictions (i.e. whether
   predictions should be on the response scale, link scale, etc.). It can also
   be used to predict auxiliary (distributional) parameters.
 
-- `estimate_means()` and `estimate_contrasts()` get a ``marginalize` argument,
+- `estimate_means()` and `estimate_contrasts()` get a `marginalize` argument,
   to specify how to marginalize over non-focal terms. This results in slightly
   different predicted values, each approach answering a different question.
-
-- The `"marginaleffects"` backend is now fully implemented and no longer
-  work-in-progress.
 
 - `estimate_contrasts()` gains a `backend` argument. This defaults to `"emmeans"`,
   but can be set to `"marginaleffects"` to use features of that package to estimate

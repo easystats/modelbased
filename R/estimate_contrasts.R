@@ -7,8 +7,8 @@
 #' @param contrast A character vector indicating the name of the variable(s)
 #' for which to compute the contrasts.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. Can be one of `"holm"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"none"`. See the
+#' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"holm"`. See the
 #' p-value adjustment section in the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
 #' @param comparison Specify the type of contrasts or tests that should be
@@ -53,7 +53,7 @@
 #' estimate_contrasts(model)
 #'
 #' # Can also run contrasts between points of numeric
-#' estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+#' estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
 #'
 #' # Or both
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
@@ -103,7 +103,7 @@ estimate_contrasts <- function(model,
                                by = NULL,
                                predict = NULL,
                                ci = 0.95,
-                               p_adjust = "holm",
+                               p_adjust = "none",
                                comparison = "pairwise",
                                marginalize = "average",
                                backend = getOption("modelbased_backend", "emmeans"),
@@ -148,7 +148,11 @@ estimate_contrasts <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_title") <- c(ifelse(
+    marginalize == "individual",
+    "Model-based Contrasts Analysis",
+    "Marginal Contrasts Analysis"
+  ), "blue")
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,

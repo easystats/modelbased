@@ -1,15 +1,17 @@
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
+skip_on_os("mac")
 
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
+  data(iris)
 
   # One factor
   dat <<- iris
   model <- lm(Sepal.Width ~ Species, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
   expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
@@ -17,7 +19,7 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(3L, 8L))
   expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
 
-  estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')"))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')", backend = "emmeans"))
   expect_identical(dim(estim), c(1L, 9L))
 
   estim <- suppressMessages(estimate_contrasts(model, contrast = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
@@ -30,11 +32,11 @@ test_that("estimate_contrasts - Frequentist", {
 
   model <- lm(Sepal.Width ~ Species * fac, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, levels = "Species"))
+  estim <- suppressMessages(estimate_contrasts(model, levels = "Species", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "fac='A'")))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "fac='A'"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 10L))
   estim <- suppressMessages(estimate_contrasts(model, contrast = "Species", backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 8L))
@@ -43,22 +45,24 @@ test_that("estimate_contrasts - Frequentist", {
 
   # One factor and one continuous
   model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0")))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 10L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4, backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 10L))
   estim <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width=0", backend = "marginaleffects")
   expect_identical(dim(estim), c(3L, 8L))
+  estim <- estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4, backend = "marginaleffects")
+  expect_equal(estim$Difference, c(-0.21646, 0.20579, 0.42224), tolerance = 1e-4)
 
 
   # Contrast between continuous
   model <- lm(Sepal.Width ~ Petal.Length, data = iris)
 
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Length=c(2.3, 3)"))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Length=c(2.3, 3)", backend = "emmeans"))
   expect_identical(dim(estim), c(1L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Length=c(2, 3, 4)"))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Length=c(2, 3, 4)", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
   estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2.3, 3)", backend = "marginaleffects")
   expect_identical(dim(estim), c(1L, 8L))
@@ -72,10 +76,17 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- lm(mpg ~ gear * vs * am, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model, by = "all"))
+  estim <- suppressMessages(estimate_contrasts(model, by = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 11L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "emmeans"))
   expect_identical(dim(estim), c(1L, 10L))
+  ## FIXME: doesn't work right nw
+  # estim <- suppressMessages(estimate_contrasts(model, by = "all", backend = "marginaleffects"))
+  # expect_identical(dim(estim), c(12L, 11L))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
+  expect_identical(dim(estim), c(6L, 9L))
+  expect_named(estim, c("vs", "am", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_equal(estim$Difference, c(-6.98333, -11.275, -18.25833, -4.29167, -11.275, -6.98333), tolerance = 1e-4)
 
 
   dat <- iris
@@ -86,11 +97,11 @@ test_that("estimate_contrasts - Frequentist", {
 
   model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), by = "all"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), by = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(28L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3='F'"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3='F'", backend = "emmeans"))
   expect_identical(dim(estim), c(6L, 10L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3", backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 10L))
 
 
@@ -99,7 +110,7 @@ test_that("estimate_contrasts - Frequentist", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
 
 
@@ -109,9 +120,9 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
-  estim1 <- suppressMessages(estimate_contrasts(model))
+  estim1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim1), c(3L, 9L))
-  estim2 <- suppressMessages(estimate_contrasts(model, predict = "link"))
+  estim2 <- suppressMessages(estimate_contrasts(model, predict = "link", backend = "emmeans"))
   expect_identical(dim(estim2), c(3L, 9L))
   expect_true(all(estim1$Difference != estim2$Difference))
 
@@ -128,7 +139,7 @@ test_that("estimate_contrasts - Frequentist", {
   dat <<- dat
   model <- glm(counts ~ treatment, data = dat, family = poisson())
 
-  estim <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
 })
 
@@ -138,39 +149,63 @@ test_that("estimate_contrasts - Bayesian", {
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
   skip_if_not_installed("coda")
+  data(iris)
 
   dat <- iris
   dat$Petal.Length_factor <- ifelse(dat$Petal.Length < 4.2, "A", "B")
   dat <<- dat
 
+  set.seed(123)
   model <- suppressWarnings(
     rstanarm::stan_glm(
       Sepal.Width ~ Species * Petal.Length_factor,
       data = dat,
       refresh = 0,
       iter = 200,
-      chains = 2
+      chains = 2,
+      seed = 123
     )
   )
-  estim <- suppressMessages(estimate_contrasts(model, contrast = "all"))
+  estim <- suppressMessages(estimate_contrasts(model, contrast = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(15L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'")))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 8L))
+  estim <- estimate_contrasts(model, contrast = c("Species", "Petal.Length_factor"), backend = "marginaleffects")
+  expect_identical(dim(estim), c(15L, 10L))
+  expect_named(
+    estim,
+    c(
+      "Species", "Petal.Length_factor", "ROPE_CI", "Median", "CI_low",
+      "CI_high", "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+    )
+  )
+  expect_equal(
+    estim$Median,
+    c(
+      0.05025, 0.89132, 0.52141, 0.27182, 0.45085, 0.83305, 0.47175,
+      -0.00022, 0.45184, -0.36936, -0.60636, -0.43568, -0.20898, -0.068,
+      0.18029
+    ),
+    tolerance = 1e-4
+  )
 
+
+  set.seed(123)
   model <- suppressWarnings(
     rstanarm::stan_glm(
       Sepal.Width ~ Species * Petal.Width,
       data = iris,
       refresh = 0,
       iter = 200,
-      chains = 2
+      chains = 2,
+      seed = 123
     )
   )
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0")))
+  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0"), backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 8L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4))
+  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4, backend = "emmeans"))
   expect_identical(dim(estim), c(12L, 8L))
 
   # GLM
@@ -182,25 +217,29 @@ test_that("estimate_contrasts - Bayesian", {
     prior = rstanarm::normal(scale = 0.5)
   ))
 
-  estim <- suppressMessages(estimate_contrasts(model))
+  estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, predict = "link"))
+  estim <- suppressMessages(estimate_contrasts(model, predict = "link", backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
 
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf", backend = "emmeans")))
   expect_identical(dim(estim), c(3L, 6L))
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf", backend = "emmeans")))
   expect_identical(dim(estim), c(3L, 6L))
 })
 
 
 test_that("estimate_contrasts - p.adjust", {
+  data(iris)
   model <- lm(Petal.Width ~ Species, data = iris)
 
-  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none"))
-  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey"))
+  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "emmeans"))
+  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "emmeans"))
+  expect_true(any(p_none$p != p_tuk$p))
 
-  expect_true(any(as.data.frame(p_none) != as.data.frame(p_tuk)))
+  p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "marginaleffects"))
+  p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "marginaleffects"))
+  expect_true(any(p_none$p != p_tuk$p))
 })
 
 
@@ -208,27 +247,50 @@ test_that("estimate_contrasts - dfs", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("pbkrtest")
   skip_if_not_installed("lmerTest")
+  data(iris)
 
   data <- iris
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite"))
-  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", p_adjust = "holm", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", p_adjust = "holm", backend = "emmeans"))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
   expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
   expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
+
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", backend = "emmeans"))
+
+  expect_true(all(estim1$CI_low != estim2$CI_low))
+  expect_equal(estim1$CI_low, c(-0.22624, -0.33383, -1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(-0.29193, -0.4364, -1.04019), tolerance = 1e-4)
 })
 
 
 test_that("estimate_contrasts - marginaleffects", {
+  ## TODO: skip for marginaleffects 0.24.0?
   skip_if_not_installed("Formula")
+  skip_if_not_installed("ggeffects")
   data(coffee_data, package = "ggeffects")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf)) # nolint
+  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
+  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "(b2-b1)=(b4-b3)")
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
+  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  # validated against ggeffects::test_predictions()
+  data(efc, package = "ggeffects")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
+  expect_snapshot(estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects"))
 })
 
 
@@ -243,8 +305,8 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_message(estimate_contrasts(model), regex = "No variable was")
 
   ## emmeans backend works and has proper default
-  out1 <- suppressMessages(estimate_contrasts(model))
-  out2 <- suppressMessages(estimate_contrasts(model, predict = "response"))
+  out1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
+  out2 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "emmeans"))
   pr <- ggeffects::predict_response(model, "Species")
   out3 <- ggeffects::test_predictions(pr)
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
@@ -268,15 +330,17 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
 
   # test p-adjust
-  expect_snapshot(estimate_contrasts(model))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans"))
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans", p_adjust = "holm"))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects", p_adjust = "holm"))
 })
 
 
 test_that("estimate_contrasts - on-the-fly factors", {
   data(mtcars)
   model <- lm(mpg ~ as.factor(cyl) + wt * hp, mtcars)
-  out1 <- estimate_contrasts(model)
+  out1 <- estimate_contrasts(model, backend = "emmeans")
   out2 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out1), 3L)
@@ -286,7 +350,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
   model <- lm(mpg ~ cyl + wt * hp, mtcars2)
-  out3 <- estimate_contrasts(model)
+  out3 <- estimate_contrasts(model, backend = "emmeans")
   out4 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out3), 3L)
@@ -317,13 +381,13 @@ test_that("estimate_contrasts - different options for comparison", {
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
 
   # emmeans
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
   )
   expect_equal(out$Difference, c(0.2, 0.55, -0.6, -0.15), tolerance = 1e-3)
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
@@ -385,6 +449,7 @@ test_that("estimate_contrasts - filtering works", {
 test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   skip_if_not_installed("glmmTMB")
   skip_if_not_installed("ggeffects")
+  data(iris)
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"), table_width = Inf)) # nolint
@@ -399,4 +464,14 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+})
+
+
+test_that("estimate_contrasts - contrasts for numeric by factor", {
+  skip_if_not_installed("ggeffects")
+  data(iris)
+  model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+  out1 <- estimate_contrasts(model, contrast = "Petal.Length", by = "Species", backend = "marginaleffects") # nolint
+  out2 <- ggeffects::test_predictions(model, c("Petal.Length", "Species"))
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
 })

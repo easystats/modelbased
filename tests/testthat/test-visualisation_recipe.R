@@ -52,24 +52,34 @@ test_that("visualization_recipe", {
   dat <- data.frame(y = rpois(100, 3), fa = gl(4, 20, 100))
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
   x <- estimate_means(dat_glm, "fa", backend = "emmeans")
-  vr <- visualisation_recipe(x)
+  vr <- visualisation_recipe(x, show_data = TRUE)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
-  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = 1, alpha = NULL))
+  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
     vr$l3$aes,
     list(
       y = "Rate", x = "fa", ymin = "CI_low", ymax = "CI_high",
-      color = NULL, group = 1, alpha = NULL
+      color = NULL, group = ".group", alpha = NULL
     )
   )
   x <- estimate_means(dat_glm, "fa", backend = "marginaleffects")
+  vr <- visualisation_recipe(x, show_data = TRUE)
   expect_identical(vr$l1$aes, list(y = "y", x = "fa", color = NULL, alpha = NULL))
-  expect_identical(vr$l2$aes, list(y = "Rate", x = "fa", color = NULL, group = 1, alpha = NULL))
+  expect_identical(vr$l2$aes, list(y = "Mean", x = "fa", color = NULL, group = ".group", alpha = NULL))
   expect_identical(
     vr$l3$aes,
     list(
-      y = "Rate", x = "fa", ymin = "CI_low", ymax = "CI_high",
-      color = NULL, group = 1, alpha = NULL
+      y = "Mean", x = "fa", ymin = "CI_low", ymax = "CI_high",
+      color = NULL, group = ".group", alpha = NULL
+    )
+  )
+  vr <- visualisation_recipe(x, show_data = FALSE)
+  expect_identical(vr$l1$aes, list(y = "Mean", x = "fa", color = NULL, group = ".group", alpha = NULL))
+  expect_identical(
+    vr$l2$aes,
+    list(
+      y = "Mean", x = "fa", ymin = "CI_low", ymax = "CI_high",
+      color = NULL, group = ".group", alpha = NULL
     )
   )
 
@@ -134,7 +144,7 @@ test_that("visualization_recipe", {
   expect_identical(aes$y, "Predicted")
   expect_identical(aes$x, "Species")
   expect_identical(aes$color, "Sepal.Width")
-  expect_identical(deparse(aes$grid), "fac ~ fac2")
+  expect_identical(deparse(aes$grid), "fac2 ~ fac")
   expect_null(aes$facet)
 
   # Estimate slopes --------------------------------
@@ -148,7 +158,10 @@ test_that("visualization_recipe", {
   expect_identical(aes$x, "Species")
   expect_null(aes$color)
 
-  # broken
-  # x <- estimate_slopes(model, trend="Species", by="Sepal.Width")
+  x <- estimate_slopes(model, trend = "Species", by = "Sepal.Width", backend = "marginaleffects")
+  aes <- modelbased:::.find_aes(x)$aes
+  expect_identical(aes$y, "Slope")
+  expect_identical(aes$x, "Sepal.Width")
+  expect_identical(aes$color, "Comparison")
   # plot(modelbased:::.visualization_recipe(x))
 })

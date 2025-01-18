@@ -4,15 +4,20 @@
 #' @keywords internal
 .find_aes <- function(x) {
   data <- as.data.frame(x)
+  data$.group <- 1
+
   att <- attributes(x)
   aes <- list(
     y = "Predicted",
-    group = 1
+    group = ".group"
   )
 
   # extract information for labels
   model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
   model_response <- attributes(x)$response
+
+  # Find predictors
+  by <- att$focal_terms
 
   # Main geom
   if ("estimate_contrasts" %in% att$class) {
@@ -21,22 +26,26 @@
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
     aes$y <- "Slope"
+    if ("Comparison" %in% names(data)) {
+      # Insert "Comparison" column as the 2nd by so that it gets plotted as color
+      if (length(by) > 1) by[3:(length(by) + 1)] <- by[2:length(by)]
+      by[2] <- "Comparison"
+    }
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
     aes$y <- "Coefficient"
     aes$type <- "grouplevel"
     if (length(unique(data$Parameter)) > 1) {
       aes$color <- "Parameter"
-      aes$group <- "Parameter"
+      data$.group <- paste(data$.group, data$Parameter)
     }
     if (length(unique(data$Group)) > 1) aes$facet <- "Group"
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
   }
 
-  # Find predictors
-  by <- att$focal_terms
-  # 2nd try
+
+  # Assign predictors to aes
   if (is.null(by)) {
     by <- att$by
   }
@@ -53,7 +62,7 @@
   }
   if (length(by) > 1) {
     aes$color <- by[2]
-    aes$group <- by[2]
+    data$.group <- paste(data$.group, data[[by[2]]])
   }
   if (length(by) > 2) {
     if (is.numeric(data[[by[3]]])) {
@@ -61,12 +70,17 @@
     } else {
       aes$facet <- stats::as.formula(paste("~", paste(utils::tail(by, -2), collapse = " * ")))
     }
-    data$.group <- paste(data[[by[2]]], "_", data[[by[3]]])
-    aes$group <- ".group"
+    data$.group <- paste(data$.group, data[[by[3]]])
   }
   if (length(by) > 3) {
     aes$facet <- NULL
-    aes$grid <- stats::as.formula(paste(by[3], "~", paste(utils::tail(by, -3), collapse = "*")))
+    # we have to switch variables 3 and 4, due to regression formula
+    remaining <- paste(utils::tail(by, -2))
+    aes$grid <- stats::as.formula(paste(
+      remaining[2],
+      "~",
+      paste(setdiff(remaining, remaining[2]), collapse = "*")
+    ))
   }
 
   # CI
@@ -128,6 +142,7 @@
                                   grid = NULL,
                                   join_dots = TRUE,
                                   ...) {
+  response_scale <- attributes(x)$predict
   aes <- .find_aes(x)
   data <- aes$data
   aes <- aes$aes
@@ -140,7 +155,12 @@
     do_not_join <- c(do_not_join, "pointrange")
   }
 
-  # TODO: Don't plot raw data if `predict` is not on the response scale
+  # Don't plot raw data if `predict` is not on the response scale
+  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectations", "invlink(link)")) {
+    show_data <- FALSE
+  }
+
+  # add raw data as first layer
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
     # Update with additional args
@@ -285,7 +305,7 @@
     stroke <- 1
   }
 
-  list(
+  out <- list(
     geom = geom,
     data = rawdata,
     aes = list(
@@ -296,8 +316,25 @@
     ),
     height = 0,
     shape = shape,
-    stroke = stroke,
-    # set default alpha, it not mapped by aes
-    alpha = ifelse(is.null(aes$alpha), 1 / 3, NULL)
+    stroke = stroke
   )
+
+  # check if we have matching columns in the raw data - some functions,
+  # likes slopes, have mapped these aes to other columns that are not part
+  # of the raw data - we set them to NULL
+  if (!is.null(aes$color) && !aes$color %in% colnames(rawdata)) {
+    out$aes$color <- NULL
+  }
+  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
+    out$aes$alpha <- NULL
+  }
+
+  # set default alpha, if not mapped by aes
+  if (is.null(aes$alpha)) {
+    out$alpha <- 1 / 3
+  } else {
+    out$alpha <- NULL
+  }
+
+  out
 }

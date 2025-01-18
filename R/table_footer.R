@@ -89,25 +89,19 @@
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
-  if (!is.null(comparison) && is.character(comparison) && grepl("=", comparison, fixed = TRUE) && grepl("\\bb\\d+\\b", comparison)) { # nolint
-    # find all "b" strings
-    matches <- gregexpr("\\bb\\d+\\b", comparison)[[1]]
-    match_lengths <- attr(matches, "match.length")
-
+  if (.is_custom_comparison(comparison)) {
     # extract all "b" strings, so we have a vector of all "b" used in the comparison
-    parameter_names <- unlist(lapply(seq_along(matches), function(i) {
-      substr(comparison, matches[i], matches[i] + match_lengths[i] - 1)
-    }), use.names = FALSE)
+    parameter_names <- .extract_custom_comparison(comparison)
 
     # datagrid contains all parameters, so we just need to find out the rows
     # and combine column names with row values
     if (!is.null(datagrid)) {
       # transpose, so we can easier extract information
-      transposed_dg <- t(datagrid)
+      transposed_dg <- t(datagrid[info$focal_terms])
       # interate over all parameters and create labels with proper names
       hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
         rows <- as.numeric(sub(".", "", i))
-        paste0(i, " = ", toString(paste0(colnames(datagrid), " [", transposed_dg[, rows], "]")))
+        paste0(i, " = ", toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]")))
       }), use.names = FALSE)
       # add all names to the footer
       table_footer <- paste0(
