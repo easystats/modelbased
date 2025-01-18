@@ -465,3 +465,13 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   expect_snapshot(print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 })
+
+
+test_that("estimate_contrasts - contrasts for numeric by factor", {
+  skip_if_not_installed("ggeffects")
+  data(iris)
+  model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+  out1 <- estimate_contrasts(model, contrast = "Petal.Length", by = "Species", backend = "marginaleffects") # nolint
+  out2 <- ggeffects::test_predictions(model, c("Petal.Length", "Species"))
+  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+})
