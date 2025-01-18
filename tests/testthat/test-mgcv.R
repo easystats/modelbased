@@ -21,7 +21,7 @@ test_that("estimate_contrasts - mgcv gam", {
   expect_identical(dim(estim), c(3L, 9L))
   estim2 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim2), c(3L, 8L))
-  expect_named(estim2, c("Species", "Difference", "SE", "CI_low", "CI_high", "t", "df"))
+  expect_named(estim2, c("Species", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(estim$Difference, estim2$Difference, tolerance = 1e-4)
 })
 
