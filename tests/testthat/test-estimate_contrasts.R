@@ -302,7 +302,7 @@ test_that("estimate_contrasts - marginaleffects", {
   dat$y <- as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))
   model <- glm(y ~ Species, family = "binomial", data = dat)
 
-  expect_message(estimate_contrasts(model), regex = "No variable was")
+  expect_message(estimate_contrasts(model, backend = "emmeans"), regex = "No variable was")
 
   ## emmeans backend works and has proper default
   out1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))

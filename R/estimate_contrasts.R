@@ -82,7 +82,7 @@
 #' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' # fix `am` at value 1
-#' estimate_contrasts(model, by = c("cyl", "am='1'"))
+#' estimate_contrasts(model, contrast = "cyl", by = "am='1'")
 #'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
