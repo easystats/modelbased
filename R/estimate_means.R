@@ -112,12 +112,32 @@
 #' model <- lm(Petal.Length ~ Sepal.Width * Species, data = iris)
 #'
 #' estimate_means(model)
+#'
+#' # the `length` argument is passed to `insight::get_datagrid()` and modulates
+#' # the number of representative values to return for numeric predictors
 #' estimate_means(model, by = c("Species", "Sepal.Width"), length = 2)
+#'
+#' # an alternative way to setup your data grid is specify the values directly
+#' estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
+#'
+#' # or use one of the many predefined "tokens" that help you creating a useful
+#' # data grid - to learn more about creating data grids, see help in
+#' # `?insight::get_datagrid`.
+#' estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
+#'
+#' # same for factors: filter by specific levels
 #' estimate_means(model, by = "Species=c('versicolor', 'setosa')")
-#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
 #' estimate_means(model, by = c("Species", "Sepal.Width=0"))
+#'
+#' # estimate marginal average of response at values for numeric predictor
 #' estimate_means(model, by = "Sepal.Width", length = 5)
 #' estimate_means(model, by = "Sepal.Width=c(2, 4)")
+#'
+#' # or provide the definition of the data grid as list
+#' estimate_means(
+#'   model,
+#'   by = list(Sepal.Width=c(2, 4), Species=c("versicolor", "setosa"))
+#' )
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
