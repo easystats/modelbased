@@ -1,8 +1,8 @@
 #' Consistent API for 'emmeans' and 'marginaleffects'
 #'
 #' @description
-#' These functions are convenient wrappers around the `emmeans` and the
-#' `marginaleffects` packages. They are mostly available for developers who want
+#' These functions are convenient wrappers around the **emmeans** and the
+#' **marginaleffects** packages. They are mostly available for developers who want
 #' to leverage a unified API for getting model-based estimates, and regular users
 #' should use the `estimate_*` set of functions.
 #'
