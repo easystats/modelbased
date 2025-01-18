@@ -201,7 +201,7 @@ withr::with_options(
   test_that("estimate_means - brms, categorical family", {
     m <- insight::download_model("brms_categorical_1_num")
     skip_if(is.null(m))
-    out <- estimate_means(m, "mpg = [terciles]", backend = "marginaleffects")
+    out <- estimate_means(m, "mpg = [fivenum]", backend = "marginaleffects")
     expect_named(
       out,
       c(
@@ -209,14 +209,14 @@ withr::with_options(
         "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
       )
     )
-    ## FIXME: works locally/interactive, but tests on GitHub fail
-    # expect_equal(
-    #   out$Median,
-    #   c(
-    #     0.97802, 0.73107, 0.22128, 0.00039, 0.00522, 0.12942, 0.5186,
-    #     0.92419, 0.01218, 0.11657, 0.23544, 0.07274
-    #   ),
-    #   tolerance = 1e-4
-    # )
+    expect_equal(
+      out$Median,
+      c(
+        0.97802, 0.83323, 0.45822, 0.12396, 0.00039, 0.00522, 0.06985,
+        0.32089, 0.62049, 0.92419, 0.01218, 0.07694, 0.201, 0.23148,
+        0.07274
+      ),
+      tolerance = 1e-4
+    )
   })
 )
