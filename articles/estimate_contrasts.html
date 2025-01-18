@@ -141,13 +141,13 @@ previous tutorial:</p>
 &gt; 
 &gt; Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
 &gt; ------------------------------------------------------------------------------
-&gt; setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | &lt; .001
-&gt; setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001
-&gt; versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 
+&gt; setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | &lt; .001
+&gt; setosa     |  virginica |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | &lt; .001
+&gt; versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 | 0.003 
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors contrasted: Species
-&gt; p-value adjustment method: Holm (1979)</code></pre>
+&gt; p-values are uncorrected.</code></pre>
 <p>We can conclude that all pairwise differences are statistically
 significant.</p>
 </div>
@@ -164,13 +164,13 @@ applied to more complex models:</p>
 &gt; 
 &gt; Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p
 &gt; -----------------------------------------------------------------------------
-&gt; setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001
-&gt; setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001
-&gt; versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 
+&gt; setosa     | versicolor |       1.59 | [ 0.81, 2.37] | 0.39 |   4.04 | &lt; .001
+&gt; setosa     |  virginica |       1.77 | [ 0.96, 2.59] | 0.41 |   4.29 | &lt; .001
+&gt; versicolor |  virginica |       0.18 | [-0.10, 0.47] | 0.15 |   1.27 | 0.205 
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors contrasted: Species
-&gt; p-value adjustment method: Holm (1979)</code></pre>
+&gt; p-values are uncorrected.</code></pre>
 <p>For instance, if we add <code>Petal.Width</code> in the model, we can
 see that the difference between <em>versicolor</em> and
 <em>virginica</em> becomes not significant (and even changes sign).</p>

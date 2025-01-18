@@ -84,7 +84,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  p_adjust <span class="op">=</span> <span class="st">"holm"</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"emmeans"</span><span class="op">)</span>,</span>
@@ -147,8 +147,8 @@ for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
 <dd><p>The p-values adjustment method for frequentist multiple
-comparisons. Can be one of <code>"holm"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>,
-<code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code> or <code>"none"</code>. See the
+comparisons. Can be one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>,
+<code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code> or <code>"holm"</code>. See the
 p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation or
 <code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">?stats::p.adjust</a></code>.</p></dd>
 
@@ -315,13 +315,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.66 | [ 0.49,  0.82] | 0.07 |   9.69 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.45 | [ 0.29,  0.62] | 0.07 |   6.68 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.20 | [-0.37, -0.04] | 0.07 |  -3.00 | 0.003 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 | 0.003 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Dealing with interactions</span></span></span>
@@ -336,13 +336,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       1.59 | [ 0.64, 2.54] | 0.39 |   4.04 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.77 | [ 0.77, 2.78] | 0.41 |   4.29 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |       0.18 | [-0.17, 0.54] | 0.15 |   1.27 | 0.205 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       1.59 | [ 0.81, 2.37] | 0.39 |   4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.77 | [ 0.96, 2.59] | 0.41 |   4.29 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |       0.18 | [-0.10, 0.47] | 0.15 |   1.27 | 0.205 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can also run contrasts between points of numeric</span></span></span>
@@ -352,16 +352,16 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1         |         Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 |      -2.02 | [-3.06, -0.98] | 0.39 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |      -1.35 | [-2.04, -0.65] | 0.26 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |      -0.67 | [-1.02, -0.33] | 0.13 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 |      -1.35 | [-1.86, -0.83] | 0.26 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 |      -2.02 | [-2.79, -1.25] | 0.39 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |      -1.35 | [-1.86, -0.83] | 0.26 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Petal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or both</span></span></span>
@@ -388,25 +388,25 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1                    |         95% CI |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-4.92,  0.91] | 0.98 |  -2.06 | 0.166 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [ 0.99,  2.66] | 0.28 |   6.55 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-1.50,  0.10] | 0.27 |  -2.61 | 0.059 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [ 0.62,  2.48] | 0.31 |   4.95 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-0.30,  0.37] | 0.11 |   0.29 | 0.984 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2.5     | [-1.54,  4.16] | 0.95 |   1.37 | 0.517 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2.5     | [-0.71,  4.79] | 0.92 |   2.21 | 0.142 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-6.69, -0.98] | 0.96 |  -4.01 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-4.08, -0.98] | 0.52 |  -4.86 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-1.49,  0.93] | 0.41 |  -0.69 | 0.984 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-2.64, -0.95] | 0.28 |  -6.35 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2.5 | [-0.08,  1.55] | 0.27 |   2.70 | 0.055 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-6.44, -0.67] | 0.97 |  -3.68 | 0.003 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-3.44, -1.06] | 0.40 |  -5.64 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-2.63, -0.40] | 0.37 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-3.94, -0.08] | 0.98 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [ 1.28,  2.38] | 0.28 |   6.55 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-1.23, -0.17] | 0.27 |  -2.61 | 0.010 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [ 0.93,  2.17] | 0.31 |   4.95 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width0.1     | [-0.19,  0.25] | 0.11 |   0.29 | 0.773 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2.5     | [-0.58,  3.19] | 0.95 |   1.37 | 0.172 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2.5     | [ 0.22,  3.86] | 0.92 |   2.21 | 0.028 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-5.73, -1.95] | 0.96 |  -4.01 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-3.56, -1.50] | 0.52 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-1.08,  0.52] | 0.41 |  -0.69 | 0.492 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width0.1 | [-2.35, -1.24] | 0.28 |  -6.35 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2.5 | [ 0.20,  1.27] | 0.27 |   2.70 | 0.008 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-5.47, -1.65] | 0.97 |  -3.68 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-3.04, -1.46] | 0.40 |  -5.64 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width0.1  | [-2.26, -0.77] | 0.37 |  -4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species, Petal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or with custom specifications</span></span></span>
@@ -415,43 +415,43 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1                  |                  Level2 | Difference |         95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |     setosa Petal.Width2 |      -0.84 | [-2.05,  0.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | versicolor Petal.Width1 |       1.63 | [ 0.68,  2.59]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | versicolor Petal.Width2 |       0.58 | [-0.45,  1.61]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |  virginica Petal.Width1 |       1.73 | [ 0.68,  2.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |  virginica Petal.Width2 |       1.10 | [ 0.17,  2.04]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | versicolor Petal.Width2 |       1.42 | [-0.77,  3.60]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     |  virginica Petal.Width2 |       1.94 | [-0.20,  4.08]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |     setosa Petal.Width2 |      -2.47 | [-4.62, -0.32]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | versicolor Petal.Width2 |      -1.05 | [-1.70, -0.41]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |  virginica Petal.Width1 |       0.10 | [-0.45,  0.65]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |  virginica Petal.Width2 |      -0.53 | [-0.81, -0.25]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2 |  virginica Petal.Width2 |       0.52 | [ 0.05,  0.99]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  |     setosa Petal.Width2 |      -2.57 | [-4.76, -0.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | versicolor Petal.Width2 |      -1.15 | [-1.83, -0.48]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  |  virginica Petal.Width2 |      -0.63 | [-1.10, -0.17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |     setosa Petal.Width2 |      -0.84 | [-1.64, -0.03]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | versicolor Petal.Width1 |       1.63 | [ 1.00,  2.27]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | versicolor Petal.Width2 |       0.58 | [-0.10,  1.26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |  virginica Petal.Width1 |       1.73 | [ 1.04,  2.43]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     |  virginica Petal.Width2 |       1.10 | [ 0.48,  1.72]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | versicolor Petal.Width2 |       1.42 | [-0.03,  2.86]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     |  virginica Petal.Width2 |       1.94 | [ 0.52,  3.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |     setosa Petal.Width2 |      -2.47 | [-3.89, -1.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | versicolor Petal.Width2 |      -1.05 | [-1.48, -0.62]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |  virginica Petal.Width1 |       0.10 | [-0.27,  0.47]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 |  virginica Petal.Width2 |      -0.53 | [-0.71, -0.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2 |  virginica Petal.Width2 |       0.52 | [ 0.21,  0.84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  |     setosa Petal.Width2 |      -2.57 | [-4.02, -1.12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | versicolor Petal.Width2 |      -1.15 | [-1.60, -0.71]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  |  virginica Petal.Width2 |      -0.63 | [-0.94, -0.32]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1                  |   SE | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.41 |  -2.06 | 0.166 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.41 |  -2.06 | 0.041 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.32 |   5.09 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.35 |   1.68 | 0.191 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.35 |   1.68 | 0.096 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.35 |   4.93 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.31 |   3.52 | 0.005 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | 0.73 |   1.94 | 0.166 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | 0.72 |   2.71 | 0.038 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | 0.72 |  -3.43 | 0.005 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width1     | 0.31 |   3.52 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | 0.73 |   1.94 | 0.055 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa Petal.Width2     | 0.72 |   2.71 | 0.008 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | 0.72 |  -3.43 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | 0.22 |  -4.86 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | 0.19 |   0.54 | 0.589 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width1 | 0.09 |  -5.72 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2 | 0.16 |   3.31 | 0.007 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | 0.73 |  -3.50 | 0.005 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor Petal.Width2 | 0.16 |   3.31 | 0.001 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | 0.73 |  -3.50 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | 0.23 |  -5.13 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica Petal.Width1  | 0.16 |  -4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species, Petal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or modulate it</span></span></span>
@@ -462,18 +462,18 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Petal.Width | Difference |        95% CI |   SE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        0.10 |       1.83 | [ 1.15, 2.50] | 0.28</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        0.10 |       1.55 | [ 0.79, 2.30] | 0.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        0.10 |      -0.28 | [-1.26, 0.70] | 0.41</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        0.90 |       1.65 | [ 0.96, 2.35] | 0.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        0.90 |       1.71 | [ 0.93, 2.50] | 0.32</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        0.90 |       0.06 | [-0.44, 0.56] | 0.21</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        1.70 |       1.48 | [ 0.03, 2.94] | 0.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        1.70 |       1.88 | [ 0.43, 3.32] | 0.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        1.70 |       0.40 | [ 0.12, 0.67] | 0.11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        2.50 |       1.31 | [-1.00, 3.62] | 0.95</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        2.50 |       2.04 | [-0.19, 4.28] | 0.92</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        2.50 |       0.73 | [ 0.08, 1.39] | 0.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        0.10 |       1.83 | [ 1.28, 2.38] | 0.28</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        0.10 |       1.55 | [ 0.93, 2.17] | 0.31</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        0.10 |      -0.28 | [-1.08, 0.52] | 0.41</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        0.90 |       1.65 | [ 1.08, 2.22] | 0.29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        0.90 |       1.71 | [ 1.07, 2.35] | 0.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        0.90 |       0.06 | [-0.35, 0.47] | 0.21</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        1.70 |       1.48 | [ 0.29, 2.67] | 0.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        1.70 |       1.88 | [ 0.70, 3.06] | 0.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        1.70 |       0.40 | [ 0.17, 0.62] | 0.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |        2.50 |       1.31 | [-0.58, 3.19] | 0.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |        2.50 |       2.04 | [ 0.22, 3.86] | 0.92</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |        2.50 |       0.73 | [ 0.20, 1.27] | 0.27</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | t(144) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
@@ -484,15 +484,15 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   5.28 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |   0.28 | 0.780 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   2.47 | 0.015 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   3.14 | 0.004 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |   3.50 | 0.002 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   3.14 | 0.002 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |   3.50 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   1.37 | 0.172 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   2.21 | 0.057 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |   2.70 | 0.023 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |   2.21 | 0.028 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |   2.70 | 0.008 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Standardized differences</span></span></span>
@@ -504,13 +504,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       1.51 | [ 1.13,  1.89] | 0.16 |   9.69 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.04 | [ 0.66,  1.42] | 0.16 |   6.68 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.47 | [-0.85, -0.09] | 0.16 |  -3.00 | 0.003 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       1.51 | [ 1.20,  1.82] | 0.16 |   9.69 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       1.04 | [ 0.73,  1.35] | 0.16 |   6.68 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.47 | [-0.78, -0.16] | 0.16 |  -3.00 | 0.003 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...)</span></span></span>
@@ -525,13 +525,13 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     |     Level2 | Difference |        95% CI |   SE |   df |     t |     p</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.87 | [-2.63, 4.37] | 0.09 | 1.00 |  9.54 | 0.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.80 | [-2.53, 4.13] | 0.12 | 1.11 |  6.52 | 0.200</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.07 | [-2.98, 2.83] | 0.08 | 1.00 | -0.97 | 0.510</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | versicolor |       0.87 | [-0.29, 2.03] | 0.09 | 1.00 |  9.54 | 0.067</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  virginica |       0.80 | [-0.44, 2.03] | 0.12 | 1.11 |  6.52 | 0.081</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  virginica |      -0.07 | [-1.04, 0.89] | 0.08 | 1.00 | -0.97 | 0.510</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-value adjustment method: Holm (1979)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">mtcars</span></span></span>
