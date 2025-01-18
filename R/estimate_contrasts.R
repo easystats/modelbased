@@ -106,7 +106,7 @@ estimate_contrasts <- function(model,
                                p_adjust = "none",
                                comparison = "pairwise",
                                marginalize = "average",
-                               backend = getOption("modelbased_backend", "emmeans"),
+                               backend = getOption("modelbased_backend", "marginaleffects"),
                                transform = NULL,
                                verbose = TRUE,
                                ...) {
