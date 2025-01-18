@@ -1,17 +1,21 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
-#' Estimate average value of response variable at each factor level. For
-#' plotting, check the examples in [visualisation_recipe()]. See also
-#' other related functions such as [estimate_contrasts()] and
-#' [estimate_slopes()].
+#' Estimate average value of response variable at each factor level or
+#' representative value, respectively at values defined in a "data grid" or
+#' "reference grid". For plotting, check the examples in
+#' [visualisation_recipe()]. See also other related functions such as
+#' [estimate_contrasts()] and [estimate_slopes()].
 #'
 #' @param model A statistical model.
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired
 #' effect / mean / contrasts. Other predictors of the model that are not
 #' included here will be collapsed and "averaged" over (the effect will be
-#' estimated across them). `by` can a character (vector) naming the focal
-#' predictors (and optionally, representative values or levels), or a list of named
-#' elements. See details in [`insight::get_datagrid()`].
+#' estimated across them). The `by` argument is used to create a "reference grid"
+#' or "data grid" with representative values for the focal predictors, i.e. `by`
+#' can be a character (vector) naming the focal predictors (and optionally,
+#' representative values or levels), or a list of named elements. See details
+#' in [`insight::get_datagrid()`] to learn more about how to create data grids
+#' for predictors of interest.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
