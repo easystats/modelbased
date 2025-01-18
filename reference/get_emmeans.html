@@ -153,9 +153,12 @@ for which to compute the contrasts.</p></dd>
 <dd><p>The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). <code>by</code> can a character (vector) naming the focal
-predictors (and optionally, representative values or levels), or a list of named
-elements. See details in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>.</p></dd>
+estimated across them). The <code>by</code> argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors, i.e. <code>by</code>
+can be a character (vector) naming the focal predictors (and optionally,
+representative values or levels), or a list of named elements. See details
+in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids
+for predictors of interest.</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
