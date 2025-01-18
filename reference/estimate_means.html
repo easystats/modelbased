@@ -289,6 +289,9 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the `length` argument is passed to `insight::get_datagrid()` and modulates</span></span></span>
+<span class="r-in"><span><span class="co"># the number of representative values to return for numeric predictors</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -304,6 +307,53 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species, Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># an alternative way to setup your data grid is specify the values directly</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width = c(2, 4)"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Sepal.Width | Mean |   SE |       95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |           2 | 1.35 | 0.21 | [0.92, 1.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |           2 | 3.61 | 0.15 | [3.33, 3.90]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |           2 | 4.88 | 0.17 | [4.54, 5.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |           4 | 1.51 | 0.10 | [1.31, 1.70]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |           4 | 5.29 | 0.22 | [4.85, 5.73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |           4 | 6.26 | 0.18 | [5.89, 6.62]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species, Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># or use one of the many predefined "tokens" that help you creating a useful</span></span></span>
+<span class="r-in"><span><span class="co"># data grid - to learn more about creating data grids, see help in</span></span></span>
+<span class="r-in"><span><span class="co"># `?insight::get_datagrid`.</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width = [fivenum]"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Sepal.Width | Mean |   SE |       95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |        2.00 | 1.35 | 0.21 | [0.92, 1.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |        2.00 | 3.61 | 0.15 | [3.33, 3.90]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |        2.00 | 4.88 | 0.17 | [4.54, 5.23]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |        2.80 | 1.41 | 0.11 | [1.20, 1.62]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |        2.80 | 4.29 | 0.05 | [4.18, 4.39]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |        2.80 | 5.43 | 0.06 | [5.31, 5.56]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |        3.00 | 1.43 | 0.08 | [1.26, 1.59]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |        3.00 | 4.45 | 0.07 | [4.32, 4.59]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |        3.00 | 5.57 | 0.05 | [5.46, 5.68]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |        3.30 | 1.45 | 0.06 | [1.34, 1.57]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |        3.30 | 4.70 | 0.11 | [4.49, 4.92]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |        3.30 | 5.78 | 0.08 | [5.62, 5.93]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |        4.40 | 1.54 | 0.15 | [1.24, 1.84]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |        4.40 | 5.63 | 0.29 | [5.05, 6.20]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |        4.40 | 6.53 | 0.25 | [6.04, 7.02]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species, Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># same for factors: filter by specific levels</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species=c('versicolor', 'setosa')"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
@@ -315,18 +365,6 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width=c(2, 4)"</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width | Mean |   SE |       95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2           | 3.28 | 0.10 | [3.07, 3.49]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4           | 4.35 | 0.10 | [4.15, 4.55]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
@@ -340,6 +378,8 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Species, Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimate marginal average of response at values for numeric predictor</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width"</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
@@ -366,6 +406,24 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Sepal.Width</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># or provide the definition of the data grid as list</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Width<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, Species<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width |    Species | Mean |   SE |       95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           | versicolor | 3.61 | 0.15 | [3.33, 3.90]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           | versicolor | 5.29 | 0.22 | [4.85, 5.73]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2           |     setosa | 1.35 | 0.21 | [0.92, 1.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4           |     setosa | 1.51 | 0.10 | [1.31, 1.70]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors modulated: Sepal.Width, Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods that can be applied to it:</span></span></span>
