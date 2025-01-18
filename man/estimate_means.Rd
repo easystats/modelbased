@@ -223,7 +223,7 @@ estimate_means(model, by = "Sepal.Width=c(2, 4)")
 # or provide the definition of the data grid as list
 estimate_means(
   model,
-  by = list(Sepal.Width=c(2, 4), Species=c("versicolor", "setosa"))
+  by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
 
 # Methods that can be applied to it:
