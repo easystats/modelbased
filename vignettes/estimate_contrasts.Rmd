@@ -54,6 +54,7 @@ Let's carry out contrast analysis on the simple model from the previous tutorial
 ```{r}
 library(ggplot2)
 library(modelbased)
+data(iris)
 
 model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
