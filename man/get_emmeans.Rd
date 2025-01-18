@@ -186,8 +186,8 @@ In other words, the distinction between marginalization types resides in whether
 the prediction are made for:
 \itemize{
 \item A specific "individual" from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using
-\code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
+predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
+and the other prediction functions.
 \item An average individual from the sample: obtained with
 \code{estimate_means(..., marginalize = "average")}
 \item The broader, hypothetical target population: obtained with
