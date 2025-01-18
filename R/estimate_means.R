@@ -60,17 +60,17 @@
 #'   extrapolation to the population. Counterfactual predictions are useful,
 #'   insofar as the results can also be transferred to other contexts
 #'   (Dickerman and Hernan, 2020). It answers the question, "What is the
-#'   predicted for the 'average' observation in *the general population*?".
+#'   predicted for the 'average' observation in *the broader target population*?".
 #'   It does not only refer to the actual data in your observed sample, but also
 #'   "what would be if" we had more data, or if we had data from a different sample.
 #'
 #' In other words, the distinction between marginalization types resides in whether
 #' the prediction are made for:
-#' - A specific "individual" (i.e., a specific combination of predictor values):
+#' - A specific "individual" from the sample (i.e., a specific combination of predictor values):
 #'   this is what is obtained when using [`estimate_relation()`] and the other
 #'   prediction functions.
-#' - An average individual: obtained with `estimate_means(..., marginalize = "average")`
-#' - The "general population": obtained with `estimate_means(..., marginalize = "population")`
+#' - An average individual from the sample: obtained with `estimate_means(..., marginalize = "average")`
+#' - The "broader target population": obtained with `estimate_means(..., marginalize = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
