@@ -85,7 +85,7 @@ get_marginalmeans <- function(model,
     # restore data types -  if we have defined numbers in `by`, like
     # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
     # numeric in the data grid. Fix this here, else marginal effects will fail
-    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model))
+    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
 
     # add user-arguments from "...", but remove those arguments that are
     # already used (see below) when calling marginaleffects
@@ -226,7 +226,7 @@ get_marginalmeans <- function(model,
 #' @keywords internal
 .guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, verbose = TRUE, ...) {
   # Gather info and data from model
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
     colnames(model_data),
     insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)

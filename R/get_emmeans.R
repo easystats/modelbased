@@ -180,7 +180,7 @@ get_emmeans <- function(model,
 .process_emmeans_arguments <- function(model, args, data, ...) {
   # Create the data_matrix
   # ---------------------------
-  # data <- insight::get_data(model)
+  # data <- insight::get_data(model, verbose = FALSE)
   predictors <- insight::find_predictors(
     model,
     effects = "fixed",
