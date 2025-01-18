@@ -373,3 +373,30 @@ test_that("get_marginaleffects, value definition in `by`", {
   expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
   expect_identical(difference$Parameter, "control - treatment")
 })
+
+
+test_that("estimate_means, values inside correct bounds", {
+  # see https://strengejacke.github.io/ggeffects/articles/technical_stata.html
+  set.seed(5)
+
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = as.factor(rbinom(100, 1, 0.1)),
+    var2 = rnorm(100, 10, 7)
+  )
+
+  m <- glm(
+    outcome ~ var1 * var2,
+    data = data,
+    family = binomial(link = "logit")
+  )
+
+  out1 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "marginaleffects")
+  out2 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "emmeans")
+  expect_true(all(out1$Probability >= 0 & out1$Probability <= 1))
+  expect_true(all(out2$Probability >= 0 & out2$Probability <= 1))
+  expect_true(all(out1$CI_low >= 0 & out1$CI_low <= 1))
+  expect_true(all(out1$CI_high >= 0 & out1$CI_high <= 1))
+  expect_true(all(out2$CI_low >= 0 & out2$CI_low <= 1))
+  expect_true(all(out2$CI_high >= 0 & out2$CI_high <= 1))
+})

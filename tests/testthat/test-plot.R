@@ -400,3 +400,24 @@ test_that("plots, 4-way with numeric", {
     plot(estim, show_data = FALSE)
   )
 })
+
+
+test_that("plots, glm logistic inside bound", {
+  set.seed(5)
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = as.factor(rbinom(100, 1, 0.1)),
+    var2 = rnorm(100, 10, 7)
+  )
+  m <- glm(
+    outcome ~ var1 * var2,
+    data = data,
+    family = binomial(link = "logit")
+  )
+  out1 <- estimate_means(m, c("var2 = [sd]", "var1"), backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-logistic-bounds-1",
+    plot(out1, show_data = FALSE)
+  )
+})
