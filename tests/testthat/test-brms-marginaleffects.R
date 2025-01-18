@@ -199,6 +199,7 @@ withr::with_options(
 withr::with_options(
   list(modelbased_backend = "marginaleffects"),
   test_that("estimate_means - brms, categorical family", {
+    data(mtcars)
     m <- insight::download_model("brms_categorical_1_num")
     skip_if(is.null(m))
     out <- estimate_means(m, "mpg = [fivenum]", backend = "marginaleffects")

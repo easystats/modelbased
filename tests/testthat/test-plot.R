@@ -382,6 +382,12 @@ test_that("plots, logistic regression", {
     "plot-glm-logistic-1",
     plot(out, show_data = TRUE)
   )
+  out <- estimate_means(model, "wt", length = 100, predict = "link", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-glm-logistic-2",
+    plot(out, show_data = TRUE)
+  )
 })
 
 

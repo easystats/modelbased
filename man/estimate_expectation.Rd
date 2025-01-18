@@ -107,16 +107,17 @@ their default arguments (in particular, \code{data} and \code{predict}):
 \item \code{estimate_link(data = "grid", predict = "link", ...)}
 }
 
-While they are all based on model-based predictions (using \code{\link[insight:get_predicted]{insight::get_predicted()}}),
-they differ in terms of the \strong{type} of predictions they make by default. For
-instance, \code{estimate_prediction}/\code{estimate_expectation} return predictions for
-the original data used to fit the model, while \code{estimate_relation}/\code{estimate_link}
-return predictions on a \code{\link[insight:get_datagrid]{insight::get_datagrid()}}. Similarly, \code{estimate_link}
+While they are all based on model-based predictions (using
+\code{\link[insight:get_predicted]{insight::get_predicted()}}), they differ in terms of the \strong{type} of
+predictions they make by default. For instance, \code{estimate_prediction()} and
+\code{estimate_expectation()} return predictions for the original data used to fit
+the model, while \code{estimate_relation()} and \code{estimate_link()} return
+predictions on a \code{\link[insight:get_datagrid]{insight::get_datagrid()}}. Similarly, \code{estimate_link}
 returns predictions on the link scale, while the others return predictions on
-the response scale. Note that the relevance of these differences depends on the
-model family (for instance, for linear models, \code{estimate_relation} is equivalent
-to \code{estimate_link}, since there is no difference between the link-scale and the
-response scale).
+the response scale. Note that the relevance of these differences depends on
+the model family (for instance, for linear models, \code{estimate_relation} is
+equivalent to \code{estimate_link()}, since there is no difference between the
+link-scale and the response scale).
 
 Note that you can run \code{\link[=visualisation_recipe.estimate_predicted]{plot()}} on
 the output of these functions to get some visual insights (see the

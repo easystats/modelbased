@@ -142,6 +142,7 @@
                                   grid = NULL,
                                   join_dots = TRUE,
                                   ...) {
+  response_scale <- attributes(x)$predict
   aes <- .find_aes(x)
   data <- aes$data
   aes <- aes$aes
@@ -154,7 +155,12 @@
     do_not_join <- c(do_not_join, "pointrange")
   }
 
-  # TODO: Don't plot raw data if `predict` is not on the response scale
+  # Don't plot raw data if `predict` is not on the response scale
+  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectations", "invlink(link)")) {
+    show_data <- FALSE
+  }
+
+  # add raw data as first layer
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
     # Update with additional args

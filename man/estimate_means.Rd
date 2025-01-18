@@ -88,8 +88,8 @@ In other words, the distinction between marginalization types resides in whether
 the prediction are made for:
 \itemize{
 \item A specific "individual" from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using
-\code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
+predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
+and the other prediction functions.
 \item An average individual from the sample: obtained with
 \code{estimate_means(..., marginalize = "average")}
 \item The broader, hypothetical target population: obtained with
@@ -223,7 +223,7 @@ estimate_means(model, by = "Sepal.Width=c(2, 4)")
 # or provide the definition of the data grid as list
 estimate_means(
   model,
-  by = list(Sepal.Width=c(2, 4), Species=c("versicolor", "setosa"))
+  by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
 
 # Methods that can be applied to it:

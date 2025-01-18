@@ -68,8 +68,8 @@
 #' In other words, the distinction between marginalization types resides in whether
 #' the prediction are made for:
 #' - A specific "individual" from the sample (i.e., a specific combination of
-#'   predictor values): this is what is obtained when using
-#'   [`estimate_relation()`] and the other prediction functions.
+#'   predictor values): this is what is obtained when using [`estimate_relation()`]
+#'   and the other prediction functions.
 #' - An average individual from the sample: obtained with
 #'   `estimate_means(..., marginalize = "average")`
 #' - The broader, hypothetical target population: obtained with
@@ -147,7 +147,7 @@
 #' # or provide the definition of the data grid as list
 #' estimate_means(
 #'   model,
-#'   by = list(Sepal.Width=c(2, 4), Species=c("versicolor", "setosa"))
+#'   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 #' )
 #'
 #' # Methods that can be applied to it:
@@ -203,7 +203,11 @@ estimate_means <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
+  attr(means, "table_title") <- c(ifelse(
+    marginalize == "individual",
+    "Model-based Predictions",
+    "Estimated Marginal Means"
+  ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
     by = info$by,
