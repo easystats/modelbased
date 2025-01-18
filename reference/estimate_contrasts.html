@@ -112,7 +112,7 @@ for which to compute the contrasts.</p></dd>
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). The <code>by</code> argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors, i.e. <code>by</code>
+or "data grid" with representative values for the focal predictors. <code>by</code>
 can be a character (vector) naming the focal predictors (and optionally,
 representative values or levels), or a list of named elements. See details
 in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids
@@ -187,31 +187,34 @@ within subsets by indicating the grouping variable after a vertical bar
 <dt id="arg-marginalize">marginalize<a class="anchor" aria-label="anchor" href="#arg-marginalize"></a></dt>
 <dd><p>Character string, indicating the type of marginalization.
 This dictates how the predictions are "averaged" over the non-focal predictors,
-i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric predictors and
-marginalizes over the factor levels of non-focal terms, which computes a
-kind of "weighted average" for the values at which these terms are hold
-constant. These predictions are a good representation of the sample,
-because all possible values and levels of the non-focal predictors are
-taken into account. It answers the question, "What is the predicted value
-for an 'average' observation in <em>my data</em>?". It refers to
-randomly picking a subject of your sample and the result you get on average.
-This approach is the one taken by default in the <code>emmeans</code> package.</p></li>
+i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
+predictors and marginalizes over the factor levels of non-focal terms,
+which computes a kind of "weighted average" for the values at which these
+terms are hold constant. These predictions are a good representation of the
+sample, because all possible values and levels of the non-focal predictors
+are taken into account. It answers the question, "What is the predicted
+value for an 'average' observation in <em>my data</em>?". It refers to randomly
+picking a subject of your sample and the result you get on average. This
+approach is the one taken by default in the <code>emmeans</code> package.</p></li>
 <li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
 (aggregated/grouped by the focal terms). It can be considered as
-extrapolation to the population. Counterfactual predictions are useful,
-insofar as the results can also be transferred to other contexts
-(Dickerman and Hernan, 2020). It answers the question, "What is the
-predicted for the 'average' observation in <em>the general population</em>?".
-It does not only refer to the actual data in your observed sample, but also
-"what would be if" we had more data, or if we had data from a different sample.</p></li>
+extrapolation to a hypothetical target population. Counterfactual
+predictions are useful, insofar as the results can also be transferred to
+other contexts (Dickerman and Hernan, 2020). It answers the question, "What
+is the predicted for the 'average' observation in <em>the broader target
+population</em>?". It does not only refer to the actual data in your observed
+sample, but also "what would be if" we had more data, or if we had data
+from a different sample.</p></li>
 </ul><p>In other words, the distinction between marginalization types resides in whether
-the prediction are made for:</p><ul><li><p>A specific "individual" (i.e., a specific combination of predictor values):
-this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other
-prediction functions.</p></li>
-<li><p>An average individual: obtained with <code>estimate_means(..., marginalize = "average")</code></p></li>
-<li><p>The "general population": obtained with <code>estimate_means(..., marginalize = "population")</code></p></li>
+the prediction are made for:</p><ul><li><p>A specific "individual" from the sample (i.e., a specific combination of
+predictor values): this is what is obtained when using
+<code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other prediction functions.</p></li>
+<li><p>An average individual from the sample: obtained with
+<code>estimate_means(..., marginalize = "average")</code></p></li>
+<li><p>The broader, hypothetical target population: obtained with
+<code>estimate_means(..., marginalize = "population")</code></p></li>
 </ul></dd>
 
 
@@ -349,18 +352,50 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can also run contrasts between points of numeric</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, by <span class="op">=</span> <span class="st">"Species"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1         |         Level2 | Difference |         95% CI |   SE | t(144) |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 |      -1.35 | [-1.86, -0.83] | 0.26 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 |      -2.02 | [-2.79, -1.25] | 0.39 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |      -1.35 | [-1.86, -0.83] | 0.26 |  -5.18 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |      -0.67 | [-0.93, -0.42] | 0.13 |  -5.18 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1         |         Level2 |    Species | Difference |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 |     setosa |      -0.67 | [-1.31, -0.03]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 |     setosa |      -1.34 | [-2.63, -0.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 |     setosa |      -2.01 | [-3.94, -0.08]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 |     setosa |      -0.67 | [-1.31, -0.03]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |     setosa |      -1.34 | [-2.63, -0.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |     setosa |      -0.67 | [-1.31, -0.03]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 | versicolor |      -0.84 | [-1.19, -0.50]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 | versicolor |      -1.69 | [-2.37, -1.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 | versicolor |      -2.53 | [-3.56, -1.50]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 | versicolor |      -0.84 | [-1.19, -0.50]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 | versicolor |      -1.69 | [-2.37, -1.00]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 | versicolor |      -0.84 | [-1.19, -0.50]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width0.9 |  virginica |      -0.51 | [-0.75, -0.26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width1.7 |  virginica |      -1.01 | [-1.50, -0.52]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | Petal.Width2.5 |  virginica |      -1.52 | [-2.26, -0.77]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width1.7 |  virginica |      -0.51 | [-0.75, -0.26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | Petal.Width2.5 |  virginica |      -1.01 | [-1.50, -0.52]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | Petal.Width2.5 |  virginica |      -0.51 | [-0.75, -0.26]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1         |   SE | t(144) |      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.33 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.65 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.98 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.33 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.65 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | 0.33 |  -2.06 | 0.041 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.17 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.35 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.52 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.17 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.35 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | 0.17 |  -4.86 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.12 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.25 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.1 | 0.37 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.12 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width0.9 | 0.25 |  -4.04 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Petal.Width1.7 | 0.12 |  -4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Petal.Width</span></span>
