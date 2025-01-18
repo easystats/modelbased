@@ -284,7 +284,7 @@ model <- rstanarm::stan_glm(
   data = iris,
   refresh = 0
 )
-estimate_contrasts(model, by = "Petal.Length", test = "bf")
+estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 }
 \dontshow{\}) # examplesIf}
 }

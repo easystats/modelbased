@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300
 )
-options(digits = 2)
+options(digits = 2, modelbased_backend = "emmeans")
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
@@ -129,5 +129,9 @@ As we can see, the difference between *versicolor* and *virginica* increases as
 
 Contrast analysis can be a powerful tool to interpret and understand statistical
 models.
+
+```{r, echo=FALSE}
+options(modelbased_backend = NULL)
+```
 
 # References

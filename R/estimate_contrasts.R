@@ -93,7 +93,7 @@
 #'   data = iris,
 #'   refresh = 0
 #' )
-#' estimate_contrasts(model, by = "Petal.Length", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
