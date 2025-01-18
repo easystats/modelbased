@@ -148,7 +148,11 @@ estimate_contrasts <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
+  attr(out, "table_title") <- c(ifelse(
+    marginalize == "individual",
+    "Model-based Contrasts Analysis",
+    "Marginal Contrasts Analysis"
+  ), "blue")
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,

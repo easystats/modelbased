@@ -203,7 +203,11 @@ estimate_means <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(means, "table_title") <- c("Estimated Marginal Means", "blue")
+  attr(means, "table_title") <- c(ifelse(
+    marginalize == "individual",
+    "Model-based Predictions",
+    "Estimated Marginal Means"
+  ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
     by = info$by,
