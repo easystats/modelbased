@@ -535,7 +535,7 @@
     Code
       estimate_expectation(model, by = c("c160age=[fivenum]", "c161sex"))
     Output
-      Model-based Expectation
+      Model-based Predictions
       
       c160age | c161sex | Predicted |   SE |         95% CI
       -----------------------------------------------------

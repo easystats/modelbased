@@ -443,7 +443,7 @@ estimate_relation <- function(model,
   attr(out, "model") <- model
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
-  attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
+  attr(out, "table_title") <- c("Model-based Predictions", "blue")
   attr(out, "table_footer") <- .table_footer(
     out,
     by = grid_specs$at,
