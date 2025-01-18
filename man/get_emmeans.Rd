@@ -69,7 +69,7 @@ for which to compute the contrasts.}
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors, i.e. \code{by}
+or "data grid" with representative values for the focal predictors. \code{by}
 can be a character (vector) naming the focal predictors (and optionally,
 representative values or levels), or a list of named elements. See details
 in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
@@ -160,35 +160,38 @@ compute the slopes.}
 This dictates how the predictions are "averaged" over the non-focal predictors,
 i.e. those variables that are not specified in \code{by} or \code{contrast}.
 \itemize{
-\item \code{"average"} (default): Takes the mean value for non-focal numeric predictors and
-marginalizes over the factor levels of non-focal terms, which computes a
-kind of "weighted average" for the values at which these terms are hold
-constant. These predictions are a good representation of the sample,
-because all possible values and levels of the non-focal predictors are
-taken into account. It answers the question, "What is the predicted value
-for an 'average' observation in \emph{my data}?". It refers to
-randomly picking a subject of your sample and the result you get on average.
-This approach is the one taken by default in the \code{emmeans} package.
+\item \code{"average"} (default): Takes the mean value for non-focal numeric
+predictors and marginalizes over the factor levels of non-focal terms,
+which computes a kind of "weighted average" for the values at which these
+terms are hold constant. These predictions are a good representation of the
+sample, because all possible values and levels of the non-focal predictors
+are taken into account. It answers the question, "What is the predicted
+value for an 'average' observation in \emph{my data}?". It refers to randomly
+picking a subject of your sample and the result you get on average. This
+approach is the one taken by default in the \code{emmeans} package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
 (aggregated/grouped by the focal terms). It can be considered as
-extrapolation to the population. Counterfactual predictions are useful,
-insofar as the results can also be transferred to other contexts
-(Dickerman and Hernan, 2020). It answers the question, "What is the
-predicted for the 'average' observation in \emph{the general population}?".
-It does not only refer to the actual data in your observed sample, but also
-"what would be if" we had more data, or if we had data from a different sample.
+extrapolation to a hypothetical target population. Counterfactual
+predictions are useful, insofar as the results can also be transferred to
+other contexts (Dickerman and Hernan, 2020). It answers the question, "What
+is the predicted for the 'average' observation in \emph{the broader target
+population}?". It does not only refer to the actual data in your observed
+sample, but also "what would be if" we had more data, or if we had data
+from a different sample.
 }
 
 In other words, the distinction between marginalization types resides in whether
 the prediction are made for:
 \itemize{
-\item A specific "individual" (i.e., a specific combination of predictor values):
-this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}} and the other
-prediction functions.
-\item An average individual: obtained with \code{estimate_means(..., marginalize = "average")}
-\item The "general population": obtained with \code{estimate_means(..., marginalize = "population")}
+\item A specific "individual" from the sample (i.e., a specific combination of
+predictor values): this is what is obtained when using
+\code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
+\item An average individual from the sample: obtained with
+\code{estimate_means(..., marginalize = "average")}
+\item The broader, hypothetical target population: obtained with
+\code{estimate_means(..., marginalize = "population")}
 }}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}

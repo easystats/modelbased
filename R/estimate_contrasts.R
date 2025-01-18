@@ -53,7 +53,7 @@
 #' estimate_contrasts(model)
 #'
 #' # Can also run contrasts between points of numeric
-#' estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+#' estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
 #'
 #' # Or both
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)

@@ -24,7 +24,7 @@ compute the slopes.}
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors, i.e. \code{by}
+or "data grid" with representative values for the focal predictors. \code{by}
 can be a character (vector) naming the focal predictors (and optionally,
 representative values or levels), or a list of named elements. See details
 in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
