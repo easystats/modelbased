@@ -39,7 +39,10 @@ get_marginalmeans <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
+  marginalize <- insight::validate_argument(
+    marginalize,
+    c("average", "population", "individual")
+  )
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
@@ -56,10 +59,14 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
+    dg_factors <- switch(marginalize,
+      individual = "reference",
+      "all"
+    )
     dg_args <- list(
       model,
       by = my_args$by,
-      factors = "all",
+      factors = dg_factors,
       include_random = TRUE,
       verbose = FALSE
     )

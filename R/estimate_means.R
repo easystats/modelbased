@@ -177,7 +177,10 @@ estimate_means <- function(model,
   }
 
   # validate input
-  marginalize <- insight::validate_argument(marginalize, c("average", "population"))
+  marginalize <- insight::validate_argument(
+    marginalize,
+    c("average", "population", "individual")
+  )
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
