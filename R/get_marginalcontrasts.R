@@ -7,7 +7,7 @@ get_marginalcontrasts <- function(model,
                                   comparison = "pairwise",
                                   marginalize = "average",
                                   ci = 0.95,
-                                  p_adjust = "holm",
+                                  p_adjust = "none",
                                   verbose = TRUE,
                                   ...) {
   # check if available

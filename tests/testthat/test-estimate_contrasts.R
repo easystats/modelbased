@@ -253,12 +253,19 @@ test_that("estimate_contrasts - dfs", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite"))
-  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger"))
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", p_adjust = "holm", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", p_adjust = "holm", backend = "emmeans"))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
   expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
   expect_equal(estim2$CI_low, c(-2.62766, -2.53389, -2.98196), tolerance = 1e-4)
+
+  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", backend = "emmeans"))
+  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", backend = "emmeans"))
+
+  expect_true(all(estim1$CI_low != estim2$CI_low))
+  expect_equal(estim1$CI_low, c(-0.22624, -0.33383, -1.0109), tolerance = 1e-4)
+  expect_equal(estim2$CI_low, c(-0.29193, -0.4364, -1.04019), tolerance = 1e-4)
 })
 
 
@@ -278,6 +285,12 @@ test_that("estimate_contrasts - marginaleffects", {
   out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
   expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  # validated against ggeffects::test_predictions()
+  data(efc, package = "ggeffects")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
+  expect_snapshot(estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects"))
 })
 
 
@@ -319,13 +332,15 @@ test_that("estimate_contrasts - marginaleffects", {
   # test p-adjust
   expect_snapshot(estimate_contrasts(model, backend = "emmeans"))
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans", p_adjust = "holm"))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects", p_adjust = "holm"))
 })
 
 
 test_that("estimate_contrasts - on-the-fly factors", {
   data(mtcars)
   model <- lm(mpg ~ as.factor(cyl) + wt * hp, mtcars)
-  out1 <- estimate_contrasts(model)
+  out1 <- estimate_contrasts(model, backend = "emmeans")
   out2 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out1), 3L)
@@ -335,7 +350,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
   model <- lm(mpg ~ cyl + wt * hp, mtcars2)
-  out3 <- estimate_contrasts(model)
+  out3 <- estimate_contrasts(model, backend = "emmeans")
   out4 <- estimate_contrasts(model, contrast = "cyl", backend = "marginaleffects")
 
   expect_identical(nrow(out3), 3L)
@@ -366,13 +381,13 @@ test_that("estimate_contrasts - different options for comparison", {
   dat_glm <- glm(y ~ fa, data = dat, family = poisson(link = "log"))
 
   # emmeans
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "eff", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
   )
   expect_equal(out$Difference, c(0.2, 0.55, -0.6, -0.15), tolerance = 1e-3)
-  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly")
+  out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "poly", backend = "emmeans")
   expect_named(
     out,
     c("Level", "Difference", "CI_low", "CI_high", "SE", "df", "z", "p")
