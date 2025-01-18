@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.37</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.38</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -171,8 +171,8 @@ sample, but also "what would be if" we had more data, or if we had data
 from a different sample.</p></li>
 </ul><p>In other words, the distinction between marginalization types resides in whether
 the prediction are made for:</p><ul><li><p>A specific "individual" from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using
-<code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other prediction functions.</p></li>
+predictor values): this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code>
+and the other prediction functions.</p></li>
 <li><p>An average individual from the sample: obtained with
 <code>estimate_means(..., marginalize = "average")</code></p></li>
 <li><p>The broader, hypothetical target population: obtained with
@@ -423,7 +423,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-in"><span><span class="co"># or provide the definition of the data grid as list</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span></span></span>
 <span class="r-in"><span>  <span class="va">model</span>,</span></span>
-<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Width<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, Species<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Sepal.Width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>, Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"versicolor"</span>, <span class="st">"setosa"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
