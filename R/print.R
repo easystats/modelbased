@@ -60,7 +60,7 @@ print.estimate_grouplevel <- print.estimate_contrasts
 .align_columns <- function(x, out) {
   align <- paste(c("l", rep.int("r", ncol(out) - 1)), collapse = "")
   non_numerics <- !vapply(x, is.numeric, logical(1))
-  non_numeric_cols <- which(names(non_numerics) %in% colnames(x) & non_numerics)
+  non_numeric_cols <- which(names(non_numerics) %in% colnames(out) & non_numerics)
   for (i in non_numeric_cols) {
     align <- sub(paste0("(.{", i - 1, "})."), "\\1l", align)
   }
