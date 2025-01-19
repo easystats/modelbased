@@ -275,6 +275,21 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         contrast <- focal_terms <- c("Level 1", "Level 2")
       }
 
+      # ------------------------------------------------------------------
+      # old code for the display was just:
+      #
+      # for (i in seq_along(contrast)) {
+      #   contrast_names <- paste0(contrast[i], 1:2)
+      #   params <- datawizard::data_unite(
+      #     params,
+      #     new_column = contrast[i],
+      #     select = contrast_names,
+      #     separator = " - ",
+      #     verbose = FALSE
+      #   )
+      # }
+      # ------------------------------------------------------------------
+
       # filter by "by" variables
       if (!is.null(by)) {
         keep_rows <- seq_len(nrow(params))
