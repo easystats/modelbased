@@ -55,6 +55,7 @@ test_that("attributes_means, contrasts", {
 
 
 test_that("attributes_means, slopes", {
+  skip_if_not_installed("marginaleffects", minimum_version = "0.24.1")
   data(iris)
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
