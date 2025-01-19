@@ -260,7 +260,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         # all contrast terms that belong to one "contrast group", separated
         # by comma, and each the two "new contrast groups" go into separate
         # columns named "Level 1" and "Level 2".
-        for (i in seq_along(contrast)) {
+        for (i in 1:2) {
           contrast_names <- paste0(contrast, i)
           # since we combine levels from different factors, we have to make
           # sure levels are unique across different terms. If not, paste
