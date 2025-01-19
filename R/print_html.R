@@ -8,6 +8,13 @@ print_html.estimate_contrasts <- function(x, full_labels = TRUE, ...) {
   # set alignment, left-align first and non-numerics
   align <- .align_columns(x, formatted_table)
 
+  # update footer
+  table_footer <- attributes(formatted_table)$table_footer
+  if (!is.null(table_footer)) {
+    table_footer <- insight::compact_character(strsplit(table_footer, "\\n")[[1]])
+    attr(formatted_table, "table_footer") <- paste(table_footer, collapse = "; ")
+  }
+
   insight::export_table(
     formatted_table,
     format = "html",
