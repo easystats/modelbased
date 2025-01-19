@@ -19,6 +19,49 @@
       Predictors contrasted: vs, am
       p-values are uncorrected.
 
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level 1             | Level 2             | Difference |   SE |          95% CI | t(24) |      p
+      ------------------------------------------------------------------------------------------------
+      three 0, vs 0, am 0 | three 0, vs 0, am 1 |      -2.87 | 2.24 | [ -7.49,  1.76] | -1.28 |  0.213
+      three 0, vs 0, am 0 | three 0, vs 1, am 0 |      -5.83 | 2.46 | [-10.90, -0.76] | -2.37 |  0.026
+      three 0, vs 0, am 0 | three 0, vs 1, am 1 |     -14.03 | 2.10 | [-18.37, -9.69] | -6.67 | < .001
+      three 0, vs 0, am 0 | three 1, vs 0, am 0 |       0.57 | 2.01 | [ -3.57,  4.71] |  0.28 |  0.780
+      three 0, vs 0, am 0 | three 1, vs 0, am 1 |      -7.52 | 2.84 | [-13.37, -1.66] | -2.65 |  0.014
+      three 0, vs 0, am 0 | three 1, vs 1, am 0 |      -5.09 | 2.24 | [ -9.72, -0.46] | -2.27 |  0.032
+      three 0, vs 0, am 0 | three 1, vs 1, am 1 |     -10.57 | 2.84 | [-16.42, -4.71] | -3.73 |  0.001
+      three 0, vs 0, am 1 | three 0, vs 1, am 0 |      -2.97 | 2.65 | [ -8.44,  2.51] | -1.12 |  0.275
+      three 0, vs 0, am 1 | three 0, vs 1, am 1 |     -11.16 | 2.33 | [-15.97, -6.35] | -4.79 | < .001
+      three 0, vs 0, am 1 | three 1, vs 0, am 0 |       3.43 | 2.24 | [ -1.19,  8.06] |  1.53 |  0.139
+      three 0, vs 0, am 1 | three 1, vs 0, am 1 |      -4.65 | 3.01 | [-10.86,  1.56] | -1.55 |  0.135
+      three 0, vs 0, am 1 | three 1, vs 1, am 0 |      -2.23 | 2.46 | [ -7.29,  2.84] | -0.91 |  0.374
+      three 0, vs 0, am 1 | three 1, vs 1, am 1 |      -7.70 | 3.01 | [-13.91, -1.49] | -2.56 |  0.017
+      three 0, vs 1, am 0 | three 0, vs 1, am 1 |      -8.19 | 2.54 | [-13.43, -2.96] | -3.23 |  0.004
+      three 0, vs 1, am 0 | three 1, vs 0, am 0 |       6.40 | 2.46 | [  1.33, 11.47] |  2.61 |  0.016
+      three 0, vs 1, am 0 | three 1, vs 0, am 1 |      -1.68 | 3.17 | [ -8.23,  4.86] | -0.53 |  0.600
+      three 0, vs 1, am 0 | three 1, vs 1, am 0 |       0.74 | 2.65 | [ -4.73,  6.22] |  0.28 |  0.782
+      three 0, vs 1, am 0 | three 1, vs 1, am 1 |      -4.73 | 3.17 | [-11.28,  1.81] | -1.49 |  0.149
+      three 0, vs 1, am 1 | three 1, vs 0, am 0 |      14.59 | 2.10 | [ 10.25, 18.93] |  6.94 | < .001
+      three 0, vs 1, am 1 | three 1, vs 0, am 1 |       6.51 | 2.91 | [  0.51, 12.51] |  2.24 |  0.035
+      three 0, vs 1, am 1 | three 1, vs 1, am 0 |       8.94 | 2.33 | [  4.13, 13.74] |  3.83 | < .001
+      three 0, vs 1, am 1 | three 1, vs 1, am 1 |       3.46 | 2.91 | [ -2.54,  9.46] |  1.19 |  0.246
+      three 1, vs 0, am 0 | three 1, vs 0, am 1 |      -8.08 | 2.84 | [-13.94, -2.23] | -2.85 |  0.009
+      three 1, vs 0, am 0 | three 1, vs 1, am 0 |      -5.66 | 2.24 | [-10.29, -1.03] | -2.52 |  0.019
+      three 1, vs 0, am 0 | three 1, vs 1, am 1 |     -11.13 | 2.84 | [-16.99, -5.28] | -3.93 | < .001
+      three 1, vs 0, am 1 | three 1, vs 1, am 0 |       2.42 | 3.01 | [ -3.78,  8.63] |  0.81 |  0.428
+      three 1, vs 0, am 1 | three 1, vs 1, am 1 |      -3.05 | 3.47 | [-10.22,  4.12] | -0.88 |  0.389
+      three 1, vs 1, am 0 | three 1, vs 1, am 1 |      -5.48 | 3.01 | [-11.68,  0.73] | -1.82 |  0.081
+      
+      Variable predicted: mpg
+      Predictors contrasted: three, vs, am
+      p-values are uncorrected.
+
 # estimate_contrasts - marginaleffects
 
     Code
