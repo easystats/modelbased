@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.38</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -181,11 +181,11 @@ model, and represent average of response variable (here,
 <span><span class="va">means</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
-&gt; Species    | Mean |   SE |       95% CI
-&gt; ---------------------------------------
-&gt; setosa     | 3.43 | 0.05 | [3.33, 3.52]
-&gt; versicolor | 2.77 | 0.05 | [2.68, 2.86]
-&gt; virginica  | 2.97 | 0.05 | [2.88, 3.07]
+&gt; Species    | Mean |   SE |       95% CI | t(147)
+&gt; ------------------------------------------------
+&gt; setosa     | 3.43 | 0.05 | [3.33, 3.52] |  71.36
+&gt; versicolor | 2.77 | 0.05 | [2.68, 2.86] |  57.66
+&gt; virginica  | 2.97 | 0.05 | [2.88, 3.07] |  61.91
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors modulated: Species</code></pre>
@@ -232,14 +232,15 @@ will take into account) for variations of these other components.</p>
 <span><span class="va">means_complex</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Means
 &gt; 
-&gt; Species    | Mean |   SE |       95% CI
-&gt; ---------------------------------------
-&gt; setosa     | 4.17 | 0.12 | [3.93, 4.42]
-&gt; versicolor | 2.67 | 0.05 | [2.58, 2.76]
-&gt; virginica  | 2.33 | 0.11 | [2.11, 2.54]
+&gt; Species    | Mean |   SE |       95% CI | t(146)
+&gt; ------------------------------------------------
+&gt; setosa     | 4.17 | 0.12 | [3.93, 4.42] |  33.89
+&gt; versicolor | 2.67 | 0.05 | [2.58, 2.76] |  59.07
+&gt; virginica  | 2.33 | 0.11 | [2.11, 2.54] |  21.39
 &gt; 
 &gt; Variable predicted: Sepal.Width
-&gt; Predictors modulated: Species</code></pre>
+&gt; Predictors modulated: Species
+&gt; Predictors averaged: Petal.Width</code></pre>
 <p>Now let’s add to our previous plot the marginal means from the more
 complex model (shown in purple) next to each other, which should help us
 notice how the adjusted means change depending on the predictors.</p>

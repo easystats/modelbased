@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.38</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,11 +184,12 @@ that’s the idea) over the different factor levels.</p>
 <span><span class="va">slopes</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Effects
 &gt; 
-&gt; Slope |   SE |       95% CI | t(144) |      p
-&gt; ---------------------------------------------
-&gt; 0.79  | 0.10 | [0.59, 0.99] |   7.69 | &lt; .001
+&gt; Slope |   SE |       95% CI |    t |      p
+&gt; -------------------------------------------
+&gt; 0.79  | 0.10 | [0.59, 0.99] | 7.69 | &lt; .001
 &gt; 
-&gt; Marginal effects estimated for Petal.Length</code></pre>
+&gt; Marginal effects estimated for Petal.Length
+&gt; Type of slope was dY/dX</code></pre>
 <p>We can see that the effect of <code>Petal.Length</code>,
 <strong>marginalized over Species</strong>, is positive and
 significant.</p>
@@ -202,13 +203,14 @@ significant.</p>
 <span><span class="va">slopes</span></span></code></pre></div>
 <pre><code>&gt; Estimated Marginal Effects
 &gt; 
-&gt; Species    | Slope |   SE |        95% CI | t(144) |      p
-&gt; -----------------------------------------------------------
-&gt; setosa     |  0.54 | 0.28 | [ 0.00, 1.09] |   1.96 | 0.052 
-&gt; versicolor |  0.83 | 0.10 | [ 0.63, 1.03] |   8.10 | &lt; .001
-&gt; virginica  |  1.00 | 0.09 | [ 0.82, 1.17] |  11.43 | &lt; .001
+&gt; Species    | Slope |   SE |        95% CI |     t |      p
+&gt; ----------------------------------------------------------
+&gt; setosa     |  0.54 | 0.28 | [ 0.00, 1.08] |  1.96 | 0.050 
+&gt; versicolor |  0.83 | 0.10 | [ 0.63, 1.03] |  8.10 | &lt; .001
+&gt; virginica  |  1.00 | 0.09 | [ 0.83, 1.17] | 11.43 | &lt; .001
 &gt; 
-&gt; Marginal effects estimated for Petal.Length</code></pre>
+&gt; Marginal effects estimated for Petal.Length
+&gt; Type of slope was dY/dX</code></pre>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-6-1.png" width="2187.5"></p>
