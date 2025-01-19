@@ -5,9 +5,13 @@ print_html.estimate_contrasts <- function(x, full_labels = TRUE, ...) {
   # remove redundant labels, for "by" variables
   formatted_table <- .remove_redundant_labels(x, formatted_table, full_labels)
 
+  # set alignment, left-align first and non-numerics
+  align <- .align_columns(x, formatted_table)
+
   insight::export_table(
     formatted_table,
     format = "html",
+    align = align,
     ...
   )
 }

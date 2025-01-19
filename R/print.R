@@ -6,7 +6,10 @@ print.estimate_contrasts <- function(x, full_labels = TRUE, ...) {
   # remove redundant labels, for "by" variables
   out <- .remove_redundant_labels(x, out, full_labels)
 
-  cat(insight::export_table(out, ...))
+  # set alignment, left-align first and non-numerics
+  align <- .align_columns(x, out)
+
+  cat(insight::export_table(out, align = align, ...))
   invisible(x)
 }
 
@@ -51,4 +54,15 @@ print.estimate_grouplevel <- print.estimate_contrasts
     }
   }
   out
+}
+
+
+.align_columns <- function(x, out) {
+  align <- paste(c("l", rep.int("r", ncol(out) - 1)), collapse = "")
+  non_numerics <- !vapply(x, is.numeric, logical(1))
+  non_numeric_cols <- which(names(non_numerics) %in% colnames(x) & non_numerics)
+  for (i in non_numeric_cols) {
+    align <- sub(paste0("(.{", i - 1, "})."), "\\1l", align)
+  }
+  align
 }
