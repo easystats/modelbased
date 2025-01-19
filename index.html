@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.41</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.42</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -245,15 +245,15 @@
 <span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># 2. Estimate marginal contrasts</span></span>
-<span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span>, backend <span class="op">=</span> <span class="st">"emmeans"</span><span class="op">)</span></span>
+<span><span class="va">contrasts</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span>
 <span><span class="va">contrasts</span></span>
 <span><span class="co">## Marginal Contrasts Analysis</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p</span></span>
+<span><span class="co">## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p</span></span>
 <span><span class="co">## ------------------------------------------------------------------------------</span></span>
-<span><span class="co">## setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | &lt; .001</span></span>
-<span><span class="co">## setosa     |  virginica |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | &lt; .001</span></span>
-<span><span class="co">## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 | 0.003 </span></span>
+<span><span class="co">## setosa     | versicolor |       0.66 | 0.07 | [ 0.52,  0.79] |   9.69 | &lt; .001</span></span>
+<span><span class="co">## setosa     | virginica  |       0.45 | 0.07 | [ 0.32,  0.59] |   6.68 | &lt; .001</span></span>
+<span><span class="co">## versicolor | virginica  |      -0.20 | 0.07 | [-0.34, -0.07] |  -3.00 |  0.003</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
@@ -281,17 +281,17 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">difference</span>, table_width <span class="op">=</span> <span class="cn">Inf</span><span class="op">)</span></span>
 <span><span class="co">## Marginal Contrasts Analysis</span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## Species                | Petal.Length | Difference |   SE |        95% CI | t(144) |      p</span></span>
-<span><span class="co">## -------------------------------------------------------------------------------------------</span></span>
-<span><span class="co">## setosa - versicolor    |         1.00 |       1.70 | 0.34 | [ 1.02, 2.37] |   4.97 | &lt; .001</span></span>
-<span><span class="co">## setosa - virginica     |         1.00 |       1.34 | 0.40 | [ 0.56, 2.13] |   3.38 | &lt; .001</span></span>
-<span><span class="co">## versicolor - virginica |         1.00 |      -0.36 | 0.49 | [-1.33, 0.61] |  -0.73 | 0.468 </span></span>
-<span><span class="co">## setosa - versicolor    |         3.95 |       1.74 | 0.65 | [ 0.45, 3.03] |   2.67 | 0.008 </span></span>
-<span><span class="co">## setosa - virginica     |         3.95 |       1.79 | 0.66 | [ 0.48, 3.11] |   2.70 | 0.008 </span></span>
-<span><span class="co">## versicolor - virginica |         3.95 |       0.06 | 0.15 | [-0.24, 0.35] |   0.37 | 0.710 </span></span>
-<span><span class="co">## setosa - versicolor    |         6.90 |       1.78 | 1.44 | [-1.06, 4.62] |   1.24 | 0.218 </span></span>
-<span><span class="co">## setosa - virginica     |         6.90 |       2.25 | 1.42 | [-0.56, 5.06] |   1.58 | 0.116 </span></span>
-<span><span class="co">## versicolor - virginica |         6.90 |       0.47 | 0.28 | [-0.09, 1.03] |   1.65 | 0.101 </span></span>
+<span><span class="co">## Level1     | Level2     | Petal.Length | Difference |   SE |        95% CI | t(144) |      p</span></span>
+<span><span class="co">## --------------------------------------------------------------------------------------------</span></span>
+<span><span class="co">## setosa     | versicolor | 1.00         |       1.70 | 0.34 | [ 1.02, 2.37] |   4.97 | &lt; .001</span></span>
+<span><span class="co">## setosa     | virginica  | 1.00         |       1.34 | 0.40 | [ 0.56, 2.13] |   3.38 | &lt; .001</span></span>
+<span><span class="co">## setosa     | versicolor | 3.95         |       1.74 | 0.65 | [ 0.45, 3.03] |   2.67 |  0.008</span></span>
+<span><span class="co">## setosa     | virginica  | 3.95         |       1.79 | 0.66 | [ 0.48, 3.11] |   2.70 |  0.008</span></span>
+<span><span class="co">## setosa     | versicolor | 6.90         |       1.78 | 1.44 | [-1.06, 4.62] |   1.24 |  0.218</span></span>
+<span><span class="co">## setosa     | virginica  | 6.90         |       2.25 | 1.42 | [-0.56, 5.06] |   1.58 |  0.116</span></span>
+<span><span class="co">## versicolor | virginica  | 1.00         |      -0.36 | 0.49 | [-1.33, 0.61] |  -0.73 |  0.468</span></span>
+<span><span class="co">## versicolor | virginica  | 3.95         |       0.06 | 0.15 | [-0.24, 0.35] |   0.37 |  0.710</span></span>
+<span><span class="co">## versicolor | virginica  | 6.90         |       0.47 | 0.28 | [-0.09, 1.03] |   1.65 |  0.101</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Variable predicted: Sepal.Width</span></span>
 <span><span class="co">## Predictors contrasted: Species</span></span>
@@ -426,14 +426,14 @@
 <span></span>
 <span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="va">random</span></span>
-<span><span class="co">## Group | Level |   Parameter | Coefficient |   SE |         95% CI</span></span>
+<span><span class="co">## Group | Level | Parameter   | Coefficient |   SE |         95% CI</span></span>
 <span><span class="co">## -----------------------------------------------------------------</span></span>
-<span><span class="co">## cyl   |     4 | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]</span></span>
-<span><span class="co">## cyl   |     4 |        drat |        2.24 | 0.36 | [ 1.53,  2.95]</span></span>
-<span><span class="co">## cyl   |     6 | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]</span></span>
-<span><span class="co">## cyl   |     6 |        drat |       -0.09 | 0.54 | [-1.15,  0.98]</span></span>
-<span><span class="co">## cyl   |     8 | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]</span></span>
-<span><span class="co">## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]</span></span>
+<span><span class="co">## cyl   | 4     | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]</span></span>
+<span><span class="co">## cyl   | 4     | drat        |        2.24 | 0.36 | [ 1.53,  2.95]</span></span>
+<span><span class="co">## cyl   | 6     | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]</span></span>
+<span><span class="co">## cyl   | 6     | drat        |       -0.09 | 0.54 | [-1.15,  0.98]</span></span>
+<span><span class="co">## cyl   | 8     | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]</span></span>
+<span><span class="co">## cyl   | 8     | drat        |       -2.15 | 0.47 | [-3.07, -1.23]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html" class="external-link">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
