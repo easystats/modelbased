@@ -244,16 +244,70 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         by <- NULL
       }
 
-      for (i in seq_along(contrast)) {
-        contrast_names <- paste0(contrast[i], 1:2)
+      # when we just have one term for comparison, we unite levels and use a
+      # dash / minus as separator char. The column name is the name of the
+      # contrast term.
+      if (length(contrast) == 1) {
         params <- datawizard::data_unite(
           params,
-          new_column = contrast[i],
-          select = contrast_names,
+          new_column = contrast,
+          select = paste0(contrast, 1:2),
           separator = " - ",
           verbose = FALSE
         )
+      } else {
+        # if we have more than one contrast term, we unite the levels from
+        # all contrast terms that belong to one "contrast group", separated
+        # by comma, and each the two "new contrast groups" go into separate
+        # columns named "Level 1" and "Level 2".
+        for (i in 1:2) {
+          contrast_names <- paste0(contrast, i)
+          # since we combine levels from different factors, we have to make
+          # sure levels are unique across different terms. If not, paste
+          # variable names to levels. We first find the intersection of all
+          # levels from all current contrast terms
+          multiple_levels <- Reduce(
+            function(i, j) intersect(i, j),
+            lapply(params[contrast_names], unique),
+            accumulate = FALSE
+          )
+          # if we find any intersections, we have identical labels for different
+          # terms in one "contrast group" - we thus add the variable name to the
+          # levels, to avoid identical levels without knowing to which factor
+          # it belongs
+          if (length(multiple_levels)) {
+            for (cn in contrast_names) {
+              params[[cn]] <- paste(gsub(".{1}$", "", cn), params[[cn]])
+            }
+          }
+          # finally, unite levels back into single column
+          params <- datawizard::data_unite(
+            params,
+            new_column = paste("Level", i),
+            select = contrast_names,
+            separator = ", ",
+            verbose = FALSE
+          )
+        }
+        # we need to update these variables, because these are the new column
+        # names for contrasts and focal terms
+        contrast <- focal_terms <- c("Level 1", "Level 2")
       }
+
+      # ------------------------------------------------------------------
+      # old code for the display was just:
+      #
+      # for (i in seq_along(contrast)) {
+      #   contrast_names <- paste0(contrast[i], 1:2)
+      #   params <- datawizard::data_unite(
+      #     params,
+      #     new_column = contrast[i],
+      #     select = contrast_names,
+      #     separator = " - ",
+      #     verbose = FALSE
+      #   )
+      # }
+      # ------------------------------------------------------------------
 
       # filter by "by" variables
       if (!is.null(by)) {
