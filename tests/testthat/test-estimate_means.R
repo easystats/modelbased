@@ -157,7 +157,7 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-4)
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
-  estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)")))
+  estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "emmeans"))
   estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginalmeans"))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
@@ -344,11 +344,13 @@ test_that("get_marginaleffects, value definition in `by`", {
 
   difference <- estimate_contrasts(model2, c("time = factor(2)", "grp"), backend = "marginaleffects")
   expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
-  expect_identical(as.character(difference$grp), "control - treatment")
+  expect_identical(as.character(difference$Level1), "control")
+  expect_identical(as.character(difference$Level2), "treatment")
 
   difference <- estimate_contrasts(model2, c("time = 2", "grp"), backend = "marginaleffects")
   expect_equal(difference$Difference, 0.05536674, tolerance = 1e-4)
-  expect_identical(as.character(difference$grp), "control - treatment")
+  expect_identical(as.character(difference$Level1), "control")
+  expect_identical(as.character(difference$Level2), "treatment")
 
   expect_error(
     estimate_contrasts(model2, "time = factor(2)", by = "grp", backend = "marginaleffects"),

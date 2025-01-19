@@ -3,7 +3,7 @@
 #' @export
 standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
-  data <- insight::get_data(attributes(x)$model, ...)
+  data <- insight::get_data(attributes(x)$model, verbose = FALSE, ...)
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
@@ -70,7 +70,7 @@ standardize.estimate_slopes <- standardize.estimate_contrasts
 #' @export
 unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   # Get data of predictors
-  data <- insight::get_data(attributes(x)$model, ...)
+  data <- insight::get_data(attributes(x)$model, verbose = FALSE, ...)
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors

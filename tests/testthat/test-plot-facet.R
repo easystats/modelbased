@@ -114,3 +114,32 @@ test_that("plots facets", {
     plot(pr, show_data = FALSE, join_dots = FALSE)
   )
 })
+
+
+test_that("plots facets, emmeans", {
+  data(efc, package = "ggeffects")
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst"), backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-4emmeans",
+    plot(pr, show_data = FALSE)
+  )
+
+  fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex * nur_pst * negc7d, data = efc)
+  pr <- estimate_means(fit, c("c161sex", "c172code", "e16sex", "nur_pst", "negc7d"), backend = "emmeans")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-5emmeans",
+    plot(pr, show_data = FALSE)
+  )
+  # no connecting lines
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-interaction-facets-cat-6emmeans",
+    plot(pr, show_data = FALSE, join_dots = FALSE)
+  )
+})

@@ -25,10 +25,11 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300
 )
-options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("marginaleffects", quietly = TRUE) ||
+  !requireNamespace("emmeans", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -54,6 +55,7 @@ Let's carry out contrast analysis on the simple model from the previous tutorial
 ```{r}
 library(ggplot2)
 library(modelbased)
+data(iris)
 
 model <- lm(Sepal.Width ~ Species, data = iris)
 means <- estimate_means(model, by = "Species")
@@ -107,7 +109,15 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Width",
+  length = 100,
+  # we use a emmeans here because marginaleffects doesn't
+  # generate more than 25 rows for pairwise comparisons
+  backend = "emmeans"
+)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)

@@ -180,7 +180,15 @@ print(difference, table_width = Inf)
 
 ```{r}
 # Recompute contrasts with a higher precision (for a smoother plot)
-contrasts <- estimate_contrasts(model, contrast = "Species", by = "Petal.Length", length = 20)
+contrasts <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Length",
+  length = 20,
+  # we use a emmeans here because marginaleffects doesn't
+  # generate more than 25 rows for pairwise comparisons
+  backend = "emmeans"
+)
 
 # Add Contrast column by concatenating
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
