@@ -280,7 +280,7 @@ test_that("estimate_contrasts - dfs", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
-  skip_if_not_installed("marginaleffects", minimum_version = "0.24.1")
+  # ignore failing snapshot tests, should resolve with next marginaleffects version
   skip_if_not_installed("Formula")
   skip_if_not_installed("ggeffects")
   data(coffee_data, package = "ggeffects")
