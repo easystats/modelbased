@@ -6,7 +6,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1    | Level 2    | Difference |   SE |          95% CI | t(25) |      p
+      Level1     | Level2     | Difference |   SE |          95% CI | t(25) |      p
       ------------------------------------------------------------------------------
       vs 0, am 0 | vs 0, am 1 |      -6.98 | 2.33 | [-11.79, -2.17] | -2.99 |  0.006
       vs 0, am 0 | vs 1, am 0 |     -11.27 | 4.04 | [-19.60, -2.95] | -2.79 |  0.010
@@ -27,7 +27,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1             | Level 2             | Difference |   SE |          95% CI | t(24) |      p
+      Level1              | Level2              | Difference |   SE |          95% CI | t(24) |      p
       ------------------------------------------------------------------------------------------------
       three 0, vs 0, am 0 | three 0, vs 0, am 1 |      -2.87 | 2.24 | [ -7.49,  1.76] | -1.28 |  0.213
       three 0, vs 0, am 0 | three 0, vs 1, am 0 |      -5.83 | 2.46 | [-10.90, -0.76] | -2.37 |  0.026
@@ -62,6 +62,23 @@
       Predictors contrasted: three, vs, am
       p-values are uncorrected.
 
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1 | Level2 | Difference |   SE |         95% CI | t(24) |      p
+      ---------------------------------------------------------------------
+      0      | 1      |      -6.15 | 1.34 | [-8.91, -3.40] | -4.61 | < .001
+      
+      Variable predicted: mpg
+      Predictors contrasted: am
+      Predictors averaged: three, vs
+      p-values are uncorrected.
+
 # estimate_contrasts - marginaleffects
 
     Code
@@ -70,7 +87,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1           | Level 2            | Difference |   SE |          95% CI | t(113) |      p
+      Level1            | Level2             | Difference |   SE |          95% CI | t(113) |      p
       ----------------------------------------------------------------------------------------------
       morning, coffee   | morning, control   |       5.78 | 1.99 | [  1.83,  9.73] |   2.90 |  0.004
       morning, coffee   | noon, coffee       |       1.93 | 1.99 | [ -2.02,  5.88] |   0.97 |  0.336
@@ -207,11 +224,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Species                | Difference |   SE |         95% CI |     z |      p
-      ----------------------------------------------------------------------------
-      setosa - versicolor    |      -0.68 | 0.07 | [-0.82, -0.54] | -9.27 | < .001
-      setosa - virginica     |      -0.50 | 0.08 | [-0.67, -0.33] | -5.90 | < .001
-      versicolor - virginica |       0.18 | 0.08 | [ 0.01,  0.35] |  2.12 |  0.034
+      Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
+      -----------------------------------------------------------------------------
+      setosa     | versicolor |      -0.68 | 0.07 | [-0.82, -0.54] | -9.27 | < .001
+      setosa     | virginica  |      -0.50 | 0.08 | [-0.67, -0.33] | -5.90 | < .001
+      versicolor | virginica  |       0.18 | 0.08 | [ 0.01,  0.35] |  2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -248,11 +265,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Species                | Difference |   SE |         95% CI |     z |      p
-      ----------------------------------------------------------------------------
-      setosa - versicolor    |      -0.68 | 0.07 | [-0.82, -0.54] | -9.27 | < .001
-      setosa - virginica     |      -0.50 | 0.08 | [-0.67, -0.33] | -5.90 | < .001
-      versicolor - virginica |       0.18 | 0.08 | [ 0.01,  0.35] |  2.12 |  0.034
+      Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
+      -----------------------------------------------------------------------------
+      setosa     | versicolor |      -0.68 | 0.07 | [-0.82, -0.54] | -9.27 | < .001
+      setosa     | virginica  |      -0.50 | 0.08 | [-0.67, -0.33] | -5.90 | < .001
+      versicolor | virginica  |       0.18 | 0.08 | [ 0.01,  0.35] |  2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -267,11 +284,11 @@
     Output
       Marginal Contrasts Analysis
       
-      c172code   | Difference |   SE |        95% CI | t(827) |     p
-      ---------------------------------------------------------------
-      low - mid  |       0.09 | 0.34 | [-0.58, 0.76] |   0.25 | 0.802
-      low - high |      -0.61 | 0.43 | [-1.45, 0.24] |  -1.40 | 0.162
-      mid - high |      -0.69 | 0.36 | [-1.40, 0.02] |  -1.92 | 0.055
+      Level1 | Level2 | Difference |   SE |        95% CI | t(827) |     p
+      --------------------------------------------------------------------
+      low    | mid    |       0.09 | 0.34 | [-0.58, 0.76] |   0.25 | 0.802
+      low    | high   |      -0.61 | 0.43 | [-1.45, 0.24] |  -1.40 | 0.162
+      mid    | high   |      -0.69 | 0.36 | [-1.40, 0.02] |  -1.92 | 0.055
       
       Variable predicted: neg_c_7
       Predictors contrasted: c172code
@@ -286,7 +303,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1     | Level 2      | Difference |   SE |         95% CI | t(825) |     p
+      Level1      | Level2       | Difference |   SE |         95% CI | t(825) |     p
       --------------------------------------------------------------------------------
       Male, low   | Male, mid    |      -0.29 | 0.71 | [-1.68,  1.10] |  -0.41 | 0.684
       Male, low   | Male, high   |      -0.69 | 0.83 | [-2.32,  0.95] |  -0.82 | 0.410
@@ -317,11 +334,11 @@
     Output
       Marginal Contrasts Analysis
       
-      c161sex       | c172code | Difference |   SE |        95% CI | t(825) |     p
-      -----------------------------------------------------------------------------
-      Male - Female | low      |      -1.05 | 0.69 | [-2.40, 0.31] |  -1.51 | 0.131
-      Male - Female | mid      |      -0.56 | 0.42 | [-1.38, 0.26] |  -1.35 | 0.178
-      Male - Female | high     |      -0.96 | 0.69 | [-2.30, 0.39] |  -1.40 | 0.163
+      Level1 | Level2 | c172code | Difference |   SE |        95% CI | t(825) |     p
+      -------------------------------------------------------------------------------
+      Male   | Female | low      |      -1.05 | 0.69 | [-2.40, 0.31] |  -1.51 | 0.131
+      Male   | Female | mid      |      -0.56 | 0.42 | [-1.38, 0.26] |  -1.35 | 0.178
+      Male   | Female | high     |      -0.96 | 0.69 | [-2.30, 0.39] |  -1.40 | 0.163
       
       Variable predicted: neg_c_7
       Predictors contrasted: c161sex
@@ -368,11 +385,11 @@
     Output
       Marginal Contrasts Analysis
       
-      c172code   | Difference |   SE |        95% CI |     t |     p
-      --------------------------------------------------------------
-      low - mid  |      -0.01 | 0.01 | [-0.03, 0.01] | -1.17 | 0.243
-      low - high |      -0.02 | 0.01 | [-0.04, 0.01] | -1.10 | 0.271
-      mid - high |       0.00 | 0.01 | [-0.03, 0.02] | -0.27 | 0.786
+      Level1 | Level2 | Difference |   SE |        95% CI |     t |     p
+      -------------------------------------------------------------------
+      low    | mid    |      -0.01 | 0.01 | [-0.03, 0.01] | -1.17 | 0.243
+      low    | high   |      -0.02 | 0.01 | [-0.04, 0.01] | -1.10 | 0.271
+      mid    | high   |       0.00 | 0.01 | [-0.03, 0.02] | -0.27 | 0.786
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
@@ -387,7 +404,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1     | Level 2      | Difference |   SE |         95% CI |     t |     p
+      Level1      | Level2       | Difference |   SE |         95% CI |     t |     p
       -------------------------------------------------------------------------------
       low, male   | low, female  |       0.01 | 0.02 | [-0.03,  0.04] |  0.35 | 0.729
       low, male   | mid, male    |       0.01 | 0.02 | [-0.02,  0.04] |  0.46 | 0.648
@@ -418,11 +435,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Species                | Difference |   SE |         95% CI | t(146) |      p
-      -----------------------------------------------------------------------------
-      setosa - versicolor    |      -1.46 | 0.11 | [-1.68, -1.24] | -13.01 | < .001
-      setosa - virginica     |      -1.95 | 0.10 | [-2.14, -1.75] | -19.47 | < .001
-      versicolor - virginica |      -0.49 | 0.09 | [-0.67, -0.31] |  -5.41 | < .001
+      Level1     | Level2     | Difference |   SE |         95% CI | t(146) |      p
+      ------------------------------------------------------------------------------
+      setosa     | versicolor |      -1.46 | 0.11 | [-1.68, -1.24] | -13.01 | < .001
+      setosa     | virginica  |      -1.95 | 0.10 | [-2.14, -1.75] | -19.47 | < .001
+      versicolor | virginica  |      -0.49 | 0.09 | [-0.67, -0.31] |  -5.41 | < .001
       
       Variable predicted: Sepal.Length
       Predictors contrasted: Species
@@ -437,7 +454,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1           | Level 2            | Difference |   SE |          95% CI | t(113) |      p
+      Level1            | Level2             | Difference |   SE |          95% CI | t(113) |      p
       ----------------------------------------------------------------------------------------------
       morning, coffee   | morning, control   |       5.78 | 1.99 | [  1.83,  9.73] |   2.90 |  0.004
       morning, coffee   | noon, coffee       |       1.93 | 1.99 | [ -2.02,  5.88] |   0.97 |  0.336
@@ -468,14 +485,14 @@
     Output
       Marginal Contrasts Analysis
       
-      time                | coffee  | Difference |   SE |         95% CI | t(113) |      p
+      Level1  | Level2    | coffee  | Difference |   SE |         95% CI | t(113) |      p
       ------------------------------------------------------------------------------------
-      morning - noon      | coffee  |       1.93 | 1.99 | [-2.02,  5.88] |   0.97 |  0.336
-      morning - afternoon | coffee  |      -1.93 | 1.99 | [-5.88,  2.02] |  -0.97 |  0.336
-      noon - afternoon    | coffee  |      -3.86 | 1.99 | [-7.81,  0.09] |  -1.93 |  0.056
-      morning - noon      | control |      -5.78 | 1.99 | [-9.73, -1.83] |  -2.90 |  0.004
-      morning - afternoon | control |      -5.78 | 1.99 | [-9.73, -1.83] |  -2.90 |  0.004
-      noon - afternoon    | control |       0.00 | 1.99 | [-3.95,  3.95] |   0.00 | > .999
+      morning | noon      | coffee  |       1.93 | 1.99 | [-2.02,  5.88] |   0.97 |  0.336
+      morning | afternoon | coffee  |      -1.93 | 1.99 | [-5.88,  2.02] |  -0.97 |  0.336
+      morning | noon      | control |      -5.78 | 1.99 | [-9.73, -1.83] |  -2.90 |  0.004
+      morning | afternoon | control |      -5.78 | 1.99 | [-9.73, -1.83] |  -2.90 |  0.004
+      noon    | afternoon | coffee  |      -3.86 | 1.99 | [-7.81,  0.09] |  -1.93 |  0.056
+      noon    | afternoon | control |       0.00 | 1.99 | [-3.95,  3.95] |   0.00 | > .999
       
       Variable predicted: alertness
       Predictors contrasted: time
@@ -490,7 +507,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1    | Level 2    | Difference |   SE |         95% CI |     z |      p
+      Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------
       yes, GP    | yes, PR    |      -0.06 | 0.05 | [-0.16,  0.04] | -1.10 |  0.271
       yes, GP    | yes, DM    |      -0.32 | 0.11 | [-0.54, -0.10] | -2.89 |  0.004
@@ -598,15 +615,15 @@
     Output
       Marginal Contrasts Analysis
       
-      mined    | spp   | Difference |   SE |         95% CI |     z |      p
-      ----------------------------------------------------------------------
-      yes - no | GP    |      -2.59 | 0.55 | [-3.67, -1.50] | -4.67 | < .001
-      yes - no | PR    |      -0.45 | 0.16 | [-0.77, -0.13] | -2.75 |  0.006
-      yes - no | DM    |      -2.54 | 0.63 | [-3.77, -1.31] | -4.04 | < .001
-      yes - no | EC-A  |      -1.06 | 0.28 | [-1.61, -0.52] | -3.85 | < .001
-      yes - no | EC-L  |      -4.50 | 0.95 | [-6.37, -2.63] | -4.72 | < .001
-      yes - no | DES-L |      -4.19 | 0.96 | [-6.07, -2.30] | -4.35 | < .001
-      yes - no | DF    |      -1.81 | 0.52 | [-2.83, -0.78] | -3.45 | < .001
+      Level1 | Level2 | spp   | Difference |   SE |         95% CI |     z |      p
+      -----------------------------------------------------------------------------
+      yes    | no     | GP    |      -2.59 | 0.55 | [-3.67, -1.50] | -4.67 | < .001
+      yes    | no     | PR    |      -0.45 | 0.16 | [-0.77, -0.13] | -2.75 |  0.006
+      yes    | no     | DM    |      -2.54 | 0.63 | [-3.77, -1.31] | -4.04 | < .001
+      yes    | no     | EC-A  |      -1.06 | 0.28 | [-1.61, -0.52] | -3.85 | < .001
+      yes    | no     | EC-L  |      -4.50 | 0.95 | [-6.37, -2.63] | -4.72 | < .001
+      yes    | no     | DES-L |      -4.19 | 0.96 | [-6.07, -2.30] | -4.35 | < .001
+      yes    | no     | DF    |      -1.81 | 0.52 | [-2.83, -0.78] | -3.45 | < .001
       
       Variable predicted: count
       Predictors contrasted: mined

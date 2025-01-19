@@ -32,6 +32,7 @@ if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
   !requireNamespace("easystats", quietly = TRUE) ||
   !requireNamespace("MASS", quietly = TRUE) ||
+  !requireNamespace("marginaleffects", quietly = TRUE) ||
   !requireNamespace("emmeans", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }

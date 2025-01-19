@@ -180,6 +180,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
 
+    # we *could* stop here and simply rename the split columns, but then
+    # we cannot filter by `by` - thus, we go on, extract all single levels,
+    # combine only relevant levels and then we're able to filter...
+
     # When we filter contrasts, e.g. `contrast = c("vs", "am='1'")` or
     # `contrast = c("vs", "am"), by = "gear='5'"`, we get no contrasts if one
     # of the focal terms only has one unique value in the data grid. Thus,
@@ -244,55 +248,38 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         by <- NULL
       }
 
-      # when we just have one term for comparison, we unite levels and use a
-      # dash / minus as separator char. The column name is the name of the
-      # contrast term.
+      # if we have more than one contrast term, we unite the levels from
+      # all contrast terms that belong to one "contrast group", separated
+      # by comma, and each the two "new contrast groups" go into separate
+      # columns named "Level1" and "Level2". For one contrast term, we just
+      # need to rename the columns
       if (length(contrast) == 1) {
-        params <- datawizard::data_unite(
+        # rename columns
+        params <- datawizard::data_rename(
           params,
-          new_column = contrast,
           select = paste0(contrast, 1:2),
-          separator = " - ",
+          replacement = c("Level1", "Level2"),
           verbose = FALSE
         )
       } else {
-        # if we have more than one contrast term, we unite the levels from
-        # all contrast terms that belong to one "contrast group", separated
-        # by comma, and each the two "new contrast groups" go into separate
-        # columns named "Level 1" and "Level 2".
+        # prepare all contrast terms
         for (i in 1:2) {
           contrast_names <- paste0(contrast, i)
-          # since we combine levels from different factors, we have to make
-          # sure levels are unique across different terms. If not, paste
-          # variable names to levels. We first find the intersection of all
-          # levels from all current contrast terms
-          multiple_levels <- Reduce(
-            function(i, j) intersect(i, j),
-            lapply(params[contrast_names], unique),
-            accumulate = FALSE
-          )
-          # if we find any intersections, we have identical labels for different
-          # terms in one "contrast group" - we thus add the variable name to the
-          # levels, to avoid identical levels without knowing to which factor
-          # it belongs
-          if (length(multiple_levels)) {
-            for (cn in contrast_names) {
-              params[[cn]] <- paste(gsub(".{1}$", "", cn), params[[cn]])
-            }
-          }
+          params <- .fix_duplicated_contrastlevels(params, contrast_names)
           # finally, unite levels back into single column
           params <- datawizard::data_unite(
             params,
-            new_column = paste("Level", i),
+            new_column = paste0("Level", i),
             select = contrast_names,
             separator = ", ",
             verbose = FALSE
           )
         }
-        # we need to update these variables, because these are the new column
-        # names for contrasts and focal terms
-        contrast <- focal_terms <- c("Level 1", "Level 2")
       }
+
+      # we need to update these variables, because these are the new column
+      # names for contrasts and focal terms
+      contrast <- focal_terms <- c("Level1", "Level2")
 
       # ------------------------------------------------------------------
       # old code for the display was just:
@@ -323,7 +310,12 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         # column name back, so we can properly merge all variables in
         # "contrast" and "by" to the original data
         by_columns <- paste0(by, 1)
-        params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+        params <- datawizard::data_rename(
+          params,
+          select = by_columns,
+          replacement = by,
+          verbose = FALSE
+        )
 
         # filter original data and new params by "by"
         x <- x[keep_rows, ]
@@ -349,6 +341,30 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
 # Helper ----------------------------------------------------------------------
 # -----------------------------------------------------------------------------
+
+
+# since we combine levels from different factors, we have to make
+# sure levels are unique across different terms. If not, paste
+# variable names to levels. We first find the intersection of all
+# levels from all current contrast terms
+
+.fix_duplicated_contrastlevels <- function(params, contrast_names) {
+  multiple_levels <- Reduce(
+    function(i, j) intersect(i, j),
+    lapply(params[contrast_names], unique),
+    accumulate = FALSE
+  )
+  # if we find any intersections, we have identical labels for different
+  # terms in one "contrast group" - we thus add the variable name to the
+  # levels, to avoid identical levels without knowing to which factor
+  # it belongs
+  if (length(multiple_levels)) {
+    for (cn in contrast_names) {
+      params[[cn]] <- paste(gsub(".{1}$", "", cn), params[[cn]])
+    }
+  }
+  params
+}
 
 
 # This function renames columns to have a consistent naming scheme,

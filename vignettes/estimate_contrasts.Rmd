@@ -25,10 +25,11 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300
 )
-options(digits = 2, modelbased_backend = "emmeans")
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("marginaleffects", quietly = TRUE) ||
+  !requireNamespace("emmeans", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -108,7 +109,15 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Width",
+  length = 100,
+  # we use a emmeans here because marginaleffects doesn't
+  # generate more than 25 rows for pairwise comparisons
+  backend = "emmeans"
+)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -129,9 +138,5 @@ As we can see, the difference between *versicolor* and *virginica* increases as
 
 Contrast analysis can be a powerful tool to interpret and understand statistical
 models.
-
-```{r, echo=FALSE}
-options(modelbased_backend = NULL)
-```
 
 # References
