@@ -109,7 +109,15 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Length",
+  length = 100,
+  # we use a emmeans here because marginaleffects doesn't
+  # generate more than 25 rows for pairwise comparisons
+  backend = "emmeans"
+)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
