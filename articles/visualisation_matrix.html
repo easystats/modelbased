@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -155,16 +155,16 @@ function from the <strong>insight</strong> package.</p>
 &gt; 
 &gt; Sepal.Length
 &gt; ------------
-&gt;         4.30
-&gt;         4.70
-&gt;         5.10
-&gt;         5.50
-&gt;         5.90
-&gt;         6.30
-&gt;         6.70
-&gt;         7.10
-&gt;         7.50
-&gt;         7.90</code></pre>
+&gt; 4.30        
+&gt; 4.70        
+&gt; 5.10        
+&gt; 5.50        
+&gt; 5.90        
+&gt; 6.30        
+&gt; 6.70        
+&gt; 7.10        
+&gt; 7.50        
+&gt; 7.90</code></pre>
 <p>If we pass a numeric column to the function, it will return a vector
 of <strong>equally spread points</strong> (having the same range, i.e.,
 the same minimum and maximum, than the original data). The default
@@ -180,8 +180,8 @@ generate predictions using this reference grid of the predictor.</p>
 &gt; 
 &gt; Sepal.Length | Predicted
 &gt; ------------------------
-&gt;         4.30 |      3.15
-&gt;         7.90 |      2.93</code></pre>
+&gt; 4.30         |      3.15
+&gt; 7.90         |      2.93</code></pre>
 <p>Now that we have our <em>x</em> and <em>y</em> values, we can plot
 the line as an overlay to the actual data points:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -252,16 +252,16 @@ following:</p>
 &gt; 
 &gt; Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
 &gt; -----------------------------------------------------------------
-&gt;         4.30 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         4.70 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         5.10 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         5.50 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         5.90 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         6.30 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         6.70 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         7.10 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         7.50 |        3.06 |         3.76 |        1.20 |  setosa
-&gt;         7.90 |        3.06 |         3.76 |        1.20 |  setosa
+&gt; 4.30         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 4.70         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 5.10         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 5.50         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 5.90         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 6.30         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 6.70         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 7.10         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 7.50         |        3.06 |         3.76 |        1.20 | setosa 
+&gt; 7.90         |        3.06 |         3.76 |        1.20 | setosa 
 &gt; 
 &gt; Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</code></pre>
 <p>However, the other variables (present in the dataframe but not
@@ -279,16 +279,16 @@ this can be easily changed:</p>
 &gt; 
 &gt; Sepal.Length | Sepal.Width | Petal.Length | Petal.Width | Species
 &gt; -----------------------------------------------------------------
-&gt;         4.30 |           2 |            1 |        0.10 |  setosa
-&gt;         4.70 |           2 |            1 |        0.10 |  setosa
-&gt;         5.10 |           2 |            1 |        0.10 |  setosa
-&gt;         5.50 |           2 |            1 |        0.10 |  setosa
-&gt;         5.90 |           2 |            1 |        0.10 |  setosa
-&gt;         6.30 |           2 |            1 |        0.10 |  setosa
-&gt;         6.70 |           2 |            1 |        0.10 |  setosa
-&gt;         7.10 |           2 |            1 |        0.10 |  setosa
-&gt;         7.50 |           2 |            1 |        0.10 |  setosa
-&gt;         7.90 |           2 |            1 |        0.10 |  setosa
+&gt; 4.30         |           2 |            1 |        0.10 | setosa 
+&gt; 4.70         |           2 |            1 |        0.10 | setosa 
+&gt; 5.10         |           2 |            1 |        0.10 | setosa 
+&gt; 5.50         |           2 |            1 |        0.10 | setosa 
+&gt; 5.90         |           2 |            1 |        0.10 | setosa 
+&gt; 6.30         |           2 |            1 |        0.10 | setosa 
+&gt; 6.70         |           2 |            1 |        0.10 | setosa 
+&gt; 7.10         |           2 |            1 |        0.10 | setosa 
+&gt; 7.50         |           2 |            1 |        0.10 | setosa 
+&gt; 7.90         |           2 |            1 |        0.10 | setosa 
 &gt; 
 &gt; Maintained constant: Sepal.Width, Petal.Length, Petal.Width, Species</code></pre>
 </div>
@@ -310,23 +310,23 @@ variable and a factor.</p>
 <span><span class="va">vizdata</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
-&gt; Sepal.Length |    Species | Sepal.Width | Petal.Length | Petal.Width | Predicted
+&gt; Sepal.Length | Species    | Sepal.Width | Petal.Length | Petal.Width | Predicted
 &gt; --------------------------------------------------------------------------------
-&gt;         4.30 |     setosa |        3.06 |         3.76 |        1.20 |      2.86
-&gt;         5.20 |     setosa |        3.06 |         3.76 |        1.20 |      3.58
-&gt;         6.10 |     setosa |        3.06 |         3.76 |        1.20 |      4.30
-&gt;         7.00 |     setosa |        3.06 |         3.76 |        1.20 |      5.02
-&gt;         7.90 |     setosa |        3.06 |         3.76 |        1.20 |      5.74
-&gt;         4.30 | versicolor |        3.06 |         3.76 |        1.20 |      2.25
-&gt;         5.20 | versicolor |        3.06 |         3.76 |        1.20 |      2.53
-&gt;         6.10 | versicolor |        3.06 |         3.76 |        1.20 |      2.82
-&gt;         7.00 | versicolor |        3.06 |         3.76 |        1.20 |      3.11
-&gt;         7.90 | versicolor |        3.06 |         3.76 |        1.20 |      3.40
-&gt;         4.30 |  virginica |        3.06 |         3.76 |        1.20 |      2.44
-&gt;         5.20 |  virginica |        3.06 |         3.76 |        1.20 |      2.65
-&gt;         6.10 |  virginica |        3.06 |         3.76 |        1.20 |      2.86
-&gt;         7.00 |  virginica |        3.06 |         3.76 |        1.20 |      3.07
-&gt;         7.90 |  virginica |        3.06 |         3.76 |        1.20 |      3.28
+&gt; 4.30         | setosa     |        3.06 |         3.76 |        1.20 |      2.86
+&gt; 5.20         | setosa     |        3.06 |         3.76 |        1.20 |      3.58
+&gt; 6.10         | setosa     |        3.06 |         3.76 |        1.20 |      4.30
+&gt; 7.00         | setosa     |        3.06 |         3.76 |        1.20 |      5.02
+&gt; 7.90         | setosa     |        3.06 |         3.76 |        1.20 |      5.74
+&gt; 4.30         | versicolor |        3.06 |         3.76 |        1.20 |      2.25
+&gt; 5.20         | versicolor |        3.06 |         3.76 |        1.20 |      2.53
+&gt; 6.10         | versicolor |        3.06 |         3.76 |        1.20 |      2.82
+&gt; 7.00         | versicolor |        3.06 |         3.76 |        1.20 |      3.11
+&gt; 7.90         | versicolor |        3.06 |         3.76 |        1.20 |      3.40
+&gt; 4.30         | virginica  |        3.06 |         3.76 |        1.20 |      2.44
+&gt; 5.20         | virginica  |        3.06 |         3.76 |        1.20 |      2.65
+&gt; 6.10         | virginica  |        3.06 |         3.76 |        1.20 |      2.86
+&gt; 7.00         | virginica  |        3.06 |         3.76 |        1.20 |      3.07
+&gt; 7.90         | virginica  |        3.06 |         3.76 |        1.20 |      3.28
 &gt; 
 &gt; Maintained constant: Sepal.Width, Petal.Length, Petal.Width</code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -454,15 +454,15 @@ entering the entire object into the function:</p>
 &gt; 
 &gt; Petal.Width | Sepal.Length
 &gt; --------------------------
-&gt;        0.10 |         4.30
-&gt;        1.30 |         4.30
-&gt;        2.50 |         4.30
-&gt;        0.10 |         6.10
-&gt;        1.30 |         6.10
-&gt;        2.50 |         6.10
-&gt;        0.10 |         7.90
-&gt;        1.30 |         7.90
-&gt;        2.50 |         7.90</code></pre>
+&gt; 0.10        |         4.30
+&gt; 1.30        |         4.30
+&gt; 2.50        |         4.30
+&gt; 0.10        |         6.10
+&gt; 1.30        |         6.10
+&gt; 2.50        |         6.10
+&gt; 0.10        |         7.90
+&gt; 1.30        |         7.90
+&gt; 2.50        |         7.90</code></pre>
 <p>We also skip the smooth term if we are interested only in the fixed
 effects:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
@@ -471,9 +471,9 @@ effects:</p>
 &gt; 
 &gt; Petal.Width
 &gt; -----------
-&gt;        0.10
-&gt;        1.30
-&gt;        2.50
+&gt; 0.10       
+&gt; 1.30       
+&gt; 2.50       
 &gt; 
 &gt; Maintained constant: Sepal.Length</code></pre>
 <p>We can also include random effects:</p>
@@ -481,21 +481,21 @@ effects:</p>
 <code class="sourceCode R"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">5</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
-&gt; Petal.Width | Sepal.Length |    Species
+&gt; Petal.Width | Sepal.Length | Species   
 &gt; ---------------------------------------
-&gt;        0.10 |         4.30 |     setosa
-&gt;        0.10 |         5.20 |     setosa
-&gt;        1.30 |         5.20 | versicolor
-&gt;        1.30 |         6.10 | versicolor
-&gt;        1.30 |         7.00 | versicolor
-&gt;        1.90 |         5.20 |  virginica
-&gt;        2.50 |         5.20 |  virginica
-&gt;        1.90 |         6.10 |  virginica
-&gt;        2.50 |         6.10 |  virginica
-&gt;        1.90 |         7.00 |  virginica
-&gt;        2.50 |         7.00 |  virginica
-&gt;        1.90 |         7.90 |  virginica
-&gt;        2.50 |         7.90 |  virginica</code></pre>
+&gt; 0.10        |         4.30 | setosa    
+&gt; 0.10        |         5.20 | setosa    
+&gt; 1.30        |         5.20 | versicolor
+&gt; 1.30        |         6.10 | versicolor
+&gt; 1.30        |         7.00 | versicolor
+&gt; 1.90        |         5.20 | virginica 
+&gt; 2.50        |         5.20 | virginica 
+&gt; 1.90        |         6.10 | virginica 
+&gt; 2.50        |         6.10 | virginica 
+&gt; 1.90        |         7.00 | virginica 
+&gt; 2.50        |         7.00 | virginica 
+&gt; 1.90        |         7.90 | virginica 
+&gt; 2.50        |         7.90 | virginica</code></pre>
 </div>
 <div class="section level2">
 <h2 id="controlled-standardized-change">Controlled standardized change<a class="anchor" aria-label="anchor" href="#controlled-standardized-change"></a>

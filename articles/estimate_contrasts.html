@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,11 +140,11 @@ previous tutorial:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Marginal Contrasts Analysis
 &gt; 
-&gt; Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+&gt; Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
 &gt; ------------------------------------------------------------------------------
 &gt; setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | &lt; .001
-&gt; setosa     |  virginica |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | &lt; .001
-&gt; versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 | 0.003 
+&gt; setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | &lt; .001
+&gt; versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors contrasted: Species
@@ -163,11 +163,11 @@ applied to more complex models:</p>
 <span><span class="va">contrasts</span></span></code></pre></div>
 <pre><code>&gt; Marginal Contrasts Analysis
 &gt; 
-&gt; Level1     |     Level2 | Difference |        95% CI |   SE | t(144) |      p
+&gt; Level1     | Level2     | Difference |        95% CI |   SE | t(144) |      p
 &gt; -----------------------------------------------------------------------------
 &gt; setosa     | versicolor |       1.59 | [ 0.81, 2.37] | 0.39 |   4.04 | &lt; .001
-&gt; setosa     |  virginica |       1.77 | [ 0.96, 2.59] | 0.41 |   4.29 | &lt; .001
-&gt; versicolor |  virginica |       0.18 | [-0.10, 0.47] | 0.15 |   1.27 | 0.205 
+&gt; setosa     | virginica  |       1.77 | [ 0.96, 2.59] | 0.41 |   4.29 | &lt; .001
+&gt; versicolor | virginica  |       0.18 | [-0.10, 0.47] | 0.15 |   1.27 |  0.205
 &gt; 
 &gt; Variable predicted: Sepal.Width
 &gt; Predictors contrasted: Species

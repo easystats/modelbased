@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -248,42 +248,42 @@ to these group-level scores. We can use the
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_grouplevel.html">estimate_grouplevel</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
 <span><span class="va">random</span></span></code></pre></div>
-<pre><code>&gt; Group | Level |      Parameter | Coefficient |   SE |         95% CI
+<pre><code>&gt; Group | Level | Parameter      | Coefficient |   SE |         95% CI
 &gt; --------------------------------------------------------------------
-&gt; id    |     1 |    (Intercept) |       -0.10 | 0.01 | [-0.12, -0.07]
-&gt; id    |     1 | conditionspeed |        0.09 | 0.02 | [ 0.06,  0.12]
-&gt; id    |     2 |    (Intercept) |        0.08 | 0.02 | [ 0.04,  0.12]
-&gt; id    |     2 | conditionspeed |       -0.03 | 0.02 | [-0.07,  0.01]
-&gt; id    |     3 |    (Intercept) |        0.02 | 0.01 | [ 0.00,  0.05]
-&gt; id    |     3 | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
-&gt; id    |     4 |    (Intercept) |       -0.13 | 0.01 | [-0.15, -0.10]
-&gt; id    |     4 | conditionspeed |        0.08 | 0.02 | [ 0.05,  0.11]
-&gt; id    |     5 |    (Intercept) |       -0.05 | 0.01 | [-0.08, -0.03]
-&gt; id    |     5 | conditionspeed |    6.67e-03 | 0.02 | [-0.02,  0.04]
-&gt; id    |     6 |    (Intercept) |       -0.08 | 0.01 | [-0.10, -0.05]
-&gt; id    |     6 | conditionspeed |        0.04 | 0.02 | [ 0.01,  0.07]
-&gt; id    |     7 |    (Intercept) |       -0.09 | 0.01 | [-0.12, -0.07]
-&gt; id    |     7 | conditionspeed |        0.10 | 0.02 | [ 0.06,  0.13]
-&gt; id    |     8 |    (Intercept) |        0.21 | 0.01 | [ 0.19,  0.24]
-&gt; id    |     8 | conditionspeed |       -0.18 | 0.02 | [-0.21, -0.14]
-&gt; id    |     9 |    (Intercept) |        0.03 | 0.01 | [ 0.00,  0.05]
-&gt; id    |     9 | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
-&gt; id    |    10 |    (Intercept) |       -0.10 | 0.01 | [-0.13, -0.08]
-&gt; id    |    10 | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.10]
-&gt; id    |    11 |    (Intercept) |       -0.09 | 0.01 | [-0.11, -0.07]
-&gt; id    |    11 | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.11]
-&gt; id    |    12 |    (Intercept) |   -6.47e-04 | 0.01 | [-0.03,  0.02]
-&gt; id    |    12 | conditionspeed |    3.65e-03 | 0.02 | [-0.03,  0.04]
-&gt; id    |    13 |    (Intercept) |        0.08 | 0.01 | [ 0.05,  0.10]
-&gt; id    |    13 | conditionspeed |       -0.06 | 0.02 | [-0.09, -0.02]
-&gt; id    |    14 |    (Intercept) |        0.03 | 0.01 | [ 0.01,  0.06]
-&gt; id    |    14 | conditionspeed |       -0.03 | 0.02 | [-0.06,  0.00]
-&gt; id    |    15 |    (Intercept) |        0.09 | 0.01 | [ 0.07,  0.11]
-&gt; id    |    15 | conditionspeed |       -0.07 | 0.02 | [-0.10, -0.04]
-&gt; id    |    16 |    (Intercept) |        0.04 | 0.01 | [ 0.02,  0.06]
-&gt; id    |    16 | conditionspeed |       -0.01 | 0.02 | [-0.05,  0.02]
-&gt; id    |    17 |    (Intercept) |        0.06 | 0.01 | [ 0.03,  0.08]
-&gt; id    |    17 | conditionspeed |       -0.05 | 0.02 | [-0.08, -0.02]</code></pre>
+&gt; id    | 1     | (Intercept)    |       -0.10 | 0.01 | [-0.12, -0.07]
+&gt; id    | 1     | conditionspeed |        0.09 | 0.02 | [ 0.06,  0.12]
+&gt; id    | 2     | (Intercept)    |        0.08 | 0.02 | [ 0.04,  0.12]
+&gt; id    | 2     | conditionspeed |       -0.03 | 0.02 | [-0.07,  0.01]
+&gt; id    | 3     | (Intercept)    |        0.02 | 0.01 | [ 0.00,  0.05]
+&gt; id    | 3     | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
+&gt; id    | 4     | (Intercept)    |       -0.13 | 0.01 | [-0.15, -0.10]
+&gt; id    | 4     | conditionspeed |        0.08 | 0.02 | [ 0.05,  0.11]
+&gt; id    | 5     | (Intercept)    |       -0.05 | 0.01 | [-0.08, -0.03]
+&gt; id    | 5     | conditionspeed |    6.67e-03 | 0.02 | [-0.02,  0.04]
+&gt; id    | 6     | (Intercept)    |       -0.08 | 0.01 | [-0.10, -0.05]
+&gt; id    | 6     | conditionspeed |        0.04 | 0.02 | [ 0.01,  0.07]
+&gt; id    | 7     | (Intercept)    |       -0.09 | 0.01 | [-0.12, -0.07]
+&gt; id    | 7     | conditionspeed |        0.10 | 0.02 | [ 0.06,  0.13]
+&gt; id    | 8     | (Intercept)    |        0.21 | 0.01 | [ 0.19,  0.24]
+&gt; id    | 8     | conditionspeed |       -0.18 | 0.02 | [-0.21, -0.14]
+&gt; id    | 9     | (Intercept)    |        0.03 | 0.01 | [ 0.00,  0.05]
+&gt; id    | 9     | conditionspeed |       -0.02 | 0.02 | [-0.05,  0.01]
+&gt; id    | 10    | (Intercept)    |       -0.10 | 0.01 | [-0.13, -0.08]
+&gt; id    | 10    | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.10]
+&gt; id    | 11    | (Intercept)    |       -0.09 | 0.01 | [-0.11, -0.07]
+&gt; id    | 11    | conditionspeed |        0.07 | 0.02 | [ 0.04,  0.11]
+&gt; id    | 12    | (Intercept)    |   -6.47e-04 | 0.01 | [-0.03,  0.02]
+&gt; id    | 12    | conditionspeed |    3.65e-03 | 0.02 | [-0.03,  0.04]
+&gt; id    | 13    | (Intercept)    |        0.08 | 0.01 | [ 0.05,  0.10]
+&gt; id    | 13    | conditionspeed |       -0.06 | 0.02 | [-0.09, -0.02]
+&gt; id    | 14    | (Intercept)    |        0.03 | 0.01 | [ 0.01,  0.06]
+&gt; id    | 14    | conditionspeed |       -0.03 | 0.02 | [-0.06,  0.00]
+&gt; id    | 15    | (Intercept)    |        0.09 | 0.01 | [ 0.07,  0.11]
+&gt; id    | 15    | conditionspeed |       -0.07 | 0.02 | [-0.10, -0.04]
+&gt; id    | 16    | (Intercept)    |        0.04 | 0.01 | [ 0.02,  0.06]
+&gt; id    | 16    | conditionspeed |       -0.01 | 0.02 | [-0.05,  0.02]
+&gt; id    | 17    | (Intercept)    |        0.06 | 0.01 | [ 0.03,  0.08]
+&gt; id    | 17    | conditionspeed |       -0.05 | 0.02 | [-0.08, -0.02]</code></pre>
 <p>Each of our participant (the <strong>Level</strong> column), numbered
 from 1 to 17, has two rows, corresponding to its own deviation from the
 main effect of the <strong>intercept</strong> and <strong>condition

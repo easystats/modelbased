@@ -11,7 +11,7 @@ which can be useful to add the random effects to the original data."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,14 +129,14 @@ indices (such as SE and CI), as these are not computable.</p></dd>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">carb</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">random</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level |   Parameter | Coefficient |   SE |        95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient |   SE |        95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     1 | (Intercept) |        0.41 | 0.84 | [-1.24, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     2 | (Intercept) |        0.11 | 0.78 | [-1.42, 1.65]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     3 | (Intercept) |       -0.32 | 0.94 | [-2.16, 1.51]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     4 | (Intercept) |       -0.78 | 0.78 | [-2.31, 0.75]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     6 | (Intercept) |        0.09 | 1.00 | [-1.87, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     8 | (Intercept) |        0.50 | 1.00 | [-1.47, 2.46]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 1     | (Intercept) |        0.41 | 0.84 | [-1.24, 2.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 2     | (Intercept) |        0.11 | 0.78 | [-1.42, 1.65]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 3     | (Intercept) |       -0.32 | 0.94 | [-2.16, 1.51]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 4     | (Intercept) |       -0.78 | 0.78 | [-2.31, 0.75]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 6     | (Intercept) |        0.09 | 1.00 | [-1.87, 2.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 8     | (Intercept) |        0.50 | 1.00 | [-1.47, 2.46]</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Visualize random effects</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></span></span>
@@ -144,14 +144,14 @@ indices (such as SE and CI), as these are not computable.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Show group-specific effects</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, deviation <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level |   Parameter | Coefficient |   SE |        95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient |   SE |        95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     1 | (Intercept) |        0.41 | 0.84 | [-1.24, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     2 | (Intercept) |        0.11 | 0.78 | [-1.42, 1.65]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     3 | (Intercept) |       -0.32 | 0.94 | [-2.16, 1.51]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     4 | (Intercept) |       -0.78 | 0.78 | [-2.31, 0.75]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     6 | (Intercept) |        0.09 | 1.00 | [-1.87, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     8 | (Intercept) |        0.50 | 1.00 | [-1.47, 2.46]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 1     | (Intercept) |        0.41 | 0.84 | [-1.24, 2.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 2     | (Intercept) |        0.11 | 0.78 | [-1.42, 1.65]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 3     | (Intercept) |       -0.32 | 0.94 | [-2.16, 1.51]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 4     | (Intercept) |       -0.78 | 0.78 | [-2.31, 0.75]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 6     | (Intercept) |        0.09 | 1.00 | [-1.87, 2.05]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 8     | (Intercept) |        0.50 | 1.00 | [-1.47, 2.46]</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reshape to wide data so that it matches the original dataframe...</span></span></span>
 <span class="r-in"><span><span class="va">reshaped</span> <span class="op">&lt;-</span> <span class="fu">reshape_grouplevel</span><span class="op">(</span><span class="va">random</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Coefficient"</span>, <span class="st">"SE"</span><span class="op">)</span><span class="op">)</span></span></span>
@@ -171,14 +171,14 @@ indices (such as SE and CI), as these are not computable.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Compute BLUPs</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"total"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level |   Parameter | Coefficient</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     1 | (Intercept) |       30.18</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     2 | (Intercept) |       29.88</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     3 | (Intercept) |       29.45</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     4 | (Intercept) |       28.99</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     6 | (Intercept) |       29.87</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  |     8 | (Intercept) |       30.27</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 1     | (Intercept) |       30.18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 2     | (Intercept) |       29.88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 3     | (Intercept) |       29.45</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 4     | (Intercept) |       28.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 6     | (Intercept) |       29.87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 8     | (Intercept) |       30.27</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
