@@ -64,7 +64,7 @@ format.visualisation_matrix <- function(x, ...) {
 #' @export
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # model information
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
   info <- insight::model_info(model, verbose = FALSE)
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
@@ -104,7 +104,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
 format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
   info <- insight::model_info(model, verbose = FALSE)
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
   remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")
   # for contrasting slope, we need to keep the "Parameter" column

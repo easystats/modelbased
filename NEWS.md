@@ -2,6 +2,12 @@
 
 ## Breaking Changes
 
+- The default package used for `estimate_means()`, `estimate_slopes()` and
+  `estimate_contrasts()` is now *marginaleffects*. You can set your preferred
+  package as backend using either the `backend` argument, or in general by setting
+  `options(modelbased_backend = "marginaleffects")` or
+  `options(modelbased_backend = "emmeans")`.
+
 - Deprecated argument and function names have been removed.
 
 - Argument `fixed` has been removed, as you can fix predictor at certain values
@@ -33,9 +39,9 @@
   to specify how to marginalize over non-focal terms. This results in slightly
   different predicted values, each approach answering a different question.
 
-- `estimate_contrasts()` gains a `backend` argument. This defaults to `"emmeans"`,
-  but can be set to `"marginaleffects"` to use features of that package to estimate
-  contrasts and pairwise comparisons.
+- `estimate_contrasts()` gains a `backend` argument. This defaults to
+  `"marginaleffects"`, but can be set to `"emmeans"` to use features of that
+  package to estimate contrasts and pairwise comparisons.
 
 - `estimate_expectation()` and related functions also get a `by` argument, as
   alternative to create a datagrid for the `data` argument.
