@@ -141,7 +141,7 @@ Check-out [**this vignette**](https://easystats.github.io/modelbased/articles/es
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 # 2. Estimate marginal contrasts
-contrasts <- estimate_contrasts(model, contrast = "Species", backend = "emmeans")
+contrasts <- estimate_contrasts(model, contrast = "Species")
 contrasts
 ```
 

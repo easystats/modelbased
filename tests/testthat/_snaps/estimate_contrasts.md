@@ -6,7 +6,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1    | Level 2    | Difference |   SE |          95% CI | t(25) |      p
+      Level1     | Level2     | Difference |   SE |          95% CI | t(25) |      p
       ------------------------------------------------------------------------------
       vs 0, am 0 | vs 0, am 1 |      -6.98 | 2.33 | [-11.79, -2.17] | -2.99 |  0.006
       vs 0, am 0 | vs 1, am 0 |     -11.27 | 4.04 | [-19.60, -2.95] | -2.79 |  0.010
@@ -27,7 +27,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1             | Level 2             | Difference |   SE |          95% CI | t(24) |      p
+      Level1              | Level2              | Difference |   SE |          95% CI | t(24) |      p
       ------------------------------------------------------------------------------------------------
       three 0, vs 0, am 0 | three 0, vs 0, am 1 |      -2.87 | 2.24 | [ -7.49,  1.76] | -1.28 |  0.213
       three 0, vs 0, am 0 | three 0, vs 1, am 0 |      -5.83 | 2.46 | [-10.90, -0.76] | -2.37 |  0.026
@@ -70,7 +70,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1           | Level 2            | Difference |   SE |          95% CI | t(113) |      p
+      Level1            | Level2             | Difference |   SE |          95% CI | t(113) |      p
       ----------------------------------------------------------------------------------------------
       morning, coffee   | morning, control   |       5.78 | 1.99 | [  1.83,  9.73] |   2.90 |  0.004
       morning, coffee   | noon, coffee       |       1.93 | 1.99 | [ -2.02,  5.88] |   0.97 |  0.336
@@ -286,7 +286,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1     | Level 2      | Difference |   SE |         95% CI | t(825) |     p
+      Level1      | Level2       | Difference |   SE |         95% CI | t(825) |     p
       --------------------------------------------------------------------------------
       Male, low   | Male, mid    |      -0.29 | 0.71 | [-1.68,  1.10] |  -0.41 | 0.684
       Male, low   | Male, high   |      -0.69 | 0.83 | [-2.32,  0.95] |  -0.82 | 0.410
@@ -387,7 +387,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1     | Level 2      | Difference |   SE |         95% CI |     t |     p
+      Level1      | Level2       | Difference |   SE |         95% CI |     t |     p
       -------------------------------------------------------------------------------
       low, male   | low, female  |       0.01 | 0.02 | [-0.03,  0.04] |  0.35 | 0.729
       low, male   | mid, male    |       0.01 | 0.02 | [-0.02,  0.04] |  0.46 | 0.648
@@ -437,7 +437,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1           | Level 2            | Difference |   SE |          95% CI | t(113) |      p
+      Level1            | Level2             | Difference |   SE |          95% CI | t(113) |      p
       ----------------------------------------------------------------------------------------------
       morning, coffee   | morning, control   |       5.78 | 1.99 | [  1.83,  9.73] |   2.90 |  0.004
       morning, coffee   | noon, coffee       |       1.93 | 1.99 | [ -2.02,  5.88] |   0.97 |  0.336
@@ -490,7 +490,7 @@
     Output
       Marginal Contrasts Analysis
       
-      Level 1    | Level 2    | Difference |   SE |         95% CI |     z |      p
+      Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
       -----------------------------------------------------------------------------
       yes, GP    | yes, PR    |      -0.06 | 0.05 | [-0.16,  0.04] | -1.10 |  0.271
       yes, GP    | yes, DM    |      -0.32 | 0.11 | [-0.54, -0.10] | -2.89 |  0.004

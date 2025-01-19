@@ -85,7 +85,7 @@ test_that("estimate_contrasts - Frequentist", {
   # expect_identical(dim(estim), c(12L, 11L))
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
   expect_identical(dim(estim), c(6L, 9L))
-  expect_named(estim, c("Level 1", "Level 2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(estim$Difference, c(-6.98333, -11.275, -18.25833, -4.29167, -11.275, -6.98333), tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
@@ -184,7 +184,7 @@ test_that("estimate_contrasts - Bayesian", {
   expect_named(
     estim,
     c(
-      "Level 1", "Level 2", "ROPE_CI", "Median", "CI_low",
+      "Level1", "Level2", "ROPE_CI", "Median", "CI_low",
       "CI_high", "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
     )
   )

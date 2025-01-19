@@ -259,7 +259,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         # if we have more than one contrast term, we unite the levels from
         # all contrast terms that belong to one "contrast group", separated
         # by comma, and each the two "new contrast groups" go into separate
-        # columns named "Level 1" and "Level 2".
+        # columns named "Level1" and "Level2".
         for (i in 1:2) {
           contrast_names <- paste0(contrast, i)
           # since we combine levels from different factors, we have to make
@@ -283,7 +283,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
           # finally, unite levels back into single column
           params <- datawizard::data_unite(
             params,
-            new_column = paste("Level", i),
+            new_column = paste0("Level", i),
             select = contrast_names,
             separator = ", ",
             verbose = FALSE
@@ -291,7 +291,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         }
         # we need to update these variables, because these are the new column
         # names for contrasts and focal terms
-        contrast <- focal_terms <- c("Level 1", "Level 2")
+        contrast <- focal_terms <- c("Level1", "Level2")
       }
 
       # ------------------------------------------------------------------
