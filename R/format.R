@@ -180,6 +180,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       lapply(x$Parameter, .split_at_minus_outside_parentheses)
     ))
 
+    # we *could* stop here and simply rename the split columns, but then
+    # we cannot filter by `by` - thus, we go on, extract all single levels,
+    # combine only relevant levels and then we're able to filter...
+
     # When we filter contrasts, e.g. `contrast = c("vs", "am='1'")` or
     # `contrast = c("vs", "am"), by = "gear='5'"`, we get no contrasts if one
     # of the focal terms only has one unique value in the data grid. Thus,
