@@ -83,8 +83,7 @@ test_that("attributes_means", {
   estim <- estimate_expectation(
     model,
     by = c("Species", "Petal.Width = [fivenum]"),
-    preserve_range = FALSE,
-    backend = "marginaleffects"
+    preserve_range = FALSE
   )
   expect_named(
     attributes(estim),
