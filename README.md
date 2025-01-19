@@ -179,15 +179,15 @@ for a detailed walkthrough on *contrast analysis*.
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 # 2. Estimate marginal contrasts
-contrasts <- estimate_contrasts(model, contrast = "Species", backend = "emmeans")
+contrasts <- estimate_contrasts(model, contrast = "Species")
 contrasts
 ## Marginal Contrasts Analysis
 ## 
-## Level1     |     Level2 | Difference |         95% CI |   SE | t(147) |      p
+## Level1     | Level2     | Difference |   SE |         95% CI | t(147) |      p
 ## ------------------------------------------------------------------------------
-## setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
-## setosa     |  virginica |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
-## versicolor |  virginica |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 | 0.003 
+## setosa     | versicolor |       0.66 | 0.07 | [ 0.52,  0.79] |   9.69 | < .001
+## setosa     | virginica  |       0.45 | 0.07 | [ 0.32,  0.59] |   6.68 | < .001
+## versicolor | virginica  |      -0.20 | 0.07 | [-0.34, -0.07] |  -3.00 |  0.003
 ## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
@@ -218,17 +218,17 @@ difference <- estimate_contrasts(
 print(difference, table_width = Inf)
 ## Marginal Contrasts Analysis
 ## 
-## Species                | Petal.Length | Difference |   SE |        95% CI | t(144) |      p
-## -------------------------------------------------------------------------------------------
-## setosa - versicolor    |         1.00 |       1.70 | 0.34 | [ 1.02, 2.37] |   4.97 | < .001
-## setosa - virginica     |         1.00 |       1.34 | 0.40 | [ 0.56, 2.13] |   3.38 | < .001
-## versicolor - virginica |         1.00 |      -0.36 | 0.49 | [-1.33, 0.61] |  -0.73 | 0.468 
-## setosa - versicolor    |         3.95 |       1.74 | 0.65 | [ 0.45, 3.03] |   2.67 | 0.008 
-## setosa - virginica     |         3.95 |       1.79 | 0.66 | [ 0.48, 3.11] |   2.70 | 0.008 
-## versicolor - virginica |         3.95 |       0.06 | 0.15 | [-0.24, 0.35] |   0.37 | 0.710 
-## setosa - versicolor    |         6.90 |       1.78 | 1.44 | [-1.06, 4.62] |   1.24 | 0.218 
-## setosa - virginica     |         6.90 |       2.25 | 1.42 | [-0.56, 5.06] |   1.58 | 0.116 
-## versicolor - virginica |         6.90 |       0.47 | 0.28 | [-0.09, 1.03] |   1.65 | 0.101 
+## Level1     | Level2     | Petal.Length | Difference |   SE |        95% CI | t(144) |      p
+## --------------------------------------------------------------------------------------------
+## setosa     | versicolor | 1.00         |       1.70 | 0.34 | [ 1.02, 2.37] |   4.97 | < .001
+## setosa     | virginica  | 1.00         |       1.34 | 0.40 | [ 0.56, 2.13] |   3.38 | < .001
+## setosa     | versicolor | 3.95         |       1.74 | 0.65 | [ 0.45, 3.03] |   2.67 |  0.008
+## setosa     | virginica  | 3.95         |       1.79 | 0.66 | [ 0.48, 3.11] |   2.70 |  0.008
+## setosa     | versicolor | 6.90         |       1.78 | 1.44 | [-1.06, 4.62] |   1.24 |  0.218
+## setosa     | virginica  | 6.90         |       2.25 | 1.42 | [-0.56, 5.06] |   1.58 |  0.116
+## versicolor | virginica  | 1.00         |      -0.36 | 0.49 | [-1.33, 0.61] |  -0.73 |  0.468
+## versicolor | virginica  | 3.95         |       0.06 | 0.15 | [-0.24, 0.35] |   0.37 |  0.710
+## versicolor | virginica  | 6.90         |       0.47 | 0.28 | [-0.09, 1.03] |   1.65 |  0.101
 ## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
@@ -381,14 +381,14 @@ model <- lmer(mpg ~ drat + (1 + drat | cyl), data = mtcars)
 
 random <- estimate_grouplevel(model)
 random
-## Group | Level |   Parameter | Coefficient |   SE |         95% CI
+## Group | Level | Parameter   | Coefficient |   SE |         95% CI
 ## -----------------------------------------------------------------
-## cyl   |     4 | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]
-## cyl   |     4 |        drat |        2.24 | 0.36 | [ 1.53,  2.95]
-## cyl   |     6 | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]
-## cyl   |     6 |        drat |       -0.09 | 0.54 | [-1.15,  0.98]
-## cyl   |     8 | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]
-## cyl   |     8 |        drat |       -2.15 | 0.47 | [-3.07, -1.23]
+## cyl   | 4     | (Intercept) |       -3.45 | 0.56 | [-4.55, -2.36]
+## cyl   | 4     | drat        |        2.24 | 0.36 | [ 1.53,  2.95]
+## cyl   | 6     | (Intercept) |        0.13 | 0.84 | [-1.52,  1.78]
+## cyl   | 6     | drat        |       -0.09 | 0.54 | [-1.15,  0.98]
+## cyl   | 8     | (Intercept) |        3.32 | 0.73 | [ 1.89,  4.74]
+## cyl   | 8     | drat        |       -2.15 | 0.47 | [-3.07, -1.23]
 
 plot(random) +
   geom_hline(yintercept = 0, linetype = "dashed") +

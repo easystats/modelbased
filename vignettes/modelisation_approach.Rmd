@@ -29,6 +29,7 @@ options(digits = 2)
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
   !requireNamespace("emmeans", quietly = TRUE) ||
+  !requireNamespace("marginaleffects", quietly = TRUE) ||
   !requireNamespace("parameters", quietly = TRUE) ||
   !requireNamespace("gganimate", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE) ||
