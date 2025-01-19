@@ -248,9 +248,11 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         by <- NULL
       }
 
-      # when we just have one term for comparison, we unite levels and use a
-      # dash / minus as separator char. The column name is the name of the
-      # contrast term.
+      # if we have more than one contrast term, we unite the levels from
+      # all contrast terms that belong to one "contrast group", separated
+      # by comma, and each the two "new contrast groups" go into separate
+      # columns named "Level1" and "Level2". For one contrast term, we just
+      # need to rename the columns
       if (length(contrast) == 1) {
         # rename columns
         params <- datawizard::data_rename(
@@ -260,10 +262,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
           verbose = FALSE
         )
       } else {
-        # if we have more than one contrast term, we unite the levels from
-        # all contrast terms that belong to one "contrast group", separated
-        # by comma, and each the two "new contrast groups" go into separate
-        # columns named "Level1" and "Level2".
+        # prepare all contrast terms
         for (i in 1:2) {
           contrast_names <- paste0(contrast, i)
           params <- .fix_duplicated_contrastlevels(params, contrast_names)
