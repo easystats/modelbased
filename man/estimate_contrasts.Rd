@@ -243,7 +243,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 estimate_contrasts(model)
 
-# Can also run contrasts between points of numeric
+# Can also run contrasts between points of numeric, stratified by "Species"
 estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
 
 # Or both
