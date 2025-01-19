@@ -262,6 +262,25 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         # columns named "Level 1" and "Level 2".
         for (i in seq_along(contrast)) {
           contrast_names <- paste0(contrast, i)
+          # since we combine levels from different factors, we have to make
+          # sure levels are unique across different terms. If not, paste
+          # variable names to levels. We first find the intersection of all
+          # levels from all current contrast terms
+          multiple_levels <- Reduce(
+            function(i, j) intersect(i, j),
+            lapply(params[contrast_names], unique),
+            accumulate = FALSE
+          )
+          # if we find any intersections, we have identical labels for different
+          # terms in one "contrast group" - we thus add the variable name to the
+          # levels, to avoid identical levels without knowing to which factor
+          # it belongs
+          if (length(multiple_levels)) {
+            for (cn in contrast_names) {
+              params[[cn]] <- paste(gsub(".{1}$", "", cn), params[[cn]])
+            }
+          }
+          # finally, unite levels back into single column
           params <- datawizard::data_unite(
             params,
             new_column = paste("Level", i),
