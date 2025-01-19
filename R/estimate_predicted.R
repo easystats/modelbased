@@ -425,12 +425,20 @@ estimate_relation <- function(model,
   }
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
-  out <- cbind(data, out)
+
+  # select columns to copy - we don't want duplicates from the data grid
+  columns_to_copy <- setdiff(colnames(data), colnames(out))
+  if (length(columns_to_copy)) {
+    out <- cbind(data[columns_to_copy], out)
+  }
 
   # remove response variable from data frame, as this variable is predicted
   if (!is.null(model_response) && model_response %in% colnames(out)) {
     out[[model_response]] <- NULL
   }
+
+  # clean-up: remove "Row" variable (from ordinal and alike)
+  out[["Row"]] <- NULL
 
   # Add residuals
   if (!is.null(response)) {

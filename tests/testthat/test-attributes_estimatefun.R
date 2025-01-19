@@ -87,7 +87,7 @@ test_that("attributes_means", {
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "ci", "keep_iterations", "response",
+      "names", "row.names", "class", "ci", "keep_iterations", "response",
       "model", "focal_terms", "preserve_range", "table_title", "table_footer",
       "adjusted_for", "at_specs", "at", "by", "reference", "data"
     )

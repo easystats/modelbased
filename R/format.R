@@ -455,7 +455,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
 
   # Rename for Categorical family
-  if (info$is_categorical) {
+  if (info$is_categorical || info$is_ordinal || info$is_cumulative) {
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
   }
 
