@@ -1,3 +1,24 @@
+# estimate_contrasts - Frequentist
+
+    Code
+      print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'",
+      backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level 1    | Level 2    | Difference |   SE |          95% CI | t(25) |      p
+      ------------------------------------------------------------------------------
+      vs 0, am 0 | vs 0, am 1 |      -6.98 | 2.33 | [-11.79, -2.17] | -2.99 |  0.006
+      vs 0, am 0 | vs 1, am 0 |     -11.27 | 4.04 | [-19.60, -2.95] | -2.79 |  0.010
+      vs 0, am 0 | vs 1, am 1 |     -18.26 | 4.67 | [-27.88, -8.64] | -3.91 | < .001
+      vs 0, am 1 | vs 1, am 0 |      -4.29 | 4.67 | [-13.91,  5.33] | -0.92 |  0.367
+      vs 0, am 1 | vs 1, am 1 |     -11.27 | 4.04 | [-19.60, -2.95] | -2.79 |  0.010
+      vs 1, am 0 | vs 1, am 1 |      -6.98 | 2.33 | [-11.79, -2.17] | -2.99 |  0.006
+      
+      Variable predicted: mpg
+      Predictors contrasted: vs, am
+      p-values are uncorrected.
+
 # estimate_contrasts - marginaleffects
 
     Code
