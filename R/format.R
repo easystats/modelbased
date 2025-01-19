@@ -248,7 +248,13 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       # dash / minus as separator char. The column name is the name of the
       # contrast term.
       if (length(contrast) == 1) {
-        colnames(params) <- c("Level1", "Level2")
+        # rename columns
+        params <- datawizard::data_rename(
+          params,
+          select = paste0(contrast, 1:2),
+          replacement = c("Level1", "Level2"),
+          verbose = FALSE
+        )
       } else {
         # if we have more than one contrast term, we unite the levels from
         # all contrast terms that belong to one "contrast group", separated
@@ -301,7 +307,12 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         # column name back, so we can properly merge all variables in
         # "contrast" and "by" to the original data
         by_columns <- paste0(by, 1)
-        params <- datawizard::data_rename(params, select = by_columns, replacement = by, verbose = FALSE)
+        params <- datawizard::data_rename(
+          params,
+          select = by_columns,
+          replacement = by,
+          verbose = FALSE
+        )
 
         # filter original data and new params by "by"
         x <- x[keep_rows, ]
