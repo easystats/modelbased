@@ -87,6 +87,15 @@ test_that("estimate_contrasts - Frequentist", {
   expect_identical(dim(estim), c(6L, 9L))
   expect_named(estim, c("Level 1", "Level 2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(estim$Difference, c(-6.98333, -11.275, -18.25833, -4.29167, -11.275, -6.98333), tolerance = 1e-4)
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+
+  # duplicated levels
+  dat <- mtcars
+  dat[c("vs", "am")] <- sapply(dat[c("vs", "am")], as.factor)
+  set.seed(123)
+  dat$three <- factor(sample(0:1, nrow(dat), replace = TRUE))
+  model <- lm(mpg ~ three * vs * am, data = dat)
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
 
   dat <- iris
