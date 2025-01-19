@@ -113,7 +113,7 @@ estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             ci = 0.95,
-                            backend = getOption("modelbased_backend", "emmeans"),
+                            backend = getOption("modelbased_backend", "marginaleffects"),
                             verbose = TRUE,
                             ...) {
   if (backend == "emmeans") {

@@ -10,7 +10,7 @@ estimate_means(
   predict = NULL,
   ci = 0.95,
   marginalize = "average",
-  backend = getOption("modelbased_backend", "emmeans"),
+  backend = getOption("modelbased_backend", "marginaleffects"),
   transform = NULL,
   verbose = TRUE,
   ...
