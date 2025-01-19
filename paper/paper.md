@@ -58,19 +58,23 @@ In line with the `easystats`' *raison d'être*, the `modelbased` package is desi
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
 These predictions can be of different types, depending on the model and the question at hand.
 For instance, for linear regressions, predictions can be associated with **confidence intervals** (`predict="expectation"`) or **prediction intervals** (`predict="prediction"`).
-The former corresponds to the uncertainty around the "relationship" (i.e., the estimate in the model's conditional parameters) while the second provides information about the range where observation values can actually fall.
-For logistic models, predictions can be made on the **response scale** (`predict="response"`) - in terms of probability - or on the **link scale** (`predict="link"`) - in terms of log odds.
+The former corresponds to the uncertainty around the "relationship" (i.e., the estimate in the model's conditional parameters) while the second provides information about the range where observation values can actually fall (predictions intervals are typically larger than confidence intervals).
+For general linear models (GLMs), while the distinction between prediction and confidence intervals do not apply, predictions can be made on the **response scale** (`predict="response"`) or the **link scale** (`predict="link"`). 
+This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic models.
 
 These different types of variations can be obtained for the original data, which is useful to assess the model's goodness-of-fit, or for new data (typically a "data grid"), which is useful for visualization.
 
-For convenience, the `modelbased` package includes 4 "related" functions, that mostly differ in their default arguments for `data` and `predict`:
+For convenience, the `modelbased` package includes 4 related functions, that mostly differ in their default arguments for `data` and `predict`:
 
 - `estimate_prediction()`: original data, prediction intervals.
 - `estimate_expectation()`: original data, confidence intervals.
 - `estimate_relation()`: data grid, predictions on the response scale. 
 - `estimate_link()`: data grid, predictions on the link scale.
 
-These functions belong to the same family, and the relevance of their output depends on the model and the research question.
+*Note:* if the defaults are changed, then these functions can become redundant. For instance, `estimate_relation(..., predict="link")` will be equivalent to `estimate_link(...)`.
+
+These functions belong to the same family, and their relevance depends on the model and the research question.
+
 
 ## Marginal effects
 
@@ -95,7 +99,7 @@ The algorithmic heavy lifting is done by its two backend packages, `emmeans` and
 - `emmeans` (REF) Originally, the package was known as `lsmeans`, which stands for "Least-Squares Means". 
   This term was coined by researchers in the statistical community to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs, which are essentially predictions averaged over specified levels of factors in the model while holding continuous variables at their means or other specified values.
   The term "Least-Squares Means" was somewhat misleading as it suggested a method specific to least-squares estimation, hence its renaming to `emmeans` in 2016 to clarify its scope for a wider range of models including generalized linear models, mixed models, and Bayesian models.
-- `marginaleffects` (REF) was more recently introduced and also employs the delta method to approximate variance estimation.
+- `marginaleffects` (REF) was more recently introduced and also employs the delta method to approximate variance estimation. It is compatible with a wider range of models and allows for more flexibility in the specification of the marginal effects to be estimated.
 
 [What's the difference / benefits / drawbacks of using one or ther other?]
 
@@ -226,7 +230,7 @@ The effect of `Petal.Length` on `Petal.Width` is significantly stronger in *virg
 
 # Conclusion
 
-As we can see, the `modelbased` package provides a simple and intuitive interface to extract and visualize important information contained within statistical models.
+The `modelbased` package provides a simple and intuitive interface to extract and visualize important information contained within statistical models.
 
 # Acknowledgements
 
