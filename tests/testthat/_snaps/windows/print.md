@@ -134,7 +134,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c12hour, c172code, c161sex
-      Predictors averaged: barthtot
+      Predictors averaged: barthtot (65)
 
 ---
 
@@ -550,7 +550,7 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors controlled: barthtot (65), e16sex (1)
+      Predictors controlled: barthtot (65), e16sex (male)
 
 ---
 
@@ -574,5 +574,5 @@
       
       Variable predicted: neg_c_7
       Predictors modulated: c160age=[fivenum], c161sex
-      Predictors averaged: barthtot, e16sex
+      Predictors averaged: barthtot (65), e16sex
 

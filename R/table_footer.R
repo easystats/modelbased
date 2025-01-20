@@ -39,7 +39,7 @@
     } else if (all(adjusted_for %in% colnames(datagrid))) {
       ref_cat_data <- datagrid
     } else {
-      ref_cat_data
+      ref_cat_data <- NULL
     }
     if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
