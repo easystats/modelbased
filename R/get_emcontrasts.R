@@ -4,6 +4,7 @@
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' get_emcontrasts(model)
 #'
+#' \dontrun{
 #' # Dealing with interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' # By default: selects first factor
@@ -16,6 +17,7 @@
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #' # Or modulate it
 #' get_emcontrasts(model, by = "Petal.Width", length = 4)
+#' }
 #' @export
 get_emcontrasts <- function(model,
                             contrast = NULL,

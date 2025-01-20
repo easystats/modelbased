@@ -217,6 +217,7 @@ wrappers around \code{emmeans::emmeans()} and \code{emmeans::emtrends()}.
 model <- lm(Sepal.Width ~ Species, data = iris)
 get_emcontrasts(model)
 
+\dontrun{
 # Dealing with interactions
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
@@ -229,6 +230,7 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -236,13 +238,13 @@ model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 # By default, 'by' is set to "Species"
 get_emmeans(model)
 
+\dontrun{
 # Overall mean (close to 'mean(iris$Sepal.Length)')
 get_emmeans(model, by = NULL)
 
 # One can estimate marginal means at several values of a 'modulate' variable
 get_emmeans(model, by = "Petal.Width", length = 3)
 
-\dontrun{
 # Interactions
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
@@ -252,12 +254,14 @@ get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_emtrends(model)
 get_emtrends(model, by = "Species")
 get_emtrends(model, by = "Petal.Length")
 get_emtrends(model, by = c("Species", "Petal.Length"))
+}
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 get_emtrends(model)
@@ -272,6 +276,7 @@ get_marginalmeans(model)
 # Overall mean (close to 'mean(iris$Sepal.Length)')
 get_marginalmeans(model, by = NULL)
 
+\dontrun{
 # One can estimate marginal means at several values of a 'modulate' variable
 get_marginalmeans(model, by = "Petal.Width", length = 3)
 
@@ -281,6 +286,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_marginalmeans(model)
 get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

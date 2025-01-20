@@ -19,13 +19,13 @@
 #' # By default, 'by' is set to "Species"
 #' get_emmeans(model)
 #'
+#' \dontrun{
 #' # Overall mean (close to 'mean(iris$Sepal.Length)')
 #' get_emmeans(model, by = NULL)
 #'
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' get_emmeans(model, by = "Petal.Width", length = 3)
 #'
-#' \dontrun{
 #' # Interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'

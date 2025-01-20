@@ -9,6 +9,7 @@
 #' # Overall mean (close to 'mean(iris$Sepal.Length)')
 #' get_marginalmeans(model, by = NULL)
 #'
+#' \dontrun{
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' get_marginalmeans(model, by = "Petal.Width", length = 3)
 #'
@@ -18,6 +19,7 @@
 #' get_marginalmeans(model)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' }
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
