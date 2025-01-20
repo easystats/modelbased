@@ -36,10 +36,15 @@
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
+      ref_cat_data <- x
+    } else if (all(adjusted_for %in% colnames(datagrid))) {
+      ref_cat_data <- datagrid
+    } else {
+      ref_cat_data
+    }
+    if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
-      adjusted_values <- sapply(adjusted_for, function(i) {
-        x[[i]][1]
-      })
+      adjusted_values <- sapply(adjusted_for, function(i) ref_cat_data[[i]][1])
       # at values to names of non-focal terms (table_footer)
       if (is.numeric(adjusted_values)) {
         adjusted_for <- sprintf("%s (%.2g)", adjusted_for, adjusted_values)

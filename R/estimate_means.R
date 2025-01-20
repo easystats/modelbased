@@ -210,6 +210,7 @@ estimate_means <- function(model,
   ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
+    type = ifelse(marginalize == "individual", "predictions", "means"),
     by = info$by,
     model = model,
     info = info
