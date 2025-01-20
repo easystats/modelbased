@@ -427,3 +427,24 @@ test_that("plots, glm logistic inside bound", {
     plot(out1, show_data = FALSE)
   )
 })
+
+
+test_that("plots no CI", {
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+
+  # Estimate means -------------------------------------
+  x <- estimate_means(model, by = "Species", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-means-no-ci-1",
+    plot(modelbased::visualisation_recipe(x, show_ci = FALSE))
+  )
+  vdiffr::expect_doppelganger(
+    "plot-means-no-ci-2",
+    plot(modelbased::visualisation_recipe(x, show_ci = FALSE, join_dots = FALSE))
+  )
+  x <- estimate_means(model, by = "Sepal.Width", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-means-no_ci-3",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, show_ci = FALSE))
+  )
+})
