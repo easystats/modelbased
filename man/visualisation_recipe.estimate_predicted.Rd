@@ -9,6 +9,7 @@
 \method{visualisation_recipe}{estimate_predicted}(
   x,
   show_data = FALSE,
+  show_ci = TRUE,
   point = NULL,
   line = NULL,
   pointrange = NULL,
@@ -21,6 +22,7 @@
 
 \method{visualisation_recipe}{estimate_slopes}(
   x,
+  show_ci = TRUE,
   line = NULL,
   pointrange = NULL,
   ribbon = NULL,
@@ -31,6 +33,7 @@
 
 \method{visualisation_recipe}{estimate_grouplevel}(
   x,
+  show_ci = TRUE,
   line = NULL,
   pointrange = NULL,
   ribbon = NULL,
@@ -42,8 +45,10 @@
 \arguments{
 \item{x}{A modelbased object.}
 
-\item{show_data}{Display the "raw" data as a background to the model-based
-estimation.}
+\item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
+to the model-based estimation.}
+
+\item{show_ci}{Logical, if \code{TRUE}, show error bars or uncertainty bands.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
