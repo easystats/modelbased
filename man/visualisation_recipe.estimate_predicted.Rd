@@ -72,7 +72,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 \code{ggplot2} package directly.
 }
 \examples{
-\dontshow{if (require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_relation, estimate_expectation, ...
 # ==============================================
@@ -100,7 +100,7 @@ plot(x,
   theme_minimal() +
   labs(title = "Relationship between MPG and WT")
 
-
+\dontrun{
 # Customize raw data -------------
 
 plot(x, point = list(geom = "density_2d_filled"), line = list(color = "white")) +
@@ -153,8 +153,9 @@ plot(x)
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 plot(x)
+}
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_slopes
 # ==============================================
@@ -180,7 +181,7 @@ model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 plot(visualisation_recipe(x))
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("see") && require("lme4") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_grouplevel
 # ==============================================

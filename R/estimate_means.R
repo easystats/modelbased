@@ -115,7 +115,7 @@
 #' Heiss, A. (2022). Marginal and conditional effects for GLMMs with
 #' {marginaleffects}. Andrew Heiss. \doi{10.59350/xwnfm-x1827}
 #'
-#' @examplesIf all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Frequentist models
@@ -150,13 +150,13 @@
 #'   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 #' )
 #'
+#' \dontrun{
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 #'
 #' plot(means) # which runs visualisation_recipe()
 #' standardize(means)
 #'
-#' \donttest{
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'

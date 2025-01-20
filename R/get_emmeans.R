@@ -25,12 +25,14 @@
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' get_emmeans(model, by = "Petal.Width", length = 3)
 #'
+#' \dontrun{
 #' # Interactions
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #' get_emmeans(model)
 #' get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
 #' get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' }
 #' @export
 get_emmeans <- function(model,
                         by = "auto",

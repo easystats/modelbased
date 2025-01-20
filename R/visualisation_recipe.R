@@ -25,7 +25,7 @@
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
 #'
-#' @examplesIf require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0"
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
 #' # ==============================================
 #' # estimate_relation, estimate_expectation, ...
 #' # ==============================================
@@ -53,7 +53,7 @@
 #'   theme_minimal() +
 #'   labs(title = "Relationship between MPG and WT")
 #'
-#'
+#' \dontrun{
 #' # Customize raw data -------------
 #'
 #' plot(x, point = list(geom = "density_2d_filled"), line = list(color = "white")) +
@@ -106,6 +106,7 @@
 #' data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 #' x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 #' plot(x)
+#' }
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = FALSE,
@@ -138,7 +139,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))
 #' # ==============================================
 #' # estimate_slopes
 #' # ==============================================
@@ -186,7 +187,7 @@ visualisation_recipe.estimate_slopes <- function(x,
 
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("see") && require("lme4") && require("emmeans")
+#' @examplesIf all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))
 #' # ==============================================
 #' # estimate_grouplevel
 #' # ==============================================
