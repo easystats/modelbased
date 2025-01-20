@@ -40,6 +40,7 @@
 #' # visualization_recipe() is called implicitly when you call plot()
 #' plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 #'
+#' \dontrun{
 #' # And can be used in a pipe workflow
 #' lm(mpg ~ qsec, data = mtcars) |>
 #'   estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
@@ -55,7 +56,6 @@
 #'   theme_minimal() +
 #'   labs(title = "Relationship between MPG and WT")
 #'
-#' \dontrun{
 #' # Customize raw data -------------
 #'
 #' plot(x, point = list(geom = "density_2d_filled"), line = list(color = "white")) +
@@ -152,6 +152,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' layers
 #' plot(layers)
 #'
+#' \dontrun{
 #' # Customize aesthetics and add horizontal line and theme
 #' layers <- visualisation_recipe(x, pointrange = list(size = 2, linewidth = 2))
 #' plot(layers) +
@@ -166,6 +167,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 #' x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 #' plot(visualisation_recipe(x))
+#' }
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,
                                                  line = NULL,
@@ -193,6 +195,7 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' # ==============================================
 #' # estimate_grouplevel
 #' # ==============================================
+#' \dontrun{
 #' data <- lme4::sleepstudy
 #' data <- rbind(data, data)
 #' data$Newfactor <- rep(c("A", "B", "C", "D"))
@@ -215,6 +218,7 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 #' x <- estimate_grouplevel(model)
 #' plot(x)
+#' }
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,
                                                      line = NULL,

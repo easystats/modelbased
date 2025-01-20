@@ -212,6 +212,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
 # `?insight::get_datagrid`.
 estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
 
+\dontrun{
 # same for factors: filter by specific levels
 estimate_means(model, by = "Species=c('versicolor', 'setosa')")
 estimate_means(model, by = c("Species", "Sepal.Width=0"))
@@ -226,7 +227,6 @@ estimate_means(
   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
 
-\dontrun{
 # Methods that can be applied to it:
 means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 

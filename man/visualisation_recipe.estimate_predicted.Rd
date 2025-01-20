@@ -87,6 +87,7 @@ plot(layers)
 # visualization_recipe() is called implicitly when you call plot()
 plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 
+\dontrun{
 # And can be used in a pipe workflow
 lm(mpg ~ qsec, data = mtcars) |>
   estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
@@ -102,7 +103,6 @@ plot(x,
   theme_minimal() +
   labs(title = "Relationship between MPG and WT")
 
-\dontrun{
 # Customize raw data -------------
 
 plot(x, point = list(geom = "density_2d_filled"), line = list(color = "white")) +
@@ -168,6 +168,7 @@ layers <- visualisation_recipe(x)
 layers
 plot(layers)
 
+\dontrun{
 # Customize aesthetics and add horizontal line and theme
 layers <- visualisation_recipe(x, pointrange = list(size = 2, linewidth = 2))
 plot(layers) +
@@ -182,11 +183,13 @@ plot(visualisation_recipe(x))
 model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 plot(visualisation_recipe(x))
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_grouplevel
 # ==============================================
+\dontrun{
 data <- lme4::sleepstudy
 data <- rbind(data, data)
 data$Newfactor <- rep(c("A", "B", "C", "D"))
@@ -209,5 +212,6 @@ plot(x) +
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 x <- estimate_grouplevel(model)
 plot(x)
+}
 \dontshow{\}) # examplesIf}
 }
