@@ -60,7 +60,7 @@ get_marginalmeans <- function(model,
   } else {
     # setup arguments to create the data grid
     dg_factors <- switch(marginalize,
-      individual = "reference",
+      specific = "reference",
       "all"
     )
     dg_args <- list(
