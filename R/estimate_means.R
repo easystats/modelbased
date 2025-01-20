@@ -186,7 +186,7 @@ estimate_means <- function(model,
   # validate input
   marginalize <- insight::validate_argument(
     marginalize,
-    c("average", "population", "individual")
+    c("average", "population", "specific")
   )
 
   if (backend == "emmeans") {
@@ -204,13 +204,13 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c(ifelse(
-    marginalize == "individual",
+    marginalize == "specific",
     "Model-based Predictions",
     "Estimated Marginal Means"
   ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
-    type = ifelse(marginalize == "individual", "predictions", "means"),
+    type = ifelse(marginalize == "specific", "predictions", "means"),
     by = info$by,
     model = model,
     info = info

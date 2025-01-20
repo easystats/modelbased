@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   marginalize <- insight::validate_argument(
     marginalize,
-    c("average", "population", "individual")
+    c("average", "population", "specific")
   )
 
   # Guess arguments
