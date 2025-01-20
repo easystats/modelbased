@@ -188,7 +188,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: e42dep, c172code
-      Predictors averaged: c12hour, barthtot, c161sex
+      Predictors averaged: c12hour (42), barthtot (65), c161sex
       p-values are uncorrected.
       Parameters:
       b6 = e42dep [slightly dependent], c172code [intermediate level of education]
@@ -393,7 +393,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
-      Predictors averaged: e16sex, barthtot
+      Predictors averaged: e16sex, barthtot (65)
       p-values are uncorrected.
 
 ---
@@ -424,7 +424,7 @@
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
-      Predictors averaged: barthtot
+      Predictors averaged: barthtot (65)
       p-values are uncorrected.
 
 # estimate_contrasts - simple contrasts and with - in levels works
@@ -443,7 +443,7 @@
       
       Variable predicted: Sepal.Length
       Predictors contrasted: Species
-      Predictors averaged: Sepal.Width
+      Predictors averaged: Sepal.Width (3.1)
       p-values are uncorrected.
 
 ---
@@ -603,7 +603,7 @@
       
       Variable predicted: count
       Predictors contrasted: mined, spp
-      Predictors averaged: cover, site
+      Predictors averaged: cover (8.7e-11), site
       p-values are uncorrected.
       Contrasts are on the response-scale.
 
@@ -627,7 +627,7 @@
       
       Variable predicted: count
       Predictors contrasted: mined
-      Predictors averaged: cover, site
+      Predictors averaged: cover (8.7e-11), site
       p-values are uncorrected.
       Contrasts are on the response-scale.
 
