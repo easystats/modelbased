@@ -1,3 +1,4 @@
+skip_on_cran()
 skip_on_os("windows")
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")

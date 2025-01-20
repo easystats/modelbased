@@ -155,6 +155,7 @@ test_that("estimate_contrasts - Frequentist", {
 
 
 test_that("estimate_contrasts - Bayesian", {
+  skip_on_cran()
   skip_if_not_installed("logspline")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
@@ -254,6 +255,7 @@ test_that("estimate_contrasts - p.adjust", {
 
 
 test_that("estimate_contrasts - dfs", {
+  skip_on_cran()
   skip_if_not_installed("lme4")
   skip_if_not_installed("pbkrtest")
   skip_if_not_installed("lmerTest")
@@ -280,7 +282,7 @@ test_that("estimate_contrasts - dfs", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
-  ## TODO: skip for marginaleffects 0.24.0?
+  # ignore failing snapshot tests, should resolve with next marginaleffects version
   skip_if_not_installed("Formula")
   skip_if_not_installed("ggeffects")
   data(coffee_data, package = "ggeffects")
