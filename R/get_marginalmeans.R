@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   marginalize <- insight::validate_argument(
     marginalize,
-    c("average", "population", "individual")
+    c("average", "population", "specific")
   )
 
   # Guess arguments
@@ -60,7 +60,7 @@ get_marginalmeans <- function(model,
   } else {
     # setup arguments to create the data grid
     dg_factors <- switch(marginalize,
-      individual = "reference",
+      specific = "reference",
       "all"
     )
     dg_args <- list(

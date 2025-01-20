@@ -149,7 +149,7 @@ estimate_contrasts <- function(model,
 
   # Table formatting
   attr(out, "table_title") <- c(ifelse(
-    marginalize == "individual",
+    marginalize == "specific",
     "Model-based Contrasts Analysis",
     "Marginal Contrasts Analysis"
   ), "blue")
