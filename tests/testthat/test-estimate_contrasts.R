@@ -155,6 +155,7 @@ test_that("estimate_contrasts - Frequentist", {
 
 
 test_that("estimate_contrasts - Bayesian", {
+  skip_on_cran()
   skip_if_not_installed("logspline")
   skip_if_not_installed("rstanarm")
   skip_if_not_installed("lme4")
@@ -254,6 +255,7 @@ test_that("estimate_contrasts - p.adjust", {
 
 
 test_that("estimate_contrasts - dfs", {
+  skip_on_cran()
   skip_if_not_installed("lme4")
   skip_if_not_installed("pbkrtest")
   skip_if_not_installed("lmerTest")
