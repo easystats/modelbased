@@ -26,6 +26,8 @@
 #' @param ... Not used.
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
+#' library(ggplot2)
+#' library(see)
 #' # ==============================================
 #' # estimate_relation, estimate_expectation, ...
 #' # ==============================================

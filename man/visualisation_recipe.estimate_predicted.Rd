@@ -73,6 +73,8 @@ for publication-ready figures, we recommend re-creating the figures using the
 }
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(ggplot2)
+library(see)
 # ==============================================
 # estimate_relation, estimate_expectation, ...
 # ==============================================
