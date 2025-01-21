@@ -2,7 +2,7 @@
 
 
 #' @keywords internal
-.find_aes <- function(x) {
+.find_aes <- function(x, show_ci = TRUE) {
   data <- as.data.frame(x)
   data$.group <- 1
 
@@ -56,8 +56,10 @@
     # If x is a not-numeric, make pointrange
     if (is.numeric(data[[by[1]]])) {
       aes$type <- "ribbon"
-    } else {
+    } else if (isTRUE(show_ci)) {
       aes$type <- "pointrange"
+    } else {
+      aes$type <- "point"
     }
   }
   if (length(by) > 1) {
@@ -84,7 +86,9 @@
   }
 
   # CI
-  aes <- .find_aes_ci(aes, data)
+  if (isTRUE(show_ci)) {
+    aes <- .find_aes_ci(aes, data)
+  }
 
   # axis and legend labels
   if (!is.null(model_data) && !is.null(model_response)) {
@@ -134,6 +138,7 @@
 #' @keywords internal
 .visualization_recipe <- function(x,
                                   show_data = TRUE,
+                                  show_ci = TRUE,
                                   point = NULL,
                                   line = NULL,
                                   pointrange = NULL,
@@ -143,7 +148,7 @@
                                   join_dots = TRUE,
                                   ...) {
   response_scale <- attributes(x)$predict
-  aes <- .find_aes(x)
+  aes <- .find_aes(x, show_ci)
   data <- aes$data
   aes <- aes$aes
   layers <- list()
@@ -152,7 +157,7 @@
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
   if (!join_dots) {
-    do_not_join <- c(do_not_join, "pointrange")
+    do_not_join <- c(do_not_join, "pointrange", "point")
   }
 
   # Don't plot raw data if `predict` is not on the response scale
@@ -169,7 +174,7 @@
   }
 
   # Uncertainty -----------------------------------
-  if (aes$type == "ribbon" && is.null(aes$alpha)) {
+  if (isTRUE(show_ci) && aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
@@ -190,6 +195,8 @@
   }
 
   # Main ----------------------------------
+
+  # connecting lines between point geoms
   if (!aes$type %in% do_not_join) {
     layers[[paste0("l", l)]] <- list(
       geom = "line",
@@ -202,7 +209,7 @@
         alpha = aes$alpha
       )
     )
-    if (!is.null(aes$color) && aes$type == "pointrange") {
+    if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
@@ -210,7 +217,7 @@
     l <- l + 1
   }
 
-
+  # points with error bars - when show_ci = TRUE
   if (aes$type %in% c("pointrange", "grouplevel")) {
     layers[[paste0("l", l)]] <- list(
       geom = "pointrange",
@@ -234,6 +241,27 @@
   }
   if (aes$type == "grouplevel") {
     layers[[paste0("l", l)]] <- list(geom = "coord_flip")
+    l <- l + 1
+  }
+
+  # only points, no error bars - when show_ci = FALSE
+  if (aes$type == "point") {
+    layers[[paste0("l", l)]] <- list(
+      geom = "point",
+      data = data,
+      aes = list(
+        y = aes$y,
+        x = aes$x,
+        color = aes$color,
+        group = aes$group,
+        alpha = aes$alpha
+      )
+    )
+    if (!is.null(aes$color)) {
+      layers[[paste0("l", l)]]$position <- "dodge"
+      layers[[paste0("l", l)]]$width <- 0.2
+    }
+    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
 
