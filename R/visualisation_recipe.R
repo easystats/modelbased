@@ -15,8 +15,9 @@
 #' `ggplot2` package directly.
 #'
 #' @param x A modelbased object.
-#' @param show_data Display the "raw" data as a background to the model-based
-#'   estimation.
+#' @param show_data Logical, if `TRUE`, display the "raw" data as a background
+#'   to the model-based estimation.
+#' @param show_ci Logical, if `TRUE`, show error bars or uncertainty bands.
 #' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
 #' dots (estimates) are connected by lines, i.e. plots will be a combination of
 #' dots with error bars and connecting lines. If `FALSE`, only dots and error
@@ -109,6 +110,7 @@
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = FALSE,
+                                                    show_ci = TRUE,
                                                     point = NULL,
                                                     line = NULL,
                                                     pointrange = NULL,
@@ -120,6 +122,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   .visualization_recipe(
     x,
     show_data = show_data,
+    show_ci = show_ci,
     point = point,
     line = line,
     pointrange = pointrange,
@@ -165,6 +168,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' plot(visualisation_recipe(x))
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,
+                                                 show_ci = TRUE,
                                                  line = NULL,
                                                  pointrange = NULL,
                                                  ribbon = NULL,
@@ -174,6 +178,7 @@ visualisation_recipe.estimate_slopes <- function(x,
   .visualization_recipe(
     x,
     show_data = FALSE,
+    show_ci = show_ci,
     line = line,
     pointrange = pointrange,
     ribbon = ribbon,
@@ -214,6 +219,7 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' plot(x)
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,
+                                                     show_ci = TRUE,
                                                      line = NULL,
                                                      pointrange = NULL,
                                                      ribbon = NULL,
@@ -229,6 +235,7 @@ visualisation_recipe.estimate_grouplevel <- function(x,
   .visualization_recipe(
     x,
     show_data = FALSE,
+    show_ci = show_ci,
     line = line,
     pointrange = pointrange,
     ribbon = ribbon,
