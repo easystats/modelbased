@@ -9,7 +9,6 @@
 \method{visualisation_recipe}{estimate_predicted}(
   x,
   show_data = FALSE,
-  show_ci = TRUE,
   point = NULL,
   line = NULL,
   pointrange = NULL,
@@ -22,7 +21,6 @@
 
 \method{visualisation_recipe}{estimate_slopes}(
   x,
-  show_ci = TRUE,
   line = NULL,
   pointrange = NULL,
   ribbon = NULL,
@@ -33,7 +31,6 @@
 
 \method{visualisation_recipe}{estimate_grouplevel}(
   x,
-  show_ci = TRUE,
   line = NULL,
   pointrange = NULL,
   ribbon = NULL,
@@ -47,8 +44,6 @@
 
 \item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
 to the model-based estimation.}
-
-\item{show_ci}{Logical, if \code{TRUE}, show error bars or uncertainty bands.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
@@ -75,6 +70,11 @@ and \code{estimate_relation(model, by=c("Sepal.Length", "Species"))} will look d
 The automated plotting is primarily meant for convenient visual checks, but
 for publication-ready figures, we recommend re-creating the figures using the
 \code{ggplot2} package directly.
+
+There are two options to remove the confidence bands or errors bars
+from the plot. To remove error bars, simply set the \code{pointrange} geom to
+\code{point}, e.g. \code{plot(..., pointrange = list(geom = "point"))}. To remove the
+confidence bands from line geoms, use \code{ribbon = "none"}.
 }
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

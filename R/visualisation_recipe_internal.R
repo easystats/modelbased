@@ -2,7 +2,7 @@
 
 
 #' @keywords internal
-.find_aes <- function(x, show_ci = TRUE) {
+.find_aes <- function(x) {
   data <- as.data.frame(x)
   data$.group <- 1
 
@@ -56,10 +56,8 @@
     # If x is a not-numeric, make pointrange
     if (is.numeric(data[[by[1]]])) {
       aes$type <- "ribbon"
-    } else if (isTRUE(show_ci)) {
-      aes$type <- "pointrange"
     } else {
-      aes$type <- "point"
+      aes$type <- "pointrange"
     }
   }
   if (length(by) > 1) {
@@ -86,9 +84,7 @@
   }
 
   # CI
-  if (isTRUE(show_ci)) {
-    aes <- .find_aes_ci(aes, data)
-  }
+  aes <- .find_aes_ci(aes, data)
 
   # axis and legend labels
   if (!is.null(model_data) && !is.null(model_response)) {
@@ -138,7 +134,6 @@
 #' @keywords internal
 .visualization_recipe <- function(x,
                                   show_data = TRUE,
-                                  show_ci = TRUE,
                                   point = NULL,
                                   line = NULL,
                                   pointrange = NULL,
@@ -148,7 +143,7 @@
                                   join_dots = TRUE,
                                   ...) {
   response_scale <- attributes(x)$predict
-  aes <- .find_aes(x, show_ci)
+  aes <- .find_aes(x)
   data <- aes$data
   aes <- aes$aes
   layers <- list()
@@ -174,7 +169,7 @@
   }
 
   # Uncertainty -----------------------------------
-  if (isTRUE(show_ci) && aes$type == "ribbon" && is.null(aes$alpha)) {
+  if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
@@ -217,7 +212,7 @@
     l <- l + 1
   }
 
-  # points with error bars - when show_ci = TRUE
+  # points with error bars
   if (aes$type %in% c("pointrange", "grouplevel")) {
     layers[[paste0("l", l)]] <- list(
       geom = "pointrange",
@@ -244,26 +239,6 @@
     l <- l + 1
   }
 
-  # only points, no error bars - when show_ci = FALSE
-  if (aes$type == "point") {
-    layers[[paste0("l", l)]] <- list(
-      geom = "point",
-      data = data,
-      aes = list(
-        y = aes$y,
-        x = aes$x,
-        color = aes$color,
-        group = aes$group,
-        alpha = aes$alpha
-      )
-    )
-    if (!is.null(aes$color)) {
-      layers[[paste0("l", l)]]$position <- "dodge"
-      layers[[paste0("l", l)]]$width <- 0.2
-    }
-    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
-    l <- l + 1
-  }
 
   # grids and facets ----------------------------------
   if (!is.null(aes$facet)) {
