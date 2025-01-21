@@ -82,6 +82,7 @@ below for more information and examples on how to create and customize plots.</p
 <span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  show_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_ci <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  point <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -95,6 +96,7 @@ below for more information and examples on how to create and customize plots.</p
 <span><span class="co"># S3 method for class 'estimate_slopes'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  show_ci <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribbon <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -106,6 +108,7 @@ below for more information and examples on how to create and customize plots.</p
 <span><span class="co"># S3 method for class 'estimate_grouplevel'</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
+<span>  show_ci <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ribbon <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -124,8 +127,12 @@ below for more information and examples on how to create and customize plots.</p
 
 
 <dt id="arg-show-data">show_data<a class="anchor" aria-label="anchor" href="#arg-show-data"></a></dt>
-<dd><p>Display the "raw" data as a background to the model-based
-estimation.</p></dd>
+<dd><p>Logical, if <code>TRUE</code>, display the "raw" data as a background
+to the model-based estimation.</p></dd>
+
+
+<dt id="arg-show-ci">show_ci<a class="anchor" aria-label="anchor" href="#arg-show-ci"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, show error bars or uncertainty bands.</p></dd>
 
 
 <dt id="arg-point-line-pointrange-ribbon-facet-grid">point, line, pointrange, ribbon, facet, grid<a class="anchor" aria-label="anchor" href="#arg-point-line-pointrange-ribbon-facet-grid"></a></dt>
