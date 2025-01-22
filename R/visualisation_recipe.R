@@ -20,7 +20,8 @@
 #' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
 #' dots (estimates) are connected by lines, i.e. plots will be a combination of
 #' dots with error bars and connecting lines. If `FALSE`, only dots and error
-#' bars are shown.
+#' bars are shown. It is possible to set a global default value using `options()`,
+#' e.g. `options("modelbased_join_dots" = FALSE)`.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
@@ -123,7 +124,7 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     ribbon = NULL,
                                                     facet = NULL,
                                                     grid = NULL,
-                                                    join_dots = TRUE,
+                                                    join_dots = getOption("modelbased_join_dots", TRUE),
                                                     ...) {
   .visualization_recipe(
     x,
