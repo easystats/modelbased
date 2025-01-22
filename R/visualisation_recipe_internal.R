@@ -156,7 +156,7 @@
   }
 
   # Don't plot raw data if `predict` is not on the response scale
-  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectations", "invlink(link)")) {
+  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
     show_data <- FALSE
   }
 
