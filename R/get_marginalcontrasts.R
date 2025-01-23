@@ -131,6 +131,11 @@ get_marginalcontrasts <- function(model,
       }
     }
   }
+  # we want: "hypothesis" is the original argument provided by the user,
+  # can be a formula like ~pairwise, or a string like "pairwise". This is
+  # converted into the appropriate type depending on the marginaleffects
+  # version. "comparison" should always be a character string, for internal
+  # processing.
   list(hypothesis = hypothesis, comparison = comparison)
 }
 

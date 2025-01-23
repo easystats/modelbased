@@ -146,7 +146,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   dgrid <- attributes(x)$datagrid
 
   # sanity check - method "get_marginalmeans()" calls "format.estimate_means()"
-  # for printint, and that method doesn't pass "comparison" - thus, we have to
+  # for printing, and that method doesn't pass "comparison" - thus, we have to
   # extract it from the attributes
   if (is.null(comparison)) {
     comparison <- attributes(x)$comparison
