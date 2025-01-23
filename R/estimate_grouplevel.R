@@ -18,7 +18,7 @@
 #'   indices (such as SE and CI), as these are not computable.
 #' @param ... Other arguments passed to or from other methods.
 #'
-#' @examplesIf require("lme4") && require("see")
+#' @examplesIf all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE))
 #' # lme4 model
 #' data(mtcars)
 #' model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)

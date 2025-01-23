@@ -133,7 +133,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -148,6 +148,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 slopes
 
+\dontrun{
 # Plot it
 plot(slopes)
 standardize(slopes)
@@ -164,5 +165,6 @@ slopes <- estimate_slopes(model,
 )
 summary(slopes)
 plot(slopes)
+}
 \dontshow{\}) # examplesIf}
 }

@@ -191,7 +191,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -212,6 +212,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
 # `?insight::get_datagrid`.
 estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
 
+\dontrun{
 # same for factors: filter by specific levels
 estimate_means(model, by = "Species=c('versicolor', 'setosa')")
 estimate_means(model, by = c("Species", "Sepal.Width=0"))
@@ -232,7 +233,6 @@ means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 plot(means) # which runs visualisation_recipe()
 standardize(means)
 
-\donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 

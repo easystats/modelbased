@@ -84,7 +84,7 @@
     predict <- switch(predict,
       none = "link",
       prediction = ,
-      expectations = ,
+      expectation = ,
       `invlink(link)` = "response",
       predict
     )
