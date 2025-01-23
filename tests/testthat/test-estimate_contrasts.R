@@ -3,6 +3,11 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 skip_on_os("mac")
 
+## FIXME: skip on marginaleffects dev - need to check whether it is intentional
+## that the new update returns duplicated rows (same contrasts twice, with
+## switched sign)
+skip_if(utils::packageVersion("marginaleffects") > "0.24.0")
+
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
