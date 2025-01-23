@@ -86,17 +86,16 @@ also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"} and the inverse options \code{"revpairwise"}, \code{"revreference"},
-and \code{"revsequential"}.
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
 \item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
 side indicates the type of comparison (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, or \code{meandev}). Optionally, comparisons can be carried out
-within subsets by indicating the grouping variable after a vertical bar
-( \code{|}).
+\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
+can be carried out within subsets by indicating the grouping variable
+after a vertical bar ( \code{|}).
 }
 }}
 
