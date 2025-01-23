@@ -25,17 +25,16 @@
 #'   also [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"` and the inverse options `"revpairwise"`, `"revreference"`,
-#'     and `"revsequential"`.
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
 #'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
 #'     side indicates the type of comparison (`difference` or `ratio`), the
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
-#'     `sequential`, or `meandev`). Optionally, comparisons can be carried out
-#'     within subsets by indicating the grouping variable after a vertical bar
-#'     ( `|`).
+#'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
+#'     can be carried out within subsets by indicating the grouping variable
+#'     after a vertical bar ( `|`).
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details

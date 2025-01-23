@@ -109,7 +109,8 @@ get_marginalcontrasts <- function(model,
   # these are the string values that need to be converted to formulas
   hypothesis_strings <- c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential"
+    "revpairwise", "revreference", "revsequential", "poly", "helmert",
+    "trt_vs_ctrl"
   )
   # check if we have such a string
   if (!is.null(comparison) &&
