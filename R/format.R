@@ -411,9 +411,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
       estimate_name <- coefficient_name
     }
-    # and rename the "term" column (which we get from contrasts)
-    colnames(params)[colnames(params) == "term"] <- "Parameter"
   }
+  # rename the "term" and "hypothesis" column (which we get from contrasts)
+  colnames(params)[colnames(params) == "term"] <- "Parameter"
+  colnames(params)[colnames(params) == "hypothesis"] <- "Parameter"
 
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
