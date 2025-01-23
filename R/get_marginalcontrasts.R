@@ -62,7 +62,6 @@ get_marginalcontrasts <- function(model,
       ci = ci,
       hypothesis = hypothesis_arg$hypothesis,
       backend = "marginaleffects",
-      comparison = comparison,
       verbose = verbose,
       ...
     )
@@ -76,7 +75,6 @@ get_marginalcontrasts <- function(model,
       predict = predict,
       backend = "marginaleffects",
       marginalize = marginalize,
-      comparison = comparison,
       verbose = verbose,
       ...
     )
