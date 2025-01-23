@@ -165,10 +165,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # only when we have a comparison based on these options from marginaleffects,
   # we want to "clean" the parameter names
-  valid_options <- c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential"
-  )
+  valid_options <- .valid_hypothesis_strings()
 
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"

@@ -29,6 +29,8 @@ get_marginalcontrasts <- function(model,
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
   hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, ...)
+  # update / reset argument
+  comparison <- hypothesis_arg$comparison
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -58,7 +60,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
-      hypothesis = hypothesis_arg,
+      hypothesis = hypothesis_arg$hypothesis,
       backend = "marginaleffects",
       comparison = comparison,
       verbose = verbose,
@@ -70,7 +72,7 @@ get_marginalcontrasts <- function(model,
       model = model,
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
-      hypothesis = hypothesis_arg,
+      hypothesis = hypothesis_arg$hypothesis,
       predict = predict,
       backend = "marginaleffects",
       marginalize = marginalize,
@@ -112,22 +114,36 @@ get_marginalcontrasts <- function(model,
 # make "comparison" argument compatible -----------------------------------
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, ...) {
-  # these are the string values that need to be converted to formulas
-  hypothesis_strings <- c(
+  # save original argument
+  hypothesis <- comparison
+  # check if we have such a string
+  if (!is.null(comparison)) {
+    if (is.character(comparison) &&
+      comparison %in% .valid_hypothesis_strings() &&
+      isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
+      utils::packageVersion("marginaleffects") > "0.24.0") {
+      # convert to formula
+      hypothesis <- stats::as.formula(paste("~", comparison))
+    } else if (inherits(comparison, "formula")) {
+      # convert to character
+      comparison_string <- all.vars(comparison)
+      # update comparison
+      if (length(comparison_string) == 1 && comparison_string %in% .valid_hypothesis_strings()) {
+        comparison <- comparison_string
+      }
+    }
+  }
+  list(hypothesis = hypothesis, comparison = comparison)
+}
+
+
+# these are the string values that need to be converted to formulas
+.valid_hypothesis_strings <- function() {
+  c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
     "trt_vs_ctrl"
   )
-  # check if we have such a string
-  if (!is.null(comparison) &&
-    is.character(comparison) &&
-    comparison %in% hypothesis_strings &&
-    isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
-    utils::packageVersion("marginaleffects") > "0.24.0") {
-    # convert to formula
-    comparison <- stats::as.formula(paste("~", comparison))
-  }
-  comparison
 }
 
 
