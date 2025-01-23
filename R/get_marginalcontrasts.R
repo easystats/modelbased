@@ -100,7 +100,11 @@ get_marginalcontrasts <- function(model,
     )
   )
 
-  class(out) <- unique(c("marginaleffects_contrasts", class(out)))
+  # remove "estimate_means" class attribute
+  class(out) <- setdiff(
+    unique(c("marginaleffects_contrasts", class(out))),
+    "estimate_means"
+  )
   out
 }
 

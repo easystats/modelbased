@@ -138,12 +138,19 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 
 
 #' @export
-format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...) {
+format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, comparison = NULL, ...) {
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
+
+  # sanity check - method "get_marginalmeans()" calls "format.estimate_means()"
+  # for printint, and that method doesn't pass "comparison" - thus, we have to
+  # extract it from the attributes
+  if (is.null(comparison)) {
+    comparison <- attributes(x)$comparison
+  }
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
