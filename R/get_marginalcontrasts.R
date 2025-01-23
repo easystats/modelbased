@@ -25,6 +25,11 @@ get_marginalcontrasts <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
+  # sanitize comparison argument, to ensure compatibility between different
+  # marginaleffects versions - newer versions don't accept a string argument,
+  # only formulas (older versions don't accept formulas)
+  hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, ...)
+
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   on_the_fly_factors <- attributes(model_data)$factors
@@ -53,7 +58,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
-      hypothesis = comparison,
+      hypothesis = hypothesis_arg,
       backend = "marginaleffects",
       verbose = verbose,
       ...
@@ -64,7 +69,7 @@ get_marginalcontrasts <- function(model,
       model = model,
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
-      hypothesis = comparison,
+      hypothesis = hypothesis_arg,
       predict = predict,
       backend = "marginaleffects",
       marginalize = marginalize,
@@ -95,6 +100,27 @@ get_marginalcontrasts <- function(model,
 
   class(out) <- unique(c("marginaleffects_contrasts", class(out)))
   out
+}
+
+
+# make "comparison" argument compatible -----------------------------------
+
+.get_marginaleffects_hypothesis_argument <- function(comparison, ...) {
+  # these are the string values that need to be converted to formulas
+  hypothesis_strings <- c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential"
+  )
+  # check if we have such a string
+  if (!is.null(comparison) &&
+    is.character(comparison) &&
+    comparison %in% hypothesis_strings &&
+    isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
+    utils::packageVersion("marginaleffects") > "0.24.0") {
+    # convert to formula
+    comparison <- stats::as.formula(paste("~", comparison))
+  }
+  comparison
 }
 
 
