@@ -36,6 +36,9 @@ test_that("estimate_means - glmmTMB", {
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-3)
 
+  ## FIXME: skip on marginaleffects dev - ggeffects needs to be fixed first
+  skip_if(utils::packageVersion("marginaleffects") > "0.24.0")
+
   ## marginaleffects for zero-inflated model, zero-inflation probabilities
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
   estim2 <- ggeffects::predict_response(model, "mined", type = "zi_prob")
@@ -46,6 +49,9 @@ test_that("estimate_means - glmmTMB", {
 
 
 test_that("estimate_contrasts - glmmTMB", {
+  ## FIXME: skip on marginaleffects dev - ggeffects needs to be fixed first
+  skip_if(utils::packageVersion("marginaleffects") > "0.24.0")
+
   ## contrasts emmeans for zero-inflated model, count component
   estim1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   pr <- ggeffects::predict_response(model, "mined", verbose = FALSE)
