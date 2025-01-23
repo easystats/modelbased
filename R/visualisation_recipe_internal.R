@@ -285,8 +285,6 @@
 
 #' @keywords internal
 .visualization_recipe_rawdata <- function(x, aes) {
-  # TODO: In the main function, don't forget to NOT add raw data when `predict` is not "response"
-
   model <- attributes(x)$model
   rawdata <- insight::get_data(model, verbose = FALSE)
 

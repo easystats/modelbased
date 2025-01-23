@@ -170,6 +170,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
 
+  ## TODO: we should be able to process more ways of comparisons here,
+  ## e.g. also prettify labels and prepare levels for certain formula-written
+  ## comparisons. Need to find out which ones.
+
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
   if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
@@ -525,7 +529,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
-    estimate_name <- "Probability" ## TODO: could be renamed into ZI-Probability?
+    estimate_name <- "Probability"
   } else {
     estimate_name <- "Mean"
   }
