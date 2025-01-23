@@ -1,11 +1,13 @@
 #' @rdname get_emmeans
 #' @examplesIf insight::check_if_installed("emmeans", quietly = TRUE)
+#' \dontrun{
 #' model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 #'
 #' get_emtrends(model)
 #' get_emtrends(model, by = "Species")
 #' get_emtrends(model, by = "Petal.Length")
 #' get_emtrends(model, by = c("Species", "Petal.Length"))
+#' }
 #'
 #' model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 #' get_emtrends(model)

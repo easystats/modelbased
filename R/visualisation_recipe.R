@@ -17,16 +17,23 @@
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
 #'   to the model-based estimation.
-#' @param show_ci Logical, if `TRUE`, show error bars or uncertainty bands.
 #' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
 #' dots (estimates) are connected by lines, i.e. plots will be a combination of
 #' dots with error bars and connecting lines. If `FALSE`, only dots and error
-#' bars are shown.
+#' bars are shown. It is possible to set a global default value using `options()`,
+#' e.g. `options("modelbased_join_dots" = FALSE)`.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
 #'
-#' @examplesIf require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0"
+#' @details There are two options to remove the confidence bands or errors bars
+#' from the plot. To remove error bars, simply set the `pointrange` geom to
+#' `point`, e.g. `plot(..., pointrange = list(geom = "point"))`. To remove the
+#' confidence bands from line geoms, use `ribbon = "none"`.
+#'
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
+#' library(ggplot2)
+#' library(see)
 #' # ==============================================
 #' # estimate_relation, estimate_expectation, ...
 #' # ==============================================
@@ -39,6 +46,7 @@
 #' # visualization_recipe() is called implicitly when you call plot()
 #' plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 #'
+#' \dontrun{
 #' # And can be used in a pipe workflow
 #' lm(mpg ~ qsec, data = mtcars) |>
 #'   estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
@@ -53,7 +61,6 @@
 #' ) +
 #'   theme_minimal() +
 #'   labs(title = "Relationship between MPG and WT")
-#'
 #'
 #' # Customize raw data -------------
 #'
@@ -107,22 +114,21 @@
 #' data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 #' x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 #' plot(x)
+#' }
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = FALSE,
-                                                    show_ci = TRUE,
                                                     point = NULL,
                                                     line = NULL,
                                                     pointrange = NULL,
                                                     ribbon = NULL,
                                                     facet = NULL,
                                                     grid = NULL,
-                                                    join_dots = TRUE,
+                                                    join_dots = getOption("modelbased_join_dots", TRUE),
                                                     ...) {
   .visualization_recipe(
     x,
     show_data = show_data,
-    show_ci = show_ci,
     point = point,
     line = line,
     pointrange = pointrange,
@@ -141,7 +147,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("ggplot2") && require("emmeans") && require("see")
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))
 #' # ==============================================
 #' # estimate_slopes
 #' # ==============================================
@@ -152,6 +158,7 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' layers
 #' plot(layers)
 #'
+#' \dontrun{
 #' # Customize aesthetics and add horizontal line and theme
 #' layers <- visualisation_recipe(x, pointrange = list(size = 2, linewidth = 2))
 #' plot(layers) +
@@ -166,9 +173,9 @@ visualisation_recipe.estimate_means <- visualisation_recipe.estimate_predicted
 #' model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 #' x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 #' plot(visualisation_recipe(x))
+#' }
 #' @export
 visualisation_recipe.estimate_slopes <- function(x,
-                                                 show_ci = TRUE,
                                                  line = NULL,
                                                  pointrange = NULL,
                                                  ribbon = NULL,
@@ -178,7 +185,6 @@ visualisation_recipe.estimate_slopes <- function(x,
   .visualization_recipe(
     x,
     show_data = FALSE,
-    show_ci = show_ci,
     line = line,
     pointrange = pointrange,
     ribbon = ribbon,
@@ -191,10 +197,11 @@ visualisation_recipe.estimate_slopes <- function(x,
 
 #' @rdname visualisation_recipe.estimate_predicted
 #'
-#' @examplesIf require("see") && require("lme4") && require("emmeans")
+#' @examplesIf all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))
 #' # ==============================================
 #' # estimate_grouplevel
 #' # ==============================================
+#' \dontrun{
 #' data <- lme4::sleepstudy
 #' data <- rbind(data, data)
 #' data$Newfactor <- rep(c("A", "B", "C", "D"))
@@ -217,9 +224,9 @@ visualisation_recipe.estimate_slopes <- function(x,
 #' model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 #' x <- estimate_grouplevel(model)
 #' plot(x)
+#' }
 #' @export
 visualisation_recipe.estimate_grouplevel <- function(x,
-                                                     show_ci = TRUE,
                                                      line = NULL,
                                                      pointrange = NULL,
                                                      ribbon = NULL,
@@ -235,7 +242,6 @@ visualisation_recipe.estimate_grouplevel <- function(x,
   .visualization_recipe(
     x,
     show_data = FALSE,
-    show_ci = show_ci,
     line = line,
     pointrange = pointrange,
     ribbon = ribbon,
