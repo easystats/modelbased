@@ -169,17 +169,16 @@ equations and formula are probably the most common options and described
 below. For other options and detailed descriptions of those options, see
 also <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
-<code>"meanotherdev"</code> and the inverse options <code>"revpairwise"</code>, <code>"revreference"</code>,
-and <code>"revsequential"</code>.</p></li>
+<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
 <li><p>Formula: A formula like <code>comparison ~ pairs | group</code>, where the left-hand
 side indicates the type of comparison (<code>difference</code> or <code>ratio</code>), the
 right-hand side determines the pairs of estimates to compare (<code>reference</code>,
-<code>sequential</code>, or <code>meandev</code>). Optionally, comparisons can be carried out
-within subsets by indicating the grouping variable after a vertical bar
-( <code>|</code>).</p></li>
+<code>sequential</code>, <code>meandev</code>, etc., see string-options). Optionally, comparisons
+can be carried out within subsets by indicating the grouping variable
+after a vertical bar ( <code>|</code>).</p></li>
 </ul></li>
 </ul></dd>
 
