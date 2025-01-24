@@ -1,4 +1,26 @@
 #' @docType data
+#' @title Sample data set
+#' @name fish
+#' @keywords data
+#'
+#' @description A sample data set, used in tests and some examples. Useful for
+#' demonstrating count models (with or without zero-inflation component). It
+#' consists of nine variables from 250 observations.
+NULL
+
+
+#' @docType data
+#' @title Sample dataset from the EFC Survey
+#' @name efc
+#' @keywords data
+#'
+#' @description Selected variables from the EUROFAMCARE survey. Useful when
+#' testing on "real-life" data sets, including random missing values. This
+#' data set also has value and variable label attributes.
+NULL
+
+
+#' @docType data
 #' @title Sample dataset from a course about analysis of factorial designs
 #' @name coffee_data
 #' @keywords data
@@ -15,8 +37,4 @@
 #' - `coffee`: Group indicator, whether participant drank coffee or not
 #'   ("`coffee"` or `"control"`).
 #' - `alertness`: The participant's alertness score.
-#'
-#' @examples
-#' # Attach coffee-data
-#' data(coffee_data)
 NULL
