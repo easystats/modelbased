@@ -14,7 +14,7 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   if (!is.null(by) && all(by %in% colnames(x))) {
     # add "Level" columns from contrasts
     if (all(c("Level1", "Level2") %in% colnames(x))) {
-      by <- unique(c("Level1", "Level2", by))
+      by <- unique(c(by, "Level2", "Level1"))
     }
     # arrange predictions
     x <- datawizard::data_arrange(x, select = by)
