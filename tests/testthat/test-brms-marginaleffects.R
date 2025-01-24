@@ -10,12 +10,9 @@ skip_if_not_installed("marginaleffects")
 skip_if_not_installed("httr2")
 skip_if_not_installed("withr")
 
-withr::with_options(
-  list(modelbased_backend = "marginaleffects"),
+withr::with_environment(
+  new.env(),
   test_that("estimate_means - brms", {
-    data(efc, package = "modelbased")
-    efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep", "c161sex"))
-
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
 
@@ -100,8 +97,8 @@ withr::with_options(
 )
 
 
-withr::with_options(
-  list(modelbased_backend = "marginaleffects"),
+withr::with_environment(
+  new.env(),
   test_that("estimate_slopes - brms", {
     data(efc, package = "modelbased")
     efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep", "c161sex"))
@@ -180,12 +177,9 @@ withr::with_options(
 )
 
 
-withr::with_options(
-  list(modelbased_backend = "marginaleffects"),
+withr::with_environment(
+  new.env(),
   test_that("estimate_contrasts - brms, logistic", {
-    data(efc, package = "modelbased")
-    efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep", "c161sex"))
-
     m <- insight::download_model("brms_logistic_1")
     skip_if(is.null(m))
 

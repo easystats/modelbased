@@ -80,12 +80,12 @@ test_that("estimate_contrasts - glmmTMB", {
   estim1 <- suppressMessages(estimate_contrasts(model, component = "zi", backend = "emmeans"))
   estim2 <- predict(model, type = "zprob", newdata = insight::get_datagrid(model, "mined"))
   expect_identical(dim(estim1), c(1L, 9L))
-  expect_equal(estim1$Difference, diff(estim_2), tolerance = 1e-1)
+  expect_equal(estim1$Difference, diff(estim2), tolerance = 1e-1)
   expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
 
   ## contrasts marginaleffects for zero-inflated model, zero-inflation probability component
   estim3 <- suppressMessages(estimate_contrasts(model, predict = "zprob", backend = "marginaleffects"))
-  expect_equal(estim3$Difference, diff(estim_2), tolerance = 1e-1)
+  expect_equal(estim3$Difference, diff(estim2), tolerance = 1e-1)
 })
 
 
