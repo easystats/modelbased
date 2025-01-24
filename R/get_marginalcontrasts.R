@@ -82,8 +82,8 @@ get_marginalcontrasts <- function(model,
 
 
   ## TODO: just experimental! Must wait for decision on marginaleffects
-  if (utils::packageVersion("marginaleffects") > "0.24.0") {
-    out <- out[((nrow(out) / 2) + 1):nrow(out), ]
+  if (utils::packageVersion("marginaleffects") > "0.24.0" && "hypothesis" %in% names(out)) {
+    out <- out[duplicated(lapply(out$hypothesis, function(i) sort(.split_at_minus_outside_parentheses(i)))), ]
   }
 
 
