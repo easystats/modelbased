@@ -81,7 +81,7 @@ get_marginalcontrasts <- function(model,
   }
 
   ## TODO: just experimental! Must wait for decision on marginaleffects
-  out <- out[1:(nrow(out) / 2), ]
+  out <- out[((nrow(out) / 2) + 1):nrow(out), ]
 
 
   # adjust p-values
