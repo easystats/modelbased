@@ -176,7 +176,6 @@ test_that("estimate_expectation - VisMatrix", {
 test_that("estimate_expectation - predicting RE works", {
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("ggeffects")
 
   data(Salamanders, package = "glmmTMB")
   m1 <- glmmTMB::glmmTMB(
@@ -185,7 +184,7 @@ test_that("estimate_expectation - predicting RE works", {
     data = Salamanders
   )
 
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   efc$e15relat <- datawizard::to_factor(efc$e15relat)
   m2 <- lme4::lmer(neg_c_7 ~ c12hour + c160age + c161sex + (1 | e15relat), data = efc)
 

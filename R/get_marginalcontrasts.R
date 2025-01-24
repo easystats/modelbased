@@ -80,8 +80,11 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+
   ## TODO: just experimental! Must wait for decision on marginaleffects
-  out <- out[((nrow(out) / 2) + 1):nrow(out), ]
+  if (utils::packageVersion("marginaleffects") > "0.24.0") {
+    out <- out[((nrow(out) / 2) + 1):nrow(out), ]
+  }
 
 
   # adjust p-values

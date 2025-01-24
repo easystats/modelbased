@@ -3,11 +3,6 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 skip_on_os("mac")
 
-## FIXME: skip on marginaleffects dev - need to check whether it is intentional
-## that the new update returns duplicated rows (same contrasts twice, with
-## switched sign)
-skip_if(utils::packageVersion("marginaleffects") > "0.24.0")
-
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
@@ -290,22 +285,22 @@ test_that("estimate_contrasts - dfs", {
 test_that("estimate_contrasts - marginaleffects", {
   # ignore failing snapshot tests, should resolve with next marginaleffects version
   skip_if_not_installed("Formula")
-  skip_if_not_installed("ggeffects")
-  data(coffee_data, package = "ggeffects")
+  data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf)) # nolint
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
-  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "(b2-b1)=(b4-b3)")
-  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  out2 <- predict(m, newdata = insight::get_datagrid(m, c("time", "coffee")))
+  expect_equal(out1$Difference, 5.78298, tolerance = 1e-4)
+  expect_equal(out1$Difference, (out2[2] - out2[1]) - (out2[4] - out2[3]), tolerance = 1e-4)
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
-  out2 <- ggeffects::test_predictions(m, c("time", "coffee"), test = "b5=b3")
-  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  expect_equal(out1$Difference, -1.927659, tolerance = 1e-4)
+  expect_equal(out1$Difference, out2[5] - out2[3], tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
 
   # validated against ggeffects::test_predictions()
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
   expect_snapshot(estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects"))
@@ -313,8 +308,6 @@ test_that("estimate_contrasts - marginaleffects", {
 
 
 test_that("estimate_contrasts - marginaleffects", {
-  skip_if_not_installed("ggeffects")
-
   data(iris)
   dat <- iris
   dat$y <- as.factor(ifelse(dat$Sepal.Width > 3, "A", "B"))
@@ -325,10 +318,8 @@ test_that("estimate_contrasts - marginaleffects", {
   ## emmeans backend works and has proper default
   out1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   out2 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "emmeans"))
-  pr <- ggeffects::predict_response(model, "Species")
-  out3 <- ggeffects::test_predictions(pr)
   expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
-  expect_equal(out1$Difference, out3$Contrast, tolerance = 1e-4)
+  expect_equal(out1$Difference, c(-0.68, -0.5, 0.18), tolerance = 1e-4)
 
   ## marginaleffects backend works and has proper default
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
@@ -430,8 +421,7 @@ test_that("estimate_contrasts - different options for comparison", {
 skip_on_os(c("mac", "linux"))
 
 test_that("estimate_contrasts - filtering works", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
 
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
@@ -466,13 +456,12 @@ test_that("estimate_contrasts - filtering works", {
 
 test_that("estimate_contrasts - simple contrasts and with - in levels works", {
   skip_if_not_installed("glmmTMB")
-  skip_if_not_installed("ggeffects")
   data(iris)
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"), table_width = Inf)) # nolint
 
-  data(coffee_data, package = "ggeffects")
+  data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
@@ -486,10 +475,17 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
 
 
 test_that("estimate_contrasts - contrasts for numeric by factor", {
-  skip_if_not_installed("ggeffects")
   data(iris)
   model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
   out1 <- estimate_contrasts(model, contrast = "Petal.Length", by = "Species", backend = "marginaleffects") # nolint
-  out2 <- ggeffects::test_predictions(model, c("Petal.Length", "Species"))
-  expect_equal(out1$Difference, out2$Contrast, tolerance = 1e-4)
+  # validated against ggeffects::test_predictions()
+  expect_equal(out1$Difference, c(-0.17076, 0.04095, 0.17076), tolerance = 1e-4)
+  out2 <- marginaleffects::avg_slopes(
+    model,
+    variables = "Petal.Length",
+    by = "Species",
+    newdata = insight::get_datagrid(model, by = c("Petal.Length", "Species")),
+    hypothesis = ~pairwise
+  )
+  expect_equal(out1$Difference, out2$estimate[4:6], tolerance = 1e-4)
 })

@@ -1,7 +1,6 @@
 skip_on_os(c("mac", "linux"))
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
-skip_if_not_installed("ggeffects")
 
 test_that("estimate_slopes - print summary", {
   skip_if_not_installed("MASS")
@@ -29,7 +28,7 @@ test_that("estimate_slopes - print regular", {
 
 
 test_that("estimate_means - print multiple by's", {
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
 
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
@@ -42,7 +41,7 @@ test_that("estimate_means - print multiple by's", {
 
 
 test_that("estimate_means - full labels", {
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
 
@@ -57,8 +56,7 @@ test_that("estimate_means - full labels", {
 
 
 test_that("estimate_means - protect integers", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   efc$c161sex <- datawizard::to_factor(efc$c161sex)
   efc$e16sex <- datawizard::to_factor(efc$e16sex)
   model <- lm(neg_c_7 ~ barthtot + c160age * c161sex + e16sex, data = efc)
@@ -69,8 +67,7 @@ test_that("estimate_means - protect integers", {
 
 
 test_that("estimate_contrasts - by with special character", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
@@ -83,8 +80,7 @@ test_that("estimate_contrasts - by with special character", {
 
 
 test_that("estimate_means - by is list", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
