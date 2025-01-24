@@ -13,6 +13,10 @@ skip_if_not_installed("withr")
 withr::with_environment(
   new.env(),
   test_that("estimate_means - brms", {
+    data(efc, package = "modelbased")
+    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+    levels(efc$c172code) <- c("low", "mid", "high")
+
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
 
@@ -101,7 +105,8 @@ withr::with_environment(
   new.env(),
   test_that("estimate_slopes - brms", {
     data(efc, package = "modelbased")
-    efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep", "c161sex"))
+    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+    levels(efc$c172code) <- c("low", "mid", "high")
 
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
@@ -180,6 +185,10 @@ withr::with_environment(
 withr::with_environment(
   new.env(),
   test_that("estimate_contrasts - brms, logistic", {
+    data(efc, package = "modelbased")
+    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+    levels(efc$c172code) <- c("low", "mid", "high")
+
     m <- insight::download_model("brms_logistic_1")
     skip_if(is.null(m))
 
