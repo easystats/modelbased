@@ -11,11 +11,11 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
 
   # arrange columns (not for contrast now)
   by <- rev(attr(x, "focal_terms", exact = TRUE))
+  # add "Level" columns from contrasts
+  if (all(c("Level1", "Level2") %in% colnames(x))) {
+    by <- unique(c(by, "Level1", "Level2"))
+  }
   if (!is.null(by) && all(by %in% colnames(x))) {
-    # add "Level" columns from contrasts
-    if (all(c("Level1", "Level2") %in% colnames(x))) {
-      by <- unique(c(by, "Level1", "Level2"))
-    }
     # arrange predictions
     x <- datawizard::data_arrange(x, select = by)
     # protect integers, only for focal terms
