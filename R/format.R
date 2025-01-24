@@ -15,7 +15,12 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   if (all(c("Level1", "Level2") %in% colnames(x))) {
     by <- unique(c(by, "Level1", "Level2"))
   }
-  if (!is.null(by) && all(by %in% colnames(x))) {
+  # check which columns actually exist
+  if (!is.null(by)) {
+    by <- intersect(by, colnames(x))
+  }
+  # sort
+  if (length(by)) {
     # arrange predictions
     x <- datawizard::data_arrange(x, select = by)
     # protect integers, only for focal terms
