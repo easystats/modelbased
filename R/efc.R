@@ -1,7 +1,6 @@
 #' @docType data
 #' @title Sample dataset from the EUROFAMCARE project
 #' @name efc
-#' @aliases efc_test
 #' @keywords data
 #'
 #' @description An SPSS sample data set, imported with the [`datawizard::data_read()`]
@@ -11,7 +10,7 @@
 #'
 #' @examples
 #' # Attach EFC-data
-#' data(efc)
+#' data(efc, package = "modelbased")
 #'
 #' # Show structure
 #' str(efc)

@@ -3,7 +3,6 @@
 \docType{data}
 \name{efc}
 \alias{efc}
-\alias{efc_test}
 \title{Sample dataset from the EUROFAMCARE project}
 \description{
 An SPSS sample data set, imported with the \code{\link[datawizard:data_read]{datawizard::data_read()}}
@@ -13,7 +12,7 @@ Europe.
 }
 \examples{
 # Attach EFC-data
-data(efc)
+data(efc, package = "modelbased")
 
 # Show structure
 str(efc)
