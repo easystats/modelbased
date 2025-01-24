@@ -86,7 +86,10 @@ get_marginalcontrasts <- function(model,
 
   ## TODO: just experimental! Must wait for decision on marginaleffects
   if (utils::packageVersion("marginaleffects") > "0.24.0" && "Parameter" %in% names(out)) {
-    out <- out[duplicated(lapply(out$Parameter, function(i) sort(.split_at_minus_outside_parentheses(i)))), ]
+    redundant_rows <- duplicated(lapply(out$Parameter, function(i) sort(.split_at_minus_outside_parentheses(i))))
+    if (any(redundant_rows)) {
+      out <- out[redundant_rows, ]
+    }
   }
 
   # adjust p-values

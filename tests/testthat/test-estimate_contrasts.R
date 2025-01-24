@@ -419,7 +419,7 @@ test_that("estimate_contrasts - different options for comparison", {
     out,
     c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
-  expect_equal(out$Difference, c(-0.35, 0.8, 0.35, 1.15, 0.7, -0.45), tolerance = 1e-3)
+  expect_equal(out$Difference, c(-0.35, 0.8, 1.15, 0.35, 0.7, -0.45), tolerance = 1e-3)
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "reference", backend = "marginaleffects")
   expect_named(
     out,
