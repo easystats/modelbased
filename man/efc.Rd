@@ -6,7 +6,7 @@
 \alias{efc_test}
 \title{Sample dataset from the EUROFAMCARE project}
 \description{
-An SPSS sample data set, imported with the \code{\link[sjlabelled:read_spss]{sjlabelled::read_spss()}}
+An SPSS sample data set, imported with the \code{\link[datawizard:data_read]{datawizard::data_read()}}
 function. Consists of 28 variables from 908 observations. The data set is part
 of the EUROFAMCARE project, a cross-national survey on informal caregiving in
 Europe.
