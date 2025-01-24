@@ -80,6 +80,10 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+  ## TODO: just experimental! Must wait for decision on marginaleffects
+  out <- out[1:(nrow(out) / 2), ]
+
+
   # adjust p-values
   if (!insight::model_info(model)$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
