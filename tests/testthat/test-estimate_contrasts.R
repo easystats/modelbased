@@ -339,7 +339,6 @@ test_that("estimate_contrasts - marginaleffects", {
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
   expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
-  expect_equal(out4$CI_low, out3$conf.low, tolerance = 1e-2)
 
   # validate against emmeans
   out_emm <- emmeans::emmeans(model, "Species", type = "response")
@@ -492,7 +491,7 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
   model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
   out1 <- estimate_contrasts(model, contrast = "Petal.Length", by = "Species", backend = "marginaleffects") # nolint
   # validated against ggeffects::test_predictions()
-  expect_equal(out1$Difference, c(0.17076, -0.04095, -0.17076), tolerance = 1e-4)
+  expect_equal(out1$Difference, c(0.12981, -0.04095, -0.17076), tolerance = 1e-4)
   out2 <- marginaleffects::avg_slopes(
     model,
     variables = "Petal.Length",

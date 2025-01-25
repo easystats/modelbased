@@ -13,7 +13,7 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   by <- rev(attr(x, "focal_terms", exact = TRUE))
   # add "Level" columns from contrasts
   if (all(c("Level1", "Level2") %in% colnames(x))) {
-    by <- unique(c(by, "Level1", "Level2"))
+    by <- unique(c("Level1", "Level2", by))
   }
   # check which columns actually exist
   if (!is.null(by)) {
