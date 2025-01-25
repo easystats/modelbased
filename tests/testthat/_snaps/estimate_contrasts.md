@@ -19,6 +19,66 @@
       Predictors contrasted: vs, am
       p-values are uncorrected.
 
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1              | Level2              | Difference |   SE |           95% CI | t(24) |      p
+      -------------------------------------------------------------------------------------------------
+      three 0, vs 0, am 1 | three 0, vs 0, am 0 |       2.87 | 2.24 | [ -1.76,   7.49] |  1.28 |  0.213
+      three 0, vs 1, am 0 | three 0, vs 0, am 0 |       5.83 | 2.46 | [  0.76,  10.90] |  2.37 |  0.026
+      three 0, vs 1, am 0 | three 0, vs 0, am 1 |       2.97 | 2.65 | [ -2.51,   8.44] |  1.12 |  0.275
+      three 0, vs 1, am 1 | three 0, vs 0, am 0 |      14.03 | 2.10 | [  9.69,  18.37] |  6.67 | < .001
+      three 0, vs 1, am 1 | three 0, vs 0, am 1 |      11.16 | 2.33 | [  6.35,  15.97] |  4.79 | < .001
+      three 0, vs 1, am 1 | three 0, vs 1, am 0 |       8.19 | 2.54 | [  2.96,  13.43] |  3.23 |  0.004
+      three 1, vs 0, am 0 | three 0, vs 0, am 0 |      -0.57 | 2.01 | [ -4.71,   3.57] | -0.28 |  0.780
+      three 1, vs 0, am 0 | three 0, vs 0, am 1 |      -3.43 | 2.24 | [ -8.06,   1.19] | -1.53 |  0.139
+      three 1, vs 0, am 0 | three 0, vs 1, am 0 |      -6.40 | 2.46 | [-11.47,  -1.33] | -2.61 |  0.016
+      three 1, vs 0, am 0 | three 0, vs 1, am 1 |     -14.59 | 2.10 | [-18.93, -10.25] | -6.94 | < .001
+      three 1, vs 0, am 1 | three 0, vs 0, am 0 |       7.52 | 2.84 | [  1.66,  13.37] |  2.65 |  0.014
+      three 1, vs 0, am 1 | three 0, vs 0, am 1 |       4.65 | 3.01 | [ -1.56,  10.86] |  1.55 |  0.135
+      three 1, vs 0, am 1 | three 0, vs 1, am 0 |       1.68 | 3.17 | [ -4.86,   8.23] |  0.53 |  0.600
+      three 1, vs 0, am 1 | three 0, vs 1, am 1 |      -6.51 | 2.91 | [-12.51,  -0.51] | -2.24 |  0.035
+      three 1, vs 0, am 1 | three 1, vs 0, am 0 |       8.08 | 2.84 | [  2.23,  13.94] |  2.85 |  0.009
+      three 1, vs 1, am 0 | three 0, vs 0, am 0 |       5.09 | 2.24 | [  0.46,   9.72] |  2.27 |  0.032
+      three 1, vs 1, am 0 | three 0, vs 0, am 1 |       2.23 | 2.46 | [ -2.84,   7.29] |  0.91 |  0.374
+      three 1, vs 1, am 0 | three 0, vs 1, am 0 |      -0.74 | 2.65 | [ -6.22,   4.73] | -0.28 |  0.782
+      three 1, vs 1, am 0 | three 0, vs 1, am 1 |      -8.94 | 2.33 | [-13.74,  -4.13] | -3.83 | < .001
+      three 1, vs 1, am 0 | three 1, vs 0, am 0 |       5.66 | 2.24 | [  1.03,  10.29] |  2.52 |  0.019
+      three 1, vs 1, am 0 | three 1, vs 0, am 1 |      -2.42 | 3.01 | [ -8.63,   3.78] | -0.81 |  0.428
+      three 1, vs 1, am 1 | three 0, vs 0, am 0 |      10.57 | 2.84 | [  4.71,  16.42] |  3.73 |  0.001
+      three 1, vs 1, am 1 | three 0, vs 0, am 1 |       7.70 | 3.01 | [  1.49,  13.91] |  2.56 |  0.017
+      three 1, vs 1, am 1 | three 0, vs 1, am 0 |       4.73 | 3.17 | [ -1.81,  11.28] |  1.49 |  0.149
+      three 1, vs 1, am 1 | three 0, vs 1, am 1 |      -3.46 | 2.91 | [ -9.46,   2.54] | -1.19 |  0.246
+      three 1, vs 1, am 1 | three 1, vs 0, am 0 |      11.13 | 2.84 | [  5.28,  16.99] |  3.93 | < .001
+      three 1, vs 1, am 1 | three 1, vs 0, am 1 |       3.05 | 3.47 | [ -4.12,  10.22] |  0.88 |  0.389
+      three 1, vs 1, am 1 | three 1, vs 1, am 0 |       5.48 | 3.01 | [ -0.73,  11.68] |  1.82 |  0.081
+      
+      Variable predicted: mpg
+      Predictors contrasted: three, vs, am
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1 | Level2 | Difference |   SE |       95% CI | t(24) |      p
+      -------------------------------------------------------------------
+      1      | 0      |       6.15 | 1.34 | [3.40, 8.91] |  4.61 | < .001
+      
+      Variable predicted: mpg
+      Predictors contrasted: am
+      Predictors averaged: three, vs
+      p-values are uncorrected.
+
 # estimate_contrasts - marginaleffects
 
     Code
@@ -59,12 +119,12 @@
     Output
       Marginal Contrasts Analysis
       
-      Parameter                               | coffee  | Difference |   SE |       95% CI | t(113) |      p
-      ------------------------------------------------------------------------------------------------------
-      (noon coffee) / (morning coffee)        | coffee  |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
-      (afternoon coffee) / (morning coffee)   | coffee  |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
-      (noon control) / (morning control)      | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
-      (afternoon control) / (morning control) | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      Parameter                           | coffee  | Difference |   SE |       95% CI | t(113) |      p
+      --------------------------------------------------------------------------------------------------
+      noon coffee / morning coffee        | coffee  |       0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
+      afternoon coffee / morning coffee   | coffee  |       1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
+      noon control / morning control      | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      afternoon control / morning control | control |       1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
@@ -80,9 +140,9 @@
     Output
       Marginal Contrasts Analysis
       
-      Parameter       | Difference |   SE |        95% CI | t(113) |     p
-      --------------------------------------------------------------------
-      (b2-b1)=(b4-b3) |       5.78 | 2.82 | [0.20, 11.37] |   2.05 | 0.043
+      Parameter   | Difference |   SE |        95% CI | t(113) |     p
+      ----------------------------------------------------------------
+      b2-b1=b4-b3 |       5.78 | 2.82 | [0.20, 11.37] |   2.05 | 0.043
       
       Variable predicted: alertness
       Predictors contrasted: time, coffee
@@ -438,4 +498,136 @@
       Predictors contrasted: time
       Predictors averaged: sex
       p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     | Difference |   SE |         95% CI |     z |      p
+      -----------------------------------------------------------------------------
+      yes, PR    | yes, GP    |       0.06 | 0.05 | [-0.04,  0.16] |  1.10 |  0.271
+      yes, DM    | yes, GP    |       0.32 | 0.11 | [ 0.10,  0.54] |  2.89 |  0.004
+      yes, DM    | yes, PR    |       0.26 | 0.11 | [ 0.05,  0.48] |  2.43 |  0.015
+      yes, EC-A  | yes, GP    |       0.04 | 0.05 | [-0.05,  0.13] |  0.80 |  0.421
+      yes, EC-A  | yes, PR    |      -0.02 | 0.06 | [-0.13,  0.09] | -0.33 |  0.740
+      yes, EC-A  | yes, DM    |      -0.28 | 0.11 | [-0.50, -0.07] | -2.59 |  0.010
+      yes, EC-L  | yes, GP    |       0.17 | 0.08 | [ 0.02,  0.32] |  2.19 |  0.028
+      yes, EC-L  | yes, PR    |       0.11 | 0.08 | [-0.04,  0.27] |  1.43 |  0.154
+      yes, EC-L  | yes, DM    |      -0.15 | 0.11 | [-0.36,  0.06] | -1.39 |  0.164
+      yes, EC-L  | yes, EC-A  |       0.13 | 0.08 | [-0.02,  0.29] |  1.68 |  0.093
+      yes, DES-L | yes, GP    |       0.43 | 0.14 | [ 0.17,  0.70] |  3.19 |  0.001
+      yes, DES-L | yes, PR    |       0.38 | 0.13 | [ 0.12,  0.64] |  2.86 |  0.004
+      yes, DES-L | yes, DM    |       0.11 | 0.13 | [-0.14,  0.36] |  0.89 |  0.375
+      yes, DES-L | yes, EC-A  |       0.40 | 0.13 | [ 0.14,  0.66] |  2.97 |  0.003
+      yes, DES-L | yes, EC-L  |       0.26 | 0.13 | [ 0.02,  0.51] |  2.08 |  0.037
+      yes, DF    | yes, GP    |       0.43 | 0.14 | [ 0.17,  0.70] |  3.19 |  0.001
+      yes, DF    | yes, PR    |       0.38 | 0.13 | [ 0.12,  0.64] |  2.86 |  0.004
+      yes, DF    | yes, DM    |       0.11 | 0.13 | [-0.14,  0.36] |  0.89 |  0.375
+      yes, DF    | yes, EC-A  |       0.40 | 0.13 | [ 0.14,  0.66] |  2.97 |  0.003
+      yes, DF    | yes, EC-L  |       0.26 | 0.13 | [ 0.02,  0.51] |  2.08 |  0.037
+      yes, DF    | yes, DES-L |       0.00 | 0.13 | [-0.26,  0.26] |  0.00 | > .999
+      no, GP     | yes, GP    |       2.59 | 0.55 | [ 1.50,  3.67] |  4.67 | < .001
+      no, GP     | yes, PR    |       2.53 | 0.56 | [ 1.44,  3.62] |  4.54 | < .001
+      no, GP     | yes, DM    |       2.27 | 0.58 | [ 1.14,  3.40] |  3.93 | < .001
+      no, GP     | yes, EC-A  |       2.55 | 0.56 | [ 1.46,  3.64] |  4.58 | < .001
+      no, GP     | yes, EC-L  |       2.42 | 0.57 | [ 1.31,  3.53] |  4.28 | < .001
+      no, GP     | yes, DES-L |       2.15 | 0.59 | [ 1.00,  3.31] |  3.67 | < .001
+      no, GP     | yes, DF    |       2.15 | 0.59 | [ 1.00,  3.31] |  3.67 | < .001
+      no, PR     | yes, GP    |       0.51 | 0.16 | [ 0.20,  0.82] |  3.21 |  0.001
+      no, PR     | yes, PR    |       0.45 | 0.16 | [ 0.13,  0.77] |  2.75 |  0.006
+      no, PR     | yes, DM    |       0.19 | 0.20 | [-0.21,  0.58] |  0.93 |  0.352
+      no, PR     | yes, EC-A  |       0.47 | 0.16 | [ 0.15,  0.79] |  2.90 |  0.004
+      no, PR     | yes, EC-L  |       0.34 | 0.18 | [-0.01,  0.69] |  1.89 |  0.058
+      no, PR     | yes, DES-L |       0.07 | 0.22 | [-0.36,  0.50] |  0.33 |  0.738
+      no, PR     | yes, DF    |       0.07 | 0.22 | [-0.36,  0.50] |  0.33 |  0.738
+      no, PR     | no, GP     |      -2.08 | 0.48 | [-3.02, -1.14] | -4.35 | < .001
+      no, DM     | yes, GP    |       2.86 | 0.61 | [ 1.68,  4.05] |  4.73 | < .001
+      no, DM     | yes, PR    |       2.80 | 0.61 | [ 1.61,  4.00] |  4.61 | < .001
+      no, DM     | yes, DM    |       2.54 | 0.63 | [ 1.31,  3.77] |  4.04 | < .001
+      no, DM     | yes, EC-A  |       2.82 | 0.61 | [ 1.63,  4.01] |  4.65 | < .001
+      no, DM     | yes, EC-L  |       2.69 | 0.62 | [ 1.48,  3.90] |  4.37 | < .001
+      no, DM     | yes, DES-L |       2.43 | 0.64 | [ 1.18,  3.68] |  3.81 | < .001
+      no, DM     | yes, DF    |       2.43 | 0.64 | [ 1.18,  3.68] |  3.81 | < .001
+      no, DM     | no, GP     |       0.27 | 0.37 | [-0.46,  1.00] |  0.73 |  0.466
+      no, DM     | no, PR     |       2.35 | 0.53 | [ 1.32,  3.39] |  4.47 | < .001
+      no, EC-A   | yes, GP    |       1.10 | 0.27 | [ 0.57,  1.64] |  4.03 | < .001
+      no, EC-A   | yes, PR    |       1.05 | 0.28 | [ 0.50,  1.59] |  3.76 | < .001
+      no, EC-A   | yes, DM    |       0.78 | 0.31 | [ 0.18,  1.38] |  2.56 |  0.011
+      no, EC-A   | yes, EC-A  |       1.06 | 0.28 | [ 0.52,  1.61] |  3.85 | < .001
+      no, EC-A   | yes, EC-L  |       0.93 | 0.29 | [ 0.37,  1.50] |  3.23 |  0.001
+      no, EC-A   | yes, DES-L |       0.67 | 0.32 | [ 0.04,  1.29] |  2.09 |  0.037
+      no, EC-A   | yes, DF    |       0.67 | 0.32 | [ 0.04,  1.29] |  2.09 |  0.037
+      no, EC-A   | no, GP     |      -1.49 | 0.41 | [-2.29, -0.68] | -3.61 | < .001
+      no, EC-A   | no, PR     |       0.59 | 0.23 | [ 0.14,  1.05] |  2.56 |  0.011
+      no, EC-A   | no, DM     |      -1.76 | 0.46 | [-2.65, -0.87] | -3.86 | < .001
+      no, EC-L   | yes, GP    |       4.67 | 0.94 | [ 2.82,  6.52] |  4.95 | < .001
+      no, EC-L   | yes, PR    |       4.61 | 0.95 | [ 2.76,  6.47] |  4.87 | < .001
+      no, EC-L   | yes, DM    |       4.35 | 0.96 | [ 2.46,  6.24] |  4.51 | < .001
+      no, EC-L   | yes, EC-A  |       4.63 | 0.95 | [ 2.78,  6.48] |  4.90 | < .001
+      no, EC-L   | yes, EC-L  |       4.50 | 0.95 | [ 2.63,  6.37] |  4.72 | < .001
+      no, EC-L   | yes, DES-L |       4.24 | 0.97 | [ 2.33,  6.14] |  4.36 | < .001
+      no, EC-L   | yes, DF    |       4.24 | 0.97 | [ 2.33,  6.14] |  4.36 | < .001
+      no, EC-L   | no, GP     |       2.08 | 0.58 | [ 0.95,  3.21] |  3.61 | < .001
+      no, EC-L   | no, PR     |       4.16 | 0.86 | [ 2.49,  5.84] |  4.87 | < .001
+      no, EC-L   | no, DM     |       1.81 | 0.55 | [ 0.73,  2.89] |  3.29 | < .001
+      no, EC-L   | no, EC-A   |       3.57 | 0.77 | [ 2.07,  5.07] |  4.66 | < .001
+      no, DES-L  | yes, GP    |       4.62 | 0.93 | [ 2.79,  6.45] |  4.95 | < .001
+      no, DES-L  | yes, PR    |       4.56 | 0.94 | [ 2.73,  6.40] |  4.87 | < .001
+      no, DES-L  | yes, DM    |       4.30 | 0.95 | [ 2.43,  6.17] |  4.51 | < .001
+      no, DES-L  | yes, EC-A  |       4.58 | 0.94 | [ 2.75,  6.42] |  4.90 | < .001
+      no, DES-L  | yes, EC-L  |       4.45 | 0.94 | [ 2.60,  6.30] |  4.71 | < .001
+      no, DES-L  | yes, DES-L |       4.19 | 0.96 | [ 2.30,  6.07] |  4.35 | < .001
+      no, DES-L  | yes, DF    |       4.19 | 0.96 | [ 2.30,  6.07] |  4.35 | < .001
+      no, DES-L  | no, GP     |       2.03 | 0.57 | [ 0.92,  3.15] |  3.57 | < .001
+      no, DES-L  | no, PR     |       4.11 | 0.85 | [ 2.45,  5.77] |  4.86 | < .001
+      no, DES-L  | no, DM     |       1.76 | 0.54 | [ 0.70,  2.82] |  3.24 |  0.001
+      no, DES-L  | no, EC-A   |       3.52 | 0.76 | [ 2.03,  5.00] |  4.65 | < .001
+      no, DES-L  | no, EC-L   |      -0.05 | 0.48 | [-0.99,  0.89] | -0.10 |  0.918
+      no, DF     | yes, GP    |       2.24 | 0.49 | [ 1.28,  3.20] |  4.58 | < .001
+      no, DF     | yes, PR    |       2.18 | 0.49 | [ 1.22,  3.15] |  4.44 | < .001
+      no, DF     | yes, DM    |       1.92 | 0.51 | [ 0.91,  2.93] |  3.74 | < .001
+      no, DF     | yes, EC-A  |       2.20 | 0.49 | [ 1.24,  3.17] |  4.49 | < .001
+      no, DF     | yes, EC-L  |       2.07 | 0.50 | [ 1.09,  3.05] |  4.14 | < .001
+      no, DF     | yes, DES-L |       1.81 | 0.52 | [ 0.78,  2.83] |  3.45 | < .001
+      no, DF     | yes, DF    |       1.81 | 0.52 | [ 0.78,  2.83] |  3.45 | < .001
+      no, DF     | no, GP     |      -0.35 | 0.35 | [-1.04,  0.35] | -0.98 |  0.328
+      no, DF     | no, PR     |       1.73 | 0.42 | [ 0.92,  2.55] |  4.15 | < .001
+      no, DF     | no, DM     |      -0.62 | 0.38 | [-1.36,  0.12] | -1.65 |  0.100
+      no, DF     | no, EC-A   |       1.14 | 0.36 | [ 0.43,  1.85] |  3.16 |  0.002
+      no, DF     | no, EC-L   |      -2.43 | 0.61 | [-3.63, -1.22] | -3.95 | < .001
+      no, DF     | no, DES-L  |      -2.38 | 0.61 | [-3.57, -1.19] | -3.92 | < .001
+      
+      Variable predicted: count
+      Predictors contrasted: mined, spp
+      Predictors averaged: cover (8.7e-11), site
+      p-values are uncorrected.
+      Contrasts are on the response-scale.
+
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1 | Level2 | spp   | Difference |   SE |       95% CI |    z |      p
+      --------------------------------------------------------------------------
+      no     | yes    | GP    |       2.59 | 0.55 | [1.50, 3.67] | 4.67 | < .001
+      no     | yes    | PR    |       0.45 | 0.16 | [0.13, 0.77] | 2.75 |  0.006
+      no     | yes    | DM    |       2.54 | 0.63 | [1.31, 3.77] | 4.04 | < .001
+      no     | yes    | EC-A  |       1.06 | 0.28 | [0.52, 1.61] | 3.85 | < .001
+      no     | yes    | EC-L  |       4.50 | 0.95 | [2.63, 6.37] | 4.72 | < .001
+      no     | yes    | DES-L |       4.19 | 0.96 | [2.30, 6.07] | 4.35 | < .001
+      no     | yes    | DF    |       1.81 | 0.52 | [0.78, 2.83] | 3.45 | < .001
+      
+      Variable predicted: count
+      Predictors contrasted: mined
+      Predictors averaged: cover (8.7e-11), site
+      p-values are uncorrected.
+      Contrasts are on the response-scale.
 

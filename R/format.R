@@ -393,6 +393,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     }
   }
 
+  # remove () for single columns
+  if ("Parameter" %in% colnames(x)) {
+    x$Parameter <- gsub("(", "", gsub(")", "", x$Parameter, fixed = TRUE), fixed = TRUE)
+  }
+
   x
 }
 
