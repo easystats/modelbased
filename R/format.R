@@ -242,7 +242,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # extract all comparison levels
       all_levels <- unlist(lapply(dgrid[focal_terms], function(i) as.character(unique(i))), use.names = FALSE)
       # create replacement vector
-      replace_levels <- paste0("###", seq_along(all_levels))
+      replace_levels <- NULL
+      for (i in seq_along(all_levels)) {
+        replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
+      }
 
       # replace all comparison levels with tokens
       params[] <- lapply(params, function(comparison_pair) {
@@ -254,10 +257,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
       # we now have a data frame with each comparison-pairs as single column.
       # next, we need to separate the levels from the different variables at the
-      # sparator char, "," for old marginaleffects, "_" for new marginaleffects
+      # separator char, "," for old marginaleffects, "_" for new marginaleffects
       params <- datawizard::data_separate(
         params,
-        separator = "[_,]",
+        separator = "[_, ]",
         guess_columns = "max",
         verbose = FALSE
       )
