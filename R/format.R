@@ -376,9 +376,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
       }
       # make sure filtering terms in `by` are factors, for data_arrange later
-      if (!is.null(by)) {
+      if (!is.null(by) && length(by)) {
         for (i in by) {
-          if (i %in% colnames(dgrid) && i %in% colnames(x) && is.factor(dgrid[[i]])) {
+          if (i %in% colnames(dgrid) && i %in% colnames(x) && is.factor(dgrid[[i]]) && !is.factor(x[[i]])) { # nolint
             x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
           }
         }
