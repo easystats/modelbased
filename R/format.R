@@ -235,6 +235,23 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
+      # levels may contain the separator char. to be 100% certain we extract
+      # levels correctly, we now replace levels with a special "token", and later
+      # replace those tokens with the original levels again
+
+      # extract all comparison levels
+      all_levels <- unlist(lapply(dgrid[focal_terms], function(i) as.character(unique(i))), use.names = FALSE)
+      # create replacement vector
+      replace_levels <- paste0("###", seq_along(all_levels))
+
+      # replace all comparison levels with tokens
+      params[] <- lapply(params, function(comparison_pair) {
+        for (j in seq_along(all_levels)) {
+          comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
+        }
+        comparison_pair
+      })
+
       # we now have a data frame with each comparison-pairs as single column.
       # next, we need to separate the levels from the different variables at the
       # sparator char, "," for old marginaleffects, "_" for new marginaleffects
@@ -248,6 +265,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         rep.int(focal_terms, 2),
         rep(1:2, each = length(focal_terms))
       )
+
+      # finally, replace all tokens with original comparison levels again
+      params[] <- lapply(params, function(comparison_pair) {
+        for (j in seq_along(all_levels)) {
+          comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
+        }
+        comparison_pair
+      })
     } else {
       new_colnames <- paste0(focal_terms, 1:2)
     }
