@@ -243,6 +243,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       all_levels <- unlist(lapply(dgrid[focal_terms], function(i) as.character(unique(i))), use.names = FALSE)
       # create replacement vector
       replace_levels <- NULL
+      # this looks strange, but we need to make sure we have unique tokens that
+      # do not contain any letters or numbers, or similar characters that may
+      # appear as a single level in the data. thus, we use a sequence of "~"
+      # characters, which are unlikely to appear in the data
       for (i in seq_along(all_levels)) {
         replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
       }
