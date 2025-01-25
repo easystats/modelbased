@@ -1,6 +1,7 @@
 skip_on_os(c("mac", "linux"))
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
+skip_if_not_installed("withr")
 
 test_that("estimate_slopes - print summary", {
   skip_if_not_installed("MASS")
@@ -66,17 +67,20 @@ test_that("estimate_means - protect integers", {
 })
 
 
-test_that("estimate_contrasts - by with special character", {
-  data(efc, package = "modelbased")
-  # make categorical
-  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
-  levels(efc$c172code) <- c("low", "mid", "high")
-  fit <- lm(neg_c_7 ~ barthtot * c172code, data = efc)
-  expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
-  expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
-  expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
-  expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
-})
+withr::with_options(
+  list(marginaleffects_safe = FALSE),
+  test_that("estimate_contrasts - by with special character", {
+    data(efc, package = "modelbased")
+    # make categorical
+    efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+    levels(efc$c172code) <- c("low", "mid", "high")
+    fit <- lm(neg_c_7 ~ barthtot * c172code, data = efc)
+    expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
+    expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
+    expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+    expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint
+  })
+)
 
 
 test_that("estimate_means - by is list", {
