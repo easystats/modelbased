@@ -307,10 +307,10 @@ test_that("estimate_contrasts - marginaleffects", {
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
   out2 <- predict(m, newdata = insight::get_datagrid(m, c("time", "coffee")))
   expect_equal(out1$Difference, 5.78298, tolerance = 1e-4)
-  expect_equal(out1$Difference, (out2[2] - out2[1]) - (out2[4] - out2[3]), tolerance = 1e-4)
+  expect_equal(out1$Difference, ((out2[2] - out2[1]) - (out2[4] - out2[3])), tolerance = 1e-4)
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
   expect_equal(out1$Difference, -1.927659, tolerance = 1e-4)
-  expect_equal(out1$Difference, out2[5] - out2[3], tolerance = 1e-4)
+  expect_equal(out1$Difference, (out2[5] - out2[3]), tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3"), zap_small = TRUE, table_width = Inf)) # nolint
 
   # validated against ggeffects::test_predictions()
@@ -347,7 +347,7 @@ test_that("estimate_contrasts - marginaleffects", {
   expect_equal(out6$estimate, out1$Difference, tolerance = 1e-3)
 
   # validate against marginaleffects
-  out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = "pairwise")
+  out7 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = ~pairwise)
   expect_equal(out7$estimate, out4$Difference, tolerance = 1e-3)
 
   # test p-adjust
