@@ -41,6 +41,7 @@
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
+#' options(marginaleffects_safe = FALSE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)

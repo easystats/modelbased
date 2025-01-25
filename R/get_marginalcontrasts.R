@@ -80,18 +80,6 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-
-  # Third step: clean-up of marginaleffects object ----------------------------
-  # ---------------------------------------------------------------------------
-
-  ## TODO: just experimental! Must wait for decision on marginaleffects
-  # if (utils::packageVersion("marginaleffects") > "0.24.0" && "Parameter" %in% names(out)) {
-  #   redundant_rows <- duplicated(lapply(out$Parameter, function(i) sort(.split_at_minus_outside_parentheses(i))))
-  #   if (any(redundant_rows)) {
-  #     out <- out[redundant_rows, ]
-  #   }
-  # }
-
   # adjust p-values
   if (!insight::model_info(model)$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
