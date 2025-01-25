@@ -18,7 +18,7 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 9L))
-  expect_equal(estim$Difference, c(0.658, 0.454, -0.204), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(-0.658, 0.454, 0.204), tolerance = 1e-4)
 
   # out <- marginaleffects::avg_predictions(
   #   model,
@@ -62,7 +62,7 @@ test_that("estimate_contrasts - Frequentist", {
   estim <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width=0", backend = "marginaleffects")
   expect_identical(dim(estim), c(3L, 9L))
   estim <- estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4, backend = "marginaleffects")
-  expect_equal(estim$Difference, c(-0.21646, 0.20579, 0.42224), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(0.21646, 0.20579, -0.42224), tolerance = 1e-4)
 
 
   # Contrast between continuous
@@ -94,7 +94,7 @@ test_that("estimate_contrasts - Frequentist", {
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
   expect_identical(dim(estim), c(6L, 9L))
   expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-  expect_equal(estim$Difference, c(-6.98333, -11.275, -4.29167, -18.25833, -11.275, -6.98333), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(6.98333, 11.275, 4.29167, 18.25833, 11.275, 6.98333), tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
   # duplicated levels
