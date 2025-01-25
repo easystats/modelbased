@@ -38,7 +38,7 @@ test_that("estimate_means - glmmTMB", {
   ## marginaleffects for zero-inflated model, zero-inflation probabilities
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
   estim2 <- estimate_means(model, backend = "marginaleffects", predict = "zprob")
-  expect_equal(estim1$Probability, estim2$predicted, tolerance = 1e-3)
+  expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-3)
   # validated against ggeffects
   expect_equal(estim1$Probability, c(0.75755, 0.35508), tolerance = 1e-3)
   estim_me <- marginaleffects::avg_predictions(
@@ -62,7 +62,7 @@ test_that("estimate_contrasts - glmmTMB", {
 
   ## contrasts marginaleffects for zero-inflated model, count component
   estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
-  expect_equal(estim3$Difference, -1.99344, tolerance = 1e-3)
+  expect_equal(estim3$Difference, 1.99344, tolerance = 1e-3)
   estim_me <- marginaleffects::avg_predictions(
     model,
     newdata = insight::get_datagrid(model, by = "mined", factors = "all", include_random = TRUE),
@@ -70,7 +70,7 @@ test_that("estimate_contrasts - glmmTMB", {
     hypothesis = ~pairwise,
     re.form = NULL
   )
-  expect_equal(estim3$Difference, estim_me$estimate[2], tolerance = 1e-3)
+  expect_equal(estim3$Difference, estim_me$estimate, tolerance = 1e-3)
 
   # select default for contrast automatically works
   estim4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
@@ -80,7 +80,7 @@ test_that("estimate_contrasts - glmmTMB", {
   estim1 <- suppressMessages(estimate_contrasts(model, component = "zi", backend = "emmeans"))
   estim2 <- predict(model, type = "zprob", newdata = insight::get_datagrid(model, "mined"))
   expect_identical(dim(estim1), c(1L, 9L))
-  expect_equal(estim1$Difference, diff(estim2), tolerance = 1e-1)
+  expect_equal(estim1$Difference * -1, diff(estim2), tolerance = 1e-1)
   expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
 
   ## contrasts marginaleffects for zero-inflated model, zero-inflation probability component
