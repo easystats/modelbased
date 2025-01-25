@@ -26,6 +26,7 @@ knitr::opts_chunk$set(
   message = FALSE,
   out.width = "100%"
 )
+options(marginaleffects_safe = FALSE)
 ```
 
 
