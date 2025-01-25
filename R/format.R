@@ -236,10 +236,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
       # we now have a data frame with each comparison-pairs as single column.
-      # next, we need to separate the levels from the different variables at the ","
+      # next, we need to separate the levels from the different variables at the
+      # sparator char, "," for old marginaleffects, "_" for new marginaleffects
       params <- datawizard::data_separate(
         params,
-        separator = ",",
+        separator = "[_,]",
         guess_columns = "max",
         verbose = FALSE
       )
