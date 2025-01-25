@@ -75,8 +75,8 @@ test_that("estimate_expectation - error", {
 
 
 test_that("estimate_relation and marginalize specific", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  skip_if_not_installed("marginaleffects")
+  data(efc, package = "modelbased")
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep + c172code, data = efc)
   out1 <- estimate_means(fit, "e42dep", marginalize = "specific", backend = "marginaleffects")

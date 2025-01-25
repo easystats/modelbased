@@ -11,7 +11,16 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
 
   # arrange columns (not for contrast now)
   by <- rev(attr(x, "focal_terms", exact = TRUE))
-  if (!is.null(by) && all(by %in% colnames(x))) {
+  # add "Level" columns from contrasts
+  if (all(c("Level1", "Level2") %in% colnames(x))) {
+    by <- unique(c("Level1", "Level2", by))
+  }
+  # check which columns actually exist
+  if (!is.null(by)) {
+    by <- intersect(by, colnames(x))
+  }
+  # sort
+  if (length(by)) {
     # arrange predictions
     x <- datawizard::data_arrange(x, select = by)
     # protect integers, only for focal terms
@@ -138,12 +147,19 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 
 
 #' @export
-format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...) {
+format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, comparison = NULL, ...) {
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
+
+  # sanity check - method "get_marginalmeans()" calls "format.estimate_means()"
+  # for printing, and that method doesn't pass "comparison" - thus, we have to
+  # extract it from the attributes
+  if (is.null(comparison)) {
+    comparison <- attributes(x)$comparison
+  }
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
@@ -158,13 +174,14 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
   # only when we have a comparison based on these options from marginaleffects,
   # we want to "clean" the parameter names
-  valid_options <- c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential"
-  )
+  valid_options <- .valid_hypothesis_strings()
 
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
+
+  ## TODO: we should be able to process more ways of comparisons here,
+  ## e.g. also prettify labels and prepare levels for certain formula-written
+  ## comparisons. Need to find out which ones.
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
@@ -218,11 +235,36 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
 
     # for more than one term, we have comma-separated levels.
     if (length(focal_terms) > 1) {
+      # levels may contain the separator char. to be 100% certain we extract
+      # levels correctly, we now replace levels with a special "token", and later
+      # replace those tokens with the original levels again
+
+      # extract all comparison levels
+      all_levels <- unlist(lapply(dgrid[focal_terms], function(i) as.character(unique(i))), use.names = FALSE)
+      # create replacement vector
+      replace_levels <- NULL
+      # this looks strange, but we need to make sure we have unique tokens that
+      # do not contain any letters or numbers, or similar characters that may
+      # appear as a single level in the data. thus, we use a sequence of "~"
+      # characters, which are unlikely to appear in the data
+      for (i in seq_along(all_levels)) {
+        replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
+      }
+
+      # replace all comparison levels with tokens
+      params[] <- lapply(params, function(comparison_pair) {
+        for (j in seq_along(all_levels)) {
+          comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
+        }
+        comparison_pair
+      })
+
       # we now have a data frame with each comparison-pairs as single column.
-      # next, we need to separate the levels from the different variables at the ","
+      # next, we need to separate the levels from the different variables at the
+      # separator char, "," for old marginaleffects, "_" for new marginaleffects
       params <- datawizard::data_separate(
         params,
-        separator = ",",
+        separator = "[_, ]",
         guess_columns = "max",
         verbose = FALSE
       )
@@ -230,6 +272,14 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
         rep.int(focal_terms, 2),
         rep(1:2, each = length(focal_terms))
       )
+
+      # finally, replace all tokens with original comparison levels again
+      params[] <- lapply(params, function(comparison_pair) {
+        for (j in seq_along(all_levels)) {
+          comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
+        }
+        comparison_pair
+      })
     } else {
       new_colnames <- paste0(focal_terms, 1:2)
     }
@@ -332,7 +382,20 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
       for (i in focal_terms) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
       }
+      # make sure filtering terms in `by` are factors, for data_arrange later
+      if (!is.null(by) && length(by)) {
+        for (i in by) {
+          if (i %in% colnames(dgrid) && i %in% colnames(x) && is.factor(dgrid[[i]]) && !is.factor(x[[i]])) { # nolint
+            x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+          }
+        }
+      }
     }
+  }
+
+  # remove () for single columns
+  if ("Parameter" %in% colnames(x)) {
+    x$Parameter <- gsub("(", "", gsub(")", "", x$Parameter, fixed = TRUE), fixed = TRUE)
   }
 
   x
@@ -411,9 +474,10 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
     if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
       estimate_name <- coefficient_name
     }
-    # and rename the "term" column (which we get from contrasts)
-    colnames(params)[colnames(params) == "term"] <- "Parameter"
   }
+  # rename the "term" and "hypothesis" column (which we get from contrasts)
+  colnames(params)[colnames(params) == "term"] <- "Parameter"
+  colnames(params)[colnames(params) == "hypothesis"] <- "Parameter"
 
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
@@ -520,7 +584,7 @@ format.marginaleffects_contrasts <- function(x, model, p_adjust, comparison, ...
   } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
-    estimate_name <- "Probability" ## TODO: could be renamed into ZI-Probability?
+    estimate_name <- "Probability"
   } else {
     estimate_name <- "Mean"
   }

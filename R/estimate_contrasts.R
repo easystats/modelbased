@@ -41,6 +41,7 @@
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
+#' options(marginaleffects_safe = FALSE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
@@ -114,6 +115,11 @@ estimate_contrasts <- function(model,
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
+
+  # update comparison argument - if user provides a formula for the new
+  # marginaleffects version, we still want the string-option for internal
+  # processing...
+  comparison <- .get_marginaleffects_hypothesis_argument(comparison)$comparison
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------

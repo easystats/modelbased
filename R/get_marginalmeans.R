@@ -171,7 +171,10 @@ get_marginalmeans <- function(model,
   # =========================================================================
   # fix term label for custom hypothesis
   if (.is_custom_comparison(comparison)) {
+    ## TODO: check which column name is used in marginaleffects update, and
+    ## keep only the new one later
     means$term <- gsub(" ", "", comparison, fixed = TRUE)
+    means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
 
   # Last step: Save information in attributes  --------------------------------

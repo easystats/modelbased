@@ -232,6 +232,7 @@ condition (\code{using [estimate_slopes]}).
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
+options(marginaleffects_safe = FALSE)
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)

@@ -392,8 +392,7 @@ test_that("plots, logistic regression", {
 
 
 test_that("plots, 4-way with numeric", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")

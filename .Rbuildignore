@@ -5,7 +5,6 @@
 ^\.travis.yml
 ^\_pkgdown.yml
 ^LICENSE
-^data/.
 ^docs/.
 ^paper/.
 ^vignettes/d.
