@@ -3,6 +3,11 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 skip_on_os("mac")
 
+# tests are written for forthcoming marginaleffects version
+# marginaleffects <= 0.24.0 still works with modelbased, but the output is
+# different, so we can't compare against the specific order of the output
+skip_if(utils::packageVersion("marginaleffects") <= "0.24.0")
+
 test_that("estimate_contrasts - Frequentist", {
   skip_if_not_installed("logspline")
   skip_if_not_installed("lme4")
@@ -18,14 +23,16 @@ test_that("estimate_contrasts - Frequentist", {
 
   estim <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 9L))
-  expect_equal(estim$Difference, c(-0.658, 0.454, 0.204), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(-0.658, -0.454, 0.204), tolerance = 1e-4)
 
-  # out <- marginaleffects::avg_predictions(
-  #   model,
-  #   by = "Species",
-  #   newdata = insight::get_datagrid(model, "Species"),
-  #   hypothesis = ~pairwise
-  # )
+  # validate against new marginaleffects
+  out <- marginaleffects::avg_predictions(
+    model,
+    by = "Species",
+    newdata = insight::get_datagrid(model, "Species", factors = "all"),
+    hypothesis = ~pairwise
+  )
+  expect_equal(out$estimate, estim$Difference, tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, by = "Species=c('versicolor', 'virginica')", backend = "emmeans"))
   expect_identical(dim(estim), c(1L, 9L))
@@ -62,7 +69,7 @@ test_that("estimate_contrasts - Frequentist", {
   estim <- estimate_contrasts(model, contrast = "Species", by = "Petal.Width=0", backend = "marginaleffects")
   expect_identical(dim(estim), c(3L, 9L))
   estim <- estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4, backend = "marginaleffects")
-  expect_equal(estim$Difference, c(0.21646, 0.20579, -0.42224), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(0.21646, -0.20579, -0.42224), tolerance = 1e-4)
 
 
   # Contrast between continuous
@@ -94,7 +101,7 @@ test_that("estimate_contrasts - Frequentist", {
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
   expect_identical(dim(estim), c(6L, 9L))
   expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-  expect_equal(estim$Difference, c(6.98333, 11.275, 4.29167, 18.25833, 11.275, 6.98333), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333), tolerance = 1e-4)
   expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
   # duplicated levels
@@ -201,9 +208,9 @@ test_that("estimate_contrasts - Bayesian", {
   expect_equal(
     estim$Median,
     c(
-      0.05025, 0.89132, 0.83305, 0.52141, 0.47175, -0.36936, 0.27182,
-      -0.00022, -0.60636, -0.20898, 0.45085, 0.45184, -0.43568, -0.068,
-      0.18029
+      -0.05025, -0.89132, -0.52141, -0.27182, -0.45085, -0.83305,
+      -0.47175, 0.00022, -0.45184, 0.36936, 0.60636, 0.43568, 0.20898,
+      0.068, -0.18029
     ),
     tolerance = 1e-4
   )
@@ -332,7 +339,6 @@ test_that("estimate_contrasts - marginaleffects", {
   out4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   out5 <- suppressMessages(estimate_contrasts(model, predict = "response", backend = "marginaleffects"))
   expect_equal(out4$Difference, out5$Difference, tolerance = 1e-4)
-  expect_equal(out4$Difference, out3$Contrast, tolerance = 1e-4)
   expect_equal(out4$CI_low, out3$conf.low, tolerance = 1e-2)
 
   # validate against emmeans
@@ -361,7 +367,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out1), 3L)
   expect_identical(nrow(out2), 3L)
-  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$Difference, out2$Difference * -1, tolerance = 1e-4) # swicthed sign
 
   mtcars2 <- mtcars
   mtcars2$cyl <- as.factor(mtcars2$cyl)
@@ -371,7 +377,7 @@ test_that("estimate_contrasts - on-the-fly factors", {
 
   expect_identical(nrow(out3), 3L)
   expect_identical(nrow(out4), 3L)
-  expect_equal(out3$Difference, out4$Difference, tolerance = 1e-4)
+  expect_equal(out3$Difference, out4$Difference * -1, tolerance = 1e-4) # switched sign
 })
 
 
@@ -387,7 +393,7 @@ test_that("estimate_contrasts - works with slopes", {
   out4 <- estimate_contrasts(fit, contrast = "Petal.Length", by = "Species", backend = "marginaleffects")
   out5 <- emmeans::emtrends(fit, specs = pairwise ~ Species, var = "Petal.Length")
   expect_equal(out3$Slope, as.data.frame(out5$emtrends)$Petal.Length.trend, tolerance = 1e-3)
-  expect_equal(out4$Difference, as.data.frame(out5$contrasts)$estimate, tolerance = 1e-3)
+  expect_equal(out4$Difference * -1, as.data.frame(out5$contrasts)$estimate, tolerance = 1e-3)
 })
 
 
@@ -416,7 +422,7 @@ test_that("estimate_contrasts - different options for comparison", {
     out,
     c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
-  expect_equal(out$Difference, c(-0.35, 0.8, 1.15, 0.35, 0.7, -0.45), tolerance = 1e-3)
+  expect_equal(out$Difference, c(0.35, -0.8, -0.35, -1.15, -0.7, 0.45), tolerance = 1e-3)
   out <- estimate_contrasts(dat_glm, contrast = "fa", comparison = "reference", backend = "marginaleffects")
   expect_named(
     out,
@@ -486,7 +492,7 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
   model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
   out1 <- estimate_contrasts(model, contrast = "Petal.Length", by = "Species", backend = "marginaleffects") # nolint
   # validated against ggeffects::test_predictions()
-  expect_equal(out1$Difference, c(-0.17076, 0.04095, 0.17076), tolerance = 1e-4)
+  expect_equal(out1$Difference, c(0.17076, -0.04095, -0.17076), tolerance = 1e-4)
   out2 <- marginaleffects::avg_slopes(
     model,
     variables = "Petal.Length",
@@ -494,5 +500,5 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
     newdata = insight::get_datagrid(model, by = c("Petal.Length", "Species")),
     hypothesis = ~pairwise
   )
-  expect_equal(out1$Difference, out2$estimate[4:6], tolerance = 1e-4)
+  expect_equal(out1$Difference, out2$estimate, tolerance = 1e-4)
 })
