@@ -119,7 +119,7 @@ estimate_contrasts <- function(model,
   # update comparison argument - if user provides a formula for the new
   # marginaleffects version, we still want the string-option for internal
   # processing...
-  comparison <- .get_marginaleffects_hypothesis_argument(comparison)$comparison
+  # comparison <- .get_marginaleffects_hypothesis_argument(comparison)$comparison
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
