@@ -16,6 +16,8 @@ test_that("estimate_means - mgcv gam", {
 
 
 test_that("estimate_contrasts - mgcv gam", {
+  ## TODO: remove when marginaleffects 1.0.0 is on CRAN
+  skip_if(utils::packageVersion("marginaleffects") <= "0.24.0")
   model <- mgcv::gam(Sepal.Length ~ Species + s(Sepal.Width, by = Species), data = iris)
   estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 9L))
