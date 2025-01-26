@@ -53,39 +53,42 @@ test_that("estimate_means - glmmTMB", {
 
 
 test_that("estimate_contrasts - glmmTMB", {
-  ## contrasts emmeans for zero-inflated model, count component
-  estim1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
-  expect_identical(dim(estim1), c(1L, 9L))
-  # validated against ggeffects
-  expect_equal(estim1$Difference, -2.32874, tolerance = 1e-3)
-  expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
+  ## TODO: remove when marginaleffects 1.0.0 is on CRAN
+  if (utils::packageVersion("marginaleffects") > "0.24.0") {
+    ## contrasts emmeans for zero-inflated model, count component
+    estim1 <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
+    expect_identical(dim(estim1), c(1L, 9L))
+    # validated against ggeffects
+    expect_equal(estim1$Difference, -2.32874, tolerance = 1e-3)
+    expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
 
-  ## contrasts marginaleffects for zero-inflated model, count component
-  estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
-  expect_equal(estim3$Difference, 1.99344, tolerance = 1e-3)
-  estim_me <- marginaleffects::avg_predictions(
-    model,
-    newdata = insight::get_datagrid(model, by = "mined", factors = "all", include_random = TRUE),
-    by = "mined",
-    hypothesis = ~pairwise,
-    re.form = NULL
-  )
-  expect_equal(estim3$Difference, estim_me$estimate, tolerance = 1e-3)
+    ## contrasts marginaleffects for zero-inflated model, count component
+    estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
+    expect_equal(estim3$Difference, 1.99344, tolerance = 1e-3)
+    estim_me <- marginaleffects::avg_predictions(
+      model,
+      newdata = insight::get_datagrid(model, by = "mined", factors = "all", include_random = TRUE),
+      by = "mined",
+      hypothesis = ~pairwise,
+      re.form = NULL
+    )
+    expect_equal(estim3$Difference, estim_me$estimate, tolerance = 1e-3)
 
-  # select default for contrast automatically works
-  estim4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
-  expect_equal(estim3$Difference, estim4$Difference, tolerance = 1e-3)
+    # select default for contrast automatically works
+    estim4 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
+    expect_equal(estim3$Difference, estim4$Difference, tolerance = 1e-3)
 
-  ## contrasts emmeans for zero-inflated model, zero-inflation probability component
-  estim1 <- suppressMessages(estimate_contrasts(model, component = "zi", backend = "emmeans"))
-  estim2 <- predict(model, type = "zprob", newdata = insight::get_datagrid(model, "mined"))
-  expect_identical(dim(estim1), c(1L, 9L))
-  expect_equal(estim1$Difference * -1, diff(estim2), tolerance = 1e-1)
-  expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
+    ## contrasts emmeans for zero-inflated model, zero-inflation probability component
+    estim1 <- suppressMessages(estimate_contrasts(model, component = "zi", backend = "emmeans"))
+    estim2 <- predict(model, type = "zprob", newdata = insight::get_datagrid(model, "mined"))
+    expect_identical(dim(estim1), c(1L, 9L))
+    expect_equal(estim1$Difference * -1, diff(estim2), tolerance = 1e-1)
+    expect_identical(c(estim1$Level1[1], estim1$Level2[1]), c("yes", "no"))
 
-  ## contrasts marginaleffects for zero-inflated model, zero-inflation probability component
-  estim3 <- suppressMessages(estimate_contrasts(model, predict = "zprob", backend = "marginaleffects"))
-  expect_equal(estim3$Difference, diff(estim2), tolerance = 1e-1)
+    ## contrasts marginaleffects for zero-inflated model, zero-inflation probability component
+    estim3 <- suppressMessages(estimate_contrasts(model, predict = "zprob", backend = "marginaleffects"))
+    expect_equal(estim3$Difference, diff(estim2), tolerance = 1e-1)
+  }
 })
 
 
