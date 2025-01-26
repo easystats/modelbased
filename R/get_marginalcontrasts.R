@@ -31,8 +31,8 @@ get_marginalcontrasts <- function(model,
   hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, by, ...)
   # update / reset argument
   comparison <- hypothesis_arg$comparison
-  by <- hypothesis_arg$by
-  contrast <- setdiff(contrast, by)
+  my_args$by <- hypothesis_arg$by
+  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -119,13 +119,10 @@ get_marginalcontrasts <- function(model,
   hypothesis <- comparison
   # check if we have such a string
   if (!is.null(comparison)) {
-    if (is.character(comparison) &&
-      comparison %in% .valid_hypothesis_strings() &&
-      isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
-      utils::packageVersion("marginaleffects") > "0.24.0") {
-      # convert to formula
-      hypothesis <- stats::as.formula(paste("~", comparison))
-    } else if (inherits(comparison, "formula")) {
+    # if we have a formula as comparison, we convert it into strings in order to
+    # extract the information for "comparison" and "by", as we need for processing
+    # in modelbased.
+    if (inherits(comparison, "formula")) {
       # check if we have grouping in the formula, indicated via "|". we split
       # the formula into the three single components: lhs ~ rhs | group
       f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
@@ -142,6 +139,15 @@ get_marginalcontrasts <- function(model,
           by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
         }
       }
+    }
+    # for newer marginaleffects version, we need to convert single string into
+    # a formula. all "non-common" formulas remain unchanged.
+    if (is.character(comparison) &&
+      comparison %in% .valid_hypothesis_strings() &&
+      isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
+      utils::packageVersion("marginaleffects") > "0.24.0") {
+      # convert to formula
+      hypothesis <- stats::as.formula(paste("~", comparison))
     }
   }
   # we want: "hypothesis" is the original argument provided by the user,

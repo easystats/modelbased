@@ -508,3 +508,33 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
   )
   expect_equal(out1$Difference, out2$estimate, tolerance = 1e-4)
 })
+
+
+test_that("estimate_contrasts - contrasts for numeric by factor", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
+  # all should return the same output
+  out1 <- estimate_contrasts(fit, "c161sex", by = "c172code", backend = "marginaleffects")
+  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"), comparison = ~pairwise | c172code, backend = "marginaleffects")
+  out3 <- estimate_contrasts(fit, "c161sex", by = "c172code", comparison = ~pairwise, backend = "marginaleffects")
+  expect_named(
+    out1,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    out2,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    out3,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out2), c(3L, 10L))
+  expect_identical(dim(out3), c(3L, 10L))
+  expect_equal(out1$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
+  expect_equal(out2$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
+  expect_equal(out3$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
+})
