@@ -135,6 +135,7 @@ get_marginalcontrasts <- function(model,
       if (formula_lhs != "ratio" && length(formula_rhs) == 1 && formula_rhs %in% .valid_hypothesis_strings()) {
         # rhs is clear, should be one of the valid values
         comparison <- formula_rhs
+        # "by" is updated, by adding grouping variables
         by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
       }
     }
