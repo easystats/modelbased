@@ -178,6 +178,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
 
   ## TODO: we should be able to process more ways of comparisons here,
   ## e.g. also prettify labels and prepare levels for certain formula-written
@@ -185,17 +186,31 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
-  if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
+
+  ## TODO: restore this line if does not work with ratios
+  # if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
+
+  if (!is.null(comparison)) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
 
-    # split parameter column into comparison groups.
-    params <- as.data.frame(do.call(
-      rbind,
-      lapply(x$Parameter, .split_at_minus_outside_parentheses)
-    ))
+    if (is_ratio_comparison) {
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Parameter, function(s) {
+          value_pairs <- insight::trim_ws(unlist(strsplit(s, "/", fixed = TRUE), use.names = FALSE))
+          gsub("(", "", gsub(")", "", value_pairs, fixed = TRUE), fixed = TRUE)
+        })
+      ))
+    } else {
+      # split parameter column into comparison groups.
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Parameter, .split_at_minus_outside_parentheses)
+      ))
+    }
 
     # we *could* stop here and simply rename the split columns, but then
     # we cannot filter by `by` - thus, we go on, extract all single levels,

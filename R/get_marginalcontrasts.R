@@ -138,6 +138,13 @@ get_marginalcontrasts <- function(model,
         if (!is.na(formula_group) && nzchar(formula_group)) {
           by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
         }
+      } else if (identical(formula_lhs, "ratio")) {
+        by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
+        hypothesis <- comparison <- stats::as.formula(paste(
+          formula_lhs,
+          "~",
+          paste(formula_rhs, collapse = "+")
+        ))
       }
     }
     # for newer marginaleffects version, we need to convert single string into
