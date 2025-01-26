@@ -31,6 +31,8 @@ get_marginalcontrasts <- function(model,
   hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, by, ...)
   # update / reset argument
   comparison <- hypothesis_arg$comparison
+  by <- hypothesis_arg$by
+  contrast <- setdiff(contrast, by)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -128,15 +130,17 @@ get_marginalcontrasts <- function(model,
       # the formula into the three single components: lhs ~ rhs | group
       f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
       # extract formula parts
-      formula_lhs <- all.vars(f[1])
-      formula_rhs <- all.vars(f[2])
-      formula_group <- all.vars(f[3]) # can be NA when no group
+      formula_lhs <- f[1]
+      formula_rhs <- f[2]
+      formula_group <- f[3] # can be NA when no group
       # update comparison
       if (formula_lhs != "ratio" && length(formula_rhs) == 1 && formula_rhs %in% .valid_hypothesis_strings()) {
         # rhs is clear, should be one of the valid values
         comparison <- formula_rhs
         # "by" is updated, by adding grouping variables
-        by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
+        if (!is.na(formula_group) && nzchar(formula_group)) {
+          by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
+        }
       }
     }
   }
