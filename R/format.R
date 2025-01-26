@@ -266,8 +266,20 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
       }
 
+      # for ratios, we need to remove by-levels
+      if (!is.null(by)) {
+        by_levels <- unlist(lapply(dgrid[by], function(i) as.character(unique(i))), use.names = FALSE)
+      } else {
+        by_levels <- NULL
+      }
+
       # replace all comparison levels with tokens
       params[] <- lapply(params, function(comparison_pair) {
+        if (is_ratio_comparison && !is.null(by_levels)) {
+          for (bl in by_levels) {
+            comparison_pair <- insight::trim_ws(gsub(paste0("\\<", bl, "\\>"), "", comparison_pair))
+          }
+        }
         for (j in seq_along(all_levels)) {
           comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
         }
