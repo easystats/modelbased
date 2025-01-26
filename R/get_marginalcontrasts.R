@@ -117,6 +117,7 @@ get_marginalcontrasts <- function(model,
 .get_marginaleffects_hypothesis_argument <- function(comparison, by = NULL, ...) {
   # save original argument
   hypothesis <- comparison
+
   # check if we have such a string
   if (!is.null(comparison)) {
     # if we have a formula as comparison, we convert it into strings in order to
@@ -130,32 +131,22 @@ get_marginalcontrasts <- function(model,
       formula_lhs <- f[1]
       formula_rhs <- f[2]
       formula_group <- f[3] # can be NA when no group
-      # update comparison
-      if (formula_lhs != "ratio" && length(formula_rhs) == 1 && formula_rhs %in% .valid_hypothesis_strings()) {
-        # rhs is clear, should be one of the valid values
-        comparison <- formula_rhs
-        # "by" is updated, by adding grouping variables
-        if (!is.na(formula_group) && nzchar(formula_group)) {
-          by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
-        }
-      } else if (identical(formula_lhs, "ratio")) {
-        by <- unique(c(by, all.vars(stats::as.formula(paste0("~", formula_group)))))
-        hypothesis <- comparison <- stats::as.formula(paste(
-          formula_lhs,
-          "~",
-          paste(formula_rhs, collapse = "+")
-        ))
-      }
+    } else {
+      formula_lhs <- "difference"
+      formula_rhs <- comparison
+      formula_group <- by
     }
-    # for newer marginaleffects version, we need to convert single string into
-    # a formula. all "non-common" formulas remain unchanged.
-    if (is.character(comparison) &&
-      comparison %in% .valid_hypothesis_strings() &&
-      isTRUE(insight::check_if_installed("marginaleffects", quietly = TRUE)) &&
-      utils::packageVersion("marginaleffects") > "0.24.0") {
-      # convert to formula
-      hypothesis <- stats::as.formula(paste("~", comparison))
+    # we put "by" into the formula
+    if (is.na(formula_group) || !nzchar(formula_group)) {
+      formula_group <- by
     }
+
+    f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+    if (!is.null(formula_group)) {
+      f <- paste(f, "|", formula_group)
+    }
+
+    hypothesis <- comparison <- stats::as.formula(f)
   }
   # we want: "hypothesis" is the original argument provided by the user,
   # can be a formula like ~pairwise, or a string like "pairwise". This is
