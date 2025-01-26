@@ -28,7 +28,7 @@ get_marginalcontrasts <- function(model,
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, ...)
+  hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, by, ...)
   # update / reset argument
   comparison <- hypothesis_arg$comparison
 
@@ -112,7 +112,7 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
-.get_marginaleffects_hypothesis_argument <- function(comparison, ...) {
+.get_marginaleffects_hypothesis_argument <- function(comparison, by = NULL, ...) {
   # save original argument
   hypothesis <- comparison
   # check if we have such a string
@@ -124,11 +124,18 @@ get_marginalcontrasts <- function(model,
       # convert to formula
       hypothesis <- stats::as.formula(paste("~", comparison))
     } else if (inherits(comparison, "formula")) {
-      # convert to character
-      comparison_string <- all.vars(comparison)
+      # check if we have grouping in the formula, indicated via "|". we split
+      # the formula into the three single components: lhs ~ rhs | group
+      f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
+      # extract formula parts
+      formula_lhs <- all.vars(f[1])
+      formula_rhs <- all.vars(f[2])
+      formula_group <- all.vars(f[3]) # can be NA when no group
       # update comparison
-      if (length(comparison_string) == 1 && comparison_string %in% .valid_hypothesis_strings()) {
-        comparison <- comparison_string
+      if (formula_lhs != "ratio" && length(formula_rhs) == 1 && formula_rhs %in% .valid_hypothesis_strings()) {
+        # rhs is clear, should be one of the valid values
+        comparison <- formula_rhs
+
       }
     }
   }
@@ -137,7 +144,7 @@ get_marginalcontrasts <- function(model,
   # converted into the appropriate type depending on the marginaleffects
   # version. "comparison" should always be a character string, for internal
   # processing.
-  list(hypothesis = hypothesis, comparison = comparison)
+  list(hypothesis = hypothesis, comparison = comparison, by = by)
 }
 
 
