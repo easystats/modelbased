@@ -115,10 +115,7 @@ get_marginalcontrasts <- function(model,
 # make "comparison" argument compatible -----------------------------------
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, by = NULL, ...) {
-  # save original argument
-  hypothesis <- comparison
-
-  # check if we have such a string
+  # convert comparison and by into a formula
   if (!is.null(comparison)) {
     # if we have a formula as comparison, we convert it into strings in order to
     # extract the information for "comparison" and "by", as we need for processing
@@ -140,20 +137,16 @@ get_marginalcontrasts <- function(model,
     if (is.na(formula_group) || !nzchar(formula_group)) {
       formula_group <- by
     }
-
+    # compose formula
     f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+    # add group variable and update by
     if (!is.null(formula_group)) {
-      f <- paste(f, "|", formula_group)
+      f <- paste(f, "|", paste(formula_group, collapse = "+"))
+      by <- formula_group
     }
-
-    hypothesis <- comparison <- stats::as.formula(f)
+    comparison <- stats::as.formula(f)
   }
-  # we want: "hypothesis" is the original argument provided by the user,
-  # can be a formula like ~pairwise, or a string like "pairwise". This is
-  # converted into the appropriate type depending on the marginaleffects
-  # version. "comparison" should always be a character string, for internal
-  # processing.
-  list(hypothesis = hypothesis, comparison = comparison, by = by)
+  list(comparison = comparison, by = by)
 }
 
 
