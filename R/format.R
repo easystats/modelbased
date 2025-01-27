@@ -160,7 +160,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   if (is.null(comparison)) {
     comparison <- attributes(x)$comparison
   }
-browser()
+
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
