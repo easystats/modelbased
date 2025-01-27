@@ -133,6 +133,8 @@ get_marginalcontrasts <- function(model,
         my_args$by <- formula_group
       }
     } else {
+      # sanity check for "comparison" argument
+      insight::validate_argument(comparison, .valid_hypothesis_strings())
       formula_lhs <- "difference"
       formula_rhs <- comparison
     }
@@ -155,6 +157,15 @@ get_marginalcontrasts <- function(model,
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
   c(my_args, list(comparison = comparison))
+}
+
+
+.valid_hypothesis_strings <- function() {
+  c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential", "poly", "helmert",
+    "trt_vs_ctrl"
+  )
 }
 
 
