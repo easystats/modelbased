@@ -53,28 +53,25 @@ test_that("attributes_means, contrasts", {
 
 
 test_that("attributes_means, slopes", {
-  ## TODO: remove when marginaleffects 1.0.0 is on CRAN
-  if (utils::packageVersion("marginaleffects") > "0.24.0") {
-    data(iris)
-    model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
+  data(iris)
+  model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
 
-    estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "emmeans"))
-    expect_named(
-      attributes(estim),
-      c(
-        "names", "row.names", "class", "table_title", "table_footer",
-        "model", "response", "ci", "trend", "coef_name"
-      )
+  estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "emmeans"))
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "row.names", "class", "table_title", "table_footer",
+      "model", "response", "ci", "trend", "coef_name"
     )
-    estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
-    expect_named(
-      attributes(estim),
-      c(
-        "names", "class", "row.names", "trend", "comparison", "coef_name",
-        "slope", "table_title", "table_footer", "model", "response", "ci"
-      )
+  )
+  estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "class", "row.names", "trend", "comparison", "coef_name",
+      "slope", "table_title", "table_footer", "model", "response", "ci"
     )
-  }
+  )
 })
 
 

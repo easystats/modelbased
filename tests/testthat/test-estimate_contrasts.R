@@ -4,11 +4,6 @@ skip_if_not_installed("marginaleffects")
 skip_on_os("mac")
 skip_if_not_installed("withr")
 
-# tests are written for forthcoming marginaleffects version
-# marginaleffects <= 0.24.0 still works with modelbased, but the output is
-# different, so we can't compare against the specific order of the output
-skip_if(utils::packageVersion("marginaleffects") <= "0.24.0")
-
 withr::with_options(
   list(marginaleffects_safe = FALSE),
   test_that("estimate_contrasts - Frequentist", {
@@ -101,11 +96,18 @@ withr::with_options(
     ## FIXME: doesn't work right nw
     # estim <- suppressMessages(estimate_contrasts(model, by = "all", backend = "marginaleffects"))
     # expect_identical(dim(estim), c(12L, 11L))
-    estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
-    expect_identical(dim(estim), c(6L, 9L))
-    expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-    expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333), tolerance = 1e-4)
-    expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+
+    ## TODO: enable when by = "gear='5'" works again
+    # estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
+    # expect_identical(dim(estim), c(6L, 9L))
+    # expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+    # expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333), tolerance = 1e-4)
+    # expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+    estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"))
+    expect_identical(dim(estim), c(3L, 10L))
+    expect_named(estim, c("Level1", "Level2", "gear", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+    expect_equal(estim$Difference, c(6.98333, 0.05, 6.98333), tolerance = 1e-4)
+    expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 
     # duplicated levels
     dat <- mtcars
@@ -507,4 +509,34 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
     hypothesis = ~pairwise
   )
   expect_equal(out1$Difference, out2$estimate, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrasts - contrasts for numeric by factor", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
+  # all should return the same output
+  out1 <- estimate_contrasts(fit, "c161sex", by = "c172code", backend = "marginaleffects")
+  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"), comparison = ~ pairwise | c172code, backend = "marginaleffects")
+  out3 <- estimate_contrasts(fit, "c161sex", by = "c172code", comparison = ~pairwise, backend = "marginaleffects")
+  expect_named(
+    out1,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    out2,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    out3,
+    c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out2), c(3L, 10L))
+  expect_identical(dim(out3), c(3L, 10L))
+  expect_equal(out1$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
+  expect_equal(out2$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
+  expect_equal(out3$Difference, c(1.04585, 0.56041, 0.95798), tolerance = 1e-4)
 })

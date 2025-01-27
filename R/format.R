@@ -13,7 +13,7 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   by <- rev(attr(x, "focal_terms", exact = TRUE))
   # add "Level" columns from contrasts
   if (all(c("Level1", "Level2") %in% colnames(x))) {
-    by <- unique(c("Level1", "Level2", by))
+    by <- unique(by, c("Level1", "Level2"))
   }
   # check which columns actually exist
   if (!is.null(by)) {
@@ -172,30 +172,39 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     }
   }
 
-  # only when we have a comparison based on these options from marginaleffects,
-  # we want to "clean" the parameter names
-  valid_options <- .valid_hypothesis_strings()
+  # check type of contrast
+  is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
 
-  # Column name for coefficient - fix needed for contrasting slopes
+  # Column name for coefficient - fix needed for contrasting slopes and ratios
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
-
-  ## TODO: we should be able to process more ways of comparisons here,
-  ## e.g. also prettify labels and prepare levels for certain formula-written
-  ## comparisons. Need to find out which ones.
+  if (is_ratio_comparison) {
+    colnames(x)[colnames(x) == "Difference"] <- "Ratio"
+  }
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
-  if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
+
+  if (!is.null(comparison)) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
 
-    # split parameter column into comparison groups.
-    params <- as.data.frame(do.call(
-      rbind,
-      lapply(x$Parameter, .split_at_minus_outside_parentheses)
-    ))
+    if (is_ratio_comparison) {
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Parameter, function(s) {
+          value_pairs <- insight::trim_ws(unlist(strsplit(s, "/", fixed = TRUE), use.names = FALSE))
+          gsub("(", "", gsub(")", "", value_pairs, fixed = TRUE), fixed = TRUE)
+        })
+      ))
+    } else {
+      # split parameter column into comparison groups.
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Parameter, .split_at_minus_outside_parentheses)
+      ))
+    }
 
     # we *could* stop here and simply rename the split columns, but then
     # we cannot filter by `by` - thus, we go on, extract all single levels,
@@ -346,49 +355,15 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # }
       # ------------------------------------------------------------------
 
-      # filter by "by" variables
-      if (!is.null(by)) {
-        keep_rows <- seq_len(nrow(params))
-        for (i in by) {
-          by_names <- paste0(i, 1:2)
-          keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
-            all(j == j[1])
-          })]
-        }
-
-        # here we make sure that one of the "by" column has its original
-        # column name back, so we can properly merge all variables in
-        # "contrast" and "by" to the original data
-        by_columns <- paste0(by, 1)
-        params <- datawizard::data_rename(
-          params,
-          select = by_columns,
-          replacement = by,
-          verbose = FALSE
-        )
-
-        # filter original data and new params by "by"
-        x <- x[keep_rows, ]
-        params <- params[keep_rows, ]
-      }
-
       # remove old column
       x$Parameter <- NULL
 
       # add back new columns
-      x <- cbind(params[c(contrast, by)], x)
+      x <- cbind(params[contrast], x)
 
       # make sure terms are factors, for data_arrange later
       for (i in focal_terms) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
-      }
-      # make sure filtering terms in `by` are factors, for data_arrange later
-      if (!is.null(by) && length(by)) {
-        for (i in by) {
-          if (i %in% colnames(dgrid) && i %in% colnames(x) && is.factor(dgrid[[i]]) && !is.factor(x[[i]])) { # nolint
-            x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
-          }
-        }
       }
     }
   }

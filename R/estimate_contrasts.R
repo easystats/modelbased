@@ -79,11 +79,6 @@
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
 #'
-#' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#' estimate_contrasts(model)
-#' # fix `am` at value 1
-#' estimate_contrasts(model, contrast = "cyl", by = "am='1'")
-#'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, by = "wt", length = 4)
@@ -115,11 +110,6 @@ estimate_contrasts <- function(model,
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
-
-  # update comparison argument - if user provides a formula for the new
-  # marginaleffects version, we still want the string-option for internal
-  # processing...
-  comparison <- .get_marginaleffects_hypothesis_argument(comparison)$comparison
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
