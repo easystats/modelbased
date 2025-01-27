@@ -40,7 +40,7 @@
       
       Variable predicted: Species
       Predictors modulated: Sepal.Width
-      Predictions are on the expectation-scale.
+      Predictions are on the response-scale.
 
 ---
 
@@ -128,7 +128,7 @@
       
       Variable predicted: Species
       Predictors modulated: Sepal.Width
-      Predictions are on the expectation-scale.
+      Predictions are on the response-scale.
 
 ---
 
