@@ -127,45 +127,48 @@ get_marginalcontrasts <- function(model,
 
   # convert comparison and by into a formula
   if (!is.null(comparison)) {
-    # if we have a formula as comparison, we convert it into strings in order to
-    # extract the information for "comparison" and "by", as we need for processing
-    # in modelbased.
-    if (inherits(comparison, "formula")) {
-      # check if we have grouping in the formula, indicated via "|". we split
-      # the formula into the three single components: lhs ~ rhs | group
-      f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
-      # extract formula parts
-      formula_lhs <- f[1]
-      formula_rhs <- f[2]
-      formula_group <- f[3]
-      # can be NA when no group
-      if (is.na(formula_group) || !nzchar(formula_group)) {
-        # no grouping via formula
-        formula_group <- NULL
+    # only proceed if we don't have custom comparisons
+    if (!.is_custom_comparison(comparison)) {
+      # if we have a formula as comparison, we convert it into strings in order to
+      # extract the information for "comparison" and "by", as we need for processing
+      # in modelbased.
+      if (inherits(comparison, "formula")) {
+        # check if we have grouping in the formula, indicated via "|". we split
+        # the formula into the three single components: lhs ~ rhs | group
+        f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
+        # extract formula parts
+        formula_lhs <- f[1]
+        formula_rhs <- f[2]
+        formula_group <- f[3]
+        # can be NA when no group
+        if (is.na(formula_group) || !nzchar(formula_group)) {
+          # no grouping via formula
+          formula_group <- NULL
+        } else {
+          # else, if we have groups, update by-argument
+          my_args$by <- formula_group
+        }
       } else {
-        # else, if we have groups, update by-argument
+        # sanity check for "comparison" argument
+        insight::validate_argument(comparison, .valid_hypothesis_strings())
+        formula_lhs <- "difference"
+        formula_rhs <- comparison
+      }
+      # we put "by" into the formula. user either provided "by", or we put the
+      # group variable from the formula into "by", hence, "my_args$by" definitely
+      # contains the requested groups
+      formula_group <- my_args$by
+      # compose formula
+      f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+      # for contrasts of slopes, we don *not* want the group-variable in the formula
+      comparison_slopes <- stats::as.formula(f)
+      # add group variable and update by
+      if (!is.null(formula_group)) {
+        f <- paste(f, "|", paste(formula_group, collapse = "+"))
         my_args$by <- formula_group
       }
-    } else {
-      # sanity check for "comparison" argument
-      insight::validate_argument(comparison, .valid_hypothesis_strings())
-      formula_lhs <- "difference"
-      formula_rhs <- comparison
+      comparison <- stats::as.formula(f)
     }
-    # we put "by" into the formula. user either provided "by", or we put the
-    # group variable from the formula into "by", hence, "my_args$by" definitely
-    # contains the requested groups
-    formula_group <- my_args$by
-    # compose formula
-    f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
-    # for contrasts of slopes, we don *not* want the group-variable in the formula
-    comparison_slopes <- stats::as.formula(f)
-    # add group variable and update by
-    if (!is.null(formula_group)) {
-      f <- paste(f, "|", paste(formula_group, collapse = "+"))
-      my_args$by <- formula_group
-    }
-    comparison <- stats::as.formula(f)
   } else {
     # default to pairwise
     comparison <- comparison_slopes <- ~pairwise
