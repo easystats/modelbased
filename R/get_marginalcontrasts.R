@@ -152,6 +152,8 @@ get_marginalcontrasts <- function(model,
     # default to pairwise
     comparison <- ~pairwise
   }
+  # remove "by" from "contrast"
+  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
   c(my_args, list(comparison = comparison))
 }
 
