@@ -13,7 +13,7 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   by <- rev(attr(x, "focal_terms", exact = TRUE))
   # add "Level" columns from contrasts
   if (all(c("Level1", "Level2") %in% colnames(x))) {
-    by <- unique(c("Level1", "Level2", by))
+    by <- unique(by, c("Level1", "Level2"))
   }
   # check which columns actually exist
   if (!is.null(by)) {
@@ -172,9 +172,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     }
   }
 
-  # Column name for coefficient - fix needed for contrasting slopes
-  colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  # check type of contrast
   is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
+
+  # Column name for coefficient - fix needed for contrasting slopes and ratios
+  colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  if (is_ratio_comparison) {
+    colnames(x)[colnames(x) == "Difference"] <- "Ratio"
+  }
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
@@ -350,49 +355,15 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # }
       # ------------------------------------------------------------------
 
-      # filter by "by" variables
-      if (!is.null(by)) {
-        keep_rows <- seq_len(nrow(params))
-        for (i in by) {
-          by_names <- paste0(i, 1:2)
-          keep_rows <- keep_rows[apply(params[by_names], 1, function(j) {
-            all(j == j[1])
-          })]
-        }
-
-        # here we make sure that one of the "by" column has its original
-        # column name back, so we can properly merge all variables in
-        # "contrast" and "by" to the original data
-        by_columns <- paste0(by, 1)
-        params <- datawizard::data_rename(
-          params,
-          select = by_columns,
-          replacement = by,
-          verbose = FALSE
-        )
-
-        # filter original data and new params by "by"
-        x <- x[keep_rows, ]
-        params <- params[keep_rows, ]
-      }
-
       # remove old column
       x$Parameter <- NULL
 
       # add back new columns
-      x <- cbind(params[c(contrast, by)], x)
+      x <- cbind(params[contrast], x)
 
       # make sure terms are factors, for data_arrange later
       for (i in focal_terms) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
-      }
-      # make sure filtering terms in `by` are factors, for data_arrange later
-      if (!is.null(by) && length(by)) {
-        for (i in by) {
-          if (i %in% colnames(dgrid) && i %in% colnames(x) && is.factor(dgrid[[i]]) && !is.factor(x[[i]])) { # nolint
-            x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
-          }
-        }
       }
     }
   }

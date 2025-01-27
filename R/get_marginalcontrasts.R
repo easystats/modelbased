@@ -123,16 +123,23 @@ get_marginalcontrasts <- function(model,
       # extract formula parts
       formula_lhs <- f[1]
       formula_rhs <- f[2]
-      formula_group <- f[3] # can be NA when no group
+      formula_group <- f[3]
+      # can be NA when no group
+      if (is.na(formula_group) || !nzchar(formula_group)) {
+        # no grouping via formula
+        formula_group <- NULL
+      } else {
+        # else, if we have groups, update by-argument
+        my_args$by <- formula_group
+      }
     } else {
       formula_lhs <- "difference"
       formula_rhs <- comparison
-      formula_group <- my_args$by
     }
-    # we put "by" into the formula
-    if (is.na(formula_group) || !nzchar(formula_group)) {
-      formula_group <- my_args$by
-    }
+    # we put "by" into the formula. user either provided "by", or we put the
+    # group variable from the formula into "by", hence, "my_args$by" definitely
+    # contains the requested groups
+    formula_group <- my_args$by
     # compose formula
     f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
     # add group variable and update by
