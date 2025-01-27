@@ -160,7 +160,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   if (is.null(comparison)) {
     comparison <- attributes(x)$comparison
   }
-
+browser()
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
@@ -172,23 +172,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     }
   }
 
-  # only when we have a comparison based on these options from marginaleffects,
-  # we want to "clean" the parameter names
-  valid_options <- .valid_hypothesis_strings()
-
   # Column name for coefficient - fix needed for contrasting slopes
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
   is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
 
-  ## TODO: we should be able to process more ways of comparisons here,
-  ## e.g. also prettify labels and prepare levels for certain formula-written
-  ## comparisons. Need to find out which ones.
-
   # for contrasting slopes, we do nothing more here. for other contrasts,
   # we prettify labels now
-
-  ## TODO: restore this line if does not work with ratios
-  # if (!is.null(comparison) && is.character(comparison) && comparison %in% valid_options) {
 
   if (!is.null(comparison)) {
     #  the goal here is to create tidy columns with the comparisons.

@@ -116,11 +116,6 @@ estimate_contrasts <- function(model,
     predict <- transform
   }
 
-  # update comparison argument - if user provides a formula for the new
-  # marginaleffects version, we still want the string-option for internal
-  # processing...
-  string_comparison <- .get_marginaleffects_hypothesis_argument(comparison)$comparison
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
@@ -146,7 +141,7 @@ estimate_contrasts <- function(model,
       verbose = verbose,
       ...
     )
-    out <- format(estimated, model, p_adjust, comparison = string_comparison, ...)
+    out <- format(estimated, model, p_adjust, comparison, ...)
   }
 
   # restore attributes later

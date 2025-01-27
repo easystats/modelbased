@@ -28,11 +28,7 @@ get_marginalcontrasts <- function(model,
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  hypothesis_arg <- .get_marginaleffects_hypothesis_argument(comparison, by, ...)
-  # update / reset argument
-  comparison <- hypothesis_arg$comparison
-  my_args$by <- hypothesis_arg$by
-  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, ...)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -62,7 +58,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
-      hypothesis = hypothesis_arg$hypothesis,
+      hypothesis = my_args$comparison,
       backend = "marginaleffects",
       verbose = verbose,
       ...
@@ -73,7 +69,7 @@ get_marginalcontrasts <- function(model,
       model = model,
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
-      hypothesis = hypothesis_arg$hypothesis,
+      hypothesis = my_args$comparison,
       predict = predict,
       backend = "marginaleffects",
       marginalize = marginalize,
@@ -97,7 +93,7 @@ get_marginalcontrasts <- function(model,
     info = list(
       contrast = my_args$contrast,
       predict = predict,
-      comparison = comparison,
+      comparison = my_args$comparison,
       marginalize = marginalize,
       p_adjust = p_adjust
     )
@@ -114,7 +110,7 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
-.get_marginaleffects_hypothesis_argument <- function(comparison, by = NULL, ...) {
+.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, ...) {
   # convert comparison and by into a formula
   if (!is.null(comparison)) {
     # if we have a formula as comparison, we convert it into strings in order to
@@ -131,32 +127,25 @@ get_marginalcontrasts <- function(model,
     } else {
       formula_lhs <- "difference"
       formula_rhs <- comparison
-      formula_group <- by
+      formula_group <- my_args$by
     }
     # we put "by" into the formula
     if (is.na(formula_group) || !nzchar(formula_group)) {
-      formula_group <- by
+      formula_group <- my_args$by
     }
     # compose formula
     f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
     # add group variable and update by
     if (!is.null(formula_group)) {
       f <- paste(f, "|", paste(formula_group, collapse = "+"))
-      by <- formula_group
+      my_args$by <- formula_group
     }
     comparison <- stats::as.formula(f)
+  } else {
+    # default to pairwise
+    comparison <- ~pairwise
   }
-  list(comparison = comparison, by = by)
-}
-
-
-# these are the string values that need to be converted to formulas
-.valid_hypothesis_strings <- function() {
-  c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl"
-  )
+  c(my_args, list(comparison = comparison))
 }
 
 
