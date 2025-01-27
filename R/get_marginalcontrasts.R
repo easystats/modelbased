@@ -116,6 +116,10 @@ get_marginalcontrasts <- function(model,
 # make "comparison" argument compatible -----------------------------------
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, ...) {
+  # init
+  comparison_slopes <- NULL
+  original_by <- my_args$by
+
   # convert comparison and by into a formula
   if (!is.null(comparison)) {
     # if we have a formula as comparison, we convert it into strings in order to
@@ -163,7 +167,20 @@ get_marginalcontrasts <- function(model,
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
-  c(my_args, list(comparison = comparison, comparison_slopes = comparison_slopes))
+
+  c(
+    # the "my_args" argument, containing "by" and "contrast"
+    my_args,
+    list(
+      # the modifed comparison, as formula, which also includes "by" as group
+      comparison = comparison,
+      # the modifed comparison, as formula, excluding "by" as group
+      comparison_slopes = comparison_slopes,
+      # the original "by" value, might be required for filtering
+      # (e.g. when `by = "Species='setosa'"`)
+      original_by = original_by
+    )
+  )
 }
 
 
