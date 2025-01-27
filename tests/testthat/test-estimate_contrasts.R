@@ -4,11 +4,6 @@ skip_if_not_installed("marginaleffects")
 skip_on_os("mac")
 skip_if_not_installed("withr")
 
-# tests are written for forthcoming marginaleffects version
-# marginaleffects <= 0.24.0 still works with modelbased, but the output is
-# different, so we can't compare against the specific order of the output
-skip_if(utils::packageVersion("marginaleffects") <= "0.24.0")
-
 withr::with_options(
   list(marginaleffects_safe = FALSE),
   test_that("estimate_contrasts - Frequentist", {
