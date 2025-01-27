@@ -519,7 +519,7 @@ test_that("estimate_contrasts - contrasts for numeric by factor", {
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
   # all should return the same output
   out1 <- estimate_contrasts(fit, "c161sex", by = "c172code", backend = "marginaleffects")
-  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"), comparison = ~pairwise | c172code, backend = "marginaleffects")
+  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"), comparison = ~ pairwise | c172code, backend = "marginaleffects")
   out3 <- estimate_contrasts(fit, "c161sex", by = "c172code", comparison = ~pairwise, backend = "marginaleffects")
   expect_named(
     out1,
