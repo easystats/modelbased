@@ -13,6 +13,11 @@ get_marginalcontrasts <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
+  # temporarily overwrite settings that error on "too many" rows
+  me_option <- getOption("marginaleffects_safe")
+  options(marginaleffects_safe = FALSE)
+	on.exit(options(marginaleffects_safe = me_option))
+
 
   # First step: prepare arguments ---------------------------------------------
   # ---------------------------------------------------------------------------
@@ -58,7 +63,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
-      hypothesis = my_args$comparison,
+      hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       verbose = verbose,
       ...
@@ -144,6 +149,8 @@ get_marginalcontrasts <- function(model,
     formula_group <- my_args$by
     # compose formula
     f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+    # for contrasts of slopes, we don *not* want the group-variable in the formula
+    comparison_slopes <- stats::as.formula(f)
     # add group variable and update by
     if (!is.null(formula_group)) {
       f <- paste(f, "|", paste(formula_group, collapse = "+"))
@@ -152,11 +159,11 @@ get_marginalcontrasts <- function(model,
     comparison <- stats::as.formula(f)
   } else {
     # default to pairwise
-    comparison <- ~pairwise
+    comparison <- comparison_slopes <- ~pairwise
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
-  c(my_args, list(comparison = comparison))
+  c(my_args, list(comparison = comparison, comparison_slopes = comparison_slopes))
 }
 
 
