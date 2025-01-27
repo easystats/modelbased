@@ -16,7 +16,7 @@ get_marginalcontrasts <- function(model,
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
   options(marginaleffects_safe = FALSE)
-	on.exit(options(marginaleffects_safe = me_option))
+  on.exit(options(marginaleffects_safe = me_option))
 
 
   # First step: prepare arguments ---------------------------------------------
@@ -27,11 +27,11 @@ get_marginalcontrasts <- function(model,
     contrast <- "auto"
   }
 
-	# check whether contrasts should be made for numerics or categorical
-	model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
-	on_the_fly_factors <- attributes(model_data)$factors
+  # check whether contrasts should be made for numerics or categorical
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+  on_the_fly_factors <- attributes(model_data)$factors
 
-	# Guess arguments
+  # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
   # sanitize comparison argument, to ensure compatibility between different
