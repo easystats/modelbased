@@ -27,17 +27,17 @@ get_marginalcontrasts <- function(model,
     contrast <- "auto"
   }
 
-  # Guess arguments
+	# check whether contrasts should be made for numerics or categorical
+	model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+	on_the_fly_factors <- attributes(model_data)$factors
+
+	# Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, ...)
-
-  # check whether contrasts should be made for numerics or categorical
-  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
-  on_the_fly_factors <- attributes(model_data)$factors
+  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, ...)
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
@@ -115,10 +115,15 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
-.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, ...) {
+.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
   # init
   comparison_slopes <- NULL
   original_by <- my_args$by
+
+  # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
+  if (!is.null(my_args$by) && grepl("[^0-9A-Za-z\\.]", my_args$by)) {
+    my_args$by <- NULL
+  }
 
   # convert comparison and by into a formula
   if (!is.null(comparison)) {
