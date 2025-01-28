@@ -1,4 +1,4 @@
-# estimate_contrasts - Frequentist
+# estimate_contrasts - Frequentist, Three factors
 
     Code
       print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"),
@@ -16,7 +16,7 @@
       Predictors contrasted: vs, am
       p-values are uncorrected.
 
-# estimate_contrasts - marginaleffects
+# estimate_contrasts - marginaleffects, comparisons, validate against predict
 
     Code
       print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
@@ -131,7 +131,7 @@
       b6 = e42dep [slightly dependent], c172code [intermediate level of education]
       b3 = e42dep [moderately dependent], c172code [low level of education]
 
----
+# estimate_contrasts - marginaleffects vs emmeans
 
     Code
       estimate_contrasts(model, backend = "emmeans")
