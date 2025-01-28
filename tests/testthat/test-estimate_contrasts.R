@@ -120,6 +120,26 @@ test_that("estimate_contrasts - Frequentist, Three factors", {
 })
 
 
+test_that("estimate_contrasts - Frequentist, Three factors", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  fit <- lm(neg_c_7 ~ barthtot + e16sex * c172code * c161sex, data = efc)
+  estim <- estimate_contrasts(fit, contrast = c("c161sex", "c172code"), by = "e16sex='male'", backend = "marginaleffects")
+  expect_identical(dim(estim), c(6L, 10L))
+  expect_equal(estim$Difference, c(2.70334, 2.23511, -0.46823, 0.92477, 0.92698, 0.00221), tolerance = 1e-4)
+  expect_true(all(estim$e16sex == "male"))
+  expect_identical(
+    as.character(estim$Level1),
+    c("Male, mid", "Male, high", "Male, high", "Female, mid", "Female, high", "Female, high")
+  )
+  expect_identical(
+    as.character(estim$Level2),
+    c("Male, low", "Male, low", "Male, mid", "Female, low", "Female, low", "Female, mid")
+  )
+})
+
+
 test_that("estimate_contrasts - Frequentist, duplicated levels", {
   data(mtcars)
   # duplicated levels
