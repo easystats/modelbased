@@ -19,6 +19,11 @@ reference:
       - find_inversions
       - zero_crossings
       - smoothing
+  - title: "Sample datasets"
+    contents:
+      - coffee_data
+      - efc
+      - fish
 
 # Keep articles organized
 navbar:

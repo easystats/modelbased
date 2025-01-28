@@ -152,11 +152,11 @@
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
   if (!join_dots) {
-    do_not_join <- c(do_not_join, "pointrange")
+    do_not_join <- c(do_not_join, "pointrange", "point")
   }
 
   # Don't plot raw data if `predict` is not on the response scale
-  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectations", "invlink(link)")) {
+  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
     show_data <- FALSE
   }
 
@@ -169,7 +169,7 @@
   }
 
   # Uncertainty -----------------------------------
-  if (aes$type == "ribbon" && is.null(aes$alpha)) {
+  if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
@@ -190,6 +190,8 @@
   }
 
   # Main ----------------------------------
+
+  # connecting lines between point geoms
   if (!aes$type %in% do_not_join) {
     layers[[paste0("l", l)]] <- list(
       geom = "line",
@@ -202,7 +204,7 @@
         alpha = aes$alpha
       )
     )
-    if (!is.null(aes$color) && aes$type == "pointrange") {
+    if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
@@ -210,7 +212,7 @@
     l <- l + 1
   }
 
-
+  # points with error bars
   if (aes$type %in% c("pointrange", "grouplevel")) {
     layers[[paste0("l", l)]] <- list(
       geom = "pointrange",
@@ -236,6 +238,7 @@
     layers[[paste0("l", l)]] <- list(geom = "coord_flip")
     l <- l + 1
   }
+
 
   # grids and facets ----------------------------------
   if (!is.null(aes$facet)) {
@@ -282,8 +285,6 @@
 
 #' @keywords internal
 .visualization_recipe_rawdata <- function(x, aes) {
-  # TODO: In the main function, don't forget to NOT add raw data when `predict` is not "response"
-
   model <- attributes(x)$model
   rawdata <- insight::get_data(model, verbose = FALSE)
 

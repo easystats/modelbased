@@ -38,7 +38,7 @@ models. Can be reshaped to be of the same dimensions as the original data,
 which can be useful to add the random effects to the original data.
 }
 \examples{
-\dontshow{if (require("lme4") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # lme4 model
 data(mtcars)
 model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)

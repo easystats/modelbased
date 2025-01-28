@@ -86,17 +86,16 @@ also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"} and the inverse options \code{"revpairwise"}, \code{"revreference"},
-and \code{"revsequential"}.
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
 \item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
 side indicates the type of comparison (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, or \code{meandev}). Optionally, comparisons can be carried out
-within subsets by indicating the grouping variable after a vertical bar
-( \code{|}).
+\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
+can be carried out within subsets by indicating the grouping variable
+after a vertical bar ( \code{|}).
 }
 }}
 
@@ -109,10 +108,10 @@ predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
-are taken into account. It answers the question, "What is the predicted
-value for an 'average' observation in \emph{my data}?". It refers to randomly
-picking a subject of your sample and the result you get on average. This
-approach is the one taken by default in the \code{emmeans} package.
+are considered. It answers the question, "What is the predicted value for
+an 'average' observation in \emph{my data}?". It refers to randomly picking a
+subject of your sample and the result you get on average. This approach is
+the one taken by default in the \code{emmeans} package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -120,10 +119,10 @@ in the sample, where the sample is replicated multiple times to produce
 extrapolation to a hypothetical target population. Counterfactual
 predictions are useful, insofar as the results can also be transferred to
 other contexts (Dickerman and Hernan, 2020). It answers the question, "What
-is the predicted for the 'average' observation in \emph{the broader target
-population}?". It does not only refer to the actual data in your observed
-sample, but also "what would be if" we had more data, or if we had data
-from a different sample.
+is the predicted response value for the 'average' observation in \emph{the
+broader target population}?". It does not only refer to the actual data in
+your observed sample, but also "what would be if" we had more data, or if
+we had data from a different sample.
 }
 
 In other words, the distinction between marginalization types resides in whether
@@ -231,8 +230,9 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
+options(marginaleffects_safe = FALSE)
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
@@ -243,7 +243,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 estimate_contrasts(model)
 
-# Can also run contrasts between points of numeric
+# Can also run contrasts between points of numeric, stratified by "Species"
 estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
 
 # Or both
@@ -269,11 +269,6 @@ estimate_contrasts(model)
 data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
-
-model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-estimate_contrasts(model)
-# fix `am` at value 1
-estimate_contrasts(model, contrast = "cyl", by = "am='1'")
 
 model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)

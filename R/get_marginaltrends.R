@@ -17,8 +17,7 @@ get_marginaltrends <- function(model,
   dots <- list(...)
 
   # Guess arguments
-  trend <- .guess_marginaltrends_arguments(model, trend, by, verbose, ...)
-
+  trend <- .guess_marginaltrends_arguments(model, trend, verbose, ...)
 
   # First step: create a data grid --------------------------------------------
   # ---------------------------------------------------------------------------
@@ -93,7 +92,6 @@ get_marginaltrends <- function(model,
 #' @keywords internal
 .guess_marginaltrends_arguments <- function(model,
                                             trend = NULL,
-                                            by = NULL,
                                             verbose = TRUE,
                                             ...) {
   # Gather info

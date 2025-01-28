@@ -392,8 +392,7 @@ test_that("plots, logistic regression", {
 
 
 test_that("plots, 4-way with numeric", {
-  skip_if_not_installed("ggeffects")
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
   levels(efc$c172code) <- c("low", "mid", "high")
@@ -425,5 +424,26 @@ test_that("plots, glm logistic inside bound", {
   vdiffr::expect_doppelganger(
     "plot-logistic-bounds-1",
     plot(out1, show_data = FALSE)
+  )
+})
+
+
+test_that("plots no CI", {
+  model <- lm(Sepal.Length ~ Species * Sepal.Width, data = iris)
+
+  # Estimate means -------------------------------------
+  x <- estimate_means(model, by = "Species", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-means-no-ci-1",
+    plot(modelbased::visualisation_recipe(x, pointrange = list(geom = "point")))
+  )
+  vdiffr::expect_doppelganger(
+    "plot-means-no-ci-2",
+    plot(modelbased::visualisation_recipe(x, pointrange = list(geom = "point"), join_dots = FALSE))
+  )
+  x <- estimate_means(model, by = "Sepal.Width", backend = "marginaleffects")
+  vdiffr::expect_doppelganger(
+    "plot-means-no_ci-3",
+    plot(modelbased::visualisation_recipe(x, show_data = FALSE, ribbon = "none"))
   )
 })

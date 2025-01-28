@@ -9,6 +9,7 @@
 #' # Overall mean (close to 'mean(iris$Sepal.Length)')
 #' get_marginalmeans(model, by = NULL)
 #'
+#' \dontrun{
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' get_marginalmeans(model, by = "Petal.Width", length = 3)
 #'
@@ -18,6 +19,7 @@
 #' get_marginalmeans(model)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' }
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
@@ -41,7 +43,7 @@ get_marginalmeans <- function(model,
   # validate input
   marginalize <- insight::validate_argument(
     marginalize,
-    c("average", "population", "individual")
+    c("average", "population", "specific")
   )
 
   # Guess arguments
@@ -60,7 +62,7 @@ get_marginalmeans <- function(model,
   } else {
     # setup arguments to create the data grid
     dg_factors <- switch(marginalize,
-      individual = "reference",
+      specific = "reference",
       "all"
     )
     dg_args <- list(
@@ -169,7 +171,10 @@ get_marginalmeans <- function(model,
   # =========================================================================
   # fix term label for custom hypothesis
   if (.is_custom_comparison(comparison)) {
+    ## TODO: check which column name is used in marginaleffects update, and
+    ## keep only the new one later
     means$term <- gsub(" ", "", comparison, fixed = TRUE)
+    means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
 
   # Last step: Save information in attributes  --------------------------------

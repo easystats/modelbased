@@ -4,11 +4,10 @@ skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
 skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
-skip_if_not_installed("ggeffects")
 skip_on_cran()
 
 test_that("plots facets", {
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
 
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
@@ -88,7 +87,7 @@ test_that("plots facets", {
 
 
 test_that("plots facets", {
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
 
@@ -117,7 +116,7 @@ test_that("plots facets", {
 
 
 test_that("plots facets, emmeans", {
-  data(efc, package = "ggeffects")
+  data(efc, package = "modelbased")
   # make categorical
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "nur_pst"))
 

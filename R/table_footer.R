@@ -32,19 +32,26 @@
 
 
   # predictors controlled (non-focal terms) ----------------------------------
-
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
     # if we have values of adjusted terms, add these here
     if (all(adjusted_for %in% colnames(x))) {
+      ref_cat_data <- x
+    } else if (all(adjusted_for %in% colnames(datagrid))) {
+      ref_cat_data <- datagrid
+    } else {
+      ref_cat_data <- NULL
+    }
+    if (!is.null(ref_cat_data)) {
       # get values at which non-focal terms are hold constant
-      adjusted_values <- sapply(adjusted_for, function(i) {
-        x[[i]][1]
-      })
-      # at values to names of non-focal terms (table_footer)
-      if (is.numeric(adjusted_values)) {
-        adjusted_for <- sprintf("%s (%.2g)", adjusted_for, adjusted_values)
-      } else {
-        adjusted_for <- sprintf("%s (%s)", adjusted_for, adjusted_values)
+      adjusted_values <- lapply(adjusted_for, function(i) ref_cat_data[[i]][1])
+      # at values to names of non-focal terms (table_footer). we have to iterate
+      # over the list, because we may have different types of data
+      for (av in seq_along(adjusted_values)) {
+        if (is.numeric(adjusted_values[[av]])) {
+          adjusted_for[av] <- sprintf("%s (%.2g)", adjusted_for[av], adjusted_values[[av]])
+        } else if (identical(type, "predictions")) {
+          adjusted_for[av] <- sprintf("%s (%s)", adjusted_for[av], adjusted_values[[av]])
+        }
       }
     }
     average_string <- switch(type,
@@ -77,7 +84,7 @@
     predict <- switch(predict,
       none = "link",
       prediction = ,
-      expectations = ,
+      expectation = ,
       `invlink(link)` = "response",
       predict
     )

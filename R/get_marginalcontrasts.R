@@ -13,6 +13,11 @@ get_marginalcontrasts <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
+  # temporarily overwrite settings that error on "too many" rows
+  me_option <- getOption("marginaleffects_safe")
+  options(marginaleffects_safe = FALSE)
+  on.exit(options(marginaleffects_safe = me_option))
+
 
   # First step: prepare arguments ---------------------------------------------
   # ---------------------------------------------------------------------------
@@ -22,12 +27,17 @@ get_marginalcontrasts <- function(model,
     contrast <- "auto"
   }
 
-  # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
-
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   on_the_fly_factors <- attributes(model_data)$factors
+
+  # Guess arguments
+  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
+
+  # sanitize comparison argument, to ensure compatibility between different
+  # marginaleffects versions - newer versions don't accept a string argument,
+  # only formulas (older versions don't accept formulas)
+  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, ...)
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
@@ -53,7 +63,7 @@ get_marginalcontrasts <- function(model,
       trend = my_args$contrast,
       by = my_args$by,
       ci = ci,
-      hypothesis = comparison,
+      hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       verbose = verbose,
       ...
@@ -64,7 +74,7 @@ get_marginalcontrasts <- function(model,
       model = model,
       by = unique(c(my_args$contrast, my_args$by)),
       ci = ci,
-      hypothesis = comparison,
+      hypothesis = my_args$comparison,
       predict = predict,
       backend = "marginaleffects",
       marginalize = marginalize,
@@ -78,6 +88,7 @@ get_marginalcontrasts <- function(model,
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
   }
 
+
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -87,14 +98,114 @@ get_marginalcontrasts <- function(model,
     info = list(
       contrast = my_args$contrast,
       predict = predict,
-      comparison = comparison,
+      comparison = my_args$comparison,
       marginalize = marginalize,
       p_adjust = p_adjust
     )
   )
 
-  class(out) <- unique(c("marginaleffects_contrasts", class(out)))
+  # remove "estimate_means" class attribute
+  class(out) <- setdiff(
+    unique(c("marginaleffects_contrasts", class(out))),
+    "estimate_means"
+  )
   out
+}
+
+
+# make "comparison" argument compatible -----------------------------------
+
+.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
+  # init
+  comparison_slopes <- NULL
+  original_by <- my_args$by
+
+  # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
+  if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\._]", my_args$by))) {
+
+    ## TODO: handle with by-filters
+    # for things like estimate_contrasts(model, "gear", by = "am='1'"), we can't
+    # use `by` as group in the formula, thus we remove by here - but it's still
+    # saved in `original_by`. We could use `original_by` either for creating a
+    # data grid, or for filtering. Currently, this is not supported for
+    # `estimate_contrasts()` (but for estimate_means()).
+
+    my_args$by <- NULL
+  }
+
+  # convert comparison and by into a formula
+  if (!is.null(comparison)) {
+    # only proceed if we don't have custom comparisons
+    if (!.is_custom_comparison(comparison)) {
+      # if we have a formula as comparison, we convert it into strings in order to
+      # extract the information for "comparison" and "by", as we need for processing
+      # in modelbased.
+      if (inherits(comparison, "formula")) {
+        # check if we have grouping in the formula, indicated via "|". we split
+        # the formula into the three single components: lhs ~ rhs | group
+        f <- insight::trim_ws(unlist(strsplit(insight::safe_deparse(comparison), "[~|]")))
+        # extract formula parts
+        formula_lhs <- f[1]
+        formula_rhs <- f[2]
+        formula_group <- f[3]
+        # can be NA when no group
+        if (is.na(formula_group) || !nzchar(formula_group)) {
+          # no grouping via formula
+          formula_group <- NULL
+        } else {
+          # else, if we have groups, update by-argument
+          my_args$by <- formula_group
+        }
+      } else {
+        # sanity check for "comparison" argument
+        insight::validate_argument(comparison, .valid_hypothesis_strings())
+        formula_lhs <- "difference"
+        formula_rhs <- comparison
+      }
+      # we put "by" into the formula. user either provided "by", or we put the
+      # group variable from the formula into "by", hence, "my_args$by" definitely
+      # contains the requested groups
+      formula_group <- my_args$by
+      # compose formula
+      f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
+      # for contrasts of slopes, we don *not* want the group-variable in the formula
+      comparison_slopes <- stats::as.formula(f)
+      # add group variable and update by
+      if (!is.null(formula_group)) {
+        f <- paste(f, "|", paste(formula_group, collapse = "+"))
+        my_args$by <- formula_group
+      }
+      comparison <- stats::as.formula(f)
+    }
+  } else {
+    # default to pairwise
+    comparison <- comparison_slopes <- ~pairwise
+  }
+  # remove "by" from "contrast"
+  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+
+  c(
+    # the "my_args" argument, containing "by" and "contrast"
+    my_args,
+    list(
+      # the modifed comparison, as formula, which also includes "by" as group
+      comparison = comparison,
+      # the modifed comparison, as formula, excluding "by" as group
+      comparison_slopes = comparison_slopes,
+      # the original "by" value, might be required for filtering
+      # (e.g. when `by = "Species='setosa'"`)
+      original_by = original_by
+    )
+  )
+}
+
+
+.valid_hypothesis_strings <- function() {
+  c(
+    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
+    "revpairwise", "revreference", "revsequential", "poly", "helmert",
+    "trt_vs_ctrl"
+  )
 }
 
 

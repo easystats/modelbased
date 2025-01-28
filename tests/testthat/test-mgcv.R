@@ -22,7 +22,7 @@ test_that("estimate_contrasts - mgcv gam", {
   estim2 <- suppressMessages(estimate_contrasts(model, backend = "marginaleffects"))
   expect_identical(dim(estim2), c(3L, 9L))
   expect_named(estim2, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-  expect_equal(estim$Difference, estim2$Difference, tolerance = 1e-4)
+  expect_equal(estim$Difference, estim2$Difference * -1, tolerance = 1e-4) # switched signs
 })
 
 

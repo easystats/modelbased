@@ -118,17 +118,16 @@ also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"} and the inverse options \code{"revpairwise"}, \code{"revreference"},
-and \code{"revsequential"}.
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
 \item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
 side indicates the type of comparison (\code{difference} or \code{ratio}), the
 right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, or \code{meandev}). Optionally, comparisons can be carried out
-within subsets by indicating the grouping variable after a vertical bar
-( \code{|}).
+\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
+can be carried out within subsets by indicating the grouping variable
+after a vertical bar ( \code{|}).
 }
 }}
 
@@ -165,10 +164,10 @@ predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
-are taken into account. It answers the question, "What is the predicted
-value for an 'average' observation in \emph{my data}?". It refers to randomly
-picking a subject of your sample and the result you get on average. This
-approach is the one taken by default in the \code{emmeans} package.
+are considered. It answers the question, "What is the predicted value for
+an 'average' observation in \emph{my data}?". It refers to randomly picking a
+subject of your sample and the result you get on average. This approach is
+the one taken by default in the \code{emmeans} package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -176,10 +175,10 @@ in the sample, where the sample is replicated multiple times to produce
 extrapolation to a hypothetical target population. Counterfactual
 predictions are useful, insofar as the results can also be transferred to
 other contexts (Dickerman and Hernan, 2020). It answers the question, "What
-is the predicted for the 'average' observation in \emph{the broader target
-population}?". It does not only refer to the actual data in your observed
-sample, but also "what would be if" we had more data, or if we had data
-from a different sample.
+is the predicted response value for the 'average' observation in \emph{the
+broader target population}?". It does not only refer to the actual data in
+your observed sample, but also "what would be if" we had more data, or if
+we had data from a different sample.
 }
 
 In other words, the distinction between marginalization types resides in whether
@@ -217,6 +216,7 @@ wrappers around \code{emmeans::emmeans()} and \code{emmeans::emtrends()}.
 model <- lm(Sepal.Width ~ Species, data = iris)
 get_emcontrasts(model)
 
+\dontrun{
 # Dealing with interactions
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
@@ -229,6 +229,7 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -236,6 +237,7 @@ model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 # By default, 'by' is set to "Species"
 get_emmeans(model)
 
+\dontrun{
 # Overall mean (close to 'mean(iris$Sepal.Length)')
 get_emmeans(model, by = NULL)
 
@@ -248,14 +250,17 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_emmeans(model)
 get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_emtrends(model)
 get_emtrends(model, by = "Species")
 get_emtrends(model, by = "Petal.Length")
 get_emtrends(model, by = c("Species", "Petal.Length"))
+}
 
 model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 get_emtrends(model)
@@ -270,6 +275,7 @@ get_marginalmeans(model)
 # Overall mean (close to 'mean(iris$Sepal.Length)')
 get_marginalmeans(model, by = NULL)
 
+\dontrun{
 # One can estimate marginal means at several values of a 'modulate' variable
 get_marginalmeans(model, by = "Petal.Width", length = 3)
 
@@ -279,6 +285,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 get_marginalmeans(model)
 get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+}
 \dontshow{\}) # examplesIf}
 \dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

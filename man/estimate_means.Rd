@@ -67,10 +67,10 @@ predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
-are taken into account. It answers the question, "What is the predicted
-value for an 'average' observation in \emph{my data}?". It refers to randomly
-picking a subject of your sample and the result you get on average. This
-approach is the one taken by default in the \code{emmeans} package.
+are considered. It answers the question, "What is the predicted value for
+an 'average' observation in \emph{my data}?". It refers to randomly picking a
+subject of your sample and the result you get on average. This approach is
+the one taken by default in the \code{emmeans} package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -78,10 +78,10 @@ in the sample, where the sample is replicated multiple times to produce
 extrapolation to a hypothetical target population. Counterfactual
 predictions are useful, insofar as the results can also be transferred to
 other contexts (Dickerman and Hernan, 2020). It answers the question, "What
-is the predicted for the 'average' observation in \emph{the broader target
-population}?". It does not only refer to the actual data in your observed
-sample, but also "what would be if" we had more data, or if we had data
-from a different sample.
+is the predicted response value for the 'average' observation in \emph{the
+broader target population}?". It does not only refer to the actual data in
+your observed sample, but also "what would be if" we had more data, or if
+we had data from a different sample.
 }
 
 In other words, the distinction between marginalization types resides in whether
@@ -191,7 +191,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("emmeans", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models
@@ -212,6 +212,7 @@ estimate_means(model, by = c("Species", "Sepal.Width = c(2, 4)"))
 # `?insight::get_datagrid`.
 estimate_means(model, by = c("Species", "Sepal.Width = [fivenum]"))
 
+\dontrun{
 # same for factors: filter by specific levels
 estimate_means(model, by = "Species=c('versicolor', 'setosa')")
 estimate_means(model, by = c("Species", "Sepal.Width=0"))
@@ -232,7 +233,6 @@ means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
 plot(means) # which runs visualisation_recipe()
 standardize(means)
 
-\donttest{
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 

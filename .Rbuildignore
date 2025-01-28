@@ -5,7 +5,6 @@
 ^\.travis.yml
 ^\_pkgdown.yml
 ^LICENSE
-^data/.
 ^docs/.
 ^paper/.
 ^vignettes/d.
@@ -24,3 +23,4 @@
 ^CRAN-SUBMISSION$
 \.code-workspace$
 ^\.lintr$
+^tests/testthat/_snaps/.

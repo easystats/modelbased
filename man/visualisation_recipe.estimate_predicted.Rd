@@ -15,7 +15,7 @@
   ribbon = NULL,
   facet = NULL,
   grid = NULL,
-  join_dots = TRUE,
+  join_dots = getOption("modelbased_join_dots", TRUE),
   ...
 )
 
@@ -42,8 +42,8 @@
 \arguments{
 \item{x}{A modelbased object.}
 
-\item{show_data}{Display the "raw" data as a background to the model-based
-estimation.}
+\item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
+to the model-based estimation.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
@@ -51,7 +51,8 @@ aesthetics and parameters for the geoms (see customization example).}
 \item{join_dots}{Logical, if \code{TRUE} and for categorical focal terms in \code{by},
 dots (estimates) are connected by lines, i.e. plots will be a combination of
 dots with error bars and connecting lines. If \code{FALSE}, only dots and error
-bars are shown.}
+bars are shown. It is possible to set a global default value using \code{options()},
+e.g. \code{options("modelbased_join_dots" = FALSE)}.}
 
 \item{...}{Not used.}
 }
@@ -70,9 +71,16 @@ and \code{estimate_relation(model, by=c("Sepal.Length", "Species"))} will look d
 The automated plotting is primarily meant for convenient visual checks, but
 for publication-ready figures, we recommend re-creating the figures using the
 \code{ggplot2} package directly.
+
+There are two options to remove the confidence bands or errors bars
+from the plot. To remove error bars, simply set the \code{pointrange} geom to
+\code{point}, e.g. \code{plot(..., pointrange = list(geom = "point"))}. To remove the
+confidence bands from line geoms, use \code{ribbon = "none"}.
 }
 \examples{
-\dontshow{if (require("ggplot2") && require("emmeans") && require("see") && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+library(ggplot2)
+library(see)
 # ==============================================
 # estimate_relation, estimate_expectation, ...
 # ==============================================
@@ -85,6 +93,7 @@ plot(layers)
 # visualization_recipe() is called implicitly when you call plot()
 plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 
+\dontrun{
 # And can be used in a pipe workflow
 lm(mpg ~ qsec, data = mtcars) |>
   estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
@@ -99,7 +108,6 @@ plot(x,
 ) +
   theme_minimal() +
   labs(title = "Relationship between MPG and WT")
-
 
 # Customize raw data -------------
 
@@ -153,8 +161,9 @@ plot(x)
 data <- data.frame(vs = mtcars$vs, cyl = as.factor(mtcars$cyl))
 x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl"))
 plot(x)
+}
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("ggplot2") && require("emmeans") && require("see")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_slopes
 # ==============================================
@@ -165,6 +174,7 @@ layers <- visualisation_recipe(x)
 layers
 plot(layers)
 
+\dontrun{
 # Customize aesthetics and add horizontal line and theme
 layers <- visualisation_recipe(x, pointrange = list(size = 2, linewidth = 2))
 plot(layers) +
@@ -179,11 +189,13 @@ plot(visualisation_recipe(x))
 model <- lm(Petal.Length ~ Species * poly(Sepal.Width, 3), data = iris)
 x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Species"))
 plot(visualisation_recipe(x))
+}
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("see") && require("lme4") && require("emmeans")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # ==============================================
 # estimate_grouplevel
 # ==============================================
+\dontrun{
 data <- lme4::sleepstudy
 data <- rbind(data, data)
 data$Newfactor <- rep(c("A", "B", "C", "D"))
@@ -206,5 +218,6 @@ plot(x) +
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject) + (1 | Newfactor), data = data)
 x <- estimate_grouplevel(model)
 plot(x)
+}
 \dontshow{\}) # examplesIf}
 }

@@ -49,7 +49,7 @@ standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
     }
 
     # Standardize relevant cols
-    for (col in c("Difference", "Coefficient", "SE", "MAD", "CI_low", "CI_high")) {
+    for (col in c("Difference", "Ratio", "Coefficient", "SE", "MAD", "CI_low", "CI_high")) {
       if (col %in% names(x)) {
         x[col] <- x[[col]] / disp
       }

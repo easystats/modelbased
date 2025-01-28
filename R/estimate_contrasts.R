@@ -25,23 +25,23 @@
 #'   also [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"` and the inverse options `"revpairwise"`, `"revreference"`,
-#'     and `"revsequential"`.
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
 #'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
 #'     side indicates the type of comparison (`difference` or `ratio`), the
 #'     right-hand side determines the pairs of estimates to compare (`reference`,
-#'     `sequential`, or `meandev`). Optionally, comparisons can be carried out
-#'     within subsets by indicating the grouping variable after a vertical bar
-#'     ( `|`).
+#'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
+#'     can be carried out within subsets by indicating the grouping variable
+#'     after a vertical bar ( `|`).
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
+#' options(marginaleffects_safe = FALSE)
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
@@ -52,7 +52,7 @@
 #' # By default: selects first factor
 #' estimate_contrasts(model)
 #'
-#' # Can also run contrasts between points of numeric
+#' # Can also run contrasts between points of numeric, stratified by "Species"
 #' estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
 #'
 #' # Or both
@@ -78,11 +78,6 @@
 #' data <- mtcars
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
-#'
-#' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#' estimate_contrasts(model)
-#' # fix `am` at value 1
-#' estimate_contrasts(model, contrast = "cyl", by = "am='1'")
 #'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
@@ -149,7 +144,7 @@ estimate_contrasts <- function(model,
 
   # Table formatting
   attr(out, "table_title") <- c(ifelse(
-    marginalize == "individual",
+    marginalize == "specific",
     "Model-based Contrasts Analysis",
     "Marginal Contrasts Analysis"
   ), "blue")
