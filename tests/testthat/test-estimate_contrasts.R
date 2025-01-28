@@ -281,6 +281,8 @@ test_that("estimate_contrasts - ratios", {
   estim <- estimate_contrasts(model, "Species", comparison = ratio ~ pairwise, backend = "marginaleffects")
   expect_equal(estim$Ratio, c(5.39024, 8.23577, 1.5279), tolerance = 1e-4)
   expect_identical(dim(estim), c(3L, 9L))
+  estim2 <- marginaleffects::avg_predictions(model, by = "Species", hypothesis = ratio ~ pairwise)
+  expect_equal(estim$Ratio, estim2$estimate, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 
