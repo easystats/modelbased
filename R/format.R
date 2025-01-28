@@ -165,7 +165,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
     if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
-      # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\.]")[[1]][1]
+      # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\._]")[[1]][1]
       by[startsWith(by, i)] <- i
     }
     if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
