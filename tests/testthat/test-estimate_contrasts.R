@@ -105,12 +105,9 @@ test_that("estimate_contrasts - Frequentist, Three factors", {
   # estim <- suppressMessages(estimate_contrasts(model, by = "all", backend = "marginaleffects"))
   # expect_identical(dim(estim), c(12L, 11L))
 
-  ## TODO: enable when by = "gear='5'" works again
-  # estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
-  # expect_identical(dim(estim), c(6L, 9L))
-  # expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
-  # expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333), tolerance = 1e-4)
-  # expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
+  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
+  expect_identical(dim(estim), c(1L, 10L))
+  expect_equal(estim$Difference, 6.98333, tolerance = 1e-4)
 
   estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 10L))
