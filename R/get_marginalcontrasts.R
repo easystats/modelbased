@@ -83,6 +83,11 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+  # filter results
+  if (!is.null(my_args$by_filter) && all(my_args$by %in% colnames(out))) {
+    out <- out[out[[my_args$by]] == my_args$by_filter, ]
+  }
+
   # adjust p-values
   if (!insight::model_info(model)$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
@@ -121,7 +126,7 @@ get_marginalcontrasts <- function(model,
   original_by <- my_args$by
 
   # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
-  if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\._]", my_args$by))) {
+  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # look for filter values
     filter_value <- insight::trim_ws(unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE))
     if (length(filter_value) > 1) {
