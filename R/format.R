@@ -165,6 +165,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
     if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
+      # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\.]")[[1]][1]
       by[startsWith(by, i)] <- i
     }
     if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
@@ -177,8 +178,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # Column name for coefficient - fix needed for contrasting slopes and ratios
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
+  separator <- "-"
+
+  # for ratios, we want different column name, and we need to set the separator
   if (is_ratio_comparison) {
     colnames(x)[colnames(x) == "Difference"] <- "Ratio"
+    separator <- "/"
   }
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
@@ -190,21 +195,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
 
-    if (is_ratio_comparison) {
-      params <- as.data.frame(do.call(
-        rbind,
-        lapply(x$Parameter, function(s) {
-          value_pairs <- insight::trim_ws(unlist(strsplit(s, "/", fixed = TRUE), use.names = FALSE))
-          gsub("(", "", gsub(")", "", value_pairs, fixed = TRUE), fixed = TRUE)
-        })
-      ))
-    } else {
-      # split parameter column into comparison groups.
-      params <- as.data.frame(do.call(
-        rbind,
-        lapply(x$Parameter, .split_at_minus_outside_parentheses)
-      ))
-    }
+    params <- as.data.frame(do.call(
+      rbind,
+      lapply(x$Parameter, .split_at_minus_outside_parentheses, separator = separator)
+    ))
 
     # we *could* stop here and simply rename the split columns, but then
     # we cannot filter by `by` - thus, we go on, extract all single levels,
@@ -559,40 +553,46 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 # parentheses
 
 #' @keywords internal
-.split_at_minus_outside_parentheses <- function(input_string) {
-  pattern <- "\\(([^()]*)\\)|-" # find all the parentheses and the -
-  matches <- gregexpr(pattern, input_string, perl = TRUE)
-  match_positions <- matches[[1]]
-  match_lengths <- attr(matches[[1]], "match.length")
+.split_at_minus_outside_parentheses <- function(input_string, separator = "-") {
+  # we split at "-" for differences, and at "/" for ratios
+  if (identical(separator, "/")) {
+    parts <- unlist(strsplit(input_string, "/", fixed = TRUE), use.names = FALSE)
+  } else {
+    pattern <- "\\(([^()]*)\\)|-" # find all the parentheses and the -
+    matches <- gregexpr(pattern, input_string, perl = TRUE)
+    match_positions <- matches[[1]]
+    match_lengths <- attr(matches[[1]], "match.length")
 
-  split_positions <- 0
-  for (i in seq_along(match_positions)) {
-    if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
-      inside_parentheses <- FALSE
-      for (j in seq_along(match_positions)) {
-        if (i != j && match_positions[i] > match_positions[j] && match_positions[i] < (match_positions[j] + match_lengths[j])) {
-          inside_parentheses <- TRUE
-          break
+    split_positions <- 0
+    for (i in seq_along(match_positions)) {
+      if (substring(input_string, match_positions[i], match_positions[i]) == "-") {
+        inside_parentheses <- FALSE
+        for (j in seq_along(match_positions)) {
+          if (i != j && match_positions[i] > match_positions[j] && match_positions[i] < (match_positions[j] + match_lengths[j])) {
+            inside_parentheses <- TRUE
+            break
+          }
+        }
+        if (!inside_parentheses) {
+          split_positions <- c(split_positions, match_positions[i])
         }
       }
-      if (!inside_parentheses) {
-        split_positions <- c(split_positions, match_positions[i])
-      }
+    }
+    split_positions <- c(split_positions, nchar(input_string) + 1)
+
+    parts <- NULL
+    for (i in 1:(length(split_positions) - 1)) {
+      parts <- c(
+        parts,
+        substring(
+          input_string,
+          split_positions[i] + 1,
+          split_positions[i + 1] - 1
+        )
+      )
     }
   }
-  split_positions <- c(split_positions, nchar(input_string) + 1)
 
-  parts <- NULL
-  for (i in 1:(length(split_positions) - 1)) {
-    parts <- c(
-      parts,
-      substring(
-        input_string,
-        split_positions[i] + 1,
-        split_positions[i + 1] - 1
-      )
-    )
-  }
   parts <- insight::trim_ws(parts)
   gsub("(", "", gsub(")", "", parts, fixed = TRUE), fixed = TRUE)
 }

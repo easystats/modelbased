@@ -122,6 +122,14 @@ get_marginalcontrasts <- function(model,
 
   # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
   if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\.]", my_args$by))) {
+
+    ## TODO: handle with by-filters
+    # for things like estimate_contrasts(model, "gear", by = "am='1'"), we can't
+    # use `by` as group in the formula, thus we remove by here - but it's still
+    # saved in `original_by`. We could use `original_by` either for creating a
+    # data grid, or for filtering. Currently, this is not supported for
+    # `estimate_contrasts()` (but for estimate_means()).
+
     my_args$by <- NULL
   }
 
