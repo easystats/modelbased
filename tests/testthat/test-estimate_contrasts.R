@@ -275,6 +275,15 @@ test_that("estimate_contrasts - p.adjust", {
 })
 
 
+test_that("estimate_contrasts - ratios", {
+  data(iris)
+  model <- lm(Petal.Width ~ Species, data = iris)
+  estim <- estimate_contrasts(model, "Species", comparison = ratio ~ pairwise, backend = "marginaleffects")
+  expect_equal(estim$Ratio, c(5.39024, 8.23577, 1.5279), tolerance = 1e-4)
+  expect_identical(dim(estim), c(3L, 9L))
+})
+
+
 test_that("estimate_contrasts - dfs", {
   skip_on_cran()
   skip_if_not_installed("lme4")
@@ -435,6 +444,7 @@ test_that("estimate_contrasts - different options for comparison", {
   )
   expect_equal(out$Difference, c(0.35, -0.8, -0.35), tolerance = 1e-3)
 })
+
 
 skip_on_os(c("mac", "linux"))
 
