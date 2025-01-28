@@ -123,10 +123,10 @@ get_marginalcontrasts <- function(model,
   # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
   if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\._]", my_args$by))) {
     # look for filter values
-    filter_value <- unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE)
+    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE))
     if (length(filter_value) > 1) {
       # parse filter value and save for later user
-      by_filter <- eval(str2lang(filter_value[2]))
+      by_filter <- .safe(eval(str2lang(filter_value[2])))
       # copy variable
       my_args$by <- filter_value[1]
     }
