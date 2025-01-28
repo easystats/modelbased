@@ -121,7 +121,7 @@ get_marginalcontrasts <- function(model,
   original_by <- my_args$by
 
   # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
-  if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\.]", my_args$by))) {
+  if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\._]", my_args$by))) {
 
     ## TODO: handle with by-filters
     # for things like estimate_contrasts(model, "gear", by = "am='1'"), we can't
