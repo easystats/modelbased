@@ -1,10 +1,20 @@
 #' @export
 summary.estimate_slopes <- function(object, ...) {
   out <- as.data.frame(object)
+  by <- attributes(object)$by
 
   # Add "Confidence" col based on the sig index present in the data
   out$Confidence <- .estimate_slopes_significance(out, ...)
   out$Direction <- .estimate_slopes_direction(out, ...)
+
+  if (length(by) > 1) {
+    parts <- split(out, out[[by[2]]])
+    out <- do.call(rbind, lapply(parts, .estimate_slope_parts, by = by[1]))
+    out <- datawizard::rownames_as_column(out, "Group")
+    out$Group <- gsub("\\.\\d+$", "", out$Group)
+  } else {
+    out <- .estimate_slope_parts(out, by)
+  }
 
   attributes(out) <- utils::modifyList(attributes(object), attributes(out))
   class(out) <- c("summary_estimate_slopes", "data.frame")
@@ -23,6 +33,36 @@ summary.reshape_grouplevel <- function(object, ...) {
 
 
 # Utilities ===============================================================
+
+
+.estimate_slope_parts <- function(out, by) {
+  # filter significant values only
+#   out <- out[out$Confidence == "Significant", ]
+
+  # mark all "changes" from negative to positive and vice versa
+  index <- 1
+  out$switch <- index
+  index <- index + 1
+
+  for (i in 2:nrow(out)) {
+    if (out$Direction[i] != out$Direction[i - 1] || out$Confidence[i] != out$Confidence[i - 1]) {
+      out$switch[i:nrow(out)] <- index
+      index <- index + 1
+    }
+  }
+
+  # split into "switches"
+  parts <- split(out, out$switch)
+
+  do.call(rbind, lapply(parts, function(i) {
+    data.frame(
+      Start = i[[by]][1],
+      End  = i[[by]][nrow(i)],
+      Direction = i$Direction[1],
+      Confidence = i$Confidence[1]
+    )
+  }))
+}
 
 
 .estimate_slopes_direction <- function(data, ...) {
