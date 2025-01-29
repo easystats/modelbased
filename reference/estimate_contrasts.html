@@ -311,7 +311,6 @@ condition (<code>using [estimate_slopes]</code>).</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>marginaleffects_safe <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># Basic usage</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
@@ -350,7 +349,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Can also run contrasts between points of numeric, stratified by "Species"</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, by <span class="op">=</span> <span class="st">"Species"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, by <span class="op">=</span> <span class="st">"Species"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | Level2     | Difference |   SE |        95% CI |     t |     p</span>
@@ -548,15 +547,42 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | Level2     |   BF | Median |         95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | Level2     | Petal.Length |   BF | Median |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         1.00 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         1.00 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         1.00 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         1.66 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         1.66 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         1.66 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         2.31 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         2.31 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         2.31 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         2.97 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         2.97 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         2.97 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         3.62 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         3.62 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         3.62 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         4.28 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         4.28 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         4.28 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         4.93 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         4.93 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         4.93 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         5.59 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         5.59 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         5.59 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         6.24 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         6.24 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         6.24 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         6.90 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         6.90 | 1.00 |  -2.15 | [-2.68, -1.63]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         6.90 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors averaged: Petal.Width (1.2), Petal.Length (3.8)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors averaged: Petal.Width (1.2)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
