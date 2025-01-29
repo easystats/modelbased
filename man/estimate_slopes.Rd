@@ -163,6 +163,7 @@ slopes <- estimate_slopes(model,
   trend = "Petal.Length",
   by = c("Petal.Length", "Species"), length = 20
 )
+summary(slopes)
 plot(slopes)
 }
 \dontshow{\}) # examplesIf}
