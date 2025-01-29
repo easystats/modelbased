@@ -101,10 +101,10 @@
       Predictors averaged: sex
       p-values are uncorrected.
       Parameters:
-      b2 = time [morning], coffee [coffee]
+      b2 = time [noon], coffee [coffee]
       b1 = time [morning], coffee [coffee]
       b4 = time [morning], coffee [control]
-      b3 = time [morning], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
 
 ---
 
@@ -123,8 +123,8 @@
       Predictors averaged: sex
       p-values are uncorrected.
       Parameters:
-      b5 = time [noon], coffee [coffee]
-      b3 = time [morning], coffee [control]
+      b5 = time [noon], coffee [control]
+      b3 = time [afternoon], coffee [coffee]
 
 ---
 
@@ -143,8 +143,8 @@
       Predictors averaged: c12hour (42), barthtot (65), c161sex
       p-values are uncorrected.
       Parameters:
-      b6 = e42dep [independent], c172code [high level of education]
-      b3 = e42dep [independent], c172code [intermediate level of education]
+      b6 = e42dep [slightly dependent], c172code [intermediate level of education]
+      b3 = e42dep [moderately dependent], c172code [low level of education]
 
 # estimate_contrasts - marginaleffects vs emmeans
 

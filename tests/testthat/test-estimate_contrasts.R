@@ -406,6 +406,8 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
   expect_snapshot(estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects"))
+  out <- estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects")
+  expect_equal(out$Difference, -0.3352769, tolerance = 1e-4)
 })
 
 
