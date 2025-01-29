@@ -11,6 +11,8 @@ summary.estimate_slopes <- function(object, verbose = TRUE, ...) {
   out$Confidence <- .estimate_slopes_significance(out, ...)
   out$Direction <- .estimate_slopes_direction(out, ...)
 
+  # if we have more than one variable in `by`, group result table and
+  # add group name as separate column
   if (length(by) > 1) {
     parts <- split(out, out[[by[2]]])
     out <- do.call(rbind, lapply(parts, .estimate_slope_parts, by = by[1]))
@@ -40,9 +42,6 @@ summary.reshape_grouplevel <- function(object, ...) {
 
 
 .estimate_slope_parts <- function(out, by) {
-  # filter significant values only
-#   out <- out[out$Confidence == "Significant", ]
-
   # mark all "changes" from negative to positive and vice versa
   index <- 1
   out$switch <- index
