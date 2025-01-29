@@ -31,14 +31,18 @@ get_marginalmeans <- function(model,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
-  dots <- list(...)
-  comparison <- dots$hypothesis
 
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
     predict <- transform
   }
+
+  # First step: process arguments --------------------------------------------
+  # --------------------------------------------------------------------------
+
+  dots <- list(...)
+  comparison <- dots$hypothesis
 
   # validate input
   marginalize <- insight::validate_argument(
@@ -53,7 +57,7 @@ get_marginalmeans <- function(model,
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
 
-  # First step: create a data grid --------------------------------------------
+  # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
 
   # exception: by = NULL computes overall mean
@@ -95,8 +99,8 @@ get_marginalmeans <- function(model,
   }
 
 
-  # Second step: prepare arguments for marginaleffects ------------------------
-  # ---------------------------------------------------------------------------
+  # Third step: prepare arguments for marginaleffects ------------------------
+  # --------------------------------------------------------------------------
 
   # model df
   dof <- insight::get_df(model, type = "wald", verbose = FALSE)
@@ -146,13 +150,12 @@ get_marginalmeans <- function(model,
   # the b-values internally, because we have a different sorting in our output
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
-  if (!is.null(comparison)) {
-    # create a data frame with the same sorting as the data grid, but only
-    # for the focal terms
-    custom_grid <- data.frame(expand.grid(
-      lapply(datagrid[datagrid_info$at_specs$varname], unique)
-    ))
-    dots$hypothesis <- .reorder_custom_hypothesis(comparison, custom_grid)
+  if (.is_custom_comparison(comparison)) {
+    dots$hypothesis <- .reorder_custom_hypothesis(
+      comparison,
+      datagrid,
+      focal = datagrid_info$at_specs$varname
+    )
   }
 
   # cleanup
@@ -165,7 +168,7 @@ get_marginalmeans <- function(model,
   }
 
 
-  # Third step: compute marginal means ----------------------------------------
+  # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # we can use this function for contrasts as well,
@@ -178,7 +181,7 @@ get_marginalmeans <- function(model,
   # fix term label for custom hypothesis
   if (.is_custom_comparison(comparison)) {
     ## TODO: check which column name is used in marginaleffects update, and
-    ## keep only the new one later
+    ## keep only the new one later - or for safety, we can keep both code lines
     means$term <- gsub(" ", "", comparison, fixed = TRUE)
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
