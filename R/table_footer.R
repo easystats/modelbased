@@ -103,8 +103,12 @@
     # datagrid contains all parameters, so we just need to find out the rows
     # and combine column names with row values
     if (!is.null(datagrid)) {
+      # extract unique values
+      custom_grid <- data.frame(expand.grid(
+        lapply(datagrid[info$focal_terms], unique)
+      ))
       # transpose, so we can easier extract information
-      transposed_dg <- t(datagrid[info$focal_terms])
+      transposed_dg <- t(custom_grid[info$focal_terms])
       # interate over all parameters and create labels with proper names
       hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
         rows <- as.numeric(sub(".", "", i))
