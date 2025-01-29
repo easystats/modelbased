@@ -37,6 +37,11 @@ print.summary_estimate_slopes <- function(x, verbose = TRUE, ...) {
   trend <- attributes(x)$trend
   response <- attributes(x)$response
 
+  ## TODO: make by > 1 work
+  if (length(by) > 1) {
+    insight::format_error("`summary()` not implemented for more than one stratification variable in `by` yet.")
+  }
+
   if (verbose && nrow(x) < 50) {
     insight::format_alert("There might be too few data to accurately determine intervals. Consider setting `length = 100` (or larger) in your call to `estimate_slopes()`.") # nolint
   }

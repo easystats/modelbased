@@ -107,7 +107,6 @@
 #'   trend = "Petal.Length",
 #'   by = c("Petal.Length", "Species"), length = 20
 #' )
-#' summary(slopes)
 #' plot(slopes)
 #' }
 #' @export
