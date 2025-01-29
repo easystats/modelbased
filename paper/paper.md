@@ -49,6 +49,10 @@ The two probably most popular R packages for extracting these quantities of inte
 
 # Key concepts
 
+- Conceptual differences between predictions and marginal means?
+- Concept of focal and non-focal terms?
+- For marginalization, we can refer to non-focal terms, meaning it would be good to have the concept introduced somewhere
+
 ## Predictions
 
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
@@ -77,7 +81,7 @@ For instance, `estimate_relation(..., predict="link")` will be equivalent to `es
 These functions belong to the same family, and their relevance depends on the model and the research question.
 
 
-## Marginal effects
+## Marginal means and effects
 
 The concept of "marginal" in statistical modeling refers to the effect of one variable when all other variables are held constant at specific values
 (e.g., their reference value, or their empirical or theoretical average).
@@ -85,9 +89,9 @@ This is crucial for interpreting how individual predictors influence the respons
 
 - `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
 - `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
-- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for a one-unit change in a predictor, holding all other predictors constant. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
+- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
 
-The modelbased package simplifies the extraction of these effects, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
+The modelbased package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 [details about types of marginalization]
 
