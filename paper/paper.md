@@ -41,13 +41,10 @@ The replication crisis (REF) and methodological revolution(s) (Makowski & Waggon
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Existing packages are dedicated to model parameters (e.g., the `parameters` package; REF), predictive performance (e.g., the `performance` package; REF) or effect importance (e.g., the `effectsize` package; REF).
 
 **But there is even more power hidden inside models!**
-Their fundamental nature - being a statistical link between an outcome $y$ and predictor variables $X$ - enables the generation predictions for any combination of predictors - typically observed combinations, but often unobserved (counter-factual) ones.
-These predictions, in turn, can be used to estimate values and effects any levels, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
+Their fundamental nature - being a statistical link between an outcome $y$ and predictor variables $X$ - enables the generation of predictions for any combination of predictors - typically observed combinations, but often unobserved (counter-factual) ones.
+These predictions, in turn, can be used to estimate expected values of the outcome  and predictor effects of any levels, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
 
-This currently underused potential is what the `modelbased` package aims to unlock.
-It provides a unified interface to extract marginal means, marginal effects, and model predictions from a wide range of statistical models.
-It is built on top of the `emmeans` (REF) and `marginaleffects` (REF) packages, which are the two most popular packages for extracting these quantities of interest from statistical models.
-In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
+The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` (REF) and `marginaleffects` (REF). These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. It is built on top of the two aforementioned `emmeans` and `marginaleffects` packages. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
 
 
 # Key concepts
