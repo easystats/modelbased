@@ -103,7 +103,13 @@ get_marginalmeans <- function(model,
 
   # sanity check
   if (!is.null(datagrid)) {
-    datagrid <- as.data.frame(datagrid)
+    ## FIXME: we have to sort the rows of the data grid
+    # guess it's a bug, see
+    # https://github.com/vincentarelbundock/marginaleffects/issues/1374
+    datagrid <- datawizard::data_arrange(
+      as.data.frame(datagrid),
+      select = datagrid_info$at_specs$varname
+    )
   }
 
   # setup arguments
