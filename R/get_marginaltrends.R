@@ -112,10 +112,13 @@ get_marginaltrends <- function(model,
     }
   }
   if (length(trend) > 1) {
-    trend <- trend[1]
     if (verbose) {
-      insight::format_alert(paste0("More than one numeric variable was selected for slope estimation. Keeping only ", trend[1], ".")) # nolint
+      insight::format_alert(paste0(
+        "More than one numeric variable was selected for slope estimation. Keeping only `", trend[1], "`. ", #nolint
+        "If you want to estimate the slope of `", trend[1], "` at different values of `", trend[2], "`, use `by=\"", trend[2], "\"` instead." # nolint
+      ))
     }
+    trend <- trend[1]
   }
 
   trend
