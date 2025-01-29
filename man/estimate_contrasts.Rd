@@ -232,7 +232,6 @@ condition (\code{using [estimate_slopes]}).
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-options(marginaleffects_safe = FALSE)
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
@@ -244,7 +243,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 estimate_contrasts(model)
 
 # Can also run contrasts between points of numeric, stratified by "Species"
-estimate_contrasts(model, contrast = "Petal.Width", by = "Species", length = 4)
+estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 
 # Or both
 estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)

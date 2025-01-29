@@ -83,6 +83,11 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+  # filter results
+  if (!is.null(my_args$by_filter) && all(my_args$by %in% colnames(out))) {
+    out <- out[out[[my_args$by]] == my_args$by_filter, ]
+  }
+
   # adjust p-values
   if (!insight::model_info(model)$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
@@ -117,19 +122,19 @@ get_marginalcontrasts <- function(model,
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
   # init
-  comparison_slopes <- NULL
+  comparison_slopes <- by_filter <- NULL
   original_by <- my_args$by
 
   # make sure "by" is a valid column name, and no filter-directive, like "Species='setosa'".
-  if (!is.null(my_args$by) && any(grepl("[^0-9A-Za-z\\._]", my_args$by))) {
-    ## TODO: handle with by-filters
-    # for things like estimate_contrasts(model, "gear", by = "am='1'"), we can't
-    # use `by` as group in the formula, thus we remove by here - but it's still
-    # saved in `original_by`. We could use `original_by` either for creating a
-    # data grid, or for filtering. Currently, this is not supported for
-    # `estimate_contrasts()` (but for estimate_means()).
-
-    my_args$by <- NULL
+  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+    # look for filter values
+    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE))
+    if (length(filter_value) > 1) {
+      # parse filter value and save for later user
+      by_filter <- .safe(eval(str2lang(filter_value[2])))
+      # copy variable
+      my_args$by <- filter_value[1]
+    }
   }
 
   # convert comparison and by into a formula
@@ -193,7 +198,9 @@ get_marginalcontrasts <- function(model,
       comparison_slopes = comparison_slopes,
       # the original "by" value, might be required for filtering
       # (e.g. when `by = "Species='setosa'"`)
-      original_by = original_by
+      original_by = original_by,
+      # the filter-value, in case `by` indicated any filtering
+      by_filter = by_filter
     )
   )
 }

@@ -1,4 +1,4 @@
-# estimate_contrasts - Frequentist
+# estimate_contrasts - Frequentist, Three factors 1
 
     Code
       print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"),
@@ -6,17 +6,32 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | gear | Difference |   SE |         95% CI | t(25) |     p
-      -----------------------------------------------------------------------------------
-      vs 0, am 1 | vs 0, am 0 | 3    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 | 0.006
-      vs 1, am 0 | vs 0, am 1 | 4    |       0.05 | 3.13 | [-6.40,  6.50] |  0.02 | 0.987
-      vs 1, am 1 | vs 1, am 0 | 5    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 | 0.006
+      Level1     | Level2     | gear | Difference |   SE |         95% CI | t(25) |      p
+      ------------------------------------------------------------------------------------
+      vs 0, am 1 | vs 0, am 0 | 3    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
+      vs 1, am 0 | vs 0, am 0 | 3    |       5.28 | 2.33 | [ 0.47, 10.09] |  2.26 |  0.033
+      vs 1, am 1 | vs 0, am 0 | 3    |      12.27 | 3.30 | [ 5.47, 19.07] |  3.71 |  0.001
+      vs 1, am 0 | vs 0, am 1 | 3    |      -1.70 | 3.30 | [-8.50,  5.10] | -0.51 |  0.611
+      vs 1, am 1 | vs 0, am 1 | 3    |       5.28 | 2.33 | [ 0.47, 10.09] |  2.26 |  0.033
+      vs 1, am 1 | vs 1, am 0 | 3    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
+      vs 0, am 1 | vs 0, am 0 | 4    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
+      vs 1, am 0 | vs 0, am 0 | 4    |       7.03 | 2.95 | [ 0.95, 13.12] |  2.38 |  0.025
+      vs 1, am 1 | vs 0, am 0 | 4    |      14.02 | 4.31 | [ 5.15, 22.88] |  3.26 |  0.003
+      vs 1, am 0 | vs 0, am 1 | 4    |       0.05 | 3.13 | [-6.40,  6.50] |  0.02 |  0.987
+      vs 1, am 1 | vs 0, am 1 | 4    |       7.03 | 2.95 | [ 0.95, 13.12] |  2.38 |  0.025
+      vs 1, am 1 | vs 1, am 0 | 4    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
+      vs 0, am 1 | vs 0, am 0 | 5    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
+      vs 1, am 0 | vs 0, am 0 | 5    |      11.27 | 4.04 | [ 2.95, 19.60] |  2.79 |  0.010
+      vs 1, am 1 | vs 0, am 0 | 5    |      18.26 | 4.67 | [ 8.64, 27.88] |  3.91 | < .001
+      vs 1, am 0 | vs 0, am 1 | 5    |       4.29 | 4.67 | [-5.33, 13.91] |  0.92 |  0.367
+      vs 1, am 1 | vs 0, am 1 | 5    |      11.27 | 4.04 | [ 2.95, 19.60] |  2.79 |  0.010
+      vs 1, am 1 | vs 1, am 0 | 5    |       6.98 | 2.33 | [ 2.17, 11.79] |  2.99 |  0.006
       
       Variable predicted: mpg
       Predictors contrasted: vs, am
       p-values are uncorrected.
 
-# estimate_contrasts - marginaleffects
+# estimate_contrasts - marginaleffects, comparisons, validate against predict
 
     Code
       print(estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects",
@@ -131,7 +146,7 @@
       b6 = e42dep [slightly dependent], c172code [intermediate level of education]
       b3 = e42dep [moderately dependent], c172code [low level of education]
 
----
+# estimate_contrasts - marginaleffects vs emmeans
 
     Code
       estimate_contrasts(model, backend = "emmeans")
@@ -567,4 +582,112 @@
       Predictors averaged: cover (8.7e-11), site
       p-values are uncorrected.
       Contrasts are on the response-scale.
+
+# estimate_contrasts - examples from docs work as intendec
+
+    Code
+      print(estimate_contrasts(model, contrast = "Petal.Width", by = "Species"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     | Difference |   SE |        95% CI |     t |     p
+      ---------------------------------------------------------------------------
+      versicolor | setosa     |       0.22 | 0.46 | [-0.69, 1.12] |  0.47 | 0.639
+      virginica  | setosa     |      -0.21 | 0.44 | [-1.06, 0.65] | -0.47 | 0.637
+      virginica  | versicolor |      -0.42 | 0.27 | [-0.95, 0.10] | -1.58 | 0.114
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Petal.Width
+      Predictors averaged: Petal.Width (1.2)
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1          | Level2          | Difference |   SE |         95% CI | t(144) |      p
+      ----------------------------------------------------------------------------------------
+      setosa, 2.5     | setosa, 0.1     |       2.01 | 0.98 | [ 0.08,  3.94] |   2.06 |  0.041
+      versicolor, 0.1 | setosa, 0.1     |      -1.83 | 0.28 | [-2.38, -1.28] |  -6.55 | < .001
+      versicolor, 2.5 | setosa, 0.1     |       0.70 | 0.27 | [ 0.17,  1.23] |   2.61 |  0.010
+      virginica, 0.1  | setosa, 0.1     |      -1.55 | 0.31 | [-2.17, -0.93] |  -4.95 | < .001
+      virginica, 2.5  | setosa, 0.1     |      -0.03 | 0.11 | [-0.25,  0.19] |  -0.29 |  0.773
+      versicolor, 0.1 | setosa, 2.5     |      -3.84 | 0.96 | [-5.73, -1.95] |  -4.01 | < .001
+      versicolor, 2.5 | setosa, 2.5     |      -1.31 | 0.95 | [-3.19,  0.58] |  -1.37 |  0.172
+      virginica, 0.1  | setosa, 2.5     |      -3.56 | 0.97 | [-5.47, -1.65] |  -3.68 | < .001
+      virginica, 2.5  | setosa, 2.5     |      -2.04 | 0.92 | [-3.86, -0.22] |  -2.21 |  0.028
+      versicolor, 2.5 | versicolor, 0.1 |       2.53 | 0.52 | [ 1.50,  3.56] |   4.86 | < .001
+      virginica, 0.1  | versicolor, 0.1 |       0.28 | 0.41 | [-0.52,  1.08] |   0.69 |  0.492
+      virginica, 2.5  | versicolor, 0.1 |       1.80 | 0.28 | [ 1.24,  2.35] |   6.35 | < .001
+      virginica, 0.1  | versicolor, 2.5 |      -2.25 | 0.40 | [-3.04, -1.46] |  -5.64 | < .001
+      virginica, 2.5  | versicolor, 2.5 |      -0.73 | 0.27 | [-1.27, -0.20] |  -2.70 |  0.008
+      virginica, 2.5  | virginica, 0.1  |       1.52 | 0.37 | [ 0.77,  2.26] |   4.04 | < .001
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Species, Petal.Width
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)")),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1        | Level2        | Difference |   SE |         95% CI | t(144) |      p
+      ------------------------------------------------------------------------------------
+      setosa, 2     | setosa, 1     |       0.84 | 0.41 | [ 0.03,  1.64] |   2.06 |  0.041
+      versicolor, 1 | setosa, 1     |      -1.63 | 0.32 | [-2.27, -1.00] |  -5.09 | < .001
+      versicolor, 2 | setosa, 1     |      -0.58 | 0.35 | [-1.26,  0.10] |  -1.68 |  0.096
+      virginica, 1  | setosa, 1     |      -1.73 | 0.35 | [-2.43, -1.04] |  -4.93 | < .001
+      virginica, 2  | setosa, 1     |      -1.10 | 0.31 | [-1.72, -0.48] |  -3.52 | < .001
+      versicolor, 1 | setosa, 2     |      -2.47 | 0.72 | [-3.89, -1.05] |  -3.43 | < .001
+      versicolor, 2 | setosa, 2     |      -1.42 | 0.73 | [-2.86,  0.03] |  -1.94 |  0.055
+      virginica, 1  | setosa, 2     |      -2.57 | 0.73 | [-4.02, -1.12] |  -3.50 | < .001
+      virginica, 2  | setosa, 2     |      -1.94 | 0.72 | [-3.35, -0.52] |  -2.71 |  0.008
+      versicolor, 2 | versicolor, 1 |       1.05 | 0.22 | [ 0.62,  1.48] |   4.86 | < .001
+      virginica, 1  | versicolor, 1 |      -0.10 | 0.19 | [-0.47,  0.27] |  -0.54 |  0.589
+      virginica, 2  | versicolor, 1 |       0.53 | 0.09 | [ 0.35,  0.71] |   5.72 | < .001
+      virginica, 1  | versicolor, 2 |      -1.15 | 0.23 | [-1.60, -0.71] |  -5.13 | < .001
+      virginica, 2  | versicolor, 2 |      -0.52 | 0.16 | [-0.84, -0.21] |  -3.31 |  0.001
+      virginica, 2  | virginica, 1  |       0.63 | 0.16 | [ 0.32,  0.94] |   4.04 | < .001
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Species, Petal.Width=c(1, 2)
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model, by = "Petal.Width", length = 4), zap_small = TRUE,
+      table_width = Inf)
+    Message
+      We selected `contrast=c("Species")`.
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     | Petal.Width | Difference |   SE |         95% CI | t(144) |      p
+      --------------------------------------------------------------------------------------------
+      versicolor | setosa     |        0.10 |      -1.83 | 0.28 | [-2.38, -1.28] |  -6.55 | < .001
+      virginica  | setosa     |        0.10 |      -1.55 | 0.31 | [-2.17, -0.93] |  -4.95 | < .001
+      virginica  | versicolor |        0.10 |       0.28 | 0.41 | [-0.52,  1.08] |   0.69 |  0.492
+      versicolor | setosa     |        0.90 |      -1.65 | 0.29 | [-2.22, -1.08] |  -5.74 | < .001
+      virginica  | setosa     |        0.90 |      -1.71 | 0.32 | [-2.35, -1.07] |  -5.28 | < .001
+      virginica  | versicolor |        0.90 |      -0.06 | 0.21 | [-0.47,  0.35] |  -0.28 |  0.780
+      versicolor | setosa     |        1.70 |      -1.48 | 0.60 | [-2.67, -0.29] |  -2.47 |  0.015
+      virginica  | setosa     |        1.70 |      -1.88 | 0.60 | [-3.06, -0.70] |  -3.14 |  0.002
+      virginica  | versicolor |        1.70 |      -0.40 | 0.11 | [-0.62, -0.17] |  -3.50 | < .001
+      versicolor | setosa     |        2.50 |      -1.31 | 0.95 | [-3.19,  0.58] |  -1.37 |  0.172
+      virginica  | setosa     |        2.50 |      -2.04 | 0.92 | [-3.86, -0.22] |  -2.21 |  0.028
+      virginica  | versicolor |        2.50 |      -0.73 | 0.27 | [-1.27, -0.20] |  -2.70 |  0.008
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Species
+      p-values are uncorrected.
 
