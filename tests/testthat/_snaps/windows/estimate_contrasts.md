@@ -1,4 +1,4 @@
-# estimate_contrasts - Frequentist
+# estimate_contrasts - Frequentist, duplicated levels
 
     Code
       print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
