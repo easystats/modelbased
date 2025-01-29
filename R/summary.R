@@ -7,7 +7,7 @@ summary.estimate_slopes <- function(object, ...) {
   out$Direction <- .estimate_slopes_direction(out, ...)
 
   attributes(out) <- utils::modifyList(attributes(object), attributes(out))
-  class(out) <- c("estimate_slopes", "data.frame")
+  class(out) <- c("summary_estimate_slopes", "data.frame")
   attr(out, "table_title") <- c("Average Marginal Effects", "blue")
 
   out
@@ -31,8 +31,7 @@ summary.reshape_grouplevel <- function(object, ...) {
     c("Coefficient", "Slope", "Median", "Mean", "MAP_Estimate"),
     verbose = FALSE
   )
-  centrality_signs <- as.character(sign(data[[centrality_columns]]))
-  datawizard::recode_into(centrality_signs == -1 ~ "negative", default = "positive")
+  ifelse(data[[centrality_columns]] < 0, "negative", "positive")
 }
 
 

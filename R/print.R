@@ -31,6 +31,66 @@ print.visualisation_matrix <- print.estimate_contrasts
 #' @export
 print.estimate_grouplevel <- print.estimate_contrasts
 
+#' @export
+print.summary_estimate_slopes <- function(x, verbose = TRUE, ...) {
+  by <- attributes(x)$by
+  trend <- attributes(x)$trend
+  response <- attributes(x)$response
+
+  if (verbose && nrow(x) < 50) {
+    insight::format_alert("There might be too few data to accurately determine intervals. Consider setting `length = 100` (or larger) in your call to `estimate_slopes()`.") # nolint
+  }
+
+  # init messages
+  msg_neg <- msg_pos <- msg_unclear <- NULL
+
+  # associations
+  negative_association <- which(x$Confidence == "Significant" & x$Direction == "negative")
+  positive_association <- which(x$Confidence == "Significant" & x$Direction == "positive")
+  unclear_association <- which(x$Confidence == "Not Significant")
+
+  # sentence negative association
+  if (length(negative_association)) {
+    negative_bound <- insight::format_value(max(x[[by]][negative_association]), ...)
+    msg_neg <- paste0(
+      "The association between `", response, "` and `", trend, "` is negative for values of ",
+      "`", by, "` lower than ", negative_bound, "."
+    )
+  } else {
+    msg_neg <- paste0(
+      "There were no negative associations between `", response, "` and `", trend, "`."
+    )
+  }
+  # sentence positive association
+  if (length(positive_association)) {
+    positive_bound <- insight::format_value(min(x[[by]][positive_association]), ...)
+    msg_pos <- paste0(
+      "The association between `", response, "` and `", trend, "` is positive for values of ",
+      "`", by, "` larger than ", positive_bound, "."
+    )
+  } else {
+    msg_pos <- paste0(
+      "There were no positive associations between `", response, "` and `", trend, "`."
+    )
+  }
+  # sentence unclear association
+  if (length(unclear_association)) {
+    unclear_interval <- insight::format_ci(
+      x[[by]][unclear_association[1]],
+      x[[by]][unclear_association[length(unclear_association)]],
+      ci = NULL
+    )
+    msg_unclear <- paste0(
+      "Inside the interval of ", unclear_interval,
+      ", there were no clear associations between `",
+      response, "` and `", trend, "`."
+    )
+  }
+
+  cat(insight::format_message(msg_neg, msg_pos, msg_unclear))
+  cat("\n")
+}
+
 
 # Helper --------------------------------
 
