@@ -49,9 +49,6 @@ The two probably most popular R packages for extracting these quantities of inte
 
 # Key concepts
 
-- Conceptual differences between predictions and marginal means?
-- Concept of focal and non-focal terms?
-- For marginalization, we can refer to non-focal terms, meaning it would be good to have the concept introduced somewhere
 
 ## Predictions
 
