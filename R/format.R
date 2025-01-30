@@ -71,6 +71,12 @@ format.visualisation_matrix <- function(x, ...) {
 
 
 #' @export
+format.summary_estimate_slopes <- function(x, ...) {
+  insight::format_table(x, ...)
+}
+
+
+#' @export
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # model information
   model_data <- insight::get_data(model, verbose = FALSE)
