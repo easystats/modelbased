@@ -2,6 +2,7 @@
 estimate_contrasts.estimate_predicted <- function(model,
                                                   contrast = NULL,
                                                   by = NULL,
+                                                  predict = "response",
                                                   ci = 0.95,
                                                   p_adjust = "none",
                                                   comparison = "pairwise",
@@ -9,53 +10,22 @@ estimate_contrasts.estimate_predicted <- function(model,
                                                   ...) {
   comparison <- insight::validate_argument(comparison, c("pairwise", "interaction"))
 
-  # we convert the ggeffects object to a data frame, using the original
-  # names of the focal terms as column names
-  predictions <- datagrid <- as.data.frame(object, terms_to_colnames = TRUE)
+  # the "model" object is an object of class "estimate_predicted", we want
+  # to copy that into a separate object, for clearer names
+  predictions <- object <- model
+  model <- attributes(object)$model
 
   # some attributes we need
-  focal_terms <- attributes(object)$terms
-  original_terms <- attributes(object)$original.terms
-  at_list <- attributes(object)$at.list
-  type <- attributes(object)$type
-  margin <- attributes(object)$margin
-  std_erros <- attributes(object)$standard_error
-  dof <- attributes(object)$df
-  condition <- attributes(object)$condition
-  is_latent <- !is.null(attributes(object)$latent_thresholds)
-
-  # warn for very long at-list
-  values_at_lengths <- lengths(at_list)
-  if (any(values_at_lengths > 20) && verbose) {
-    warning(insight::format_message(
-      paste0(
-        "The number of levels to compare is very high for the following terms: ",
-        toString(names(values_at_lengths)[values_at_lengths > 20]),
-        ". This may lead to a large number of pairwise comparisons."
-      )
-    ), call. = FALSE, immediate. = TRUE)
-  }
+  focal_terms <- attributes(object)$focal_terms
 
   # vcov matrix, for adjusting se
-  vcov_matrix <- .safe(stats::vcov(object, verbose = FALSE, ...))
+  vcov_matrix <- .safe(stats::vcov(model, verbose = FALSE, ...))
 
-  # we now need to get the model object
-  object <- .get_model_object(object)
   minfo <- insight::model_info(object)
-  pred_type <- "response"
 
-  # set defaults
-  if (is.null(df) || is.na(df)) {
-    if (is.null(dof)) {
-      df <- .get_df(object)
-    } else {
-      df <- dof
-    }
-  }
-  if (is.null(ci_level) || is.na(ci_level)) {
-    ci_level <- 0.95
-  }
-  crit_factor <- (1 + ci_level) / 2
+  # model df
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  crit_factor <- (1 + ci) / 2
 
   ## TODO: For Bayesian models, we always use the returned standard errors
   # need to check whether scale is always correct
@@ -80,7 +50,7 @@ estimate_contrasts.estimate_predicted <- function(model,
         my_args <- list(
           object,
           newdata = .datagrid,
-          type = pred_type,
+          type = predict,
           se.fit = TRUE
         )
         # for mixed models, need to set re.form to NULL or NA
