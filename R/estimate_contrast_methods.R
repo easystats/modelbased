@@ -14,6 +14,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   # to copy that into a separate object, for clearer names
   predictions <- object <- model
   model <- attributes(object)$model
+  datagrid <- attributes(object)$datagrid
 
   # some attributes we need
   focal_terms <- attributes(object)$focal_terms
@@ -31,35 +32,19 @@ estimate_contrasts.estimate_predicted <- function(model,
   # need to check whether scale is always correct
 
   # for non-Gaussian models, we need to adjust the standard errors
-  if (!minfo$is_linear && !minfo$is_bayesian && !is_latent && type != "simulate") {
-    # zero-inflated models? If so, we need to find the correct prediction type
-    # since we allow predictions / comparisons for the different model parts
-    if (minfo$is_zero_inflated) {
-      pred_type <- .get_zi_prediction_type(object, type)
-      # for zi_prob, we need to set margin to "mean_reference",
-      # else we get wrong confidence intervals
-      if (type == "zi_prob") {
-        margin <- "mean_reference"
-      }
-    }
+  if (!minfo$is_linear && !minfo$is_bayesian &&) {
     se_from_predictions <- tryCatch(
       {
-        .datagrid <- data_grid(object, terms = original_terms, condition = condition)
-        # arguments for predict(), to get SE on response scale
-        # for non-Gaussian models
+        # arguments for predict(), to get SE on response scale for non-Gaussian models
         my_args <- list(
-          object,
-          newdata = .datagrid,
+          model,
+          newdata = datagrid,
           type = predict,
           se.fit = TRUE
         )
         # for mixed models, need to set re.form to NULL or NA
-        if (insight::is_mixed_model(object)) {
-          if (identical(type, "random") && !identical(margin, "empirical")) {
-            my_args$re.form <- NULL
-          } else {
-            my_args$re.form <- NA
-          }
+        if (insight::is_mixed_model(model)) {
+          my_args$re.form <- NULL
         }
         do.call(stats::predict, my_args)
       },
@@ -80,106 +65,59 @@ estimate_contrasts.estimate_predicted <- function(model,
     }
     preds_with_se <- merge(
       predictions,
-      cbind(.datagrid, se_prob = se_from_predictions$se.fit),
+      cbind(datagrid, se_prob = se_from_predictions$se.fit),
       sort = FALSE,
       all = TRUE
     )
-    predictions$std.error <- preds_with_se$se_prob
+    predictions$SE <- preds_with_se$se_prob
   } else {
     # for linear models, we don't need adjustment of standard errors
     vcov_matrix <- NULL
   }
-
-  # check for valid by-variable
-  by <- .validate_by_argument(by, predictions)
-
+  at_list <- lapply(datagrid, unique)
   # compute contrasts or comparisons
-  out <- switch(test,
-    contrast = .compute_contrasts(predictions, df),
-    pairwise = .compute_comparisons(predictions, df, vcov_matrix, at_list, focal_terms, crit_factor),
-    interaction = .compute_interactions(predictions, df, vcov_matrix, at_list, focal_terms, crit_factor)
+  out <- switch(comparison,
+    pairwise = .compute_comparisons(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor),
+    interaction = .compute_interactions(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor)
   )
-
-  # for pairwise comparisons, we may have comparisons inside one level when we
-  # have multiple focal terms, like "1-1" and "a-b". In this case, the comparison
-  # of 1 to 1 ("1-1") is just the contrast for the level "1", we therefore can
-  # collpase that string
-  if (isTRUE(collapse_levels)) {
-    out <- .collapse_levels(out, predictions, focal_terms, by)
-  }
-
-  # filter by-variables?
-  if (!is.null(by)) {
-    for (by_factor in by) {
-      # values in "by" are character vectors, which are saved as "level-level".
-      # we now extract the unique values, and filter the data frame
-      unique_values <- unique(predictions[[by_factor]])
-      by_levels <- paste0(unique_values, "-", unique_values)
-      keep_rows <- out[[by_factor]] %in% c(by_levels, unique_values)
-      # filter final data frame
-      out <- out[keep_rows, , drop = FALSE]
-      # finally, replace "level-level" just by "level"
-      for (i in seq_along(by_levels)) {
-        out[[by_factor]] <- gsub(
-          by_levels[i],
-          unique_values[i],
-          out[[by_factor]],
-          fixed = TRUE
-        )
-      }
-    }
-    # remove by-terms from focal terms
-    focal_terms <- focal_terms[!focal_terms %in% by]
-    # re-arrange columns, so it matches output from "emmeans" (by comes after focal)
-    out <- datawizard::data_relocate(out, select = focal_terms, before = by)
-  }
 
   # p-value adjustment?
   if (!is.null(p_adjust)) {
-    out <- .p_adjust(out, p_adjust, predictions, focal_terms, out$statistic, df, verbose)
+    out <- .p_adjust(model, predictions, p_adjust, verbose, ...)
   }
 
-  # arrange data, but where possible, restore original data type before
-  out <- .restore_focal_types(out, focal = c(by, focal_terms), model_data = predictions)
-  out <- suppressWarnings(datawizard::data_arrange(out, c(by, focal_terms), safe = TRUE))
+  out <- format(estimated, model, p_adjust, comparison, ...)
 
-  class(out) <- c("ggcomparisons", "data.frame")
-  attr(out, "ci_level") <- ci_level
-  attr(out, "test") <- test
+  # restore attributes later
+  info <- attributes(object)
+
+  # Table formatting
+  attr(out, "table_title") <- c("Model-based Contrasts Analysis", "blue")
+  attr(out, "table_footer") <- .table_footer(
+    out,
+    by = info$contrast,
+    type = "contrasts",
+    model = model,
+    info = info
+  )
+
+  # Add attributes
+  attr(out, "model") <- model
+  attr(out, "response") <- insight::find_response(model)
+  attr(out, "ci") <- ci
   attr(out, "p_adjust") <- p_adjust
-  attr(out, "df") <- df
-  attr(out, "verbose") <- verbose
-  attr(out, "scale") <- "response"
-  attr(out, "engine") <- "ggeffects"
-  attr(out, "by_factor") <- by
-  attr(out, "datagrid") <- datagrid
-  attr(out, "scale_label") <- .scale_label(minfo, pred_type)
-  attr(out, "standard_error") <- out$std.error
-  attr(out, "link_inverse") <- .link_inverse(object, ...)
-  attr(out, "link_function") <- insight::link_function(object)
-  attr(out, "linear_model") <- minfo$is_linear
-  attr(out, "estimate_name") <- "Contrast"
 
-  # remove unused variables
-  out$std.error <- NULL
-  out$statistic <- NULL
+  # add attributes from workhorse function
+  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
 
-  out
-}
-
-
-# contrasts ---------------------------------------------------------------
-.compute_contrasts <- function(predictions, df) {
-  # contrasts means we simply add the p-value to the predictions
-  out <- predictions
-  out$statistic <- out$predicted / out$std.error
-  out$p.value <- 2 * stats::pt(abs(out$statistic), df = df, lower.tail = FALSE)
+  # Output
+  class(out) <- unique(c("estimate_contrasts", "see_estimate_contrasts", class(out)))
   out
 }
 
 
 # pairwise comparisons ----------------------------------------------------
-.compute_comparisons <- function(predictions, df, vcov_matrix, at_list, focal_terms, crit_factor) {
+.compute_comparisons <- function(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor) {
   # pairwise comparisons are a bit more complicated, as we need to create
   # pairwise combinations of the levels of the focal terms.
 
@@ -260,16 +198,16 @@ estimate_contrasts.estimate_predicted <- function(model,
     result
   }))
   # add CI and p-values
-  out$conf.low <- out$Contrast - stats::qt(crit_factor, df = df) * out$std.error
-  out$conf.high <- out$Contrast + stats::qt(crit_factor, df = df) * out$std.error
-  out$statistic <- out$Contrast / out$std.error
-  out$p.value <- 2 * stats::pt(abs(out$statistic), df = df, lower.tail = FALSE)
+  out$CI_low <- out$Contrast - stats::qt(crit_factor, df = dof) * out$std.error
+  out$CI_high <- out$Contrast + stats::qt(crit_factor, df = dof) * out$std.error
+  out$Statistic <- out$Contrast / out$std.error
+  out$p <- 2 * stats::pt(abs(out$statistic), df = dof, lower.tail = FALSE)
   out
 }
 
 
 # interaction contrasts  ----------------------------------------------------
-.compute_interactions <- function(predictions, df, vcov_matrix, at_list, focal_terms, crit_factor) {
+.compute_interactions <- function(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor) {
   ## TODO: interaction contrasts currently only work for two focal terms
   if (length(focal_terms) != 2) {
     msg <- "Interaction contrasts currently only work for two focal terms."
@@ -374,9 +312,9 @@ estimate_contrasts.estimate_predicted <- function(model,
     }))
   }))
   # add CI and p-values
-  out$conf.low <- out$Contrast - stats::qt(crit_factor, df = df) * out$std.error
-  out$conf.high <- out$Contrast + stats::qt(crit_factor, df = df) * out$std.error
-  out$statistic <- out$Contrast / out$std.error
-  out$p.value <- 2 * stats::pt(abs(out$statistic), df = df, lower.tail = FALSE)
+  out$CI_low <- out$Contrast - stats::qt(crit_factor, df = dof) * out$std.error
+  out$CI_high <- out$Contrast + stats::qt(crit_factor, df = dof) * out$std.error
+  out$Statistic <- out$Contrast / out$std.error
+  out$p <- 2 * stats::pt(abs(out$statistic), df = dof, lower.tail = FALSE)
   out
 }
