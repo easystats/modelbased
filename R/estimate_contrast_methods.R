@@ -87,7 +87,10 @@ estimate_contrasts.estimate_predicted <- function(model,
   # restore attributes, for formatting
   info <- attributes(object)
   attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
+
+  # overwrite some of the attributes
   attr(out, "contrast") <- contrast
+  attr(out, "by") <- by
 
   # format output
   out <- format.marginaleffects_contrasts(out, model, p_adjust, comparison, ...)
@@ -178,12 +181,13 @@ estimate_contrasts.estimate_predicted <- function(model,
 
     # we then create labels for the pairs. "result" is a data frame with
     # the labels (of the pairwise contrasts) as columns.
-    result <- as.data.frame(
+    result <- data.frame(
       Parameter = paste(
-        paste0("(", paste(pairs_data[[1]][i, ], collapse = ", "), ")"),
-        paste0("(", paste(pairs_data[[2]][i, ], collapse = ", "), ")"),
+        paste0("(", paste(pairs_data[[1]][i, ], collapse = " "), ")"),
+        paste0("(", paste(pairs_data[[2]][i, ], collapse = " "), ")"),
         sep = "-"
-      )
+      ),
+      stringsAsFactors = FALSE
     )
     # we then add the contrast and the standard error. for linear models, the
     # SE is sqrt(se1^2 + se2^2).
@@ -284,8 +288,8 @@ estimate_contrasts.estimate_predicted <- function(model,
       pos_2b <- pos2 & predictions[[focal_terms[2]]] == pairs_focal2[j, 2]
       # once we have found the correct rows for the pairs, we can calculate
       # the contrast. We need the predicted values first
-      predicted1 <- predictions$predicted[pos_1a] - predictions$predicted[pos_1b]
-      predicted2 <- predictions$predicted[pos_2a] - predictions$predicted[pos_2b]
+      predicted1 <- predictions$Predicted[pos_1a] - predictions$Predicted[pos_1b]
+      predicted2 <- predictions$Predicted[pos_2a] - predictions$Predicted[pos_2b]
       # we then create labels for the pairs. "result" is a data frame with
       # the labels (of the pairwise contrasts) as columns.
       result <- data.frame(
@@ -296,10 +300,10 @@ estimate_contrasts.estimate_predicted <- function(model,
       colnames(result) <- focal_terms
       # we then add the contrast and the standard error. for linear models, the
       # SE is sqrt(se1^2 + se2^2)
-      result$Contrast <- predicted1 - predicted2
+      result$Difference <- predicted1 - predicted2
       sum_se_squared <- sum(
-        predictions$std.error[pos_1a]^2, predictions$std.error[pos_1b]^2,
-        predictions$std.error[pos_2a]^2, predictions$std.error[pos_2b]^2
+        predictions$SE[pos_1a]^2, predictions$SE[pos_1b]^2,
+        predictions$SE[pos_2a]^2, predictions$SE[pos_2b]^2
       )
       # for non-Gaussian models, we subtract the covariance of the two predictions
       # but only if the vcov_matrix is not NULL and has the correct dimensions
@@ -315,17 +319,17 @@ estimate_contrasts.estimate_predicted <- function(model,
       }
       # Avoid negative values in sqrt()
       if (vcov_sub >= sum_se_squared) {
-        result$std.error <- sqrt(sum_se_squared)
+        result$SE <- sqrt(sum_se_squared)
       } else {
-        result$std.error <- sqrt(sum_se_squared - vcov_sub)
+        result$SE <- sqrt(sum_se_squared - vcov_sub)
       }
       result
     }))
   }))
   # add CI and p-values
-  out$CI_low <- out$Contrast - stats::qt(crit_factor, df = dof) * out$std.error
-  out$CI_high <- out$Contrast + stats::qt(crit_factor, df = dof) * out$std.error
-  out$Statistic <- out$Contrast / out$std.error
-  out$p <- 2 * stats::pt(abs(out$statistic), df = dof, lower.tail = FALSE)
+  out$CI_low <- out$Difference - stats::qt(crit_factor, df = dof) * out$SE
+  out$CI_high <- out$Difference + stats::qt(crit_factor, df = dof) * out$SE
+  out$Statistic <- out$Difference / out$SE
+  out$p <- 2 * stats::pt(abs(out$Statistic), df = dof, lower.tail = FALSE)
   out
 }
