@@ -8,6 +8,10 @@ estimate_contrasts.estimate_predicted <- function(model,
                                                   comparison = "pairwise",
                                                   verbose = TRUE,
                                                   ...) {
+  # sanity check
+  if (inherits(comparison, "formula")) {
+    comparison <- all.vars(comparison)[1]
+  }
   comparison <- insight::validate_argument(comparison, c("pairwise", "interaction"))
 
   # sanity check
