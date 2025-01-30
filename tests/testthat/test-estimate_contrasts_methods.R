@@ -22,7 +22,7 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
     replacement = c("gender", "age", "qol", "employed")
   )
   # age into factor, set levels, and change labels for education
-  d <- datawizard::data_modify(d age = factor(age, labels = c("-40", "41-64", "65+")))
+  d <- datawizard::data_modify(d, age = factor(age, labels = c("-40", "41-64", "65+")))
 
   # Quality of Life score ranges from 0 to 25
   m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = d)
@@ -58,7 +58,7 @@ test_that("estimate_contrasts - Random Effects Levels, interaction", {
     replacement = c("gender", "age", "qol", "employed")
   )
   # age into factor, set levels, and change labels for education
-  d <- datawizard::data_modify(d age = factor(age, labels = c("-40", "41-64", "65+")))
+  d <- datawizard::data_modify(d, age = factor(age, labels = c("-40", "41-64", "65+")))
 
   # Quality of Life score ranges from 0 to 25
   m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = d)
