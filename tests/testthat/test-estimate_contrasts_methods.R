@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_on_os("mac")
 skip_if_not_installed("glmmTMB")
+skip_if_not(interactive())
 
 
 test_that("estimate_contrasts - Random Effects Levels, pairwise", {
