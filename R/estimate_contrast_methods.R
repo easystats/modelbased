@@ -227,7 +227,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   if (length(focal_terms) != 2) {
     msg <- "Interaction contrasts currently only work for two focal terms."
     if (length(focal_terms) > 2) {
-      cleaned_f3 <- .clean_terms(focal_terms[3])
+      cleaned_f3 <- focal_terms[3]
       s1 <- "pr <- predict_response(\n    model,"
       s2 <- paste0("terms = c(", datawizard::text_concatenate(focal_terms[1:2], enclose = "\"", sep = ", ", last = ", "), "),") # nolint
       s3 <- paste0("condition = c(", cleaned_f3, " = \"", at_list[[cleaned_f3]][1], "\")")
