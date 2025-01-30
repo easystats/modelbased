@@ -22,7 +22,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   # vcov matrix, for adjusting se
   vcov_matrix <- .safe(stats::vcov(model, verbose = FALSE, ...))
 
-  minfo <- insight::model_info(object)
+  minfo <- insight::model_info(model)
 
   # model df
   dof <- insight::get_df(model, type = "wald", verbose = FALSE)
@@ -74,22 +74,28 @@ estimate_contrasts.estimate_predicted <- function(model,
     # for linear models, we don't need adjustment of standard errors
     vcov_matrix <- NULL
   }
-  at_list <- lapply(datagrid, unique)
+
+  # we need the focal terms and all unique values from the datagrid
+  at_list <- lapply(datagrid[focal_terms], unique)
+
   # compute contrasts or comparisons
   out <- switch(comparison,
     pairwise = .compute_comparisons(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor),
     interaction = .compute_interactions(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor)
   )
 
+  # restore attributes, for formatting
+  info <- attributes(object)
+  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
+  attr(out, "contrast") <- contrast
+
+  # format output
+  out <- format.marginaleffects_contrasts(out, model, p_adjust, comparison, ...)
+
   # p-value adjustment?
   if (!is.null(p_adjust)) {
-    out <- .p_adjust(model, predictions, p_adjust, verbose, ...)
+    out <- .p_adjust(model, out, p_adjust, verbose, ...)
   }
-
-  out <- format(estimated, model, p_adjust, comparison, ...)
-
-  # restore attributes later
-  info <- attributes(object)
 
   # Table formatting
   attr(out, "table_title") <- c("Model-based Contrasts Analysis", "blue")
@@ -167,19 +173,25 @@ estimate_contrasts.estimate_predicted <- function(model,
     }
     # once we have found the correct rows for the pairs, we can calculate
     # the contrast. We need the predicted values first
-    predicted1 <- predictions$predicted[pos1]
-    predicted2 <- predictions$predicted[pos2]
+    predicted1 <- predictions$Predicted[pos1]
+    predicted2 <- predictions$Predicted[pos2]
+
     # we then create labels for the pairs. "result" is a data frame with
     # the labels (of the pairwise contrasts) as columns.
     result <- as.data.frame(do.call(cbind, lapply(seq_along(focal_terms), function(j) {
-      paste(pairs_data[[1]][i, j], pairs_data[[2]][i, j], sep = "-")
+      Parameter <- paste(
+        paste0("(", paste(pairs_data[[1]][i, ], collapse = ", "), ")"),
+        paste0("(", paste(pairs_data[[2]][i, ], collapse = ", "), ")"),
+        sep = "-"
+      )
+      Parameter
     })))
     colnames(result) <- focal_terms
     # we then add the contrast and the standard error. for linear models, the
     # SE is sqrt(se1^2 + se2^2).
-    result$Contrast <- predicted1 - predicted2
+    result$Difference <- predicted1 - predicted2
     # sum of squared standard errors
-    sum_se_squared <- predictions$std.error[pos1]^2 + predictions$std.error[pos2]^2
+    sum_se_squared <- predictions$SE[pos1]^2 + predictions$SE[pos2]^2
     # for non-Gaussian models, we subtract the covariance of the two predictions
     # but only if the vcov_matrix is not NULL and has the correct dimensions
     correct_row_dims <- nrow(vcov_matrix) > 0 && all(nrow(vcov_matrix) >= which(pos1))
@@ -191,17 +203,18 @@ estimate_contrasts.estimate_predicted <- function(model,
     }
     # Avoid negative values in sqrt()
     if (vcov_sub >= sum_se_squared) {
-      result$std.error <- sqrt(sum_se_squared)
+      result$SE <- sqrt(sum_se_squared)
     } else {
-      result$std.error <- sqrt(sum_se_squared - vcov_sub)
+      result$SE <- sqrt(sum_se_squared - vcov_sub)
     }
     result
   }))
   # add CI and p-values
-  out$CI_low <- out$Contrast - stats::qt(crit_factor, df = dof) * out$std.error
-  out$CI_high <- out$Contrast + stats::qt(crit_factor, df = dof) * out$std.error
-  out$Statistic <- out$Contrast / out$std.error
-  out$p <- 2 * stats::pt(abs(out$statistic), df = dof, lower.tail = FALSE)
+  out$CI_low <- out$Difference - stats::qt(crit_factor, df = dof) * out$SE
+  out$CI_high <- out$Difference + stats::qt(crit_factor, df = dof) * out$SE
+  out$Statistic <- out$Difference / out$SE
+  out$p <- 2 * stats::pt(abs(out$Statistic), df = dof, lower.tail = FALSE)
+
   out
 }
 
