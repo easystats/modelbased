@@ -10,6 +10,11 @@ estimate_contrasts.estimate_predicted <- function(model,
                                                   ...) {
   comparison <- insight::validate_argument(comparison, c("pairwise", "interaction"))
 
+  # sanity check
+  if (is.null(contrast)) {
+    insight::format_error("Argument `contrast` must be specified and cannot be `NULL`.")
+  }
+
   # the "model" object is an object of class "estimate_predicted", we want
   # to copy that into a separate object, for clearer names
   predictions <- object <- model

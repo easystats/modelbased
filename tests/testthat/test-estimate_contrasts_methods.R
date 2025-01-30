@@ -27,6 +27,7 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
   m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = efc)
   estim <- estimate_relation(m_null, by = c("gender", "employed", "age"))
 
+  expect_error(estimate_contrasts(estim), regex = "must be specified")
   expect_snapshot(print(estimate_contrasts(estim, contrast = c("gender", "employed", "age")), zap_small = TRUE, table_width = Inf))
   expect_snapshot(print(estimate_contrasts(estim, contrast = c("gender", "employed"), by = "age"), zap_small = TRUE, table_width = Inf))
   expect_snapshot(print(estimate_contrasts(estim, contrast = "employed", by = c("age", "gender")), zap_small = TRUE, table_width = Inf))
