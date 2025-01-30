@@ -72,15 +72,10 @@ estimate_contrasts.estimate_predicted <- function(model,
     vcov_matrix <- NULL
   }
 
-
-  # we need the focal terms and all unique values from the datagrid
-  focal_terms <- c(contrast, by)
-  at_list <- lapply(datagrid[focal_terms], unique)
-
   # compute contrasts or comparisons
   out <- switch(comparison,
-    pairwise = .compute_comparisons(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor),
-    interaction = .compute_interactions(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor)
+    pairwise = .compute_comparisons(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor),
+    interaction = .compute_interactions(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor)
   )
 
   # restore attributes, for formatting
@@ -125,7 +120,11 @@ estimate_contrasts.estimate_predicted <- function(model,
 
 
 # pairwise comparisons ----------------------------------------------------
-.compute_comparisons <- function(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor) {
+.compute_comparisons <- function(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor) {
+  # we need the focal terms and all unique values from the datagrid
+  focal_terms <- c(contrast, by)
+  at_list <- lapply(datagrid[focal_terms], unique)
+
   # pairwise comparisons are a bit more complicated, as we need to create
   # pairwise combinations of the levels of the focal terms.
 
@@ -216,13 +215,36 @@ estimate_contrasts.estimate_predicted <- function(model,
   out$Statistic <- out$Difference / out$SE
   out$p <- 2 * stats::pt(abs(out$Statistic), df = dof, lower.tail = FALSE)
 
+  # filter by "by"
+  if (!is.null(by)) {
+    idx <- rep_len(TRUE, nrow(out))
+    for (filter_by in by) {
+      # create index with "by" variables for each comparison pair
+      filter_data <- do.call(cbind, lapply(pairs_data, function(i) {
+        colnames(i) <- focal_terms
+        i[filter_by]
+      }))
+      # check which pairs have identical values - these are the rows we want to keep
+      idx <- idx & unname(apply(filter_data, 1, function(r) r[1] == r[2]))
+    }
+    # prepare filtered dataset
+    filter_column <- pairs_data[[1]]
+    colnames(filter_column) <- focal_terms
+    # bind the filtered data to the output
+    out <- cbind(filter_column[idx, by, drop = FALSE], out[idx, , drop = FALSE])
+  }
+
   out
 }
 
 
 # interaction contrasts  ----------------------------------------------------
-.compute_interactions <- function(predictions, dof, vcov_matrix, at_list, focal_terms, crit_factor) {
-  ## TODO: interaction contrasts currently only work for two focal terms
+.compute_interactions <- function(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor) {
+  # we need the focal terms and all unique values from the datagrid
+  focal_terms <- c(contrast, by)
+  at_list <- lapply(datagrid[focal_terms], unique)
+
+    ## TODO: interaction contrasts currently only work for two focal terms
   if (length(focal_terms) != 2) {
     insight::format_error("Interaction contrasts currently only work for two focal terms.")
   }
