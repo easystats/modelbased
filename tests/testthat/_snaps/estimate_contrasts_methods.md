@@ -1,4 +1,4 @@
-# estimate_contrasts - Random Effects Levels
+# estimate_contrasts - Random Effects Levels, pairwise
 
     Code
       print(estimate_contrasts(estim, contrast = c("gender", "employed", "age")),
@@ -129,4 +129,21 @@
       
       Variable predicted: qol
       Predictors contrasted: employed
+
+# estimate_contrasts - Random Effects Levels, interaction
+
+    Code
+      print(estimate_contrasts(estim, contrast = c("age", "employed"), comparison = "interaction"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Model-based Contrasts Analysis
+      
+      age       | employed   | Difference |   SE |        95% CI | Statistic |     p
+      ------------------------------------------------------------------------------
+      -40-41-64 | no and yes |      -0.49 | 0.94 | [-2.34, 1.36] |     -0.52 | 0.600
+      -40-65+   | no and yes |       0.44 | 1.41 | [-2.31, 3.20] |      0.31 | 0.753
+      41-64-65+ | no and yes |       0.94 | 1.21 | [-1.43, 3.30] |      0.78 | 0.438
+      
+      Variable predicted: qol
+      Predictors contrasted: age, employed
 
