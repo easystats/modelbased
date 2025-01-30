@@ -255,7 +255,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   focal_terms <- c(contrast, by)
   at_list <- lapply(datagrid[focal_terms], unique)
 
-    ## TODO: interaction contrasts currently only work for two focal terms
+  ## TODO: interaction contrasts currently only work for two focal terms
   if (length(focal_terms) != 2) {
     insight::format_error("Interaction contrasts currently only work for two focal terms.")
   }
