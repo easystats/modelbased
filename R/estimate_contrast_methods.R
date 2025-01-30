@@ -84,6 +84,7 @@ estimate_contrasts.estimate_predicted <- function(model,
 
   # overwrite some of the attributes
   attr(out, "contrast") <- contrast
+  attr(out, "focal_terms") <- c(contrast, by)
   attr(out, "by") <- by
 
   # format output
@@ -98,7 +99,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   attr(out, "table_title") <- c("Model-based Contrasts Analysis", "blue")
   attr(out, "table_footer") <- .table_footer(
     out,
-    by = info$contrast,
+    by = contrast,
     type = "contrasts",
     model = model,
     info = info
@@ -234,6 +235,7 @@ estimate_contrasts.estimate_predicted <- function(model,
     out <- cbind(filter_column[idx, by, drop = FALSE], out[idx, , drop = FALSE])
   }
 
+  rownames(out) <- NULL
   out
 }
 
