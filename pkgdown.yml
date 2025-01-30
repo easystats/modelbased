@@ -1,6 +1,6 @@
 pandoc: 3.6.2
 pkgdown: 2.1.1.9000
-pkgdown_sha: 74fda8cdb8bbbcd215faf2a2079f4eb98db586c6
+pkgdown_sha: 18cca452d736fea33d47b19b4ef4973db9104a75
 articles:
   derivatives: derivatives.html
   estimate_contrasts: estimate_contrasts.html
@@ -12,7 +12,7 @@ articles:
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2025-01-29T09:13Z
+last_built: 2025-01-30T19:17Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles

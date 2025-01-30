@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.106</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.107</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -78,7 +78,10 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">estimate_contrasts</span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -100,6 +103,23 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 
 <dl><dt id="arg-model">model<a class="anchor" aria-label="anchor" href="#arg-model"></a></dt>
 <dd><p>A statistical model.</p></dd>
+
+
+<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
+<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
+to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
+Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code> or <code>range</code> can be used
+to control the (number of) representative values.</p></li>
+<li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
+means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
+for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
+passed to those functions.</p></li>
+<li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
+Additional arguments can be passed to these functions.</p></li>
+<li><p>Bayesian models: For Bayesian models, parameters are cleaned using
+<code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
+<code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
+</ul></dd>
 
 
 <dt id="arg-contrast">contrast<a class="anchor" aria-label="anchor" href="#arg-contrast"></a></dt>
@@ -235,23 +255,6 @@ as default backend.</p></dd>
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
 <dd><p>Use <code>FALSE</code> to silence messages and warnings.</p></dd>
-
-
-<dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
-to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
-Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code> or <code>range</code> can be used
-to control the (number of) representative values.</p></li>
-<li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
-means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
-for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
-passed to those functions.</p></li>
-<li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
-Additional arguments can be passed to these functions.</p></li>
-<li><p>Bayesian models: For Bayesian models, parameters are cleaned using
-<code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
-<code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
-</ul></dd>
 
 </dl></div>
     <div class="section level2">
