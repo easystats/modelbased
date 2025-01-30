@@ -120,7 +120,8 @@ test_that("estimate_contrasts - Frequentist, Three factors 1", {
       7.03333, 14.01667, 0.05, 7.03333, 6.98333, 6.98333, 11.275, 18.25833,
       4.29167, 11.275, 6.98333
     ),
-    tolerance = 1e-4)
+    tolerance = 1e-4
+  )
   expect_snapshot(print(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf)) # nolint
 })
 
@@ -142,12 +143,13 @@ test_that("estimate_contrasts - Frequentist, Three factors 2", {
     by = c("c161sex", "c172code", "e16sex"),
     hypothesis = ~ pairwise | e16sex
   )
-  expect_equal(out$estimate[out$e16sex == "male"],  estim$Difference, tolerance = 1e-4)
+  expect_equal(out$estimate[out$e16sex == "male"], estim$Difference, tolerance = 1e-4)
 
   expect_identical(dim(estim), c(15L, 10L))
   expect_equal(
     estim$Difference,
-    c(2.70334, 2.23511, 1.55845, 2.48322, 2.48543, -0.46823, -1.14489,
+    c(
+      2.70334, 2.23511, 1.55845, 2.48322, 2.48543, -0.46823, -1.14489,
       -0.22012, -0.21791, -0.67666, 0.24811, 0.25032, 0.92477, 0.92698,
       0.00221
     ),
@@ -156,7 +158,8 @@ test_that("estimate_contrasts - Frequentist, Three factors 2", {
   expect_true(all(estim$e16sex == "male"))
   expect_identical(
     as.character(estim$Level1),
-    c("Male, mid", "Male, high", "Female, low", "Female, mid", "Female, high",
+    c(
+      "Male, mid", "Male, high", "Female, low", "Female, mid", "Female, high",
       "Male, high", "Female, low", "Female, mid", "Female, high", "Female, low",
       "Female, mid", "Female, high", "Female, mid", "Female, high",
       "Female, high"
@@ -164,7 +167,8 @@ test_that("estimate_contrasts - Frequentist, Three factors 2", {
   )
   expect_identical(
     as.character(estim$Level2),
-    c("Male, low", "Male, low", "Male, low", "Male, low", "Male, low",
+    c(
+      "Male, low", "Male, low", "Male, low", "Male, low", "Male, low",
       "Male, mid", "Male, mid", "Male, mid", "Male, mid", "Male, high",
       "Male, high", "Male, high", "Female, low", "Female, low", "Female, mid"
     )

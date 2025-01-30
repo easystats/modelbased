@@ -2,9 +2,12 @@
 % Please edit documentation in R/estimate_contrasts.R
 \name{estimate_contrasts}
 \alias{estimate_contrasts}
+\alias{estimate_contrasts.default}
 \title{Estimate Marginal Contrasts}
 \usage{
-estimate_contrasts(
+estimate_contrasts(model, ...)
+
+\method{estimate_contrasts}{default}(
   model,
   contrast = NULL,
   by = NULL,
@@ -21,6 +24,23 @@ estimate_contrasts(
 }
 \arguments{
 \item{model}{A statistical model.}
+
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
+to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
+Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
+\itemize{
+\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
+to control the (number of) representative values.
+\item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
+for instance like \code{vcov}, \code{transform}, \code{equivalence} or \code{slope} can be
+passed to those functions.
+\item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
+Additional arguments can be passed to these functions.
+\item Bayesian models: For Bayesian models, parameters are cleaned using
+\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
+\code{rope_range}, or \code{test} are passed to that function.
+}}
 
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
@@ -151,23 +171,6 @@ as default backend.}
 \item{transform}{Deprecated, please use \code{predict} instead.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
-
-\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
-to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
-Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
-\itemize{
-\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
-to control the (number of) representative values.
-\item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
-means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence} or \code{slope} can be
-passed to those functions.
-\item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
-Additional arguments can be passed to these functions.
-\item Bayesian models: For Bayesian models, parameters are cleaned using
-\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
-\code{rope_range}, or \code{test} are passed to that function.
-}}
 }
 \value{
 A data frame of estimated contrasts.
