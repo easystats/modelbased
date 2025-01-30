@@ -32,7 +32,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   # need to check whether scale is always correct
 
   # for non-Gaussian models, we need to adjust the standard errors
-  if (!minfo$is_linear && !minfo$is_bayesian &&) {
+  if (!minfo$is_linear && !minfo$is_bayesian) {
     se_from_predictions <- tryCatch(
       {
         # arguments for predict(), to get SE on response scale for non-Gaussian models
