@@ -92,18 +92,25 @@
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
-estimate_contrasts <- function(model,
-                               contrast = NULL,
-                               by = NULL,
-                               predict = NULL,
-                               ci = 0.95,
-                               p_adjust = "none",
-                               comparison = "pairwise",
-                               marginalize = "average",
-                               backend = getOption("modelbased_backend", "marginaleffects"),
-                               transform = NULL,
-                               verbose = TRUE,
-                               ...) {
+estimate_contrasts <- function(model, ...) {
+  UseMethod("estimate_contrasts")
+}
+
+
+#' @rdname estimate_contrasts
+#' @export
+estimate_contrasts.default <- function(model,
+                                       contrast = NULL,
+                                       by = NULL,
+                                       predict = NULL,
+                                       ci = 0.95,
+                                       p_adjust = "none",
+                                       comparison = "pairwise",
+                                       marginalize = "average",
+                                       backend = getOption("modelbased_backend", "marginaleffects"),
+                                       transform = NULL,
+                                       verbose = TRUE,
+                                       ...) {
   ## TODO: remove deprecation warning later
   if (!is.null(transform)) {
     insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
