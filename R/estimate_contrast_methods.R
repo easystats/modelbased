@@ -16,9 +16,6 @@ estimate_contrasts.estimate_predicted <- function(model,
   model <- attributes(object)$model
   datagrid <- attributes(object)$datagrid
 
-  # some attributes we need
-  focal_terms <- attributes(object)$focal_terms
-
   # vcov matrix, for adjusting se
   vcov_matrix <- .safe(stats::vcov(model, verbose = FALSE, ...))
 
@@ -75,7 +72,9 @@ estimate_contrasts.estimate_predicted <- function(model,
     vcov_matrix <- NULL
   }
 
+
   # we need the focal terms and all unique values from the datagrid
+  focal_terms <- c(contrast, by)
   at_list <- lapply(datagrid[focal_terms], unique)
 
   # compute contrasts or comparisons
