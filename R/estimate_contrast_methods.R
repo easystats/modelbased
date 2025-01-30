@@ -178,15 +178,13 @@ estimate_contrasts.estimate_predicted <- function(model,
 
     # we then create labels for the pairs. "result" is a data frame with
     # the labels (of the pairwise contrasts) as columns.
-    result <- as.data.frame(do.call(cbind, lapply(seq_along(focal_terms), function(j) {
-      Parameter <- paste(
+    result <- as.data.frame(
+      Parameter = paste(
         paste0("(", paste(pairs_data[[1]][i, ], collapse = ", "), ")"),
         paste0("(", paste(pairs_data[[2]][i, ], collapse = ", "), ")"),
         sep = "-"
       )
-      Parameter
-    })))
-    colnames(result) <- focal_terms
+    )
     # we then add the contrast and the standard error. for linear models, the
     # SE is sqrt(se1^2 + se2^2).
     result$Difference <- predicted1 - predicted2
