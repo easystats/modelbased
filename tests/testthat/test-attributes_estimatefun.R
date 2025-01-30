@@ -87,8 +87,9 @@ test_that("attributes_means", {
     attributes(estim),
     c(
       "names", "row.names", "class", "ci", "keep_iterations", "response",
-      "model", "focal_terms", "preserve_range", "table_title", "table_footer",
-      "adjusted_for", "at_specs", "at", "by", "reference", "data"
+      "model", "datagrid", "focal_terms", "preserve_range", "table_title",
+      "table_footer", "adjusted_for", "at_specs", "at", "by", "reference",
+      "data"
     )
   )
 })

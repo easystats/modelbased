@@ -3,6 +3,8 @@
 S3method(describe_nonlinear,data.frame)
 S3method(describe_nonlinear,estimate_predicted)
 S3method(describe_nonlinear,numeric)
+S3method(estimate_contrasts,default)
+S3method(estimate_contrasts,estimate_predicted)
 S3method(format,estimate_contrasts)
 S3method(format,estimate_grouplevel)
 S3method(format,estimate_means)

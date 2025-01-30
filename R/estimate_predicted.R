@@ -450,6 +450,7 @@ estimate_relation <- function(model,
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "model") <- model
+  attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
   attr(out, "table_title") <- c("Model-based Predictions", "blue")
