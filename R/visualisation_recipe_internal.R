@@ -245,7 +245,7 @@
       )
       # optionally add group aes, if not in global_aes and not null
       if (!"group" %in% names(global_aes) || !is.null(aes$group)) {
-        aes_list$group = aes$group
+        aes_list$group <- aes$group
       }
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
@@ -268,10 +268,10 @@
       x = aes$x,
       color = aes$color,
       alpha = aes$alpha
-  )
+    )
     # optionally add group aes, if not in global_aes and not null
     if (!"group" %in% names(global_aes) || !is.null(aes$group)) {
-      aes_list$group = aes$group
+      aes_list$group <- aes$group
     }
     layers[[paste0("l", l)]] <- list(
       geom = "line",
