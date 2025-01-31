@@ -334,7 +334,7 @@ test_that("plots, estimate_slope", {
   )
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
-  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "marginaleffects")
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", length = 200, backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-slopes-4",
@@ -445,5 +445,17 @@ test_that("plots no CI", {
   vdiffr::expect_doppelganger(
     "plot-means-no_ci-3",
     plot(modelbased::visualisation_recipe(x, show_data = FALSE, ribbon = "none"))
+  )
+})
+
+
+test_that("interaction of numerics (Johnson-Neyman)", {
+  data(mtcars)
+  model <- lm(mpg ~ hp * wt, data = mtcars)
+  slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-jonhson-neyman-1",
+    plot(slopes)
   )
 })

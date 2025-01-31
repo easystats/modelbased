@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.9.107
+Version: 0.9.0
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -89,4 +89,4 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
-Remotes: vincentarelbundock/marginaleffects
+Remotes: vincentarelbundock/marginaleffects, easystats/see

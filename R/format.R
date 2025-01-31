@@ -204,17 +204,17 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # we cannot filter by `by` - thus, we go on, extract all single levels,
     # combine only relevant levels and then we're able to filter...
 
-    # When we filter contrasts, e.g. `contrast = c("vs", "am='1'")` or
-    # `contrast = c("vs", "am"), by = "gear='5'"`, we get no contrasts if one
-    # of the focal terms only has one unique value in the data grid. Thus,
-    # we need to exclude all those focal terms that only have one unique value
-    # in the data grid now. Fingers crossed that it works...
-    focal_terms <- focal_terms[lengths(lapply(dgrid[focal_terms], unique)) > 1]
-
-    # in the second example, `contrast = c("vs", "am"), by = "gear='5'"`, the
+    # If we have, for example, `contrast = c("vs", "am"), by = "gear='5'"`, the
     # `by` column is the one with one unique value only, we thus have to update
-    # `by` as well, and also `contrast` (the latter not(!) for numerics)...
+    # `by`, and also `contrast` (the latter not(!) for numerics)...
     by <- by[lengths(lapply(dgrid[by], unique)) > 1]
+
+    # for slopes, we have our "levels" in the by-variable, because `by` indicates
+    # the levels for which slopes are contrasted - thus, we replace contrast with by
+    if (inherits(x, "estimate_slopes")) {
+      contrast <- by
+      by <- NULL
+    }
 
     # for contrasts, we also filter variables with one unique value, but we
     # keep numeric variables. When these are hold constant in the data grid,
@@ -232,18 +232,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       insight::format_error("No contrasts to show. Please adjust `contrast`.")
     }
 
-    # contrasts can't be longer than focal terms - make sure we have not
-    # removed too much (and that we now have captured all exceptions...)
-    if (length(contrast) > length(focal_terms)) focal_terms <- contrast
-
     # for more than one term, we have comma-separated levels.
-    if (length(focal_terms) > 1) {
+    if (length(contrast) > 1) {
       # levels may contain the separator char. to be 100% certain we extract
       # levels correctly, we now replace levels with a special "token", and later
       # replace those tokens with the original levels again
 
       # extract all comparison levels
-      all_levels <- unlist(lapply(dgrid[focal_terms], function(i) as.character(unique(i))), use.names = FALSE)
+      all_levels <- unlist(lapply(dgrid[contrast], function(i) as.character(unique(i))), use.names = FALSE)
       # create replacement vector
       replace_levels <- NULL
       # this looks strange, but we need to make sure we have unique tokens that
@@ -272,8 +268,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         verbose = FALSE
       )
       new_colnames <- paste0(
-        rep.int(focal_terms, 2),
-        rep(1:2, each = length(focal_terms))
+        rep.int(contrast, 2),
+        rep(1:2, each = length(contrast))
       )
 
       # finally, replace all tokens with original comparison levels again
@@ -284,7 +280,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         comparison_pair
       })
     } else {
-      new_colnames <- paste0(focal_terms, 1:2)
+      new_colnames <- paste0(contrast, 1:2)
     }
 
     # sanity check - for some edgecases, we have fewer columns than expected
@@ -294,12 +290,6 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
       # make sure all whitespaces are removed
       params[] <- lapply(params, insight::trim_ws)
-
-      # unite back columns with focal contrasts - only needed when not slopes
-      if (inherits(x, "estimate_slopes")) {
-        contrast <- by
-        by <- NULL
-      }
 
       # if we have more than one contrast term, we unite the levels from
       # all contrast terms that belong to one "contrast group", separated
@@ -332,22 +322,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
       # we need to update these variables, because these are the new column
       # names for contrasts and focal terms
-      contrast <- focal_terms <- c("Level1", "Level2")
-
-      # ------------------------------------------------------------------
-      # old code for the display was just:
-      #
-      # for (i in seq_along(contrast)) {
-      #   contrast_names <- paste0(contrast[i], 1:2)
-      #   params <- datawizard::data_unite(
-      #     params,
-      #     new_column = contrast[i],
-      #     select = contrast_names,
-      #     separator = " - ",
-      #     verbose = FALSE
-      #   )
-      # }
-      # ------------------------------------------------------------------
+      contrast <- c("Level1", "Level2")
 
       # remove old column
       x$Parameter <- NULL
@@ -356,7 +331,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       x <- cbind(params[contrast], x)
 
       # make sure terms are factors, for data_arrange later
-      for (i in focal_terms) {
+      for (i in contrast) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
       }
     }

@@ -694,3 +694,37 @@ test_that("estimate_contrasts - examples from docs work as intendec", {
   expect_snapshot(print(estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)")), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(model, by = "Petal.Width", length = 4), zap_small = TRUE, table_width = Inf)) # nolint
 })
+
+
+test_that("estimate_contrasts - test all combinations of contrast and by, with filtering", {
+  # see https://github.com/vincentarelbundock/marginaleffects/issues/1374
+  set.seed(123)
+  n <- 1000
+  d <- data.frame(
+    score = rnorm(n),
+    grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
+    time = as.factor(sample(1:2, n, TRUE)),
+    x = as.factor(sample(letters[1:2], n, TRUE))
+  )
+  model2 <- lm(score ~ grp * time * x, data = d)
+
+  expect_snapshot(print(estimate_contrasts(model2, c("grp", "time", "x")), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, c("grp", "time"), by = "x"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, "grp", by = c("time", "x")), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, "grp", by = "time"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, c("grp", "time", "x='a'")), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, c("grp", "time=1"), by = "x"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, "grp", by = c("time", "x='a'")), zap_small = TRUE, table_width = Inf)) # nolint
+
+  set.seed(123)
+  n <- 1000
+  d <- data.frame(
+    score = rnorm(n),
+    grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
+    time = as.factor(sample(1:3, n, TRUE))
+  )
+  model2 <- lm(score ~ grp * time, data = d)
+
+  expect_snapshot(print(estimate_contrasts(model2, "time=c(1,2)", by = "grp"), zap_small = TRUE, table_width = Inf)) # nolint
+  expect_snapshot(print(estimate_contrasts(model2, c("grp", "time=2")), zap_small = TRUE, table_width = Inf)) # nolint
+})
