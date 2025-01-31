@@ -334,7 +334,7 @@ test_that("plots, estimate_slope", {
   )
 
   model <- lm(Sepal.Width ~ Petal.Width * Petal.Length, data = iris)
-  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", backend = "marginaleffects")
+  slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Width", length = 200, backend = "marginaleffects")
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-slopes-4",

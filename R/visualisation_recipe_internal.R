@@ -68,7 +68,25 @@
   }
   if (length(by) > 1) {
     aes$color <- by[2]
-    data$.group <- paste(data$.group, data[[by[2]]])
+    # if by is of length 2 and numeric, *and* we have slopes, then we have
+    # a Johnson-Neyman plot. In this case, we need to re-adjust ".group",
+    # which must have an own index for each "part" of the ribbons
+    if ("estimate_slopes" %in% att$class && by[2] == "p") {
+      group_index <- 1
+      for (i in 2:(nrow(data))) {
+        if (data$p[i] != data$p[i - 1]) {
+          group_index <- group_index + 1
+        }
+        data$.group[i] <- group_index
+      }
+      # for johnson-neymann plots, the "group" aes cannot be assigned to the
+      # ribbon geom - instead, it must be part of the "ggplot()" function. this
+      # can be achieved by adding the aes as "global_aes" attribute to the
+      # returned visualisation_recipe
+      aes$group <- NULL
+    } else {
+      data$.group <- paste(data$.group, data[[by[2]]])
+    }
   }
   if (length(by) > 2) {
     if (is.numeric(data[[by[3]]])) {
@@ -152,6 +170,7 @@
   aes <- .find_aes(x)
   data <- aes$data
   aes <- aes$aes
+  global_aes <- list()
   layers <- list()
   l <- 1
 
@@ -184,6 +203,7 @@
       linetype = "dashed"
     ))
     l <- l + 1
+    global_aes$group <- ".group"
   }
 
 
@@ -193,14 +213,14 @@
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
         data = data,
-        aes = list(
+        aes = insight::compact_list(list(
           y = aes$y,
           x = aes$x,
           ymin = aes$ymin[i],
           ymax = aes$ymax[i],
           fill = aes$color,
           group = aes$group
-        ),
+        )),
         alpha = 1 / 3
       )
       if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
@@ -215,13 +235,13 @@
     layers[[paste0("l", l)]] <- list(
       geom = "line",
       data = data,
-      aes = list(
+      aes = insight::compact_list(list(
         y = aes$y,
         x = aes$x,
         color = aes$color,
         group = aes$group,
         alpha = aes$alpha
-      )
+      ))
     )
     if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
       layers[[paste0("l", l)]]$position <- "dodge"
@@ -295,6 +315,7 @@
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
+  attr(layers, "global_aes") <- global_aes
   layers
 }
 
