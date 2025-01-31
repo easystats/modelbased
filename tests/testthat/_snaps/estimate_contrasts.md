@@ -691,3 +691,199 @@
       Predictors contrasted: Species
       p-values are uncorrected.
 
+# estimate_contrasts - test all combinations of contrast and by, with filtering
+
+    Code
+      print(estimate_contrasts(model2, c("grp", "time", "x")), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1          | Level2          | Difference |   SE |        95% CI | t(992) |     p
+      --------------------------------------------------------------------------------------
+      control, 1, b   | control, 1, a   |       0.15 | 0.13 | [-0.10, 0.40] |   1.20 | 0.231
+      control, 2, a   | control, 1, a   |       0.03 | 0.13 | [-0.23, 0.28] |   0.19 | 0.847
+      control, 2, b   | control, 1, a   |       0.09 | 0.13 | [-0.16, 0.34] |   0.73 | 0.465
+      treatment, 1, a | control, 1, a   |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment, 1, b | control, 1, a   |      -0.03 | 0.13 | [-0.28, 0.22] |  -0.22 | 0.824
+      treatment, 2, a | control, 1, a   |       0.02 | 0.13 | [-0.23, 0.27] |   0.19 | 0.850
+      treatment, 2, b | control, 1, a   |       0.05 | 0.12 | [-0.19, 0.28] |   0.37 | 0.712
+      control, 2, a   | control, 1, b   |      -0.12 | 0.13 | [-0.38, 0.13] |  -0.97 | 0.332
+      control, 2, b   | control, 1, b   |      -0.06 | 0.12 | [-0.30, 0.19] |  -0.46 | 0.648
+      treatment, 1, a | control, 1, b   |       0.04 | 0.13 | [-0.20, 0.29] |   0.34 | 0.730
+      treatment, 1, b | control, 1, b   |      -0.18 | 0.12 | [-0.42, 0.06] |  -1.45 | 0.147
+      treatment, 2, a | control, 1, b   |      -0.13 | 0.12 | [-0.37, 0.12] |  -1.02 | 0.307
+      treatment, 2, b | control, 1, b   |      -0.10 | 0.12 | [-0.34, 0.13] |  -0.89 | 0.376
+      control, 2, b   | control, 2, a   |       0.07 | 0.13 | [-0.19, 0.32] |   0.52 | 0.604
+      treatment, 1, a | control, 2, a   |       0.17 | 0.13 | [-0.09, 0.43] |   1.26 | 0.207
+      treatment, 1, b | control, 2, a   |      -0.05 | 0.13 | [-0.31, 0.20] |  -0.41 | 0.680
+      treatment, 2, a | control, 2, a   |       0.00 | 0.13 | [-0.26, 0.25] |  -0.01 | 0.991
+      treatment, 2, b | control, 2, a   |       0.02 | 0.13 | [-0.23, 0.27] |   0.16 | 0.876
+      treatment, 1, a | control, 2, b   |       0.10 | 0.13 | [-0.15, 0.35] |   0.78 | 0.437
+      treatment, 1, b | control, 2, b   |      -0.12 | 0.13 | [-0.37, 0.12] |  -0.97 | 0.333
+      treatment, 2, a | control, 2, b   |      -0.07 | 0.13 | [-0.32, 0.18] |  -0.55 | 0.582
+      treatment, 2, b | control, 2, b   |      -0.05 | 0.12 | [-0.29, 0.19] |  -0.40 | 0.691
+      treatment, 1, b | treatment, 1, a |      -0.22 | 0.13 | [-0.47, 0.03] |  -1.73 | 0.083
+      treatment, 2, a | treatment, 1, a |      -0.17 | 0.13 | [-0.42, 0.08] |  -1.32 | 0.187
+      treatment, 2, b | treatment, 1, a |      -0.15 | 0.12 | [-0.39, 0.09] |  -1.20 | 0.230
+      treatment, 2, a | treatment, 1, b |       0.05 | 0.12 | [-0.19, 0.30] |   0.42 | 0.676
+      treatment, 2, b | treatment, 1, b |       0.07 | 0.12 | [-0.16, 0.31] |   0.61 | 0.541
+      treatment, 2, b | treatment, 2, a |       0.02 | 0.12 | [-0.21, 0.26] |   0.18 | 0.861
+      
+      Variable predicted: score
+      Predictors contrasted: grp, time, x
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, c("grp", "time"), by = "x"), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1       | Level2       | x | Difference |   SE |        95% CI | t(992) |     p
+      ------------------------------------------------------------------------------------
+      control, 2   | control, 1   | a |       0.03 | 0.13 | [-0.23, 0.28] |   0.19 | 0.847
+      treatment, 1 | control, 1   | a |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment, 2 | control, 1   | a |       0.02 | 0.13 | [-0.23, 0.27] |   0.19 | 0.850
+      treatment, 1 | control, 2   | a |       0.17 | 0.13 | [-0.09, 0.43] |   1.26 | 0.207
+      treatment, 2 | control, 2   | a |       0.00 | 0.13 | [-0.26, 0.25] |  -0.01 | 0.991
+      treatment, 2 | treatment, 1 | a |      -0.17 | 0.13 | [-0.42, 0.08] |  -1.32 | 0.187
+      control, 2   | control, 1   | b |      -0.06 | 0.12 | [-0.30, 0.19] |  -0.46 | 0.648
+      treatment, 1 | control, 1   | b |      -0.18 | 0.12 | [-0.42, 0.06] |  -1.45 | 0.147
+      treatment, 2 | control, 1   | b |      -0.10 | 0.12 | [-0.34, 0.13] |  -0.89 | 0.376
+      treatment, 1 | control, 2   | b |      -0.12 | 0.13 | [-0.37, 0.12] |  -0.97 | 0.333
+      treatment, 2 | control, 2   | b |      -0.05 | 0.12 | [-0.29, 0.19] |  -0.40 | 0.691
+      treatment, 2 | treatment, 1 | b |       0.07 | 0.12 | [-0.16, 0.31] |   0.61 | 0.541
+      
+      Variable predicted: score
+      Predictors contrasted: grp, time
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, "grp", by = c("time", "x")), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1    | Level2  | time | x | Difference |   SE |        95% CI | t(992) |     p
+      -----------------------------------------------------------------------------------
+      treatment | control | 1    | a |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment | control | 2    | a |       0.00 | 0.13 | [-0.26, 0.25] |  -0.01 | 0.991
+      treatment | control | 1    | b |      -0.18 | 0.12 | [-0.42, 0.06] |  -1.45 | 0.147
+      treatment | control | 2    | b |      -0.05 | 0.12 | [-0.29, 0.19] |  -0.40 | 0.691
+      
+      Variable predicted: score
+      Predictors contrasted: grp
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, "grp", by = "time"), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1    | Level2  | time | Difference |   SE |        95% CI | t(992) |     p
+      -------------------------------------------------------------------------------
+      treatment | control | 1    |       0.01 | 0.09 | [-0.17, 0.18] |   0.09 | 0.931
+      treatment | control | 2    |      -0.02 | 0.09 | [-0.20, 0.15] |  -0.28 | 0.780
+      
+      Variable predicted: score
+      Predictors contrasted: grp
+      Predictors averaged: x
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, c("grp", "time", "x='a'")), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1       | Level2       | Difference |   SE |        95% CI | t(992) |     p
+      --------------------------------------------------------------------------------
+      control, 2   | control, 1   |       0.03 | 0.13 | [-0.23, 0.28] |   0.19 | 0.847
+      treatment, 1 | control, 1   |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment, 2 | control, 1   |       0.02 | 0.13 | [-0.23, 0.27] |   0.19 | 0.850
+      treatment, 1 | control, 2   |       0.17 | 0.13 | [-0.09, 0.43] |   1.26 | 0.207
+      treatment, 2 | control, 2   |       0.00 | 0.13 | [-0.26, 0.25] |  -0.01 | 0.991
+      treatment, 2 | treatment, 1 |      -0.17 | 0.13 | [-0.42, 0.08] |  -1.32 | 0.187
+      
+      Variable predicted: score
+      Predictors contrasted: grp, time, x='a'
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, c("grp", "time=1"), by = "x"), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1    | Level2  | x | Difference |   SE |        95% CI | t(992) |     p
+      ----------------------------------------------------------------------------
+      treatment | control | a |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment | control | b |      -0.18 | 0.12 | [-0.42, 0.06] |  -1.45 | 0.147
+      
+      Variable predicted: score
+      Predictors contrasted: grp, time=1
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, "grp", by = c("time", "x='a'")), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1    | Level2  | time | Difference |   SE |        95% CI | t(992) |     p
+      -------------------------------------------------------------------------------
+      treatment | control | 1    |       0.01 | 0.09 | [-0.17, 0.18] |   0.09 | 0.931
+      treatment | control | 2    |      -0.02 | 0.09 | [-0.20, 0.15] |  -0.28 | 0.780
+      
+      Variable predicted: score
+      Predictors contrasted: grp
+      Predictors averaged: x
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, "time=c(1,2)", by = "grp"), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1 | Level2 | grp       | Difference |   SE |        95% CI | t(994) |     p
+      --------------------------------------------------------------------------------
+      2      | 1      | control   |       0.14 | 0.11 | [-0.08, 0.36] |   1.24 | 0.216
+      2      | 1      | treatment |      -0.07 | 0.11 | [-0.28, 0.14] |  -0.63 | 0.529
+      
+      Variable predicted: score
+      Predictors contrasted: time=c(1,2)
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(estimate_contrasts(model2, c("grp", "time=2")), zap_small = TRUE,
+      table_width = Inf)
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1    | Level2  | Difference |   SE |        95% CI | t(994) |     p
+      ------------------------------------------------------------------------
+      treatment | control |      -0.15 | 0.11 | [-0.36, 0.05] |  -1.47 | 0.143
+      
+      Variable predicted: score
+      Predictors contrasted: grp, time=2
+      p-values are uncorrected.
+
