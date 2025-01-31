@@ -3,6 +3,7 @@
 
 #' @keywords internal
 .find_aes <- function(x) {
+  # init basic aes
   data <- as.data.frame(x)
   data$.group <- 1
 
@@ -20,6 +21,7 @@
   by <- att$focal_terms
 
   # Main geom
+  # ------------------------------------------------------------------------
   if ("estimate_contrasts" %in% att$class) {
     insight::format_error("Automated plotting is not yet implemented for this class.")
   } else if ("estimate_means" %in% att$class) {
@@ -32,6 +34,11 @@
       by[2] <- "Comparison"
     } else if ("p" %in% colnames(data) && length(by) == 1 && is.numeric(data[[by]])) {
       # this is for slopes of two numeric interaction terms (johnson-neymann plots)
+      # the slope of the first numeric term is along the y-axis, values for the
+      # 2nd numeric term on the x-axis. whenever confidence intervals exclude 0
+      # we find the (range of) numeric values for the 2nd term where the interaction
+      # is "significant", i.e. p < 0.05. We want to map this to a special aes
+      # so we can color the ribbons accordingly
       by <- c(by, "p")
       significant <- data$p < 0.05
       data$p <- "not significant"
@@ -57,20 +64,27 @@
   }
   if (length(by) == 0) {
     insight::format_error("No `by` variable was detected, so nothing to put in the x-axis.")
-  } else if (length(by) > 0) {
-    aes$x <- by[1]
-    # If x is a not-numeric, make pointrange
-    if (is.numeric(data[[by[1]]])) {
-      aes$type <- "ribbon"
-    } else {
-      aes$type <- "pointrange"
-    }
   }
+
+  # first variable for x-axis - decide whether we have a dot- or a line-plot
+  # ------------------------------------------------------------------------
+  aes$x <- by[1]
+  # If x is a not-numeric, make pointrange
+  if (is.numeric(data[[by[1]]])) {
+    aes$type <- "ribbon"
+  } else {
+    aes$type <- "pointrange"
+  }
+
+  # second variable, mapped to the color-aes
+  # ------------------------------------------------------------------------
   if (length(by) > 1) {
     aes$color <- by[2]
-    # if by is of length 2 and numeric, *and* we have slopes, then we have
-    # a Johnson-Neyman plot. In this case, we need to re-adjust ".group",
-    # which must have an own index for each "part" of the ribbons
+    # if by is of length 2, and the p-value column, *and* we have slopes, then
+    # # we have a Johnson-Neyman plot. In this case, we need to re-adjust ".group",
+    # which must have an own index for each "part" of the ribbons. ".group" now
+    # indicates every switch / flip from significant to non-significant and
+    # vice versa
     if ("estimate_slopes" %in% att$class && by[2] == "p") {
       group_index <- 1
       for (i in 2:(nrow(data))) {
@@ -88,6 +102,9 @@
       data$.group <- paste(data$.group, data[[by[2]]])
     }
   }
+
+  # third variable, mapped to alpha when numeric, or creates a facet for factors
+  # ------------------------------------------------------------------------
   if (length(by) > 2) {
     if (is.numeric(data[[by[3]]])) {
       aes$alpha <- by[3]
@@ -96,6 +113,9 @@
     }
     data$.group <- paste(data$.group, data[[by[3]]])
   }
+
+  # more than three variable? create facet grids then
+  # ------------------------------------------------------------------------
   if (length(by) > 3) {
     aes$facet <- NULL
     # we have to switch variables 3 and 4, due to regression formula
@@ -107,10 +127,14 @@
     ))
   }
 
+
   # CI
+  # ------------------------------------------------------------------------
   aes <- .find_aes_ci(aes, data)
 
+
   # axis and legend labels
+  # ------------------------------------------------------------------------
   if (!is.null(model_data) && !is.null(model_response)) {
     # response - mapped to the y-axis
     ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
@@ -166,6 +190,7 @@
                                   grid = NULL,
                                   join_dots = TRUE,
                                   ...) {
+  # init
   response_scale <- attributes(x)$predict
   aes <- .find_aes(x)
   data <- aes$data
@@ -210,17 +235,22 @@
   # Uncertainty -----------------------------------
   if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {
     for (i in seq_len(length(aes$ymin))) {
+      # base list elements
+      aes_list <- list(
+        y = aes$y,
+        x = aes$x,
+        ymin = aes$ymin[i],
+        ymax = aes$ymax[i],
+        fill = aes$color
+      )
+      # optionally add group aes, if not in global_aes and not null
+      if (!"group" %in% names(global_aes) || !is.null(aes$group)) {
+        aes_list$group = aes$group
+      }
       layers[[paste0("l", l)]] <- list(
         geom = "ribbon",
         data = data,
-        aes = insight::compact_list(list(
-          y = aes$y,
-          x = aes$x,
-          ymin = aes$ymin[i],
-          ymax = aes$ymax[i],
-          fill = aes$color,
-          group = aes$group
-        )),
+        aes = aes_list,
         alpha = 1 / 3
       )
       if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
@@ -232,16 +262,21 @@
 
   # connecting lines between point geoms
   if (!aes$type %in% do_not_join) {
+    # base list elements
+    aes_list <- list(
+      y = aes$y,
+      x = aes$x,
+      color = aes$color,
+      alpha = aes$alpha
+  )
+    # optionally add group aes, if not in global_aes and not null
+    if (!"group" %in% names(global_aes) || !is.null(aes$group)) {
+      aes_list$group = aes$group
+    }
     layers[[paste0("l", l)]] <- list(
       geom = "line",
       data = data,
-      aes = insight::compact_list(list(
-        y = aes$y,
-        x = aes$x,
-        color = aes$color,
-        group = aes$group,
-        alpha = aes$alpha
-      ))
+      aes = aes_list
     )
     if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
       layers[[paste0("l", l)]]$position <- "dodge"
@@ -315,7 +350,7 @@
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))
   attr(layers, "data") <- data
-  attr(layers, "global_aes") <- global_aes
+  attr(layers, "global_aes") <- insight::compact_list(global_aes)
   layers
 }
 
