@@ -429,11 +429,11 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
   by = "Petal.Length",
-  length = 100
+  length = 200
 )
 
 # 2. Visualize predictions and derivative
-plot(estimate_relation(model, length = 100)) /
+plot(estimate_relation(model, length = 200)) /
   plot(deriv) +
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
@@ -500,6 +500,8 @@ slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
 
 plot(slopes)
 ```
+
+<img src="man/figures/unnamed-chunk-13-1.png" width="100%" />
 
 ### Visualize predictions with random effects
 
