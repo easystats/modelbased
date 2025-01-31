@@ -354,12 +354,6 @@ describe_nonlinear(vizdata, x = "Petal.Length")
 See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a walkthrough on how to do that.
 
 
-```{r echo=FALSE, fig.align='center', out.width="80%"}
-knitr::include_graphics("https://raw.githubusercontent.com/easystats/modelbased/refs/heads/main/man/figures/gganimate_figure.gif")
-```
-
-<!-- Needs to be re-implemented after revision of visualisation_recipe()
-
 ## Understand interactions between two continuous variables
 
 Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
@@ -369,11 +363,10 @@ For instance, the plot below shows that the effect of `hp` (the y-axis) is signi
 ```{r eval=FALSE}
 model <- lm(mpg ~ hp * wt, data = mtcars)
 
-slopes <- estimate_slopes(model, trend = "hp", by = "wt")
+slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
 
 plot(slopes)
 ```
--->
 
 ### Visualize predictions with random effects
 

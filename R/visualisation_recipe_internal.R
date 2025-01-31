@@ -30,6 +30,12 @@
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
       if (length(by) > 1) by[3:(length(by) + 1)] <- by[2:length(by)]
       by[2] <- "Comparison"
+    } else if ("p" %in% colnames(data) && length(by) == 1 && is.numeric(data[[by]])) {
+      # this is for slopes of two numeric interaction terms (johnson-neymann plots)
+      by <- c(by, "p")
+      significant <- data$p < 0.05
+      data$p <- "not significant"
+      data$p[significant] <- "significant"
     }
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
@@ -167,6 +173,19 @@
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
+
+
+  # intercept line for slopes ----------------------------------
+  if (inherits(x, "estimate_slopes")) {
+    layers[[paste0("l", l)]] <- insight::compact_list(list(
+      geom = "hline",
+      yintercept = 0,
+      alpha = 1 / 2,
+      linetype = "dashed"
+    ))
+    l <- l + 1
+  }
+
 
   # Uncertainty -----------------------------------
   if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {

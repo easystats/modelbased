@@ -447,3 +447,15 @@ test_that("plots no CI", {
     plot(modelbased::visualisation_recipe(x, show_data = FALSE, ribbon = "none"))
   )
 })
+
+
+test_that("interaction of numerics (Johnson-Neyman)", {
+  data(mtcars)
+  model <- lm(mpg ~ hp * wt, data = mtcars)
+  slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-jonhson-neyman-1",
+    plot(slopes)
+  )
+})
