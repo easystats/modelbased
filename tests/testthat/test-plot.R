@@ -307,6 +307,7 @@ test_that("plots, at special values", {
 
 
 test_that("plots, estimate_slope", {
+  skip_if(packageVersion("see") <= "0.10.0")
   data(iris)
 
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -450,6 +451,7 @@ test_that("plots no CI", {
 
 
 test_that("interaction of numerics (Johnson-Neyman)", {
+  skip_if(packageVersion("see") <= "0.10.0")
   data(mtcars)
   model <- lm(mpg ~ hp * wt, data = mtcars)
   slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
