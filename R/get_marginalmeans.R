@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              marginalize = "average",
+                              estimate = "sample",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -45,9 +45,9 @@ get_marginalmeans <- function(model,
   comparison <- dots$hypothesis
 
   # validate input
-  marginalize <- insight::validate_argument(
-    marginalize,
-    c("average", "population", "specific")
+  estimate <- insight::validate_argument(
+    estimate,
+    c("sample", "population", "specific")
   )
 
   # Guess arguments
@@ -65,7 +65,7 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    dg_factors <- switch(marginalize,
+    dg_factors <- switch(estimate,
       specific = "reference",
       "all"
     )
@@ -121,7 +121,7 @@ get_marginalmeans <- function(model,
   )
 
   # counterfactual predictions - we need the "variables" argument
-  if (marginalize == "population") {
+  if (estimate == "population") {
     # sanity check
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
@@ -191,7 +191,7 @@ get_marginalmeans <- function(model,
     by = my_args$by,
     info = c(
       datagrid_info,
-      list(predict = predict, marginalize = marginalize, datagrid = datagrid)
+      list(predict = predict, estimate = estimate, datagrid = datagrid)
     )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
@@ -226,7 +226,7 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range",
+    "contrast", "estimate", "p_adjust", "datagrid", "preserve_range",
     "coef_name", "slope"
   )
 }

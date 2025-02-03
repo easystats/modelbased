@@ -5,7 +5,7 @@ get_marginalcontrasts <- function(model,
                                   by = NULL,
                                   predict = NULL,
                                   comparison = "pairwise",
-                                  marginalize = "average",
+                                  estimate = "sample",
                                   ci = 0.95,
                                   p_adjust = "none",
                                   verbose = TRUE,
@@ -77,7 +77,7 @@ get_marginalcontrasts <- function(model,
       hypothesis = my_args$comparison,
       predict = predict,
       backend = "marginaleffects",
-      marginalize = marginalize,
+      estimate = estimate,
       verbose = verbose,
       ...
     )
@@ -104,7 +104,7 @@ get_marginalcontrasts <- function(model,
       contrast = my_args$contrast,
       predict = predict,
       comparison = my_args$comparison,
-      marginalize = marginalize,
+      estimate = estimate,
       p_adjust = p_adjust
     )
   )

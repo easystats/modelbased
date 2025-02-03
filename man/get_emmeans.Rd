@@ -39,7 +39,7 @@ get_marginalcontrasts(
   by = NULL,
   predict = NULL,
   comparison = "pairwise",
-  marginalize = "average",
+  estimate = "sample",
   ci = 0.95,
   p_adjust = "none",
   verbose = TRUE,
@@ -51,7 +51,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  marginalize = "average",
+  estimate = "sample",
   transform = NULL,
   verbose = TRUE,
   ...
@@ -155,11 +155,12 @@ Additional arguments can be passed to these functions.
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
-\item{marginalize}{Character string, indicating the type of marginalization.
-This dictates how the predictions are "averaged" over the non-focal predictors,
-i.e. those variables that are not specified in \code{by} or \code{contrast}.
+\item{estimate}{Character string, indicating the type of target population
+predictions refer to, i.e. this dictates how the predictions are "averaged"
+over the non-focal predictors, i.e. those variables that are not specified in
+\code{by} or \code{contrast}.
 \itemize{
-\item \code{"average"} (default): Takes the mean value for non-focal numeric
+\item \code{"sample"} (default): Takes the mean value for non-focal numeric
 predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
@@ -181,16 +182,16 @@ your observed sample, but also "what would be if" we had more data, or if
 we had data from a different sample.
 }
 
-In other words, the distinction between marginalization types resides in whether
+In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
 \item A specific "individual" from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
 and the other prediction functions.
 \item An average individual from the sample: obtained with
-\code{estimate_means(..., marginalize = "average")}
+\code{estimate_means(..., estimate = "sample")}
 \item The broader, hypothetical target population: obtained with
-\code{estimate_means(..., marginalize = "population")}
+\code{estimate_means(..., estimate = "population")}
 }}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}

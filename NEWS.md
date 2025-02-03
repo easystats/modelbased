@@ -35,8 +35,8 @@
   predictions should be on the response scale, link scale, etc.). It can also
   be used to predict auxiliary (distributional) parameters.
 
-- `estimate_means()` and `estimate_contrasts()` get a `marginalize` argument,
-  to specify how to marginalize over non-focal terms. This results in slightly
+- `estimate_means()` and `estimate_contrasts()` get a `estimate` argument,
+  to specify how to estimate over non-focal terms. This results in slightly
   different predicted values, each approach answering a different question.
 
 - `estimate_contrasts()` gains a `backend` argument. This defaults to

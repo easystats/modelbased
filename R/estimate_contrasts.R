@@ -106,7 +106,7 @@ estimate_contrasts.default <- function(model,
                                        ci = 0.95,
                                        p_adjust = "none",
                                        comparison = "pairwise",
-                                       marginalize = "average",
+                                       estimate = "sample",
                                        backend = getOption("modelbased_backend", "marginaleffects"),
                                        transform = NULL,
                                        verbose = TRUE,
@@ -138,7 +138,7 @@ estimate_contrasts.default <- function(model,
       comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
-      marginalize = marginalize,
+      estimate = estimate,
       verbose = verbose,
       ...
     )
@@ -150,7 +150,7 @@ estimate_contrasts.default <- function(model,
 
   # Table formatting
   attr(out, "table_title") <- c(ifelse(
-    marginalize == "specific",
+    estimate == "specific",
     "Model-based Contrasts Analysis",
     "Marginal Contrasts Analysis"
   ), "blue")
