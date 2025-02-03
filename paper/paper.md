@@ -54,16 +54,15 @@ The two probably most popular R packages for extracting these quantities of inte
 
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
 These predictions can be of different types, depending on the model and the question at hand.
-For instance, for linear regressions, predictions can be associated with **confidence intervals** (`predict="expectation"`) or **prediction intervals** (`predict="prediction"`).
+For instance, predictions can be associated with **confidence intervals** (`predict="expectation"`) or **prediction intervals** (`predict="prediction"`).
 The former corresponds to the uncertainty around the "relationship" (i.e., the conditional estimate, typically of the expectation ($E[X]$) according to a model's parameters)
-while the latter provides information about the range individual observations might take (e.g., _around_ the expectation $E[X]$).
-For generalized linear models (GLMs), <!-- while the distinction between prediction and confidence intervals do not apply, -->
-predictions can be made on the **response scale** (`predict="response"`) or the **link scale** (`predict="link"`).
+while the latter is typically larger and provides information about the range individual observations might take (e.g., _around_ the expectation $E[X]$).
+Moreover, for generalized linear models (GLMs), predictions can be made on the **response scale** (`predict="response"`) or the **link scale** (`predict="link"`).
 This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic regression models.
 
 These different types of estimates can be obtained for observation in the original dataset,
 which is useful to assess the model's goodness-of-fit,
-or for new data (typically a "data grid"), which is useful for visualization and counter-factual reasoning.
+or for new data (typically a "data grid"), which is useful for visualization or computing "marginal" estimates (see below).
 
 For convenience, the `modelbased` package includes 4 related functions, that mostly differ in their default arguments for `data` and `predict`:
 
@@ -98,13 +97,12 @@ The modelbased package simplifies the extraction of these quantities, providing 
 The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`,
 which can be set as a global option with (e.g., `options(modelbased_backend = "marginaleffects")`).
 
-Of the two, `emmeans` (REF) is the more senior package;
-Originally, the package was known as `lsmeans`, which stands for "Least-Squares Means".
+Of the two, `emmeans` (REF) is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means").
 This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs:
 predictions made over a regular grid - a counter-factual dataset containing all combinations of the categorical predictors in the model and typically the mean of numerical predictors.
-The package was renamed in 2016 to `emmeans` to clarify it is not specific to least-squares estimation.
+The package was renamed in 2016 to `emmeans` to clarify that it is not specific to least-squares estimation.
 
-Within `emmeans, estimated marginal means are generated as a linear function of the model's coefficients,
+Within `emmeans, estimates are generated as a linear function of the model's coefficients,
 with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
 For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance,
 we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
@@ -136,11 +134,11 @@ making it more computationally costly relative to the simple simple matrix multi
 (though `marginaleffects` is very efficient).
 
 This means that while `emmeans` typically produces _effects at the mean_, `marginaleffects` typically produces _mean effects_.
-Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very very different.
+Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
 
-Of course, `emmeans` can also use the delta method and can use non-regular grids,
-and `marginaleffects` can also generate linear predictions at the mean.
-But to obtain these requires a higher degree of competency in the relevant packages than perhaps most users have.
+Note that `emmeans` can also use the delta method and can use non-regular grids,
+and `marginaleffects` can also generate linear predictions at the mean, 
+but to obtain these requires some degree of competency in the relevant packages.
 
 
 `modelbased` leverages `get_datagrid()` function from the `insight` package (REF)
