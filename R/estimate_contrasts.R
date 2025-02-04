@@ -104,11 +104,11 @@ estimate_contrasts.default <- function(model,
                                        by = NULL,
                                        predict = NULL,
                                        ci = 0.95,
-                                       p_adjust = "none",
                                        comparison = "pairwise",
                                        estimate = "average",
-                                       backend = getOption("modelbased_backend", "marginaleffects"),
+                                       p_adjust = "none",
                                        transform = NULL,
+                                       backend = getOption("modelbased_backend", "marginaleffects"),
                                        verbose = TRUE,
                                        ...) {
   if (backend == "emmeans") {

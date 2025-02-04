@@ -38,9 +38,9 @@ get_marginalcontrasts(
   contrast = NULL,
   by = NULL,
   predict = NULL,
+  ci = 0.95,
   comparison = "pairwise",
   estimate = "average",
-  ci = 0.95,
   p_adjust = "none",
   transform = NULL,
   verbose = TRUE,
@@ -162,6 +162,8 @@ Additional arguments can be passed to these functions.
 \item{trend}{A character indicating the name of the variable for which to
 compute the slopes.}
 
+\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
 \item{estimate}{Character string, indicating the type of target population
 predictions refer to. This dictates how the predictions are "averaged" over
 the non-focal predictors, i.e. those variables that are not specified in
@@ -201,8 +203,6 @@ and the other prediction functions.
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
 }}
-
-\item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},

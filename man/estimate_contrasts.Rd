@@ -13,11 +13,11 @@ estimate_contrasts(model, ...)
   by = NULL,
   predict = NULL,
   ci = 0.95,
-  p_adjust = "none",
   comparison = "pairwise",
   estimate = "average",
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  p_adjust = "none",
   transform = NULL,
+  backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
 )
@@ -83,12 +83,6 @@ packages), for instance when using complex formulae in \code{brms} models, the
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
-
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
 carried out.
@@ -159,6 +153,20 @@ and the other prediction functions.
 \code{estimate_means(..., estimate = "population")}
 }}
 
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function.}
+
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
@@ -169,14 +177,6 @@ You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
 \code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
 as default backend.}
-
-\item{transform}{A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be \code{TRUE}, in
-which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 }

@@ -10,8 +10,8 @@ estimate_means(
   predict = NULL,
   ci = 0.95,
   estimate = "average",
-  backend = getOption("modelbased_backend", "marginaleffects"),
   transform = NULL,
+  backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
 )
@@ -98,6 +98,14 @@ and the other prediction functions.
 \code{estimate_means(..., estimate = "population")}
 }}
 
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function.}
+
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
@@ -108,14 +116,6 @@ You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
 \code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
 as default backend.}
-
-\item{transform}{A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be \code{TRUE}, in
-which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 

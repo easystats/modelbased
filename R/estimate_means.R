@@ -181,8 +181,8 @@ estimate_means <- function(model,
                            predict = NULL,
                            ci = 0.95,
                            estimate = "average",
-                           backend = getOption("modelbased_backend", "marginaleffects"),
                            transform = NULL,
+                           backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
                            ...) {
   # validate input
