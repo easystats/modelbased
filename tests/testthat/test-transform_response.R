@@ -38,7 +38,7 @@ test_that("estimate_expectation, transform", {
   )
   out1 <- estimate_expectation(m, by = "speed", transform = TRUE)
   expect_equal(
-    out$Predicted,
+    out1$Predicted,
     c(
       8.66407, 11.48417, 15.2222, 20.17694, 26.74442, 35.44958, 46.98822,
       62.28261, 82.55525, 109.42651
