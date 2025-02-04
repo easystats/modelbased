@@ -89,7 +89,7 @@ get_marginalmeans <- function(model,
 
     # add user-arguments from "...", but remove those arguments that are
     # already used (see below) when calling marginaleffects
-    dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
+    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
   }
 
 
@@ -123,7 +123,11 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    fun_args$newdata <- datagrid
+    if (is.null(dots$newdata)) {
+      # we allow individual "newdata" options, so do not
+      # # overwrite if explicitly set
+      fun_args$newdata <- datagrid
+    }
     fun_args$by <- datagrid_info$at_specs$varname
   }
 

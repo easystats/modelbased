@@ -53,8 +53,8 @@ Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::descr
 to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence} or \code{slope} can be
-passed to those functions.
+for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
+\code{newdata} can be passed to those functions.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using

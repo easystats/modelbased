@@ -101,8 +101,8 @@
 #'   to control the (number of) representative values.
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments
-#'   for instance like `vcov`, `transform`, `equivalence` or `slope` can be
-#'   passed to those functions.
+#'   for instance like `vcov`, `transform`, `equivalence`, `slope` or even
+#'   `newdata` can be passed to those functions.
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using

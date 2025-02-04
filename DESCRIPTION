@@ -65,6 +65,7 @@ Suggests:
     MASS,
     marginaleffects (>= 0.25.0),
     mgcv,
+    nanoparquet,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,
