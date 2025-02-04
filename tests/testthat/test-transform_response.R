@@ -47,6 +47,6 @@ test_that("estimate_expectation, transform", {
     ),
     tolerance = 1e-4
   )
-  out2 <- estimate_expectation(m, by ="speed", transform = exp)
+  out2 <- estimate_expectation(m, by = "speed", transform = exp)
   expect_equal(out1$Predicted, out2$Predicted, tolerance = 1e-4)
 })
