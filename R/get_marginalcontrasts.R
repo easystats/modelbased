@@ -122,7 +122,7 @@ get_marginalcontrasts <- function(model,
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
   # init
-  comparison_slopes <- by_filter <- NULL
+  comparison_slopes <- by_filter <- by_token <- NULL
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
@@ -134,6 +134,11 @@ get_marginalcontrasts <- function(model,
     if (length(filter_value) > 1) {
       # parse filter value and save for later user
       by_filter <- .safe(eval(str2lang(filter_value[2])))
+      # check if evaluation was possible, or if we had a "token", like
+      # "[sd]" or "[fivenum]". If not, update `by`, else preserve
+      if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
+        by_token <- filter_value[2]
+      }
       # copy "cleaned" variable
       my_args$by <- filter_value[1]
     }
@@ -190,6 +195,11 @@ get_marginalcontrasts <- function(model,
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+
+  # add back token to `by`
+  if (!is.null(by_token)) {
+    my_args$by <- paste(my_args$by, by_token, sep = "=")
+  }
 
   c(
     # the "my_args" argument, containing "by" and "contrast"
