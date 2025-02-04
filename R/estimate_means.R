@@ -42,18 +42,19 @@
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.
 #' @param estimate Character string, indicating the type of target population
-#' predictions refer to, i.e. this dictates how the predictions are "averaged"
-#' over the non-focal predictors, i.e. those variables that are not specified in
+#' predictions refer to. This dictates how the predictions are "averaged" over
+#' the non-focal predictors, i.e. those variables that are not specified in
 #' `by` or `contrast`.
-#' - `"sample"` (default): Takes the mean value for non-focal numeric
+#' - `"average"` (default): Takes the mean value for non-focal numeric
 #'   predictors and marginalizes over the factor levels of non-focal terms,
 #'   which computes a kind of "weighted average" for the values at which these
 #'   terms are hold constant. These predictions are a good representation of the
 #'   sample, because all possible values and levels of the non-focal predictors
 #'   are considered. It answers the question, "What is the predicted value for
-#'   an 'average' observation in *my data*?". It refers to randomly picking a
-#'   subject of your sample and the result you get on average. This approach is
-#'   the one taken by default in the `emmeans` package.
+#'   an 'average' observation in *my data*?". Cum grano salis, it refers to
+#'   randomly picking a subject of your sample and the result you get on
+#'   average. This approach is the one taken by default in the `emmeans`
+#'   package.
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
@@ -72,7 +73,7 @@
 #'   predictor values): this is what is obtained when using [`estimate_relation()`]
 #'   and the other prediction functions.
 #' - An average individual from the sample: obtained with
-#'   `estimate_means(..., estimate = "sample")`
+#'   `estimate_means(..., estimate = "average")`
 #' - The broader, hypothetical target population: obtained with
 #'   `estimate_means(..., estimate = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
@@ -173,7 +174,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           estimate = "sample",
+                           estimate = "average",
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            transform = NULL,
                            verbose = TRUE,
@@ -187,7 +188,7 @@ estimate_means <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("sample", "population", "specific")
+    c("average", "population", "specific")
   )
 
   if (backend == "emmeans") {

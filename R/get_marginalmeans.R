@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = "sample",
+                              estimate = "average",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -47,7 +47,7 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("sample", "population", "specific")
+    c("average", "population", "specific")
   )
 
   # Guess arguments

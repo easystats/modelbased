@@ -15,7 +15,7 @@ estimate_contrasts(model, ...)
   ci = 0.95,
   p_adjust = "none",
   comparison = "pairwise",
-  estimate = "sample",
+  estimate = "average",
   backend = getOption("modelbased_backend", "marginaleffects"),
   transform = NULL,
   verbose = TRUE,
@@ -120,19 +120,20 @@ after a vertical bar ( \code{|}).
 }}
 
 \item{estimate}{Character string, indicating the type of target population
-predictions refer to, i.e. this dictates how the predictions are "averaged"
-over the non-focal predictors, i.e. those variables that are not specified in
+predictions refer to. This dictates how the predictions are "averaged" over
+the non-focal predictors, i.e. those variables that are not specified in
 \code{by} or \code{contrast}.
 \itemize{
-\item \code{"sample"} (default): Takes the mean value for non-focal numeric
+\item \code{"average"} (default): Takes the mean value for non-focal numeric
 predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
 are considered. It answers the question, "What is the predicted value for
-an 'average' observation in \emph{my data}?". It refers to randomly picking a
-subject of your sample and the result you get on average. This approach is
-the one taken by default in the \code{emmeans} package.
+an 'average' observation in \emph{my data}?". Cum grano salis, it refers to
+randomly picking a subject of your sample and the result you get on
+average. This approach is the one taken by default in the \code{emmeans}
+package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -153,7 +154,7 @@ the prediction are made for:
 predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
 and the other prediction functions.
 \item An average individual from the sample: obtained with
-\code{estimate_means(..., estimate = "sample")}
+\code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
 }}
