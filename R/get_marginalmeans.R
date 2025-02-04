@@ -32,12 +32,6 @@ get_marginalmeans <- function(model,
   # check if available
   insight::check_if_installed("marginaleffects")
 
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   # First step: process arguments --------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -162,6 +156,14 @@ get_marginalmeans <- function(model,
   # set to NULL
   if (!"re.form" %in% names(dots)) {
     fun_args$re.form <- NULL
+  }
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+  }
+  if (!is.null(transform)) {
+    fun_args$transform <- transform
   }
 
 

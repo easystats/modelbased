@@ -111,12 +111,6 @@ estimate_contrasts.default <- function(model,
                                        transform = NULL,
                                        verbose = TRUE,
                                        ...) {
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
@@ -139,6 +133,7 @@ estimate_contrasts.default <- function(model,
       p_adjust = p_adjust,
       ci = ci,
       estimate = estimate,
+      transform = transform,
       verbose = verbose,
       ...
     )

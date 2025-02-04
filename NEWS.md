@@ -13,7 +13,11 @@
 - Argument `fixed` has been removed, as you can fix predictor at certain values
   using the `by` argument.
 
-- Argument `transform` is deprecated. Please use `predict` instead.
+- Argument `transform` is no longer used to determin the scale of the predictions.
+  Please use `predict` instead.
+
+- Argument `transform` is now used to (back-) transform predictions and confidence
+  intervals.
 
 - Argument `method` in `estimate_contrasts()` was renamed into `comparison`.
 

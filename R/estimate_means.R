@@ -86,7 +86,13 @@
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
 #' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
 #' as default backend.
-#' @param transform Deprecated, please use `predict` instead.
+#' @param transform A function applied to predictions and confidence intervals
+#' to (back-) transform results, which can be useful in case the regression
+#' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). For
+#' Bayesian models, this function is applied to individual draws from the
+#' posterior distribution, before computing summaries. Can also be `TRUE`, in
+#' which case `insight::get_transformation()` is called to determine the
+#' appropriate transformation-function.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -179,12 +185,6 @@ estimate_means <- function(model,
                            transform = NULL,
                            verbose = TRUE,
                            ...) {
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   # validate input
   estimate <- insight::validate_argument(
     estimate,
@@ -193,11 +193,26 @@ estimate_means <- function(model,
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
+    estimated <- get_emmeans(
+      model,
+      by = by,
+      predict = predict,
+      verbose = verbose,
+      ...
+    )
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, estimate = estimate, verbose = verbose, ...) # nolint
+    estimated <- get_marginalmeans(
+      model,
+      by = by,
+      predict = predict,
+      ci = ci,
+      estimate = estimate,
+      transform = transform,
+      verbose = verbose,
+      ...
+    )
     means <- format(estimated, model, ...)
   }
 

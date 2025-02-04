@@ -8,6 +8,7 @@ get_marginalcontrasts <- function(model,
                                   estimate = "average",
                                   ci = 0.95,
                                   p_adjust = "none",
+                                  transform = NULL,
                                   verbose = TRUE,
                                   ...) {
   # check if available
@@ -78,6 +79,7 @@ get_marginalcontrasts <- function(model,
       predict = predict,
       backend = "marginaleffects",
       estimate = estimate,
+      transform = transform,
       verbose = verbose,
       ...
     )

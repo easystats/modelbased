@@ -170,7 +170,13 @@ You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
 as default backend.}
 
-\item{transform}{Deprecated, please use \code{predict} instead.}
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 }
