@@ -1,3 +1,5 @@
+skip_if_not_installed("marginaleffects")
+
 test_that("estimate_means, transform", {
   data(cars)
   m <- lm(log(dist) ~ speed, data = cars)
