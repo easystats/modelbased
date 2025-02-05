@@ -13,6 +13,7 @@ estimate_expectation(
   by = NULL,
   predict = "expectation",
   ci = 0.95,
+  transform = NULL,
   keep_iterations = FALSE,
   ...
 )
@@ -23,6 +24,7 @@ estimate_link(
   by = NULL,
   predict = "link",
   ci = 0.95,
+  transform = NULL,
   keep_iterations = FALSE,
   ...
 )
@@ -33,6 +35,7 @@ estimate_prediction(
   by = NULL,
   predict = "prediction",
   ci = 0.95,
+  transform = NULL,
   keep_iterations = FALSE,
   ...
 )
@@ -43,6 +46,7 @@ estimate_relation(
   by = NULL,
   predict = "expectation",
   ci = 0.95,
+  transform = NULL,
   keep_iterations = FALSE,
   ...
 )
@@ -76,6 +80,13 @@ the corresponding functions will then only differ in the default value of
 their \code{data} argument.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). Can also
+be \code{TRUE}, in which case \code{insight::get_transformation()} is called to
+determine the appropriate transformation-function. \strong{Note:} Standard errors
+are not (back-) transformed!}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
