@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.107</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -66,13 +66,14 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.9.0" id="modelbased-090">modelbased 0.9.0<a class="anchor" aria-label="anchor" href="#modelbased-090"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.9.0" id="modelbased-090">modelbased 0.9.0<a class="anchor" aria-label="anchor" href="#modelbased-090"></a></h2><p class="text-muted">CRAN release: 2025-02-05</p>
 <div class="section level3">
 <h3 id="breaking-changes-0-9-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-9-0"></a></h3>
 <ul><li><p>The default package used for <code><a href="../reference/estimate_means.html">estimate_means()</a></code>, <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> is now <em>marginaleffects</em>. You can set your preferred package as backend using either the <code>backend</code> argument, or in general by setting <code>options(modelbased_backend = "marginaleffects")</code> or <code>options(modelbased_backend = "emmeans")</code>.</p></li>
 <li><p>Deprecated argument and function names have been removed.</p></li>
 <li><p>Argument <code>fixed</code> has been removed, as you can fix predictor at certain values using the <code>by</code> argument.</p></li>
-<li><p>Argument <code>transform</code> is deprecated. Please use <code>predict</code> instead.</p></li>
+<li><p>Argument <code>transform</code> is no longer used to determine the scale of the predictions. Please use <code>predict</code> instead.</p></li>
+<li><p>Argument <code>transform</code> is now used to (back-) transform predictions and confidence intervals.</p></li>
 <li><p>Argument <code>method</code> in <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> was renamed into <code>comparison</code>.</p></li>
 <li><p>All <code>model_*()</code> alias names have been removed. Use the related <code>get_*()</code> functions instead.</p></li>
 <li><p>The <code>show_data</code> argument in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> defaults to <code>FALSE</code>.</p></li>
@@ -81,7 +82,7 @@
 <h3 id="major-changes-0-9-0">Major Changes<a class="anchor" aria-label="anchor" href="#major-changes-0-9-0"></a></h3>
 <ul><li><p>The <code>"marginaleffects"</code> backend is now fully implemented and no longer work-in-progress. You can set your preferred package as backend using either the <code>backend</code> argument, or in general by setting <code>options(modelbased_backend = "marginaleffects")</code> or <code>options(modelbased_backend = "emmeans")</code>.</p></li>
 <li><p>All <code>estimate_*()</code> functions get a <code>predict</code> argument, which can be used to modulate the type of transformation applied to the predictions (i.e. whether predictions should be on the response scale, link scale, etc.). It can also be used to predict auxiliary (distributional) parameters.</p></li>
-<li><p><code><a href="../reference/estimate_means.html">estimate_means()</a></code> and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> get a <code>marginalize</code> argument, to specify how to marginalize over non-focal terms. This results in slightly different predicted values, each approach answering a different question.</p></li>
+<li><p><code><a href="../reference/estimate_means.html">estimate_means()</a></code> and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> get a <code>estimate</code> argument, to specify how to estimate over non-focal terms. This results in slightly different predicted values, each approach answering a different question.</p></li>
 <li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gains a <code>backend</code> argument. This defaults to <code>"marginaleffects"</code>, but can be set to <code>"emmeans"</code> to use features of that package to estimate contrasts and pairwise comparisons.</p></li>
 <li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> and related functions also get a <code>by</code> argument, as alternative to create a datagrid for the <code>data</code> argument.</p></li>
 <li><p>Many functions get a <code>verbose</code> argument, to silence warnings and messages.</p></li>

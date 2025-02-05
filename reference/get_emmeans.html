@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.107</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -114,10 +114,11 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  contrast <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
-<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -127,7 +128,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -214,7 +215,13 @@ after a vertical bar ( <code>|</code>).</p></li>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
-<dd><p>Deprecated, please use <code>predict</code> instead.</p></dd>
+<dd><p>A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be <code>TRUE</code>, in
+which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
+appropriate transformation-function.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -228,8 +235,8 @@ Bayesian models via <code><a href="https://easystats.github.io/bayestestR/refere
 to control the (number of) representative values.</p></li>
 <li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
 means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
-for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
-passed to those functions.</p></li>
+for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code>, <code>slope</code> or even
+<code>newdata</code> can be passed to those functions.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
@@ -243,18 +250,24 @@ Additional arguments can be passed to these functions.</p></li>
 compute the slopes.</p></dd>
 
 
-<dt id="arg-marginalize">marginalize<a class="anchor" aria-label="anchor" href="#arg-marginalize"></a></dt>
-<dd><p>Character string, indicating the type of marginalization.
-This dictates how the predictions are "averaged" over the non-focal predictors,
-i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
+<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
+<dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
+
+
+<dt id="arg-estimate">estimate<a class="anchor" aria-label="anchor" href="#arg-estimate"></a></dt>
+<dd><p>Character string, indicating the type of target population
+predictions refer to. This dictates how the predictions are "averaged" over
+the non-focal predictors, i.e. those variables that are not specified in
+<code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
 predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
 are considered. It answers the question, "What is the predicted value for
-an 'average' observation in <em>my data</em>?". It refers to randomly picking a
-subject of your sample and the result you get on average. This approach is
-the one taken by default in the <code>emmeans</code> package.</p></li>
+an 'average' observation in <em>my data</em>?". Cum grano salis, it refers to
+randomly picking a subject of your sample and the result you get on
+average. This approach is the one taken by default in the <code>emmeans</code>
+package.</p></li>
 <li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -266,19 +279,15 @@ is the predicted response value for the 'average' observation in <em>the
 broader target population</em>?". It does not only refer to the actual data in
 your observed sample, but also "what would be if" we had more data, or if
 we had data from a different sample.</p></li>
-</ul><p>In other words, the distinction between marginalization types resides in whether
+</ul><p>In other words, the distinction between estimate types resides in whether
 the prediction are made for:</p><ul><li><p>A specific "individual" from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code>
 and the other prediction functions.</p></li>
 <li><p>An average individual from the sample: obtained with
-<code>estimate_means(..., marginalize = "average")</code></p></li>
+<code>estimate_means(..., estimate = "average")</code></p></li>
 <li><p>The broader, hypothetical target population: obtained with
-<code>estimate_means(..., marginalize = "population")</code></p></li>
+<code>estimate_means(..., estimate = "population")</code></p></li>
 </ul></dd>
-
-
-<dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
-<dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>

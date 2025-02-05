@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.8.9.107</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -87,11 +87,11 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
-<span>  marginalize <span class="op">=</span> <span class="st">"average"</span>,</span>
-<span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"marginaleffects"</span><span class="op">)</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"marginaleffects"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -112,8 +112,8 @@ Bayesian models via <code><a href="https://easystats.github.io/bayestestR/refere
 to control the (number of) representative values.</p></li>
 <li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
 means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments
-for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code> or <code>slope</code> can be
-passed to those functions.</p></li>
+for instance like <code>vcov</code>, <code>transform</code>, <code>equivalence</code>, <code>slope</code> or even
+<code>newdata</code> can be passed to those functions.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
@@ -168,14 +168,6 @@ for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
 <dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
 
 
-<dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
-<dd><p>The p-values adjustment method for frequentist multiple
-comparisons. Can be one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>,
-<code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code> or <code>"holm"</code>. See the
-p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation or
-<code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">?stats::p.adjust</a></code>.</p></dd>
-
-
 <dt id="arg-comparison">comparison<a class="anchor" aria-label="anchor" href="#arg-comparison"></a></dt>
 <dd><p>Specify the type of contrasts or tests that should be
 carried out.</p><ul><li><p>When <code>backend = "emmeans"</code>, can be one of <code>"pairwise"</code>, <code>"poly"</code>,
@@ -203,18 +195,20 @@ after a vertical bar ( <code>|</code>).</p></li>
 </ul></dd>
 
 
-<dt id="arg-marginalize">marginalize<a class="anchor" aria-label="anchor" href="#arg-marginalize"></a></dt>
-<dd><p>Character string, indicating the type of marginalization.
-This dictates how the predictions are "averaged" over the non-focal predictors,
-i.e. those variables that are not specified in <code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
+<dt id="arg-estimate">estimate<a class="anchor" aria-label="anchor" href="#arg-estimate"></a></dt>
+<dd><p>Character string, indicating the type of target population
+predictions refer to. This dictates how the predictions are "averaged" over
+the non-focal predictors, i.e. those variables that are not specified in
+<code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
 predictors and marginalizes over the factor levels of non-focal terms,
 which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
 are considered. It answers the question, "What is the predicted value for
-an 'average' observation in <em>my data</em>?". It refers to randomly picking a
-subject of your sample and the result you get on average. This approach is
-the one taken by default in the <code>emmeans</code> package.</p></li>
+an 'average' observation in <em>my data</em>?". Cum grano salis, it refers to
+randomly picking a subject of your sample and the result you get on
+average. This approach is the one taken by default in the <code>emmeans</code>
+package.</p></li>
 <li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -226,15 +220,33 @@ is the predicted response value for the 'average' observation in <em>the
 broader target population</em>?". It does not only refer to the actual data in
 your observed sample, but also "what would be if" we had more data, or if
 we had data from a different sample.</p></li>
-</ul><p>In other words, the distinction between marginalization types resides in whether
+</ul><p>In other words, the distinction between estimate types resides in whether
 the prediction are made for:</p><ul><li><p>A specific "individual" from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code>
 and the other prediction functions.</p></li>
 <li><p>An average individual from the sample: obtained with
-<code>estimate_means(..., marginalize = "average")</code></p></li>
+<code>estimate_means(..., estimate = "average")</code></p></li>
 <li><p>The broader, hypothetical target population: obtained with
-<code>estimate_means(..., marginalize = "population")</code></p></li>
+<code>estimate_means(..., estimate = "population")</code></p></li>
 </ul></dd>
+
+
+<dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
+<dd><p>The p-values adjustment method for frequentist multiple
+comparisons. Can be one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>,
+<code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code> or <code>"holm"</code>. See the
+p-value adjustment section in the <code><a href="https://rvlenth.github.io/emmeans/reference/summary.emmGrid.html" class="external-link">emmeans::test</a></code> documentation or
+<code><a href="https://rdrr.io/r/stats/p.adjust.html" class="external-link">?stats::p.adjust</a></code>.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be <code>TRUE</code>, in
+which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
+appropriate transformation-function.</p></dd>
 
 
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
@@ -247,10 +259,6 @@ predictions", see Heiss 2022).</p>
 <code>options(modelbased_backend = "emmeans")</code> to use the <strong>emmeans</strong> package or
 <code>options(modelbased_backend = "marginaleffects")</code> to set <strong>marginaleffects</strong>
 as default backend.</p></dd>
-
-
-<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
-<dd><p>Deprecated, please use <code>predict</code> instead.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
@@ -426,35 +434,35 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter              | Petal.Width | Difference |   SE |         95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |        0.10 |      -1.83 | 0.28 | [-2.38, -1.28]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |        0.10 |      -1.55 | 0.31 | [-2.17, -0.93]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |        0.10 |       0.28 | 0.41 | [-0.52,  1.08]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |        0.90 |      -1.65 | 0.29 | [-2.22, -1.08]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |        0.90 |      -1.71 | 0.32 | [-2.35, -1.07]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |        0.90 |      -0.06 | 0.21 | [-0.47,  0.35]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |        1.70 |      -1.48 | 0.60 | [-2.67, -0.29]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |        1.70 |      -1.88 | 0.60 | [-3.06, -0.70]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |        1.70 |      -0.40 | 0.11 | [-0.62, -0.17]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |        2.50 |      -1.31 | 0.95 | [-3.19,  0.58]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |        2.50 |      -2.04 | 0.92 | [-3.86, -0.22]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |        2.50 |      -0.73 | 0.27 | [-1.27, -0.20]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | Level2     | Petal.Width | Difference |   SE |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |        0.10 |      -1.83 | 0.28 | [-2.38, -1.28]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |        0.10 |      -1.55 | 0.31 | [-2.17, -0.93]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |        0.10 |       0.28 | 0.41 | [-0.52,  1.08]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |        0.90 |      -1.65 | 0.29 | [-2.22, -1.08]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |        0.90 |      -1.71 | 0.32 | [-2.35, -1.07]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |        0.90 |      -0.06 | 0.21 | [-0.47,  0.35]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |        1.70 |      -1.48 | 0.60 | [-2.67, -0.29]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |        1.70 |      -1.88 | 0.60 | [-3.06, -0.70]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |        1.70 |      -0.40 | 0.11 | [-0.62, -0.17]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |        2.50 |      -1.31 | 0.95 | [-3.19,  0.58]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |        2.50 |      -2.04 | 0.92 | [-3.86, -0.22]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |        2.50 |      -0.73 | 0.27 | [-1.27, -0.20]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter              | t(144) |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |  -6.55 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |  -4.95 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |   0.69 |  0.492</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |  -5.74 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |  -5.28 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |  -0.28 |  0.780</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |  -2.47 |  0.015</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |  -3.14 |  0.002</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |  -3.50 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |  -1.37 |  0.172</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |  -2.21 |  0.028</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |  -2.70 |  0.008</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | t(144) |      p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  -6.55 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -4.95 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |   0.69 |  0.492</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  -5.74 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -5.28 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -0.28 |  0.780</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  -2.47 |  0.015</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -3.14 |  0.002</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -3.50 | &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  -1.37 |  0.172</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -2.21 |  0.028</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  -2.70 |  0.008</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
@@ -522,20 +530,20 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("cyl")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter |   wt | Median |          95% CI |     pd |          ROPE | % in ROPE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 - 4     | 1.51 |  -6.05 | [-14.94,  3.33] | 89.90% | [-0.10, 0.10] |     0.89%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 4     | 1.51 | -10.01 | [-15.18, -4.77] |   100% | [-0.10, 0.10] |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 6     | 1.51 |  -3.95 | [-14.47,  5.84] | 79.67% | [-0.10, 0.10] |     1.18%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 - 4     | 2.82 |  -3.16 | [ -6.41,  0.25] | 96.53% | [-0.10, 0.10] |     0.92%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 4     | 2.82 |  -6.05 | [ -9.35, -2.62] | 99.90% | [-0.10, 0.10] |        0%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 6     | 2.82 |  -2.86 | [ -6.63,  0.65] | 94.73% | [-0.10, 0.10] |     1.16%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 - 4     | 4.12 |  -0.22 | [ -8.13,  7.44] | 52.05% | [-0.10, 0.10] |     1.92%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 4     | 4.12 |  -2.01 | [ -7.48,  3.29] | 77.53% | [-0.10, 0.10] |     1.97%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 6     | 4.12 |  -1.80 | [ -7.61,  4.26] | 73.22% | [-0.10, 0.10] |     2.13%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6 - 4     | 5.42 |   2.75 | [-12.82, 17.23] | 63.82% | [-0.10, 0.10] |     0.97%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 4     | 5.42 |   1.99 | [ -7.20, 10.88] | 67.45% | [-0.10, 0.10] |     1.61%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8 - 6     | 5.42 |  -0.62 | [-13.32, 12.49] | 54.65% | [-0.10, 0.10] |     1.42%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 |   wt | Median |          95% CI |     pd |          ROPE | % in ROPE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 1.51 |  -6.05 | [-14.94,  3.33] | 89.90% | [-0.10, 0.10] |     0.89%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 1.51 | -10.01 | [-15.18, -4.77] |   100% | [-0.10, 0.10] |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 1.51 |  -3.95 | [-14.47,  5.84] | 79.67% | [-0.10, 0.10] |     1.18%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 2.82 |  -3.16 | [ -6.41,  0.25] | 96.53% | [-0.10, 0.10] |     0.92%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 2.82 |  -6.05 | [ -9.35, -2.62] | 99.90% | [-0.10, 0.10] |        0%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 2.82 |  -2.86 | [ -6.63,  0.65] | 94.73% | [-0.10, 0.10] |     1.16%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 4.12 |  -0.22 | [ -8.13,  7.44] | 52.05% | [-0.10, 0.10] |     1.92%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 4.12 |  -2.01 | [ -7.48,  3.29] | 77.53% | [-0.10, 0.10] |     1.97%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 4.12 |  -1.80 | [ -7.61,  4.26] | 73.22% | [-0.10, 0.10] |     2.13%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6      | 4      | 5.42 |   2.75 | [-12.82, 17.23] | 63.82% | [-0.10, 0.10] |     0.97%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 4      | 5.42 |   1.99 | [ -7.20, 10.88] | 67.45% | [-0.10, 0.10] |     1.61%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8      | 6      | 5.42 |  -0.62 | [-13.32, 12.49] | 54.65% | [-0.10, 0.10] |     1.42%</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: cyl</span></span>
@@ -550,38 +558,17 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter              | Petal.Length |   BF | Median |         95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         1.00 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         1.00 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         1.00 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         1.66 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         1.66 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         1.66 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         2.31 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         2.31 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         2.31 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         2.97 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         2.97 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         2.97 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         3.62 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         3.62 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         3.62 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         4.28 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         4.28 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         4.28 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         4.93 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         4.93 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         4.93 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         5.59 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         5.59 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         5.59 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         6.24 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         6.24 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         6.24 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor - setosa    |         6.90 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - setosa     |         6.90 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica - versicolor |         6.90 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1     | Level2     | Petal.Length |   BF | Median |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         1.99 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         1.99 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         1.99 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         3.76 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         3.76 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         3.76 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | setosa     |         5.52 | 1.00 |  -1.73 | [-2.09, -1.38]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | setosa     |         5.52 | 1.00 |  -2.15 | [-2.68, -1.64]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | versicolor |         5.52 | 1.00 |  -0.42 | [-0.63, -0.21]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Variable predicted: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Predictors contrasted: Species</span></span>
