@@ -19,8 +19,9 @@ test_that("attributes_means", {
     attributes(estim),
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
-      "predict", "estimate", "datagrid", "preserve_range", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "predict", "estimate", "transform", "datagrid", "preserve_range",
+      "table_title", "table_footer", "model", "response", "ci", "backend",
+      "coef_name"
     )
   )
 })
@@ -46,7 +47,7 @@ test_that("attributes_means, contrasts", {
       "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "datagrid", "preserve_range", "coef_name"
+      "transform", "datagrid", "preserve_range", "coef_name"
     )
   )
 })
