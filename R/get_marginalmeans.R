@@ -25,24 +25,22 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              marginalize = "average",
+                              estimate = "average",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
+
+  # First step: process arguments --------------------------------------------
+  # --------------------------------------------------------------------------
+
   dots <- list(...)
   comparison <- dots$hypothesis
 
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   # validate input
-  marginalize <- insight::validate_argument(
-    marginalize,
+  estimate <- insight::validate_argument(
+    estimate,
     c("average", "population", "specific")
   )
 
@@ -53,7 +51,7 @@ get_marginalmeans <- function(model,
   predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
 
-  # First step: create a data grid --------------------------------------------
+  # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
 
   # exception: by = NULL computes overall mean
@@ -61,7 +59,7 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    dg_factors <- switch(marginalize,
+    dg_factors <- switch(estimate,
       specific = "reference",
       "all"
     )
@@ -91,21 +89,18 @@ get_marginalmeans <- function(model,
 
     # add user-arguments from "...", but remove those arguments that are
     # already used (see below) when calling marginaleffects
-    dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
+    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
   }
 
 
-  # Second step: prepare arguments for marginaleffects ------------------------
-  # ---------------------------------------------------------------------------
+  # Third step: prepare arguments for marginaleffects ------------------------
+  # --------------------------------------------------------------------------
 
   # model df
   dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
   # sanity check
   if (!is.null(datagrid)) {
-    ## FIXME: we have to sort the rows of the data grid
-    # guess it's a bug, see
-    # https://github.com/vincentarelbundock/marginaleffects/issues/1374
     datagrid <- datawizard::data_arrange(
       as.data.frame(datagrid),
       select = datagrid_info$at_specs$varname
@@ -120,7 +115,7 @@ get_marginalmeans <- function(model,
   )
 
   # counterfactual predictions - we need the "variables" argument
-  if (marginalize == "population") {
+  if (estimate == "population") {
     # sanity check
     if (is.null(datagrid)) {
       insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
@@ -128,7 +123,11 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    fun_args$newdata <- datagrid
+    if (is.null(dots$newdata)) {
+      # we allow individual "newdata" options, so do not
+      # # overwrite if explicitly set
+      fun_args$newdata <- datagrid
+    }
     fun_args$by <- datagrid_info$at_specs$varname
   }
 
@@ -146,13 +145,12 @@ get_marginalmeans <- function(model,
   # the b-values internally, because we have a different sorting in our output
   # compared to what "avg_predictions()" returns... so let's check if we have to
   # take care of this
-  if (!is.null(comparison)) {
-    # create a data frame with the same sorting as the data grid, but only
-    # for the focal terms
-    custom_grid <- data.frame(expand.grid(
-      lapply(datagrid[datagrid_info$at_specs$varname], unique)
-    ))
-    dots$hypothesis <- .reorder_custom_hypothesis(comparison, custom_grid)
+  if (.is_custom_comparison(comparison)) {
+    dots$hypothesis <- .reorder_custom_hypothesis(
+      comparison,
+      datagrid,
+      focal = datagrid_info$at_specs$varname
+    )
   }
 
   # cleanup
@@ -164,13 +162,21 @@ get_marginalmeans <- function(model,
     fun_args$re.form <- NULL
   }
 
+  # transform reponse?
+  if (isTRUE(transform)) {
+    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+  }
+  if (!is.null(transform)) {
+    fun_args$transform <- transform
+  }
 
-  # Third step: compute marginal means ----------------------------------------
+
+  # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+  means <- .call_marginaleffects(fun_args)
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -178,7 +184,7 @@ get_marginalmeans <- function(model,
   # fix term label for custom hypothesis
   if (.is_custom_comparison(comparison)) {
     ## TODO: check which column name is used in marginaleffects update, and
-    ## keep only the new one later
+    ## keep only the new one later - or for safety, we can keep both code lines
     means$term <- gsub(" ", "", comparison, fixed = TRUE)
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
@@ -191,12 +197,48 @@ get_marginalmeans <- function(model,
     by = my_args$by,
     info = c(
       datagrid_info,
-      list(predict = predict, marginalize = marginalize, datagrid = datagrid)
+      list(predict = predict, estimate = estimate, datagrid = datagrid)
     )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
   means
+}
+
+
+# call marginaleffects and process potential errors ---------------------------
+
+.call_marginaleffects <- function(fun_args, type = "means") {
+  out <- tryCatch(
+    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    error = function(e) e
+  )
+
+  # display informative error
+  if (inherits(out, "simpleError")) {
+    # what was requested?
+    if (!is.null(fun_args$hypothesis)) {
+      fun <- "marginal contrasts"
+    } else {
+      fun <- "marginal means"
+    }
+    msg <- paste0(
+      "Sorry, calculating ", fun, " failed with following error:\n",
+      insight::color_text(gsub("\n", "", out$message), "red")
+    )
+    # we get this error when we should use counterfactuals - tell
+    # # user about possible solution
+    if (grepl("not found in column names", out$message, fixed = TRUE)) {
+      msg <- paste0(
+        msg,
+        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"." # nolint
+      )
+    }
+    # error
+    insight::format_error(msg)
+  }
+
+  out
 }
 
 
@@ -226,7 +268,7 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "marginalize", "p_adjust", "datagrid", "preserve_range",
+    "contrast", "estimate", "p_adjust", "datagrid", "preserve_range",
     "coef_name", "slope"
   )
 }
