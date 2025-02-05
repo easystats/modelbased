@@ -176,7 +176,7 @@ get_marginalmeans <- function(model,
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+  means <- .call_marginaleffects(fun_args)
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -203,6 +203,42 @@ get_marginalmeans <- function(model,
   class(means) <- unique(c("marginaleffects_means", class(means)))
 
   means
+}
+
+
+# call marginaleffects and process potential errors ---------------------------
+
+.call_marginaleffects <- function(fun_args, type = "means") {
+  out <- tryCatch(
+    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    error = function(e) e
+  )
+
+  # display informative error
+  if (inherits(out, "simpleError")) {
+    # what was requested?
+    if (!is.null(fun_args$hypothesis)) {
+      fun <- "marginal contrasts"
+    } else {
+      fun <- "marginal means"
+    }
+    msg <- paste0(
+      "Sorry, calculating ", fun, " failed with following error:\n",
+      insight::color_text(gsub("\n", "", out$message), "red")
+    )
+    # we get this error when we should use counterfactuals - tell
+    # # user about possible solution
+    if (grepl("not found in column names", out$message, fixed = TRUE)) {
+      msg <- paste0(
+        msg,
+        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"."
+      ) # nolint
+    }
+    # error
+    insight::format_error(msg)
+  }
+
+  out
 }
 
 
