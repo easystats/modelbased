@@ -79,15 +79,16 @@ These functions belong to the same family, and their relevance depends on the mo
 
 ## Marginal means and effects
 
-The concept of "marginal" in statistical modeling refers to the effect of one variable when all other variables are held constant at specific values
-(e.g., their reference value, or their empirical or theoretical average).
-This is crucial for interpreting how individual predictors influence the response variable in complex models.
+The concept of "marginal" in statistical modeling typically refers to the effect of one variable when all other variables are held constant at specific values
+(e.g., their empirical or theoretical average or reference value).
+This in turn in convenient for understanding the effect of a variable in a complex model, where multiple variables interact with each other.
+
+The `modelbased` package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 - `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
 - `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
 - `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
 
-The modelbased package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 [details about types of marginalization]
 
@@ -102,7 +103,7 @@ This term has been historically used to describe what are now more commonly refe
 predictions made over a regular grid - a counter-factual dataset containing all combinations of the categorical predictors in the model and typically the mean of numerical predictors.
 The package was renamed in 2016 to `emmeans` to clarify that it is not specific to least-squares estimation.
 
-Within `emmeans, estimates are generated as a linear function of the model's coefficients,
+Within `emmeans`, estimates are generated as a linear function of the model's coefficients,
 with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
 For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance,
 we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
