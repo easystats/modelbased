@@ -231,7 +231,7 @@ get_marginalmeans <- function(model,
     if (grepl("not found in column names", out$message, fixed = TRUE)) {
       msg <- paste0(
         msg,
-        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"."
+        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"." # nolint
       )
     }
     # error
