@@ -79,9 +79,9 @@ These functions belong to the same family, and their relevance depends on the mo
 
 ## Marginal means and effects
 
-The concept of "marginal" in statistical modeling typically refers to the effect of one variable when all other variables are held constant at specific values
+The concept of "marginal" in statistical modeling typically refers to the analysis of the effect of one or more "focus" variables while all other variables are held constant at specific values
 (e.g., their empirical or theoretical average or reference value).
-This in turn in convenient for understanding the effect of a variable in a complex model, where multiple variables interact with each other.
+This in turn is convenient for understanding the effect of a variable in a complex model, where multiple variables interact with each other.
 
 The `modelbased` package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
@@ -95,13 +95,13 @@ The `modelbased` package simplifies the extraction of these quantities, providin
 
 ## Technical details
 
-The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects`,
-which can be set as a global option with (e.g., `options(modelbased_backend = "marginaleffects")`).
+The algorithmic heavy lifting is done by its two backend packages, `emmeans` and `marginaleffects` (the default),
+which can be set as a global option with (e.g., `options(modelbased_backend = "emmeans")`).
 
 Of the two, `emmeans` (REF) is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means").
 This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs:
 predictions made over a regular grid - a counter-factual dataset containing all combinations of the categorical predictors in the model and typically the mean of numerical predictors.
-The package was renamed in 2016 to `emmeans` to clarify that it is not specific to least-squares estimation.
+The package was renamed in 2016 to `emmeans` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
 
 Within `emmeans`, estimates are generated as a linear function of the model's coefficients,
 with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
