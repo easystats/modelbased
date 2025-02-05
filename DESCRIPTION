@@ -64,6 +64,7 @@ Suggests:
     logspline,
     MASS,
     marginaleffects (>= 0.25.0),
+    mice,
     mgcv,
     nanoparquet,
     performance (>= 0.13.0),

@@ -42,7 +42,7 @@ pool_contrasts <- function(x, ...) {
 
   len <- length(x)
   ci <- attributes(x[[1]])$ci
-  dof <- insight::get_df(attributes(x[[1]])$model, type = "wald", verbose = FALSE)
+  dof <- x[[1]]$df
 
   if (is.null(dof)) {
     dof <- Inf
@@ -94,6 +94,7 @@ pool_contrasts <- function(x, ...) {
 #'
 #' @param x A list of `estimate_means` objects, as returned by [`estimate_means()`].
 #' @param ... Currently not used.
+#' @inheritParams estimate_means
 #'
 #' @details Averaging of parameters follows Rubin's rules (*Rubin, 1987, p. 76*).
 #' Pooling is applied to the predicted values on the scale of the *linear predictor*,
@@ -116,7 +117,7 @@ pool_contrasts <- function(x, ...) {
 #' pool_means(predictions)
 #' @return A data frame with pooled predictions.
 #' @export
-pool_means <- function(x, ...) {
+pool_means <- function(x, transform = NULL, ...) {
 
   # check input -----
 
@@ -137,7 +138,7 @@ pool_means <- function(x, ...) {
   len <- length(x)
   ci <- attributes(x[[1]])$ci
   model <- attributes(x[[1]])$model
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  dof <- x[[1]]$df
   link_inv <- insight::link_inverse(model)
   link_fun <- insight::link_function(model)
 
@@ -149,6 +150,11 @@ pool_means <- function(x, ...) {
   }
   if (is.null(dof)) {
     dof <- Inf
+  }
+  if (isTRUE(transform)) {
+    transform_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    transform_fun <- transform
   }
 
   # pool predictions -----
@@ -181,6 +187,13 @@ pool_means <- function(x, ...) {
   fac <- stats::qt(alpha, df = pooled_df)
   pooled_predictions$CI_low <- link_inv(pooled_predictions[[estimate_name]] - fac * pooled_predictions$SE)
   pooled_predictions$CI_high <- link_inv(pooled_predictions[[estimate_name]] + fac * pooled_predictions$SE)
+
+  # back-transform response and CI?
+  if (!is.null(transform_fun)) {
+    pooled_predictions[[estimate_name]] <- transform_fun(pooled_predictions[[estimate_name]])
+    pooled_predictions$CI_low <- transform_fun(pooled_predictions$CI_low)
+    pooled_predictions$CI_high <- transform_fun(pooled_predictions$CI_high)
+  }
 
   # backtransform
   pooled_predictions[[estimate_name]] <- link_inv(pooled_predictions[[estimate_name]])
