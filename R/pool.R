@@ -122,9 +122,9 @@ pool_means <- function(x, transform = NULL, ...) {
   obj_name <- deparse(substitute(x), width.cutoff = 500)
   original_x <- x
 
-  if (!all(vapply(x, inherits, logical(1), "estimate_means"))) {
+  if (!all(vapply(x, inherits, logical(1), c("estimate_means", "estimate_predicted")))) {
     insight::format_error(
-      "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`."
+      "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`, or a list of `estimate_predicted` objects, as returned by functions like `estimate_expectation()`." # nolint
     )
   }
 

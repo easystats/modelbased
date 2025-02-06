@@ -479,6 +479,7 @@ estimate_relation <- function(model,
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
   attr(out, "table_title") <- c("Model-based Predictions", "blue")
+  attr(out, "coef_name") <- "Predicted"
   attr(out, "table_footer") <- .table_footer(
     out,
     by = grid_specs$at,
