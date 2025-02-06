@@ -20,7 +20,7 @@
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Valid options for `predict`` are:
+#' Valid options for `predict` are:
 #'
 #' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate

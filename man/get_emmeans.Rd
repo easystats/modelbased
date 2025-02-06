@@ -80,7 +80,7 @@ for predictors of interest.}
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
 \code{backend = "marginaleffects"}). For emmeans, see also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Valid options for `predict`` are:
+Valid options for \code{predict} are:
 \itemize{
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
