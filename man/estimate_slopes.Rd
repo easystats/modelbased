@@ -9,6 +9,7 @@ estimate_slopes(
   trend = NULL,
   by = NULL,
   ci = 0.95,
+  p_adjust = "none",
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -31,6 +32,14 @@ in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more abo
 for predictors of interest.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
+option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
+\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
+\code{"sidak"}, or \code{"holm"}.}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed

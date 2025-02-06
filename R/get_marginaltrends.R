@@ -10,6 +10,8 @@
 get_marginaltrends <- function(model,
                                trend = NULL,
                                by = NULL,
+                               ci = 0.95,
+                               p_adjust = p_adjust,
                                verbose = TRUE,
                                ...) {
   # check if available
@@ -56,7 +58,8 @@ get_marginaltrends <- function(model,
       model,
       variables = trend,
       by = datagrid_info$at_specs$varname,
-      newdata = datagrid
+      newdata = datagrid,
+      conf_level = ci
     ),
     dots
   ))
@@ -76,10 +79,21 @@ get_marginaltrends <- function(model,
     estimated,
     info = c(
       datagrid_info,
-      list(trend = trend, datagrid = datagrid, coef_name = "Slope")
+      list(
+        trend = trend,
+        datagrid = datagrid,
+        coef_name = "Slope",
+        p_adjust = p_adjust,
+        ci = ci
+      )
     )
   )
   class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
+
+  # adjust p-values
+  if (!insight::model_info(model)$is_bayesian) {
+    estimated <- .p_adjust(model, estimated, p_adjust, verbose, ...)
+  }
 
   estimated
 }
