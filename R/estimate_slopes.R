@@ -136,7 +136,7 @@ estimate_slopes <- function(model,
     table_footer <- paste0(table_footer, "\nType of slope was ", attributes(trends)$slope)
   }
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
-  attr(trends, "table_footer") <- c(table_footer, "blue")
+  attr(trends, "table_footer") <- c(table_footer, "yellow")
 
   # Add attributes
   attr(trends, "model") <- model
