@@ -62,7 +62,8 @@ get_marginaltrends(
   model,
   trend = NULL,
   by = NULL,
-  p_adjust = p_adjust,
+  ci = 0.95,
+  p_adjust = "none",
   verbose = TRUE,
   ...
 )

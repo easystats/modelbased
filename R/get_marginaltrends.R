@@ -11,7 +11,7 @@ get_marginaltrends <- function(model,
                                trend = NULL,
                                by = NULL,
                                ci = 0.95,
-                               p_adjust = p_adjust,
+                               p_adjust = "none",
                                verbose = TRUE,
                                ...) {
   # check if available
