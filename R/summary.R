@@ -60,7 +60,7 @@ summary.reshape_grouplevel <- function(object, ...) {
   do.call(rbind, lapply(parts, function(i) {
     data.frame(
       Start = i[[by]][1],
-      End  = i[[by]][nrow(i)],
+      End = i[[by]][nrow(i)],
       Direction = i$Direction[1],
       Confidence = i$Confidence[1]
     )
