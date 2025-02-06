@@ -90,8 +90,8 @@ test_that("attributes_means", {
     c(
       "names", "row.names", "class", "ci", "keep_iterations", "response",
       "model", "datagrid", "focal_terms", "preserve_range", "table_title",
-      "table_footer", "adjusted_for", "at_specs", "at", "by", "reference",
-      "data"
+      "coef_name", "table_footer", "adjusted_for", "at_specs", "at",
+      "by", "reference", "data"
     )
   )
 })
