@@ -222,17 +222,14 @@ get_marginalmeans <- function(model,
     } else {
       fun <- "marginal means"
     }
-    msg <- paste0(
-      "Sorry, calculating ", fun, " failed with following error:\n",
+    msg <- c(
+      paste0("Sorry, calculating ", fun, " failed with following error:"),
       insight::color_text(gsub("\n", "", out$message), "red")
     )
     # we get this error when we should use counterfactuals - tell
     # # user about possible solution
     if (grepl("not found in column names", out$message, fixed = TRUE)) {
-      msg <- paste0(
-        msg,
-        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"." # nolint
-      )
+      msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
     }
     # error
     insight::format_error(msg)
@@ -269,7 +266,7 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope"
+    "coef_name", "slope", "ci"
   )
 }
 
