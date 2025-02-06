@@ -83,5 +83,4 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
     ),
     tolerance = 1e-2
   )
-
 })
