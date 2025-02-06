@@ -127,5 +127,5 @@
     return(NULL)
   }
 
-  c(paste0(table_footer, "\n"), "blue")
+  c(paste0(table_footer, "\n"), "yellow")
 }
