@@ -43,7 +43,7 @@ Access the package
 check-out these vignettes:
 
 - [Data
-  grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+  grids](https://easystats.github.io/insight/reference/get_datagrid.html)
 - [What are, why use and how to get marginal
   means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 - [Contrast

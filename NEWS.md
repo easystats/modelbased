@@ -1,3 +1,10 @@
+# modelbased (devel)
+
+## Breaking Changes
+
+* The deprecated function `visualisation_matrix()` has been removed. Use
+  `insight::get_datagrid()` instead.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
