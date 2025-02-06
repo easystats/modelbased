@@ -86,7 +86,6 @@ pool_contrasts <- function(x, ...) {
 }
 
 
-
 #' Pool Estimated Marginal Means
 #'
 #' This function "pools" (i.e. combines) multiple `estimate_means` objects, in
@@ -118,7 +117,6 @@ pool_contrasts <- function(x, ...) {
 #' @return A data frame with pooled predictions.
 #' @export
 pool_means <- function(x, transform = NULL, ...) {
-
   # check input -----
 
   obj_name <- deparse(substitute(x), width.cutoff = 500)
