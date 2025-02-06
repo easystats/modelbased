@@ -256,8 +256,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  0.37 | 0.10 | [ 0.19, 0.56] | 3.89 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  0.23 | 0.08 | [ 0.07, 0.39] | 2.86 |  0.004</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal effects estimated for Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Type of slope was dY/dX</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># Plot it</span></span></span>
@@ -272,8 +272,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  0.37 | 0.22 | [ 0.43, 1.29] | 3.89 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  0.23 | 0.19 | [ 0.17, 0.91] | 2.86 |  0.004</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal effects estimated for Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Type of slope was dY/dX</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">mgcv</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/mgcv/man/gam.html" class="external-link">gam</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="fu">s</span><span class="op">(</span><span class="va">Petal.Length</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Length"</span>, length <span class="op">=</span> <span class="fl">50</span><span class="op">)</span></span></span>
@@ -290,8 +290,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3.77  | 4.25 |         4.01 |  0.54 | 0.20 | [ 0.15,  0.92] |  2.71 | 0.010</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4.37  | 6.90 |         5.64 |  0.07 | 0.23 | [-0.39,  0.53] |  0.58 | 0.428</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal effects estimated for Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Type of slope was dY/dX</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="estimate_slopes-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -310,8 +310,8 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  4.73 | 5.66 |         5.19 |  0.29 | 0.13 | [ 0.04, 0.53] | 2.32 |  0.024</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  5.97 | 6.90 |         6.43 |  0.10 | 0.17 | [-0.23, 0.44] | 0.71 |  0.536</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal effects estimated for Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Type of slope was dY/dX</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="estimate_slopes-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
