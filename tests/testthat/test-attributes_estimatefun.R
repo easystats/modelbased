@@ -69,7 +69,7 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "class", "row.names", "trend", "comparison", "coef_name",
-      "slope", "table_title", "table_footer", "model", "response", "ci"
+      "slope", "ci", "table_title", "table_footer", "model", "response"
     )
   )
 })
