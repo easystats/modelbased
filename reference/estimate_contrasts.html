@@ -66,7 +66,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Estimate Marginal Contrasts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/v0.9.0/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/estimate_contrasts.R" class="external-link"><code>R/estimate_contrasts.R</code></a></small>
       <div class="d-none name"><code>estimate_contrasts.Rd</code></div>
     </div>
 
@@ -144,7 +144,7 @@ for predictors of interest.</p></dd>
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
 <code>backend = "marginaleffects"</code>). For emmeans, see also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for `predict“ are:</p><ul><li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
+Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>).</p></li>
 <li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
