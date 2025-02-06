@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -272,11 +272,11 @@ itself.</p>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-8-1.png" width="100%"></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Average Marginal Effects
+<pre><code>&gt; Johnson-Neymann Intervals
 &gt; 
-&gt; Start |  End |     x | Slope |   SE |         95% CI |     t |      p
-&gt; ---------------------------------------------------------------------
-&gt; -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | &lt; .001
+&gt; Start |  End | Direction | Confidence 
+&gt; --------------------------------------
+&gt; -3.38 | 3.28 | positive  | Significant
 &gt; 
 &gt; Marginal effects estimated for x
 &gt; Type of slope was dY/dX</code></pre>
@@ -301,11 +301,11 @@ to <strong>any model</strong>!</p>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Average Marginal Effects
+<pre><code>&gt; Johnson-Neymann Intervals
 &gt; 
-&gt; Start |  End |     x | Slope |   SE |         95% CI |     t |      p
-&gt; ---------------------------------------------------------------------
-&gt; -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | &lt; .001
+&gt; Start |  End | Direction | Confidence 
+&gt; --------------------------------------
+&gt; -3.38 | 3.28 | positive  | Significant
 &gt; 
 &gt; Marginal effects estimated for x
 &gt; Type of slope was dY/dX</code></pre>
@@ -361,13 +361,13 @@ the “linear slope” at every point of the curve.</p>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-12-1.png" width="100%"></p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Average Marginal Effects
+<pre><code>&gt; Johnson-Neymann Intervals
 &gt; 
-&gt; Start |   End |     x | Slope |   SE |         95% CI |      t |      p
-&gt; -----------------------------------------------------------------------
-&gt; -3.38 | -0.08 | -1.73 | -3.43 | 0.04 | [-3.52, -3.35] | -72.58 | &lt; .001
-&gt; -0.01 | -0.01 | -0.01 | -0.01 | 0.02 | [-0.05,  0.02] |  -0.83 |  0.405
-&gt; 0.05  |  3.28 |  1.67 |  3.34 | 0.04 | [ 3.25,  3.42] |  70.50 | &lt; .001
+&gt; Start |   End | Direction | Confidence     
+&gt; -------------------------------------------
+&gt; -3.38 | -0.08 | negative  | Significant    
+&gt; -0.01 | -0.01 | negative  | Not Significant
+&gt; 0.05  |  3.28 | positive  | Significant    
 &gt; 
 &gt; Marginal effects estimated for x
 &gt; Type of slope was dY/dX</code></pre>
@@ -398,13 +398,14 @@ trick?</strong></p>
 <p><img src="derivatives_files/figure-html/unnamed-chunk-13-2.png" width="100%"></p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
-<pre><code>&gt; Average Marginal Effects
+<pre><code>&gt; Johnson-Neymann Intervals
 &gt; 
-&gt; Start |   End |     x | Slope |   SE |         95% CI |      t |      p
-&gt; -----------------------------------------------------------------------
-&gt; -3.38 | -0.08 | -1.73 | -3.25 | 0.20 | [-3.64, -2.86] | -16.62 | &lt; .001
-&gt; -0.01 |  0.05 |  0.02 | -0.01 | 0.11 | [-0.23,  0.21] |  -0.08 |  0.449
-&gt; 0.12  |  3.28 |  1.70 |  3.39 | 0.20 | [ 3.00,  3.77] |  17.35 | &lt; .001
+&gt; Start |   End | Direction | Confidence     
+&gt; -------------------------------------------
+&gt; -3.38 | -0.08 | negative  | Significant    
+&gt; -0.01 | -0.01 | negative  | Not Significant
+&gt; 0.05  |  0.05 | positive  | Not Significant
+&gt; 0.12  |  3.28 | positive  | Significant    
 &gt; 
 &gt; Marginal effects estimated for x
 &gt; Type of slope was dY/dX</code></pre>

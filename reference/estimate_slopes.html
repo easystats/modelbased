@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -291,15 +291,18 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   = "Petal.Length"`.</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Average Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Johnson-Neymann Intervals</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Start |  End | Petal.Length | Slope |   SE |         95% CI |     t |     p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.00  | 1.96 |         1.48 |  0.13 | 0.30 | [-0.46,  0.71] |  0.30 | 0.420</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.08  | 3.05 |         2.57 | -0.78 | 0.19 | [-1.15, -0.41] | -4.25 | 0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.17  | 3.65 |         3.41 | -0.10 | 0.26 | [-0.61,  0.41] | -0.31 | 0.344</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.77  | 4.25 |         4.01 |  0.54 | 0.20 | [ 0.15,  0.92] |  2.71 | 0.010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.37  | 6.90 |         5.64 |  0.07 | 0.23 | [-0.39,  0.53] |  0.58 | 0.428</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Start |  End | Direction | Confidence     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.00  | 1.60 | positive  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.72  | 1.96 | negative  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.08  | 3.05 | negative  | Significant    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.17  | 3.41 | negative  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.53  | 3.65 | positive  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.77  | 4.25 | positive  | Significant    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.37  | 6.18 | positive  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6.30  | 6.90 | negative  | Not Significant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
@@ -312,14 +315,16 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">20</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Average Marginal Effects</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> There might be too few data to accurately determine intervals. Consider</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   setting `length = 100` (or larger) in your call to `estimate_slopes()`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Johnson-Neymann Intervals</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Start |  End | Petal.Length | Slope |   SE |        95% CI |    t |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  1.00 | 1.62 |         1.31 |  0.27 | 0.28 | [-0.27, 0.82] | 0.99 |  0.324</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  3.17 | 5.04 |         4.11 |  0.38 | 0.10 | [ 0.19, 0.56] | 3.94 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  4.73 | 5.66 |         5.19 |  0.29 | 0.13 | [ 0.04, 0.53] | 2.32 |  0.024</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  5.97 | 6.90 |         6.43 |  0.10 | 0.17 | [-0.23, 0.44] | 0.71 |  0.536</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Group      | Start |  End | Direction | Confidence     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     |  1.00 | 1.62 | positive  | Not Significant</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor |  3.17 | 5.04 | positive  | Significant    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  4.73 | 5.66 | positive  | Significant    </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |  5.97 | 6.90 | positive  | Not Significant</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
