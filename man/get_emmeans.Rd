@@ -58,7 +58,15 @@ get_marginalmeans(
   ...
 )
 
-get_marginaltrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
+get_marginaltrends(
+  model,
+  trend = NULL,
+  by = NULL,
+  ci = 0.95,
+  p_adjust = "none",
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
@@ -205,10 +213,12 @@ and the other prediction functions.
 }}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
+comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
+option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
+\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
+\code{"sidak"}, or \code{"holm"}.}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the

@@ -8,8 +8,11 @@
 #' for which to compute the contrasts.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"holm"`. See the
-#' p-value adjustment section in the `emmeans::test` documentation or
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
+#' `"holm"`. The `"esarey"` option is specifically for the case of Johnson-Neyman
+#' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
+#' in an interaction term. Details for the other options can be found in the
+#' p-value adjustment section of the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out.

@@ -5,6 +5,12 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+## Changes
+
+* New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
+  specifically for the case of Johnson-Neyman intervals, i.e. when calling
+  `estimate_slopes()` with two numeric predictors in an interaction term.
+
 ## Bug fixes
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
