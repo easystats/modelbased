@@ -24,7 +24,7 @@ summary.estimate_slopes <- function(object, verbose = TRUE, ...) {
 
   attributes(out) <- utils::modifyList(attributes(object), attributes(out))
   class(out) <- c("summary_estimate_slopes", "data.frame")
-  attr(out, "table_title") <- c("Average Marginal Effects", "blue")
+  attr(out, "table_title") <- c("Johnson-Neymann Intervals", "blue")
 
   out
 }
