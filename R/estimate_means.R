@@ -20,7 +20,7 @@
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Valid options for `predict`` are:
+#' Valid options for `predict` are:
 #'
 #' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
@@ -41,18 +41,20 @@
 #' packages), for instance when using complex formulae in `brms` models, the
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.
-#' @param marginalize Character string, indicating the type of marginalization.
-#' This dictates how the predictions are "averaged" over the non-focal predictors,
-#' i.e. those variables that are not specified in `by` or `contrast`.
+#' @param estimate Character string, indicating the type of target population
+#' predictions refer to. This dictates how the predictions are "averaged" over
+#' the non-focal predictors, i.e. those variables that are not specified in
+#' `by` or `contrast`.
 #' - `"average"` (default): Takes the mean value for non-focal numeric
 #'   predictors and marginalizes over the factor levels of non-focal terms,
 #'   which computes a kind of "weighted average" for the values at which these
 #'   terms are hold constant. These predictions are a good representation of the
 #'   sample, because all possible values and levels of the non-focal predictors
 #'   are considered. It answers the question, "What is the predicted value for
-#'   an 'average' observation in *my data*?". It refers to randomly picking a
-#'   subject of your sample and the result you get on average. This approach is
-#'   the one taken by default in the `emmeans` package.
+#'   an 'average' observation in *my data*?". Cum grano salis, it refers to
+#'   randomly picking a subject of your sample and the result you get on
+#'   average. This approach is the one taken by default in the `emmeans`
+#'   package.
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
@@ -65,15 +67,15 @@
 #'   your observed sample, but also "what would be if" we had more data, or if
 #'   we had data from a different sample.
 #'
-#' In other words, the distinction between marginalization types resides in whether
+#' In other words, the distinction between estimate types resides in whether
 #' the prediction are made for:
 #' - A specific "individual" from the sample (i.e., a specific combination of
 #'   predictor values): this is what is obtained when using [`estimate_relation()`]
 #'   and the other prediction functions.
 #' - An average individual from the sample: obtained with
-#'   `estimate_means(..., marginalize = "average")`
+#'   `estimate_means(..., estimate = "average")`
 #' - The broader, hypothetical target population: obtained with
-#'   `estimate_means(..., marginalize = "population")`
+#'   `estimate_means(..., estimate = "population")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
@@ -84,7 +86,13 @@
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
 #' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
 #' as default backend.
-#' @param transform Deprecated, please use `predict` instead.
+#' @param transform A function applied to predictions and confidence intervals
+#' to (back-) transform results, which can be useful in case the regression
+#' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). For
+#' Bayesian models, this function is applied to individual draws from the
+#' posterior distribution, before computing summaries. Can also be `TRUE`, in
+#' which case `insight::get_transformation()` is called to determine the
+#' appropriate transformation-function.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -93,8 +101,8 @@
 #'   to control the (number of) representative values.
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments
-#'   for instance like `vcov`, `transform`, `equivalence` or `slope` can be
-#'   passed to those functions.
+#'   for instance like `vcov`, `transform`, `equivalence`, `slope` or even
+#'   `newdata` can be passed to those functions.
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using
@@ -172,30 +180,39 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           marginalize = "average",
-                           backend = getOption("modelbased_backend", "marginaleffects"),
+                           estimate = "average",
                            transform = NULL,
+                           backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
                            ...) {
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   # validate input
-  marginalize <- insight::validate_argument(
-    marginalize,
+  estimate <- insight::validate_argument(
+    estimate,
     c("average", "population", "specific")
   )
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emmeans(model, by = by, predict = predict, verbose = verbose, ...)
+    estimated <- get_emmeans(
+      model,
+      by = by,
+      predict = predict,
+      verbose = verbose,
+      ...
+    )
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalmeans(model, by = by, predict = predict, ci = ci, marginalize = marginalize, verbose = verbose, ...) # nolint
+    estimated <- get_marginalmeans(
+      model,
+      by = by,
+      predict = predict,
+      ci = ci,
+      estimate = estimate,
+      transform = transform,
+      verbose = verbose,
+      ...
+    )
     means <- format(estimated, model, ...)
   }
 
@@ -204,13 +221,13 @@ estimate_means <- function(model,
 
   # Table formatting
   attr(means, "table_title") <- c(ifelse(
-    marginalize == "specific",
+    estimate == "specific",
     "Model-based Predictions",
     "Estimated Marginal Means"
   ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
-    type = ifelse(marginalize == "specific", "predictions", "means"),
+    type = ifelse(estimate == "specific", "predictions", "means"),
     by = info$by,
     model = model,
     info = info

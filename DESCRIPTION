@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.8.9.107
+Version: 0.9.0.1
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -63,8 +63,9 @@ Suggests:
     lmerTest,
     logspline,
     MASS,
-    marginaleffects,
+    marginaleffects (>= 0.25.0),
     mgcv,
+    nanoparquet,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,
@@ -89,4 +90,3 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
-Remotes: vincentarelbundock/marginaleffects

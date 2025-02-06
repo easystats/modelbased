@@ -24,7 +24,7 @@
 ---
 
     Code
-      print(estimate_means(m, "spp", backend = "marginaleffects", marginalize = "population"),
+      print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
       Estimated Marginal Means
@@ -72,7 +72,7 @@
 ---
 
     Code
-      print(estimate_means(m, "Days", backend = "marginaleffects", marginalize = "population"),
+      print(estimate_means(m, "Days", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
       Estimated Marginal Means

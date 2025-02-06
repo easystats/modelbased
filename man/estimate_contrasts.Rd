@@ -13,11 +13,11 @@ estimate_contrasts(model, ...)
   by = NULL,
   predict = NULL,
   ci = 0.95,
-  p_adjust = "none",
   comparison = "pairwise",
-  marginalize = "average",
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  estimate = "average",
+  p_adjust = "none",
   transform = NULL,
+  backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
 )
@@ -33,8 +33,8 @@ Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::descr
 to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence} or \code{slope} can be
-passed to those functions.
+for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
+\code{newdata} can be passed to those functions.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -59,7 +59,7 @@ for predictors of interest.}
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
 \code{backend = "marginaleffects"}). For emmeans, see also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Valid options for `predict`` are:
+Valid options for \code{predict} are:
 \itemize{
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
@@ -83,12 +83,6 @@ packages), for instance when using complex formulae in \code{brms} models, the
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
-
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
 carried out.
@@ -119,9 +113,10 @@ after a vertical bar ( \code{|}).
 }
 }}
 
-\item{marginalize}{Character string, indicating the type of marginalization.
-This dictates how the predictions are "averaged" over the non-focal predictors,
-i.e. those variables that are not specified in \code{by} or \code{contrast}.
+\item{estimate}{Character string, indicating the type of target population
+predictions refer to. This dictates how the predictions are "averaged" over
+the non-focal predictors, i.e. those variables that are not specified in
+\code{by} or \code{contrast}.
 \itemize{
 \item \code{"average"} (default): Takes the mean value for non-focal numeric
 predictors and marginalizes over the factor levels of non-focal terms,
@@ -129,9 +124,10 @@ which computes a kind of "weighted average" for the values at which these
 terms are hold constant. These predictions are a good representation of the
 sample, because all possible values and levels of the non-focal predictors
 are considered. It answers the question, "What is the predicted value for
-an 'average' observation in \emph{my data}?". It refers to randomly picking a
-subject of your sample and the result you get on average. This approach is
-the one taken by default in the \code{emmeans} package.
+an 'average' observation in \emph{my data}?". Cum grano salis, it refers to
+randomly picking a subject of your sample and the result you get on
+average. This approach is the one taken by default in the \code{emmeans}
+package.
 \item \code{"population"}: Non-focal predictors are marginalized over the observations
 in the sample, where the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
@@ -145,17 +141,31 @@ your observed sample, but also "what would be if" we had more data, or if
 we had data from a different sample.
 }
 
-In other words, the distinction between marginalization types resides in whether
+In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
 \item A specific "individual" from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
 and the other prediction functions.
 \item An average individual from the sample: obtained with
-\code{estimate_means(..., marginalize = "average")}
+\code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
-\code{estimate_means(..., marginalize = "population")}
+\code{estimate_means(..., estimate = "population")}
 }}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
+p-value adjustment section in the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function.}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed
@@ -167,8 +177,6 @@ You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
 \code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
 as default backend.}
-
-\item{transform}{Deprecated, please use \code{predict} instead.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 }

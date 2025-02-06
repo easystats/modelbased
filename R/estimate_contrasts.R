@@ -104,19 +104,13 @@ estimate_contrasts.default <- function(model,
                                        by = NULL,
                                        predict = NULL,
                                        ci = 0.95,
-                                       p_adjust = "none",
                                        comparison = "pairwise",
-                                       marginalize = "average",
-                                       backend = getOption("modelbased_backend", "marginaleffects"),
+                                       estimate = "average",
+                                       p_adjust = "none",
                                        transform = NULL,
+                                       backend = getOption("modelbased_backend", "marginaleffects"),
                                        verbose = TRUE,
                                        ...) {
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
-
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
@@ -138,7 +132,8 @@ estimate_contrasts.default <- function(model,
       comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
-      marginalize = marginalize,
+      estimate = estimate,
+      transform = transform,
       verbose = verbose,
       ...
     )
@@ -150,7 +145,7 @@ estimate_contrasts.default <- function(model,
 
   # Table formatting
   attr(out, "table_title") <- c(ifelse(
-    marginalize == "specific",
+    estimate == "specific",
     "Model-based Contrasts Analysis",
     "Marginal Contrasts Analysis"
   ), "blue")

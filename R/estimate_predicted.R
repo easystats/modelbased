@@ -173,6 +173,12 @@
 #' you are directly predicting the value of some distributional parameter), and
 #' the corresponding functions will then only differ in the default value of
 #' their `data` argument.
+#' @param transform A function applied to predictions and confidence intervals
+#' to (back-) transform results, which can be useful in case the regression
+#' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). Can also
+#' be `TRUE`, in which case `insight::get_transformation()` is called to
+#' determine the appropriate transformation-function. **Note:** Standard errors
+#' are not (back-) transformed!
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -228,6 +234,7 @@ estimate_expectation <- function(model,
                                  by = NULL,
                                  predict = "expectation",
                                  ci = 0.95,
+                                 transform = NULL,
                                  keep_iterations = FALSE,
                                  ...) {
   .estimate_predicted(
@@ -237,6 +244,7 @@ estimate_expectation <- function(model,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -249,6 +257,7 @@ estimate_link <- function(model,
                           by = NULL,
                           predict = "link",
                           ci = 0.95,
+                          transform = NULL,
                           keep_iterations = FALSE,
                           ...) {
   # reset to NULL if only "by" was specified
@@ -263,6 +272,7 @@ estimate_link <- function(model,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -274,6 +284,7 @@ estimate_prediction <- function(model,
                                 by = NULL,
                                 predict = "prediction",
                                 ci = 0.95,
+                                transform = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   .estimate_predicted(
@@ -283,6 +294,7 @@ estimate_prediction <- function(model,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -294,6 +306,7 @@ estimate_relation <- function(model,
                               by = NULL,
                               predict = "expectation",
                               ci = 0.95,
+                              transform = NULL,
                               keep_iterations = FALSE,
                               ...) {
   # reset to NULL if only "by" was specified
@@ -308,6 +321,7 @@ estimate_relation <- function(model,
     ci = ci,
     keep_iterations = keep_iterations,
     predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -321,6 +335,7 @@ estimate_relation <- function(model,
                                 by = NULL,
                                 predict = "expectation",
                                 ci = 0.95,
+                                transform = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   # only "by" or "data", but not both
@@ -443,6 +458,16 @@ estimate_relation <- function(model,
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted
+  }
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+  }
+  if (!is.null(transform)) {
+    out$Predicted <- transform(out$Predicted)
+    out$CI_low <- transform(out$CI_low)
+    out$CI_high <- transform(out$CI_high)
   }
 
   # Store relevant information

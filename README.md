@@ -43,7 +43,7 @@ Access the package
 check-out these vignettes:
 
 - [Data
-  grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+  grids](https://easystats.github.io/insight/reference/get_datagrid.html)
 - [What are, why use and how to get marginal
   means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 - [Contrast
@@ -220,15 +220,15 @@ print(difference, table_width = Inf)
 ## 
 ## Level1     | Level2     | Petal.Length | Difference |   SE |         95% CI | t(144) |      p
 ## ---------------------------------------------------------------------------------------------
-## versicolor | setosa     | 1.00         |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | < .001
-## versicolor | setosa     | 3.95         |      -1.74 | 0.65 | [-3.03, -0.45] |  -2.67 |  0.008
-## versicolor | setosa     | 6.90         |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218
-## virginica  | setosa     | 1.00         |      -1.34 | 0.40 | [-2.13, -0.56] |  -3.38 | < .001
-## virginica  | setosa     | 3.95         |      -1.79 | 0.66 | [-3.11, -0.48] |  -2.70 |  0.008
-## virginica  | setosa     | 6.90         |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116
-## virginica  | versicolor | 1.00         |       0.36 | 0.49 | [-0.61,  1.33] |   0.73 |  0.468
-## virginica  | versicolor | 3.95         |      -0.06 | 0.15 | [-0.35,  0.24] |  -0.37 |  0.710
-## virginica  | versicolor | 6.90         |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101
+## versicolor | setosa     |         1.00 |      -1.70 | 0.34 | [-2.37, -1.02] |  -4.97 | < .001
+## virginica  | setosa     |         1.00 |      -1.34 | 0.40 | [-2.13, -0.56] |  -3.38 | < .001
+## virginica  | versicolor |         1.00 |       0.36 | 0.49 | [-0.61,  1.33] |   0.73 |  0.468
+## versicolor | setosa     |         3.95 |      -1.74 | 0.65 | [-3.03, -0.45] |  -2.67 |  0.008
+## virginica  | setosa     |         3.95 |      -1.79 | 0.66 | [-3.11, -0.48] |  -2.70 |  0.008
+## virginica  | versicolor |         3.95 |      -0.06 | 0.15 | [-0.35,  0.24] |  -0.37 |  0.710
+## versicolor | setosa     |         6.90 |      -1.78 | 1.44 | [-4.62,  1.06] |  -1.24 |  0.218
+## virginica  | setosa     |         6.90 |      -2.25 | 1.42 | [-5.06,  0.56] |  -1.58 |  0.116
+## virginica  | versicolor |         6.90 |      -0.47 | 0.28 | [-1.03,  0.09] |  -1.65 |  0.101
 ## 
 ## Variable predicted: Sepal.Width
 ## Predictors contrasted: Species
@@ -429,11 +429,11 @@ model <- mgcv::gam(Sepal.Width ~ s(Petal.Length), data = iris)
 deriv <- estimate_slopes(model,
   trend = "Petal.Length",
   by = "Petal.Length",
-  length = 100
+  length = 200
 )
 
 # 2. Visualize predictions and derivative
-plot(estimate_relation(model, length = 100)) /
+plot(estimate_relation(model, length = 200)) /
   plot(deriv) +
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
@@ -483,19 +483,25 @@ See [**this
 vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html)
 for a walkthrough on how to do that.
 
-<img src="https://raw.githubusercontent.com/easystats/modelbased/refs/heads/main/man/figures/gganimate_figure.gif" width="80%" style="display: block; margin: auto;" />
+## Understand interactions between two continuous variables
 
-<!-- Needs to be re-implemented after revision of visualisation_recipe()
-&#10;## Understand interactions between two continuous variables
-&#10;Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
-&#10;For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
-&#10;
+Also referred to as **Johnson-Neyman intervals**, this plot shows how
+the effect (the “slope”) of one variable varies depending on another
+variable. It is useful in the case of complex interactions between
+continuous variables.
+
+For instance, the plot below shows that the effect of `hp` (the y-axis)
+is significantly negative only when `wt` is low (`< ~4`).
+
 ``` r
 model <- lm(mpg ~ hp * wt, data = mtcars)
-&#10;slopes <- estimate_slopes(model, trend = "hp", by = "wt")
-&#10;plot(slopes)
+
+slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
+
+plot(slopes)
 ```
--->
+
+<img src="man/figures/unnamed-chunk-13-1.png" width="100%" />
 
 ### Visualize predictions with random effects
 
@@ -519,7 +525,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -535,7 +541,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -549,7 +555,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
 
-<img src="man/figures/unnamed-chunk-17-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
 
 ## Code of Conduct
 
