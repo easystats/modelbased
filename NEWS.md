@@ -5,6 +5,10 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+## Bug fixes
+
+* Fixed issue in the `summary()` method for `estimate_slopes()`.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
