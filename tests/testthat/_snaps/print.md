@@ -203,3 +203,82 @@
       DES-L |      1.34 | 0.36 | [0.63, 2.04]
       DF    |      0.78 | 0.21 | [0.37, 1.19]
 
+# print - layouts and include data grid
+
+    Code
+      print(out)
+    Output
+      Estimated Marginal Means
+      
+      Species    | Mean |   SE |       95% CI | t(147)
+      ------------------------------------------------
+      setosa     | 1.46 | 0.06 | [1.34, 1.58] |  24.02
+      versicolor | 4.26 | 0.06 | [4.14, 4.38] |  70.00
+      virginica  | 5.55 | 0.06 | [5.43, 5.67] |  91.23
+      
+      Variable predicted: Petal.Length
+      Predictors modulated: Species
+
+---
+
+    Code
+      print(out, select = "basic")
+    Output
+      Estimated Marginal Means
+      
+      Species    | Mean |       95% CI
+      --------------------------------
+      setosa     | 1.46 | [1.34, 1.58]
+      versicolor | 4.26 | [4.14, 4.38]
+      virginica  | 5.55 | [5.43, 5.67]
+      
+      Variable predicted: Petal.Length
+      Predictors modulated: Species
+
+---
+
+    Code
+      print(estimate_relation(m, by = "qsec"))
+    Output
+      Model-based Predictions
+      
+      qsec  | Predicted |   SE |       95% CI
+      ---------------------------------------
+      14.50 |      2.80 | 0.19 | [2.41, 3.18]
+      15.43 |      2.91 | 0.15 | [2.62, 3.21]
+      16.37 |      3.03 | 0.11 | [2.81, 3.26]
+      17.30 |      3.15 | 0.09 | [2.97, 3.32]
+      18.23 |      3.27 | 0.08 | [3.10, 3.44]
+      19.17 |      3.38 | 0.10 | [3.17, 3.60]
+      20.10 |      3.50 | 0.14 | [3.21, 3.78]
+      21.03 |      3.62 | 0.18 | [3.25, 3.98]
+      21.97 |      3.73 | 0.22 | [3.28, 4.19]
+      22.90 |      3.85 | 0.27 | [3.30, 4.40]
+      
+      Variable predicted: wt
+      Predictors modulated: qsec
+      Predictors controlled: mpg (20)
+
+---
+
+    Code
+      print(estimate_relation(m, by = "qsec"), include_grid = TRUE)
+    Output
+      Model-based Predictions
+      
+      qsec  |   mpg | Predicted |   SE |       95% CI
+      -----------------------------------------------
+      14.50 | 20.09 |      2.80 | 0.19 | [2.41, 3.18]
+      15.43 | 20.09 |      2.91 | 0.15 | [2.62, 3.21]
+      16.37 | 20.09 |      3.03 | 0.11 | [2.81, 3.26]
+      17.30 | 20.09 |      3.15 | 0.09 | [2.97, 3.32]
+      18.23 | 20.09 |      3.27 | 0.08 | [3.10, 3.44]
+      19.17 | 20.09 |      3.38 | 0.10 | [3.17, 3.60]
+      20.10 | 20.09 |      3.50 | 0.14 | [3.21, 3.78]
+      21.03 | 20.09 |      3.62 | 0.18 | [3.25, 3.98]
+      21.97 | 20.09 |      3.73 | 0.22 | [3.28, 4.19]
+      22.90 | 20.09 |      3.85 | 0.27 | [3.30, 4.40]
+      
+      Variable predicted: wt
+      Predictors modulated: qsec
+

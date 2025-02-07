@@ -105,3 +105,16 @@ test_that("estimate_epectation - don't print empty RE columns", {
   )
   expect_snapshot(print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE))
 })
+
+
+test_that("print - layouts and include data grid", {
+  data(iris)
+  model <- lm(Petal.Length ~ Species, data = iris)
+  out <- estimate_means(model, "Species")
+  expect_snapshot(print(out))
+  expect_snapshot(print(out, select = "basic"))
+
+  m <- lm(wt ~ qsec + mpg, dat = mtcars)
+  expect_snapshot(print(estimate_relation(m, by = "qsec")))
+  expect_snapshot(print(estimate_relation(m, by = "qsec"), include_grid = TRUE))
+})
