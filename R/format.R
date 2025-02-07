@@ -1,10 +1,13 @@
 # Format ------------------------------------------------------------------
 
 #' @export
-format.estimate_contrasts <- function(x, format = NULL, ...) {
+format.estimate_contrasts <- function(x,
+                                      format = NULL,
+                                      include_grid = getOption("modelbased_include_grid", FALSE),
+                                      ...) {
   # don't print columns of adjusted_for variables
   adjusted_for <- attr(x, "adjusted_for", exact = TRUE)
-  if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x))) {
+  if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
     # remove non-focal terms from data frame
     x[adjusted_for] <- NULL
   }

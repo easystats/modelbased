@@ -1,7 +1,64 @@
+#' Printing modelbased-objects
+#'
+#' `print()` method for **modelbased** objects. Can be used to tweak the output
+#' of tables.
+#'
+#' @param x An object returned by the different `estimate_*()` functions.
+#' @param select Character string, indicating which columns should be included
+#' in the table.
+#' @param include_grid Logical, if `TRUE`, the data grid is included in the
+#' table output. Only applies to prediction-functions like `estimate_relation()`
+#' or `estimate_link()`.
+#' @param full_labels Logical, if `TRUE` (default), all labels for focal terms
+#' are shown. If `FALSE`, redundant (duplicated) label rows are removed.
+#' @param ... Arguments passed to `insight::format_table()` or
+#' `insight::export_table()`.
+#'
+#' @return Invisibly returns `x`.
+#'
+#' @section Global Options to Customize Tables when Printing:
+#' Columns and table layout can be customized using `options()`:
+#'
+#' - `modelbased_select`: `options(modelbased_select = <string>)` will set a
+#'   default value for the `select` argument and can be used to define a custom
+#'   default layout for printing.
+#'
+#' - `modelbased_include_grid`: `options(modelbased_include_grid = TRUE)` will
+#'   set a default value for the `include_grid` argument and can be used to
+#'   include data grids in the output by default or not.
+#'
+#' @note Use `print_html()` and `print_md()` to create tables in HTML or
+#' markdown format, respectively.
+#'
+#' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
+#' model <- lm(Petal.Length ~ Species, data = iris)
+#' out <- estimate_means(model, "Species")
+#'
+#' # default
+#' print(out)
+#'
+#' # smaller set of columns
+#' print(out, select = "basic")
 #' @export
-print.estimate_contrasts <- function(x, full_labels = TRUE, ...) {
+print.estimate_contrasts <- function(x,
+                                     select = getOption("modelbased_select", NULL),
+                                     include_grid = getOption("modelbased_include_grid", FALSE),
+                                     full_labels = TRUE,
+                                     ...) {
+  # copy original
+  out <- x
+  # get attributes, but remove some of them - else, matching attribute fails
+  attr <- attributes(x)
+  attr <- attr[setdiff(names(attr), c("names", "row.names"))]
+
+  # select columns to print
+  if (!is.null(select)) {
+    out <- .format_layout(out, select)
+    attributes(out) <- utils::modifyList(attributes(out), attr)
+  }
+
   # format table
-  out <- format(x, ...)
+  out <- format(out, include_grid = include_grid, ...)
 
   # remove redundant labels, for "by" variables
   out <- .remove_redundant_labels(x, out, full_labels)
@@ -68,4 +125,43 @@ print.estimate_grouplevel <- print.estimate_contrasts
     align <- sub(paste0("(.{", i - 1, "})."), "\\1l", align)
   }
   align
+}
+
+
+.format_layout <- function(x, select) {
+  # possible names for estimate column
+  estimate_names <- unique(
+    attributes(x)$coef_name,
+    c("Coefficient", "Slope", "Predicted", "Median", "Mean", "MAP", "Difference", "Ratio")
+  )
+  # define column name for estimates
+  estimate_col <- estimate_names[which.min(estimate_names == colnames(x))]
+  # focal terms
+  focal_terms <- intersect(
+    c("Level1", "Level2", attributes(x)$focal_terms),
+    colnames(x)
+  )
+
+  # do we have shortcuts for "select"?
+  select <- switch(select,
+    # basic output, only focal terms, estimate, CI and p
+    basic = {
+      out <- c(focal_terms, estimate_col, "CI_low", "CI_high")
+      if ("p" %in% colnames(x)) {
+        out <- c(out, "p")
+      }
+      out
+    },
+    select
+  )
+
+  # if "select" refers to column names, return selected columns
+  if (all(select %in% colnames(x))) {
+    return(x[select])
+  }
+
+  # add significant stars, in case it's requested
+  x$stars <- insight::format_p(x$p, stars = TRUE, stars_only = TRUE)
+
+  x
 }
