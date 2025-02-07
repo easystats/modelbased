@@ -49,7 +49,7 @@ summary.reshape_grouplevel <- function(object, ...) {
 
   for (i in 2:nrow(out)) {
     if (out$Direction[i] != out$Direction[i - 1] || out$Confidence[i] != out$Confidence[i - 1]) {
-      out$switch[i:nrow(out)] <- index
+      out$switch[i:nrow(out)] <- index # styler: off
       index <- index + 1
     }
   }
