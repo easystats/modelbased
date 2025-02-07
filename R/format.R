@@ -10,7 +10,7 @@ format.estimate_contrasts <- function(x,
   if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
     # remove non-focal terms from data frame
     x[adjusted_for] <- NULL
-  } else {
+  } else if (isTRUE(include_grid)) {
     # we include the data grid, so we don't need to add the same information
     # to the footer
     table_footer <- attributes(x)$table_footer
