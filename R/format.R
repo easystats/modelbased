@@ -10,6 +10,28 @@ format.estimate_contrasts <- function(x,
   if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
     # remove non-focal terms from data frame
     x[adjusted_for] <- NULL
+  } else {
+    # we include the data grid, so we don't need to add the same information
+    # to the footer
+    table_footer <- attributes(x)$table_footer
+    if (!is.null(table_footer)) {
+      # (Predictors controlled.*?): This is the first capturing group.
+      # - `Predictors controlled`: Matches the literal string "Predictors controlled".
+      # - `.*?`: Matches any character (.) zero or more times (*), but as few
+      #    times as possible (?). This is important to avoid matching across
+      #    multiple lines. This is a non-greedy quantifier.
+      # `(\n|$)`: This is the second capturing group.
+      # - \n: Matches a newline character.
+      # - $: Matches the end of the string.
+      # - |: Acts as an "OR" operator. So, this part matches either a newline
+      #   or the end of the string. This is necessary to capture the last match
+      #   if it's at the very end of the string and not followed by a newline.
+      # (powered by Gemini)
+      pattern <- "(Predictors controlled.*?)(\n|$)"
+      table_footer[1] <- gsub(pattern, "", table_footer[1])
+      # add back modified footer
+      attr(x, "table_footer") <- table_footer
+    }
   }
 
   # arrange columns (not for contrast now)
