@@ -20,6 +20,9 @@ print.estimate_means <- print.estimate_contrasts
 print.estimate_slopes <- print.estimate_contrasts
 
 #' @export
+print.summary_estimate_slopes <- print.estimate_contrasts
+
+#' @export
 print.estimate_smooth <- print.estimate_contrasts
 
 #' @export

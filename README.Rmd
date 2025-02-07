@@ -65,7 +65,7 @@ library("modelbased")
 
 Access the package [**documentation**](https://easystats.github.io/modelbased/), and check-out these vignettes:
 
-* [Data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+* [Data grids](https://easystats.github.io/insight/reference/get_datagrid.html)
 * [What are, why use and how to get marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 * [Contrast analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
 * [Marginal effects and derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)

@@ -59,7 +59,7 @@ for predictors of interest.}
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
 \code{backend = "marginaleffects"}). For emmeans, see also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Valid options for `predict`` are:
+Valid options for \code{predict} are:
 \itemize{
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
@@ -155,8 +155,11 @@ and the other prediction functions.
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"} or \code{"holm"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation or
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"esarey"} or
+\code{"holm"}. The \code{"esarey"} option is specifically for the case of Johnson-Neyman
+intervals, i.e. when calling \code{estimate_slopes()} with two numeric predictors
+in an interaction term. Details for the other options can be found in the
+p-value adjustment section of the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}.}
 
 \item{transform}{A function applied to predictions and confidence intervals

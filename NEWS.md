@@ -1,3 +1,23 @@
+# modelbased (devel)
+
+## Breaking Changes
+
+* The deprecated function `visualisation_matrix()` has been removed. Use
+  `insight::get_datagrid()` instead.
+
+## Changes
+
+* New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
+  specifically for the case of Johnson-Neyman intervals, i.e. when calling
+  `estimate_slopes()` with two numeric predictors in an interaction term.
+
+* `print_html()` and `print_md()` pass `...` to format-methods (e.g. to
+  `insight::format_table()`), to tweak the output.
+
+## Bug fixes
+
+* Fixed issue in the `summary()` method for `estimate_slopes()`.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
