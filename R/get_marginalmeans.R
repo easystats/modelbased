@@ -197,7 +197,12 @@ get_marginalmeans <- function(model,
     by = my_args$by,
     info = c(
       datagrid_info,
-      list(predict = predict, estimate = estimate, datagrid = datagrid, transform = !is.null(transform))
+      list(
+        predict = predict,
+        estimate = estimate,
+        datagrid = datagrid,
+        transform = !is.null(transform)
+      )
     )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
