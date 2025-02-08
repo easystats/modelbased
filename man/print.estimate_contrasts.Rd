@@ -8,7 +8,7 @@
   x,
   select = getOption("modelbased_select", NULL),
   include_grid = getOption("modelbased_include_grid", FALSE),
-  full_labels = TRUE,
+  full_labels = getOption("modelbased_full_labels", TRUE),
   ...
 )
 }
@@ -49,20 +49,25 @@ equivalent to \code{select = "{estimate}{stars} ({se})"}..
 }
 }
 
-\strong{Note 1:} glue-like syntax is still experimental in the case of more complex models
-(like mixed models) and may not return expected results.
+Using \code{select} to define columns will re-order columns and remove all columns
+related to uncertainty (standard errors, confidence intervals), test statistics,
+and p-values (and similar, like \code{pd} or \code{BF} for Bayesian models), because
+these are assumed to be included or intentionally excluded when using \code{select}.
+The new column order will be: Parameter columns first, followed by the "glue"
+columns, followed by all remaining columns. If further columns should also be
+placed first, add those as \code{focal_terms} attributes to \code{x}. I.e., following
+columns are considers as "parameter columns" and placed first:
+\code{c(easystats_columns("parameter"), attributes(x)$focal_terms)}.
 
-\strong{Note 2:} Using \code{select} to define columns will remove all columns related
-to uncertainty (standard errors, confidence intervals), test statistics, and
-p-values (and similar, like \code{pd} or \code{BF} for Bayesian models), because these
-are assumed to be included or intentionally excluded when using \code{select}.}
+\strong{Note:} glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.}
 
 \item{include_grid}{Logical, if \code{TRUE}, the data grid is included in the
 table output. Only applies to prediction-functions like \code{estimate_relation()}
 or \code{estimate_link()}.}
 
 \item{full_labels}{Logical, if \code{TRUE} (default), all labels for focal terms
-are shown. If \code{FALSE}, redundant (duplicated) label rows are removed.}
+are shown. If \code{FALSE}, redundant (duplicated) labels are removed from rows.}
 
 \item{...}{Arguments passed to \code{insight::format_table()} or
 \code{insight::export_table()}.}
@@ -88,6 +93,8 @@ default layout for printing.
 \item \code{modelbased_include_grid}: \code{options(modelbased_include_grid = TRUE)} will
 set a default value for the \code{include_grid} argument and can be used to
 include data grids in the output by default or not.
+\item \code{modelbased_full_labels}: \code{options(modelbased_full_labels = FALSE)} will
+remove redundant (duplicated) labels from rows.
 }
 }
 
@@ -101,5 +108,13 @@ print(out)
 
 # smaller set of columns
 print(out, select = "minimal")
+
+# remove redundant labels
+data(efc, package = "modelbased")
+efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+levels(efc$c172code) <- c("low", "mid", "high")
+fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex , data = efc)
+out <- estimate_means(fit, c("c161sex", "c172code", "e16sex"))
+print(out, full_labels = FALSE)
 \dontshow{\}) # examplesIf}
 }

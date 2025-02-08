@@ -8,7 +8,7 @@
 #' table output. Only applies to prediction-functions like `estimate_relation()`
 #' or `estimate_link()`.
 #' @param full_labels Logical, if `TRUE` (default), all labels for focal terms
-#' are shown. If `FALSE`, redundant (duplicated) label rows are removed.
+#' are shown. If `FALSE`, redundant (duplicated) labels are removed from rows.
 #' @param ... Arguments passed to `insight::format_table()` or
 #' `insight::export_table()`.
 #'
@@ -27,6 +27,9 @@
 #'   set a default value for the `include_grid` argument and can be used to
 #'   include data grids in the output by default or not.
 #'
+#' - `modelbased_full_labels`: `options(modelbased_full_labels = FALSE)` will
+#'   remove redundant (duplicated) labels from rows.
+#'
 #' @note Use `print_html()` and `print_md()` to create tables in HTML or
 #' markdown format, respectively.
 #'
@@ -39,11 +42,20 @@
 #'
 #' # smaller set of columns
 #' print(out, select = "minimal")
+#'
+#' # remove redundant labels
+#' data(efc, package = "modelbased")
+#' efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+#' levels(efc$c172code) <- c("low", "mid", "high")
+#' fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex , data = efc)
+#' out <- estimate_means(fit, c("c161sex", "c172code", "e16sex"))
+#' print(out, full_labels = FALSE)
+#'
 #' @export
 print.estimate_contrasts <- function(x,
                                      select = getOption("modelbased_select", NULL),
                                      include_grid = getOption("modelbased_include_grid", FALSE),
-                                     full_labels = TRUE,
+                                     full_labels = getOption("modelbased_full_labels", TRUE),
                                      ...) {
   # copy original
   out <- x
