@@ -113,6 +113,9 @@ test_that("print - layouts and include data grid", {
   out <- estimate_means(model, "Species")
   expect_snapshot(print(out))
   expect_snapshot(print(out, select = "minimal"))
+  out <- estimate_contrasts(model, "Species")
+  expect_snapshot(print(out, select = "minimal"))
+  expect_snapshot(print(out, select = "{estimate}{stars}|{ci}"))
 
   m <- lm(wt ~ qsec + mpg, dat = mtcars)
   expect_snapshot(print(estimate_relation(m, by = "qsec")))

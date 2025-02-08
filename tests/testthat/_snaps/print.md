@@ -245,6 +245,40 @@
 ---
 
     Code
+      print(out, select = "minimal")
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     |   Difference (CI) |      p
+      ----------------------------------------------------
+      versicolor | setosa     | 2.80 (2.63, 2.97) | <0.001
+      virginica  | setosa     | 4.09 (3.92, 4.26) | <0.001
+      virginica  | versicolor | 1.29 (1.12, 1.46) | <0.001
+      
+      Variable predicted: Petal.Length
+      Predictors contrasted: Species
+      p-values are uncorrected.
+
+---
+
+    Code
+      print(out, select = "{estimate}{stars}|{ci}")
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     | Difference |         CI
+      -------------------------------------------------
+      versicolor | setosa     |    2.80*** | 2.63, 2.97
+      virginica  | setosa     |    4.09*** | 3.92, 4.26
+      virginica  | versicolor |    1.29*** | 1.12, 1.46
+      
+      Variable predicted: Petal.Length
+      Predictors contrasted: Species
+      p-values are uncorrected.
+
+---
+
+    Code
       print(estimate_relation(m, by = "qsec"))
     Output
       Model-based Predictions
