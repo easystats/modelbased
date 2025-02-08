@@ -24,12 +24,15 @@
 
     Code
       summary(deriv)
+    Message
+      There might be too few data to accurately determine intervals. Consider
+        setting `length = 100` (or larger) in your call to `estimate_slopes()`.
     Output
-      Average Marginal Effects
+      Johnson-Neymann Intervals
       
-      Start |  End |     x | Slope |   SE |         95% CI | t(998) |      p
-      ----------------------------------------------------------------------
-      -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
+      Start |  End | Direction | Confidence 
+      --------------------------------------
+      -3.38 | 3.28 | positive  | Significant
       
       Marginal effects estimated for x
 
@@ -60,12 +63,15 @@
 
     Code
       summary(deriv2)
+    Message
+      There might be too few data to accurately determine intervals. Consider
+        setting `length = 100` (or larger) in your call to `estimate_slopes()`.
     Output
-      Average Marginal Effects
+      Johnson-Neymann Intervals
       
-      Start |  End |     x | Slope |   SE |         95% CI |     t |      p
-      ---------------------------------------------------------------------
-      -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      Start |  End | Direction | Confidence 
+      --------------------------------------
+      -3.38 | 3.28 | positive  | Significant
       
       Marginal effects estimated for x
       Type of slope was dY/dX
