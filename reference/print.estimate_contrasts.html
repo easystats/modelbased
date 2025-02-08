@@ -9,7 +9,7 @@ of tables."><meta property="og:image" content="https://easystats.github.io/model
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ of tables.</p>
 <span>  <span class="va">x</span>,</span>
 <span>  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_select"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
 <span>  include_grid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_include_grid"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
-<span>  full_labels <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  full_labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_full_labels"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -119,12 +119,17 @@ is equivalent to <code>select = "{estimate}{stars} ({ci})"</code>.</p></li>
 <li><p><code>"se_p"</code>: Estimates, standard errors and asterisks for p-values. This is
 equivalent to <code>select = "{estimate}{stars} ({se})"</code>..</p></li>
 </ul></li>
-</ul><p><strong>Note 1:</strong> glue-like syntax is still experimental in the case of more complex models
-(like mixed models) and may not return expected results.</p>
-<p><strong>Note 2:</strong> Using <code>select</code> to define columns will remove all columns related
-to uncertainty (standard errors, confidence intervals), test statistics, and
-p-values (and similar, like <code>pd</code> or <code>BF</code> for Bayesian models), because these
-are assumed to be included or intentionally excluded when using <code>select</code>.</p></dd>
+</ul><p>Using <code>select</code> to define columns will re-order columns and remove all columns
+related to uncertainty (standard errors, confidence intervals), test statistics,
+and p-values (and similar, like <code>pd</code> or <code>BF</code> for Bayesian models), because
+these are assumed to be included or intentionally excluded when using <code>select</code>.
+The new column order will be: Parameter columns first, followed by the "glue"
+columns, followed by all remaining columns. If further columns should also be
+placed first, add those as <code>focal_terms</code> attributes to <code>x</code>. I.e., following
+columns are considers as "parameter columns" and placed first:
+<code>c(easystats_columns("parameter"), attributes(x)$focal_terms)</code>.</p>
+<p><strong>Note:</strong> glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.</p></dd>
 
 
 <dt id="arg-include-grid">include_grid<a class="anchor" aria-label="anchor" href="#arg-include-grid"></a></dt>
@@ -135,7 +140,7 @@ or <code><a href="estimate_expectation.html">estimate_link()</a></code>.</p></dd
 
 <dt id="arg-full-labels">full_labels<a class="anchor" aria-label="anchor" href="#arg-full-labels"></a></dt>
 <dd><p>Logical, if <code>TRUE</code> (default), all labels for focal terms
-are shown. If <code>FALSE</code>, redundant (duplicated) label rows are removed.</p></dd>
+are shown. If <code>FALSE</code>, redundant (duplicated) labels are removed from rows.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -162,6 +167,8 @@ default layout for printing.</p></li>
 <li><p><code>modelbased_include_grid</code>: <code>options(modelbased_include_grid = TRUE)</code> will
 set a default value for the <code>include_grid</code> argument and can be used to
 include data grids in the output by default or not.</p></li>
+<li><p><code>modelbased_full_labels</code>: <code>options(modelbased_full_labels = FALSE)</code> will
+remove redundant (duplicated) labels from rows.</p></li>
 </ul></div>
 
     <div class="section level2">
@@ -195,6 +202,34 @@ include data grids in the output by default or not.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># remove redundant labels</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">efc</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">efc</span> <span class="op">&lt;-</span> <span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">efc</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c161sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e16sex"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">efc</span><span class="op">$</span><span class="va">c172code</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"low"</span>, <span class="st">"mid"</span>, <span class="st">"high"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">neg_c_7</span> <span class="op">~</span> <span class="va">c161sex</span> <span class="op">*</span> <span class="va">c172code</span> <span class="op">*</span> <span class="va">e16sex</span> , data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">fit</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"c161sex"</span>, <span class="st">"c172code"</span>, <span class="st">"e16sex"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">out</span>, full_labels <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> c161sex | c172code | e16sex |  Mean |   SE |         95% CI | t(820)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | low      | male   |  9.47 | 1.00 | [ 7.50, 11.43] |   9.47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 12.13 | 0.48 | [11.17, 13.08] |  25.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | mid      |        | 12.16 | 0.68 | [10.81, 13.50] |  17.76</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 12.48 | 0.35 | [11.79, 13.16] |  35.59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | high     |        | 12.31 | 1.07 | [10.20, 14.42] |  11.46</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 12.37 | 0.71 | [10.98, 13.75] |  17.49</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | low      | female | 11.92 | 0.76 | [10.43, 13.41] |  15.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 12.11 | 0.46 | [11.22, 13.01] |  26.54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | mid      |        | 10.93 | 0.43 | [10.08, 11.77] |  25.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 11.57 | 0.24 | [11.10, 12.03] |  48.99</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Male    | high     |        | 11.42 | 0.67 | [10.10, 12.75] |  16.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Female  |          |        | 12.74 | 0.44 | [11.87, 13.61] |  28.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: neg_c_7</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: c161sex, c172code, e16sex</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
