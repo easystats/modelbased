@@ -193,6 +193,8 @@
     Code
       print(estimate_expectation(m, by = "spp", predict = "conditional"), zap_small = TRUE)
     Output
+      Model-based Predictions
+      
       spp   | Predicted |   SE |           CI
       ---------------------------------------
       GP    |      0.73 | 0.21 | [0.32, 1.14]
@@ -202,6 +204,11 @@
       EC-L  |      1.42 | 0.37 | [0.69, 2.14]
       DES-L |      1.34 | 0.36 | [0.63, 2.04]
       DF    |      0.78 | 0.21 | [0.37, 1.19]
+      
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors controlled: mined (yes)
+      Predictions are on the conditional-scale.
 
 # print - layouts and include data grid
 
@@ -222,15 +229,15 @@
 ---
 
     Code
-      print(out, select = "basic")
+      print(out, select = "minimal")
     Output
       Estimated Marginal Means
       
-      Species    | Mean |       95% CI
-      --------------------------------
-      setosa     | 1.46 | [1.34, 1.58]
-      versicolor | 4.26 | [4.14, 4.38]
-      virginica  | 5.55 | [5.43, 5.67]
+      Species    |         Mean (CI)
+      ------------------------------
+      setosa     | 1.46 (1.34, 1.58)
+      versicolor | 4.26 (4.14, 4.38)
+      virginica  | 5.55 (5.43, 5.67)
       
       Variable predicted: Petal.Length
       Predictors modulated: Species
@@ -281,4 +288,5 @@
       
       Variable predicted: wt
       Predictors modulated: qsec
+      Predictors controlled: mpg (20)
 
