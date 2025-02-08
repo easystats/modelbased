@@ -119,17 +119,12 @@ is equivalent to <code>select = "{estimate}{stars} ({ci})"</code>.</p></li>
 <li><p><code>"se_p"</code>: Estimates, standard errors and asterisks for p-values. This is
 equivalent to <code>select = "{estimate}{stars} ({se})"</code>..</p></li>
 </ul></li>
-</ul><p>Using <code>select</code> to define columns will re-order columns and remove all columns
-related to uncertainty (standard errors, confidence intervals), test statistics,
-and p-values (and similar, like <code>pd</code> or <code>BF</code> for Bayesian models), because
-these are assumed to be included or intentionally excluded when using <code>select</code>.
-The new column order will be: Parameter columns first, followed by the "glue"
-columns, followed by all remaining columns. If further columns should also be
-placed first, add those as <code>focal_terms</code> attributes to <code>x</code>. I.e., following
-columns are considers as "parameter columns" and placed first:
-<code>c(easystats_columns("parameter"), attributes(x)$focal_terms)</code>.</p>
-<p><strong>Note:</strong> glue-like syntax is still experimental in the case of more complex models
-(like mixed models) and may not return expected results.</p></dd>
+</ul><p><strong>Note 1:</strong> glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.</p>
+<p><strong>Note 2:</strong> Using <code>select</code> to define columns will remove all columns related
+to uncertainty (standard errors, confidence intervals), test statistics, and
+p-values (and similar, like <code>pd</code> or <code>BF</code> for Bayesian models), because these
+are assumed to be included or intentionally excluded when using <code>select</code>.</p></dd>
 
 
 <dt id="arg-include-grid">include_grid<a class="anchor" aria-label="anchor" href="#arg-include-grid"></a></dt>
@@ -189,8 +184,18 @@ include data grids in the output by default or not.</p></li>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># smaller set of columns</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">out</span>, select <span class="op">=</span> <span class="st">"basic"</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in data.frame(..., check.names = FALSE):</span> arguments imply differing number of rows: 3, 0</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">out</span>, select <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species    |         Mean (CI)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | 1.46 (1.34, 1.58)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | 4.26 (4.14, 4.38)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | 5.55 (5.43, 5.67)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
