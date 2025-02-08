@@ -38,7 +38,7 @@
 #' print(out)
 #'
 #' # smaller set of columns
-#' print(out, select = "basic")
+#' print(out, select = "minimal")
 #' @export
 print.estimate_contrasts <- function(x,
                                      select = getOption("modelbased_select", NULL),
