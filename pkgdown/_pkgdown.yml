@@ -13,6 +13,7 @@ reference:
       - starts_with("visualisation_")
   - title: "Miscellaenous"
     contents:
+      - print.estimate_contrasts
       - describe_nonlinear
       - get_emmeans
       - get_marginalmeans

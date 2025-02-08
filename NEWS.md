@@ -7,6 +7,9 @@
 
 ## Changes
 
+* The `print()` method is now explicitly documented and gets some new options
+  to customize the output for tables.
+
 * New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
   specifically for the case of Johnson-Neyman intervals, i.e. when calling
   `estimate_slopes()` with two numeric predictors in an interaction term.
