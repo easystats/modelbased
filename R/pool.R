@@ -86,12 +86,14 @@ pool_contrasts <- function(x, ...) {
 }
 
 
-#' Pool Estimated Marginal Means
+#' Pool Predictions and Estimated Marginal Means
 #'
 #' This function "pools" (i.e. combines) multiple `estimate_means` objects, in
 #' a similar fashion as [`mice::pool()`].
 #'
-#' @param x A list of `estimate_means` objects, as returned by [`estimate_means()`].
+#' @param x A list of `estimate_means` objects, as returned by [`estimate_means()`],
+#' or `estimate_predicted`, as returned by [`estimate_relation()`] and related
+#' functions.
 #' @param ... Currently not used.
 #' @inheritParams estimate_means
 #'
@@ -113,10 +115,10 @@ pool_contrasts <- function(x, ...) {
 #'   m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
 #'   estimate_means(m, "age")
 #' })
-#' pool_means(predictions)
+#' pool_predictions(predictions)
 #' @return A data frame with pooled predictions.
 #' @export
-pool_means <- function(x, transform = NULL, ...) {
+pool_predictions <- function(x, transform = NULL, ...) {
   # check input -----
 
   obj_name <- deparse(substitute(x), width.cutoff = 500)
