@@ -60,6 +60,11 @@ format.estimate_contrasts <- function(x,
   # remove all-NA columns
   x <- datawizard::remove_empty_columns(x)
 
+  # add back adjusted_for variables when we have custom column layouts
+  if (!is.null(select)) {
+    attr(x, "focal_terms") <- unique(c(attr(x, "focal_terms"), adjusted_for))
+  }
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
     insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = "html", ...)
   } else {
