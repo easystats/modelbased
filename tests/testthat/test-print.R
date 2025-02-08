@@ -112,7 +112,7 @@ test_that("print - layouts and include data grid", {
   model <- lm(Petal.Length ~ Species, data = iris)
   out <- estimate_means(model, "Species")
   expect_snapshot(print(out))
-  expect_snapshot(print(out, select = "basic"))
+  expect_snapshot(print(out, select = "minimal"))
 
   m <- lm(wt ~ qsec + mpg, dat = mtcars)
   expect_snapshot(print(estimate_relation(m, by = "qsec")))

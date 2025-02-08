@@ -15,8 +15,47 @@
 \arguments{
 \item{x}{An object returned by the different \verb{estimate_*()} functions.}
 
-\item{select}{Character string, indicating which columns should be included
-in the table.}
+\item{select}{Determines which columns are printed and the table layout.
+There are two options for this argument:
+\itemize{
+\item \strong{A string expression with layout pattern}
+
+\code{select} is a string with "tokens" enclosed in braces. These tokens will be
+replaced by their associated columns, where the selected columns will be
+collapsed into one column. Following tokens are replaced by the related
+coefficients or statistics: \code{{estimate}}, \code{{se}}, \code{{ci}} (or \code{{ci_low}} and
+\code{{ci_high}}), \code{{p}}, \code{{pd}} and \code{{stars}}. The token \code{{ci}} will be replaced
+by \verb{{ci_low}, {ci_high}}. Example: \code{select = "{estimate}{stars} ({ci})"}
+
+It is possible to create multiple columns as well. A \code{|} separates values
+into new cells/columns. Example: \code{select = "{estimate} ({ci})|{p}"}.
+\item \strong{A string indicating a pre-defined layout}
+
+\code{select} can be one of the following string values, to create one of the
+following pre-defined column layouts:
+\itemize{
+\item \code{"minimal"}: Estimates, confidence intervals and numeric p-values, in two
+columns. This is equivalent to \code{select = "{estimate} ({ci})|{p}"}.
+\item \code{"short"}: Estimate, standard errors and numeric p-values, in two columns.
+This is equivalent to \code{select = "{estimate} ({se})|{p}"}.
+\item \code{"ci"}: Estimates and confidence intervals, no asterisks for p-values.
+This is equivalent to \code{select = "{estimate} ({ci})"}.
+\item \code{"se"}: Estimates and standard errors, no asterisks for p-values. This is
+equivalent to \code{select = "{estimate} ({se})"}.
+\item \code{"ci_p"}: Estimates, confidence intervals and asterisks for p-values. This
+is equivalent to \code{select = "{estimate}{stars} ({ci})"}.
+\item \code{"se_p"}: Estimates, standard errors and asterisks for p-values. This is
+equivalent to \code{select = "{estimate}{stars} ({se})"}..
+}
+}
+
+\strong{Note 1:} glue-like syntax is still experimental in the case of more complex models
+(like mixed models) and may not return expected results.
+
+\strong{Note 2:} Using \code{select} to define columns will remove all columns related
+to uncertainty (standard errors, confidence intervals), test statistics, and
+p-values (and similar, like \code{pd} or \code{BF} for Bayesian models), because these
+are assumed to be included or intentionally excluded when using \code{select}.}
 
 \item{include_grid}{Logical, if \code{TRUE}, the data grid is included in the
 table output. Only applies to prediction-functions like \code{estimate_relation()}

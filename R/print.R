@@ -4,8 +4,6 @@
 #' of tables.
 #'
 #' @param x An object returned by the different `estimate_*()` functions.
-#' @param select Character string, indicating which columns should be included
-#' in the table.
 #' @param include_grid Logical, if `TRUE`, the data grid is included in the
 #' table output. Only applies to prediction-functions like `estimate_relation()`
 #' or `estimate_link()`.
@@ -13,6 +11,8 @@
 #' are shown. If `FALSE`, redundant (duplicated) label rows are removed.
 #' @param ... Arguments passed to `insight::format_table()` or
 #' `insight::export_table()`.
+#'
+#' @inheritParams insight::format_table
 #'
 #' @return Invisibly returns `x`.
 #'
@@ -51,14 +51,9 @@ print.estimate_contrasts <- function(x,
   attr <- attributes(x)
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
-  # select columns to print
-  if (!is.null(select)) {
-    out <- .format_layout(out, select)
-    attributes(out) <- utils::modifyList(attributes(out), attr)
-  }
-
   # format table
-  out <- format(out, include_grid = include_grid, ...)
+  out <- format(out, select = select, include_grid = include_grid, ...)
+  attributes(out) <- utils::modifyList(attributes(out), attr)
 
   # remove redundant labels, for "by" variables
   out <- .remove_redundant_labels(x, out, full_labels)

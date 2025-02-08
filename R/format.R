@@ -3,6 +3,7 @@
 #' @export
 format.estimate_contrasts <- function(x,
                                       format = NULL,
+                                      select = getOption("modelbased_select", NULL),
                                       include_grid = getOption("modelbased_include_grid", FALSE),
                                       ...) {
   # don't print columns of adjusted_for variables
@@ -60,9 +61,9 @@ format.estimate_contrasts <- function(x,
   x <- datawizard::remove_empty_columns(x)
 
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
-    insight::format_table(x, ci_brackets = c("(", ")"), ...)
+    insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = "html", ...)
   } else {
-    insight::format_table(x, ...)
+    insight::format_table(x, select = select, ...)
   }
 }
 
