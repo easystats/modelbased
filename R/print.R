@@ -49,7 +49,7 @@ print.estimate_contrasts <- function(x,
   out <- x
   # get attributes, but remove some of them - else, matching attribute fails
   attr <- attributes(x)
-  attr <- attr[setdiff(names(attr), c("names", "row.names"))]
+  attr <- attr[setdiff(names(attr), c("names", "row.names", "table_footer"))]
 
   # format table
   out <- format(out, select = select, include_grid = include_grid, ...)
