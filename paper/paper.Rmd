@@ -106,6 +106,9 @@ The two probably most popular R packages for extracting these quantities of inte
 
 # Key concepts
 
+## Terminology
+
+Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_. We can describe this relationship (i.e. estimate the expected outcome values) for a very "specific" observation that is defined by characteristics that may not appear in our data. This is what we call _predictions_. Or we express the relationship considering an "average" or "typical" observation, i.e. how is the _average_ relationship between predictors and our outcome? We call this _marginal means_. When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms.
 
 ## Predictions
 
@@ -121,7 +124,7 @@ These different types of estimates can be obtained for observation in the origin
 which is useful to assess the model's goodness-of-fit,
 or for new data (typically a "data grid"), which is useful for visualization or computing "marginal" estimates (see below).
 
-For convenience, the `modelbased` package includes 4 related functions, that mostly differ in their default arguments for `data` and `predict`:
+For convenience, the `modelbased` package includes four related functions, that mostly differ in their default arguments for `data` and `predict`:
 
 - `estimate_prediction()`: original data, prediction intervals.
 - `estimate_expectation()`: original data, confidence intervals.
