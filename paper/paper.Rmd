@@ -37,15 +37,20 @@ affiliations:
   index: 1
 - name: Sussex Centre for Consciousness Science, University of Sussex, Brighton, UK
   index: 2
-- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  index: 3
+  
 - name: Independent Researcher, Ramat Gan, Israel
-  index: 4
+  index: 3
+
 - name: Independent Researcher, Tampa, FL, USA
-  index: 5
+  index: 4
+
 - name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  index: 5
+
+- name: Department of Psychology, New York University, New York, NY, USA
   index: 6
-- name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+
+- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
@@ -72,7 +77,6 @@ output:
   rticles::joss_article
 journal:
   pissn: 2475-9066
-link-citations: true
 csl: apa.csl
 ---
 

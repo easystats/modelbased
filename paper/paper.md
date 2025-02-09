@@ -31,21 +31,21 @@ authors:
 - name: Daniel Lüdecke
   orcid: 0000-0002-8895-3206
   affiliation: 7
-  
+
 affiliations:
 - name: School of Psychology, University of Sussex, Brighton, UK
   index: 1
 - name: Sussex Centre for Consciousness Science, University of Sussex, Brighton, UK
   index: 2
-- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  index: 3
 - name: Independent Researcher, Ramat Gan, Israel
-  index: 4
+  index: 3
 - name: Independent Researcher, Tampa, FL, USA
-  index: 5
+  index: 4
 - name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  index: 5
+- name: Department of Psychology, New York University, New York, NY, USA
   index: 6
-- name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
@@ -70,8 +70,8 @@ conflictsofinterest: |
   The authors declare no conflict of interest.
 output:
   rticles::joss_article
-journal: JOSS
-link-citations: yes
+journal:
+  pissn: 2475-9066
 csl: apa.csl
 ---
 
@@ -85,16 +85,19 @@ The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodol
 
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages [@easystatspackage] has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Existing packages are dedicated to model parameters [e.g., the `parameters` package, @ludecke2020extracting], predictive performance [e.g., the `performance` package, @ludecke2021performance] or effect importance [e.g., the `effectsize` package, @ben2020effectsize].
 
-**But there is even more power hidden inside models!**
+**But there is even more information hidden inside models!**
 
-Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observe or unobserved alike.
-These predictions, in turn, can be used to estimate expected values of the outcome  and predictor effects of any levels, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
+Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observed or unobserved alike.
+These predictions refer to expected values of the outcome for given levels of predictors of interest, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
 
 The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package, built on top of the two aforementioned, aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
 
 
 # Key concepts
 
+## Terminology
+
+Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_. We can describe this relationship (i.e. estimate the expected outcome values) for a very "specific" observation that is defined by characteristics that may not appear in our data. This is what we call _predictions_. Or we express the relationship considering an "average" or "typical" observation, i.e. how is the _average_ relationship between predictors and our outcome? We call this _marginal means_. When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms.
 
 ## Predictions
 
@@ -106,11 +109,11 @@ while the latter is typically larger and provides information about the range in
 Moreover, for generalized linear models (GLMs), predictions can be made on the **response scale** (`predict = "response"`) or the **link scale** (`predict = "link"`).
 This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic regression models.
 
-These different types of estimates can be obtained for observation in the original dataset,
+These different types of estimates can be obtained for observations in the original dataset,
 which is useful to assess the model's goodness-of-fit,
-or for new data (typically a "data grid"), which is useful for visualization or computing "marginal" estimates (see below).
+or for new data (typically a "data grid"), which is useful for visualization.
 
-For convenience, the `modelbased` package includes 4 related functions, that mostly differ in their default arguments for `data` and `predict`:
+For convenience, the `modelbased` package includes four related functions, that mostly differ in their default arguments for `data` and `predict`:
 
 - `estimate_prediction()`: original data, prediction intervals.
 - `estimate_expectation()`: original data, confidence intervals.
@@ -120,7 +123,7 @@ For convenience, the `modelbased` package includes 4 related functions, that mos
 *Note:* if the defaults are changed, then these functions can become redundant.
 For instance, `estimate_relation(..., predict = "link")` will be equivalent to `estimate_link(...)`.
 
-Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.). 
+Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.).
 
 
 ## Marginal means and effects
@@ -132,8 +135,8 @@ This in turn is convenient for understanding the effect of a variable in a compl
 The `modelbased` package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 - `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
-- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
-- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
+- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison of marginal means at different levels of a factor to assess differences or effects.
+- `estimate_slopes()`: computes **Marginal Effects**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors, and describe the average strength of an effect.
 
 
 **[TODO: details about types of marginalization]**
@@ -185,7 +188,7 @@ This means that while `emmeans` typically produces _effects at the mean_, `margi
 Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
 
 Note that `emmeans` can also use the delta method and can use non-regular grids,
-and `marginaleffects` can also generate linear predictions at the mean, 
+and `marginaleffects` can also generate linear predictions at the mean,
 but to obtain these requires some degree of competency in the relevant packages.
 
 Finally, `modelbased` leverages `get_datagrid()` function from the `insight` package [@ludecke2019insight]
