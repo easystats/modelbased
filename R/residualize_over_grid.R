@@ -14,8 +14,6 @@
 #' `grid` should match to predictors in the model.
 #' @param predictor_name The name of the focal predictor, for which partial residuals
 #' are computed.
-#' @param protect_names Logical, if `TRUE`, preserves column names from the
-#' `ggeffects` objects that is used as `grid`.
 #' @param ... Currently not used.
 #'
 #' @section Partial Residuals:
@@ -112,8 +110,6 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
 }
 
 
-
-#' @rdname residualize_over_grid
 #' @export
 residualize_over_grid.estimate_means <- function(grid, model, ...) {
   new_d <- as.data.frame(grid)

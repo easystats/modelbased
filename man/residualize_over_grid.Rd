@@ -3,14 +3,11 @@
 \name{residualize_over_grid}
 \alias{residualize_over_grid}
 \alias{residualize_over_grid.data.frame}
-\alias{residualize_over_grid.estimate_means}
 \title{Compute partial residuals from a data grid}
 \usage{
 residualize_over_grid(grid, model, ...)
 
 \method{residualize_over_grid}{data.frame}(grid, model, predictor_name, ...)
-
-\method{residualize_over_grid}{estimate_means}(grid, model, ...)
 }
 \arguments{
 \item{grid}{A data frame representing the data grid, or an object of class
@@ -24,9 +21,6 @@ residualize_over_grid(grid, model, ...)
 
 \item{predictor_name}{The name of the focal predictor, for which partial residuals
 are computed.}
-
-\item{protect_names}{Logical, if \code{TRUE}, preserves column names from the
-\code{ggeffects} objects that is used as \code{grid}.}
 }
 \value{
 A data frame with residuals for the focal predictor.
