@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.1.14)  9 FEB 2025 08:55
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.1.14)  9 FEB 2025 08:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1178,4 +1178,96 @@ Overfull \hbox (32.66139pt too wide) in paragraph at lines 657--657
 
 
 Overfull \hbox (27.41139pt too wide) in paragraph at lines 711--711
-[]\TU/lmtt/m/n/10 #> Level1     | Level2     
+[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 712--712
+[]\TU/lmtt/m/n/10 #> ----------------------------------------------------------------------------[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 713--713
+[]\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.43] |  0.83 | 0.404[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 714--714
+[]\TU/lmtt/m/n/10 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] | -0.27 | 0.789[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 715--715
+[]\TU/lmtt/m/n/10 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] | -2.41 | 0.016[] 
+ []
+
+
+
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 63.55022pt, for example:
+(fancyhdr)                \setlength{\headheight}{63.55022pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
+
+[6]
+Underfull \hbox (badness 2913) in paragraph at lines 750--757
+[][][][][][] [] [][] [] [][][][][][][][][][]$[][]\TU/lmr/m/n/10 ), on CRAN ([][]$[][][][][] [] [] [] [][][][] [] [][][][][][][][][][] [] [][][] [] [][][][][][][] [] [][][][][][][][][][]$[][]),
+ []
+
+
+LaTeX Warning: Citation 'ref-easystatspackage' on page 7 undefined on input line 764.
+
+
+
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 63.55022pt, for example:
+(fancyhdr)                \setlength{\headheight}{63.55022pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
+
+[7]
+
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 63.55022pt, for example:
+(fancyhdr)                \setlength{\headheight}{63.55022pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
+
+[8] (./paper.aux)
+ ***********
+LaTeX2e <2024-11-01> patch level 1
+L3 programming layer <2024-12-25>
+ ***********
+
+LaTeX Warning: There were undefined references.
+
+Package rerunfilecheck Info: File `paper.out' has not changed.
+(rerunfilecheck)             Checksum: 4C2D13FDD063369D15E0949E833AF367;2959.
+
+Package biblatex Warning: Please (re)run Biber on the file:
+(biblatex)                paper
+(biblatex)                and rerun LaTeX afterwards.
+
+Package logreq Info: Writing requests to 'paper.run.xml'.
+\openout1 = `paper.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 37141 strings out of 475791
+ 763993 string characters out of 5771227
+ 1641147 words of memory out of 5000000
+ 59544 multiletter control sequences out of 15000+600000
+ 565701 words of font info for 83 fonts, out of 8000000 for 9000
+ 36 hyphenation exceptions out of 8191
+ 84i,12n,87p,1194b,1174s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+Output written on paper.pdf (8 pages).
