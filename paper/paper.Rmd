@@ -96,10 +96,10 @@ The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodol
 
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages [@easystatspackage] has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Existing packages are dedicated to model parameters [e.g., the `parameters` package, @ludecke2020extracting], predictive performance [e.g., the `performance` package, @ludecke2021performance] or effect importance [e.g., the `effectsize` package, @ben2020effectsize].
 
-**But there is even more power hidden inside models!**
+**But there is even more information hidden inside models!**
 
-Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observe or unobserved alike.
-These predictions, in turn, can be used to estimate expected values of the outcome  and predictor effects of any levels, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
+Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observed or unobserved alike.
+These predictions refer to expected values of the outcome for given levels of predictors of interest, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
 
 The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package, built on top of the two aforementioned, aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
 
