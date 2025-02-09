@@ -164,7 +164,7 @@ which can be set as a global option with (e.g., `options(modelbased_backend = "e
 
 Of the two, `emmeans` [@russell2024emmeans] is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means").
 This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs:
-predictions made over a regular grid—a counter-factual dataset containing all combinations of the categorical predictors in the model and typically the mean of numerical predictors.
+predictions made over a regular grid -- a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors.
 The package was renamed in 2016 to `emmeans` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
 
 Within `emmeans`, estimates are generated as a linear function of the model's coefficients,
@@ -172,14 +172,18 @@ with standard errors (SEs) produced in a similar manner by taking a linear combi
 For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance,
 we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
 
-$L \cdot b$
+$$
+\hat{b} = L \cdot b
+$$
 
-$\sqrt{L \cdot V \cdot L}$
+$$
+SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
+$$
 
-```{r, echo=FALSE, eval=F}
+```{r, echo=FALSE, eval=FALSE}
 # original formula, please check OK:
 L %*% b
-sqrt(L %*% V %*% L)
+sqrt(diag(L %*% V %*% t(L)))
 ```
 
 These grid predictions are sometimes averaged over (averaging being a linear operation itself)
