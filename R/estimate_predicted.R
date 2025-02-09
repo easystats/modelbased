@@ -462,18 +462,21 @@ estimate_relation <- function(model,
 
   # transform reponse?
   if (isTRUE(transform)) {
-    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+    trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    trans_fun <- transform
   }
-  if (!is.null(transform)) {
-    out$Predicted <- transform(out$Predicted)
-    out$CI_low <- transform(out$CI_low)
-    out$CI_high <- transform(out$CI_high)
+  if (!is.null(trans_fun)) {
+    out$Predicted <- trans_fun(out$Predicted)
+    out$CI_low <- trans_fun(out$CI_low)
+    out$CI_high <- trans_fun(out$CI_high)
   }
 
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
+  attr(out, "transform") <- transform
   attr(out, "model") <- model
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
