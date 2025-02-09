@@ -146,8 +146,8 @@ This in turn is convenient for understanding the effect of a variable in a compl
 The `modelbased` package simplifies the extraction of these quantities, providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
 
 - `estimate_means()`: computes **Marginal Means**, i.e., the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
-- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison the marginal means of different levels of a factor to assess differences or effects.
-- `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
+- `estimate_contrasts()`: computes **Marginal Contrasts**, i.e., the comparison of marginal means at different levels of a factor to assess differences or effects.
+- `estimate_slopes()`: computes **Marginal Effects**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors, and describe the average strength of an effect.
 
 
 **[TODO: details about types of marginalization]**
