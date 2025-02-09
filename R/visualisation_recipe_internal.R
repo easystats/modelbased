@@ -182,6 +182,7 @@
 #' @keywords internal
 .visualization_recipe <- function(x,
                                   show_data = TRUE,
+                                  show_residuals = FALSE,
                                   point = NULL,
                                   line = NULL,
                                   pointrange = NULL,
@@ -213,6 +214,15 @@
   # add raw data as first layer
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
+    # Update with additional args
+    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    l <- l + 1
+  }
+
+
+  # add residual data as next lowest layer
+  if (show_residuals) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_residuals(x, aes)
     # Update with additional args
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
@@ -404,6 +414,47 @@
   if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
     out$aes$alpha <- NULL
   }
+
+  # set default alpha, if not mapped by aes
+  if (is.null(aes$alpha)) {
+    out$alpha <- 1 / 3
+  } else {
+    out$alpha <- NULL
+  }
+
+  out
+}
+
+
+# residuals ----------------------------------------------------------------
+
+
+#' @keywords internal
+.visualization_recipe_residuals <- function(x, aes) {
+  model <- attributes(x)$model
+  residual_data <- residualize_over_grid(x, model)
+
+  # Default changes for binomial models
+  shape <- 16
+  stroke <- 0
+  if (insight::model_info(model)$is_binomial) {
+    shape <- "|"
+    stroke <- 1
+  }
+
+  out <- list(
+    geom = "point",
+    data = residual_data,
+    aes = list(
+      y = y,
+      x = aes$x,
+      color = aes$color,
+      alpha = aes$alpha
+    ),
+    height = 0,
+    shape = shape,
+    stroke = stroke
+  )
 
   # set default alpha, if not mapped by aes
   if (is.null(aes$alpha)) {

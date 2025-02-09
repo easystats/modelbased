@@ -118,6 +118,7 @@
 #' @export
 visualisation_recipe.estimate_predicted <- function(x,
                                                     show_data = FALSE,
+                                                    show_residuals = FALSE,
                                                     point = NULL,
                                                     line = NULL,
                                                     pointrange = NULL,
@@ -129,6 +130,7 @@ visualisation_recipe.estimate_predicted <- function(x,
   .visualization_recipe(
     x,
     show_data = show_data,
+    show_residuals = show_residuals,
     point = point,
     line = line,
     pointrange = pointrange,
