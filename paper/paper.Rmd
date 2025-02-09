@@ -31,7 +31,7 @@ authors:
 - name: Daniel Lüdecke
   orcid: 0000-0002-8895-3206
   affiliation: 7
-  
+
 affiliations:
 - name: School of Psychology, University of Sussex, Brighton, UK
   index: 1
@@ -70,8 +70,9 @@ conflictsofinterest: |
   The authors declare no conflict of interest.
 output:
   rticles::joss_article
-journal: JOSS
-link-citations: yes
+journal:
+  pissn: 2475-9066
+link-citations: true
 csl: apa.csl
 ---
 
@@ -130,7 +131,7 @@ For convenience, the `modelbased` package includes 4 related functions, that mos
 *Note:* if the defaults are changed, then these functions can become redundant.
 For instance, `estimate_relation(..., predict = "link")` will be equivalent to `estimate_link(...)`.
 
-Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.). 
+Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.).
 
 
 ## Marginal means and effects
@@ -199,7 +200,7 @@ This means that while `emmeans` typically produces _effects at the mean_, `margi
 Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
 
 Note that `emmeans` can also use the delta method and can use non-regular grids,
-and `marginaleffects` can also generate linear predictions at the mean, 
+and `marginaleffects` can also generate linear predictions at the mean,
 but to obtain these requires some degree of competency in the relevant packages.
 
 Finally, `modelbased` leverages `get_datagrid()` function from the `insight` package [@ludecke2019insight]
