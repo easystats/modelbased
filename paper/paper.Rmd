@@ -6,46 +6,47 @@ tags:
   - marginal effects
   - marginal means
   - model predictions
-# authors:
-  # - name: Dominique Makowski
-  #   orcid: 0000-0001-5375-9967
-  #   affiliation: 1
-  #   
-  # - name: Daniel Lüdecke
-  #   orcid: 0000-0002-8895-3206
-  #   affiliation: 2
-  #   
-  # - name: Mattan S. Ben-Shachar
-  #   orcid: 0000-0002-4287-4801
-  #   affiliation: 3
-  #   
-  # - name: Brenton M. Wiernik
-  #   orcid: 0000-0001-9560-6336
-  #   affiliation: 4
-  #   
-  # - name: Indrajeet Patil
-  #   orcid: 0000-0003-1995-6531
-  #   affiliation: 5
-  #   
-  # - name: Rémi Thériault
-  #   orcid: 0000-0003-4315-6788
-  #   affiliation: 6
-  #   corresponding: TRUE
-  #   email: theriault.remi@courrier.uqam.ca
+authors:
+- name: Dominique Makowski
+  orcid: 0000-0001-5375-9967
+  affiliation: "1, 2"
+  corresponding: TRUE
 
-# affiliations:
-  # - name: School of Psychology, University of Sussex, Brighton, UK
-  #   index: 1
-  # - name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  #   index: 2
-  # - name: Independent Researcher, Ramat Gan, Israel
-  #   index: 3
-  # - name: Independent Researcher, Tampa, FL, USA
-  #   index: 4
-  # - name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
-  #   index: 5
-  # - name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
-  #   index: 6
+- name: Mattan S. Ben-Shachar
+  orcid: 0000-0002-4287-4801
+  affiliation: 3
+
+- name: Brenton M. Wiernik
+  orcid: 0000-0001-9560-6336
+  affiliation: 4
+
+- name: Indrajeet Patil
+  orcid: 0000-0003-1995-6531
+  affiliation: 5
+
+- name: Rémi Thériault
+  orcid: 0000-0003-4315-6788
+  affiliation: 6
+
+- name: Daniel Lüdecke
+  orcid: 0000-0002-8895-3206
+  affiliation: 7
+  
+affiliations:
+- name: School of Psychology, University of Sussex, Brighton, UK
+  index: 1
+- name: Sussex Centre for Consciousness Science, University of Sussex, Brighton, UK
+  index: 2
+- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
+  index: 3
+- name: Independent Researcher, Ramat Gan, Israel
+  index: 4
+- name: Independent Researcher, Tampa, FL, USA
+  index: 5
+- name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  index: 6
+- name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+  index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
 date: "`r Sys.Date()`"
@@ -95,10 +96,11 @@ The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodol
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages [@easystatspackage] has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Existing packages are dedicated to model parameters [e.g., the `parameters` package, @ludecke2020extracting], predictive performance [e.g., the `performance` package, @ludecke2021performance] or effect importance [e.g., the `effectsize` package, @ben2020effectsize].
 
 **But there is even more power hidden inside models!**
-Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors—typically observed combinations, but often unobserved (counter-factual) ones.
+
+Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observe or unobserved alike.
 These predictions, in turn, can be used to estimate expected values of the outcome  and predictor effects of any levels, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
 
-The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. It is built on top of the two aforementioned `emmeans` and `marginaleffects` packages. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
+The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package, built on top of the two aforementioned, aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
 
 
 # Key concepts
@@ -128,7 +130,7 @@ For convenience, the `modelbased` package includes 4 related functions, that mos
 *Note:* if the defaults are changed, then these functions can become redundant.
 For instance, `estimate_relation(..., predict = "link")` will be equivalent to `estimate_link(...)`.
 
-These functions belong to the same family, and their relevance depends on the model and the research question.
+Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.). 
 
 
 ## Marginal means and effects
@@ -144,7 +146,7 @@ The `modelbased` package simplifies the extraction of these quantities, providin
 - `estimate_slopes()`: computes **Marginal Slopes**, i.e., the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. They are essentially the partial derivatives of the response with respect to each predictor, useful for continuous predictors.
 
 
-[details about types of marginalization]
+**[TODO: details about types of marginalization]**
 
 
 ## Technical details
@@ -200,12 +202,9 @@ Note that `emmeans` can also use the delta method and can use non-regular grids,
 and `marginaleffects` can also generate linear predictions at the mean, 
 but to obtain these requires some degree of competency in the relevant packages.
 
-
-`modelbased` leverages `get_datagrid()` function from the `insight` package [@ludecke2019insight]
+Finally, `modelbased` leverages `get_datagrid()` function from the `insight` package [@ludecke2019insight]
 to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated.
-And since these two packages support a wider range of models—including generalized linear models, mixed models, and Bayesian models -
-this means that `modelbased` also inherits the support for such models.
-
+And since these these packages support a wider range of models—including generalized linear models, mixed models, and Bayesian models, this means that `modelbased` also inherits the support for such models.
 
 # Examples
 

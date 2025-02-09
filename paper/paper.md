@@ -6,49 +6,50 @@ tags:
   - marginal effects
   - marginal means
   - model predictions
-# authors:
-  # - name: Dominique Makowski
-  #   orcid: 0000-0001-5375-9967
-  #   affiliation: 1
-  #   
-  # - name: Daniel Lüdecke
-  #   orcid: 0000-0002-8895-3206
-  #   affiliation: 2
-  #   
-  # - name: Mattan S. Ben-Shachar
-  #   orcid: 0000-0002-4287-4801
-  #   affiliation: 3
-  #   
-  # - name: Brenton M. Wiernik
-  #   orcid: 0000-0001-9560-6336
-  #   affiliation: 4
-  #   
-  # - name: Indrajeet Patil
-  #   orcid: 0000-0003-1995-6531
-  #   affiliation: 5
-  #   
-  # - name: Rémi Thériault
-  #   orcid: 0000-0003-4315-6788
-  #   affiliation: 6
-  #   corresponding: TRUE
-  #   email: theriault.remi@courrier.uqam.ca
+authors:
+- name: Dominique Makowski
+  orcid: 0000-0001-5375-9967
+  affiliation: "1, 2"
+  corresponding: TRUE
 
-# affiliations:
-  # - name: School of Psychology, University of Sussex, Brighton, UK
-  #   index: 1
-  # - name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
-  #   index: 2
-  # - name: Independent Researcher, Ramat Gan, Israel
-  #   index: 3
-  # - name: Independent Researcher, Tampa, FL, USA
-  #   index: 4
-  # - name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
-  #   index: 5
-  # - name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
-  #   index: 6
+- name: Mattan S. Ben-Shachar
+  orcid: 0000-0002-4287-4801
+  affiliation: 3
+
+- name: Brenton M. Wiernik
+  orcid: 0000-0001-9560-6336
+  affiliation: 4
+
+- name: Indrajeet Patil
+  orcid: 0000-0003-1995-6531
+  affiliation: 5
+
+- name: Rémi Thériault
+  orcid: 0000-0003-4315-6788
+  affiliation: 6
+
+- name: Daniel Lüdecke
+  orcid: 0000-0002-8895-3206
+  affiliation: 2
+  
+affiliations:
+- name: School of Psychology, University of Sussex, Brighton, UK
+  index: 1
+- name: School of Psychology, University of Sussex, Brighton, UK
+  index: 1
+- name: Institute of Medical Sociology, University Medical Center Hamburg-Eppendorf, Germany
+  index: 2
+- name: Independent Researcher, Ramat Gan, Israel
+  index: 3
+- name: Independent Researcher, Tampa, FL, USA
+  index: 4
+- name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+  index: 5
+- name: Department of Psychology, Université du Québec à Montréal, Montréal, Québec, Canada
+  index: 6
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-02-07"
+date: "2025-02-09"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
