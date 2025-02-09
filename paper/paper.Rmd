@@ -120,9 +120,9 @@ while the latter is typically larger and provides information about the range in
 Moreover, for generalized linear models (GLMs), predictions can be made on the **response scale** (`predict = "response"`) or the **link scale** (`predict = "link"`).
 This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic regression models.
 
-These different types of estimates can be obtained for observation in the original dataset,
+These different types of estimates can be obtained for observations in the original dataset,
 which is useful to assess the model's goodness-of-fit,
-or for new data (typically a "data grid"), which is useful for visualization or computing "marginal" estimates (see below).
+or for new data (typically a "data grid"), which is useful for visualization.
 
 For convenience, the `modelbased` package includes four related functions, that mostly differ in their default arguments for `data` and `predict`:
 
