@@ -2,7 +2,7 @@
 
 
 #' @keywords internal
-.find_aes <- function(x) {
+.find_aes <- function(x, numeric_as_discrete = 8) {
   # init basic aes
   data <- as.data.frame(x)
   data$.group <- 1
@@ -20,10 +20,15 @@
   # Find predictors
   by <- att$focal_terms
 
-  # if we have only few numeric values as second term, we don't want a
-  # continuous color scale...
-  if (length(by) > 1 && is.numeric(data[[by[2]]]) && insight::n_unique(data[[by[2]]]) < 8) {
-    data[[by[2]]] <- as.factor(insight::format_value(data[[by[2]]], protect_integers = TRUE))
+  # if we have only few numeric values, we don't want a continuous color scale.
+  # check whether we can treat numeric as discrete
+  if (!isFALSE(numeric_as_discrete) & is.numeric(numeric_as_discrete)) {
+    data[by] <- lapply(data[by], function(v) {
+      if (is.numeric(v) && insight::n_unique(v) < numeric_as_discrete) {
+        v <- as.factor(insight::format_value(v, protect_integers = TRUE))
+      }
+      v
+    })
   }
 
   # Main geom
@@ -195,10 +200,11 @@
                                   facet = NULL,
                                   grid = NULL,
                                   join_dots = TRUE,
+                                  numeric_as_discrete = 8,
                                   ...) {
   # init
   response_scale <- attributes(x)$predict
-  aes <- .find_aes(x)
+  aes <- .find_aes(x, numeric_as_discrete)
   data <- aes$data
   aes <- aes$aes
   global_aes <- list()

@@ -16,6 +16,7 @@
   facet = NULL,
   grid = NULL,
   join_dots = getOption("modelbased_join_dots", TRUE),
+  numeric_as_discrete = getOption("modelbased_numeric_as_discrete", 8),
   ...
 )
 
@@ -48,11 +49,21 @@ to the model-based estimation.}
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
 
-\item{join_dots}{Logical, if \code{TRUE} and for categorical focal terms in \code{by},
-dots (estimates) are connected by lines, i.e. plots will be a combination of
-dots with error bars and connecting lines. If \code{FALSE}, only dots and error
-bars are shown. It is possible to set a global default value using \code{options()},
-e.g. \code{options("modelbased_join_dots" = FALSE)}.}
+\item{join_dots}{Logical, if \code{TRUE} (default) and for categorical focal terms
+in \code{by}, dots (estimates) are connected by lines, i.e. plots will be a
+combination of dots with error bars and connecting lines. If \code{FALSE}, only
+dots and error bars are shown. It is possible to set a global default value
+using \code{options()}, e.g. \code{options(modelbased_join_dots = FALSE)}.}
+
+\item{numeric_as_discrete}{Maximum number of unique values in a numeric
+predictor to treat that predictor as discrete. Defaults to \code{8}. Numeric
+predictors are usually mapped to a continuous color scale, unless they have
+only few unique values. In the latter case, numeric predictors are assumed to
+represent "categories", e.g. when only the mean value and +/- 1 standard
+deviation around the mean are chosen as representative values for that
+predictor. Use \code{FALSE} to always use continuous color scales for numeric
+predictors. It is possible to set a global default value using \code{options()},
+e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 
 \item{...}{Not used.}
 }
@@ -77,6 +88,18 @@ from the plot. To remove error bars, simply set the \code{pointrange} geom to
 \code{point}, e.g. \code{plot(..., pointrange = list(geom = "point"))}. To remove the
 confidence bands from line geoms, use \code{ribbon = "none"}.
 }
+\section{Global Options to Customize Plots}{
+
+Some arguments for \code{plot()} can get global defaults using \code{options()}:
+\itemize{
+\item \code{modelbased_join_dots}: \verb{options(modelbased_join_dots = <logical>)} will
+set a default value for the \code{join_dots}.
+\item \code{modelbased_numeric_as_discrete}: \verb{options(modelbased_numeric_as_discrete = <number>)}
+will set a default value for the \code{modelbased_numeric_as_discrete} argument.
+Can also be \code{FALSE}.
+}
+}
+
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
