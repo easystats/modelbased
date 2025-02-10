@@ -117,3 +117,18 @@ test_that("estimate_expectation - glmmTMB", {
   estim <- suppressMessages(estimate_expectation(model2))
   expect_identical(dim(estim), c(644L, 8L))
 })
+
+
+test_that("column name beta regression", {
+  data(mtcars)
+  mtcars$ord <- datawizard::normalize(mtcars$mpg)
+  m <- glmmTMB::glmmTMB(
+    ord ~ wt + hp + as.factor(gear) + (1 | cyl),
+    data = mtcars,
+    family = glmmTMB::ordbeta()
+  )
+  expect_named(
+    estimate_means(m, "gear"),
+    c("gear", "Proportion", "SE", "CI_low", "CI_high", "z")
+  )
+})

@@ -41,6 +41,10 @@ format.estimate_contrasts <- function(x,
   if (all(c("Level1", "Level2") %in% colnames(x))) {
     by <- unique(by, c("Level1", "Level2"))
   }
+  # add "group" columns from multivariate models
+  if ("group" %in% colnames(x)) {
+    by <- unique("group", by)
+  }
   # check which columns actually exist
   if (!is.null(by)) {
     by <- intersect(by, colnames(x))
@@ -572,6 +576,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
     estimate_name <- "Probability"
+  } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
+    estimate_name <- "Proportion"
   } else {
     estimate_name <- "Mean"
   }

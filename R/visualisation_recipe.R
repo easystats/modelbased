@@ -17,11 +17,20 @@
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
 #'   to the model-based estimation.
-#' @param join_dots Logical, if `TRUE` and for categorical focal terms in `by`,
-#' dots (estimates) are connected by lines, i.e. plots will be a combination of
-#' dots with error bars and connecting lines. If `FALSE`, only dots and error
-#' bars are shown. It is possible to set a global default value using `options()`,
-#' e.g. `options("modelbased_join_dots" = FALSE)`.
+#' @param join_dots Logical, if `TRUE` (default) and for categorical focal terms
+#' in `by`, dots (estimates) are connected by lines, i.e. plots will be a
+#' combination of dots with error bars and connecting lines. If `FALSE`, only
+#' dots and error bars are shown. It is possible to set a global default value
+#' using `options()`, e.g. `options(modelbased_join_dots = FALSE)`.
+#' @param numeric_as_discrete Maximum number of unique values in a numeric
+#' predictor to treat that predictor as discrete. Defaults to `8`. Numeric
+#' predictors are usually mapped to a continuous color scale, unless they have
+#' only few unique values. In the latter case, numeric predictors are assumed to
+#' represent "categories", e.g. when only the mean value and +/- 1 standard
+#' deviation around the mean are chosen as representative values for that
+#' predictor. Use `FALSE` to always use continuous color scales for numeric
+#' predictors. It is possible to set a global default value using `options()`,
+#' e.g. `options(modelbased_numeric_as_discrete = 10)`.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Not used.
@@ -30,6 +39,16 @@
 #' from the plot. To remove error bars, simply set the `pointrange` geom to
 #' `point`, e.g. `plot(..., pointrange = list(geom = "point"))`. To remove the
 #' confidence bands from line geoms, use `ribbon = "none"`.
+#'
+#' @section Global Options to Customize Plots:
+#' Some arguments for `plot()` can get global defaults using `options()`:
+#'
+#' - `modelbased_join_dots`: `options(modelbased_join_dots = <logical>)` will
+#'   set a default value for the `join_dots`.
+#'
+#' - `modelbased_numeric_as_discrete`: `options(modelbased_numeric_as_discrete = <number>)`
+#'   will set a default value for the `modelbased_numeric_as_discrete` argument.
+#'   Can also be `FALSE`.
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
 #' library(ggplot2)
@@ -126,6 +145,7 @@ visualisation_recipe.estimate_predicted <- function(x,
                                                     facet = NULL,
                                                     grid = NULL,
                                                     join_dots = getOption("modelbased_join_dots", TRUE),
+                                                    numeric_as_discrete = getOption("modelbased_numeric_as_discrete", 8),
                                                     ...) {
   .visualization_recipe(
     x,
@@ -138,6 +158,7 @@ visualisation_recipe.estimate_predicted <- function(x,
     facet = facet,
     grid = grid,
     join_dots = join_dots,
+    numeric_as_discrete = numeric_as_discrete,
     ...
   )
 }

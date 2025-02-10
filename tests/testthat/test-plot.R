@@ -303,6 +303,11 @@ test_that("plots, at special values", {
     "plot-expectation-fivenum",
     plot(pr, show_data = FALSE)
   )
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-expectation-fivenum.2",
+    plot(pr, show_data = FALSE, numeric_as_discrete = FALSE)
+  )
 })
 
 
@@ -425,6 +430,11 @@ test_that("plots, glm logistic inside bound", {
   vdiffr::expect_doppelganger(
     "plot-logistic-bounds-1",
     plot(out1, show_data = FALSE)
+  )
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-logistic-bounds-2",
+    plot(out1, show_data = FALSE, numeric_as_discrete = FALSE)
   )
 })
 

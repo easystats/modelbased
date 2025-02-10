@@ -7,6 +7,12 @@
 
 ## Changes
 
+* New functions `pool_predictions()` and `pool_contrasts()`, to deal with
+  *modelbased* objects that were applied to imputed data sets. E.g., functions
+  like `estimate_means()` can be run on several data sets where missing values
+  were imputed, and the multiple results from `estimate_means()` can be pooled
+  using `pool_predictions()`.
+
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
 
@@ -21,9 +27,17 @@
   the models has a transformed response variable, but predictions were not
   back-transformed using the `transform` argument.
 
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
+
 ## Bug fixes
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
+
+* Fixed issues with multivariate response models.
+
+* Fixed issues with plotting ordinal or multinomial models.
 
 # modelbased 0.9.0
 
