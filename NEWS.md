@@ -5,10 +5,6 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
-* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
-  numeric predictors should be treated as factor or continuous, based on the
-  of unique values in numeric predictors.
-
 ## Changes
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
@@ -31,9 +27,15 @@
   the models has a transformed response variable, but predictions were not
   back-transformed using the `transform` argument.
 
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
+
 ## Bug fixes
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
+
+* Fixed issues with multivariate response models.
 
 # modelbased 0.9.0
 
