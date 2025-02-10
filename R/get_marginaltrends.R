@@ -80,6 +80,7 @@ get_marginaltrends <- function(model,
 
   estimated <- .add_attributes(
     estimated,
+    model_info = model_info,
     info = c(
       datagrid_info,
       list(
@@ -87,8 +88,7 @@ get_marginaltrends <- function(model,
         datagrid = datagrid,
         coef_name = "Slope",
         p_adjust = p_adjust,
-        ci = ci,
-        model_info = model_info
+        ci = ci
       )
     )
   )
