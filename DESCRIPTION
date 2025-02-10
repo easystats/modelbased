@@ -67,6 +67,7 @@ Suggests:
     mice,
     mgcv,
     nanoparquet,
+    ordinal,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,
