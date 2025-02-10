@@ -2,7 +2,7 @@
 
 
 #' @keywords internal
-.find_aes <- function(x) {
+.find_aes <- function(x, model_info = NULL, numeric_as_discrete = 8) {
   # init basic aes
   data <- as.data.frame(x)
   data$.group <- 1
@@ -19,6 +19,24 @@
 
   # Find predictors
   by <- att$focal_terms
+
+  # multivariate response models? if so, we need one more stratification in "by"
+  if (isTRUE(model_info$is_ordinal | model_info$is_multinomial) && "Response" %in% colnames(data)) {
+    by <- c(by, "Response")
+    data$Response <- factor(data$Response, levels = unique(data$Response))
+  }
+
+  # if we have only few numeric values, we don't want a continuous color scale.
+  # check whether we can treat numeric as discrete
+  if (!isFALSE(numeric_as_discrete) && is.numeric(numeric_as_discrete)) {
+    data[by] <- lapply(data[by], function(v) {
+      if (is.numeric(v) && insight::n_unique(v) < numeric_as_discrete) {
+        formatted <- insight::format_value(v, protect_integers = TRUE)
+        v <- factor(formatted, levels = unique(formatted))
+      }
+      v
+    })
+  }
 
   # Main geom
   # ------------------------------------------------------------------------
@@ -189,15 +207,20 @@
                                   facet = NULL,
                                   grid = NULL,
                                   join_dots = TRUE,
+                                  numeric_as_discrete = 8,
                                   ...) {
   # init
   response_scale <- attributes(x)$predict
-  aes <- .find_aes(x)
+  model_info <- attributes(x)$model_info
+
+  aes <- .find_aes(x, model_info, numeric_as_discrete)
   data <- aes$data
   aes <- aes$aes
   global_aes <- list()
   layers <- list()
   l <- 1
+
+  # preparation of settings / arguments ----------------------------------
 
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
@@ -211,15 +234,18 @@
   }
 
   # Don't plot raw data for transformed responses with no back-transformation
-  trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
   transform <- attributes(x)$transform
-  model_info <- attributes(x)$model_info
 
-  if (!is.null(trans_fun) && !isTRUE(transform) && isTRUE(model_info$is_linear)) {
-    show_data <- FALSE
+  if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
+    # add information about response transformation
+    trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
+    if (!is.null(trans_fun) && trans_fun != "identity") {
+      show_data <- FALSE
+    }
   }
 
-  # add raw data as first layer
+
+  # add raw data as first layer ----------------------------------
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
     # Update with additional args
@@ -355,6 +381,24 @@
     ))
     l <- l + 1
   }
+
+
+  ## FIXME: doesn't work yet - breaks test-plot
+
+  # probability scale? ----------------------------------
+  # if (identical(response_scale, "response) &&isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
+  #   layers[[paste0("l", l)]] <- list(
+  #     geom = "scale_y_continuous",
+  #     labels = insight::format_value(
+  #       x = pretty(data[[aes$y]]),
+  #       as_percent = TRUE,
+  #       digits = 0
+  #     ),
+  #     breaks = pretty(data[[aes$y]])
+  #   )
+  #   l <- l + 1
+  # }
+
 
   # Out
   class(layers) <- unique(c("visualisation_recipe", "see_visualisation_recipe", class(layers)))

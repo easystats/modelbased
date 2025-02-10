@@ -113,7 +113,7 @@ print(out, select = "minimal")
 data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
 levels(efc$c172code) <- c("low", "mid", "high")
-fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex , data = efc)
+fit <- lm(neg_c_7 ~ c161sex * c172code * e16sex, data = efc)
 out <- estimate_means(fit, c("c161sex", "c172code", "e16sex"))
 print(out, full_labels = FALSE, select = "{estimate} ({se})")
 \dontshow{\}) # examplesIf}

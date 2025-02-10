@@ -105,13 +105,13 @@ get_marginalcontrasts <- function(model,
   out <- .add_attributes(
     out,
     by = my_args$by,
+    model_info = model_info,
     info = list(
       contrast = my_args$contrast,
       predict = predict,
       comparison = my_args$comparison,
       estimate = estimate,
-      p_adjust = p_adjust,
-      model_info = model_info
+      p_adjust = p_adjust
     )
   )
 
