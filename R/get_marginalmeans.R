@@ -198,14 +198,14 @@ get_marginalmeans <- function(model,
   means <- .add_attributes(
     means,
     by = my_args$by,
+    model_info = model_info,
     info = c(
       datagrid_info,
       list(
         predict = predict,
         estimate = estimate,
         datagrid = datagrid,
-        transform = !is.null(transform),
-        model_info = model_info
+        transform = !is.null(transform)
       )
     )
   )
@@ -262,9 +262,10 @@ get_marginalmeans <- function(model,
 #   calling avg_slopes()
 # - model_info: object from insight::model_info()
 #' @keywords internal
-.add_attributes <- function(x, by = NULL, info = NULL) {
+.add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
   attr(x, "at") <- by
   attr(x, "by") <- by
+  attr(x, "model_info") <- model_info
 
   # compact list
   info <- insight::compact_list(info)
