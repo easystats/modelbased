@@ -41,6 +41,10 @@ format.estimate_contrasts <- function(x,
   if (all(c("Level1", "Level2") %in% colnames(x))) {
     by <- unique(by, c("Level1", "Level2"))
   }
+  # add "group" columns from multivariate models
+  if ("group" %in% colnames(x)) {
+    by <- unique("group", by)
+  }
   # check which columns actually exist
   if (!is.null(by)) {
     by <- intersect(by, colnames(x))
