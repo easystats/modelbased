@@ -35,6 +35,8 @@
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
 
+* Fixed issues with multivariate response models.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
