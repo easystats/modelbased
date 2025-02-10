@@ -386,18 +386,19 @@
   ## FIXME: doesn't work yet - breaks test-plot
 
   # probability scale? ----------------------------------
-  # if (identical(response_scale, "response) &&isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
-  #   layers[[paste0("l", l)]] <- list(
-  #     geom = "scale_y_continuous",
-  #     labels = insight::format_value(
-  #       x = pretty(data[[aes$y]]),
-  #       as_percent = TRUE,
-  #       digits = 0
-  #     ),
-  #     breaks = pretty(data[[aes$y]])
-  #   )
-  #   l <- l + 1
-  # }
+  if (!is.null(response_scale) && response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
+      isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta  | model_info$is_ordinal)) { # nolint
+    layers[[paste0("l", l)]] <- list(
+      geom = "scale_y_continuous",
+      labels = insight::format_value(
+        x = pretty(sort(c(data[[aes$ymin]], data[[aes$ymax]]))),
+        as_percent = TRUE,
+        digits = 0
+      ),
+      breaks = pretty(sort(c(data[[aes$ymin]], data[[aes$ymax]])))
+    )
+    l <- l + 1
+  }
 
 
   # Out
