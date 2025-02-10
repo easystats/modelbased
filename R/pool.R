@@ -80,6 +80,8 @@ pool_contrasts <- function(x, ...) {
   pooled_comparisons$CI_low <- pooled_comparisons[[estimate_name]] - fac * pooled_comparisons$SE
   pooled_comparisons$CI_high <- pooled_comparisons[[estimate_name]] + fac * pooled_comparisons$SE
 
+  # udpate df ----
+  pooled_comparisons$df <- pooled_df
 
   attributes(pooled_comparisons) <- utils::modifyList(attributes(original_x[[1]]), attributes(pooled_comparisons))
   pooled_comparisons
@@ -187,6 +189,9 @@ pool_predictions <- function(x, transform = NULL, ...) {
   fac <- stats::qt(alpha, df = pooled_df)
   pooled_predictions$CI_low <- link_inv(pooled_predictions[[estimate_name]] - fac * pooled_predictions$SE)
   pooled_predictions$CI_high <- link_inv(pooled_predictions[[estimate_name]] + fac * pooled_predictions$SE)
+
+  # udpate df ----
+  pooled_predictions$df <- pooled_df
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {

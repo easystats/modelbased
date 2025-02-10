@@ -5,7 +5,17 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
+
 ## Changes
+
+* New functions `pool_predictions()` and `pool_contrasts()`, to deal with
+  *modelbased* objects that were applied to imputed data sets. E.g., functions
+  like `estimate_means()` can be run on several data sets where missing values
+  were imputed, and the multiple results from `estimate_means()` can be pooled
+  using `pool_predictions()`.
 
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
