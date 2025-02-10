@@ -20,6 +20,12 @@
   # Find predictors
   by <- att$focal_terms
 
+  # if we have only few numeric values as second term, we don't want a
+  # continuous color scale...
+  if (length(by) > 1 && is.numeric(data[[by[2]]]) && insight::n_unique(data[[by[2]]]) < 8) {
+    data[[by[2]]] <- as.factor(insight::format_value(data[[by[2]]], protect_integers = TRUE))
+  }
+
   # Main geom
   # ------------------------------------------------------------------------
   if ("estimate_contrasts" %in% att$class) {

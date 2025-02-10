@@ -5,6 +5,9 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+* The `plot()` method plots the 2nd focal term, if numeric, either as continuous
+  or as factor, based on number of unique values in that predictor.
+
 ## Changes
 
 * The `print()` method is now explicitly documented and gets some new options
