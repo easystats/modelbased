@@ -370,6 +370,7 @@
     l <- l + 1
   }
 
+
   # add axis and legend labels ----------------------------------
   if (!is.null(aes$labs)) {
     layers[[paste0("l", l)]] <- insight::compact_list(list(
@@ -382,8 +383,6 @@
     l <- l + 1
   }
 
-
-  ## FIXME: doesn't work yet - breaks test-plot
 
   # probability scale? ----------------------------------
   if (!is.null(response_scale) && response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
