@@ -31,6 +31,9 @@
   numeric predictors should be treated as factor or continuous, based on the
   of unique values in numeric predictors.
 
+* Plots now use a probability scale for the y-axis for models whose response
+  scale are probabilities (e.g., logistic regression).
+
 ## Bug fixes
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
