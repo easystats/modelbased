@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -307,6 +307,21 @@ make inferences at each point of point of the relationship!</p>
 into chunks and obtain the “average” linear trend of each chunk.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
+<pre><code>&gt; Johnson-Neymann Intervals
+&gt; 
+&gt; Start |  End | Direction | Confidence     
+&gt; ------------------------------------------
+&gt; 1.00  | 1.72 | positive  | Not Significant
+&gt; 1.77  | 1.95 | negative  | Not Significant
+&gt; 2.01  | 3.15 | negative  | Significant    
+&gt; 3.21  | 3.44 | negative  | Not Significant
+&gt; 3.50  | 3.68 | positive  | Not Significant
+&gt; 3.74  | 4.28 | positive  | Significant    
+&gt; 4.34  | 6.24 | positive  | Not Significant
+&gt; 6.30  | 6.90 | negative  | Not Significant
+&gt; 
+&gt; Marginal effects estimated for Petal.Length
+&gt; Type of slope was dY/dX</code></pre>
 <p>We can conclude that Petal.Length shares significantly negative
 relationship with the outcome variable between 2.01 and 3.15
 (<em>average marginal effect</em> = -0.76, 95% CI [-1.14, -0.37], p &lt;
