@@ -98,7 +98,7 @@
   } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- insight::find_transformation(model)
-    if (!is.null(trans_fun)) {
+    if (!is.null(trans_fun) && transfun != "identity") {
       table_footer <- paste0(table_footer, "\n", result_type, " are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
     }
   }

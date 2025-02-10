@@ -227,7 +227,7 @@
   transform <- attributes(x)$transform
   model_info <- attributes(x)$model_info
 
-  if (!is.null(trans_fun) && !isTRUE(transform) && isTRUE(model_info$is_linear)) {
+  if (!is.null(trans_fun) && !isTRUE(transform) && isTRUE(model_info$is_linear) && trans_fun != "identity") {
     show_data <- FALSE
   }
 
