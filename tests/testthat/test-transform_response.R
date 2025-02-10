@@ -12,6 +12,7 @@ test_that("estimate_means, transform", {
     ),
     tolerance = 1e-4
   )
+  expect_snapshot(out)
   out1 <- estimate_means(m, "speed", transform = TRUE)
   expect_equal(
     out1$Mean,
@@ -21,6 +22,7 @@ test_that("estimate_means, transform", {
     ),
     tolerance = 1e-4
   )
+  expect_snapshot(out1)
   out2 <- estimate_means(m, "speed", transform = exp)
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-4)
 })
