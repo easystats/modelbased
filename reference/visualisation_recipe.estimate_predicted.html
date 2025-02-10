@@ -11,7 +11,7 @@ below for more information and examples on how to create and customize plots."><
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,6 +89,7 @@ below for more information and examples on how to create and customize plots.</p
 <span>  facet <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  join_dots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_join_dots"</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  numeric_as_discrete <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_numeric_as_discrete"</span>, <span class="fl">8</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -134,11 +135,23 @@ aesthetics and parameters for the geoms (see customization example).</p></dd>
 
 
 <dt id="arg-join-dots">join_dots<a class="anchor" aria-label="anchor" href="#arg-join-dots"></a></dt>
-<dd><p>Logical, if <code>TRUE</code> and for categorical focal terms in <code>by</code>,
-dots (estimates) are connected by lines, i.e. plots will be a combination of
-dots with error bars and connecting lines. If <code>FALSE</code>, only dots and error
-bars are shown. It is possible to set a global default value using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options("modelbased_join_dots" = FALSE)</code>.</p></dd>
+<dd><p>Logical, if <code>TRUE</code> (default) and for categorical focal terms
+in <code>by</code>, dots (estimates) are connected by lines, i.e. plots will be a
+combination of dots with error bars and connecting lines. If <code>FALSE</code>, only
+dots and error bars are shown. It is possible to set a global default value
+using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. <code>options(modelbased_join_dots = FALSE)</code>.</p></dd>
+
+
+<dt id="arg-numeric-as-discrete">numeric_as_discrete<a class="anchor" aria-label="anchor" href="#arg-numeric-as-discrete"></a></dt>
+<dd><p>Maximum number of unique values in a numeric
+predictor to treat that predictor as discrete. Defaults to <code>8</code>. Numeric
+predictors are usually mapped to a continuous color scale, unless they have
+only few unique values. In the latter case, numeric predictors are assumed to
+represent "categories", e.g. when only the mean value and +/- 1 standard
+deviation around the mean are chosen as representative values for that
+predictor. Use <code>FALSE</code> to always use continuous color scales for numeric
+predictors. It is possible to set a global default value using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
+e.g. <code>options(modelbased_numeric_as_discrete = 10)</code>.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -160,6 +173,16 @@ from the plot. To remove error bars, simply set the <code>pointrange</code> geom
 <code>point</code>, e.g. <code>plot(..., pointrange = list(geom = "point"))</code>. To remove the
 confidence bands from line geoms, use <code>ribbon = "none"</code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="global-options-to-customize-plots">Global Options to Customize Plots<a class="anchor" aria-label="anchor" href="#global-options-to-customize-plots"></a></h2>
+
+
+<p>Some arguments for <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> can get global defaults using <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>:</p><ul><li><p><code>modelbased_join_dots</code>: <code>options(modelbased_join_dots = &lt;logical&gt;)</code> will
+set a default value for the <code>join_dots</code>.</p></li>
+<li><p><code>modelbased_numeric_as_discrete</code>: <code>options(modelbased_numeric_as_discrete = &lt;number&gt;)</code>
+will set a default value for the <code>modelbased_numeric_as_discrete</code> argument.
+Can also be <code>FALSE</code>.</p></li>
+</ul></div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
