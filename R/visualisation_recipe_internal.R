@@ -387,7 +387,7 @@
   ## FIXME: should not be probability scale for link-scale
 
   # probability scale? ----------------------------------
-  # if (isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
+  # if (identical(response_scale, "response) &&isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
   #   layers[[paste0("l", l)]] <- list(
   #     geom = "scale_y_continuous",
   #     labels = insight::format_value(
