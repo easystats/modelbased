@@ -25,7 +25,8 @@
   if (!isFALSE(numeric_as_discrete) && is.numeric(numeric_as_discrete)) {
     data[by] <- lapply(data[by], function(v) {
       if (is.numeric(v) && insight::n_unique(v) < numeric_as_discrete) {
-        v <- factor(insight::format_value(v, protect_integers = TRUE), levels = unique(v))
+        formatted <- insight::format_value(v, protect_integers = TRUE)
+        v <- factor(formatted, levels = unique(formatted))
       }
       v
     })
