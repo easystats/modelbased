@@ -14,6 +14,10 @@
   adjusted_for <- info$adjusted_for
   transform <- info$transform
   model_info <- info$model_info
+  # make sure we definitely have model information
+  if (is.null(model_info) && !is.null(model)) {
+    model_info <- insight::model_info(model)
+  }
 
 
   # name of predicted response -----------------------------------------------
