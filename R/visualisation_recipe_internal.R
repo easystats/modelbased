@@ -22,7 +22,7 @@
 
   # if we have only few numeric values, we don't want a continuous color scale.
   # check whether we can treat numeric as discrete
-  if (!isFALSE(numeric_as_discrete) & is.numeric(numeric_as_discrete)) {
+  if (!isFALSE(numeric_as_discrete) && is.numeric(numeric_as_discrete)) {
     data[by] <- lapply(data[by], function(v) {
       if (is.numeric(v) && insight::n_unique(v) < numeric_as_discrete) {
         v <- as.factor(insight::format_value(v, protect_integers = TRUE))
