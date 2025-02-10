@@ -211,6 +211,8 @@
   layers <- list()
   l <- 1
 
+  # preparation of settings / arguments ----------------------------------
+
   # check whether point-geoms should be connected by lines
   do_not_join <- "grouplevel"
   if (!join_dots) {
@@ -223,15 +225,19 @@
   }
 
   # Don't plot raw data for transformed responses with no back-transformation
-  trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
   transform <- attributes(x)$transform
   model_info <- attributes(x)$model_info
 
-  if (!is.null(trans_fun) && !isTRUE(transform) && isTRUE(model_info$is_linear) && trans_fun != "identity") {
-    show_data <- FALSE
+  if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
+    # add information about response transformation
+    trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
+    if (!is.null(trans_fun) && trans_fun != "identity") {
+      show_data <- FALSE
+    }
   }
 
-  # add raw data as first layer
+
+  # add raw data as first layer ----------------------------------
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
     # Update with additional args
