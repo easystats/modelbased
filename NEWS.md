@@ -11,6 +11,12 @@
 
 ## Changes
 
+* New functions `pool_predictions()` and `pool_contrasts()`, to deal with
+  *modelbased* objects that were applied to imputed data sets. E.g., functions
+  like `estimate_means()` can be run on several data sets where missing values
+  were imputed, and the multiple results from `estimate_means()` can be pooled
+  using `pool_predictions()`.
+
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
 
