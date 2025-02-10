@@ -44,6 +44,9 @@ get_marginalmeans <- function(model,
     c("average", "population", "specific")
   )
 
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
+
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
@@ -201,7 +204,8 @@ get_marginalmeans <- function(model,
         predict = predict,
         estimate = estimate,
         datagrid = datagrid,
-        transform = !is.null(transform)
+        transform = !is.null(transform),
+        model_info = model_info
       )
     )
   )
@@ -271,7 +275,7 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci"
+    "coef_name", "slope", "ci", "model_info"
   )
 }
 

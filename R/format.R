@@ -111,7 +111,7 @@ format.summary_estimate_slopes <- function(x, ...) {
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # model information
   model_data <- insight::get_data(model, verbose = FALSE)
-  info <- insight::model_info(model, verbose = FALSE)
+  info <- attributes(x)$model_info
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
   predict_type <- attributes(x)$predict

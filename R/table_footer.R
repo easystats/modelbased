@@ -13,7 +13,7 @@
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
   transform <- info$transform
-  model_info <- insight::model_info(model)
+  model_info <- info$model_info
 
 
   # name of predicted response -----------------------------------------------

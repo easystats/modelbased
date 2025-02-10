@@ -18,6 +18,9 @@ get_marginaltrends <- function(model,
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
 
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
+
   # Guess arguments
   trend <- .guess_marginaltrends_arguments(model, trend, verbose, ...)
 
@@ -84,14 +87,15 @@ get_marginaltrends <- function(model,
         datagrid = datagrid,
         coef_name = "Slope",
         p_adjust = p_adjust,
-        ci = ci
+        ci = ci,
+        model_info = model_info
       )
     )
   )
   class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
 
   # adjust p-values
-  if (!insight::model_info(model)$is_bayesian) {
+  if (!model_info$is_bayesian) {
     estimated <- .p_adjust(model, estimated, p_adjust, verbose, ...)
   }
 
