@@ -11,6 +11,9 @@ reference:
   - title: "Data grids and Visualisation"
     contents:
       - starts_with("visualisation_")
+  - title: "Missing Data"
+    contents:
+      - starts_with("pool_")
   - title: "Miscellaenous"
     contents:
       - print.estimate_contrasts

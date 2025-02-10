@@ -111,7 +111,10 @@ format.summary_estimate_slopes <- function(x, ...) {
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # model information
   model_data <- insight::get_data(model, verbose = FALSE)
-  info <- insight::model_info(model, verbose = FALSE)
+  info <- attributes(x)$model_info
+  if (is.null(info)) {
+    info <- insight::model_info(model)
+  }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
   predict_type <- attributes(x)$predict
@@ -149,7 +152,10 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
 #' @export
 format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
-  info <- insight::model_info(model, verbose = FALSE)
+  info <- attributes(x)$model_info
+  if (is.null(info)) {
+    info <- insight::model_info(model)
+  }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
   remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")

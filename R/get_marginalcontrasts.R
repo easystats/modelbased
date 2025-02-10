@@ -32,6 +32,9 @@ get_marginalcontrasts <- function(model,
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   on_the_fly_factors <- attributes(model_data)$factors
 
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
+
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
 
@@ -91,7 +94,7 @@ get_marginalcontrasts <- function(model,
   }
 
   # adjust p-values
-  if (!insight::model_info(model)$is_bayesian) {
+  if (!model_info$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
   }
 
@@ -107,7 +110,8 @@ get_marginalcontrasts <- function(model,
       predict = predict,
       comparison = my_args$comparison,
       estimate = estimate,
-      p_adjust = p_adjust
+      p_adjust = p_adjust,
+      model_info = model_info
     )
   )
 

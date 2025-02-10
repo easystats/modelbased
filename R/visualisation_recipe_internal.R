@@ -211,6 +211,15 @@
     show_data <- FALSE
   }
 
+  # Don't plot raw data for transformed responses with no back-transformation
+  trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
+  transform <- attributes(x)$transform
+  model_info <- attributes(x)$model_info
+
+  if (!is.null(trans_fun) && !isTRUE(transform) && isTRUE(model_info$is_linear)) {
+    show_data <- FALSE
+  }
+
   # add raw data as first layer
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)

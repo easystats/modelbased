@@ -44,6 +44,9 @@ get_marginalmeans <- function(model,
     c("average", "population", "specific")
   )
 
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
+
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
@@ -197,7 +200,13 @@ get_marginalmeans <- function(model,
     by = my_args$by,
     info = c(
       datagrid_info,
-      list(predict = predict, estimate = estimate, datagrid = datagrid)
+      list(
+        predict = predict,
+        estimate = estimate,
+        datagrid = datagrid,
+        transform = !is.null(transform),
+        model_info = model_info
+      )
     )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
@@ -241,6 +250,17 @@ get_marginalmeans <- function(model,
 
 # handle attributes -----------------------------------------------------------
 
+# we have following attributes for modelbased-objects:
+# - at, by, trend, contrasts, comparison, estimate, predict, p_adjust, transform,
+#   ci: the values from the corresponding arguments from their related function
+# - focal_terms: all variables from arguments `by`, `trend` and `contrasts`
+# - adjusted_for: non-focal terms, all variables in the model that are not
+#   in focal_terms
+# - datagrid: the internal data grid that was used for the "newdata" argument
+# - coef_name: name of the column with the predictions/contrasts
+# - slope: the type of slope, e.g. "dx/dy". equals the "slope" argument when
+#   calling avg_slopes()
+# - model_info: object from insight::model_info()
 #' @keywords internal
 .add_attributes <- function(x, by = NULL, info = NULL) {
   attr(x, "at") <- by
@@ -265,8 +285,8 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "estimate", "p_adjust", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci"
+    "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
+    "coef_name", "slope", "ci", "model_info"
   )
 }
 
