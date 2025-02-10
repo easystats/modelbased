@@ -383,19 +383,21 @@
   }
 
 
+  ## FIXME: doesn't work yet - breaks test-plot
+
   # probability scale? ----------------------------------
-  if (isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
-    layers[[paste0("l", l)]] <- list(
-      geom = "scale_y_continuous",
-      labels = insight::format_value(
-        x = pretty(data[[aes$y]]),
-        as_percent = TRUE,
-        digits = 0
-      ),
-      breaks = pretty(data[[aes$y]])
-    )
-    l <- l + 1
-  }
+  # if (isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
+  #   layers[[paste0("l", l)]] <- list(
+  #     geom = "scale_y_continuous",
+  #     labels = insight::format_value(
+  #       x = pretty(data[[aes$y]]),
+  #       as_percent = TRUE,
+  #       digits = 0
+  #     ),
+  #     breaks = pretty(data[[aes$y]])
+  #   )
+  #   l <- l + 1
+  # }
 
 
   # Out
