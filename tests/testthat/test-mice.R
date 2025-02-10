@@ -16,7 +16,7 @@ test_that("pool_predictions", {
 })
 
 
-test_that("pool_conrasts", {
+test_that("pool_contrasts", {
   set.seed(123)
   data("nhanes2", package = "mice")
   imp <- mice::mice(nhanes2, printFlag = FALSE)
@@ -25,6 +25,6 @@ test_that("pool_conrasts", {
     estimate_contrasts(m, "age")
   })
   out <- pool_contrasts(comparisons)
-  expect_equal(out$Mean, c(-4.6464, -6.70639, -2.05999), tolerance = 1e-3)
+  expect_equal(out$Difference, c(-4.6464, -6.70639, -2.05999), tolerance = 1e-3)
   expect_equal(out$CI_low, c(-9.67001, -14.71457, -8.5372), tolerance = 1e-3)
 })
