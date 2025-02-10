@@ -384,6 +384,7 @@
 
 
   ## FIXME: doesn't work yet - breaks test-plot
+  ## FIXME: should not be probability scale for link-scale
 
   # probability scale? ----------------------------------
   # if (isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta)) {
