@@ -35,6 +35,7 @@ authors:
 affiliations:
 - name: School of Psychology, University of Sussex, Brighton, UK
   index: 1
+  
 - name: Sussex Centre for Consciousness Science, University of Sussex, Brighton, UK
   index: 2
   
@@ -102,17 +103,20 @@ In line with these efforts, new tools have been created to facilitate the direct
 
 **But there is even more information hidden inside models!**
 
-Their fundamental nature—being a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observed or unobserved alike.
+Their fundamental nature — that of being a statistical link between an outcome $y$ and predictor variables $X$ — enables the generation of predictions for any combination of predictors, observed or unobserved alike.
 These predictions refer to expected values of the outcome for given levels of predictors of interest, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way and answering a wide range of research questions.
 
-The two probably most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package, built on top of the two aforementioned, aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
+The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages are enormously feature rich and (almost) cover all imaginable needs for post-hoc analysis of statistical models. However, these packages are not always easy to use, especially for users who are not familiar with the underlying statistical concepts. The `modelbased` package, built on top of the two aforementioned, aims to unlock this currently underused potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package is designed to be user-friendly, with a focus on simplicity and flexibility.
 
 
 # Key concepts
 
 ## Terminology
 
-Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_. We can describe this relationship (i.e. estimate the expected outcome values) for a very "specific" observation that is defined by characteristics that may not appear in our data. This is what we call _predictions_. Or we express the relationship considering an "average" or "typical" observation, i.e. how is the _average_ relationship between predictors and our outcome? We call this _marginal means_. When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms.
+Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_. 
+1) We can describe this relationship (i.e., estimate the expected outcome value) for a very "specific" observation that is defined by a combination of predictor values (that may or may not actually appear in our data). This is what we call _predictions_. 
+2) Or we can express the relationship considering an "average" or "typical" observation (i.e., estimating the _average_ relationship between predictors and an outcome). We call this _marginal means_. 
+<!-- When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms. -->
 
 ## Predictions
 
@@ -155,6 +159,10 @@ The `modelbased` package simplifies the extraction of these quantities, providin
 
 
 **[TODO: details about types of marginalization]**
+Two types of "marginalization" are provided by `modelbased`: 
+- `estimate="average"` (default): TODO
+- `estimate="population"`: TODO
+
 
 
 ## Technical details
