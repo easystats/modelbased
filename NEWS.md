@@ -37,6 +37,8 @@
 
 * Fixed issues with multivariate response models.
 
+* Fixed issues with plotting ordinal or multinomial models.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
