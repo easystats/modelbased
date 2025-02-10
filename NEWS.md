@@ -5,10 +5,6 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
-* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
-  numeric predictors should be treated as factor or continuous, based on the
-  of unique values in numeric predictors.
-
 ## Changes
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
@@ -30,6 +26,10 @@
 * The `show_data()` argument in `plot()` is automatically set to `FALSE` when
   the models has a transformed response variable, but predictions were not
   back-transformed using the `transform` argument.
+
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
 
 ## Bug fixes
 
