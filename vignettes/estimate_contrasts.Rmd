@@ -25,10 +25,11 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300
 )
-options(digits = 2)
 
 if (!requireNamespace("ggplot2", quietly = TRUE) ||
   !requireNamespace("see", quietly = TRUE) ||
+  !requireNamespace("marginaleffects", quietly = TRUE) ||
+  !requireNamespace("emmeans", quietly = TRUE) ||
   !requireNamespace("rstanarm", quietly = TRUE)) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -53,23 +54,21 @@ Let's carry out contrast analysis on the simple model from the previous tutorial
 
 ```{r}
 library(ggplot2)
-library(see)
 library(modelbased)
+data(iris)
 
 model <- lm(Sepal.Width ~ Species, data = iris)
-means <- estimate_means(model)
+means <- estimate_means(model, by = "Species")
 
-ggplot(means, aes(x = Species, y = Mean)) +
-  geom_line(aes(group = 1)) +
-  geom_pointrange(aes(color = Species, ymin = CI_low, ymax = CI_high)) +
-  theme_modern()
+plot(means, point = list(width = 0.1)) +
+  theme_minimal()
 ```
 
 **Contrast analysis** can be achieved through the `estimate_contrasts`
 function:
 
 ```{r}
-estimate_contrasts(model)
+estimate_contrasts(model, contrast = "Species")
 ```
 
 We can conclude that all pairwise differences are statistically significant.
@@ -81,7 +80,7 @@ more complex models:
 
 ```{r}
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-contrasts <- estimate_contrasts(model)
+contrasts <- estimate_contrasts(model, contrast = "Species")
 contrasts
 ```
 
@@ -89,19 +88,18 @@ For instance, if we add `Petal.Width` in the model, we can see that the
 difference between *versicolor* and *virginica* becomes not significant (and
 even changes sign).
 
-Note that we can plot simple contrast analysis through **lighthouse plots** with
-the help of the `see` package:
+Note that we can plot simple contrast analysis through **lighthouse plots**:
 
 ```{r}
-library(see)
-
-plot(contrasts, estimate_means(model)) +
-  theme_modern()
+plot(contrasts, estimate_means(model, by = "Species")) +
+  theme_minimal()
 ```
 
 These represent the estimated means and their CI range (in black), while the
 grey areas show the CI range of the difference (as compared to the point
-estimate).
+estimate). One easy way to interpret lighthouse plots is that if the whole beam
+goes up or down (i.e., the upper limit and the lower limit are of the same direction),
+the difference is likely significant.
 
 # Changes in difference
 
@@ -111,7 +109,15 @@ continuous variable. Based on the model above (including the interaction with
 `Petal.Width`, that we will then visualise.
 
 ```{r, fig}
-contrasts <- estimate_contrasts(model, by = "Petal.Width", length = 100)
+contrasts <- estimate_contrasts(
+  model,
+  contrast = "Species",
+  by = "Petal.Width",
+  length = 100,
+  # we use a emmeans here because marginaleffects doesn't
+  # generate more than 25 rows for pairwise comparisons
+  backend = "emmeans"
+)
 
 # Create a variable with the two levels concatenated
 contrasts$Contrast <- paste(contrasts$Level1, "-", contrasts$Level2)
@@ -121,7 +127,7 @@ ggplot(contrasts, aes(x = Petal.Width, y = Difference)) +
   geom_ribbon(aes(fill = Contrast, ymin = CI_low, ymax = CI_high), alpha = 0.2) +
   geom_line(aes(colour = Contrast), linewidth = 1) +
   geom_hline(yintercept = 0, linetype = "dashed") +
-  theme_modern() +
+  theme_minimal() +
   ylab("Difference")
 ```
 

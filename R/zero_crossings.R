@@ -1,16 +1,20 @@
-#' Find zero crossings of a vector
+#' Find zero-crossings and inversion points
 #'
 #' Find zero crossings of a vector, i.e., indices when the numeric variable
-#' crosses 0.
+#' crosses 0. It is useful for finding the points where a function changes by
+#' looking at the zero crossings of its derivative.
 #'
 #' @param x A numeric vector.
 #'
+#' @return Vector of zero crossings or points of inversion.
+#' @seealso Based on the `uniroot.all` function from the rootSolve package.
+#'
 #' @examples
 #' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x)
+#' plot(x, type = "b")
+#'
 #' zero_crossings(x)
-#' @return Vector of zero crossings.
-#' @seealso Based on the `uniroot.all` function from the rootSolve package.
+#' find_inversions(x)
 #' @export
 zero_crossings <- function(x) {
   # Estimate gradient
@@ -35,12 +39,11 @@ zero_crossings <- function(x) {
                          ...) {
   ## error checking as in uniroot...
   if (!missing(interval) && length(interval) != 2) {
-    stop("'interval' must be a vector of length 2", call. = FALSE)
+    insight::format_error("`interval` must be a vector of length two.")
   }
 
-  if (!is.numeric(lower) || !is.numeric(upper) || lower >=
-    upper) {
-    stop("lower < upper  is not fulfilled", call. = FALSE)
+  if (!is.numeric(lower) || !is.numeric(upper) || lower >= upper) {
+    insight::format_error("`lower` is not smaller than `upper`.")
   }
 
   ## subdivide interval in n subintervals and estimate the function values
@@ -57,23 +60,12 @@ zero_crossings <- function(x) {
     Equi <- c(Equi, stats::uniroot(f, lower = xseq[i], upper = xseq[i + 1], ...)$root)
   }
 
-  return(Equi)
+  Equi
 }
 
 
-
-
-#' Find points of inversion
+#' @rdname zero_crossings
 #'
-#' Find points of inversion of a curve.
-#'
-#' @param x A numeric vector.
-#'
-#' @examples
-#' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x, type = "b")
-#' find_inversions(x)
-#' @return Vector of inversion points.
 #' @export
 find_inversions <- function(x) {
   zero_crossings(diff(x))

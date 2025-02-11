@@ -1,23 +1,108 @@
+# modelbased (devel)
+
+## Breaking Changes
+
+* The deprecated function `visualisation_matrix()` has been removed. Use
+  `insight::get_datagrid()` instead.
+
+## Changes
+
+* New functions `pool_predictions()` and `pool_contrasts()`, to deal with
+  *modelbased* objects that were applied to imputed data sets. E.g., functions
+  like `estimate_means()` can be run on several data sets where missing values
+  were imputed, and the multiple results from `estimate_means()` can be pooled
+  using `pool_predictions()`.
+
+* The `print()` method is now explicitly documented and gets some new options
+  to customize the output for tables.
+
+* New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
+  specifically for the case of Johnson-Neyman intervals, i.e. when calling
+  `estimate_slopes()` with two numeric predictors in an interaction term.
+
+* `print_html()` and `print_md()` pass `...` to format-methods (e.g. to
+  `insight::format_table()`), to tweak the output.
+
+* The `show_data()` argument in `plot()` is automatically set to `FALSE` when
+  the models has a transformed response variable, but predictions were not
+  back-transformed using the `transform` argument.
+
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
+
+* Plots now use a probability scale for the y-axis for models whose response
+  scale are probabilities (e.g., logistic regression).
+
+## Bug fixes
+
+* Fixed issue in the `summary()` method for `estimate_slopes()`.
+
+* Fixed issues with multivariate response models.
+
+* Fixed issues with plotting ordinal or multinomial models.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
+
+- The default package used for `estimate_means()`, `estimate_slopes()` and
+  `estimate_contrasts()` is now *marginaleffects*. You can set your preferred
+  package as backend using either the `backend` argument, or in general by setting
+  `options(modelbased_backend = "marginaleffects")` or
+  `options(modelbased_backend = "emmeans")`.
 
 - Deprecated argument and function names have been removed.
 
 - Argument `fixed` has been removed, as you can fix predictor at certain values
   using the `by` argument.
 
+- Argument `transform` is no longer used to determine the scale of the predictions.
+  Please use `predict` instead.
+
+- Argument `transform` is now used to (back-) transform predictions and confidence
+  intervals.
+
+- Argument `method` in `estimate_contrasts()` was renamed into `comparison`.
+
+- All `model_*()` alias names have been removed. Use the related `get_*()`
+  functions instead.
+
+- The `show_data` argument in `plot()` defaults to `FALSE`.
+
 ## Major Changes
 
-- The `"marginaleffects"` backend for `estimate_means()` is now fully implemented
-  and no longer work-in-progress.
+- The `"marginaleffects"` backend is now fully implemented and no longer
+  work-in-progress. You can set your preferred package as backend using
+  either the `backend` argument, or in general by setting
+  `options(modelbased_backend = "marginaleffects")` or
+  `options(modelbased_backend = "emmeans")`.
 
-- `estimate_contrasts()` gains a `backend` argument. This defaults to `"emmeans"`,
-  but can be set to `"marginaleffects"` to use features of that package to estimate
-  contrasts and pairwise comparisons.
+- All `estimate_*()` functions get a `predict` argument, which can be used
+  to modulate the type of transformation applied to the predictions (i.e. whether
+  predictions should be on the response scale, link scale, etc.). It can also
+  be used to predict auxiliary (distributional) parameters.
+
+- `estimate_means()` and `estimate_contrasts()` get a `estimate` argument,
+  to specify how to estimate over non-focal terms. This results in slightly
+  different predicted values, each approach answering a different question.
+
+- `estimate_contrasts()` gains a `backend` argument. This defaults to
+  `"marginaleffects"`, but can be set to `"emmeans"` to use features of that
+  package to estimate contrasts and pairwise comparisons.
 
 - `estimate_expectation()` and related functions also get a `by` argument, as
   alternative to create a datagrid for the `data` argument.
+
+- Many functions get a `verbose` argument, to silence warnings and messages.
+
+## Bug fixes
+
+* `estimate_contrasts()` did not calculate contrasts for all levels when the
+  predictor of interest was converted to a factor inside the model formula.
+
+* Fixed issue in `estimate_contrasts()` when `comparsison` (formerly: `method`)
+  was not `"pairwise"`.
 
 # modelbased 0.8.9
 

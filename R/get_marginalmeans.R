@@ -1,26 +1,4 @@
-#' Easy 'avg_predictions' and 'avg_slopes'
-#'
-#' The `get_marginalmeans()` function is a wrapper to facilitate the usage of
-#' `marginaleffects::avg_predictions()` and `marginaleffects::avg_slopes()`,
-#' providing a somewhat simpler and intuitive API to find the specifications and
-#' variables of interest. It is meanly made to for the developers to facilitate
-#' the organization and debugging, and end-users should rather use the
-#' `estimate_*()` series of functions.
-#'
-#' @param model A statistical model.
-#' @param transform Can be used to easily modulate the `type` argument in
-#' `marginaleffects::avg_predictions()`. Can be `"none"` or `"response"`.
-#' `"none"` will leave the values on scale of the linear predictors.
-#' `"response"` will transform them on scale of the response variable. Thus for
-#' a logistic model, `"none"` will give estimations expressed in log-odds
-#' (probabilities on logit scale) and `"response"` in terms of probabilities.
-#' @param by The predictor variable(s) at which to evaluate the desired effect
-#' / mean / contrasts. Other predictors of the model that are not included
-#' here will be collapsed and "averaged" over (the effect will be estimated
-#' across them).
-#' @param ci Level for confidence intervals.
-#' @param ... Other arguments passed, for instance, to [insight::get_datagrid()]
-#' or [marginaleffects::avg_predictions()].
+#' @rdname get_emmeans
 #'
 #' @examplesIf insight::check_if_installed("marginaleffects", quietly = TRUE)
 #' model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
@@ -31,6 +9,7 @@
 #' # Overall mean (close to 'mean(iris$Sepal.Length)')
 #' get_marginalmeans(model, by = NULL)
 #'
+#' \dontrun{
 #' # One can estimate marginal means at several values of a 'modulate' variable
 #' get_marginalmeans(model, by = "Petal.Width", length = 3)
 #'
@@ -40,166 +19,312 @@
 #' get_marginalmeans(model)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
+#' }
 #' @export
 get_marginalmeans <- function(model,
                               by = "auto",
-                              transform = NULL,
+                              predict = NULL,
                               ci = 0.95,
+                              estimate = "average",
+                              transform = NULL,
+                              verbose = TRUE,
                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
+
+  # First step: process arguments --------------------------------------------
+  # --------------------------------------------------------------------------
+
   dots <- list(...)
+  comparison <- dots$hypothesis
+
+  # validate input
+  estimate <- insight::validate_argument(
+    estimate,
+    c("average", "population", "specific")
+  )
+
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
 
   # Guess arguments
-  my_args <- .guess_arguments_means(model, by, ...)
+  my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
-  type <- .get_type_argument(model, transform, ...)
+  predict <- .get_marginaleffects_type_argument(model, predict, ...)
 
-  # setup arguments
-  dg_args <- list(
-    model,
-    by = my_args$by,
-    factors = "all",
-    include_random = TRUE
-  )
-  # always show all theoretical values by default
-  if (is.null(dots$preserve_range)) {
-    dg_args$preserve_range <- FALSE
+
+  # Second step: create a data grid -------------------------------------------
+  # ---------------------------------------------------------------------------
+
+  # exception: by = NULL computes overall mean
+  if (is.null(by)) {
+    datagrid <- datagrid_info <- NULL
+  } else {
+    # setup arguments to create the data grid
+    dg_factors <- switch(estimate,
+      specific = "reference",
+      "all"
+    )
+    dg_args <- list(
+      model,
+      by = my_args$by,
+      factors = dg_factors,
+      include_random = TRUE,
+      verbose = FALSE
+    )
+    # always show all theoretical values by default
+    if (is.null(dots$preserve_range)) {
+      dg_args$preserve_range <- FALSE
+    }
+    # add user-arguments from "...", but remove those arguments that are already set
+    dots[c("by", "factors", "include_random", "verbose")] <- NULL
+    dg_args <- insight::compact_list(c(dg_args, dots))
+
+    # Get corresponding datagrid (and deal with particular ats)
+    datagrid <- do.call(insight::get_datagrid, dg_args)
+    datagrid_info <- attributes(datagrid)
+
+    # restore data types -  if we have defined numbers in `by`, like
+    # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
+    # numeric in the data grid. Fix this here, else marginal effects will fail
+    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
+
+    # add user-arguments from "...", but remove those arguments that are
+    # already used (see below) when calling marginaleffects
+    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
   }
-  # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "factors", "include_random")] <- NULL
-  dg_args <- insight::compact_list(c(dg_args, dots))
 
-  # Get corresponding datagrid (and deal with particular ats)
-  datagrid <- do.call(insight::get_datagrid, dg_args)
-  at_specs <- attributes(datagrid)$at_specs
+
+  # Third step: prepare arguments for marginaleffects ------------------------
+  # --------------------------------------------------------------------------
 
   # model df
-  dof <- insight::get_df(model, verbose = FALSE)
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+
+  # sanity check
+  if (!is.null(datagrid)) {
+    datagrid <- datawizard::data_arrange(
+      as.data.frame(datagrid),
+      select = datagrid_info$at_specs$varname
+    )
+  }
 
   # setup arguments
   fun_args <- list(
     model,
-    by = at_specs$varname,
-    newdata = as.data.frame(datagrid),
     conf_level = ci,
-    df = dof,
-    type = type
+    df = dof
   )
-  # add user-arguments from "...", but remove those arguments that are already set
-  dots[c("by", "newdata", "conf_level", "df", "type", "verbose")] <- NULL
+
+  # counterfactual predictions - we need the "variables" argument
+  if (estimate == "population") {
+    # sanity check
+    if (is.null(datagrid)) {
+      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
+    }
+    fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
+  } else {
+    # all other "marginalizations"
+    if (is.null(dots$newdata)) {
+      # we allow individual "newdata" options, so do not
+      # # overwrite if explicitly set
+      fun_args$newdata <- datagrid
+    }
+    fun_args$by <- datagrid_info$at_specs$varname
+  }
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
+
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # for custom hypothesis, like "b2=b5" or "(b2-b1)=(b4-b3)", we need to renumber
+  # the b-values internally, because we have a different sorting in our output
+  # compared to what "avg_predictions()" returns... so let's check if we have to
+  # take care of this
+  if (.is_custom_comparison(comparison)) {
+    dots$hypothesis <- .reorder_custom_hypothesis(
+      comparison,
+      datagrid,
+      focal = datagrid_info$at_specs$varname
+    )
+  }
+
+  # cleanup
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   ## TODO: need to check against different mixed models results from other packages
   # set to NULL
-  fun_args$re.form <- NULL
+  if (!"re.form" %in% names(dots)) {
+    fun_args$re.form <- NULL
+  }
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+  }
+  if (!is.null(transform)) {
+    fun_args$transform <- transform
+  }
+
+
+  # Fourth step: compute marginal means ---------------------------------------
+  # ---------------------------------------------------------------------------
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args))
+  means <- .call_marginaleffects(fun_args)
 
-  attr(means, "at") <- my_args$by
-  attr(means, "by") <- my_args$by
-  attr(means, "focal_terms") <- at_specs$varname
-  attr(means, "datagrid") <- datagrid
+  # =========================================================================
+  # only needed to estimate_contrasts() with custom hypothesis ==============
+  # =========================================================================
+  # fix term label for custom hypothesis
+  if (.is_custom_comparison(comparison)) {
+    ## TODO: check which column name is used in marginaleffects update, and
+    ## keep only the new one later - or for safety, we can keep both code lines
+    means$term <- gsub(" ", "", comparison, fixed = TRUE)
+    means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
+  }
+
+  # Last step: Save information in attributes  --------------------------------
+  # ---------------------------------------------------------------------------
+
+  means <- .add_attributes(
+    means,
+    by = my_args$by,
+    model_info = model_info,
+    info = c(
+      datagrid_info,
+      list(
+        predict = predict,
+        estimate = estimate,
+        datagrid = datagrid,
+        transform = !is.null(transform)
+      )
+    )
+  )
+  class(means) <- unique(c("marginaleffects_means", class(means)))
+
   means
 }
 
-#' @rdname get_marginalmeans
-#' @export
-model_marginalmeans <- get_marginalmeans
 
+# call marginaleffects and process potential errors ---------------------------
 
-# Format ------------------------------------------------------------------
+.call_marginaleffects <- function(fun_args, type = "means") {
+  out <- tryCatch(
+    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    error = function(e) e
+  )
 
-
-#' @keywords internal
-.format_marginaleffects_means <- function(means, model, transform = NULL, ...) {
-  # model information
-  model_data <- insight::get_data(model)
-  info <- insight::model_info(model, verbose = FALSE)
-  non_focal <- setdiff(colnames(model_data), attr(means, "focal_terms"))
-  is_contrast_analysis <- !is.null(list(...)$hypothesis)
-
-  # do we have contrasts? For contrasts, we want to keep p-values
-  if (is_contrast_analysis) {
-    remove_column <- "SE"
-    estimate_name <- "Difference"
-  } else {
-    remove_column <- "p"
-    # estimate name
-    if (!identical(transform, "none") && (info$is_binomial || info$is_bernoulli)) {
-      estimate_name <- "Probability"
+  # display informative error
+  if (inherits(out, "simpleError")) {
+    # what was requested?
+    if (!is.null(fun_args$hypothesis)) {
+      fun <- "marginal contrasts"
     } else {
-      estimate_name <- "Mean"
+      fun <- "marginal means"
     }
+    msg <- c(
+      paste0("Sorry, calculating ", fun, " failed with following error:"),
+      insight::color_text(gsub("\n", "", out$message), "red")
+    )
+    # we get this error when we should use counterfactuals - tell
+    # # user about possible solution
+    if (grepl("not found in column names", out$message, fixed = TRUE)) {
+      msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
+    }
+    # error
+    insight::format_error(msg)
   }
 
-  # Format
-  params <- suppressWarnings(parameters::model_parameters(means, verbose = FALSE))
-  # add ci?
-  params <- .add_contrasts_ci(is_contrast_analysis, params)
-  params <- datawizard::data_relocate(params, c("Predicted", "SE", "CI_low", "CI_high"), after = -1, verbose = FALSE) # nolint
-  # move p to the end
-  params <- datawizard::data_relocate(params, "p", after = -1, verbose = FALSE)
-  params <- datawizard::data_rename(params, "Predicted", estimate_name)
-  # remove redundant columns
-  params <- datawizard::data_remove(params, c(remove_column, "Statistic", "s.value", "S", "CI", "df", "rowid_dedup", non_focal), verbose = FALSE) # nolint
-  params <- datawizard::data_restoretype(params, model_data)
-
-  # Store info
-  attr(params, "at") <- attr(means, "by")
-  attr(params, "by") <- attr(means, "by")
-  params
+  out
 }
 
 
+# handle attributes -----------------------------------------------------------
+
+# we have following attributes for modelbased-objects:
+# - at, by, trend, contrasts, comparison, estimate, predict, p_adjust, transform,
+#   ci: the values from the corresponding arguments from their related function
+# - focal_terms: all variables from arguments `by`, `trend` and `contrasts`
+# - adjusted_for: non-focal terms, all variables in the model that are not
+#   in focal_terms
+# - datagrid: the internal data grid that was used for the "newdata" argument
+# - coef_name: name of the column with the predictions/contrasts
+# - slope: the type of slope, e.g. "dx/dy". equals the "slope" argument when
+#   calling avg_slopes()
+# - model_info: object from insight::model_info()
 #' @keywords internal
-.add_contrasts_ci <- function(is_contrast_analysis, params) {
-  if (is_contrast_analysis && !"CI_low" %in% colnames(params) && "SE" %in% colnames(params)) {
-    # extract ci-level
-    if ("CI" %in% colnames(params)) {
-      ci <- params[["CI"]][1]
-    } else {
-      ci <- attributes(params)$ci
+.add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
+  attr(x, "at") <- by
+  attr(x, "by") <- by
+  attr(x, "model_info") <- model_info
+
+  # compact list
+  info <- insight::compact_list(info)
+
+  if (!is.null(info) && length(info)) {
+    if (!is.null(info$at_specs$varname)) {
+      attr(x, "focal_terms") <- info$at_specs$varname
     }
-    if (is.null(ci)) {
-      ci <- 0.95
+    for (i in .info_elements()) {
+      if (!is.null(info[[i]])) {
+        attr(x, i) <- info[[i]]
+      }
     }
-    # get degrees of freedom
-    if ("df" %in% colnames(params)) {
-      dof <- params[["df"]]
-    } else {
-      dof <- Inf
-    }
-    # critical test value
-    crit <- stats::qt((1 + ci) / 2, df = dof)
-    # add CI
-    params$CI_low <- params$Predicted - crit * params$SE
-    params$CI_high <- params$Predicted + crit * params$SE
   }
-  params
+  x
 }
 
+.info_elements <- function() {
+  c(
+    "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
+    "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
+    "coef_name", "slope", "ci", "model_info"
+  )
+}
 
 
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal
-.guess_arguments_means <- function(model, by = NULL, ...) {
+.guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, verbose = TRUE, ...) {
   # Gather info and data from model
-  predictors <- insight::find_predictors(model, flatten = TRUE, ...)
-  model_data <- insight::get_data(model)
+  model_data <- insight::get_data(model, verbose = FALSE)
+  predictors <- intersect(
+    colnames(model_data),
+    insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
+  )
+
+  validate_arg <- function(spec_value, spec_name) {
+    if (identical(spec_value, "auto")) {
+      # Find categorical predictors
+      spec_value <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
+      if (!length(spec_value) || all(is.na(spec_value))) {
+        insight::format_error(paste0(
+          "Model contains no categorical predictor. Please specify `", spec_name, "`."
+        ))
+      }
+      if (verbose) {
+        insight::format_alert(paste0(
+          "We selected `", spec_name, "=c(", toString(paste0('"', spec_value, '"')), ")`."
+        ))
+      }
+    }
+    spec_value
+  }
 
   # Guess arguments 'by'
-  if (identical(by, "auto")) {
-    # Find categorical predictors
-    by <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
-    if (!length(by) || all(is.na(by))) {
-      insight::format_error("Model contains no categorical predictor. Please specify `by`.")
-    }
-    insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
-  }
-  list(by = by)
+  by <- validate_arg(by, "by")
+  # Guess arguments 'contrast'
+  contrast <- validate_arg(contrast, "contrast")
+
+  list(by = by, contrast = contrast)
 }

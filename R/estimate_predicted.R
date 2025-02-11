@@ -1,14 +1,37 @@
-#' Model-based response estimates and uncertainty
+#' Model-based predictions
 #'
 #' @description
 #' After fitting a model, it is useful generate model-based estimates of the
 #' response variables for different combinations of predictor values. Such
-#' estimates can be used to make inferences about relationships between
-#' variables and to make predictions about individual cases.
+#' estimates can be used to make inferences about **relationships** between
+#' variables, to make predictions about individual cases, or to compare the
+#' **predicted** values against the observed data.
 #'
-#' Model-based response estimates and uncertainty can be generated for both the
-#' conditional average response values (the regression line or expectation) and
-#' for predictions about individual cases. See below for details.
+#' The `modelbased` package includes 4 "related" functions, that mostly differ in
+#' their default arguments (in particular, `data` and `predict`):
+#'
+#' - `estimate_prediction(data = NULL, predict = "prediction", ...)`
+#' - `estimate_expectation(data = NULL, predict = "expectation", ...)`
+#' - `estimate_relation(data = "grid", predict = "expectation", ...)`
+#' - `estimate_link(data = "grid", predict = "link", ...)`
+#'
+#' While they are all based on model-based predictions (using
+#' [insight::get_predicted()]), they differ in terms of the **type** of
+#' predictions they make by default. For instance, `estimate_prediction()` and
+#' `estimate_expectation()` return predictions for the original data used to fit
+#' the model, while `estimate_relation()` and `estimate_link()` return
+#' predictions on a [insight::get_datagrid()]. Similarly, `estimate_link`
+#' returns predictions on the link scale, while the others return predictions on
+#' the response scale. Note that the relevance of these differences depends on
+#' the model family (for instance, for linear models, `estimate_relation` is
+#' equivalent to `estimate_link()`, since there is no difference between the
+#' link-scale and the response scale).
+#'
+#' Note that you can run [`plot()`][visualisation_recipe.estimate_predicted] on
+#' the output of these functions to get some visual insights (see the
+#' [plotting examples][visualisation_recipe.estimate_predicted]).
+#'
+#' See the **details** section below for details about the different possibilities.
 #'
 #' @section Expected (average) values:
 #'
@@ -81,7 +104,7 @@
 #'   - Generates **expected values** (conditional average) on the **link scale**.
 #'   - The uncertainty interval is a *confidence interval*.
 #'   - By default, values are computed using a reference grid spanning the
-#'     observed range of predictor values (see [visualisation_matrix()]).
+#'     observed range of predictor values (see [insight::get_datagrid()]).
 #'
 #' - **`estimate_prediction()`**:
 #'   - Generates **predicted values** (for individual cases) on the **response scale**.
@@ -94,14 +117,14 @@
 #'   - Generates **expected values** (conditional average) on the **response scale**.
 #'   - The uncertainty interval is a *confidence interval*.
 #'   - By default, values are computed using a reference grid spanning the
-#'     observed range of predictor values (see [visualisation_matrix()]).
+#'     observed range of predictor values (see [insight::get_datagrid()]).
 #'
 #' @section Data for predictions:
 #'
 #' If the `data = NULL`, values are estimated using the data used to fit the
 #' model. If `data = "grid"`, values are computed using a reference grid
 #' spanning the observed range of predictor values with
-#' [visualisation_matrix()]. This can be useful for model visualization. The
+#' [insight::get_datagrid()]. This can be useful for model visualization. The
 #' number of predictor values used for each variable can be controlled with the
 #' `length` argument. `data` can also be a data frame containing columns with
 #' names matching the model frame (see [insight::get_data()]). This can be used
@@ -126,7 +149,7 @@
 #' examples](https://easystats.github.io/modelbased/index.html#features) for
 #' various examples, tutorials and usecases.
 #'
-#' @inheritParams estimate_means
+#' @inheritParams get_emmeans
 #' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
 #' `NULL`, the model's data is used. If `"grid"`, the model matrix is obtained
@@ -137,6 +160,25 @@
 #' types). The `by` argument will be used to create a data grid via
 #' `insight::get_datagrid()`, which will then be used as `data` argument. Thus,
 #' you cannot specify both `data` and `by` but only of these two arguments.
+#' @param predict This parameter controls what is predicted (and gets internally
+#' passed to [insight::get_predicted()]). In most cases, you don't need to care
+#' about it: it is changed automatically according to the different predicting
+#' functions (i.e., `estimate_expectation()`, `estimate_prediction()`, `estimate_link()`
+#' or `estimate_relation()`). The only time you might be interested in manually
+#' changing it is to estimate other distributional parameters (called "dpar" in
+#' other packages) - for instance when using complex formulae in `brms` models.
+#' The `predict` argument can then be set to the parameter you want to
+#' estimate, for instance `"sigma"`, `"kappa"`, etc. Note that the distinction
+#' between `"expectation"`, `"link"` and `"prediction"` does not then apply (as
+#' you are directly predicting the value of some distributional parameter), and
+#' the corresponding functions will then only differ in the default value of
+#' their `data` argument.
+#' @param transform A function applied to predictions and confidence intervals
+#' to (back-) transform results, which can be useful in case the regression
+#' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). Can also
+#' be `TRUE`, in which case `insight::get_transformation()` is called to
+#' determine the appropriate transformation-function. **Note:** Standard errors
+#' are not (back-) transformed!
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -190,7 +232,9 @@
 estimate_expectation <- function(model,
                                  data = NULL,
                                  by = NULL,
+                                 predict = "expectation",
                                  ci = 0.95,
+                                 transform = NULL,
                                  keep_iterations = FALSE,
                                  ...) {
   .estimate_predicted(
@@ -199,7 +243,8 @@ estimate_expectation <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "expectation",
+    predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -210,7 +255,9 @@ estimate_expectation <- function(model,
 estimate_link <- function(model,
                           data = "grid",
                           by = NULL,
+                          predict = "link",
                           ci = 0.95,
+                          transform = NULL,
                           keep_iterations = FALSE,
                           ...) {
   # reset to NULL if only "by" was specified
@@ -224,7 +271,8 @@ estimate_link <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "link",
+    predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -234,7 +282,9 @@ estimate_link <- function(model,
 estimate_prediction <- function(model,
                                 data = NULL,
                                 by = NULL,
+                                predict = "prediction",
                                 ci = 0.95,
+                                transform = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   .estimate_predicted(
@@ -243,7 +293,8 @@ estimate_prediction <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "prediction",
+    predict = predict,
+    transform = transform,
     ...
   )
 }
@@ -253,7 +304,9 @@ estimate_prediction <- function(model,
 estimate_relation <- function(model,
                               data = "grid",
                               by = NULL,
+                              predict = "expectation",
                               ci = 0.95,
+                              transform = NULL,
                               keep_iterations = FALSE,
                               ...) {
   # reset to NULL if only "by" was specified
@@ -267,11 +320,11 @@ estimate_relation <- function(model,
     by = by,
     ci = ci,
     keep_iterations = keep_iterations,
-    predict = "expectation",
+    predict = predict,
+    transform = transform,
     ...
   )
 }
-
 
 
 # Internal ----------------------------------------------------------------
@@ -282,6 +335,7 @@ estimate_relation <- function(model,
                                 by = NULL,
                                 predict = "expectation",
                                 ci = 0.95,
+                                transform = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   # only "by" or "data", but not both
@@ -292,18 +346,21 @@ estimate_relation <- function(model,
   # call "get_data()" only once...
   model_data <- insight::get_data(model, verbose = FALSE)
   is_model <- insight::is_model(model)
+  dots <- list(...)
 
   # model and data properties
   if (is_model) {
     # for models, get predictors, response etc.
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
-    is_nullmodel <- insight::is_nullmodel(model)
+    is_nullmodel <- isTRUE(.safe(insight::is_nullmodel(model)))
+    grouplevel_effects <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
   } else {
     # for stuff like data frame, no response and no null model
     variables <- colnames(model_data)
     model_response <- NULL
     is_nullmodel <- FALSE
+    grouplevel_effects <- NULL
   }
 
   # if "by" is provided, get datagrid
@@ -342,7 +399,7 @@ estimate_relation <- function(model,
     data <- model_data
   } else if (!is.data.frame(data)) {
     if (is_grid) {
-      data <- visualisation_matrix(model, reference = model_data, include_response = is_nullmodel, ...)
+      data <- insight::get_datagrid(model, reference = model_data, include_response = is_nullmodel, ...)
     } else {
       insight::format_error(
         "The `data` argument must either NULL, \"grid\" or another data frame."
@@ -370,70 +427,75 @@ estimate_relation <- function(model,
   data <- datawizard::data_restoretype(data, model_data)
 
   # Get predicted ----------------
-  predictions <- insight::get_predicted(model,
+  prediction_args <- list(
+    model,
     data = data,
     predict = predict,
-    ci = ci,
-    ...
+    ci = ci
   )
+  # for predicting grouplevel random effects, add "allow.new.levels"
+  if (!is.null(grouplevel_effects) && any(grouplevel_effects %in% grid_specs$at_spec$varname)) {
+    prediction_args$allow.new.levels <- TRUE
+    dots$allow.new.levels <- NULL
+  }
+  predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
-  out <- cbind(data, out)
+
+  # select columns to copy - we don't want duplicates from the data grid
+  columns_to_copy <- setdiff(colnames(data), colnames(out))
+  if (length(columns_to_copy)) {
+    out <- cbind(data[columns_to_copy], out)
+  }
 
   # remove response variable from data frame, as this variable is predicted
   if (!is.null(model_response) && model_response %in% colnames(out)) {
     out[[model_response]] <- NULL
   }
 
+  # clean-up: remove "Row" variable (from ordinal and alike)
+  out[["Row"]] <- NULL
+
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted
+  }
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    trans_fun <- transform
+  }
+  if (!is.null(trans_fun)) {
+    out$Predicted <- trans_fun(out$Predicted)
+    out$CI_low <- trans_fun(out$CI_low)
+    out$CI_high <- trans_fun(out$CI_high)
   }
 
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
+  attr(out, "transform") <- transform
   attr(out, "model") <- model
-  attr(out, "table_title") <- c(paste0("Model-based ", tools::toTitleCase(predict)), "blue")
-  attr(out, "table_footer") <- .estimate_predicted_footer(model, grid_specs, out)
+  attr(out, "datagrid") <- data
+  attr(out, "focal_terms") <- grid_specs$at_specs$varname
+  attr(out, "preserve_range") <- grid_specs$preserve_range
+  attr(out, "table_title") <- c("Model-based Predictions", "blue")
+  attr(out, "coef_name") <- "Predicted"
+  attr(out, "model_info") <- insight::model_info(model)
+  attr(out, "table_footer") <- .table_footer(
+    out,
+    by = grid_specs$at,
+    type = "predictions",
+    model = model,
+    info = c(grid_specs, list(predict = predict))
+  )
+
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])
 
   # Class
   class(out) <- c(paste0("estimate_", predict), "estimate_predicted", "see_estimate_predicted", class(out))
 
   out
-}
-
-
-
-# Utils -------------------------------------------------------------------
-
-#' @keywords internal
-.estimate_predicted_footer <- function(model, grid_specs, predictions) {
-  footer <- paste0("\nVariable predicted: ", insight::find_response(model), "\n")
-
-  if ("at" %in% names(grid_specs)) {
-    footer <- paste0(footer, "Predictors modulated: ", toString(grid_specs$at), "\n")
-  }
-
-  if ("adjusted_for" %in% names(grid_specs) &&
-    length(grid_specs$adjusted_for) >= 1 &&
-    !(length(grid_specs$adjusted_for) == 1 && is.na(grid_specs$adjusted_for))) {
-    # if we have values of adjusted terms, add these here
-    if (all(grid_specs$adjusted_for %in% colnames(predictions))) {
-      # get values at which non-focal terms are hold constant
-      adjusted_values <- sapply(grid_specs$adjusted_for, function(i) {
-        predictions[[i]][1]
-      })
-      # at values to names of non-focal terms (footer)
-      if (is.numeric(adjusted_values)) {
-        grid_specs$adjusted_for <- sprintf("%s (%.2g)", grid_specs$adjusted_for, adjusted_values)
-      } else {
-        grid_specs$adjusted_for <- sprintf("%s (%s)", grid_specs$adjusted_for, adjusted_values)
-      }
-    }
-    footer <- paste0(footer, "Predictors controlled: ", toString(grid_specs$adjusted_for), "\n")
-  }
-
-  c(footer, "blue")
 }

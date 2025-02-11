@@ -166,8 +166,47 @@ test_that("estimate_expectation - VisMatrix", {
   skip_if_not_installed("mgcv")
 
   m <- lm(Sepal.Length ~ Petal.Length * Petal.Width, data = iris)
-  vm <- visualisation_matrix(m, by = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
+  vm <- insight::get_datagrid(m, by = c("Petal.Length", "Petal.Width = seq(-3, 3)"))
   estim <- estimate_relation(vm)
   expect_identical(dim(estim), c(70L, 6L))
   expect_named(estim, c("Petal.Length", "Petal.Width", "Predicted", "SE", "CI_low", "CI_high"))
+})
+
+
+test_that("estimate_expectation - predicting RE works", {
+  skip_if_not_installed("lme4")
+  skip_if_not_installed("glmmTMB")
+
+  data(Salamanders, package = "glmmTMB")
+  m1 <- glmmTMB::glmmTMB(
+    count ~ spp + mined + (1 | site),
+    family = poisson(),
+    data = Salamanders
+  )
+
+  data(efc, package = "modelbased")
+  efc$e15relat <- datawizard::to_factor(efc$e15relat)
+  m2 <- lme4::lmer(neg_c_7 ~ c12hour + c160age + c161sex + (1 | e15relat), data = efc)
+
+  out <- estimate_relation(m1, by = "site")
+  expect_equal(
+    out$Predicted,
+    c(
+      0.23843, 0.23843, 0.18498, 0.35626, 0.24159, 0.29875, 0.14771,
+      0.20692, 0.13234, 0.17874, 0.1171, 0.16318, 0.21392, 0.78665,
+      0.0828, 0.1716, 0.11488, 0.11488, 0.35552, 0.45806, 0.19238,
+      0.09819, 0.25902
+    ),
+    tolerance = 1e-4
+  )
+
+  out <- estimate_relation(m2, by = "e15relat")
+  expect_equal(
+    out$Predicted,
+    c(
+      12.20636, 12.06311, 11.2071, 11.62862, 11.2327, 10.58387, 11.20853,
+      11.12288
+    ),
+    tolerance = 1e-4
+  )
 })

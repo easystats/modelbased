@@ -16,6 +16,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj$
 
 # produced vignettes
 vignettes/*.html
@@ -56,3 +57,4 @@ rsconnect/
 Network Trash Folder
 Temporary Items
 .apdisk
+/.quarto/

@@ -4,53 +4,105 @@
 \alias{estimate_slopes}
 \title{Estimate Marginal Effects}
 \usage{
-estimate_slopes(model, trend = NULL, by = NULL, ci = 0.95, ...)
+estimate_slopes(
+  model,
+  trend = NULL,
+  by = NULL,
+  ci = 0.95,
+  p_adjust = "none",
+  backend = getOption("modelbased_backend", "marginaleffects"),
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{model}{A statistical model.}
 
-\item{trend}{A character indicating the name of the variable
-for which to compute the slopes.}
+\item{trend}{A character indicating the name of the variable for which to
+compute the slopes.}
 
-\item{by}{The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
+\item{by}{The (focal) predictor variable(s) at which to evaluate the desired
+effect / mean / contrasts. Other predictors of the model that are not
+included here will be collapsed and "averaged" over (the effect will be
+estimated across them). The \code{by} argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. \code{by}
+can be a character (vector) naming the focal predictors (and optionally,
+representative values or levels), or a list of named elements. See details
+in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
+for predictors of interest.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
+option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
+\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
+\code{"sidak"}, or \code{"holm"}.}
+
+\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+Results are usually very similar. The major difference will be found for mixed
+models, where \code{backend = "marginaleffects"} will also average across random
+effects levels, producing "marginal predictions" (instead of "conditional
+predictions", see Heiss 2022).
+
+You can set a default backend via \code{options()}, e.g. use
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
+as default backend.}
+
+\item{verbose}{Use \code{FALSE} to silence messages and warnings.}
+
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
+to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
+Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
+\itemize{
+\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
+to control the (number of) representative values.
+\item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
+for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
+\code{newdata} can be passed to those functions.
+\item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
+Additional arguments can be passed to these functions.
+\item Bayesian models: For Bayesian models, parameters are cleaned using
+\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
+\code{rope_range}, or \code{test} are passed to that function.
+}}
 }
 \value{
 A data.frame of class \code{estimate_slopes}.
 }
 \description{
 Estimate the slopes (i.e., the coefficient) of a predictor over or within
-different factor levels, or alongside a numeric variable . In other words, to
-assess the effect of a predictor \emph{at} specific configurations data. Other
-related functions based on marginal estimations includes
+different factor levels, or alongside a numeric variable. In other words, to
+assess the effect of a predictor \emph{at} specific configurations data. It corresponds
+to the derivative and can be useful to understand where a predictor has a
+significant role when interactions or non-linear relationships are present.
+
+Other related functions based on marginal estimations includes
 \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_means]{estimate_means()}}.
-\cr\cr
-}
-\details{
+
 See the \strong{Details} section below, and don't forget to also check out the
 \href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes}
 and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for
 various examples, tutorials and use cases.
-
+}
+\details{
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
 \strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
 argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
-\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
 (see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors (i.e.,
-given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid()}} is so important for direct predictions.
+given a specific data configuration). This is why the concept of \code{\link[insight:get_datagrid]{reference grid()}} is so important for direct predictions.
 \item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension
 of such predictions, allowing to "average" (collapse) some of the predictors,
 to obtain the average response value at a specific predictors configuration.
@@ -90,7 +142,7 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("emmeans", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -105,6 +157,7 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 slopes
 
+\dontrun{
 # Plot it
 plot(slopes)
 standardize(slopes)
@@ -121,5 +174,6 @@ slopes <- estimate_slopes(model,
 )
 summary(slopes)
 plot(slopes)
+}
 \dontshow{\}) # examplesIf}
 }

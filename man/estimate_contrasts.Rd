@@ -2,64 +2,187 @@
 % Please edit documentation in R/estimate_contrasts.R
 \name{estimate_contrasts}
 \alias{estimate_contrasts}
+\alias{estimate_contrasts.default}
 \title{Estimate Marginal Contrasts}
 \usage{
-estimate_contrasts(
+estimate_contrasts(model, ...)
+
+\method{estimate_contrasts}{default}(
   model,
   contrast = NULL,
   by = NULL,
-  transform = "none",
+  predict = NULL,
   ci = 0.95,
   p_adjust = "holm",
   method = "pairwise",
+  comparison = "pairwise",
+  estimate = "average",
+  p_adjust = "none",
+  transform = NULL,
+  backend = getOption("modelbased_backend", "marginaleffects"),
+  verbose = TRUE,
   ...
 )
 }
 \arguments{
 \item{model}{A statistical model.}
 
+\item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
+to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
+Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
+\itemize{
+\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
+to control the (number of) representative values.
+\item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
+for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
+\code{newdata} can be passed to those functions.
+\item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
+Additional arguments can be passed to these functions.
+\item Bayesian models: For Bayesian models, parameters are cleaned using
+\code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
+\code{rope_range}, or \code{test} are passed to that function.
+}}
+
 \item{contrast}{A character vector indicating the name of the variable(s)
 for which to compute the contrasts.}
 
-\item{by}{The predictor variable(s) at which to evaluate the desired effect
-/ mean / contrasts. Other predictors of the model that are not included
-here will be collapsed and "averaged" over (the effect will be estimated
-across them).}
+\item{by}{The (focal) predictor variable(s) at which to evaluate the desired
+effect / mean / contrasts. Other predictors of the model that are not
+included here will be collapsed and "averaged" over (the effect will be
+estimated across them). The \code{by} argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. \code{by}
+can be a character (vector) naming the focal predictors (and optionally,
+representative values or levels), or a list of named elements. See details
+in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
+for predictors of interest.}
 
-\item{transform}{Is passed to the \code{type} argument in \code{emmeans::emmeans()}.
-See \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Can be \code{"none"} (default for contrasts), \code{"response"} (default for means),
-\code{"mu"}, \code{"unlink"}, \code{"log"}. \code{"none"} will leave the values on scale of the
-linear predictors. \code{"response"} will transform them on scale of the response
-variable. Thus for a logistic model, \code{"none"} will give estimations expressed
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
+\code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
+\code{backend = "marginaleffects"}). For emmeans, see also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+Valid options for \code{predict} are:
+\itemize{
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
+any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
+for zero-inflation models from package \strong{glmmTMB}, you can choose
+\code{predict = "zprob"} or \code{predict = "conditional"} etc., see
+\link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
+appropriate transformation is selected, which usually returns predictions
+or contrasts on the response-scale.
+}
+
+\code{"link"} will leave the values on scale of the linear predictors.
+\code{"response"} (or \code{NULL}) will transform them on scale of the response
+variable. Thus for a logistic model, \code{"link"} will give estimations expressed
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities.}
+probabilities. To predict distributional parameters (called "dpar" in other
+packages), for instance when using complex formulae in \code{brms} models, the
+\code{predict} argument can take the value of the parameter you want to estimate,
+for instance \code{"sigma"}, \code{"kappa"}, etc.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. Can be one of \code{"holm"} (default), \code{"tukey"}, \code{"hochberg"},
-\code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"} or \code{"none"}. See the
-p-value adjustment section in the \code{emmeans::test} documentation.}
+\item{comparison}{Specify the type of contrasts or tests that should be
+carried out.
+\itemize{
+\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
+\code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
+\code{"dunnett"}, \code{"wtcon"} and some more. See also \code{method} argument in
+\link[emmeans:contrast]{emmeans::contrast} and the \code{?emmeans::emmc-functions}.
+\item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
+matrix, a string equation specifying the hypothesis to test, a string
+naming the comparison method, a formula, or a function. Strings, string
+equations and formula are probably the most common options and described
+below. For other options and detailed descriptions of those options, see
+also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+\itemize{
+\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
+\item String equation: To identify parameters from the output, either specify
+the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
+\code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
+\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
+side indicates the type of comparison (\code{difference} or \code{ratio}), the
+right-hand side determines the pairs of estimates to compare (\code{reference},
+\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
+can be carried out within subsets by indicating the grouping variable
+after a vertical bar ( \code{|}).
+}
+}}
 
-\item{method}{Contrast method. See same argument in \link[emmeans:contrast]{emmeans::contrast}.}
+\item{estimate}{Character string, indicating the type of target population
+predictions refer to. This dictates how the predictions are "averaged" over
+the non-focal predictors, i.e. those variables that are not specified in
+\code{by} or \code{contrast}.
+\itemize{
+\item \code{"average"} (default): Takes the mean value for non-focal numeric
+predictors and marginalizes over the factor levels of non-focal terms,
+which computes a kind of "weighted average" for the values at which these
+terms are hold constant. These predictions are a good representation of the
+sample, because all possible values and levels of the non-focal predictors
+are considered. It answers the question, "What is the predicted value for
+an 'average' observation in \emph{my data}?". Cum grano salis, it refers to
+randomly picking a subject of your sample and the result you get on
+average. This approach is the one taken by default in the \code{emmeans}
+package.
+\item \code{"population"}: Non-focal predictors are marginalized over the observations
+in the sample, where the sample is replicated multiple times to produce
+"counterfactuals" and then takes the average of these predicted values
+(aggregated/grouped by the focal terms). It can be considered as
+extrapolation to a hypothetical target population. Counterfactual
+predictions are useful, insofar as the results can also be transferred to
+other contexts (Dickerman and Hernan, 2020). It answers the question, "What
+is the predicted response value for the 'average' observation in \emph{the
+broader target population}?". It does not only refer to the actual data in
+your observed sample, but also "what would be if" we had more data, or if
+we had data from a different sample.
+}
+
+In other words, the distinction between estimate types resides in whether
+the prediction are made for:
+\itemize{
+\item A specific "individual" from the sample (i.e., a specific combination of
+predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
+and the other prediction functions.
+\item An average individual from the sample: obtained with
+\code{estimate_means(..., estimate = "average")}
+\item The broader, hypothetical target population: obtained with
+\code{estimate_means(..., estimate = "population")}
+}}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"esarey"} or
+\code{"holm"}. The \code{"esarey"} option is specifically for the case of Johnson-Neyman
+intervals, i.e. when calling \code{estimate_slopes()} with two numeric predictors
+in an interaction term. Details for the other options can be found in the
+p-value adjustment section of the \code{emmeans::test} documentation or
+\code{?stats::p.adjust}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function.}
 
 \item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).}
+predictions", see Heiss 2022).
 
-\item{effectsize}{Desired measure of standardized effect size, one of "none"
-(default), "emmeans", "marginal", or "bootES".}
+You can set a default backend via \code{options()}, e.g. use
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
+as default backend.}
 
-\item{bootstraps}{The number of bootstrap resamples to perform.}
-
-\item{bootES_type}{Specifies the type of effect-size measure to
-estimate when using \code{effectsize = "bootES"}. One of \code{c("unstandardized", "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
-
-\item{...}{Other arguments passed for instance to \code{\link[insight:get_datagrid]{insight::get_datagrid()}}.}
-}
 \value{
 A data frame of estimated contrasts.
 }
@@ -69,24 +192,19 @@ factor. See also other related functions such as \code{\link[=estimate_means]{es
 and \code{\link[=estimate_slopes]{estimate_slopes()}}.
 }
 \details{
-See the \strong{Details} section below, and don't forget to also check out the
-\href{https://easystats.github.io/modelbased/articles/estimate_slopes.html}{Vignettes}
-and \href{https://easystats.github.io/modelbased/index.html#features}{README examples} for
-various examples, tutorials and use cases.
-
 The \code{\link[=estimate_slopes]{estimate_slopes()}}, \code{\link[=estimate_means]{estimate_means()}} and \code{\link[=estimate_contrasts]{estimate_contrasts()}}
 functions are forming a group, as they are all based on \emph{marginal}
 estimations (estimations based on a model). All three are built on the
 \strong{emmeans} or \strong{marginaleffects} package (depending on the \code{backend}
 argument), so reading its documentation (for instance \code{\link[emmeans:emmeans]{emmeans::emmeans()}},
-\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website} is
+\code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed,
 the first thing to understand is how models can be used to make predictions
 (see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors (i.e.,
-given a specific data configuration). This is why the concept of \code{\link[=visualisation_matrix]{reference grid()}} is so important for direct predictions.
+given a specific data configuration). This is why the concept of \code{\link[insight:get_datagrid]{reference grid()}} is so important for direct predictions.
 \item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension
 of such predictions, allowing to "average" (collapse) some of the predictors,
 to obtain the average response value at a specific predictors configuration.
@@ -161,7 +279,7 @@ covariates, but creates an appropriate scale for standardizing the response.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
@@ -173,8 +291,8 @@ model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 estimate_contrasts(model)
 
-# Can also run contrasts between points of numeric
-estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+# Can also run contrasts between points of numeric, stratified by "Species"
+estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 
 # Or both
 estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
@@ -200,11 +318,6 @@ data <- mtcars
 data$cyl <- as.factor(data$cyl)
 data$am <- as.factor(data$am)
 
-model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-estimate_contrasts(model)
-# fix `am` at value 1
-estimate_contrasts(model, by = c("cyl", "am='1'"))
-
 model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 estimate_contrasts(model)
 estimate_contrasts(model, by = "wt", length = 4)
@@ -214,7 +327,7 @@ model <- rstanarm::stan_glm(
   data = iris,
   refresh = 0
 )
-estimate_contrasts(model, by = "Petal.Length", test = "bf")
+estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 }
 \dontshow{\}) # examplesIf}
 }

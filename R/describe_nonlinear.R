@@ -13,7 +13,7 @@
 #'   (`x`).
 #' @param ... Other arguments to be passed to or from.
 #'
-#' @examples
+#' @examplesIf insight::check_if_installed("performance", quietly = TRUE)
 #' # Create data
 #' data <- data.frame(x = rnorm(200))
 #' data$y <- data$x^2 + rnorm(200, 0, 0.5)
@@ -27,8 +27,6 @@
 describe_nonlinear <- function(data, ...) {
   UseMethod("describe_nonlinear")
 }
-
-
 
 
 #' @export
@@ -77,12 +75,12 @@ describe_nonlinear.data.frame <- function(data, x = NULL, y = NULL, ...) {
 estimate_smooth <- describe_nonlinear
 
 
-
-
 # Utils -------------------------------------------------------------------
 
 #' @keywords internal
 .describe_nonlinear_parts <- function(y, x) {
+  insight::check_if_installed("performance")
+
   n <- length(y)
 
   # 1. Cut y into different parts delimited by inversion points

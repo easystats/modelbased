@@ -4,12 +4,40 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
-#' @inheritParams estimate_means
-#' @inheritParams get_emcontrasts
+#' @param contrast A character vector indicating the name of the variable(s)
+#' for which to compute the contrasts.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
-#' comparisons. Can be one of `"holm"` (default), `"tukey"`, `"hochberg"`,
-#' `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"` or `"none"`. See the
-#' p-value adjustment section in the `emmeans::test` documentation.
+#' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
+#' `"holm"`. The `"esarey"` option is specifically for the case of Johnson-Neyman
+#' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
+#' in an interaction term. Details for the other options can be found in the
+#' p-value adjustment section of the `emmeans::test` documentation or
+#' `?stats::p.adjust`.
+#' @param comparison Specify the type of contrasts or tests that should be
+#' carried out.
+#' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
+#'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
+#'   `"dunnett"`, `"wtcon"` and some more. See also `method` argument in
+#'   [emmeans::contrast] and the `?emmeans::emmc-functions`.
+#' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
+#'   matrix, a string equation specifying the hypothesis to test, a string
+#'   naming the comparison method, a formula, or a function. Strings, string
+#'   equations and formula are probably the most common options and described
+#'   below. For other options and detailed descriptions of those options, see
+#'   also [marginaleffects::comparisons] and
+#'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`.
+#'   * String equation: To identify parameters from the output, either specify
+#'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
+#'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
+#'   * Formula: A formula like `comparison ~ pairs | group`, where the left-hand
+#'     side indicates the type of comparison (`difference` or `ratio`), the
+#'     right-hand side determines the pairs of estimates to compare (`reference`,
+#'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
+#'     can be carried out within subsets by indicating the grouping variable
+#'     after a vertical bar ( `|`).
 #' @param effectsize Desired measure of standardized effect size, one of "none"
 #' (default), "emmeans", "marginal", or "bootES".
 #' @param bootES_type Specifies the type of effect-size measure to
@@ -17,6 +45,7 @@
 #' "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")`. See`
 #' effect.type` argument of [bootES::bootES] for details.
 #' @param bootstraps The number of bootstrap resamples to perform.
+#' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details
 #'
@@ -53,7 +82,7 @@
 #' `effectsize = "bootES"` uses bootstrapping (defaults to a low value of
 #' 200) through [bootES::bootES]. Adjust for contrasts, but not for covariates.
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "emmeans", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage
 #' model <- lm(Sepal.Width ~ Species, data = iris)
@@ -65,8 +94,8 @@
 #' # By default: selects first factor
 #' estimate_contrasts(model)
 #'
-#' # Can also run contrasts between points of numeric
-#' estimate_contrasts(model, contrast = "Petal.Width", length = 4)
+#' # Can also run contrasts between points of numeric, stratified by "Species"
+#' estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 #'
 #' # Or both
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
@@ -92,11 +121,6 @@
 #' data$cyl <- as.factor(data$cyl)
 #' data$am <- as.factor(data$am)
 #'
-#' model <- rstanarm::stan_glm(mpg ~ cyl * am, data = data, refresh = 0)
-#' estimate_contrasts(model)
-#' # fix `am` at value 1
-#' estimate_contrasts(model, by = c("cyl", "am='1'"))
-#'
 #' model <- rstanarm::stan_glm(mpg ~ cyl * wt, data = data, refresh = 0)
 #' estimate_contrasts(model)
 #' estimate_contrasts(model, by = "wt", length = 4)
@@ -106,112 +130,88 @@
 #'   data = iris,
 #'   refresh = 0
 #' )
-#' estimate_contrasts(model, by = "Petal.Length", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
-estimate_contrasts <- function(model,
-                               contrast = NULL,
-                               by = NULL,
-                               transform = "none",
-                               ci = 0.95,
-                               p_adjust = "holm",
+#' @rdname estimate_contrasts
+#' @export
+estimate_contrasts.default <- function(model,
+                                       contrast = NULL,
+                                       by = NULL,
+                                       predict = NULL,
+                                       ci = 0.95,
+                                       comparison = "pairwise",
+                                       estimate = "average",
+                                       p_adjust = "none",
+                                       transform = NULL,
                                method = "pairwise",
                                effectsize = "none",
                                bootstraps = 200,
                                bootES_type = "cohens.d",
-                               backend = "emmeans",
-                               ...) {
+                                       backend = getOption("modelbased_backend", "marginaleffects"),
+                                       verbose = TRUE,
+                                       ...) {
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
     estimated <- get_emcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
-      method = method,
+      predict = predict,
+      comparison = comparison,
       adjust = p_adjust,
+      verbose = verbose,
       ...
     )
-    out <- .format_emmeans_contrasts(model, estimated, ci, transform, p_adjust, effectsize, ...)
-    info <- attributes(estimated)
+    out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
     estimated <- get_marginalcontrasts(model,
       contrast = contrast,
       by = by,
-      transform = transform,
-      method = method,
+      predict = predict,
+      comparison = comparison,
       p_adjust = p_adjust,
       ci = ci,
+      estimate = estimate,
+      transform = transform,
+      verbose = verbose,
       ...
     )
-    out <- .format_marginaleffects_contrasts(model, estimated, p_adjust, method, ...)
-    ## TODO: needs to be fixed
-    info <- list(contrast = contrast, by = by)
+    out <- format(estimated, model, p_adjust, comparison, ...)
   }
 
+  # restore attributes later
+  info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c("Marginal Contrasts Analysis", "blue")
-  attr(out, "table_footer") <- .estimate_means_footer(
+  attr(out, "table_title") <- c(ifelse(
+    estimate == "specific",
+    "Model-based Contrasts Analysis",
+    "Marginal Contrasts Analysis"
+  ), "blue")
+  attr(out, "table_footer") <- .table_footer(
     out,
-    info$contrast,
+    by = info$contrast,
     type = "contrasts",
-    p_adjust = p_adjust
+    model = model,
+    info = info
   )
 
   # Add attributes
   attr(out, "model") <- model
   attr(out, "response") <- insight::find_response(model)
   attr(out, "ci") <- ci
-  attr(out, "transform") <- transform
-  attr(out, "at") <- info$by
-  attr(out, "by") <- info$by
-  attr(out, "contrast") <- info$contrast
   attr(out, "p_adjust") <- p_adjust
+  attr(out, "backend") <- backend
+
+  # add attributes from workhorse function
+  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
   out
-}
-
-
-
-# Table formatting emmeans ----------------------------------------------------
-
-
-.format_emmeans_contrasts <- function(model, estimated, ci, transform, p_adjust, effectsize, ...) {
-  # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
-    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
-    out <- .clean_names_bayesian(out, model, transform, type = "contrast")
-  } else {
-    out <- as.data.frame(merge(
-      as.data.frame(estimated),
-      stats::confint(estimated, level = ci, adjust = p_adjust)
-    ))
-    out <- .clean_names_frequentist(out)
-  }
-  out$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  out <- datawizard::data_relocate(
-    out,
-    c("CI_low", "CI_high"),
-    after = c("Difference", "Odds_ratio", "Ratio")
-  )
-
-
-  # Format contrasts names
-  # Split by either " - " or "/"
-  level_cols <- strsplit(as.character(out$contrast), " - |\\/")
-  level_cols <- data.frame(do.call(rbind, lapply(level_cols, trimws)))
-  names(level_cols) <- c("Level1", "Level2")
-  level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
-  level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
-
-  # Merge levels and rest
-  out$contrast <- NULL
-  cbind(level_cols, out)
 }
 
   # Add standardized effect size
@@ -270,58 +270,3 @@ estimate_contrasts <- function(model,
                       paste0(bootES_type, "es_CI_high"))
 
       contrasts <- cbind(contrasts, eff)
-  }
-
-
-# Table formatting marginal effects -------------------------------------------
-
-
-.format_marginaleffects_contrasts <- function(model, estimated, p_adjust, method, ...) {
-  groups <- attributes(estimated)$by
-  contrast <- attributes(estimated)$contrast
-  focal_terms <- attributes(estimated)$focal_terms
-
-  estimated <- .p_adjust(model, estimated, p_adjust, ...)
-
-  valid_methods <- c(
-    "pairwise", "reference", "sequential", "meandev", "meanotherdev",
-    "revpairwise", "revreference", "revsequential"
-  )
-
-  if (!is.null(method) && is.character(method) && method %in% valid_methods) {
-
-    ## TODO: split Parameter column into levels indicated in "contrast", and filter by "by"
-
-    # These are examples of what {marginaleffects} returns, a single parmater
-    # column that includes all levels, comma- and dash-separated, or with /
-    # see also https://github.com/easystats/modelbased/pull/280
-    #
-    #   estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none")
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> Parameter                              | Difference |          95% CI |      p
-    # #> ------------------------------------------------------------------------------
-    # #> morning, coffee - morning, control     |       5.78 | [  1.83,  9.73] | 0.004
-    # #> morning, coffee - noon, coffee         |       1.93 | [ -2.02,  5.88] | 0.336
-    #
-    # estimate_contrasts(
-    #   m,
-    #   c("time", "coffee"),
-    #   backend = "marginaleffects",
-    #   p_adjust = "none",
-    #   method = ratio ~ reference | coffee
-    # )
-    # #> Marginal Contrasts Analysis
-    # #>
-    # #> coffee  |              hypothesis | Difference |       95% CI |      p
-    # #> ----------------------------------------------------------------------
-    # #> coffee  |      (noon) / (morning) |       0.89 | [0.67, 1.11] | < .001
-    # #> coffee  | (afternoon) / (morning) |       1.11 | [0.87, 1.36] | < .001
-    #
-    # We need to split the "Parameter" or "hypothesis" columns into one column
-    # per level, as we do with the emmeans-backend. Else, we cannot use the "by"
-    # argument, which is used for filtering by levels of given focal terms.
-  }
-
-  estimated
-}

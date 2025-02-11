@@ -63,11 +63,10 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
   } else if (method == "smooth") {
     smoothed <- stats::smooth(x, ...)
   } else {
-    stop('method must be one of c("loess", "smooth")', call. = FALSE)
+    insight::format_error("`method` must be one of c(\"loess\", \"smooth\")")
   }
   smoothed
 }
-
 
 
 #' @export
@@ -83,7 +82,7 @@ smoothing.data.frame <- function(x, method = "loess", strength = 0.25, ...) {
     x$temp <- apply(x[names(combinations)], 1, paste, collapse = "_")
 
     for (i in seq_len(nrow(combinations))) {
-      current_row <- paste0(t(combinations[i, ]), collapse = "_")
+      current_row <- paste(t(combinations[i, ]), collapse = "_")
       x[x$temp == current_row, nums] <- sapply(x[x$temp == current_row, nums], smoothing, method = method, strength = strength, ...)
     }
 
