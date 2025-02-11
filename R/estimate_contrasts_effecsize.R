@@ -23,9 +23,6 @@
     contrasts <- cbind(contrasts, marginal_d = d_adj)
 
   } else if (effectsize == "bootES") {
-    if (bootstraps < 500) {
-      insight::format_alert("Number of bootstraps probably too low. Consider increasing it.")
-    }
 
     insight::check_if_installed("bootES")
     dat <- insight::get_data(model)
