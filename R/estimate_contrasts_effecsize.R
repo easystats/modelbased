@@ -53,7 +53,7 @@
 
     eff <- do.call(rbind, es.lists)
     eff <- eff[1:3]
-    names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"), paste0(bootES_type, "es_CI_high"))
+    names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"), paste0(bootES_type, "_CI_high"))
 
     contrasts <- cbind(contrasts, eff)
   }
