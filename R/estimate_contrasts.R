@@ -135,6 +135,11 @@
 #'
 #' @return A data frame of estimated contrasts.
 #' @export
+estimate_contrasts <- function(model, ...) {
+  UseMethod("estimate_contrasts")
+}
+
+
 #' @rdname estimate_contrasts
 #' @export
 estimate_contrasts.default <- function(model,
