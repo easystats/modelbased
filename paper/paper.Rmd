@@ -220,7 +220,8 @@ library(easystats)
 
 model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
 
-parameters::parameters(model)
+parameters::parameters(model) |>
+  print(select = "minimal")
 ```
 
 The model's **parameters** can be challenging to interpret and do not offer us all the insights that this model actually contains.

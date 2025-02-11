@@ -35,10 +35,10 @@ authors:
 affiliations:
 - name: School of Psychology, University of Sussex, Brighton, UK
   index: 1
-  
+
 - name: Sussex Centre for Consciousness Science, University of Sussex, Brighton, UK
   index: 2
-  
+
 - name: Independent Researcher, Ramat Gan, Israel
   index: 3
 
@@ -55,7 +55,7 @@ affiliations:
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-02-10"
+date: "2025-02-11"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
@@ -85,16 +85,13 @@ csl: apa.csl
 
 # Statement of need
 
-Applied statistics have historically focused on statistical *tests* (e.g., *t* tests, correlation tests, and analyses of variances, ANOVAs), seen as most apt to provide researchers with interpretable answers to the questions they seek.
-However, these tests typically rely on statistical *models*—the true underlying cornerstone of modern data science.
-The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodological revolutions [@makowski2023we] have underlined some of the issues with the traditional focus on statistical tests (e.g., the effacement of model assumptions, a focus on null-hypothesis testing, non-compatibility with more complex variance structures) and called for shifting the focus to the models themselves.
+Applied statistics have historically focused on statistical *tests* (e.g., *t* tests, correlation tests, and analyses of variances, ANOVAs), seen as most apt to provide researchers with interpretable answers to the questions they seek. However, these tests typically rely on statistical *models*—the true underlying cornerstone of modern data science. The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodological revolutions [@makowski2023we] have underlined some of the issues with the traditional focus on statistical tests (e.g., the effacement of model assumptions, a focus on null-hypothesis testing, non-compatibility with more complex variance structures) and called for shifting the focus to the models themselves.
 
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages [@easystatspackage] has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Existing packages are dedicated to model parameters [the `parameters` package, @ludecke2020extracting], predictive performance [the `performance` package, @ludecke2021performance] or effect importance [the `effectsize` package, @ben2020effectsize].
 
 **But the models themselves hide even more critical information!**
 
-The fundamental nature of these models—a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observed or unobserved alike.
-These predictions refer to expected values of the outcome for given levels of predictors of interest, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way, and answering a broad range of research questions.
+The fundamental nature of these models—a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any combination of predictors, observed or unobserved alike. These predictions refer to expected values of the outcome for given levels of predictors of interest, as well as contrasting them, making it possible to visualize the model's behaviour in a more meaningful and comprehensive way, and answering a broad range of research questions.
 
 The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. However, their power and flexibility come at a cost: ease of use—especially for users not familiar with the underlying statistical concepts. The `modelbased` package, built on top of these two packages, aims to unleash this vast, untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
 
@@ -103,20 +100,15 @@ The two most popular R packages for extracting these quantities of interest from
 
 ## Terminology
 
-Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_. 
-1) We can describe this relationship (i.e., estimate the expected outcome value) for a very "specific" observation that is defined by a combination of predictor values (that may or may not actually appear in our data). This is what we call _predictions_. 
-2) Or, we can express the relationship considering an "average" or "typical" observation (i.e., estimating the _average_ relationship between predictors and an outcome). We call this _marginal means_. 
+Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_.
+1) We can describe this relationship (i.e., estimate the expected outcome value) for a very "specific" observation that is defined by a combination of predictor values (that may or may not actually appear in our data). This is what we call _predictions_.
+2) Or, we can express the relationship considering an "average" or "typical" observation (i.e., estimating the _average_ relationship between predictors and an outcome). We call this _marginal means_.
 <!-- When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms. -->
 
 ## Predictions
 
 At a fundamental level, `modelbased` and similar packages leverage model *predictions*.
-These predictions can be of different types, depending on the model and the question at hand.
-For instance, predictions can be associated with **confidence intervals** (`predict = "expectation"`) or **prediction intervals** (`predict = "prediction"`).
-The former corresponds to the uncertainty around the "relationship" (i.e., the conditional estimate, typically of the expectation ($E[X]$) according to a model's parameters),
-while the latter is typically larger and provides information about the range which individual observations might take (e.g., _around_ the expectation $E[X]$).
-Moreover, for generalized linear models (GLMs), predictions can be made on the **response scale** (`predict = "response"`) or the **link scale** (`predict = "link"`).
-This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic regression models.
+These predictions can be of different types, depending on the model and the question at hand. For instance, predictions can be associated with **confidence intervals** (`predict = "expectation"`) or **prediction intervals** (`predict = "prediction"`). The former corresponds to the uncertainty around the "relationship" (i.e., the conditional estimate, typically of the expectation ($E[X]$) according to a model's parameters), while the latter is typically larger and provides information about the range which individual observations might take (e.g., _around_ the expectation $E[X]$). Moreover, for generalized linear models (GLMs), predictions can be made on the **response scale** (`predict = "response"`) or the **link scale** (`predict = "link"`). This corresponds for instance to predictions in terms of probability (response scale) or log odds (link scale) for logistic regression models.
 
 These different types of estimates can be obtained for observations in the original dataset—which is useful to assess the model's goodness-of-fit—or for new data (typically a "data grid")—which is useful for visualization.
 
@@ -132,22 +124,25 @@ For convenience, the `modelbased` package includes four related functions, which
 Which function to use depends on the model and the research question at hand (visualizing effects, generating predictions, etc.).
 
 
-## Marginal means and effects
+## Marginal means
 
-The concept of "marginal" in statistical modeling typically refers to the analysis of the effect of one or more "focus" variables while all other variables are held constant at specific values
-(e.g., their empirical or theoretical average or reference value).
-This, in turn, facilitates understanding the effect of a variable in a complex model, where multiple variables interact with each other.
+The concept of "marginal" in this context refers to how non-focal variables are treated. While predictions, as described above, fix non-focal variables at their reference level, marginal means compute the empirical or theoretical averages of them. These kind of predictions are a good representation of the sample, because they are not based on very specific characteristics. E.g., predictions are made for _female_ persons with _high_ income, while marginal means calculate the expected outcome for an _average_ observation.
 
-The `modelbased` package simplifies the extraction of these quantities by providing a clear interface to understand how different predictors interact with outcomes in various scenarios.
+The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function, which can be considered as "marginal" pendant to `estimate_relation()`. `estimate_means()` typically returns results in line with the _emmeans_ package.
 
-- `estimate_means()`: computes **Marginal Means**—the average predictions for each level of a categorical predictor, averaged across all levels of other predictors.
-- `estimate_contrasts()`: computes **Marginal Contrasts**—the comparison of marginal means at different levels of a factor to assess differences or effects.
-- `estimate_slopes()`: computes **Marginal Effects**—the change in the response variable for an infinitesimal change in a predictor, averaged across all levels of other predictors. Marginal effects are essentially the partial derivatives of the response with respect to each predictor (useful for continuous predictors) and describe the average strength of an effect.
+## Marginal effects
 
+Predictions and marginal means can be used to better understand the _relationship_ of predictors with the outcome. They tell you that "the average health score for a person at the age of sixty is 80 points". Marginal _effects_, in turn, evaluate the (average) _strength_ of an effect (also called "slope"), telling you that "the average effect of age on the health score is an decrease 5 points".
 
-**[TODO: details about types of marginalization]**
+For the simple case of linear regression without interaction terms, the regression coefficient (slope) equals the marginal effect. However, in even slightly more complex situations (e.g., when interaction terms are involved, or logistic regression models), the slope is not constant across the predictor's values. Here we can estimate an _average_ slope, or marginal effect.
 
-`modelbased` provides two types of "marginalization": 
+Again, the `modelbased` package has a simple function to do so, `estimate_slopes()`. This function calculates the _trend_ or average effect, usually for numeric predictors.
+
+## Contrasts
+
+## Counterfactual / ATE
+
+`modelbased` provides two types of "marginalization":
 
 - `estimate = "average"` (default): TODO
 - `estimate = "population"`: TODO
@@ -212,27 +207,19 @@ library(easystats)
 
 model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
 
-parameters::parameters(model)
+parameters::parameters(model) |>
+  print(select = "minimal")
 ```
 
 ```
-#> Parameter                           | Coefficient |   SE |        95% CI
-#> ------------------------------------------------------------------------
-#> (Intercept)                         |       -0.05 | 0.21 | [-0.47, 0.38]
-#> Petal Length                        |        0.20 | 0.15 | [-0.09, 0.49]
-#> Species [versicolor]                |       -0.04 | 0.32 | [-0.66, 0.59]
-#> Species [virginica]                 |        1.18 | 0.33 | [ 0.52, 1.84]
-#> Petal Length × Species [versicolor] |        0.13 | 0.16 | [-0.18, 0.44]
-#> Petal Length × Species [virginica]  |       -0.04 | 0.15 | [-0.34, 0.26]
-#> 
-#> Parameter                           | t(144) |      p
-#> -----------------------------------------------------
-#> (Intercept)                         |  -0.22 | 0.823 
-#> Petal Length                        |   1.38 | 0.170 
-#> Species [versicolor]                |  -0.11 | 0.909 
-#> Species [virginica]                 |   3.54 | < .001
-#> Petal Length × Species [versicolor] |   0.83 | 0.405 
-#> Petal Length × Species [virginica]  |  -0.27 | 0.789
+#> Parameter                           | Coefficient |        95% CI |      p
+#> --------------------------------------------------------------------------
+#> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823 
+#> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170 
+#> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909 
+#> Species [virginica]                 |        1.18 | [ 0.52, 1.84] | < .001
+#> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405 
+#> Petal Length × Species [virginica]  |       -0.04 | [-0.34, 0.26] | 0.789
 ```
 
 ```

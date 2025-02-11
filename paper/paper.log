@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.17)  10 FEB 2025 16:44
+This is XeTeX, Version 3.141592653-2.6-0.999995 (TeX Live 2023) (preloaded format=xelatex 2023.12.17)  11 FEB 2025 11:07
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1022,45 +1022,30 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [3]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 577.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 584.
 
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 586--586
-[]\TU/lmtt/m/n/10 #> Parameter                           | Coefficient |   SE |        95% CI 
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 594--594
+[]\TU/lmtt/m/n/10 #> Parameter                           | Coefficient |        95% CI |      p 
  []
 
 
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 587--587
-[]\TU/lmtt/m/n/10 #> ------------------------------------------------------------------------[] 
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 595--595
+[]\TU/lmtt/m/n/10 #> --------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 588--588
-[]\TU/lmtt/m/n/10 #> (Intercept)                         |       -0.05 | 0.21 | [-0.47, 0.38][] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 596--596
+[]\TU/lmtt/m/n/10 #> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823[] 
  []
 
 
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 589--589
-[]\TU/lmtt/m/n/10 #> Petal Length                        |        0.20 | 0.15 | [-0.09, 0.49][] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 597--597
+[]\TU/lmtt/m/n/10 #> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170[] 
  []
 
 
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 590--590
-[]\TU/lmtt/m/n/10 #> Species [versicolor]                |       -0.04 | 0.32 | [-0.66, 0.59][] 
- []
-
-
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 591--591
-[]\TU/lmtt/m/n/10 #> Species [virginica]                 |        1.18 | 0.33 | [ 0.52, 1.84][] 
- []
-
-
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 592--592
-[]\TU/lmtt/m/n/10 #> Petal Length × Species [versicolor] |        0.13 | 0.16 | [-0.18, 0.44][] 
- []
-
-
-Overfull \hbox (6.41139pt too wide) in paragraph at lines 593--593
-[]\TU/lmtt/m/n/10 #> Petal Length × Species [virginica]  |       -0.04 | 0.15 | [-0.34, 0.26][] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 598--598
+[]\TU/lmtt/m/n/10 #> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909[] 
  []
 
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
@@ -1073,7 +1058,22 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [4]
-Overfull \hbox (1.16139pt too wide) in paragraph at lines 607--607
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 599--599
+[]\TU/lmtt/m/n/10 #> Species [virginica]                 |        1.18 | [ 0.52, 1.84] | < .001[] 
+ []
+
+
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 600--600
+[]\TU/lmtt/m/n/10 #> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405[] 
+ []
+
+
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 601--601
+[]\TU/lmtt/m/n/10 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34, 0.26] | 0.789[] 
+ []
+
+
+Overfull \hbox (1.16139pt too wide) in paragraph at lines 606--606
 []\TU/lmtt/m/n/10 #> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed[] 
  []
 
@@ -1089,33 +1089,28 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [5]
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 676--676
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 675--675
 []\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |      p[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 677--677
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 676--676
 []\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 678--678
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 677--677
 []\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12] |   1.34 |  0.183[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 679--679
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 678--678
 []\TU/lmtt/m/n/10 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72] |   2.97 |  0.003[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 680--680
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 679--679
 []\TU/lmtt/m/n/10 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76] |   6.18 | < .001[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 734--734
-[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p[] 
  []
 
 File: D:/Rpackages/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
@@ -1128,27 +1123,32 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [6]
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 735--735
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 733--733
+[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 734--734
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 736--736
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 735--735
 []\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.43] |  0.83 | 0.404[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 737--737
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 736--736
 []\TU/lmtt/m/n/10 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] | -0.27 | 0.789[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 738--738
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 737--737
 []\TU/lmtt/m/n/10 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] | -2.41 | 0.016[] 
  []
 
 
-Underfull \hbox (badness 2913) in paragraph at lines 773--780
+Underfull \hbox (badness 2913) in paragraph at lines 772--779
 [][][][][][] [] [][] [] [][][][][][][][][][]$[][]\TU/lmr/m/n/10 ), on CRAN ([][]$[][][][][] [] [] [] [][][][] [] [][][][][][][][][][] [] [][][] [] [][][][][][][] [] [][][][][][][][][][]$[][]),
  []
 
@@ -1177,18 +1177,18 @@ LaTeX2e <2023-11-01>
 L3 programming layer <2023-12-11>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: 48AF35DA9C25E03C31F3C7D72DA8E17E;3073.
+(rerunfilecheck)             Checksum: 83DC0EB39C7D4A50E6BAB85C2D4E1E50;3422.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36675 strings out of 476836
- 753490 string characters out of 5803150
+ 36678 strings out of 476836
+ 753530 string characters out of 5803150
  1947109 words of memory out of 5000000
- 58086 multiletter control sequences out of 15000+600000
+ 58089 multiletter control sequences out of 15000+600000
  564965 words of font info for 87 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 84i,12n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,13n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (8 pages).
