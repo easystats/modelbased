@@ -181,6 +181,13 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
+  # filter "by" rows when we have "sample" marginalization, because we don't
+  # pass data grid in such situations
+  if (identical(estimate, "sample") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+
+
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
   # =========================================================================

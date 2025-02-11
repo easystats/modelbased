@@ -413,7 +413,7 @@ test_that("estimate_means, full averaging", {
   m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
 
   estim1 <- marginaleffects::avg_predictions(m, by = c("c161sex", "c172code"))
-  estim2 <- estimate_means(m, by = c("c161sex='Male'", "c172code"), estimate = "sample")
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "sample")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim1 <- marginaleffects::avg_predictions(m, variables = c("c161sex", "c172code"))
@@ -423,4 +423,7 @@ test_that("estimate_means, full averaging", {
   estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "average")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "sample")
+  expect_identical(dim(estim2), c(6L, 8L))
 })
