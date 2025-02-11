@@ -293,6 +293,21 @@ test_that("plots, numeric or categorical predictors are detected", {
     "plot-cat-num-predictor-5",
     plot(pr, show_data = FALSE)
   )
+
+  data(efc, package = "modelbased")
+  m <- lm(neg_c_7 ~ barthtot, data = efc)
+  pr <- estimate_means(m, by = "barthtot", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-6",
+    plot(pr, show_data = FALSE)
+  )
+  pr <- estimate_means(m, by = "barthtot", range = "grid", backend = "marginaleffects")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-7",
+    plot(pr, show_data = FALSE)
+  )
 })
 
 
