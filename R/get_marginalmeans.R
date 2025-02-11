@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific")
+    c("average", "population", "specific", "sample")
   )
 
   # model details
@@ -126,7 +126,7 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    if (is.null(dots$newdata)) {
+    if (is.null(dots$newdata) && estimate != "sample") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
@@ -180,6 +180,13 @@ get_marginalmeans <- function(model,
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
+
+  # filter "by" rows when we have "sample" marginalization, because we don't
+  # pass data grid in such situations
+  if (identical(estimate, "sample") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============

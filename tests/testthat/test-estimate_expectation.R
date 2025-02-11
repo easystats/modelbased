@@ -46,7 +46,7 @@ test_that("estimate_expectation - data-grid", {
 
   m <- lm(mpg ~ cyl, data = mtcars)
   estim <- estimate_expectation(m, data = "grid")
-  expect_identical(dim(estim), c(10L, 5L))
+  expect_identical(dim(estim), c(3L, 5L))
   expect_named(
     estim,
     c("cyl", "Predicted", "SE", "CI_low", "CI_high")
