@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific")
+    c("average", "population", "specific", "sample")
   )
 
   # model details
@@ -126,7 +126,7 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    if (is.null(dots$newdata)) {
+    if (is.null(dots$newdata) && estimate != "sample") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
