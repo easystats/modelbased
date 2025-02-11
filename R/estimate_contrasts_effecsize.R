@@ -1,11 +1,14 @@
-.estimate_contrasts_effecsize <- function(effectsize = "none") {
+.estimate_contrasts_effecsize <- function(contrasts, effectsize = "none") {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "bootES"))
 
   if (effectsize == "emmeans") {
     eff <- emmeans::eff_size(
-      estimated, sigma = stats::sigma(model),
-      edf = stats::df.residual(model), method = "identity")
+      estimated,
+      sigma = insight::get_sigma(model, no_recursion = TRUE),
+      edf = insight::get_df(model),
+      method = "identity"
+    )
     eff <- as.data.frame(eff)
     eff <- eff[c(2, 5:6)]
     names(eff) <- c("partial_d", "es_CI_low", "es_CI_high")
@@ -19,39 +22,40 @@
     d_adj <- contrasts$Difference * (1 - R2) / sigma(model)
     contrasts <- cbind(contrasts, marginal_d = d_adj)
 
-    } else if (effectsize == "bootES") {
-      if (bootstraps < 500) {
-        message("Number of bootstraps probably too low. Consider increasing it.")
-      }
+  } else if (effectsize == "bootES") {
+    if (bootstraps < 500) {
+      insight::format_alert("Number of bootstraps probably too low. Consider increasing it.")
+    }
 
-      insight::check_if_installed("bootES")
-      dat <- insight::get_data(model)
-      resp <- insight::find_response(model)
-      group <- names(estimated@model.info$xlev)
-      contrast <- estimated@misc$con.coef
+    insight::check_if_installed("bootES")
+    dat <- insight::get_data(model)
+    resp <- insight::find_response(model)
+    group <- names(estimated@model.info$xlev)
+    contrast <- estimated@misc$con.coef
 
-      contrast <- lapply(seq_len(nrow(contrast)), function(x) {
-        z <- contrast[x, ]
-        names(z) <- levels(as.factor(dat[[group]]))
-        z
-        })
+    contrast <- lapply(seq_len(nrow(contrast)), function(x) {
+      z <- contrast[x, ]
+      names(z) <- levels(as.factor(dat[[group]]))
+      z
+    })
 
-      es.lists <- lapply(contrast, function(x) {
-        y <- bootES::bootES(
-          data = stats::na.omit(dat),
-          R = bootstraps,
-          data.col = resp,
-          group.col = group,
-          contrast = x,
-          effect.type = bootES_type
-          )
-        y <- as.data.frame(summary(y))})
+    es.lists <- lapply(contrast, function(x) {
+      y <- bootES::bootES(
+        data = stats::na.omit(dat),
+        R = bootstraps,
+        data.col = resp,
+        group.col = group,
+        contrast = x,
+        effect.type = bootES_type
+      )
+      y <- as.data.frame(summary(y))
+    })
 
-      eff <- do.call(rbind, es.lists)
-      eff <- eff[1:3]
-      names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"),
-                      paste0(bootES_type, "es_CI_high"))
+    eff <- do.call(rbind, es.lists)
+    eff <- eff[1:3]
+    names(eff) <- c(bootES_type, paste0(bootES_type, "_CI_low"), paste0(bootES_type, "es_CI_high"))
 
-      contrasts <- cbind(contrasts, eff)
-        }
+    contrasts <- cbind(contrasts, eff)
+  }
+  contrasts
 }
