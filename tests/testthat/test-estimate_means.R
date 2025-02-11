@@ -425,5 +425,5 @@ test_that("estimate_means, full averaging", {
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
-  expect_identical(dim(estim2), c(6L, 8L))
+  expect_identical(dim(estim2), c(2L, 8L))
 })

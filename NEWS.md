@@ -6,7 +6,7 @@
   `insight::get_datagrid()` instead.
 
 * The `"average"` option for argument `estimate` was renamed into `"typical"`.
-  The former `"average"` option is still available, but now returnd marginal
+  The former `"average"` option is still available, but now returned marginal
   means fully averaged across the sample.
 
 ## Changes
