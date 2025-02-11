@@ -1,8 +1,6 @@
-.estimate_contrasts_effecsize <- function() {
+.estimate_contrasts_effecsize <- function(effectsize = "none") {
   # Add standardized effect size
-  if (!effectsize %in% c("none", "emmeans", "marginal", "bootES")) {
-    insight::format_alert("Unsupported effect size '", effectsize, "', returning none.")
-  }
+  insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "bootES"))
 
   if (effectsize == "emmeans") {
     eff <- emmeans::eff_size(
