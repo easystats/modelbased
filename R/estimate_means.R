@@ -53,9 +53,9 @@
 #'   are considered. It answers the question, "What is the predicted value for
 #'   an 'typical' observation in *my data*?". Cum grano salis, it refers to
 #'   randomly picking a subject of your sample (with an equal or "balanced"
-#'   chance that this subject shares the characteristic of the *focal predictors*)
-#'   and the result you get on average. This approach is the one taken by default
-#'   in the `emmeans` package.
+#'   chance for each subject that it shares the characteristic of the *focal
+#'   predictors*) and the result you get on average. This approach is the one
+#'   taken by default in the `emmeans` package.
 #' - `"average"`: Predictions are made for each observation in the sample,
 #'   aggregated by levels or groups in `by`, and then the average of all (grouped)
 #'   predictions is calculated. These predictions are the closest representation
@@ -78,12 +78,12 @@
 #'
 #' In other words, the distinction between estimate types resides in whether
 #' the prediction are made for:
-#' - A specific "individual" from the sample (i.e., a specific combination of
+#' - A specific individual from the sample (i.e., a specific combination of
 #'   predictor values): this is what is obtained when using [`estimate_relation()`]
 #'   and the other prediction functions.
-#' - An typical individual from the sample (equal chance for each level of the
-#'   focal predictors): obtained with `estimate_means(..., estimate = "typical")`
-#' - The outcome for an average individuals from the sample: obtained with
+#' - An average individual, which is typical for the characteristics in of the
+#'   focal predictors: obtained with `estimate_means(..., estimate = "typical")`
+#' - The average individuals from the sample: obtained with
 #'   `estimate_means(..., estimate = "average")`
 #' - The broader, hypothetical target population: obtained with
 #'   `estimate_means(..., estimate = "population")`

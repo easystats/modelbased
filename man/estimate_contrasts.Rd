@@ -126,9 +126,9 @@ sample, because all possible values and levels of the non-focal predictors
 are considered. It answers the question, "What is the predicted value for
 an 'typical' observation in \emph{my data}?". Cum grano salis, it refers to
 randomly picking a subject of your sample (with an equal or "balanced"
-chance that this subject shares the characteristic of the \emph{focal predictors})
-and the result you get on average. This approach is the one taken by default
-in the \code{emmeans} package.
+chance for each subject that it shares the characteristic of the \emph{focal
+predictors}) and the result you get on average. This approach is the one
+taken by default in the \code{emmeans} package.
 \item \code{"average"}: Predictions are made for each observation in the sample,
 aggregated by levels or groups in \code{by}, and then the average of all (grouped)
 predictions is calculated. These predictions are the closest representation
@@ -153,12 +153,12 @@ we had data from a different sample.
 In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
-\item A specific "individual" from the sample (i.e., a specific combination of
+\item A specific individual from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
 and the other prediction functions.
-\item An typical individual from the sample (equal chance for each level of the
-focal predictors): obtained with \code{estimate_means(..., estimate = "typical")}
-\item The outcome for an average individuals from the sample: obtained with
+\item An average individual, which is typical for the characteristics in of the
+focal predictors: obtained with \code{estimate_means(..., estimate = "typical")}
+\item The average individuals from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
