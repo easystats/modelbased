@@ -45,16 +45,21 @@
 #' predictions refer to. This dictates how the predictions are "averaged" over
 #' the non-focal predictors, i.e. those variables that are not specified in
 #' `by` or `contrast`.
-#' - `"average"` (default): Takes the mean value for non-focal numeric
+#' - `"typical"` (default): Takes the mean value for non-focal numeric
 #'   predictors and marginalizes over the factor levels of non-focal terms,
 #'   which computes a kind of "weighted average" for the values at which these
 #'   terms are hold constant. These predictions are a good representation of the
 #'   sample, because all possible values and levels of the non-focal predictors
 #'   are considered. It answers the question, "What is the predicted value for
-#'   an 'average' observation in *my data*?". Cum grano salis, it refers to
+#'   an 'typical' observation in *my data*?". Cum grano salis, it refers to
 #'   randomly picking a subject of your sample and the result you get on
 #'   average. This approach is the one taken by default in the `emmeans`
 #'   package.
+#' - `"average"`: Predictions are made for each observation in the sample,
+#'   aggregated by levels or groups in `by`, and then the average of all (grouped)
+#'   predictions is calculated. These predictions are the closest representation
+#'   of the sample for certain groups. It answers the question, "What is the
+#'   average predicted value for an observation in my data?".
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
@@ -72,7 +77,9 @@
 #' - A specific "individual" from the sample (i.e., a specific combination of
 #'   predictor values): this is what is obtained when using [`estimate_relation()`]
 #'   and the other prediction functions.
-#' - An average individual from the sample: obtained with
+#' - An typical individual from the sample: obtained with
+#'   `estimate_means(..., estimate = "typical")`
+#' - The average outcome for individuals from the sample: obtained with
 #'   `estimate_means(..., estimate = "average")`
 #' - The broader, hypothetical target population: obtained with
 #'   `estimate_means(..., estimate = "population")`
@@ -180,7 +187,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           estimate = "average",
+                           estimate = "typical",
                            transform = NULL,
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
@@ -188,7 +195,7 @@ estimate_means <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific", "sample")
+    c("typical", "population", "specific", "average")
   )
 
   if (backend == "emmeans") {

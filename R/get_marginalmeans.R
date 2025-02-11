@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = "average",
+                              estimate = "typical",
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific", "sample")
+    c("typical", "population", "specific", "average")
   )
 
   # model details
@@ -126,7 +126,7 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    if (is.null(dots$newdata) && estimate != "sample") {
+    if (is.null(dots$newdata) && estimate != "average") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
@@ -181,9 +181,9 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-  # filter "by" rows when we have "sample" marginalization, because we don't
+  # filter "by" rows when we have "average" marginalization, because we don't
   # pass data grid in such situations
-  if (identical(estimate, "sample") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
   }
 
