@@ -188,7 +188,7 @@ estimate_means <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific")
+    c("average", "population", "specific", "sample")
   )
 
   if (backend == "emmeans") {
