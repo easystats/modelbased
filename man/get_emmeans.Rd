@@ -71,9 +71,6 @@ get_marginaltrends(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{contrast}{A character vector indicating the name of the variable(s)
-for which to compute the contrasts.}
-
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
@@ -110,35 +107,6 @@ probabilities. To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
 for instance \code{"sigma"}, \code{"kappa"}, etc.}
-
-\item{comparison}{Specify the type of contrasts or tests that should be
-carried out.
-\itemize{
-\item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
-\code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
-\code{"dunnett"}, \code{"wtcon"} and some more. See also \code{method} argument in
-\link[emmeans:contrast]{emmeans::contrast} and the \code{?emmeans::emmc-functions}.
-\item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
-matrix, a string equation specifying the hypothesis to test, a string
-naming the comparison method, a formula, or a function. Strings, string
-equations and formula are probably the most common options and described
-below. For other options and detailed descriptions of those options, see
-also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
-\itemize{
-\item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
-\item String equation: To identify parameters from the output, either specify
-the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
-\code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
-\item Formula: A formula like \code{comparison ~ pairs | group}, where the left-hand
-side indicates the type of comparison (\code{difference} or \code{ratio}), the
-right-hand side determines the pairs of estimates to compare (\code{reference},
-\code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
-can be carried out within subsets by indicating the grouping variable
-after a vertical bar ( \code{|}).
-}
-}}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
