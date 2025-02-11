@@ -52,14 +52,18 @@
 #'   sample, because all possible values and levels of the non-focal predictors
 #'   are considered. It answers the question, "What is the predicted value for
 #'   an 'typical' observation in *my data*?". Cum grano salis, it refers to
-#'   randomly picking a subject of your sample and the result you get on
-#'   average. This approach is the one taken by default in the `emmeans`
-#'   package.
+#'   randomly picking a subject of your sample (with an equal or "balanced"
+#'   chance that this subject shares the characteristic of the *focal predictors*)
+#'   and the result you get on average. This approach is the one taken by default
+#'   in the `emmeans` package.
 #' - `"average"`: Predictions are made for each observation in the sample,
 #'   aggregated by levels or groups in `by`, and then the average of all (grouped)
 #'   predictions is calculated. These predictions are the closest representation
-#'   of the sample for certain groups. It answers the question, "What is the
-#'   average predicted value for an observation in my data?".
+#'   of the sample for certain groups. While `estimate = "typical"` produces
+#'   "weighted averages" of the *non-focal* terms, but uses a balanced grid for
+#'   the *focal predictors*, `estimate = "average"` averages across the full
+#'   sample. It answers the question, "What is the predicted value for an
+#'   average observation in my data?".
 #' - `"population"`: Non-focal predictors are marginalized over the observations
 #'   in the sample, where the sample is replicated multiple times to produce
 #'   "counterfactuals" and then takes the average of these predicted values
@@ -79,7 +83,7 @@
 #'   and the other prediction functions.
 #' - An typical individual from the sample: obtained with
 #'   `estimate_means(..., estimate = "typical")`
-#' - The average outcome for individuals from the sample: obtained with
+#' - The outcome for an average individuals from the sample: obtained with
 #'   `estimate_means(..., estimate = "average")`
 #' - The broader, hypothetical target population: obtained with
 #'   `estimate_means(..., estimate = "population")`
