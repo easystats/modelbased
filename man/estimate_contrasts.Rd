@@ -156,8 +156,8 @@ the prediction are made for:
 \item A specific "individual" from the sample (i.e., a specific combination of
 predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
 and the other prediction functions.
-\item An typical individual from the sample: obtained with
-\code{estimate_means(..., estimate = "typical")}
+\item An typical individual from the sample (equal chance for each level of the
+focal predictors): obtained with \code{estimate_means(..., estimate = "typical")}
 \item The outcome for an average individuals from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
