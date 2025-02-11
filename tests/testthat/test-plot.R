@@ -287,6 +287,12 @@ test_that("plots, numeric or categorical predictors are detected", {
     "plot-cat-num-predictor-4",
     plot(pr, show_data = FALSE)
   )
+  pr <- estimate_expectation(m_cat, by = "cyl", range = "grid")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-cat-num-predictor-5",
+    plot(pr, show_data = FALSE)
+  )
 })
 
 
