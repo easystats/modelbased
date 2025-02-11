@@ -74,13 +74,13 @@
 #' _d_ will be overestimated.
 #'
 #' `effectsize = "marginal"` uses the following formula to compute effect
-#' size: `d_adj <- difference * (1- R2)/ sigma`. This standardized
+#' size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes
 #' using the response SD with only the between-groups variance on the focal
 #' factor/contrast removed. This allows for groups to be equated on their
 #' covariates, but creates an appropriate scale for standardizing the response.
 #'
 #' `effectsize = "bootES"` uses bootstrapping (defaults to a low value of
-#' 200) through [bootES::bootES]. Adjust for contrasts, but not for covariates.
+#' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
