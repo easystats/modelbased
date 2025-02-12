@@ -1,6 +1,6 @@
 #' @docType options
 #' @title Global options from the modelbased package
-#' @name options
+#' @name modelbased-options
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #' Columns and table layout can be customized using `options()`:

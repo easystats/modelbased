@@ -25,7 +25,7 @@ reference:
       - smoothing
   - title: "Global options"
     contents:
-      - options
+      - modelbased-options
   - title: "Sample datasets"
     contents:
       - coffee_data
