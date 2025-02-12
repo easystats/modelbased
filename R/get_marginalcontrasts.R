@@ -111,7 +111,8 @@ get_marginalcontrasts <- function(model,
       predict = predict,
       comparison = my_args$comparison,
       estimate = estimate,
-      p_adjust = p_adjust
+      p_adjust = p_adjust,
+      contrasts_filter = my_args$contrasts_filter
     )
   )
 
@@ -128,7 +129,7 @@ get_marginalcontrasts <- function(model,
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
   # init
-  comparison_slopes <- by_filter <- by_token <- NULL
+  comparison_slopes <- by_filter <- contrasts_filter <- by_token <- NULL
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
@@ -147,6 +148,17 @@ get_marginalcontrasts <- function(model,
       }
       # copy "cleaned" variable
       my_args$by <- filter_value[1]
+    }
+  }
+
+  # if filtering is requested for contrasts, we also want to extract the filter
+  # values for later use
+  if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+    # look for filter values
+    filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast, "=", fixed = TRUE), use.names = FALSE))
+    if (length(filter_value) > 1) {
+      # parse filter value and save for later user
+      contrasts_filter <- .safe(eval(str2lang(filter_value[2])))
     }
   }
 
@@ -215,8 +227,9 @@ get_marginalcontrasts <- function(model,
       comparison = comparison,
       # the modifed comparison, as formula, excluding "by" as group
       comparison_slopes = comparison_slopes,
-      # the filter-value, in case `by` indicated any filtering
-      by_filter = by_filter
+      # the filter-value, in case `by` or contrast indicated any filtering
+      by_filter = by_filter,
+      contrasts_filter = contrasts_filter
     )
   )
 }

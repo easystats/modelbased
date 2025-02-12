@@ -295,7 +295,7 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info"
+    "coef_name", "slope", "ci", "model_info", "contrasts_filter"
   )
 }
 

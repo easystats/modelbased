@@ -198,6 +198,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
+  contrasts_filter <- attributes(x)$contrasts_filter
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
 
@@ -380,6 +381,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # make sure terms are factors, for data_arrange later
       for (i in contrast) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+      }
+
+      # filter
+      if (!is.null(contrasts_filter)) {
+        x <- x[x$Level1 %in% contrasts_filter & x$Level2 %in% contrasts_filter, ]
       }
     }
   }
