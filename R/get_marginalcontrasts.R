@@ -41,7 +41,7 @@ get_marginalcontrasts <- function(model,
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, ...)
+  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, estimate, ...) # nolint
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
@@ -129,7 +129,7 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
-.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
+.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, estimate = NULL, ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
 
@@ -157,7 +157,7 @@ get_marginalcontrasts <- function(model,
 
   # if filtering is requested for contrasts, we also want to extract the filter
   # values for later use
-  if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+  if (identical(estimate, "average") && !is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # nolint
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
     for (f in filter_index) {
