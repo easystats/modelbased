@@ -129,6 +129,10 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
+# this function has two major tasks: format the "comparison" argument for use
+# in the marginaleffects package, and extract the potential filter values used
+# in `by` and `contrast` (if any), to "clean" these arguments and save the levels
+# or values at which rows should be filtered later...
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, estimate = NULL, ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
