@@ -90,7 +90,9 @@ get_marginalcontrasts <- function(model,
 
   # filter results
   if (!is.null(my_args$by_filter) && all(my_args$by %in% colnames(out))) {
-    out <- out[out[[my_args$by]] == my_args$by_filter, ]
+    for (i in my_args$by) {
+      out <- out[out[[i]] %in% my_args$by_filter, ]
+    }
   }
 
   # adjust p-values
@@ -112,7 +114,7 @@ get_marginalcontrasts <- function(model,
       comparison = my_args$comparison,
       estimate = estimate,
       p_adjust = p_adjust,
-      contrasts_filter = my_args$contrasts_filter
+      contrast_filter = my_args$contrast_filter
     )
   )
 
@@ -129,7 +131,7 @@ get_marginalcontrasts <- function(model,
 
 .get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
   # init
-  comparison_slopes <- by_filter <- contrasts_filter <- by_token <- NULL
+  comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
@@ -152,7 +154,7 @@ get_marginalcontrasts <- function(model,
       my_args$by[filter_index] <- filter_value[1]
     }
   }
-
+browser()
   # if filtering is requested for contrasts, we also want to extract the filter
   # values for later use
   if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
@@ -162,7 +164,7 @@ get_marginalcontrasts <- function(model,
     filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[filter_index], "=", fixed = TRUE), use.names = FALSE))
     if (length(filter_value) > 1) {
       # parse filter value and save for later user
-      contrasts_filter[filter_index] <- .safe(eval(str2lang(filter_value[2])))
+      contrast_filter <- .safe(eval(str2lang(filter_value[2])))
     }
   }
 
@@ -233,7 +235,7 @@ get_marginalcontrasts <- function(model,
       comparison_slopes = comparison_slopes,
       # the filter-value, in case `by` or contrast indicated any filtering
       by_filter = by_filter,
-      contrasts_filter = contrasts_filter
+      contrast_filter = contrast_filter
     )
   )
 }
