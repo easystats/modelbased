@@ -244,8 +244,8 @@ get_marginalcontrasts <- function(model,
       # the modifed comparison, as formula, excluding "by" as group
       comparison_slopes = comparison_slopes,
       # the filter-value, in case `by` or contrast indicated any filtering
-      by_filter = by_filter,
-      contrast_filter = contrast_filter
+      by_filter = insight::compact_list(by_filter),
+      contrast_filter = insight::compact_list(contrast_filter)
     )
   )
 }
