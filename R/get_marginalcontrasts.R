@@ -152,7 +152,10 @@ get_marginalcontrasts <- function(model,
         # check if evaluation was possible, or if we had a "token", like
         # "[sd]" or "[fivenum]". If not, update `by`, else preserve
         if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
-          by_token <- filter_value[2]
+          by_token <- c(
+            by_token,
+            stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+          )
         }
         # copy "cleaned" variable
         my_args$by[f] <- filter_value[1]
@@ -232,7 +235,9 @@ get_marginalcontrasts <- function(model,
 
   # add back token to `by`
   if (!is.null(by_token)) {
-    my_args$by <- paste(my_args$by, by_token, sep = "=")
+    for (i in names(by_token)) {
+      my_args$by[[i]] <- paste(my_args$by[[i]], by_token[[i]], sep = "=")
+    }
   }
 
   c(
