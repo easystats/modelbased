@@ -396,8 +396,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         ))
         # now create combinations of all filter variables
         filter_levels <- apply(expand.grid(contrast_filter), 1, paste, collapse = ", ")
+        # sanity check anything left after filtering? else, filter already worked before
+        filtered_rows <- x$Level1 %in% filter_levels & x$Level2 %in% filter_levels
         # filter...
-        x <- x[x$Level1 %in% filter_levels & x$Level2 %in% filter_levels, ]
+        if (any(filtered_rows)) {
+          x <- x[filtered_rows, ]
+        }
       }
     }
   }
