@@ -46,7 +46,7 @@
 #' the non-focal predictors, i.e. those variables that are not specified in
 #' `by` or `contrast`. We can roughly distinguish between "modelbased" and
 #' "empirical" predictions.
-#' - `"typical"` (default): Predictions are made for obsersvations that are
+#' - `"typical"` (default): Predictions are made for observations that are
 #'   represented by a data grid, which is built from all combinations of the
 #'   predictor levels in `by` (the focal terms). `"typical"` then takes the mean
 #'   value for non-focal numeric predictors and marginalizes over the factor

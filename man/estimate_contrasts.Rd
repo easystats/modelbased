@@ -119,7 +119,7 @@ the non-focal predictors, i.e. those variables that are not specified in
 \code{by} or \code{contrast}. We can roughly distinguish between "modelbased" and
 "empirical" predictions.
 \itemize{
-\item \code{"typical"} (default): Predictions are made for obsersvations that are
+\item \code{"typical"} (default): Predictions are made for observations that are
 represented by a data grid, which is built from all combinations of the
 predictor levels in \code{by} (the focal terms). \code{"typical"} then takes the mean
 value for non-focal numeric predictors and marginalizes over the factor
