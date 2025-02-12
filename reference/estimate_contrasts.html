@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.14</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.15</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,7 +88,7 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="st">"average"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_estimate"</span>, <span class="st">"typical"</span><span class="op">)</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"marginaleffects"</span><span class="op">)</span>,</span>
@@ -199,18 +199,33 @@ after a vertical bar ( <code>|</code>).</p></li>
 <dd><p>Character string, indicating the type of target population
 predictions refer to. This dictates how the predictions are "averaged" over
 the non-focal predictors, i.e. those variables that are not specified in
-<code>by</code> or <code>contrast</code>.</p><ul><li><p><code>"average"</code> (default): Takes the mean value for non-focal numeric
-predictors and marginalizes over the factor levels of non-focal terms,
-which computes a kind of "weighted average" for the values at which these
-terms are hold constant. These predictions are a good representation of the
-sample, because all possible values and levels of the non-focal predictors
-are considered. It answers the question, "What is the predicted value for
-an 'average' observation in <em>my data</em>?". Cum grano salis, it refers to
-randomly picking a subject of your sample and the result you get on
-average. This approach is the one taken by default in the <code>emmeans</code>
-package.</p></li>
-<li><p><code>"population"</code>: Non-focal predictors are marginalized over the observations
-in the sample, where the sample is replicated multiple times to produce
+<code>by</code> or <code>contrast</code>. We can roughly distinguish between "modelbased" and
+"empirical" predictions.</p><ul><li><p><code>"typical"</code> (default): Predictions are made for observations that are
+represented by a data grid, which is built from all combinations of the
+predictor levels in <code>by</code> (the focal terms). <code>"typical"</code> then takes the mean
+value for non-focal numeric predictors and marginalizes over the factor
+levels of non-focal terms, which computes a kind of "weighted average" for
+the values at which these terms are hold constant. These predictions are
+useful for comparing defined "groups" and are still a good representation
+of the sample, because all possible values and levels of the non-focal
+predictors are considered (averaged over). It answers the question, "What
+would be the average outcome for a 'typical' observation?", where 'typical'
+refers to subjects represented by (i.e., that share the characteristics
+from) the data grid. This approach is the one taken by default in the
+<code>emmeans</code> package.</p></li>
+<li><p><code>"average"</code>: Predictions are made for each observation in the sample. Then,
+the average of all predictions is calculated within all groups (or levels)
+of the focal terms defined in <code>by</code>. These predictions are the closest
+representation of the sample, because <code>estimate = "average"</code> averages
+across the full sample, where groups (in <code>by</code>) are not represented by a
+balanced data grid, but rather the empirical distributions of the
+characteristics of the sample. It answers the question, "What is the
+predicted value for an average observation (from a certain group in <code>by</code>)
+in my data?".</p></li>
+<li><p><code>"population"</code>: Each observation is "cloned" multiple times, where each
+duplicate gets one of the levels from the focal terms in <code>by</code>. We then have
+one "original" and several copies of that original, each varying in the levels
+of the focal terms. Hence, the sample is replicated multiple times to produce
 "counterfactuals" and then takes the average of these predicted values
 (aggregated/grouped by the focal terms). It can be considered as
 extrapolation to a hypothetical target population. Counterfactual
@@ -221,14 +236,23 @@ broader target population</em>?". It does not only refer to the actual data in
 your observed sample, but also "what would be if" we had more data, or if
 we had data from a different sample.</p></li>
 </ul><p>In other words, the distinction between estimate types resides in whether
-the prediction are made for:</p><ul><li><p>A specific "individual" from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using <code><a href="estimate_expectation.html">estimate_relation()</a></code>
-and the other prediction functions.</p></li>
-<li><p>An average individual from the sample: obtained with
+the prediction are made for:</p><ul><li><p><em>modelbased predictions</em> (which are useful to look at differences between
+typical groups, or for visualization)</p><ul><li><p>A specific individual from the sample (i.e., a specific combination of
+predictor values for focal and non-focal terms): this is what is obtained
+when using <code><a href="estimate_expectation.html">estimate_relation()</a></code> and the other prediction functions.</p></li>
+<li><p>A typical individual from the sample: obtained with
+<code>estimate_means(..., estimate = "typical")</code></p></li>
+</ul></li>
+<li><p><em>empirical predictions</em> (which are useful if you want a realistic picture
+of your sample, assuming that it is representative for a special population
+(option <code>"average"</code>), or useful for "what-if" scenarios, especially if you
+want to make unbiased comparisons (G-computation, option <code>"population"</code>))</p><ul><li><p>The average individual from the sample: obtained with
 <code>estimate_means(..., estimate = "average")</code></p></li>
 <li><p>The broader, hypothetical target population: obtained with
 <code>estimate_means(..., estimate = "population")</code></p></li>
-</ul></dd>
+</ul></li>
+</ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
+e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
