@@ -386,7 +386,7 @@
 
   # probability scale? ----------------------------------
   if (!is.null(response_scale) && response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
-      isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta  | model_info$is_ordinal)) { # nolint
+    isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta | model_info$is_ordinal)) { # nolint
     layers[[paste0("l", l)]] <- list(
       geom = "scale_y_continuous",
       labels = insight::format_value(
