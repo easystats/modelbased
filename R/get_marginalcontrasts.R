@@ -159,12 +159,17 @@ get_marginalcontrasts <- function(model,
   # values for later use
   if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
-    filter_index <- grep("=", my_args$contrast, fixed = TRUE)[1]
-    # look for filter values
-    filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[filter_index], "=", fixed = TRUE), use.names = FALSE))
-    if (length(filter_value) > 1) {
-      # parse filter value and save for later user
-      contrast_filter <- .safe(eval(str2lang(filter_value[2])))
+    filter_index <- grep("=", my_args$contrast, fixed = TRUE)
+    for (f in filter_index) {
+      # look for filter values
+      filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[f], "=", fixed = TRUE), use.names = FALSE))
+      if (length(filter_value) > 1) {
+        # parse filter value and save for later user
+        contrast_filter <- c(
+          contrast_filter,
+          stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+        )
+      }
     }
   }
 

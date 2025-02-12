@@ -384,8 +384,20 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       }
 
       # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
+      # we also need to include non-filtered contrast-predictors here, because
+      # if we have more than one contrast-predictor, we don't have the single
+      # values, but comma-separated levels from all predictor-combinations. we
+      # need to reconstruct these combinations for proper filtering
       if (!is.null(contrast_filter)) {
-        x <- x[x$Level1 %in% contrast_filter & x$Level2 %in% contrast_filter, ]
+        # make sure we also have all levels for non-filtered variables
+        contrast_filter <- insight::compact_list(c(
+          lapply(dgrid[setdiff(names(dgrid), names(contrast_filter))], unique),
+          contrast_filter
+        ))
+        # now create combinations of all filter variables
+        filter_levels <- apply(expand.grid(contrast_filter), 1, paste, collapse = ", ")
+        # filter...
+        x <- x[x$Level1 %in% filter_levels & x$Level2 %in% filter_levels, ]
       }
     }
   }

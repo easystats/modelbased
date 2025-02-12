@@ -34,3 +34,20 @@ test_that("filtering for by and contrast works for different estimate options", 
   expect_identical(dim(out), c(2L, 10L))
   expect_identical(as.character(out$Level1), c("mid", "mid"))
 })
+
+
+test_that("special filtering for by and contrast works", {
+  data(iris)
+  model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
+  out <- estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+  expect_identical(dim(out), c(15L, 9L))
+  expect_identical(
+    as.character(out$Level1),
+    c(
+      "setosa, 2", "versicolor, 1", "versicolor, 2", "virginica, 1",
+      "virginica, 2", "versicolor, 1", "versicolor, 2", "virginica, 1",
+      "virginica, 2", "versicolor, 2", "virginica, 1", "virginica, 2",
+      "virginica, 1", "virginica, 2", "virginica, 2"
+    )
+  )
+})
