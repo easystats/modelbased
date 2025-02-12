@@ -736,6 +736,6 @@ test_that("estimate_contrast, full averaging", {
   levels(efc$c172code) <- c("low", "mid", "high")
   m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
 
-  out <- estimate_contrasts(m, "c161sex", by = "c172code", estimate = "sample")
+  out <- estimate_contrasts(m, "c161sex", by = "c172code", estimate = "average")
   expect_equal(out$Difference, c(1.09591, 0.68736, 0.92224), tolerance = 1e-4)
 })
