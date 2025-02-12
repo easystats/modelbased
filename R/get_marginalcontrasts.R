@@ -152,17 +152,12 @@ get_marginalcontrasts <- function(model,
         # because we need to know *which* variables in `by` used a filter. we
         # could have `by = c("x", "y=c(1,2)")`, but also `by = c("x=c('a','b')", "y")`.
         # the list has the variable name as name, and the filter values as element
-        by_filter <- c(
-          by_filter,
-          stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
-        )
+        by_value <- stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+        by_filter <- c(by_filter, by_value)
         # check if evaluation was possible, or if we had a "token", like
         # "[sd]" or "[fivenum]". If not, update `by`, else preserve
-        if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
-          by_token <- c(
-            by_token,
-            stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
-          )
+        if (is.null(by_value[[1]]) && !grepl("[\\[\\]]", filter_value[2])) {
+          by_token <- c(by_token, stats::setNames(list(filter_value[2]), filter_value[1]))
         }
         # copy "cleaned" variable
         my_args$by[f] <- filter_value[1]
@@ -246,7 +241,7 @@ get_marginalcontrasts <- function(model,
   # add back token to `by`
   if (!is.null(by_token)) {
     for (i in names(by_token)) {
-      my_args$by[[i]] <- paste(my_args$by[[i]], by_token[[i]], sep = "=")
+      my_args$by[my_args$by == i] <- paste(i, by_token[[i]], sep = "=")
     }
   }
 
