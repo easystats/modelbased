@@ -147,10 +147,12 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c(ifelse(
-    estimate == "specific",
-    "Model-based Contrasts Analysis",
-    "Marginal Contrasts Analysis"
+  attr(out, "table_title") <- c(switch(
+    estimate,
+    specific = "Model-based Contrasts Analysis",
+    typical = "Marginal Contrasts Analysis",
+    average = "Averaged Contrasts Analysis",
+    population = "Counterfactual Contrasts Analysis (G-computation)"
   ), "blue")
   attr(out, "table_footer") <- .table_footer(
     out,

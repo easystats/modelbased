@@ -243,10 +243,12 @@ estimate_means <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(means, "table_title") <- c(ifelse(
-    estimate == "specific",
-    "Model-based Predictions",
-    "Estimated Marginal Means"
+  attr(means, "table_title") <- c(switch(
+    estimate,
+    specific = "Model-based Predictions",
+    typical = "Estimated Marginal Means",
+    average = "Average Predictions",
+    population = "Average Counterfactual Predictions"
   ), "blue")
   attr(means, "table_footer") <- .table_footer(
     means,
