@@ -183,7 +183,8 @@ get_marginalmeans <- function(model,
   means <- .call_marginaleffects(fun_args)
 
   # filter "by" rows when we have "average" marginalization, because we don't
-  # pass data grid in such situations
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
   if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
   }

@@ -148,7 +148,10 @@ get_marginalcontrasts <- function(model,
       # look for filter values
       filter_value <- insight::trim_ws(unlist(strsplit(my_args$by[f], "=", fixed = TRUE), use.names = FALSE))
       if (length(filter_value) > 1) {
-        # parse filter value and save for later user
+        # parse filter value and save for later use - we create a named list,
+        # because we need to know *which* variables in `by` used a filter. we
+        # could have `by = c("x", "y=c(1,2)")`, but also `by = c("x=c('a','b')", "y")`.
+        # the list has the variable name as name, and the filter values as element
         by_filter <- c(
           by_filter,
           stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
@@ -168,7 +171,9 @@ get_marginalcontrasts <- function(model,
   }
 
   # if filtering is requested for contrasts, we also want to extract the filter
-  # values for later use
+  # values for later use. we only need this for `estimate = "average"`, because
+  # that is the only situation where we do *not* use a data grid, which we else
+  # could use for filtering, by dropping not-wanted rows from the grid.
   if (identical(estimate, "average") && !is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # nolint
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
@@ -176,7 +181,8 @@ get_marginalcontrasts <- function(model,
       # look for filter values
       filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[f], "=", fixed = TRUE), use.names = FALSE))
       if (length(filter_value) > 1) {
-        # parse filter value and save for later user
+        # parse filter value and save for later user - we need as named list
+        # for the same reason as mentioned above...
         contrast_filter <- c(
           contrast_filter,
           stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
