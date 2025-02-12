@@ -44,8 +44,8 @@
 #' @param estimate Character string, indicating the type of target population
 #' predictions refer to. This dictates how the predictions are "averaged" over
 #' the non-focal predictors, i.e. those variables that are not specified in
-#' `by` or `contrast`. We can roughly between "modelbased" and "empirical"
-#' predictions.
+#' `by` or `contrast`. We can roughly distinguish between "modelbased" and
+#' "empirical" predictions.
 #' - `"typical"` (default): Predictions are made for obsersvations that are
 #'   represented by a data grid, which is built from all combinations of the
 #'   predictor levels in `by` (the focal terms). `"typical"` then takes the mean

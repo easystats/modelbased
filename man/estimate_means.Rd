@@ -61,8 +61,8 @@ for instance \code{"sigma"}, \code{"kappa"}, etc.}
 \item{estimate}{Character string, indicating the type of target population
 predictions refer to. This dictates how the predictions are "averaged" over
 the non-focal predictors, i.e. those variables that are not specified in
-\code{by} or \code{contrast}. We can roughly between "modelbased" and "empirical"
-predictions.
+\code{by} or \code{contrast}. We can roughly distinguish between "modelbased" and
+"empirical" predictions.
 \itemize{
 \item \code{"typical"} (default): Predictions are made for obsersvations that are
 represented by a data grid, which is built from all combinations of the
