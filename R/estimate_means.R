@@ -54,11 +54,11 @@
 #'   the values at which these terms are hold constant. These predictions are
 #'   useful for comparing defined "groups" and are still a good representation
 #'   of the sample, because all possible values and levels of the non-focal
-#'   predictors are considered. It answers the question, "What would be the
-#'   average outcome for a "typical" observation?", where "typical" refers to
-#'   subjects represented by (i.e., that share the characteristics from) the
-#'   data grid. This approach is the one taken by default in the `emmeans`
-#'   package.
+#'   predictors are considered (averaged over). It answers the question, "What
+#'   would be the average outcome for a 'typical' observation?", where 'typical'
+#'   refers to subjects represented by (i.e., that share the characteristics
+#'   from) the data grid. This approach is the one taken by default in the
+#'   `emmeans` package.
 #' - `"average"`: Predictions are made for each observation in the sample. Then,
 #'   the average of all predictions is calculated within all groups (or levels)
 #'   of the focal terms defined in `by`. These predictions are the closest
@@ -84,21 +84,24 @@
 #'
 #' In other words, the distinction between estimate types resides in whether
 #' the prediction are made for:
-#' - *modelbased means* (which are useful to look at differences between groups,
-#'   or for visualization)
+#' - *modelbased predictions* (which are useful to look at differences between
+#'   typical groups, or for visualization)
 #'   - A specific individual from the sample (i.e., a specific combination of
 #'     predictor values for focal and non-focal terms): this is what is obtained
 #'     when using [`estimate_relation()`] and the other prediction functions.
-#'   - An typical individual from the sample: obtained with
+#'   - A typical individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "typical")`
-#' - *empirical means* (which are useful if you want a realistic picture of your
-#'   sample, assuming that it is representative for a special population (option
-#'   `"average"`), or useful for "what-if" scenarios, especially if you want to
-#'   make unbiased comparisons (g-computation, option `"population"`))
+#' - *empirical predictions* (which are useful if you want a realistic picture
+#'   of your sample, assuming that it is representative for a special population
+#'   (option `"average"`), or useful for "what-if" scenarios, especially if you
+#'   want to make unbiased comparisons (G-computation, option `"population"`))
 #'   - The average individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "average")`
 #'   - The broader, hypothetical target population: obtained with
 #'     `estimate_means(..., estimate = "population")`
+#'
+#' You can set a default option for the `estimate` argument via `options()`,
+#' e.g. `options(modelbased_estimate = "average")`
 #' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
@@ -137,6 +140,16 @@
 #' @inherit estimate_slopes details
 #'
 #' @return A data frame of estimated marginal means.
+#'
+#' @section Global Options to Customize Estimation of Marginal Means:
+#'
+#' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a
+#'   default value for the `backend` argument and can be used to set the package
+#'   used by default to calculate marginal means. Can be `"marginalmeans"` or
+#'   `"emmeans"`.
+#'
+#' - `modelbased_estimate`: `options(modelbased_estimate = <string>)` will
+#'   set a default value for the `estimate` argument.
 #'
 #' @references
 #' Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
@@ -203,7 +216,7 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           estimate = "typical",
+                           estimate = getOption("modelbased_estimate", "typical"),
                            transform = NULL,
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,

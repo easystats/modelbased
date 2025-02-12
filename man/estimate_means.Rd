@@ -9,7 +9,7 @@ estimate_means(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  estimate = "typical",
+  estimate = getOption("modelbased_estimate", "typical"),
   transform = NULL,
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
@@ -72,11 +72,11 @@ levels of non-focal terms, which computes a kind of "weighted average" for
 the values at which these terms are hold constant. These predictions are
 useful for comparing defined "groups" and are still a good representation
 of the sample, because all possible values and levels of the non-focal
-predictors are considered. It answers the question, "What would be the
-average outcome for a "typical" observation?", where "typical" refers to
-subjects represented by (i.e., that share the characteristics from) the
-data grid. This approach is the one taken by default in the \code{emmeans}
-package.
+predictors are considered (averaged over). It answers the question, "What
+would be the average outcome for a 'typical' observation?", where 'typical'
+refers to subjects represented by (i.e., that share the characteristics
+from) the data grid. This approach is the one taken by default in the
+\code{emmeans} package.
 \item \code{"average"}: Predictions are made for each observation in the sample. Then,
 the average of all predictions is calculated within all groups (or levels)
 of the focal terms defined in \code{by}. These predictions are the closest
@@ -104,26 +104,29 @@ we had data from a different sample.
 In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
-\item \emph{modelbased means} (which are useful to look at differences between groups,
-or for visualization)
+\item \emph{modelbased predictions} (which are useful to look at differences between
+typical groups, or for visualization)
 \itemize{
 \item A specific individual from the sample (i.e., a specific combination of
 predictor values for focal and non-focal terms): this is what is obtained
 when using \code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
-\item An typical individual from the sample: obtained with
+\item A typical individual from the sample: obtained with
 \code{estimate_means(..., estimate = "typical")}
 }
-\item \emph{empirical means} (which are useful if you want a realistic picture of your
-sample, assuming that it is representative for a special population (option
-\code{"average"}), or useful for "what-if" scenarios, especially if you want to
-make unbiased comparisons (g-computation, option \code{"population"}))
+\item \emph{empirical predictions} (which are useful if you want a realistic picture
+of your sample, assuming that it is representative for a special population
+(option \code{"average"}), or useful for "what-if" scenarios, especially if you
+want to make unbiased comparisons (G-computation, option \code{"population"}))
 \itemize{
 \item The average individual from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
 }
-}}
+}
+
+You can set a default option for the \code{estimate} argument via \code{options()},
+e.g. \code{options(modelbased_estimate = "average")}}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -225,6 +228,18 @@ these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Fi
 the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
+\section{Global Options to Customize Estimation of Marginal Means}{
+
+\itemize{
+\item \code{modelbased_backend}: \verb{options(modelbased_backend = <string>)} will set a
+default value for the \code{backend} argument and can be used to set the package
+used by default to calculate marginal means. Can be \code{"marginalmeans"} or
+\code{"emmeans"}.
+\item \code{modelbased_estimate}: \verb{options(modelbased_estimate = <string>)} will
+set a default value for the \code{estimate} argument.
+}
+}
+
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)

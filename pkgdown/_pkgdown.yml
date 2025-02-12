@@ -23,6 +23,9 @@ reference:
       - find_inversions
       - zero_crossings
       - smoothing
+  - title: "Global options"
+    contents:
+      - options
   - title: "Sample datasets"
     contents:
       - coffee_data

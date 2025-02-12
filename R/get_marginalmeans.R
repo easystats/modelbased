@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = "typical",
+                              estimate = getOption("modelbased_estimate", "typical"),
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
