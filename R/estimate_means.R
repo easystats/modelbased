@@ -87,16 +87,15 @@
 #' - *modelbased means* (which are useful to look at differences between groups,
 #'   or for visualization)
 #'   - A specific individual from the sample (i.e., a specific combination of
-#'     predictor values): this is what is obtained when using [`estimate_relation()`]
-#'     and the other prediction functions.
+#'     predictor values for focal and non-focal terms): this is what is obtained
+#'     when using [`estimate_relation()`] and the other prediction functions.
 #'   - An typical individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "typical")`
-#' - *empirical means* (which is useful is useful if you want a realistic
-#'   picture of your sample, assuming that it is representative for a special
-#'   population (option `"average"`), or useful for "what-if" scenarios,
-#'   especially if you want to make unbiased comparisons (g-computation, option
-#'   `"population"`))
-#'   - The average individuals from the sample: obtained with
+#' - *empirical means* (which are useful if you want a realistic picture of your
+#'   sample, assuming that it is representative for a special population (option
+#'   `"average"`), or useful for "what-if" scenarios, especially if you want to
+#'   make unbiased comparisons (g-computation, option `"population"`))
+#'   - The average individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "average")`
 #'   - The broader, hypothetical target population: obtained with
 #'     `estimate_means(..., estimate = "population")`

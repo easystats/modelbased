@@ -108,18 +108,17 @@ the prediction are made for:
 or for visualization)
 \itemize{
 \item A specific individual from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
-and the other prediction functions.
+predictor values for focal and non-focal terms): this is what is obtained
+when using \code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
 \item An typical individual from the sample: obtained with
 \code{estimate_means(..., estimate = "typical")}
 }
-\item \emph{empirical means} (which is useful is useful if you want a realistic
-picture of your sample, assuming that it is representative for a special
-population (option \code{"average"}), or useful for "what-if" scenarios,
-especially if you want to make unbiased comparisons (g-computation, option
-\code{"population"}))
+\item \emph{empirical means} (which are useful if you want a realistic picture of your
+sample, assuming that it is representative for a special population (option
+\code{"average"}), or useful for "what-if" scenarios, especially if you want to
+make unbiased comparisons (g-computation, option \code{"population"}))
 \itemize{
-\item The average individuals from the sample: obtained with
+\item The average individual from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
