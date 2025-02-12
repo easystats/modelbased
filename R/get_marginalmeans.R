@@ -126,6 +126,7 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
+    # we don't want a datagrid for "average" option
     if (is.null(dots$newdata) && estimate != "average") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
