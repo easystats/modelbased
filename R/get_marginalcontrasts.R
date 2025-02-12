@@ -154,7 +154,7 @@ get_marginalcontrasts <- function(model,
       my_args$by[filter_index] <- filter_value[1]
     }
   }
-browser()
+
   # if filtering is requested for contrasts, we also want to extract the filter
   # values for later use
   if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
