@@ -57,6 +57,16 @@ test_that("attributes_means, contrasts", {
       "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info"
+    )
+  )
+  estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects", estimate = "average"))
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "row.names", "class", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
       "contrast_filter"
     )
