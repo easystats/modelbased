@@ -391,7 +391,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       if (!is.null(contrast_filter)) {
         # make sure we also have all levels for non-filtered variables
         contrast_filter <- insight::compact_list(c(
-          lapply(dgrid[setdiff(focal_terms, names(contrast_filter))], unique),
+          lapply(dgrid[setdiff(focal_terms, unique(c(by, names(contrast_filter))))], unique),
           contrast_filter
         ))
         # now create combinations of all filter variables
