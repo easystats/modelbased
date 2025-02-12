@@ -59,12 +59,15 @@
 #'   subjects represented by (i.e., that share the characteristics from) the
 #'   data grid. This approach is the one taken by default in the `emmeans`
 #'   package.
-#' - `"average"`: Predictions are made for each observation in the sample,
-#'   aggregated by levels or groups in `by`, and then the average of all (grouped)
-#'   predictions is calculated. These predictions are the closest representation
-#'   of the sample for certain groups, `estimate = "average"` averages across
-#'   the full sample. It answers the question, "What is the predicted value for
-#'   an average observation (from a certain group in `by`) in my data?".
+#' - `"average"`: Predictions are made for each observation in the sample. Then,
+#'   the average of all predictions is calculated within all groups (or levels)
+#'   of the focal terms defined in `by`. These predictions are the closest
+#'   representation of the sample, because `estimate = "average"` averages
+#'   across the full sample, where groups (in `by`) are not represented by a
+#'   balanced data grid, but rather the empirical distributions of the
+#'   characteristics of the sample. It answers the question, "What is the
+#'   predicted value for an average observation (from a certain group in `by`)
+#'   in my data?".
 #' - `"population"`: Each observation is "cloned" multiple times, where each
 #'   duplicate gets one of the levels from the focal terms in `by`. We then have
 #'   one "original" and several copies of that original, each varying in the levels

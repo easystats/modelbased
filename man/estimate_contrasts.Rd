@@ -132,12 +132,15 @@ average outcome for a "typical" observation?", where "typical" refers to
 subjects represented by (i.e., that share the characteristics from) the
 data grid. This approach is the one taken by default in the \code{emmeans}
 package.
-\item \code{"average"}: Predictions are made for each observation in the sample,
-aggregated by levels or groups in \code{by}, and then the average of all (grouped)
-predictions is calculated. These predictions are the closest representation
-of the sample for certain groups, \code{estimate = "average"} averages across
-the full sample. It answers the question, "What is the predicted value for
-an average observation (from a certain group in \code{by}) in my data?".
+\item \code{"average"}: Predictions are made for each observation in the sample. Then,
+the average of all predictions is calculated within all groups (or levels)
+of the focal terms defined in \code{by}. These predictions are the closest
+representation of the sample, because \code{estimate = "average"} averages
+across the full sample, where groups (in \code{by}) are not represented by a
+balanced data grid, but rather the empirical distributions of the
+characteristics of the sample. It answers the question, "What is the
+predicted value for an average observation (from a certain group in \code{by})
+in my data?".
 \item \code{"population"}: Each observation is "cloned" multiple times, where each
 duplicate gets one of the levels from the focal terms in \code{by}. We then have
 one "original" and several copies of that original, each varying in the levels
