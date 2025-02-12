@@ -89,9 +89,9 @@ get_marginalcontrasts <- function(model,
   }
 
   # filter results
-  if (!is.null(my_args$by_filter) && all(my_args$by %in% colnames(out))) {
-    for (i in my_args$by) {
-      out <- out[out[[i]] %in% my_args$by_filter, ]
+  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
+    for (i in names(my_args$by_filter)) {
+      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
   }
 
@@ -139,19 +139,24 @@ get_marginalcontrasts <- function(model,
   # calculating contrasts. Furthermore, "clean" `by` argument (remove filter)
   if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
-    filter_index <- grep("=", my_args$by, fixed = TRUE)[1]
-    # look for filter values
-    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by[filter_index], "=", fixed = TRUE), use.names = FALSE))
-    if (length(filter_value) > 1) {
-      # parse filter value and save for later user
-      by_filter <- .safe(eval(str2lang(filter_value[2])))
-      # check if evaluation was possible, or if we had a "token", like
-      # "[sd]" or "[fivenum]". If not, update `by`, else preserve
-      if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
-        by_token <- filter_value[2]
+    filter_index <- grep("=", my_args$by, fixed = TRUE)
+    for (f in filter_index) {
+      # look for filter values
+      filter_value <- insight::trim_ws(unlist(strsplit(my_args$by[f], "=", fixed = TRUE), use.names = FALSE))
+      if (length(filter_value) > 1) {
+        # parse filter value and save for later user
+        by_filter <- c(
+          by_filter,
+          stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+        )
+        # check if evaluation was possible, or if we had a "token", like
+        # "[sd]" or "[fivenum]". If not, update `by`, else preserve
+        if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
+          by_token <- filter_value[2]
+        }
+        # copy "cleaned" variable
+        my_args$by[f] <- filter_value[1]
       }
-      # copy "cleaned" variable
-      my_args$by[filter_index] <- filter_value[1]
     }
   }
 
