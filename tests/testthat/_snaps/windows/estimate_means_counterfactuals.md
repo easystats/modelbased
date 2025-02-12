@@ -27,7 +27,7 @@
       print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Average Counterfactual Predictions
       
       spp   | Mean |   SE |       95% CI |    z
       -----------------------------------------
@@ -75,7 +75,7 @@
       print(estimate_means(m, "Days", backend = "marginaleffects", estimate = "population"),
       zap_small = TRUE, table_width = Inf)
     Output
-      Estimated Marginal Means
+      Average Counterfactual Predictions
       
       Days |   Mean |    SE |           95% CI | t(174)
       -------------------------------------------------

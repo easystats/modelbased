@@ -728,3 +728,14 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   expect_snapshot(print(estimate_contrasts(model2, "time=c(1,2)", by = "grp"), zap_small = TRUE, table_width = Inf)) # nolint
   expect_snapshot(print(estimate_contrasts(model2, c("grp", "time=2")), zap_small = TRUE, table_width = Inf)) # nolint
 })
+
+
+test_that("estimate_contrast, full averaging", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
+
+  out <- estimate_contrasts(m, "c161sex", by = "c172code", estimate = "average")
+  expect_equal(out$Difference, c(1.09591, 0.68736, 0.92224), tolerance = 1e-4)
+})

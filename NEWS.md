@@ -5,6 +5,10 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+* The `"average"` option for argument `estimate` was renamed into `"typical"`.
+  The former `"average"` option is still available, but now returned marginal
+  means fully averaged across the sample.
+
 ## Changes
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
@@ -30,6 +34,9 @@
 * The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
   numeric predictors should be treated as factor or continuous, based on the
   of unique values in numeric predictors.
+
+* Plots now use a probability scale for the y-axis for models whose response
+  scale are probabilities (e.g., logistic regression).
 
 ## Bug fixes
 

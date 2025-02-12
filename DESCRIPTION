@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.9.0.11
+Version: 0.9.0.15
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -44,6 +44,7 @@ Imports:
     utils
 Suggests:
     BH,
+    betareg,
     brms,
     coda,
     collapse,
@@ -67,6 +68,7 @@ Suggests:
     mice,
     mgcv,
     nanoparquet,
+    ordinal,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,

@@ -1,6 +1,6 @@
 skip_on_cran()
-skip_if_offline()
 skip_if_not_installed("curl")
+skip_if_offline()
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")

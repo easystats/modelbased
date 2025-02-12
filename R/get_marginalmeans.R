@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = "average",
+                              estimate = getOption("modelbased_estimate", "typical"),
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -41,7 +41,7 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific")
+    c("typical", "population", "specific", "average")
   )
 
   # model details
@@ -126,7 +126,8 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    if (is.null(dots$newdata)) {
+    # we don't want a datagrid for "average" option
+    if (is.null(dots$newdata) && estimate != "average") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
@@ -180,6 +181,14 @@ get_marginalmeans <- function(model,
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
+
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -287,7 +296,7 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter"
   )
 }
 

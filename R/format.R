@@ -198,6 +198,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
+  contrast_filter <- attributes(x)$contrast_filter
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
 
@@ -380,6 +381,27 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # make sure terms are factors, for data_arrange later
       for (i in contrast) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+      }
+
+      # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
+      # we also need to include non-filtered contrast-predictors here, because
+      # if we have more than one contrast-predictor, we don't have the single
+      # values, but comma-separated levels from all predictor-combinations. we
+      # need to reconstruct these combinations for proper filtering
+      if (!is.null(contrast_filter)) {
+        # make sure we also have all levels for non-filtered variables
+        contrast_filter <- insight::compact_list(c(
+          lapply(dgrid[setdiff(focal_terms, unique(c(by, names(contrast_filter))))], unique),
+          contrast_filter
+        ))
+        # now create combinations of all filter variables
+        filter_levels <- apply(expand.grid(contrast_filter), 1, paste, collapse = ", ")
+        # sanity check anything left after filtering? else, filter already worked before
+        filtered_rows <- x$Level1 %in% filter_levels & x$Level2 %in% filter_levels
+        # filter...
+        if (any(filtered_rows)) {
+          x <- x[filtered_rows, ]
+        }
       }
     }
   }

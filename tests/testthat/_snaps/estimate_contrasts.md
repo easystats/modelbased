@@ -844,14 +844,13 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1    | Level2  | time | Difference |   SE |        95% CI | t(992) |     p
-      -------------------------------------------------------------------------------
-      treatment | control | 1    |       0.01 | 0.09 | [-0.17, 0.18] |   0.09 | 0.931
-      treatment | control | 2    |      -0.02 | 0.09 | [-0.20, 0.15] |  -0.28 | 0.780
+      Level1    | Level2  | time | x | Difference |   SE |        95% CI | t(992) |     p
+      -----------------------------------------------------------------------------------
+      treatment | control | 1    | a |       0.19 | 0.13 | [-0.06, 0.45] |   1.49 | 0.137
+      treatment | control | 2    | a |       0.00 | 0.13 | [-0.26, 0.25] |  -0.01 | 0.991
       
       Variable predicted: score
       Predictors contrasted: grp
-      Predictors averaged: x
       p-values are uncorrected.
 
 ---

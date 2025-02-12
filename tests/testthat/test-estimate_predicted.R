@@ -146,13 +146,13 @@ test_that("estimate_expectation - Frequentist", {
 
   model <- lme4::lmer(wt ~ cyl + (1 | gear), data = data)
   estim <- estimate_link(model)
-  expect_equal(dim(estim), c(10, 6))
+  expect_identical(dim(estim), c(3L, 6L))
   estim <- estimate_expectation(model)
   expect_equal(dim(estim), c(32, 7))
 
   model <- lme4::glmer(vs ~ cyl + (1 | gear), data = data, family = "binomial")
   estim <- estimate_link(model)
-  expect_equal(dim(estim), c(10, 6))
+  expect_identical(dim(estim), c(3L, 6L))
   estim <- estimate_expectation(model)
   expect_equal(dim(estim), c(32, 7))
 })

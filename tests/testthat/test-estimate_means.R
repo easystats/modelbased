@@ -404,3 +404,26 @@ test_that("estimate_means, values inside correct bounds", {
   expect_true(all(out2$CI_low >= 0 & out2$CI_low <= 1))
   expect_true(all(out2$CI_high >= 0 & out2$CI_high <= 1))
 })
+
+
+test_that("estimate_means, full averaging", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
+
+  estim1 <- marginaleffects::avg_predictions(m, by = c("c161sex", "c172code"))
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "average")
+  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+
+  estim1 <- marginaleffects::avg_predictions(m, variables = c("c161sex", "c172code"))
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "population")
+  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+
+  estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
+  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
+  expect_identical(dim(estim2), c(2L, 8L))
+})
