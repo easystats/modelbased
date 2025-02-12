@@ -383,7 +383,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
       }
 
-      # filter
+      # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
       if (!is.null(contrasts_filter)) {
         x <- x[x$Level1 %in% contrasts_filter & x$Level2 %in% contrasts_filter, ]
       }

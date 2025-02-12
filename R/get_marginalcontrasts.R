@@ -136,8 +136,10 @@ get_marginalcontrasts <- function(model,
   # extract filter value for later - we have to filter rows manually after
   # calculating contrasts. Furthermore, "clean" `by` argument (remove filter)
   if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+    # find which element in `by` has a filter
+    filter_index <- grep("=", my_args$by, fixed = TRUE)[1]
     # look for filter values
-    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE))
+    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by[filter_index], "=", fixed = TRUE), use.names = FALSE))
     if (length(filter_value) > 1) {
       # parse filter value and save for later user
       by_filter <- .safe(eval(str2lang(filter_value[2])))
@@ -147,18 +149,20 @@ get_marginalcontrasts <- function(model,
         by_token <- filter_value[2]
       }
       # copy "cleaned" variable
-      my_args$by <- filter_value[1]
+      my_args$by[filter_index] <- filter_value[1]
     }
   }
 
   # if filtering is requested for contrasts, we also want to extract the filter
   # values for later use
   if (!is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+    # find which element in `by` has a filter
+    filter_index <- grep("=", my_args$contrast, fixed = TRUE)[1]
     # look for filter values
-    filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast, "=", fixed = TRUE), use.names = FALSE))
+    filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[filter_index], "=", fixed = TRUE), use.names = FALSE))
     if (length(filter_value) > 1) {
       # parse filter value and save for later user
-      contrasts_filter <- .safe(eval(str2lang(filter_value[2])))
+      contrasts_filter[filter_index] <- .safe(eval(str2lang(filter_value[2])))
     }
   }
 
