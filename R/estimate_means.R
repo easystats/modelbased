@@ -92,10 +92,10 @@
 #'   - A typical individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "typical")`
 #' - *empirical predictions* (focus lies on _predictions_ of the outcome), which
-#'   are useful if you want a realistic predictions for your outcome, assuming
-#'   that the sample is representative for a special population (option
-#'   `"average"`), or useful for "what-if" scenarios, especially if you want to
-#'   make unbiased comparisons (G-computation, option `"population"`)
+#'   are useful if you want realistic predictions of your outcome, assuming that
+#'   the sample is representative for a special population (option `"average"`),
+#'   or useful for "what-if" scenarios, especially if you want to make unbiased
+#'   comparisons (G-computation, option `"population"`)
 #'   - The average individual from the sample: obtained with
 #'     `estimate_means(..., estimate = "average")`
 #'   - The broader, hypothetical target population: obtained with
