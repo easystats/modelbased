@@ -28,7 +28,7 @@ print_html.estimate_contrasts <- function(x,
   table_footer <- attributes(formatted_table)$table_footer
   if (!is.null(table_footer)) {
     table_footer <- insight::compact_character(strsplit(table_footer, "\\n")[[1]])
-    attr(formatted_table, "table_footer") <- paste(table_footer, collapse = "; ")
+    attr(formatted_table, "table_footer") <- paste(table_footer, collapse = "<br>")
   }
 
   insight::export_table(
