@@ -739,3 +739,18 @@ test_that("estimate_contrast, full averaging", {
   out <- estimate_contrasts(m, "c161sex", by = "c172code", estimate = "average")
   expect_equal(out$Difference, c(1.09591, 0.68736, 0.92224), tolerance = 1e-4)
 })
+
+
+test_that("estimate_contrast, slopes with emmeans", {
+  data(iris)
+  model <- lm(Petal.Width ~ Petal.Length * Species, data = iris)
+  out <- estimate_contrasts(
+    model,
+    contrast = "Petal.Length",
+    by = "Species",
+    backend = "emmeans"
+  )
+  expect_identical(dim(out), c(3L, 9L))
+  expect_equal(out$Difference, c(-0.12981, 0.04095, 0.17076), tolerance = 1e-4)
+  expect_identical(as.character(out$Level1), c("setosa", "setosa", "versicolor"))
+})
