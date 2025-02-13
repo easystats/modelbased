@@ -111,9 +111,10 @@ The two most popular R packages for extracting these quantities of interest from
 ## Terminology
 
 Answering research questions based on statistical models means describing the relationship between predictors (also called *focal terms*) of interest and the outcome, as well as differences between observed groups in the sample. There are two ways of representing this relationship: _predictions_ and _marginal estimates_.
+
 1) We can describe this relationship (i.e., estimate the expected outcome value) for a very "specific" observation that is defined by a combination of predictor values (that may or may not actually appear in our data). This is what we call _predictions_.
+
 2) Or, we can express the relationship considering an "average" or "typical" observation (i.e., estimating the _average_ relationship between predictors and an outcome). We call this _marginal means_.
-<!-- When we talk about how strong a predictor is associated with the outcome, we use the term _marginal effects_. To specify the characteristics of predictors we're interested in, we use a _data grid_, which is a (tabular) representation of the combinations of levels for our focal terms. -->
 
 ## Predictions
 
@@ -150,14 +151,21 @@ Again, the `modelbased` package has a simple function to do so, `estimate_slopes
 
 ## Contrasts
 
-## Counterfactual / ATE
+## Interpretation
 
-`modelbased` provides two types of "marginalization":
+As mentioned above, expected (or predicted) values of the outcome may differ, depending on whether _predictions_ or _marginal means_ are calculated - although both are based on the same model and data. How to interpret these numbers? This is confusing - but don't worry, it's even worse!
 
-- `estimate = "average"` (default): TODO
-- `estimate = "population"`: TODO
+The `modelbased` package allows to estimate *four different* quantities of predictions, which can be roughly divided into two categories: data grid-based and empirical predictions.
 
+### Data grid-based predictions
 
+`estimate_relation()` and `estimate_means()` represent the characteristics of the focal predictors in a _balanced data grid_, where all combinations of the predictors' levels are present. The focus lies on the _predictors_, where the aim is to look at associations or comparing certain characteristics. This is done either for a _very specific_ observation (`estimate_relation()`), or a _typical_ observation (`estimate_means()`) from the sample.
+
+### Empirical predictions
+
+If the focus lies on the _predicted outcome_, it is preferable to look at the actual, _empirical_ distribution of the focal predictors' characteristics (and not at a balanced distribution via a data grid). This can be achieved by changing the `estimate` argument in `estimate_means()`. Setting `estimate = "average"` calculates the average expected outcome from those observations _from the sample_ defined by the focal predictors.
+
+In some situations, especially when differences in the predicted outcome between certain groups (i.e., when computing contrasts for levels from the focal predictors) are important and causal effects are assumed, it might be useful to consider a hypothetical population that is not actually present in the sample. This is also called _G-computation_, and can be achieved by setting `estimate = "population"`, which is available in `estimate_means()` - but all `estimate` options are also available for `estimate_contrasts()`.
 
 ## Technical details
 
