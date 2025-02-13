@@ -41,7 +41,7 @@ option is recommended, but \code{p_adjust} can also be one of \code{"none"} (def
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
 
-\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional

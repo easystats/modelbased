@@ -90,9 +90,6 @@ for predictors of interest.}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for \code{predict} are:
 \itemize{
-\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
-\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}).
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
 any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
 for zero-inflation models from package \strong{glmmTMB}, you can choose
@@ -100,6 +97,9 @@ for zero-inflation models from package \strong{glmmTMB}, you can choose
 \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
 appropriate transformation is selected, which usually returns predictions
 or contrasts on the response-scale.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.

@@ -22,9 +22,6 @@
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #' Valid options for `predict` are:
 #'
-#' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
-#'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
-#'   transformation is selected (which usually is `"response"`).
 #' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
 #'   any valid `type` option supported by model's class `predict()` method (e.g.,
 #'   for zero-inflation models from package **glmmTMB**, you can choose
@@ -32,6 +29,9 @@
 #'   [glmmTMB::predict.glmmTMB]). By default, when `predict = NULL`, the most
 #'   appropriate transformation is selected, which usually returns predictions
 #'   or contrasts on the response-scale.
+#' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
+#'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
+#'   transformation is selected (which usually is `"response"`).
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` (or `NULL`) will transform them on scale of the response
@@ -103,7 +103,7 @@
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`
-#' @param backend Whether to use `"emmeans"` or `"marginaleffects"` as a backend.
+#' @param backend Whether to use `"marginaleffects"` or `"emmeans"`as a backend.
 #' Results are usually very similar. The major difference will be found for mixed
 #' models, where `backend = "marginaleffects"` will also average across random
 #' effects levels, producing "marginal predictions" (instead of "conditional

@@ -61,9 +61,6 @@ for predictors of interest.}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for \code{predict} are:
 \itemize{
-\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
-\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}).
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
 any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
 for zero-inflation models from package \strong{glmmTMB}, you can choose
@@ -71,6 +68,9 @@ for zero-inflation models from package \strong{glmmTMB}, you can choose
 \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
 appropriate transformation is selected, which usually returns predictions
 or contrasts on the response-scale.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
@@ -201,7 +201,7 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function.}
 
-\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
