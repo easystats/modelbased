@@ -271,12 +271,10 @@ get_emcontrasts(model)
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 get_emcontrasts(model)
-# Can also run contrasts between points of numeric
-get_emcontrasts(model, contrast = "Petal.Width", length = 3)
 # Or both
 get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 # Or with custom specifications
-estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 }
