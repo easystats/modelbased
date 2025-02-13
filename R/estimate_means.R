@@ -264,6 +264,7 @@ estimate_means <- function(model,
     average = "Average Predictions",
     population = "Average Counterfactual Predictions"
   ), "blue")
+
   attr(means, "table_footer") <- .table_footer(
     means,
     type = ifelse(estimate == "specific", "predictions", "means"),

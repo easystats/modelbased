@@ -154,6 +154,7 @@ estimate_contrasts.default <- function(model,
     average = "Averaged Contrasts Analysis",
     population = "Counterfactual Contrasts Analysis (G-computation)"
   ), "blue")
+
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,
