@@ -50,7 +50,9 @@ get_emcontrasts <- function(model,
   first_focal <- my_args$contrast[1]
 
   # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
+  if (is.numeric(model_data[[first_focal]]) &&
+    !first_focal %in% on_the_fly_factors &&
+    !identical(my_args$by, my_args$contrast)) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
