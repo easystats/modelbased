@@ -121,20 +121,20 @@ the non-focal predictors, i.e. those variables that are not specified in
 \itemize{
 \item \code{"typical"} (default): Predictions are made for observations that are
 represented by a data grid, which is built from all combinations of the
-predictor levels in \code{by} (the focal terms). \code{"typical"} then takes the mean
-value for non-focal numeric predictors and marginalizes over the factor
-levels of non-focal terms, which computes a kind of "weighted average" for
-the values at which these terms are hold constant. These predictions are
-useful for comparing defined "groups" and are still a good representation
-of the sample, because all possible values and levels of the non-focal
-predictors are considered (averaged over). It answers the question, "What
-would be the average outcome for a 'typical' observation?", where 'typical'
-refers to subjects represented by (i.e., that share the characteristics
-from) the data grid. This approach is the one taken by default in the
-\code{emmeans} package.
+predictor levels in \code{by} (the focal predictors). \code{"typical"} then takes the
+mean value for non-focal numeric predictors and marginalizes over the
+factor levels of non-focal predictors, which computes a kind of "weighted
+average" for the values at which these terms are hold constant. These
+predictions are useful for comparing defined "groups" and are still a good
+representation of the sample, because all possible values and levels of the
+non-focal predictors are considered (averaged over). It answers the
+question, "What would be the average outcome for a 'typical' observation?",
+where 'typical' refers to subjects represented by (i.e., that share the
+characteristics from) the data grid. This approach is the one taken by
+default in the \code{emmeans} package.
 \item \code{"average"}: Predictions are made for each observation in the sample. Then,
 the average of all predictions is calculated within all groups (or levels)
-of the focal terms defined in \code{by}. These predictions are the closest
+of the focal predictors defined in \code{by}. These predictions are the closest
 representation of the sample, because \code{estimate = "average"} averages
 across the full sample, where groups (in \code{by}) are not represented by a
 balanced data grid, but rather the empirical distributions of the
@@ -142,36 +142,37 @@ characteristics of the sample. It answers the question, "What is the
 predicted value for an average observation (from a certain group in \code{by})
 in my data?".
 \item \code{"population"}: Each observation is "cloned" multiple times, where each
-duplicate gets one of the levels from the focal terms in \code{by}. We then have
-one "original" and several copies of that original, each varying in the levels
-of the focal terms. Hence, the sample is replicated multiple times to produce
-"counterfactuals" and then takes the average of these predicted values
-(aggregated/grouped by the focal terms). It can be considered as
-extrapolation to a hypothetical target population. Counterfactual
-predictions are useful, insofar as the results can also be transferred to
-other contexts (Dickerman and Hernan, 2020). It answers the question, "What
-is the predicted response value for the 'average' observation in \emph{the
-broader target population}?". It does not only refer to the actual data in
-your observed sample, but also "what would be if" we had more data, or if
-we had data from a different sample.
+duplicate gets one of the levels from the focal predictors in \code{by}. We then
+have one "original" and several copies of that original, each varying in
+the levels of the focal predictors. Hence, the sample is replicated
+multiple times to produce "counterfactuals" and then takes the average of
+these predicted values (aggregated/grouped by the focal predictors). It can
+be considered as extrapolation to a hypothetical target population.
+Counterfactual predictions are useful, insofar as the results can also be
+transferred to other contexts (Dickerman and Hernan, 2020). It answers the
+question, "What is the predicted response value for the 'average'
+observation in \emph{the broader target population}?". It does not only refer to
+the actual data in your observed sample, but also "what would be if" we had
+more data, or if we had data from a different sample.
 }
 
 In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
-\item \emph{modelbased predictions} (which are useful to look at differences between
-typical groups, or for visualization)
+\item \emph{modelbased predictions} (focus lies on \emph{predictors}), which are useful to
+look at differences between typical groups, or for visualization
 \itemize{
 \item A specific individual from the sample (i.e., a specific combination of
-predictor values for focal and non-focal terms): this is what is obtained
+predictor values for focal and non-focal predictors): this is what is obtained
 when using \code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
 \item A typical individual from the sample: obtained with
 \code{estimate_means(..., estimate = "typical")}
 }
-\item \emph{empirical predictions} (which are useful if you want a realistic picture
-of your sample, assuming that it is representative for a special population
-(option \code{"average"}), or useful for "what-if" scenarios, especially if you
-want to make unbiased comparisons (G-computation, option \code{"population"}))
+\item \emph{empirical predictions} (focus lies on \emph{predictions} of the outcome), which
+are useful if you want a realistic predictions for your outcome, assuming
+that the sample is representative for a special population (option
+\code{"average"}), or useful for "what-if" scenarios, especially if you want to
+make unbiased comparisons (G-computation, option \code{"population"})
 \itemize{
 \item The average individual from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
