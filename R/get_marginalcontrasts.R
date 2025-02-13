@@ -36,12 +36,24 @@ get_marginalcontrasts <- function(model,
   model_info <- insight::model_info(model, verbose = FALSE)
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
+  my_args <- .guess_marginaleffects_arguments(
+    model,
+    by,
+    contrast,
+    verbose = verbose,
+    ...
+  )
 
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, estimate, ...) # nolint
+  my_args <- .get_marginaleffects_hypothesis_argument(
+    comparison,
+    my_args,
+    model_data,
+    estimate,
+    ...
+  )
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
@@ -135,7 +147,11 @@ get_marginalcontrasts <- function(model,
 # in the marginaleffects package, and extract the potential filter values used
 # in `by` and `contrast` (if any), to "clean" these arguments and save the levels
 # or values at which rows should be filtered later...
-.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, estimate = NULL, ...) {
+.get_marginaleffects_hypothesis_argument <- function(comparison,
+                                                     my_args,
+                                                     model_data = NULL,
+                                                     estimate = NULL,
+                                                     ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
 
@@ -148,13 +164,19 @@ get_marginalcontrasts <- function(model,
     filter_index <- grep("=", my_args$by, fixed = TRUE)
     for (f in filter_index) {
       # look for filter values
-      filter_value <- insight::trim_ws(unlist(strsplit(my_args$by[f], "=", fixed = TRUE), use.names = FALSE))
+      filter_value <- insight::trim_ws(unlist(
+        strsplit(my_args$by[f], "=", fixed = TRUE),
+        use.names = FALSE
+      ))
       if (length(filter_value) > 1) {
         # parse filter value and save for later use - we create a named list,
         # because we need to know *which* variables in `by` used a filter. we
         # could have `by = c("x", "y=c(1,2)")`, but also `by = c("x=c('a','b')", "y")`.
         # the list has the variable name as name, and the filter values as element
-        by_value <- stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+        by_value <- stats::setNames(
+          list(.safe(eval(str2lang(filter_value[2])))),
+          filter_value[1]
+        )
         by_filter <- c(by_filter, by_value)
         # check if evaluation was possible, or if we had a "token", like
         # "[sd]" or "[fivenum]". If not, update `by`, else preserve
@@ -176,7 +198,10 @@ get_marginalcontrasts <- function(model,
     filter_index <- grep("=", my_args$contrast, fixed = TRUE)
     for (f in filter_index) {
       # look for filter values
-      filter_value <- insight::trim_ws(unlist(strsplit(my_args$contrast[f], "=", fixed = TRUE), use.names = FALSE))
+      filter_value <- insight::trim_ws(unlist(
+        strsplit(my_args$contrast[f], "=", fixed = TRUE),
+        use.names = FALSE
+      ))
       if (length(filter_value) > 1) {
         # parse filter value and save for later user - we need as named list
         # for the same reason as mentioned above...
@@ -302,7 +327,10 @@ get_marginalcontrasts <- function(model,
   # this is the row-order we use in modelbased
   datagrid$.rowid <- 1:nrow(datagrid)
   # this is the row-order in marginaleffects
-  datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+  datagrid <- datawizard::data_arrange(
+    datagrid,
+    colnames(datagrid)[1:(length(datagrid) - 1)]
+  )
   # we need to extract all b's and the former parameter numbers
   b <- .extract_custom_comparison(comparison)
   old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
