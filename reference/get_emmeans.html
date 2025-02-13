@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.16</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.17</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -362,16 +362,6 @@ option is recommended, but <code>p_adjust</code> can also be one of <code>"none"
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor - virginica    0.184 0.145 144   1.272  0.4131</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
-<span class="r-in"><span><span class="co"># Can also run contrasts between points of numeric</span></span></span>
-<span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast                        estimate    SE  df t.ratio p.value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Width0.1 - Petal.Width1.3    -1.01 0.195 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Width0.1 - Petal.Width2.5    -2.02 0.390 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Width1.3 - Petal.Width2.5    -1.01 0.195 144  -5.180  &lt;.0001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: Species </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 3 estimates </span>
 <span class="r-in"><span><span class="co"># Or both</span></span></span>
 <span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast                                              estimate    SE  df</span>
@@ -409,31 +399,41 @@ option is recommended, but <code>p_adjust</code> can also be one of <code>"none"
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 6 estimates </span>
 <span class="r-in"><span><span class="co"># Or with custom specifications</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  contrast                                          estimate     SE  df t.ratio</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width1 - versicolor Petal.Width1        1.633 0.3210 144   5.093</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width1 - virginica Petal.Width1         1.733 0.3510 144   4.933</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width1 - setosa Petal.Width2           -0.837 0.4070 144  -2.057</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width1 - versicolor Petal.Width2        0.579 0.3450 144   1.678</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width1 - virginica Petal.Width2         1.102 0.3130 144   3.523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width1 - virginica Petal.Width1     0.100 0.1850 144   0.542</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width1 - setosa Petal.Width2       -2.470 0.7200 144  -3.431</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width1 - versicolor Petal.Width2   -1.054 0.2170 144  -4.858</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width1 - virginica Petal.Width2    -0.531 0.0928 144  -5.720</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica Petal.Width1 - setosa Petal.Width2        -2.570 0.7340 144  -3.501</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica Petal.Width1 - versicolor Petal.Width2    -1.154 0.2250 144  -5.128</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  virginica Petal.Width1 - virginica Petal.Width2     -0.631 0.1560 144  -4.043</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width2 - versicolor Petal.Width2        1.416 0.7310 144   1.937</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  setosa Petal.Width2 - virginica Petal.Width2         1.939 0.7160 144   2.706</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor Petal.Width2 - virginica Petal.Width2     0.523 0.1580 144   3.306</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  p.value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.3158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.5487</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0074</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.9943</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0100</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0080</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   &lt;.0001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0012</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.3840</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0802</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   0.0149</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Level1        | Level2        | Difference |   SE |         95% CI | t(144) |      p</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> setosa, 2     | setosa, 1     |       0.84 | 0.41 | [ 0.03,  1.64] |   2.06 |  0.041</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor, 1 | setosa, 1     |      -1.63 | 0.32 | [-2.27, -1.00] |  -5.09 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor, 2 | setosa, 1     |      -0.58 | 0.35 | [-1.26,  0.10] |  -1.68 |  0.096</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 1  | setosa, 1     |      -1.73 | 0.35 | [-2.43, -1.04] |  -4.93 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | setosa, 1     |      -1.10 | 0.31 | [-1.72, -0.48] |  -3.52 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor, 1 | setosa, 2     |      -2.47 | 0.72 | [-3.89, -1.05] |  -3.43 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor, 2 | setosa, 2     |      -1.42 | 0.73 | [-2.86,  0.03] |  -1.94 |  0.055</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 1  | setosa, 2     |      -2.57 | 0.73 | [-4.02, -1.12] |  -3.50 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | setosa, 2     |      -1.94 | 0.72 | [-3.35, -0.52] |  -2.71 |  0.008</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor, 2 | versicolor, 1 |       1.05 | 0.22 | [ 0.62,  1.48] |   4.86 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 1  | versicolor, 1 |      -0.10 | 0.19 | [-0.47,  0.27] |  -0.54 |  0.589</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | versicolor, 1 |       0.53 | 0.09 | [ 0.35,  0.71] |   5.72 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 1  | versicolor, 2 |      -1.15 | 0.23 | [-1.60, -0.71] |  -5.13 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | versicolor, 2 |      -0.52 | 0.16 | [-0.84, -0.21] |  -3.31 |  0.001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | virginica, 1  |       0.63 | 0.16 | [ 0.32,  0.94] |   4.04 | &lt; .001</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Sepal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: Species, Petal.Width=c(1, 2)</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> P value adjustment: tukey method for comparing a family of 6 estimates </span>
 <span class="r-in"><span><span class="co"># Or modulate it</span></span></span>
 <span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast =</span>
