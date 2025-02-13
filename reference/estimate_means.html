@@ -122,16 +122,16 @@ for predictors of interest.</p></dd>
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
 <code>backend = "marginaleffects"</code>). For emmeans, see also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
-<code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
-transformation is selected (which usually is <code>"response"</code>).</p></li>
-<li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
+Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
 any valid <code>type</code> option supported by model's class <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g.,
 for zero-inflation models from package <strong>glmmTMB</strong>, you can choose
 <code>predict = "zprob"</code> or <code>predict = "conditional"</code> etc., see
 <a href="https://rdrr.io/pkg/glmmTMB/man/predict.glmmTMB.html" class="external-link">glmmTMB::predict.glmmTMB</a>). By default, when <code>predict = NULL</code>, the most
 appropriate transformation is selected, which usually returns predictions
 or contrasts on the response-scale.</p></li>
+<li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
+<code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
+transformation is selected (which usually is <code>"response"</code>).</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
@@ -195,10 +195,10 @@ when using <code><a href="estimate_expectation.html">estimate_relation()</a></co
 <code>estimate_means(..., estimate = "typical")</code></p></li>
 </ul></li>
 <li><p><em>empirical predictions</em> (focus lies on <em>predictions</em> of the outcome), which
-are useful if you want a realistic predictions for your outcome, assuming
-that the sample is representative for a special population (option
-<code>"average"</code>), or useful for "what-if" scenarios, especially if you want to
-make unbiased comparisons (G-computation, option <code>"population"</code>)</p><ul><li><p>The average individual from the sample: obtained with
+are useful if you want realistic predictions of your outcome, assuming that
+the sample is representative for a special population (option <code>"average"</code>),
+or useful for "what-if" scenarios, especially if you want to make unbiased
+comparisons (G-computation, option <code>"population"</code>)</p><ul><li><p>The average individual from the sample: obtained with
 <code>estimate_means(..., estimate = "average")</code></p></li>
 <li><p>The broader, hypothetical target population: obtained with
 <code>estimate_means(..., estimate = "population")</code></p></li>
@@ -218,7 +218,7 @@ appropriate transformation-function.</p></dd>
 
 
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
-<dd><p>Whether to use <code>"emmeans"</code> or <code>"marginaleffects"</code> as a backend.
+<dd><p>Whether to use <code>"marginaleffects"</code> or <code>"emmeans"</code>as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where <code>backend = "marginaleffects"</code> will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
