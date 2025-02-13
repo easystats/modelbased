@@ -88,7 +88,9 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-  # filter results
+  # filter results - for `estimate_contrasts()`, we don't filter using the
+  # data grid; due to the flexible way of defining comparisons, we need the
+  # full data grid and filter here (e.g., when we have `by="Petal.Width=c(1, 2)"`)
   if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
     for (i in names(my_args$by_filter)) {
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
