@@ -149,7 +149,7 @@ variation between intersectional dimensions, as well as testing specific
 strata for significant differences.</p></li>
 </ol>
 <div class="section level3">
-<h3 id="prepating-the-data-and-defining-intersectional-strata">1. Prepating the data and defining intersectional strata<a class="anchor" aria-label="anchor" href="#prepating-the-data-and-defining-intersectional-strata"></a>
+<h3 id="preparing-the-data-and-defining-intersectional-strata">1. Preparing the data and defining intersectional strata<a class="anchor" aria-label="anchor" href="#preparing-the-data-and-defining-intersectional-strata"></a>
 </h3>
 <p>First, we load the required packages and prepare a sample data set.
 We use the <code>efc</code> data from the <strong>modelbased</strong>
@@ -277,10 +277,10 @@ intersectional model.</p>
 <span><span class="co">#&gt;     Adjusted ICC: 0.038</span></span>
 <span><span class="co">#&gt;   Unadjusted ICC: 0.038</span></span></code></pre></div>
 <p>The ICC with a value of about 4% is rather low. Usually, this
-indiates that our dimensions used to define the intersectional strata do
-not suggest larger social inequalities regarding quality of life. But we
-ignore this fact for now, as the purpose of demonstrating the analysis
-approach is rarely affected.</p>
+indicates that our dimensions used to define the intersectional strata
+do not suggest larger social inequalities regarding quality of life. But
+we ignore this fact for now, as the purpose of demonstrating the
+analysis approach is rarely affected.</p>
 </div>
 <div class="section level3">
 <h3 id="partially-adjusted-intersectional-model-and-pcv">3. Partially-adjusted intersectional model and PCV<a class="anchor" aria-label="anchor" href="#partially-adjusted-intersectional-model-and-pcv"></a>
@@ -309,7 +309,7 @@ proportional change in the between-stratum variance, the so-called
 <span><span class="va">m_age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">qol</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gender</span><span class="op">:</span><span class="va">employed</span><span class="op">:</span><span class="va">age</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">efc</span><span class="op">)</span></span></code></pre></div>
 <p>The regression coefficients already give an impression how strong the
 association between each single dimension and the outcome is, taking
-between-stratum variance into accout. The larger (in absolute values)
+between-stratum variance into account. The larger (in absolute values)
 the coefficients, the higher the degree that dimension contributed to
 the between-stratum variance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
