@@ -148,12 +148,12 @@ We could now ask whether the predicted outcome for `episode = 2` is significantl
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[3:4, 1:3]
 line_data$group_col <- "control"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) - 0.06, xend = as.numeric(episode[2]) + 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segement",
+  x = as.numeric(line_data$episode[1]) - 0.06,
+  xend = as.numeric(line_data$episode[2]) + 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
@@ -212,12 +212,12 @@ For instance, we could now ask whether the predicted outcome for `episode = 1` i
 p <- plot(my_predictions)
 line_data <- as.data.frame(my_predictions)[c(2, 5), 1:3]
 line_data$group_col <- "treatment"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) + 0.06, xend = as.numeric(episode[2]) - 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$episode[1]) + 0.06,
+  xend = as.numeric(line_data$episode[2]) - 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2]
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
@@ -255,31 +255,30 @@ my_predictions <- estimate_means(model2, c("grp", "episode"))
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[, 1:3, ]
 line_data$group_col <- "1"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[1]) - 0.05, xend = as.numeric(grp[1]) - 0.05,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[1]) - 0.05,
+  xend = as.numeric(line_data$grp[1]) - 0.05,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = "orange",
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
-) + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[4]) - 0.05, xend = as.numeric(grp[4]) - 0.05,
-    y = Mean[4], yend = Mean[5], group = NULL, color = NULL
-  ),
+) + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[4]) - 0.05,
+  xend = as.numeric(line_data$grp[4]) - 0.05,
+  y = line_data$Mean[4],
+  yend = line_data$Mean[5],
   color = "orange",
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
-) + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[1]) - 0.05, xend = as.numeric(grp[4]) - 0.05,
-    y = (Mean[1] + Mean[2]) / 2,
-    yend = (Mean[4] + Mean[5]) / 2, group = NULL, color = NULL
-  ),
+) + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[1]) - 0.05,
+  xend = as.numeric(line_data$grp[4]) - 0.05,
+  y = (line_data$Mean[1] + line_data$Mean[2]) / 2,
+  yend = (line_data$Mean[4] + line_data$Mean[5]) / 2,
   color = arrow_color,
-  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
 ) +
   ggtitle("Differnce-in-differences")
 ```

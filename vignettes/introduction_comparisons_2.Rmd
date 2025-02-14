@@ -103,31 +103,40 @@ dat3 <- data.frame(
   stringsAsFactors = FALSE
 )
 p + annotate(
-  "segment", x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[1],
+  "segment",
+  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat1$x[2], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
+  "segment",
+  x = dat1$x[2], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
+  "segment",
+  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1
 ) + annotate(
-  "segment", x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[1],
+  "segment",
+  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat2$x[2], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
+  "segment",
+  x = dat2$x[2], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
+  "segment",
+  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1
 ) + annotate(
-  "segment", x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[1],
+  "segment",
+  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat3$x[2], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
+  "segment",
+  x = dat3$x[2], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
 ) + annotate(
-  "segment", x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
+  "segment",
+  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1
 ) +
   ggtitle("Linear trend of `Sepal.Length` by `Species`")
