@@ -61,9 +61,9 @@ Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::descr
 \item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
 to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
-means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
-\code{newdata} can be passed to those functions.
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
+passed to those functions.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using

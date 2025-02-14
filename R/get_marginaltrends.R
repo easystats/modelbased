@@ -32,11 +32,7 @@ get_marginaltrends <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments
-    dg_args <- list(
-      model,
-      by = by,
-      verbose = FALSE
-    )
+    dg_args <- list(model, by = by, verbose = FALSE)
     # add user-arguments from "...", but remove those arguments that are already set
     dots[c("by", "verbose")] <- NULL
     dg_args <- insight::compact_list(c(dg_args, dots))
