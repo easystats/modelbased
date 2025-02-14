@@ -4,12 +4,12 @@
 
   # no transformation always returns link-scale
   if (identical(predict, "link")) {
-    return("link")
+    return(list(predict = "link", backtransform = FALSE, link_inverse = NULL))
   }
 
   # handle distributional parameters
   if (!is.null(predict) && predict %in% .brms_aux_elements()) {
-    return(predict)
+    return(list(predict = "link", backtransform = FALSE, link_inverse = NULL))
   }
 
   # extract all valid types for model class
@@ -39,13 +39,19 @@
 
   # return default type
   if (is.null(dots$type)) {
+    link_inverse <- insight::link_inverse(model)
     if (is.null(predict)) {
-      valid_types[1]
+      out <- valid_types[1]
     } else {
-      predict
+      out <- predict
+    }
+    if ("link" %in% valid_types && out == "response" && !is.null(link_inverse)) {
+      return(list(predict = "link", backtransform = TRUE, link_inverse = link_inverse))
+    } else {
+      return(list(predict = out, backtransform = FALSE, link_inverse = NULL))
     }
   } else {
-    dots$type
+    list(predict = dots$type, backtransform = FALSE, link_inverse = NULL)
   }
 }
 

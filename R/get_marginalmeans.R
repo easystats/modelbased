@@ -51,7 +51,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
-  predict <- .get_marginaleffects_type_argument(model, predict, ...)
+  predict_args <- .get_marginaleffects_type_argument(model, predict, ...)
 
 
   # Second step: create a data grid -------------------------------------------
@@ -136,10 +136,10 @@ get_marginalmeans <- function(model,
   }
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
-    fun_args$dpar <- predict
+  if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict_args$predict
   } else {
-    fun_args$type <- predict
+    fun_args$type <- predict_args$predict
   }
 
   # =========================================================================
@@ -189,6 +189,10 @@ get_marginalmeans <- function(model,
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
   }
 
+  # back-transform from link-scale?
+  if (is.null(comparison)) {
+    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+  }
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -211,7 +215,7 @@ get_marginalmeans <- function(model,
     info = c(
       datagrid_info,
       list(
-        predict = predict,
+        predict = predict_args$predict,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform)
