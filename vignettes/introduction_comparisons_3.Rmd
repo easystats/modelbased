@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 )
 options(width = 800)
 arrow_color <- "#FF00cc"
+p <- ht8 <- NULL
 
 pkgs <- c("ggplot2", "see", "marginaleffects")
 

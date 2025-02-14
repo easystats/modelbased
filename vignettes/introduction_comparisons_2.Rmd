@@ -18,6 +18,7 @@ knitr::opts_chunk$set(
 )
 options(width = 800)
 options(modelbased_join_dots = FALSE)
+ht6 <- NULL
 
 arrow_color <- "#FF00cc"
 
