@@ -102,41 +102,32 @@ dat3 <- data.frame(
   group_col = "virginica",
   stringsAsFactors = FALSE
 )
-p + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+p + annotate(
+  "segment", x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat1$x[2], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+) + annotate(
+  "segment", x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat2$x[2], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+) + annotate(
+  "segment", x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat3$x[2], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment", x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1
 ) +
   ggtitle("Linear trend of `Sepal.Length` by `Species`")
