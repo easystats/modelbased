@@ -98,8 +98,7 @@ get_marginalmeans <- function(model,
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
 
-  # remove user-arguments from "..." that are will be used (see below)
-  # when calling marginaleffects
+  # remove user-arguments from "..." that will be used when calling marginaleffects
   dots[c("by", "conf_level", "type")] <- NULL
 
   # model df - can be passed via `...`
