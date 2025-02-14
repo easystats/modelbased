@@ -93,12 +93,12 @@ We could now ask whether the predicted outcome for `episode = 1` is significantl
 ```{r echo=FALSE}
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[1:2, ]
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) + 0.06, xend = as.numeric(episode[2]) - 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$episode[1]) + 0.06,
+  xend = as.numeric(line_data$episode[2]) - 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
