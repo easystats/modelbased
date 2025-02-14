@@ -217,7 +217,7 @@ p + annotate(
   x = as.numeric(line_data$episode[1]) + 0.06,
   xend = as.numeric(line_data$episode[2]) - 0.06,
   y = line_data$Mean[1],
-  yend = line_data$Mean[2]
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
