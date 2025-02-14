@@ -51,6 +51,9 @@ get_marginaltrends <- function(model,
     datagrid <- as.data.frame(datagrid)
   }
 
+  # remove user-arguments from "..." that will be used when calling marginaleffects
+  dots[c("by", "conf_level", "digits")] <- NULL
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(

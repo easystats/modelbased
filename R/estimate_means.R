@@ -124,8 +124,8 @@
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
 #' Bayesian models via [bayestestR::describe_posterior()]. Examples:
-#' - `insight::get_datagrid()`: Argument such as `length` or `range` can be used
-#'   to control the (number of) representative values.
+#' - `insight::get_datagrid()`: Argument such as `length`, `digits` or `range`
+#'   can be used to control the (number of) representative values.
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments for
 #'   instance like `vcov`, `equivalence`, `df`, `slope` or even `newdata` can be

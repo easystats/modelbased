@@ -64,7 +64,7 @@ navbar:
           href: articles/modelisation_approach.html
     - text: "Contrasts and Comparisons"
       menu:
-        - text: "Contrasts and pairwise comparisons"
+        - text: "Contrasts and comparisons"
           href: articles/introduction_comparisons_1.html
         - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
           href: articles/introduction_comparisons_2.html

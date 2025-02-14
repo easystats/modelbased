@@ -93,17 +93,16 @@ We could now ask whether the predicted outcome for `episode = 1` is significantl
 ```{r echo=FALSE}
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[1:2, ]
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) + 0.06, xend = as.numeric(episode[2]) - 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$episode[1]) + 0.06,
+  xend = as.numeric(line_data$episode[2]) - 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
   ggtitle("Within \"episode\", do levels 1 and 2 differ?")
-ht1 <- estimate_contrasts(model1, contrast = "episode")
 ```
 
 To do this, we use the `estimate_contrasts()` function. By default, a pairwise comparison is performed. You can specify other comparisons as well, using the `comparison` argument. For now, we go on with the simpler example of contrasts or pairwise comparisons.
@@ -113,7 +112,7 @@ To do this, we use the `estimate_contrasts()` function. By default, a pairwise c
 estimate_contrasts(model1, "episode")
 ```
 
-For our quantity of interest, the contrast between episode `r paste0(ht1$Level1[1], "-", ht1$Level2[1])`, we see the value `r round(ht1$Difference[1], 2)`, which is exactly the difference between the predicted outcome for `episode = 1` (`r round(my_predictions$Mean[1], 2)`) and `episode = 2` (`r round(my_predictions$Mean[2], 2)`). The related p-value is `r round(ht1$p[1], 3)`, indicating that the difference between the predicted values of our outcome at these two levels of the factor _episode_ is indeed statistically significant.
+For our quantity of interest, the contrast between episode levels 2 and 1, we see the value 0.36, which is exactly the difference between the predicted outcome for `episode = 1` (-0.16) and `episode = 2` (0.20). The related p-value is 0.031, indicating that the difference between the predicted values of our outcome at these two levels of the factor _episode_ is indeed statistically significant.
 
 We can also define "representative values" via the `contrast` or `by` arguments. For example, we could specify the levels of `episode` directly, to simplify the output:
 
@@ -149,17 +148,16 @@ We could now ask whether the predicted outcome for `episode = 2` is significantl
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[3:4, 1:3]
 line_data$group_col <- "control"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) - 0.06, xend = as.numeric(episode[2]) + 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$episode[1]) - 0.06,
+  xend = as.numeric(line_data$episode[2]) + 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
   ggtitle("Within level 2 of \"episode\", do treatment and control group differ?")
-ht2 <- estimate_contrasts(model2, c("episode", "grp"))
 ```
 
 Again, to answer this question, we calculate all pairwise comparisons, i.e. the comparison (or test for differences) between all combinations of our _focal predictors_. The focal predictors we're interested here are our two variables used for the interaction.
@@ -169,7 +167,7 @@ Again, to answer this question, we calculate all pairwise comparisons, i.e. the 
 estimate_contrasts(model2, contrast = c("episode", "grp"))
 ```
 
-For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is `r round(ht2$Difference[8], 2)`. We find this comparison in row 8 of the above output.
+For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is 0.35. We find this comparison in row 8 of the above output.
 
 As we can see, `estimate_contrasts()` returns pairwise comparisons of all possible combinations of factor levels from our focal variables. If we're only interested in a very specific comparison, we have two options to simplify the output:
 
@@ -214,17 +212,16 @@ For instance, we could now ask whether the predicted outcome for `episode = 1` i
 p <- plot(my_predictions)
 line_data <- as.data.frame(my_predictions)[c(2, 5), 1:3]
 line_data$group_col <- "treatment"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(episode[1]) + 0.06, xend = as.numeric(episode[2]) - 0.06,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$episode[1]) + 0.06,
+  xend = as.numeric(line_data$episode[2]) - 0.06,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
   ggtitle("Do different episode levels differ between groups?")
-ht3 <- estimate_contrasts(model2, c("episode", "grp"))
 ```
 
 The contrast we are interested in is between `episode = 1` in the `treatment` group and `episode = 3` in the `control` group. These are the predicted values in rows three and four (c.f. above table of predicted values), thus we `comparison` whether `"b4 = b3"`.
@@ -258,36 +255,32 @@ my_predictions <- estimate_means(model2, c("grp", "episode"))
 p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.4)))
 line_data <- as.data.frame(my_predictions)[, 1:3, ]
 line_data$group_col <- "1"
-p + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[1]) - 0.05, xend = as.numeric(grp[1]) - 0.05,
-    y = Mean[1], yend = Mean[2], group = NULL, color = NULL
-  ),
+p + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[1]) - 0.05,
+  xend = as.numeric(line_data$grp[1]) - 0.05,
+  y = line_data$Mean[1],
+  yend = line_data$Mean[2],
   color = "orange",
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
-) + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[4]) - 0.05, xend = as.numeric(grp[4]) - 0.05,
-    y = Mean[4], yend = Mean[5], group = NULL, color = NULL
-  ),
+) + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[4]) - 0.05,
+  xend = as.numeric(line_data$grp[4]) - 0.05,
+  y = line_data$Mean[4],
+  yend = line_data$Mean[5],
   color = "orange",
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
-) + geom_segment(
-  data = line_data,
-  aes(
-    x = as.numeric(grp[1]) - 0.05, xend = as.numeric(grp[4]) - 0.05,
-    y = (Mean[1] + Mean[2]) / 2,
-    yend = (Mean[4] + Mean[5]) / 2, group = NULL, color = NULL
-  ),
+) + annotate(
+  "segment",
+  x = as.numeric(line_data$grp[1]) - 0.05,
+  xend = as.numeric(line_data$grp[4]) - 0.05,
+  y = (line_data$Mean[1] + line_data$Mean[2]) / 2,
+  yend = (line_data$Mean[4] + line_data$Mean[5]) / 2,
   color = arrow_color,
-  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
 ) +
   ggtitle("Differnce-in-differences")
-
-ht4 <- estimate_means(model2, c("episode", "grp"))
-ht5 <- estimate_contrasts(model2, c("episode", "grp"), comparison = "(b1 - b2) = (b4 - b5)")
 ```
 
 As a reminder, we look at the table of predictions again:
@@ -309,13 +302,13 @@ estimate_contrasts(
 
 Let's replicate this step-by-step:
 
-1. Predicted value of _outcome_ for `episode = 1` in the control group is `r round(ht4$Mean[1], 2)`.
-2. Predicted value of _outcome_ for `episode = 2` in the control group is `r round(ht4$Mean[2], 2)`.
-3. The first difference is `r round(ht4$Mean[1] - ht4$Mean[2], 2)`
-4. Predicted value of _outcome_ for `episode = 1` in the treatment group is `r round(ht4$Mean[4], 2)`.
-5. Predicted value of _outcome_ for `episode = 2` in the treatment group is `r round(ht4$Mean[5], 2)`.
-6. The second difference is `r round(ht4$Mean[4] - ht4$Mean[5], 2)`
-7. Our quantity of interest is the difference between these two differences, which is `r round((ht4$Mean[1] - ht4$Mean[2]) - (ht4$Mean[4] - ht4$Mean[5]), 2)`. This difference is not statistically significant (p = `r round(ht5$p, 3)`).
+1. Predicted value of _outcome_ for `episode = 1` in the control group is 0.03.
+2. Predicted value of _outcome_ for `episode = 2` in the control group is -0.39.
+3. The first difference is 0.42.
+4. Predicted value of _outcome_ for `episode = 1` in the treatment group is 0.18.
+5. Predicted value of _outcome_ for `episode = 2` in the treatment group is -0.04.
+6. The second difference is 0.22.
+7. Our quantity of interest is the difference between these two differences, which is 0.20. This difference is not statistically significant (p = 0.277).
 
 # Conclusion
 
