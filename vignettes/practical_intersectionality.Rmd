@@ -56,7 +56,7 @@ The steps we are showing here are:
 
 4. Calculate adjusted predictions (estimated marginal means) of the outcome by intersectional strata, to get a clearer picture of the variation between intersectional dimensions, as well as testing specific strata for significant differences.
 
-## 1. Prepating the data and defining intersectional strata
+## 1. Preparing the data and defining intersectional strata
 
 First, we load the required packages and prepare a sample data set. We use the `efc` data from the **modelbased** package, which contains data of family carers who care for their elderly relatives. Our outcome of interest is _quality of life_ of family carers (score ranging from 0 to 25 points), the different dimensions of the intersectionality groups are _gender_ (male/female), _employment status_ (currently employed yes/no) and _age_ (three groups: until 40, 41 to 64 and 65 or older). We assume that there might be health-related inequalities, i.e. the quality of life differs depending on the characteristics that define our intersectional strata.
 
@@ -126,7 +126,7 @@ model_parameters(m_null)
 icc(m_null)
 ```
 
-The ICC with a value of about 4% is rather low. Usually, this indiates that our dimensions used to define the intersectional strata do not suggest larger social inequalities regarding quality of life. But we ignore this fact for now, as the purpose of demonstrating the analysis approach is rarely affected.
+The ICC with a value of about 4% is rather low. Usually, this indicates that our dimensions used to define the intersectional strata do not suggest larger social inequalities regarding quality of life. But we ignore this fact for now, as the purpose of demonstrating the analysis approach is rarely affected.
 
 ## 3. Partially-adjusted intersectional model and PCV
 
@@ -144,7 +144,7 @@ m_employment <- glmmTMB(qol ~ employed + (1 | gender:employed:age), data = efc)
 m_age <- glmmTMB(qol ~ age + (1 | gender:employed:age), data = efc)
 ```
 
-The regression coefficients already give an impression how strong the association between each single dimension and the outcome is, taking between-stratum variance into accout. The larger (in absolute values) the coefficients, the higher the degree that dimension contributed to the between-stratum variance.
+The regression coefficients already give an impression how strong the association between each single dimension and the outcome is, taking between-stratum variance into account. The larger (in absolute values) the coefficients, the higher the degree that dimension contributed to the between-stratum variance.
 
 ```{r}
 compare_parameters(m_gender, m_employment, m_age)

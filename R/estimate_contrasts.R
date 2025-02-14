@@ -147,8 +147,7 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c(switch(
-    estimate,
+  attr(out, "table_title") <- c(switch(estimate,
     specific = "Model-based Contrasts Analysis",
     typical = "Marginal Contrasts Analysis",
     average = "Averaged Contrasts Analysis",
