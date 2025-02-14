@@ -51,7 +51,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
-  predict_args <- .get_marginaleffects_type_argument(model, predict, ...)
+  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, ...)
 
 
   # Second step: create a data grid -------------------------------------------
@@ -194,9 +194,7 @@ get_marginalmeans <- function(model,
   #   the delta-method for SEs on the response scale
   # - only called when `type` (i.e. `predict`) is "response" AND the model class
   #   has a "link" prediction type
-  if (is.null(comparison)) {
-    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
-  }
+  means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
