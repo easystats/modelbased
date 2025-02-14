@@ -276,7 +276,7 @@ When we have two numeric terms in an interaction, the comparison becomes more di
 
 ### Spotlight analysis, floodlight analysis and Johnson-Neyman intervals
 
-The following examples show interactions between two numeric predictors. In case of interaction terms, adjusted predictions are usually shown at _representative values_. If a _numeric_ variable is specified as second or third interaction term, representative values (see `values_at()`) are typically mean +/- SD. This is sometimes also called "spotlight analysis" (_Spiller et al. 2013_).
+The following examples show interactions between two numeric predictors. In case of numeric interaction terms, it makes sense to calculate adjusted predictions for _representative values_, e.g. mean +/- SD. This is sometimes also called "spotlight analysis" (_Spiller et al. 2013_).
 
 In the next example, we have `Petal.Width` as second interaction term, thus we see the predicted values of `Sepal.Width` (our outcome) for `Petal.Length` at three different, representative values of `Petal.Width`: Mean (`r round(mean(iris$Petal.Width), 2)`), 1 SD above the mean (`r round(mean(iris$Petal.Width) + sd(iris$Petal.Width), 2)`) and 1 SD below the mean (`r round(mean(iris$Petal.Width) - sd(iris$Petal.Width), 2)`).
 
@@ -284,18 +284,14 @@ In the next example, we have `Petal.Width` as second interaction term, thus we s
 
 ```{r}
 m <- lm(Sepal.Width ~ Petal.Length * Petal.Width, data = iris)
-pred <- predict_response(m, c("Petal.Length", "Petal.Width"))
+pred <- estimate_means(m, c("Petal.Length", "Petal.Width=[sd]"))
 plot(pred)
 ```
 
-For `test_predictions()`, these three values (mean, +1 SD and -1 SD) work in the same way as if `Petal.Width` was a categorical predictor with three levels.
-
-First, we want to see at which value of `Petal.Width` the slopes of `Petal.Length` are significant. We do no pairwise comparison here, hence we set `test = "slope"`.
+First, we want to see at which value of `Petal.Width` the slopes of `Petal.Length` are significant. We do no pairwise comparison for now, hence we use `estimate_slopes()`.
 
 ```{r}
-test_predictions(pred, test = "slope")
-# same as:
-# test_predictions(m, c("Petal.Length", "Petal.Width"), test = NULL)
+estimate_slopes(m, "Petal.Length", by = "Petal.Width=[sd]")
 ```
 
 ### Pairwise comparisons
@@ -303,55 +299,53 @@ test_predictions(pred, test = "slope")
 The results of the pairwise comparison are shown below. These tell us that all linear trends (slopes) are significantly different from each other, i.e. the slope of the green line is significantly different from the slope of the red line, and so on.
 
 ```{r}
-test_predictions(pred)
+estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]")
 ```
 
 ### Floodlight analysis and Johnson-Neyman intervals
 
 Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable, which is implemented in the `johnson_neyman()` function that creates Johnson-Neyman intervals. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
 
-Let's look at an example. We first plot the predicted values of `Income` for `Murder` at nine different values of `Illiteracy` (there are no more colors in the default palette to show more lines).
+Let's look at an example. We first plot the predicted values of `Income` for `Murder` at different values of `Illiteracy`.
 
 ```{r}
 states <- as.data.frame(state.x77)
 states$HSGrad <- states$`HS Grad`
 m_mod <- lm(Income ~ HSGrad + Murder * Illiteracy, data = states)
 
-myfun <- seq(0.5, 3, length.out = 9)
-pr <- predict_response(m_mod, c("Murder", "Illiteracy [myfun]"))
+pr <- estimate_means(m_mod, c("Murder", "Illiteracy"))
 plot(pr)
 ```
 
-It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically signifiant. We still can use `test_predictions()`:
+It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically signifiant. We still can use `estimate_slopes()`:
 
 ```{r}
-test_predictions(pr, test = NULL)
+estimate_slopes(m_mod, "Murder", by ="Illiteracy")
 ```
 
 As can be seen, the results might indicate that at the lower and upper tails of `Illiteracy`, i.e. when `Illiteracy` is roughly smaller than `0.8` or larger than `2.6`, the association between `Murder` and `Income` is statistically signifiant.
 
-However, this test can be simplified using the `johnson_neyman()` function:
+However, this test can be simplified using the `summary()` function. This will show us in detail at which values for `Illiteracy` the interaction term is statisticall significant, and whether the association between `Murder` and the outcome is positive or negative.
 
 ```{r eval=FALSE}
-johnson_neyman(pr)
-#> The association between `Murder` and `Income` is positive for values of
-#> `Illiteracy` lower than 0.79 and negative for values higher than 2.67.
-#> Inside the interval of [0.79, 2.67], there were no clear associations.
+# we will force to calculate slopes at 200 values for "Illiteracy" using `length`
+slopes <- estimate_slopes(m_mod, "Murder", by ="Illiteracy", length = 200)
+summary(slopes)
 ```
 
 Furthermore, it is possible to create a spotlight-plot.
 
 ```{r message=FALSE}
-plot(johnson_neyman(pr))
+plot(slopes)
 ```
 
-To avoid misleading interpretations of the plot, we speak of "positive" and "negative" associations, respectively, or "no clear" associations (instead of "significant" or "non-significant"). This should prevent considering a non-significant range of values of the moderator as "accepting the null hypothesis".
+The results of the spotlight analysis suggest that values below `0.82` and above `2.57` are significantly different from zero, while values in between are not. We can plot predictions at these values to see the differences. The red and the green line represent values of `Illiteracy` at which we find clear positive resp. negative associations between `Murder` and `Income`, while we find no clear (positive or negative) association for the red line.
 
-The results of the spotlight analysis suggest that values below `0.79` and above `2.67` are significantly different from zero, while values in between are not. We can plot predictions at these values to see the differences. The red and the green line represent values of `Illiteracy` at which we find clear positive resp. negative associations between `Murder` and `Income`, while we find no clear (positive or negative) association for the blue line.
+Here an example, using values from the three "ranges" of the Johnson-Neyman-Interval: the red and blue lines are significantly positive and negative associated with the outcome, while the green line is not significant.
 
 ```{r}
-pr <- predict_response(m_mod, c("Murder", "Illiteracy [0.7, 1.5, 2.8]"))
-plot(pr, grid = TRUE)
+pr <- estimate_means(m_mod, c("Murder", "Illiteracy=c(0.7,1.5,2.8)"))
+plot(pr) + ggplot2::facet_wrap(~Illiteracy)
 ```
 
 [Go to next vignette: **Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
