@@ -61,12 +61,12 @@ The steps we are showing here are:
 First, we load the required packages and prepare a sample data set. We use the `efc` data from the **modelbased** package, which contains data of family carers who care for their elderly relatives. Our outcome of interest is _quality of life_ of family carers (score ranging from 0 to 25 points), the different dimensions of the intersectionality groups are _gender_ (male/female), _employment status_ (currently employed yes/no) and _age_ (three groups: until 40, 41 to 64 and 65 or older). We assume that there might be health-related inequalities, i.e. the quality of life differs depending on the characteristics that define our intersectional strata.
 
 ```{r}
-library(modelbased)  # predictions and significance testing
-library(insight)     # extracting random effects variances
-library(datawizard)  # data wrangling and preparation
-library(parameters)  # model summaries
+library(modelbased) # predictions and significance testing
+library(insight) # extracting random effects variances
+library(datawizard) # data wrangling and preparation
+library(parameters) # model summaries
 library(performance) # model fit indices, ICC
-library(glmmTMB)     # multilevel modelling
+library(glmmTMB) # multilevel modelling
 
 # sample data set
 data(efc, package = "modelbased")

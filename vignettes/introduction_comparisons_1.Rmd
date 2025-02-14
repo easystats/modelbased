@@ -102,7 +102,7 @@ p + geom_segment(
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
-ggtitle("Within \"episode\", do levels 1 and 2 differ?")
+  ggtitle("Within \"episode\", do levels 1 and 2 differ?")
 ht1 <- estimate_contrasts(model1, contrast = "episode")
 ```
 
@@ -158,7 +158,7 @@ p + geom_segment(
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
-ggtitle("Within level 2 of \"episode\", do treatment and control group differ?")
+  ggtitle("Within level 2 of \"episode\", do treatment and control group differ?")
 ht2 <- estimate_contrasts(model2, c("episode", "grp"))
 ```
 
@@ -223,7 +223,7 @@ p + geom_segment(
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
-ggtitle("Do different episode levels differ between groups?")
+  ggtitle("Do different episode levels differ between groups?")
 ht3 <- estimate_contrasts(model2, c("episode", "grp"))
 ```
 
@@ -284,7 +284,7 @@ p + geom_segment(
   color = arrow_color,
   arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
 ) +
-ggtitle("Differnce-in-differences")
+  ggtitle("Differnce-in-differences")
 
 ht4 <- estimate_means(model2, c("episode", "grp"))
 ht5 <- estimate_contrasts(model2, c("episode", "grp"), comparison = "(b1 - b2) = (b4 - b5)")

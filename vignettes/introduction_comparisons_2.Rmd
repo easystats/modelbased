@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 options(width = 800)
 options(modelbased_join_dots = FALSE)
-ht6 <- NULL
+ht6 <- m <- NULL
 
 arrow_color <- "#FF00cc"
 
@@ -114,7 +114,7 @@ p + geom_segment(
   data = dat1,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1
-)  + geom_segment(
+) + geom_segment(
   data = dat2,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
   color = "orange", linewidth = 1, linetype = "dashed"
@@ -122,11 +122,11 @@ p + geom_segment(
   data = dat2,
   mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1, linetype = "dashed"
-)  + geom_segment(
+) + geom_segment(
   data = dat2,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1
-)  + geom_segment(
+) + geom_segment(
   data = dat3,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
   color = "orange", linewidth = 1, linetype = "dashed"
@@ -134,12 +134,12 @@ p + geom_segment(
   data = dat3,
   mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1, linetype = "dashed"
-)  + geom_segment(
+) + geom_segment(
   data = dat3,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1
 ) +
-ggtitle("Linear trend of `Sepal.Length` by `Species`")
+  ggtitle("Linear trend of `Sepal.Length` by `Species`")
 ```
 
 Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is significant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
@@ -190,9 +190,7 @@ estimate_contrasts(
 ```
 
 ```{r echo=FALSE}
-ht7 <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1-b2)=(b1-b3)"
-)
-
+ht7 <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1-b2)=(b1-b3)")
 ```
 
 The difference between the two differences is `r round(ht7$Difference[1], 2)` and not statistically significant (p = `r round(ht7$p[1], 3)`).
