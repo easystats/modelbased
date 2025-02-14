@@ -1,8 +1,8 @@
 ---
-title: "Significance Testing Of Differences Between Predictions I: Contrasts And Pairwise Comparisons"
+title: "Significance testing of differences between predictions I: Contrasts and pairwise comparisons"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Significance Testing Of Differences Between Predictions I: Contrasts And Pairwise Comparisons}
+  %\VignetteIndexEntry{Significance testing of differences between predictions I: Contrasts and pairwise comparisons}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
