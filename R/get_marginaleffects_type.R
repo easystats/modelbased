@@ -39,7 +39,7 @@
 
   # return default type
   if (is.null(dots$type)) {
-    link_inverse <- insight::link_inverse(model)
+    link_inverse <- .link_inverse(model)
     if (is.null(predict)) {
       out <- valid_types[1]
     } else {
