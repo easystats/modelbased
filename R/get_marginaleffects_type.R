@@ -1,5 +1,5 @@
 #' @keywords internal
-.get_marginaleffects_type_argument <- function(model, predict = NULL, comparison = NULL, ...) {
+.get_marginaleffects_type_argument <- function(model, predict = NULL, comparison = NULL, model_info = NULL, ...) {
   dots <- list(...)
 
   # no transformation always returns link-scale
@@ -46,7 +46,11 @@
       out <- predict
     }
     # no transform for comparison
-    if ("link" %in% valid_types && out == "response" && !is.null(link_inverse) && is.null(comparison)) {
+    if ("link" %in% valid_types &&
+      out == "response" &&
+      !is.null(link_inverse) &&
+      is.null(comparison) &&
+      ((isTRUE(model_info$is_binomial) || isTRUE(model_info$is_count)) && isFALSE(model_info$is_zero_inflated))) { # nolint
       list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)
     } else {
       list(predict = out, backtransform = FALSE, link_inverse = NULL)
