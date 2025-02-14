@@ -19,33 +19,13 @@ knitr::opts_chunk$set(
 options(width = 800)
 arrow_color <- "#FF00cc"
 
-pkgs <- c(
-  "ggplot2",
-  "marginaleffects",
-  "emmeans",
-  "htmltools",
-  "glmmTMB"
-)
+pkgs <- c("ggplot2", "see", "marginaleffects", "glmmTMB")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
 
-```{r echo=FALSE, message=FALSE}
-library(htmltools)
-callout_tip <- function(header = NULL, ...) {
-  div(
-    class = "callout-tip",
-    tags$h1(
-      tags$img(src = "../man/figures/summary.png", width = "20", height = "17", style = "vertical-align:middle"), # nolint
-      header
-    ),
-    ...
-  )
-}
-includeCSS("../man/figures/callout.css")
-```
 
 This vignette is the last in a 4-part series:
 
@@ -78,21 +58,11 @@ Consequently, such regression models usually have two parts in their formula, or
 
 The two model parts do not necessarily need to use the same predictors. Therefore, it is not always straightforward to find predictors that can be used in the zero-inflation model. Think about why you have excess zeros in your data. Are they true zeros (inherently no counts) or due to limitations (measurement limitations, biological process, ...)? Choose variables that explain why some data points have zero counts even when conditions might allow for some count. For instance, if modeling customer complaints, store location in a remote area might predict zero complaints due to fewer customers.
 
-```{r echo=FALSE}
-callout_tip(
-  "Summary of most important points:",
-  tags$ul(
-    tags$li("For zero-inflation models, the model has two parts: a zero-inflation component and a count component. Adjusted predictions can be calculated for both parts, and contrasts or comparisons can be calculated for both parts, too."), # nolint
-    tags$li("The easiest way to compute contrasts or pairwise comparisons is simply to pass the result from ", tags$code("predict_response()"), " to ", tags$code("test_predictions()"), ". Specify the ", tags$code("type"), " argument to calculate predictions and contrasts or comparisons for the corresponding model component."), # nolint
-  )
-)
-```
-
 # Zero-inflation models using the *glmmTMB* package
 
 In the following example, we use the `Salamanders` dataset from the `glmmTMB` package.We fit a zero-inflated Poisson regression model to the data, with `mined` as the predictor variable.
 
-Adjusted predictions using `predict_response()` can be made for the different model components:
+Adjusted predictions using `estimate_means()` can be made for the different model components:
 
 - The **conditional, or count component**, which predicts the average count of salamanders. This is the default and uses `type = "fixed"`. This would return the predicted mean from the count component only, which is the conditional mean (average counts) of the response only for "counting zeros". It does not take into account the probability of "true zeros".
 
@@ -101,7 +71,7 @@ Adjusted predictions using `predict_response()` can be made for the different mo
 - The **zero-inflation probabilities**, which predicts the probabilities whether an observation is a "true zero" or not. Use `type = "zi_prob"` for this. It only related to the zero-inflation component of the model.
 
 ```{r}
-library(ggeffects)
+library(modelbased)
 library(glmmTMB)
 
 data(Salamanders)
@@ -114,40 +84,33 @@ m <- glmmTMB(count ~ mined + (1 | site),
 
 ## Contrasts and comparisons for the conditional model
 
-We will start with the conditional mean, using `margin = "empirical"`, as we want to average predictions across random effects (see [introduction on random effects](https://easystats.github.io/modelbased/articles/introduction_randomeffects.html) for details).
-
-The easiest way to compute contrasts or pairwise comparisons is simply to pass the result from `predict_response()` to `test_predictions()`. The correct focal terms and model components are automatically detected.
-
-For zero-inflated models, the default `type` of predictions is `"fixed"`, i.e. the conditional mean is predicted. This is the average count of the response, excluding the zero-inflation component.
+We will start with the conditional mean. For zero-inflated models, the conditional mean is predicted using `predict = "conditional"`. This is the average count of the response, excluding the zero-inflation component.
 
 ```{r message=TRUE}
 # predicting the conditional mean
-p <- predict_response(m, "mined", margin = "empirical")
-p
+estimate_means(m, "mined", predict = "conditional")
 
-test_predictions(p)
+estimate_contrasts(m, "mined", predict = "conditional")
 ```
 
 ## Contrasts and comparisons for the full model
 
-If `type = "zero_inflated"`, adjusted predictions are returned for the full model, i.e. the average expected count of the response, including the zero-inflation component.
+By default, adjusted predictions are returned for the full model, i.e. the average expected count of the *response*, including the zero-inflation component.
 
 ```{r message=TRUE}
 # predicting the expected value of the response
-p <- predict_response(m, "mined", type = "zero_inflated", margin = "empirical")
-p
+estimate_means(m, "mined")
 
-test_predictions(p)
+estimate_contrasts(m, "mined")
 ```
 
 ## Contrasts and comparisons for the zero-inflation probabilities
 
-If you're interested in the probabilities of being a "true zero" or not, use `type = "zi_prob"`. Note that `margin` should not be `"empirical"` in this case, because this will not include confidence intervals for the adjusted predictions.
+If you're interested in the probabilities of being a "true zero" or not, use `predict = "zprob"`.
 
 ```{r message=TRUE}
 # predicting the zero-inflation probabilities
-p <- predict_response(m, "mined", type = "zi_prob")
-p
+estimate_means(m, "mined", predict = "zprob")
 
-test_predictions(p)
+estimate_contrasts(m, "mined", predict = "zprob")
 ```
