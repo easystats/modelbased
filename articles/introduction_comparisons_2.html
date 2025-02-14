@@ -346,7 +346,7 @@ three different, representative values of <code>Petal.Width</code>: Mean
 <code class="sourceCode R"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width=[sd]"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pred</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
 <p>First, we want to see at which value of <code>Petal.Width</code> the
 slopes of <code>Petal.Length</code> are significant. We do no pairwise
 comparison for now, hence we use <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</p>
@@ -405,7 +405,7 @@ moderator at which the slope of the predictor is significant
 <span></span>
 <span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m_mod</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Murder"</span>, <span class="st">"Illiteracy"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-16-1.png" width="672"></p>
+<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-15-1.png" width="672"></p>
 <p>It’s difficult to say at which values from <code>Illiteracy</code>,
 the association between <code>Murder</code> and <code>Income</code>
 might be statistically significant. We still can use
@@ -458,7 +458,7 @@ the outcome is positive or negative.</p>
 <p>Furthermore, it is possible to create a spotlight-plot.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
+<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-18-1.png" width="672"></p>
 <p>The results of the spotlight analysis suggest that values below
 <code>0.82</code> and above <code>2.57</code> are significantly
 different from zero, while values in between are not. We can plot
@@ -474,7 +474,7 @@ is not significant.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m_mod</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Murder"</span>, <span class="st">"Illiteracy=c(0.7,1.5,2.8)"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pr</span><span class="op">)</span> <span class="op">+</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html" class="external-link">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">Illiteracy</span><span class="op">)</span></span></code></pre></div>
-<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
+<p><img src="introduction_comparisons_2_files/figure-html/unnamed-chunk-19-1.png" width="672"></p>
 <p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html">Go
 to next vignette: <strong>Contrasts and Comparisons for Generalized
 Linear Models</strong></a></p>
