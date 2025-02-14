@@ -1,5 +1,9 @@
 #' @keywords internal
-.get_marginaleffects_type_argument <- function(model, predict = NULL, comparison = NULL, model_info = NULL, ...) {
+.get_marginaleffects_type_argument <- function(model,
+                                               predict = NULL,
+                                               comparison = NULL,
+                                               model_info = NULL,
+                                               ...) {
   dots <- list(...)
 
   # no transformation always returns link-scale

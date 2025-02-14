@@ -51,7 +51,7 @@ get_marginalmeans <- function(model,
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type
-  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, ...)
+  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, ...) # nolint
 
 
   # Second step: create a data grid -------------------------------------------
