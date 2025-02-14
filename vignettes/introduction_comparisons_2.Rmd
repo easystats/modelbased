@@ -141,7 +141,7 @@ p + geom_segment(
 ggtitle("Linear trend of `Sepal.Length` by `Species`")
 ```
 
-Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is signiciant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
+Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is significant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
 
 ```{r}
 estimate_slopes(m, "Sepal.Length", by = "Species")
@@ -316,15 +316,15 @@ pr <- estimate_means(m_mod, c("Murder", "Illiteracy"))
 plot(pr)
 ```
 
-It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically signifiant. We still can use `estimate_slopes()`:
+It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically significant. We still can use `estimate_slopes()`:
 
 ```{r}
 estimate_slopes(m_mod, "Murder", by = "Illiteracy")
 ```
 
-As can be seen, the results might indicate that at the lower and upper tails of `Illiteracy`, i.e. when `Illiteracy` is roughly smaller than `0.8` or larger than `2.6`, the association between `Murder` and `Income` is statistically signifiant.
+As can be seen, the results might indicate that at the lower and upper tails of `Illiteracy`, i.e. when `Illiteracy` is roughly smaller than `0.8` or larger than `2.6`, the association between `Murder` and `Income` is statistically significant.
 
-However, this test can be simplified using the `summary()` function. This will show us in detail at which values for `Illiteracy` the interaction term is statisticall significant, and whether the association between `Murder` and the outcome is positive or negative.
+However, this test can be simplified using the `summary()` function. This will show us in detail at which values for `Illiteracy` the interaction term is statistically significant, and whether the association between `Murder` and the outcome is positive or negative.
 
 ```{r}
 # we will force to calculate slopes at 200 values for "Illiteracy" using `length`

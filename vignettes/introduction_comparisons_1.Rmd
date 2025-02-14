@@ -45,7 +45,7 @@ This vignette is the first in a 4-part series:
 
 A reason to compute adjusted predictions (or estimated marginal means) is to help understanding the relationship between predictors and outcome of a regression model. The next step, which often follows this, is to see if there are statistically significant differences. These could be, for example, differences between groups, i.e. between the levels of categorical predictors or whether trends differ significantly from each other.
 
-The *modelbased* package provides a function, `estimate_contrasts()`, which does exactly this: testing differences of predictions or marginal means for statistical significance. This is usually called _contrasts_ or _(pairwise) comparisons_, or _marginal effects_ (if the difference refers to a one-unit change of predictors). This vignette shows some examples how to use the `estimate_contrasts()` function and how to test wheter differences in predictions are statistically significant.
+The *modelbased* package provides a function, `estimate_contrasts()`, which does exactly this: testing differences of predictions or marginal means for statistical significance. This is usually called _contrasts_ or _(pairwise) comparisons_, or _marginal effects_ (if the difference refers to a one-unit change of predictors). This vignette shows some examples how to use the `estimate_contrasts()` function and how to test whether differences in predictions are statistically significant.
 
 First, different examples for _pairwise comparisons_ are shown, later we will see how to test _differences-in-differences_ (in the *emmeans* package, also called _interaction contrasts_).
 

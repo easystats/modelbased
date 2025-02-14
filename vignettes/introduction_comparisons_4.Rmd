@@ -44,7 +44,7 @@ Lastly, we show an example for models with zero-inflation component.
 
 ## What is a zero-inflated model?
 
-A zero-inflated model is a statistical approach used when dealing with count data that has an excessive number of zero values. Imagine counting something that can be zero, like the number of customers a store gets in a day, and it happens that there are a lot more zeros in the data than a typical count model (e.g., Poisson regression) would ecpect. That's where we need zero-inflated regression models. These models consider two ways zeros can happen:
+A zero-inflated model is a statistical approach used when dealing with count data that has an excessive number of zero values. Imagine counting something that can be zero, like the number of customers a store gets in a day, and it happens that there are a lot more zeros in the data than a typical count model (e.g., Poisson regression) would expect. That's where we need zero-inflated regression models. These models consider two ways zeros can happen:
 
 - True Zeros: These are days the store is naturally closed, or maybe there's just no demand for the product.
 

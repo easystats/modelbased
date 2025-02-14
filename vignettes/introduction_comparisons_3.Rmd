@@ -40,7 +40,7 @@ This vignette is the third in a 4-part series:
 
 # Contrasts and comparisons for GLM - logistic regression example
 
-We will now show an example for non-Gaussian models. For GLM's (generalized linear models) with (non-Gaussian) link-functions, `estimate_means()` by default returns predcted values on the *response* scale. For example, predicted values for logistic regression models are shown as *probabilities*.
+We will now show an example for non-Gaussian models. For GLM's (generalized linear models) with (non-Gaussian) link-functions, `estimate_means()` by default returns predicted values on the *response* scale. For example, predicted values for logistic regression models are shown as *probabilities*.
 
 Let's look at a simple example.
 
