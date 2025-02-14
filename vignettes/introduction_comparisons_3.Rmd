@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
 options(width = 800)
 arrow_color <- "#FF00cc"
 
-pkgs <- c("ggplot2", "see" "marginaleffects")
+pkgs <- c("ggplot2", "see", "marginaleffects")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
