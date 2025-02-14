@@ -63,11 +63,6 @@ print.estimate_contrasts <- function(x,
   attr <- attributes(x)
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
-  # we can't use "select" for summary-objects
-  if (inherits(x, "summary_estimate_slopes")) {
-    select <- NULL
-  }
-
   # format table
   out <- format(out, select = select, include_grid = include_grid, ...)
   attributes(out) <- utils::modifyList(attributes(out), attr)

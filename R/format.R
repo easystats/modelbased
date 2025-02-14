@@ -107,7 +107,7 @@ format.visualisation_matrix <- function(x, ...) {
 
 #' @export
 format.summary_estimate_slopes <- function(x, ...) {
-  insight::format_table(x, ...)
+  insight::format_table(x, select = NULL, ...)
 }
 
 
