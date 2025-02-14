@@ -327,7 +327,7 @@ As can be seen, the results might indicate that at the lower and upper tails of 
 
 However, this test can be simplified using the `summary()` function. This will show us in detail at which values for `Illiteracy` the interaction term is statisticall significant, and whether the association between `Murder` and the outcome is positive or negative.
 
-```{r eval=FALSE}
+```{r}
 # we will force to calculate slopes at 200 values for "Illiteracy" using `length`
 slopes <- estimate_slopes(m_mod, "Murder", by ="Illiteracy", length = 200)
 summary(slopes)
