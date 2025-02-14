@@ -1,0 +1,332 @@
+---
+title: "Significance Testing Of Differences Between Predictions I: Contrasts And Pairwise Comparisons"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Significance Testing Of Differences Between Predictions I: Contrasts And Pairwise Comparisons}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  fig.width = 7,
+  fig.height = 3.5,
+  message = FALSE, warning = FALSE
+)
+options(width = 800)
+arrow_color <- "#FF00cc"
+
+pkgs <- c(
+  "ggplot2",
+  "marginaleffects",
+  "parameters",
+  "emmeans"
+)
+
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+
+This vignette is the first in a 4-part series:
+
+1. **Significance Testing of Differences Between Predictions I: Contrasts and Pairwise Comparisons**
+
+2. [**Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+
+3. [**Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+
+4. [**Significance Testing of Differences Between Predictions IV: Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+
+
+# Hypothesis testing for categorical predictors
+
+A reason to compute adjusted predictions (or estimated marginal means) is to help understanding the relationship between predictors and outcome of a regression model. The next step, which often follows this, is to see if there are statistically significant differences. These could be, for example, differences between groups, i.e. between the levels of categorical predictors or whether trends differ significantly from each other.
+
+The *modelbased* package provides a function, `estimate_contrasts()`, which does exactly this: testing differences of predictions or marginal means for statistical significance. This is usually called _contrasts_ or _(pairwise) comparisons_, or _marginal effects_ (if the difference refers to a one-unit change of predictors). This vignette shows some examples how to use the `estimate_contrasts()` function and how to test wheter differences in predictions are statistically significant.
+
+First, different examples for _pairwise comparisons_ are shown, later we will see how to test _differences-in-differences_ (in the *emmeans* package, also called _interaction contrasts_).
+
+## Within `episode`, do levels differ?
+
+We start with a toy example, where we have a linear model with two categorical predictors. No interaction is involved for now.
+
+We display a simple table of regression coefficients, created with `model_parameters()` from the _parameters_ package.
+
+```{r}
+library(modelbased)
+library(parameters)
+library(ggplot2)
+
+set.seed(123)
+n <- 200
+d <- data.frame(
+  outcome = rnorm(n),
+  grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
+  episode = as.factor(sample(1:3, n, TRUE)),
+  sex = as.factor(sample(c("female", "male"), n, TRUE, prob = c(0.4, 0.6)))
+)
+model1 <- lm(outcome ~ grp + episode, data = d)
+model_parameters(model1)
+```
+
+### Predictions
+
+Let us look at the adjusted predictions.
+
+```{r}
+my_predictions <- estimate_means(model1, "episode")
+my_predictions
+
+plot(my_predictions)
+```
+
+We now see that, for instance, the predicted _outcome_ when `espisode = 2` is `r round(my_predictions$Mean[2], 2)`.
+
+### Pairwise comparisons
+
+We could now ask whether the predicted outcome for `episode = 1` is significantly different from the predicted outcome at `episode = 2`.
+
+```{r echo=FALSE}
+p <- plot(my_predictions)
+line_data <- as.data.frame(my_predictions, terms_to_colnames = FALSE)[1:2, ]
+p + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[1]) + 0.06, xend = as.numeric(x[2]) - 0.06,
+    y = predicted[1], yend = predicted[2], group = NULL, color = NULL
+  ),
+  color = arrow_color,
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+) +
+ggtitle("Within \"episode\", do levels 1 and 2 differ?")
+ht1 <- estimate_contrasts(model1, contrast = "episode")
+```
+
+To do this, we use the `estimate_contrasts()` function. By default, a pairwise comparison is performed. You can specify other comparisons as well, using the `comparison` argument. For now, we go on with the simpler example of contrasts or pairwise comparisons.
+
+```{r}
+# argument `comparison` defaults to "pairwise"
+estimate_contrasts(model1, "episode")
+```
+
+For our quantity of interest, the contrast between episode `r paste0(ht1$Level1[1], "-", ht1$Leve21[1])`, we see the value `r round(ht1$Difference[1], 2)`, which is exactly the difference between the predicted outcome for `episode = 1` (`r round(my_predictions$Mean[1], 2)`) and `episode = 2` (`r round(my_predictions$Mean[2], 2)`). The related p-value is `r round(ht1$p[1], 3)`, indicating that the difference between the predicted values of our outcome at these two levels of the factor _episode_ is indeed statistically significant.
+
+We can also define "representative values" via the `contrast` or `by` arguments. For example, we could also specify the levels of `episode` directly, to simplify the output:
+
+```{r}
+estimate_contrasts(model1, contrast = "episode=c(1,2)")
+```
+
+## Does same level of episode differ between groups?
+
+The next example includes a pairwise comparison of an interaction between two categorical predictors.
+
+```{r}
+model2 <- lm(outcome ~ grp * episode, data = d)
+model_parameters(model2)
+```
+
+### Predictions
+
+First, we look at the predicted values of _outcome_ for all combinations of the involved interaction term.
+
+```{r}
+my_predictions <- estimate_means(model2, c("episode", "grp"))
+my_predictions
+
+plot(my_predictions)
+```
+
+### Pairwise comparisons
+
+We could now ask whether the predicted outcome for `episode = 2` is significantly different depending on the level of `grp`? In other words, do the groups `treatment` and `control` differ when `episode = 2`?
+
+```{r echo=FALSE}
+p <- plot(my_predictions)
+line_data <- as.data.frame(my_predictions, terms_to_colnames = FALSE)[3:4, 1:2]
+line_data$group_col <- "control"
+p + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[1]) - 0.06, xend = as.numeric(x[2]) + 0.06,
+    y = predicted[1], yend = predicted[2], group = NULL, color = NULL
+  ),
+  color = arrow_color,
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+) +
+ggtitle("Within level 2 of \"episode\", do treatment and control group differ?")
+ht2 <- estimate_means(model2, c("episode", "grp"))
+```
+
+Again, to answer this question, we calculate all pairwise comparisons, i.e. the comparison (or test for differences) between all combinations of our _focal predictors_. The focal predictors we're interested here are our two variables used for the interaction.
+
+```{r}
+# we want "episode = 2-2" and "grp = control-treatment"
+test_predictions(model2, c("episode", "grp"))
+```
+
+For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is `r round(ht2$Contrast[8], 2)`. We find this comparison in row 8 of the above output.
+
+As we can see, `test_predictions()` returns pairwise comparisons of all possible combinations of factor levels from our focal variables. If we're only interested in a very specific comparison, we have two options to simplify the output:
+
+1. We could directly formulate this comparison as `test`. To achieve this, we first need to create an overview of the adjusted predictions, which we get from `predict_response()` or `test_predictions(test = NULL)`.
+
+2. We pass specific values or levels to the `terms` argument, which is the same as for `predict_response()`.
+
+#### Option 1: Directly specify the comparison
+
+```{r}
+# adjusted predictions, compact table
+test_predictions(model2, c("episode", "grp"), test = NULL)
+```
+
+In the above output, each row is considered as one coefficient of interest. Our groups we want to include in our comparison are rows two (`grp = control` and `episode = 2`) and five (`grp = treatment` and `episode = 2`), so our "quantities of interest" are `b2` and `b5`. Our null hypothesis we want to test is whether both predictions are equal, i.e. `test = "b2 = b5"`. We can now calculate the desired comparison directly:
+
+```{r}
+# compute specific contrast directly
+test_predictions(model2, c("episode", "grp"), test = "b2 = b5")
+```
+
+Curious how `test` works in detail? `test_predictions()` is a small, convenient wrapper around `predictions()` and `slopes()` of the great [*marginaleffects*](https://marginaleffects.com/) package. Thus, `test` is just passed to the [`hypothesis` argument](https://marginaleffects.com/vignettes/hypothesis.html) of those functions.
+
+#### Option 2: Specify values or levels
+
+Again, using representative values for the `terms` argument, we can also simplify the output using an alternative syntax:
+
+```{r}
+# return pairwise comparisons for specific values, in
+# this case for episode = 2 in both groups
+test_predictions(model2, c("episode [2]", "grp"))
+```
+
+This is equivalent to the above example, where we directly specified the comparison we're interested in. However, the `test` argument might provide more flexibility in case you want more complex comparisons. See examples below.
+
+## Do different episode levels differ between groups?
+
+We can repeat the steps shown above to test any combination of group levels for differences.
+
+### Pairwise comparisons
+
+For instance, we could now ask whether the predicted outcome for `episode = 1` in the `treatment` group is significantly different from the predicted outcome for `episode = 3` in the `control` group.
+
+```{r echo=FALSE}
+p <- plot(my_predictions)
+line_data <- as.data.frame(my_predictions, terms_to_colnames = FALSE)[c(2, 5), 1:2]
+line_data$group_col <- "treatment"
+p + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[1]) + 0.06, xend = as.numeric(x[2]) - 0.06,
+    y = predicted[1], yend = predicted[2], group = NULL, color = NULL
+  ),
+  color = arrow_color,
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+) +
+ggtitle("Do different episode levels differ between groups?")
+ht3 <- test_predictions(model2, c("episode", "grp"))
+```
+
+The contrast we are interested in is between `episode = 1` in the `treatment` group and `episode = 3` in the `control` group. These are the predicted values in rows three and four (c.f. above table of predicted values), thus we `test` whether `"b4 = b3"`.
+
+```{r}
+test_predictions(model2, c("episode", "grp"), test = "b4 = b3")
+```
+
+Another way to produce this pairwise comparison, we can reduce the table of predicted values by providing [specific values or levels](https://easystats.github.io/modelbased/articles/introduction_effectsatvalues.html) in the `terms` argument:
+
+```{r}
+predict_response(model2, c("episode [1,3]", "grp"))
+```
+
+`episode = 1` in the `treatment` group and `episode = 3` in the `control` group refer now to rows two and three, thus we also can obtain the desired comparison this way:
+
+```{r}
+pred <- predict_response(model2, c("episode [1,3]", "grp"))
+test_predictions(pred, test = "b3 = b2")
+```
+
+## Does difference between two levels of episode in the control group differ from difference of same two levels in the treatment group?
+
+The `test` argument also allows us to compare difference-in-differences (aka _interaction contrasts_). For example, is the difference between two episode levels in one group significantly different from the difference of the same two episode levels in the other group?
+
+```{r echo=FALSE}
+my_predictions <- predict_response(model2, c("grp", "episode"))
+p <- plot(my_predictions)
+line_data <- as.data.frame(my_predictions, terms_to_colnames = FALSE)[, 1:2, ]
+line_data$group_col <- "1"
+p + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[1]) - 0.05, xend = as.numeric(x[1]) - 0.05,
+    y = predicted[1], yend = predicted[2], group = NULL, color = NULL
+  ),
+  color = "orange",
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
+) + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[4]) - 0.05, xend = as.numeric(x[4]) - 0.05,
+    y = predicted[4], yend = predicted[5], group = NULL, color = NULL
+  ),
+  color = "orange",
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40, type = "closed")
+) + geom_segment(
+  data = line_data,
+  aes(
+    x = as.numeric(x[1]) - 0.05, xend = as.numeric(x[4]) - 0.05,
+    y = (predicted[1] + predicted[2]) / 2,
+    yend = (predicted[4] + predicted[5]) / 2, group = NULL, color = NULL
+  ),
+  color = arrow_color,
+  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
+) +
+ggtitle("Differnce-in-differences")
+
+ht4 <- test_predictions(model2, c("episode", "grp"), test = NULL)
+ht5 <- test_predictions(model2, c("episode", "grp"), test = "(b1 - b2) = (b4 - b5)")
+```
+
+As a reminder, we look at the table of predictions again:
+
+```{r}
+test_predictions(model2, c("episode", "grp"), test = NULL)
+```
+
+The first difference of episode levels 1 and 2 in the control group refer to rows one and two in the above table (`b1` and `b2`). The difference for the same episode levels in the treatment group refer to the difference between rows four and five (`b4` and `b5`). Thus, we have `b1 - b2` and `b4 - b5`, and our null hypothesis is that these two differences are equal: `test = "(b1 - b2) = (b4 - b5)"`.
+
+```{r}
+test_predictions(model2, c("episode", "grp"), test = "(b1 - b2) = (b4 - b5)")
+```
+
+Interaction contrasts can also be calculated by specifying `test = "interaction"`. Not that in this case, the _emmeans_ package is used an backend, i.e. `test_predictions()` is called with `engine = "emmeans"` (silently).
+
+```{r}
+# test = "interaction" always returns *all* possible interaction contrasts
+test_predictions(model2, c("episode", "grp"), test = "interaction")
+```
+
+Let's replicate this step-by-step:
+
+1. Predicted value of _outcome_ for `episode = 1` in the control group is `r round(ht4$Predicted[1], 2)`.
+2. Predicted value of _outcome_ for `episode = 2` in the control group is `r round(ht4$Predicted[2], 2)`.
+3. The first difference is `r round(ht4$Predicted[1] - ht4$Predicted[2], 2)`
+4. Predicted value of _outcome_ for `episode = 1` in the treatment group is `r round(ht4$Predicted[4], 2)`.
+5. Predicted value of _outcome_ for `episode = 2` in the treatment group is `r round(ht4$Predicted[5], 2)`.
+6. The second difference is `r round(ht4$Predicted[4] - ht4$Predicted[5], 2)`
+7. Our quantity of interest is the difference between these two differences, which is `r round((ht4$Predicted[1] - ht4$Predicted[2]) - (ht4$Predicted[4] - ht4$Predicted[5]), 2)`. This difference is not statistically significant (p = `r round(ht5$p.value, 3)`).
+
+# Conclusion
+
+Thanks to the great *marginaleffects* package, it is now possible to have a powerful function in *modelbased* that allows to perform the next logical step after calculating adjusted predictions and to conduct hypothesis tests for contrasts and pairwise comparisons.
+
+While the current implementation in `test_predictions()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, I recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/vignettes/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/vignettes/hypothesis.html).
+
+[Go to next vignette: **Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)

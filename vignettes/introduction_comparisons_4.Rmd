@@ -1,0 +1,153 @@
+---
+title: "Significance Testing Of Differences Between Predictions IV: Contrasts And Comparisons For Zero-Inflation Models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Significance Testing Of Differences Between Predictions IV: Contrasts And Comparisons For Zero-Inflation Models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  fig.width = 7,
+  fig.height = 3.5,
+  message = FALSE, warning = FALSE
+)
+options(width = 800)
+arrow_color <- "#FF00cc"
+
+pkgs <- c(
+  "ggplot2",
+  "marginaleffects",
+  "emmeans",
+  "htmltools",
+  "glmmTMB"
+)
+
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+```{r echo=FALSE, message=FALSE}
+library(htmltools)
+callout_tip <- function(header = NULL, ...) {
+  div(
+    class = "callout-tip",
+    tags$h1(
+      tags$img(src = "../man/figures/summary.png", width = "20", height = "17", style = "vertical-align:middle"), # nolint
+      header
+    ),
+    ...
+  )
+}
+includeCSS("../man/figures/callout.css")
+```
+
+This vignette is the last in a 4-part series:
+
+1. [**Significance Testing of Differences Between Predictions I: Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+
+2. [**Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+
+3. [**Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+
+4. **Significance Testing of Differences Between Predictions IV: Contrasts and Comparisons for Zero-Inflation Models**
+
+
+# Contrasts and comparisons for Zero-Inflation Models
+
+Lastly, we show an example for models with zero-inflation component.
+
+## What is a zero-inflated model?
+
+A zero-inflated model is a statistical approach used when dealing with count data that has an excessive number of zero values. Imagine counting something that can be zero, like the number of customers a store gets in a day, and it happens that there are a lot more zeros in the data than a typical count model (e.g., Poisson regression) would ecpect. That's where we need zero-inflated regression models. These models consider two ways zeros can happen:
+
+- True Zeros: These are days the store is naturally closed, or maybe there's just no demand for the product.
+
+- Counting Zeros: These are days the store is open but just happens to get no customers. Maybe it's bad luck, or a random fluctuation.
+
+The model treats these differently. It uses one part (the _zero-inflation_ component, a logistic regression) to predict the probability of a true zero, based on things that make the store less likely to be open at all. Then it uses another part (the _conditional_, or _count_ component, a count regression) to predict the number of customers on days the store is actually open, considering other factors like weather or discounts.
+
+Consequently, such regression models usually have two parts in their formula, or (depending on the package) separate formulas for the count and the zero-inflation components. Adjusted predictions can be calculated for both parts, and contrasts or comparisons can be calculated for both parts, too.
+
+## How to choose predictors for zero-inflation models?
+
+The two model parts do not necessarily need to use the same predictors. Therefore, it is not always straightforward to find predictors that can be used in the zero-inflation model. Think about why you have excess zeros in your data. Are they true zeros (inherently no counts) or due to limitations (measurement limitations, biological process, ...)? Choose variables that explain why some data points have zero counts even when conditions might allow for some count. For instance, if modeling customer complaints, store location in a remote area might predict zero complaints due to fewer customers.
+
+```{r echo=FALSE}
+callout_tip(
+  "Summary of most important points:",
+  tags$ul(
+    tags$li("For zero-inflation models, the model has two parts: a zero-inflation component and a count component. Adjusted predictions can be calculated for both parts, and contrasts or comparisons can be calculated for both parts, too."), # nolint
+    tags$li("The easiest way to compute contrasts or pairwise comparisons is simply to pass the result from ", tags$code("predict_response()"), " to ", tags$code("test_predictions()"), ". Specify the ", tags$code("type"), " argument to calculate predictions and contrasts or comparisons for the corresponding model component."), # nolint
+  )
+)
+```
+
+# Zero-inflation models using the *glmmTMB* package
+
+In the following example, we use the `Salamanders` dataset from the `glmmTMB` package.We fit a zero-inflated Poisson regression model to the data, with `mined` as the predictor variable.
+
+Adjusted predictions using `predict_response()` can be made for the different model components:
+
+- The **conditional, or count component**, which predicts the average count of salamanders. This is the default and uses `type = "fixed"`. This would return the predicted mean from the count component only, which is the conditional mean (average counts) of the response only for "counting zeros". It does not take into account the probability of "true zeros".
+
+- The **full model**, which predicts the average count of the response, including the zero-inflation component. This would return the expected value of the response for an average observation, which *can* be a "true zero" or a "count zero". Use `type = "zero_inflation"` to calculate adjusted predictions that also take the zero-inflation component into account. For the above example, use this option if you want to predict the average number of customers per week, including days the store is closed.
+
+- The **zero-inflation probabilities**, which predicts the probabilities whether an observation is a "true zero" or not. Use `type = "zi_prob"` for this. It only related to the zero-inflation component of the model.
+
+```{r}
+library(ggeffects)
+library(glmmTMB)
+
+data(Salamanders)
+m <- glmmTMB(count ~ mined + (1 | site),
+  ziformula = ~mined,
+  family = poisson(),
+  data = Salamanders
+)
+```
+
+## Contrasts and comparisons for the conditional model
+
+We will start with the conditional mean, using `margin = "empirical"`, as we want to average predictions across random effects (see [introduction on random effects](https://easystats.github.io/modelbased/articles/introduction_randomeffects.html) for details).
+
+The easiest way to compute contrasts or pairwise comparisons is simply to pass the result from `predict_response()` to `test_predictions()`. The correct focal terms and model components are automatically detected.
+
+For zero-inflated models, the default `type` of predictions is `"fixed"`, i.e. the conditional mean is predicted. This is the average count of the response, excluding the zero-inflation component.
+
+```{r message=TRUE}
+# predicting the conditional mean
+p <- predict_response(m, "mined", margin = "empirical")
+p
+
+test_predictions(p)
+```
+
+## Contrasts and comparisons for the full model
+
+If `type = "zero_inflated"`, adjusted predictions are returned for the full model, i.e. the average expected count of the response, including the zero-inflation component.
+
+```{r message=TRUE}
+# predicting the expected value of the response
+p <- predict_response(m, "mined", type = "zero_inflated", margin = "empirical")
+p
+
+test_predictions(p)
+```
+
+## Contrasts and comparisons for the zero-inflation probabilities
+
+If you're interested in the probabilities of being a "true zero" or not, use `type = "zi_prob"`. Note that `margin` should not be `"empirical"` in this case, because this will not include confidence intervals for the adjusted predictions.
+
+```{r message=TRUE}
+# predicting the zero-inflation probabilities
+p <- predict_response(m, "mined", type = "zi_prob")
+p
+
+test_predictions(p)
+```
