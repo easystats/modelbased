@@ -187,7 +187,7 @@ As we can see, `estimate_contrasts()` returns pairwise comparisons of all possib
 estimate_means(model2, by = c("episode", "grp"))
 ```
 
-In the above output, each row is considered as one coefficient of interest. Our groups we want to include in our comparison are rows two (`grp = control` and `episode = 2`) and five (`grp = treatment` and `episode = 2`), so our "quantities of interest" are `b2` and `b5`. Our null hypothesis we want to test is whether both predictions are equal, i.e. `comparison = "b2 = b5"`. We can now calculate the desired comparison directly:
+In the above output, each row is considered as one coefficient of interest. Our groups we want to include in our comparison are rows two (`grp = control` and `episode = 2`) and five (`grp = treatment` and `episode = 2`), so our "quantities of interest" are `b2` and `b5`. Our null hypothesis we want to test is whether both predictions are equal, i.e. `comparison = "b5 = b2"` (we could also specify `"b2 = b5"`, results would be the same, just signs are switched). We can now calculate the desired comparison directly:
 
 ```{r}
 # compute specific contrast directly
