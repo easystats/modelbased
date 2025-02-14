@@ -149,7 +149,7 @@ p <- plot(my_predictions, pointrange = list(position = position_dodge(width = 0.
 line_data <- as.data.frame(my_predictions)[3:4, 1:3]
 line_data$group_col <- "control"
 p + annotate(
-  "segement",
+  "segment",
   x = as.numeric(line_data$episode[1]) - 0.06,
   xend = as.numeric(line_data$episode[2]) + 0.06,
   y = line_data$Mean[1],
