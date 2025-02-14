@@ -45,12 +45,19 @@
     } else {
       out <- predict
     }
-    # no transform for comparison
-    if ("link" %in% valid_types &&
+
+    # no transform if no "link" type available
+    transform <- "link" %in% valid_types &&
+      # only back-transform if "response" is requested
       out == "response" &&
+      # only back-transform if we have a link-inverse function
       !is.null(link_inverse) &&
+      # no back-transform for `estimate_contrasts()`
       is.null(comparison) &&
-      ((isTRUE(model_info$is_binomial) || isTRUE(model_info$is_count)) && isFALSE(model_info$is_zero_inflated))) { # nolint
+      # only for selected models - accurate link-inv not working for Gamma-family?
+      ((isTRUE(model_info$is_binomial) || isTRUE(model_info$is_count)) && isFALSE(model_info$is_zero_inflated))
+
+    if (transform) {
       list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)
     } else {
       list(predict = out, backtransform = FALSE, link_inverse = NULL)
