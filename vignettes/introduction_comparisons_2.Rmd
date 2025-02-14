@@ -102,41 +102,41 @@ dat3 <- data.frame(
   group_col = "virginica",
   stringsAsFactors = FALSE
 )
-p + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+p + annotate(
+  "segment",
+  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat1$x[2], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
   color = "orange", linewidth = 1
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+) + annotate(
+  "segment",
+  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat2$x[2], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
   color = "orange", linewidth = 1
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
+) + annotate(
+  "segment",
+  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[1],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[2], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat3$x[2], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1, linetype = "dashed"
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
+) + annotate(
+  "segment",
+  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
   color = "orange", linewidth = 1
 ) +
   ggtitle("Linear trend of `Sepal.Length` by `Species`")
@@ -158,11 +158,7 @@ Next question could be whether or not linear trends differ significantly between
 estimate_contrasts(m, "Sepal.Length", by = "Species")
 ```
 
-```{r echo=FALSE}
-ht5 <- estimate_contrasts(m, "Sepal.Length", by = "Species")
-```
-
-The linear trend of `Sepal.Length` within `setosa` is significantly different from the linear trend of `versicolor` and also from `virginica`. The difference of slopes between `virginica` and `versicolor` is not statistically significant (p = `r round(ht5$p[3], 3)`).
+The linear trend of `Sepal.Length` within `setosa` is significantly different from the linear trend of `versicolor` and also from `virginica`. The difference of slopes between `virginica` and `versicolor` is not statistically significant (p = 0.366).
 
 ## Is the difference linear trends of `Sepal.Length` in between two groups of `Species` significantly different from the difference of two linear trends between two other groups?
 
@@ -174,11 +170,7 @@ Let's first look at the different slopes separately again, i.e. the slopes of `S
 estimate_slopes(m, "Sepal.Length", by = "Species")
 ```
 
-```{r echo=FALSE}
-ht6 <- estimate_slopes(m, "Sepal.Length", by = "Species")
-```
-
-The first difference of slopes we're interested in is the one between `setosa` (`r round(ht6$Slope[1], 2)`) and `versicolor` (`r round(ht6$Slope[2], 2)`), i.e. `b1 - b2` (=`r round(ht6$Slope[1] - ht6$Slope[2], 2)`). The second difference is between levels `setosa` (`r round(ht6$Slope[1], 2)`) and `virginica` (`r round(ht6$Slope[3], 2)`), which is `b1 - b3` (=`r round(ht6$Slope[1] - ht6$Slope[3], 2)`). We test the null hypothesis that `(b1 - b2) = (b1 - b3)`.
+The first difference of slopes we're interested in is the one between `setosa` (0.80) and `versicolor` (0.32), i.e. `b1 - b2` (=0.48). The second difference is between levels `setosa` (0.80) and `virginica` (0.23), which is `b1 - b3` (=0.57). We test the null hypothesis that `(b1 - b2) = (b1 - b3)`.
 
 ```{r}
 estimate_contrasts(
@@ -189,11 +181,7 @@ estimate_contrasts(
 )
 ```
 
-```{r echo=FALSE}
-ht7 <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1-b2)=(b1-b3)")
-```
-
-The difference between the two differences is `r round(ht7$Difference[1], 2)` and not statistically significant (p = `r round(ht7$p[1], 3)`).
+The difference between the two differences is -0.09 and not statistically significant (p = 0.366).
 
 ## Is the linear trend of `Sepal.Length` significant at different values of another numeric predictor?
 
@@ -224,7 +212,7 @@ estimate_slopes(m, "Petal.Length", by = "Petal.Width=[sd]")
 The results of the pairwise comparison are shown below. These tell us that all linear trends (slopes) are significantly different from each other, i.e. the slope of the green line is significantly different from the slope of the red line, and so on.
 
 ```{r}
-estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]")
+estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]", digits = 1)
 ```
 
 ### Floodlight analysis and Johnson-Neyman intervals
