@@ -242,13 +242,13 @@ comparisons.</p>
 <span><span class="co">#&gt; Predictors contrasted: episode</span></span>
 <span><span class="co">#&gt; Predictors averaged: grp</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
-<p>For our quantity of interest, the contrast between episode 2-1, we
-see the value 0.36, which is exactly the difference between the
-predicted outcome for <code>episode = 1</code> (-0.16) and
-<code>episode = 2</code> (0.2). The related p-value is 0.031, indicating
-that the difference between the predicted values of our outcome at these
-two levels of the factor <em>episode</em> is indeed statistically
-significant.</p>
+<p>For our quantity of interest, the contrast between episode levels 2
+and 1, we see the value 0.36, which is exactly the difference between
+the predicted outcome for <code>episode = 1</code> (-0.16) and
+<code>episode = 2</code> (0.20). The related p-value is 0.031,
+indicating that the difference between the predicted values of our
+outcome at these two levels of the factor <em>episode</em> is indeed
+statistically significant.</p>
 <p>We can also define “representative values” via the
 <code>contrast</code> or <code>by</code> arguments. For example, we
 could specify the levels of <code>episode</code> directly, to simplify
@@ -564,14 +564,14 @@ is that these two differences are equal:
 the control group is 0.03.</li>
 <li>Predicted value of <em>outcome</em> for <code>episode = 2</code> in
 the control group is -0.39.</li>
-<li>The first difference is 0.42</li>
+<li>The first difference is 0.42.</li>
 <li>Predicted value of <em>outcome</em> for <code>episode = 1</code> in
 the treatment group is 0.18.</li>
 <li>Predicted value of <em>outcome</em> for <code>episode = 2</code> in
 the treatment group is -0.04.</li>
-<li>The second difference is 0.22</li>
+<li>The second difference is 0.22.</li>
 <li>Our quantity of interest is the difference between these two
-differences, which is 0.2. This difference is not statistically
+differences, which is 0.20. This difference is not statistically
 significant (p = 0.277).</li>
 </ol>
 </div>
