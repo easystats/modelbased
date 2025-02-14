@@ -320,7 +320,7 @@ plot(pr)
 It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically signifiant. We still can use `estimate_slopes()`:
 
 ```{r}
-estimate_slopes(m_mod, "Murder", by ="Illiteracy")
+estimate_slopes(m_mod, "Murder", by = "Illiteracy")
 ```
 
 As can be seen, the results might indicate that at the lower and upper tails of `Illiteracy`, i.e. when `Illiteracy` is roughly smaller than `0.8` or larger than `2.6`, the association between `Murder` and `Income` is statistically signifiant.
@@ -329,7 +329,7 @@ However, this test can be simplified using the `summary()` function. This will s
 
 ```{r}
 # we will force to calculate slopes at 200 values for "Illiteracy" using `length`
-slopes <- estimate_slopes(m_mod, "Murder", by ="Illiteracy", length = 200)
+slopes <- estimate_slopes(m_mod, "Murder", by = "Illiteracy", length = 200)
 summary(slopes)
 ```
 
