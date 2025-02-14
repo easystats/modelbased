@@ -1,8 +1,8 @@
 ---
-title: "Significance Testing Of Differences Between Predictions III: Contrasts And Comparisons For Generalized Linear Models"
+title: ": Contrasts And Comparisons For Generalized Linear Models"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Significance Testing Of Differences Between Predictions III: Contrasts And Comparisons For Generalized Linear Models}
+  %\VignetteIndexEntry{: Contrasts And Comparisons For Generalized Linear Models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -48,13 +48,13 @@ includeCSS("../man/figures/callout.css")
 
 This vignette is the third in a 4-part series:
 
-1. [**Significance Testing of Differences Between Predictions I: Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+1. [**Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
 
-2. [**Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+2. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
 
-3. **Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**
+3. **Contrasts and Comparisons for Generalized Linear Models**
 
-4. [**Significance Testing of Differences Between Predictions IV: Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
 
 # Contrasts and comparisons for GLM - logistic regression example
@@ -159,4 +159,4 @@ test_predictions(m, "x1", margin = "empirical")
 test_predictions(p2)
 ```
 
-[Go to next vignette: **Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+[Go to next vignette: **Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)

@@ -1,8 +1,8 @@
 ---
-title: "Significance testing of differences between predictions I: Contrasts and pairwise comparisons"
+title: "Contrasts and pairwise comparisons"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Significance testing of differences between predictions I: Contrasts and pairwise comparisons}
+  %\VignetteIndexEntry{Contrasts and pairwise comparisons}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,12 +19,7 @@ knitr::opts_chunk$set(
 options(width = 800)
 arrow_color <- "#FF00cc"
 
-pkgs <- c(
-  "ggplot2",
-  "marginaleffects",
-  "parameters",
-  "emmeans"
-)
+pkgs <- c("ggplot2", "marginaleffects", "see", "parameters")
 
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
@@ -37,13 +32,13 @@ if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L))
 
 This vignette is the first in a 4-part series:
 
-1. **Significance Testing of Differences Between Predictions I: Contrasts and Pairwise Comparisons**
+1. **Contrasts and Pairwise Comparisons**
 
-2. [**Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+2. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
 
-3. [**Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+3. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 
-4. [**Significance Testing of Differences Between Predictions IV: Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
 
 # Hypothesis testing for categorical predictors
@@ -325,4 +320,4 @@ Let's replicate this step-by-step:
 
 While the current implementation in `estimate_contrasts()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, we recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/vignettes/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/vignettes/hypothesis.html).
 
-[Go to next vignette: **Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+[Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)

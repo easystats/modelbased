@@ -62,6 +62,16 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
+    - text: "Contrasts and Comparisons"
+      menu:
+        - text: "Contrasts and pairwise comparisons"
+          href: articles/introduction_comparisons_1.html
+        - text: "Contrasts and pairwise comparisons"
+          href: articles/introduction_comparisons_2.html
+        - text: "Contrasts and pairwise comparisons"
+          href: articles/introduction_comparisons_3.html
+        - text: "Contrasts and pairwise comparisons"
+          href: articles/introduction_comparisons_4.html
     - text: "Case Studies"
       menu:
         - text: "Understanding your models"

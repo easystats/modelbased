@@ -1,8 +1,8 @@
 ---
-title: "Significance Testing Of Differences Between Predictions II: Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)"
+title: "Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Significance Testing Of Differences Between Predictions II: Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)}
+  %\VignetteIndexEntry{Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -17,65 +17,35 @@ knitr::opts_chunk$set(
   message = FALSE, warning = FALSE
 )
 options(width = 800)
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
 arrow_color <- "#FF00cc"
 
-pkgs <- c(
-  "ggplot2",
-  "marginaleffects",
-  "parameters",
-  "emmeans",
-  "htmltools"
-)
+pkgs <- c("ggplot2", "see", "marginaleffects", "parameters")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
 
-```{r echo=FALSE, message=FALSE}
-library(htmltools)
-callout_tip <- function(header = NULL, ...) {
-  div(
-    class = "callout-tip",
-    tags$h1(
-      tags$img(src = "../man/figures/summary.png", width = "20", height = "17", style = "vertical-align:middle"), # nolint
-      header
-    ),
-    ...
-  )
-}
-includeCSS("../man/figures/callout.css")
-```
 
 This vignette is the second in a 4-part series:
 
-1. [**Significance Testing of Differences Between Predictions I: Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+1. [**Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
 
-2. **Significance Testing of Differences Between Predictions II: Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**
+2. **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**
 
-3. [**Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+3. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 
-4. [**Significance Testing of Differences Between Predictions IV: Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
-# Hypothesis testing for slopes of numeric predictors
+# Contrasts and comparisons for slopes of numeric predictors
 
-For numeric focal terms, it is possible to conduct hypothesis testing for slopes, or the _linear trend_ of these focal terms.
-
-```{r echo=FALSE}
-callout_tip(
-  "Summary of most important points:",
-  tags$ul(
-    tags$li("For categorical predictors (focal terms), it is easier to define which values to compare. For continuous predictors, however, you may want to compare different (meaningful) values of that predictor, or its slope (or even compare slopes of different continuous focal terms)."), # nolint
-    tags$li("By default, when the first focal term is continuous, contrasts or comparisons are calculated for the slopes of that predictor."), # nolint
-    tags$li("It is even more complicated to deal with interactions of (at least) two continuous predictors. In this case, the ", tags$code("johnson_neyman()"), " function can be used, which is a special case of pairwise comparisons for interactions with continuous predictors.") # nolint
-  )
-)
-```
-
-Let's start with a simple example again.
+For numeric focal terms, it is possible to calculate contrasts for slopes, or the _linear trend_ of these focal terms. Let's start with a simple example again.
 
 ```{r}
-library(ggeffects)
+library(modelbased)
 library(parameters)
 data(iris)
 m <- lm(Sepal.Width ~ Sepal.Length + Species, data = iris)
@@ -85,13 +55,13 @@ model_parameters(m)
 We can already see from the coefficient table that the slope for `Sepal.Length` is `r unname(round(coef(m)[2], 3))`. We will thus find the same increase for the predicted values in our outcome when our focal variable, `Sepal.Length` increases by one unit.
 
 ```{r}
-predict_response(m, "Sepal.Length [4,5,6,7]")
+estimate_means(m, "Sepal.Length=c(4,5,6,7)")
 ```
 
-Consequently, in this case of a simple slope, we see the same result for the hypothesis test for the linar trend of `Sepal.Length`:
+Consequently, in this case of a simple slope, we see the same result for the estimated linear trend of `Sepal.Length`:
 
 ```{r}
-test_predictions(m, "Sepal.Length")
+estimate_slopes(m, "Sepal.Length")
 ```
 
 ## Is the linear trend of `Sepal.Length` significant for the different levels of `Species`?
@@ -102,7 +72,7 @@ Let's move on to a more complex example with an interaction between a numeric an
 
 ```{r}
 m <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
-pred <- predict_response(m, c("Sepal.Length", "Species"))
+pred <- estimate_means(m, c("Sepal.Length", "Species"))
 plot(pred)
 ```
 
@@ -113,22 +83,22 @@ We can see that the slope of `Sepal.Length` is different within each group of `S
 ```{r echo=FALSE}
 library(ggplot2)
 p <- plot(pred)
-dat <- as.data.frame(pred, terms_to_colnames = FALSE)
+dat <- as.data.frame(pred)
 dat1 <- data.frame(
-  x = dat$x[c(13, 28)],
-  y = dat$predicted[c(13, 28)],
+  x = dat$Sepal.Length[c(13, 28)],
+  y = dat$Mean[c(13, 28)],
   group_col = "setosa",
   stringsAsFactors = FALSE
 )
 dat2 <- data.frame(
-  x = dat$x[c(8, 23)],
-  y = dat$predicted[c(8, 23)],
+  x = dat$Sepal.Length[c(8, 23)],
+  y = dat$Mean[c(8, 23)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat3 <- data.frame(
-  x = dat$x[c(39, 54)],
-  y = dat$predicted[c(39, 54)],
+  x = dat$Sepal.Length[c(39, 54)],
+  y = dat$Mean[c(39, 54)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
@@ -172,28 +142,27 @@ p + geom_segment(
 ggtitle("Linear trend of `Sepal.Length` by `Species`")
 ```
 
-Since we don't want to do pairwise comparisons, we set `test = "slope"` (or `test = "trend"`). In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
+Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is signiciant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
 
 ```{r}
-# test = "slope" is just an alias for test = NULL
-test_predictions(m, c("Sepal.Length", "Species"), test = "slope")
+estimate_slopes(m, "Sepal.Length", by = "Species")
 ```
 
 As we can see, each of the three slopes is significant, i.e. we have "significant" linear trends.
 
 ### Pairwise comparisons
 
-Next question could be whether or not linear trends differ significantly between each other, i.e. we test differences in slopes, which is a pairwise comparison between slopes. To do this, we use the default for `test`, which is `"pairwise"`.
+Next question could be whether or not linear trends differ significantly between each other, i.e. we test differences in slopes, which is a pairwise comparison between slopes. To do this, we use `estimate_contrasts()`.
 
 ```{r}
-test_predictions(m, c("Sepal.Length", "Species"))
+estimate_contrasts(m, "Sepal.Length", by = "Species")
 ```
 
 ```{r echo=FALSE}
-ht5 <- test_predictions(m, c("Sepal.Length", "Species"))
+ht5 <- estimate_contrasts(m, "Sepal.Length", by = "Species")
 ```
 
-The linear trend of `Sepal.Length` within `setosa` is significantly different from the linear trend of `versicolor` and also from `virginica`. The difference of slopes between `virginica` and `versicolor` is not statistically significant (p = `r round(ht5$p.value[3], 3)`).
+The linear trend of `Sepal.Length` within `setosa` is significantly different from the linear trend of `versicolor` and also from `virginica`. The difference of slopes between `virginica` and `versicolor` is not statistically significant (p = `r round(ht5$p[3], 3)`).
 
 ## Is the difference linear trends of `Sepal.Length` in between two groups of `Species` significantly different from the difference of two linear trends between two other groups?
 
@@ -203,40 +172,40 @@ This difference-in-differences we're interested in is again indicated by the pur
 
 ```{r echo=FALSE}
 p <- plot(pred)
-dat <- as.data.frame(pred, terms_to_colnames = FALSE)
+dat <- as.data.frame(pred)
 dat1 <- data.frame(
-  x = dat$x[c(10, 16)],
-  y = dat$predicted[c(10, 16)],
+  x = dat$Sepal.Length[c(10, 16)],
+  y = dat$Mean[c(10, 16)],
   group_col = "setosa",
   stringsAsFactors = FALSE
 )
 dat2 <- data.frame(
-  x = dat$x[c(11, 17)],
-  y = dat$predicted[c(11, 17)],
+  x = dat$Sepal.Length[c(11, 17)],
+  y = dat$Mean[c(11, 17)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat3 <- data.frame(
-  x = dat$x[c(40, 46)],
-  y = dat$predicted[c(40, 46)],
+  x = dat$Sepal.Length[c(40, 46)],
+  y = dat$Mean[c(40, 46)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat4 <- data.frame(
-  x = dat$x[c(42, 48)],
-  y = dat$predicted[c(42, 48)],
+  x = dat$Sepal.Length[c(42, 48)],
+  y = dat$Mean[c(42, 48)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat5 <- data.frame(
-  x = dat$x[c(13, 14)],
-  y = dat$predicted[c(13, 14)],
+  x = dat$Sepal.Length[c(13, 14)],
+  y = dat$Mean[c(13, 14)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat6 <- data.frame(
-  x = dat$x[c(43, 45)],
-  y = dat$predicted[c(43, 45)],
+  x = dat$Sepal.Length[c(43, 45)],
+  y = dat$Mean[c(43, 45)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
@@ -272,27 +241,34 @@ p + geom_segment(
 ggtitle("Difference-in-differences")
 ```
 
-Let's look at the different slopes separately first, i.e. the slopes of `Sepal.Length` by levels of `Species`:
+Let's first look at the different slopes separately again, i.e. the slopes of `Sepal.Length` by levels of `Species`:
 
 ```{r}
-test_predictions(m, c("Sepal.Length", "Species"), test = NULL)
+estimate_slopes(m, "Sepal.Length", by = "Species")
 ```
 
 ```{r echo=FALSE}
-ht6 <- test_predictions(m, c("Sepal.Length", "Species"), test = NULL)
+ht6 <- estimate_slopes(m, "Sepal.Length", by = "Species")
 ```
 
 The first difference of slopes we're interested in is the one between `setosa` (`r round(ht6$Slope[1], 2)`) and `versicolor` (`r round(ht6$Slope[2], 2)`), i.e. `b1 - b2` (=`r round(ht6$Slope[1] - ht6$Slope[2], 2)`). The second difference is between levels `setosa` (`r round(ht6$Slope[1], 2)`) and `virginica` (`r round(ht6$Slope[3], 2)`), which is `b1 - b3` (=`r round(ht6$Slope[1] - ht6$Slope[3], 2)`). We test the null hypothesis that `(b1 - b2) = (b1 - b3)`.
 
 ```{r}
-test_predictions(m, c("Sepal.Length", "Species"), test = "(b1 - b2) = (b1 - b3)")
+estimate_contrasts(
+  m,
+  "Sepal.Length",
+  by = "Species",
+  comparison = "(b1 - b2) = (b1 - b3)"
+)
 ```
 
 ```{r echo=FALSE}
-ht7 <- test_predictions(m, c("Sepal.Length", "Species"), test = "(b1 - b2) = (b1 - b3)")
+ht7 <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1-b2)=(b1-b3)"
+)
+
 ```
 
-The difference between the two differences is `r round(ht7$Contrast[1], 2)` and not statistically significant (p = `r round(ht7$p.value[1], 3)`).
+The difference between the two differences is `r round(ht7$Difference[1], 2)` and not statistically significant (p = `r round(ht7$p[1], 3)`).
 
 ## Is the linear trend of `Sepal.Length` significant at different values of another numeric predictor?
 
@@ -378,7 +354,7 @@ pr <- predict_response(m_mod, c("Murder", "Illiteracy [0.7, 1.5, 2.8]"))
 plot(pr, grid = TRUE)
 ```
 
-[Go to next vignette: **Significance Testing of Differences Between Predictions III: Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+[Go to next vignette: **Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 
 # References
 

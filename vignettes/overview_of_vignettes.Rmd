@@ -43,6 +43,10 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
+## Contrasts and Comparisons
+
+* [Contrasts and pairwise comparisons](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+
 ## Case Studies
 
 * [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
