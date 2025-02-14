@@ -43,6 +43,13 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
+## Contrasts and Comparisons
+
+* [Contrasts and pairwise comparisons](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+* [Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+* [Contrasts and comparisons for generalized linear models](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+* [Contrasts and comparisons for zero-inflation models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+
 ## Case Studies
 
 * [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)

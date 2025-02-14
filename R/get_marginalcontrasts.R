@@ -257,6 +257,9 @@ get_marginalcontrasts <- function(model,
         my_args$by <- formula_group
       }
       comparison <- stats::as.formula(f)
+    } else {
+      # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
+      comparison_slopes <- comparison
     }
   } else {
     # default to pairwise, if comparison = NULL
