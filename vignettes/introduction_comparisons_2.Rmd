@@ -212,7 +212,7 @@ estimate_slopes(m, "Petal.Length", by = "Petal.Width=[sd]")
 The results of the pairwise comparison are shown below. These tell us that all linear trends (slopes) are significantly different from each other, i.e. the slope of the green line is significantly different from the slope of the red line, and so on.
 
 ```{r}
-estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]")
+estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]", digits = 1)
 ```
 
 ### Floodlight analysis and Johnson-Neyman intervals
