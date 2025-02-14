@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.18</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,18 +40,29 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../reference/index.html"><span class="fa fa-file-code"></span> Reference</a></li>
 <li class="active nav-item dropdown">
-  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-introductions" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Introductions</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-introductions">
 <li><a class="dropdown-item" href="../articles/overview_of_vignettes.html">Overview of Vignettes</a></li>
     <li><a class="dropdown-item" href="../articles/visualisation_matrix.html">Data grids</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_means.html">Marginal means</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_contrasts.html">Contrast analysis</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_slopes.html">Marginal effects and derivatives</a></li>
-    <li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-interpretation" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Interpretation</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-interpretation">
+<li><a class="dropdown-item" href="../articles/estimate_response.html">Use a model to make predictions</a></li>
     <li><a class="dropdown-item" href="../articles/derivatives.html">Interpret models using Effect Derivatives</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_grouplevel.html">Estimate and re-use Random Effects</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-case-studies" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Case Studies</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-case-studies">
+<li><a class="dropdown-item" href="../articles/practical_intersectionality.html">Intersectionality analysis using the MAIHDA framework</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fa-newspaper"></span> News</a></li>
@@ -150,7 +161,7 @@ base R <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link
 <p>Let’s try the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link"><code>get_datagrid()</code></a>
 function from the <strong>insight</strong> package.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
 &gt; Sepal.Length
@@ -173,7 +184,7 @@ the same minimum and maximum, than the original data). The default
 (i.e., a straight line), two points are in theory sufficient. Let’s
 generate predictions using this reference grid of the predictor.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span>, length <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
 <span><span class="va">vizdata</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
@@ -230,8 +241,8 @@ using <a href="https://easystats.github.io/insight/reference/get_predicted.html"
 from the <strong>insight</strong> package, which is a more robust and
 user-friendly version of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span><span class="op">[</span><span class="st">"Sepal.Length"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -246,7 +257,7 @@ user-friendly version of <code><a href="https://rdrr.io/r/stats/predict.html" cl
 a single column of data to the function, is almost equivalent to the
 following:</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span><span class="op">)</span></span>
 <span><span class="va">vizdata</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
@@ -273,7 +284,7 @@ variables in the model in whose effect we are not interested.</p>
 variables</strong> are fixed at their <strong>mean</strong>. However,
 this can be easily changed:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span>, numerics <span class="op">=</span> <span class="st">"min"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="st">"Sepal.Length"</span>, numerics <span class="op">=</span> <span class="st">"min"</span><span class="op">)</span></span>
 <span><span class="va">vizdata</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
@@ -296,7 +307,7 @@ this can be easily changed:</p>
 <h2 id="target-variables">Target variables<a class="anchor" aria-label="anchor" href="#target-variables"></a>
 </h2>
 <p>If more than one target variable is selected,
-<code>get_datagrid()</code> will return the <strong>combination</strong>
+<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid()</a></code> will return the <strong>combination</strong>
 of them (<em>i.e.</em>, all unique values crossed together). This can be
 useful in the case of an <strong>interaction</strong> between a numeric
 variable and a factor.</p>
@@ -305,8 +316,8 @@ variable and a factor.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Sepal.Length</span> <span class="op">*</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
+<span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
 <span><span class="va">vizdata</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
@@ -346,13 +357,13 @@ allows to remove observations that are “outside” the original dataset
 (however, the length should be increased to improve the precision toward
 the edges):</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu">get_datagrid</span><span class="op">(</span><span class="va">iris</span>,</span>
+<code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">iris</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Length"</span>, <span class="st">"Species"</span><span class="op">)</span>,</span>
 <span>  length <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  preserve_range <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted_Sepal.Width</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
+<span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted_Sepal.Width</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">iris</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Width</span>, color <span class="op">=</span> <span class="va">Species</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
@@ -386,8 +397,8 @@ interaction.</p>
 data grids together as follows:</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="va">iris</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">get_datagrid</span><span class="op">(</span><span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">5</span>, numerics <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width"</span><span class="op">)</span>, length <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="st">"Petal.Width"</span>, length <span class="op">=</span> <span class="fl">5</span>, numerics <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span></code></pre></div>
 <p>What did we do here? We started by generating a reference grid
 containing all the combinations between the 10 equally spread values of
 the two target variables, creating <code>10 * 10 = 100</code> rows. The
@@ -397,7 +408,7 @@ values created for <code>Petal.Length</code>). This was achieved using
 <code>numerics = "all"</code>.</p>
 <p>We can then visualise it as follows:</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu">get_predicted</span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">vizdata</span><span class="op">$</span><span class="va">Predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/insight/reference/get_predicted.html" class="external-link">get_predicted</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">vizdata</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">iris</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Petal.Length</span>, y <span class="op">=</span> <span class="va">Sepal.Length</span>, color <span class="op">=</span> <span class="va">Petal.Width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
@@ -449,7 +460,7 @@ function) and some <strong>random effects</strong> structure.</p>
 <p>One can directly extract the visualization matrix for this model by
 entering the entire object into the function:</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">3</span>, include_random <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">3</span>, include_random <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
 &gt; Petal.Width | Sepal.Length
@@ -466,7 +477,7 @@ entering the entire object into the function:</p>
 <p>We also skip the smooth term if we are interested only in the fixed
 effects:</p>
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">3</span>, include_random <span class="op">=</span> <span class="cn">FALSE</span>, include_smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">3</span>, include_random <span class="op">=</span> <span class="cn">FALSE</span>, include_smooth <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
 &gt; Petal.Width
@@ -478,7 +489,7 @@ effects:</p>
 &gt; Maintained constant: Sepal.Length</code></pre>
 <p>We can also include random effects:</p>
 <div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">get_datagrid</span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">5</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span><span class="va">model</span>, length <span class="op">=</span> <span class="fl">5</span>, include_random <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Visualisation Grid
 &gt; 
 &gt; Petal.Width | Sepal.Length | Species   
@@ -508,7 +519,7 @@ then <strong>unstandardizing</strong> it.</p>
 specific values for <code>Petal.Width</code>.</p>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">vizdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Petal.Length</span> <span class="op">*</span> <span class="va">Petal.Width</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">get_datagrid</span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width = seq(-3, 3)"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">get_datagrid</a></span><span class="op">(</span>by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Petal.Length"</span>, <span class="st">"Petal.Width = seq(-3, 3)"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/standardize.html" class="external-link">unstandardize</a></span><span class="op">(</span><span class="va">vizdata</span>, select <span class="op">=</span> <span class="st">"Petal.Width"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">vizdata</span><span class="op">)</span></span>
 <span></span>
