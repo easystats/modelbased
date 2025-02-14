@@ -1,8 +1,8 @@
 ---
-title: "Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)"
+title: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Comparisons Of Slopes, Floodlight And Spotlight Analysis (Johnson-Neyman Intervals)}
+  %\VignetteIndexEntry{Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
