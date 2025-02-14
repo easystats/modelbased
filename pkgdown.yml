@@ -9,11 +9,16 @@ articles:
   estimate_relation: estimate_relation.html
   estimate_response: estimate_response.html
   estimate_slopes: estimate_slopes.html
+  introduction_comparisons_1: introduction_comparisons_1.html
+  introduction_comparisons_2: introduction_comparisons_2.html
+  introduction_comparisons_3: introduction_comparisons_3.html
+  introduction_comparisons_4: introduction_comparisons_4.html
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
   practical_intersectionality: practical_intersectionality.html
   visualisation_matrix: visualisation_matrix.html
-last_built: 2025-02-14T09:18Z
+  workflow_modelbased: workflow_modelbased.html
+last_built: 2025-02-14T14:28Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles

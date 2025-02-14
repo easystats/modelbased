@@ -59,10 +59,20 @@
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul>
 </li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-contrasts-and-comparisons" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Contrasts and Comparisons</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-contrasts-and-comparisons">
+<li><a class="dropdown-item" href="../articles/introduction_comparisons_1.html">Contrasts and pairwise comparisons</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_2.html">Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_3.html">Contrasts and comparisons for generalized linear models</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_4.html">Contrasts and comparisons for zero-inflation models</a></li>
+  </ul>
+</li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-case-studies" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Case Studies</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-case-studies">
-<li><a class="dropdown-item" href="../articles/practical_intersectionality.html">Intersectionality analysis using the MAIHDA framework</a></li>
+<li><a class="dropdown-item" href="../articles/workflow_modelbased.html">Understanding your models</a></li>
+    <li><a class="dropdown-item" href="../articles/practical_intersectionality.html">Intersectionality analysis using the MAIHDA framework</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fa-newspaper"></span> News</a></li>
@@ -387,7 +397,7 @@ for the different groups.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">m_null</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span>, <span class="st">"age"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<p><img src="practical_intersectionality_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
 <p>According to these results, employed male family carers, who are not
 older than 40 years, show on average the highest quality of life. On the
 other hand, unemployed female carers aged 65 or older have the lowest
