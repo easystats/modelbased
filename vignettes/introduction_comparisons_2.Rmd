@@ -84,21 +84,21 @@ library(ggplot2)
 p <- plot(pred)
 dat <- as.data.frame(pred)
 dat1 <- data.frame(
-  x = dat$Sepal.Length[c(13, 28)],
-  y = dat$Mean[c(13, 28)],
+  x = dat$Sepal.Length[c(7, 19)],
+  y = dat$Mean[c(7, 19)],
   group_col = "setosa",
   stringsAsFactors = FALSE
 )
 dat2 <- data.frame(
-  x = dat$Sepal.Length[c(8, 23)],
+  x = dat$Sepal.Length[c(8, 20)],
   y = dat$Mean[c(8, 23)],
   group_col = "versicolor",
   stringsAsFactors = FALSE
 )
 dat3 <- data.frame(
-  x = dat$Sepal.Length[c(39, 54)],
-  y = dat$Mean[c(39, 54)],
-  group_col = "versicolor",
+  x = dat$Sepal.Length[c(15, 27)],
+  y = dat$Mean[c(15, 27)],
+  group_col = "virginica",
   stringsAsFactors = FALSE
 )
 p + geom_segment(
@@ -166,79 +166,6 @@ The linear trend of `Sepal.Length` within `setosa` is significantly different fr
 ## Is the difference linear trends of `Sepal.Length` in between two groups of `Species` significantly different from the difference of two linear trends between two other groups?
 
 Similar to the example for categorical predictors, we can also test a difference-in-differences for this example. For instance, is the difference of the slopes from `Sepal.Length` between `setosa` and `versicolor` different from the slope-difference for the groups `setosa` and `vigninica`?
-
-This difference-in-differences we're interested in is again indicated by the purple arrow in the below plot.
-
-```{r echo=FALSE}
-p <- plot(pred)
-dat <- as.data.frame(pred)
-dat1 <- data.frame(
-  x = dat$Sepal.Length[c(10, 16)],
-  y = dat$Mean[c(10, 16)],
-  group_col = "setosa",
-  stringsAsFactors = FALSE
-)
-dat2 <- data.frame(
-  x = dat$Sepal.Length[c(11, 17)],
-  y = dat$Mean[c(11, 17)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-dat3 <- data.frame(
-  x = dat$Sepal.Length[c(40, 46)],
-  y = dat$Mean[c(40, 46)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-dat4 <- data.frame(
-  x = dat$Sepal.Length[c(42, 48)],
-  y = dat$Mean[c(42, 48)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-dat5 <- data.frame(
-  x = dat$Sepal.Length[c(13, 14)],
-  y = dat$Mean[c(13, 14)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-dat6 <- data.frame(
-  x = dat$Sepal.Length[c(43, 45)],
-  y = dat$Mean[c(43, 45)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-p + geom_segment(
-  data = dat1,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8
-) + geom_segment(
-  data = dat2,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8
-) + geom_segment(
-  data = dat3,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8
-) + geom_segment(
-  data = dat4,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8
-) + geom_segment(
-  data = dat5,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8, linetype ="dotted"
-) + geom_segment(
-  data = dat6,
-  mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
-  color = "orange", linewidth = 0.8, linetype ="dotted"
-) + geom_segment(
-  mapping = aes(x = 5, xend = 7, y = 3.3, yend = 3.3),
-  color = arrow_color, linewidth = 0.6,
-  arrow = arrow(length = unit(0.1, "inches"), ends = "both", angle = 40)
-) +
-ggtitle("Difference-in-differences")
-```
 
 Let's first look at the different slopes separately again, i.e. the slopes of `Sepal.Length` by levels of `Species`:
 
