@@ -92,18 +92,20 @@ get_marginalmeans <- function(model,
       datagrid,
       insight::get_data(model, verbose = FALSE)
     )
-
-    # add user-arguments from "...", but remove those arguments that are
-    # already used (see below) when calling marginaleffects
-    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
   }
 
 
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
 
-  # model df
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  # remove user-arguments from "..." that are will be used (see below)
+  # when calling marginaleffects
+  dots[c("by", "conf_level", "type")] <- NULL
+
+  # model df - can be passed via `...`
+  if (is.null(dots$df)) {
+    dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
 
   # sanity check
   if (!is.null(datagrid)) {
@@ -114,11 +116,7 @@ get_marginalmeans <- function(model,
   }
 
   # setup arguments
-  fun_args <- list(
-    model,
-    conf_level = ci,
-    df = dof
-  )
+  fun_args <- list(model, conf_level = ci)
 
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
