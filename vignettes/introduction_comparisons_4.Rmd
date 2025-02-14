@@ -1,8 +1,8 @@
 ---
-title: ": Contrasts And Comparisons For Zero-Inflation Models"
+title: "Contrasts and comparisons for zero-inflation models"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{: Contrasts And Comparisons For Zero-Inflation Models}
+  %\VignetteIndexEntry{Contrasts and comparisons for zero-inflation models}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

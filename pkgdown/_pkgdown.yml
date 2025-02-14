@@ -68,9 +68,9 @@ navbar:
           href: articles/introduction_comparisons_1.html
         - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
           href: articles/introduction_comparisons_2.html
-        - text: "Contrasts and pairwise comparisons"
+        - text: "Contrasts and comparisons for generalized linear models"
           href: articles/introduction_comparisons_3.html
-        - text: "Contrasts and pairwise comparisons"
+        - text: "Contrasts and comparisons for zero-inflation models"
           href: articles/introduction_comparisons_4.html
     - text: "Case Studies"
       menu:
