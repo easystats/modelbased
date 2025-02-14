@@ -84,7 +84,7 @@ my_predictions
 plot(my_predictions)
 ```
 
-We now see that, for instance, the predicted _outcome_ when `espisode = 2` is `r round(my_predictions$Mean[2], 2)`.
+We now see that, for instance, the predicted _outcome_ when `espisode = 2` is 0.2.
 
 ### Pairwise comparisons
 

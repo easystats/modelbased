@@ -52,7 +52,7 @@ m <- lm(Sepal.Width ~ Sepal.Length + Species, data = iris)
 model_parameters(m)
 ```
 
-We can already see from the coefficient table that the slope for `Sepal.Length` is `r unname(round(coef(m)[2], 3))`. We will thus find the same increase for the predicted values in our outcome when our focal variable, `Sepal.Length` increases by one unit.
+We can already see from the coefficient table that the slope for `Sepal.Length` is 0.35. We will thus find the same increase for the predicted values in our outcome when our focal variable, `Sepal.Length` increases by one unit.
 
 ```{r}
 estimate_means(m, "Sepal.Length=c(4,5,6,7)")
