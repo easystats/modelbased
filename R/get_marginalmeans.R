@@ -189,7 +189,11 @@ get_marginalmeans <- function(model,
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
   }
 
-  # back-transform from link-scale?
+  # back-transform from link-scale? this functions is...
+  # - only called for means, not contrasts, because for contrasts we rely on
+  #   the delta-method for SEs on the response scale
+  # - only called when `type` (i.e. `predict`) is "response" AND the model class
+  #   has a "link" prediction type
   if (is.null(comparison)) {
     means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
   }
