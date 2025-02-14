@@ -38,7 +38,7 @@ navbar:
     - icon: fa fa-file-code
       text: Reference
       href: reference/index.html
-    - text: "Articles"
+    - text: "Introductions"
       menu:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
@@ -50,6 +50,8 @@ navbar:
           href: articles/estimate_contrasts.html
         - text: "Marginal effects and derivatives"
           href: articles/estimate_slopes.html
+    - text: "Interpretation"
+      menu:
         - text: "Use a model to make predictions"
           href: articles/estimate_response.html
         - text: "Interpret models using Effect Derivatives"
@@ -60,6 +62,10 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
+    - text: "Case Studies"
+      menu:
+        - text: "Intersectionality analysis using the MAIHDA framework"
+          href: articles/practical_intersectionality.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html
