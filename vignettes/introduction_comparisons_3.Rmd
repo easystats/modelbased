@@ -1,0 +1,88 @@
+---
+title: "Contrasts and comparisons for generalized linear models"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Contrasts and comparisons for generalized linear models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  fig.width = 7,
+  fig.height = 3.5,
+  message = FALSE, warning = FALSE
+)
+options(width = 800)
+arrow_color <- "#FF00cc"
+
+pkgs <- c("ggplot2", "see", "marginaleffects")
+
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+
+This vignette is the third in a 4-part series:
+
+1. [**Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
+
+2. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+
+3. **Contrasts and Comparisons for Generalized Linear Models**
+
+4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+
+
+# Contrasts and comparisons for GLM - logistic regression example
+
+We will now show an example for non-Gaussian models. For GLM's (generalized linear models) with (non-Gaussian) link-functions, `estimate_means()` by default returns predicted values on the *response* scale. For example, predicted values for logistic regression models are shown as *probabilities*.
+
+Let's look at a simple example.
+
+```{r}
+library(modelbased)
+set.seed(1234)
+dat <- data.frame(
+  outcome = rbinom(n = 100, size = 1, prob = 0.35),
+  x1 = as.factor(sample(1:3, size = 100, TRUE, prob = c(0.5, 0.2, 0.3))),
+  x2 = rnorm(n = 100, mean = 10, sd = 7),
+  x3 = as.factor(sample(1:4, size = 100, TRUE, prob = c(0.1, 0.4, 0.2, 0.3)))
+)
+
+m <- glm(outcome ~ x1 + x2 + x3, data = dat, family = binomial())
+estimate_means(m, "x1")
+```
+
+## Contrasts and comparisons for categorical focal terms
+
+Contrasts or comparisons - like predictions (see above) - are by default on the *response* scale, i.e. they're represented as difference between probabilities (in percentage points).
+
+```{r message=TRUE}
+estimate_contrasts(m, "x1")
+```
+
+```{r echo=FALSE}
+p <- estimate_means(m, "x1")
+ht8 <- estimate_contrasts(m, "x1")
+```
+
+The difference between the predicted probability of `x1 = 1` (`r sprintf("%.1f%%", 100 * p$Mean[1])`) and `x1 = 2` (`r sprintf("%.1f%%", 100 * p$Mean[2])`) is roughly `r sprintf("%.1f%%", 100 * ht8$Difference[1])` points. This difference is not statistically significant (p = `r round(ht8$p[1], 3)`).
+
+Contrasts or comparisons can also be represented on the link-scale, in this case as _log-odds_. To do so, use `predict = "link"`.
+
+```{r message=TRUE}
+estimate_contrasts(m, "x1", predict = "link")
+```
+
+The `transform` argument in `estimate_contrasts()` can be used transform comparisons. For example, to transform contrasts to _odds ratios_, we can use `transform = exp` in combination with `predict = "link"`.
+
+```{r message=TRUE}
+estimate_contrasts(m, "x1", predict = "link", transform = exp)
+```
+
+[Go to next vignette: **Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
