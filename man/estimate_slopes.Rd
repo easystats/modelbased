@@ -41,7 +41,7 @@ option is recommended, but \code{p_adjust} can also be one of \code{"none"} (def
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
 
-\item{backend}{Whether to use \code{"emmeans"} or \code{"marginaleffects"} as a backend.
+\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
 models, where \code{backend = "marginaleffects"} will also average across random
 effects levels, producing "marginal predictions" (instead of "conditional
@@ -61,9 +61,9 @@ Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::descr
 \item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
 to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
-means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
-\code{newdata} can be passed to those functions.
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
+passed to those functions.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using

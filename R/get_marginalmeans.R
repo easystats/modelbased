@@ -88,19 +88,23 @@ get_marginalmeans <- function(model,
     # restore data types -  if we have defined numbers in `by`, like
     # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
     # numeric in the data grid. Fix this here, else marginal effects will fail
-    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
-
-    # add user-arguments from "...", but remove those arguments that are
-    # already used (see below) when calling marginaleffects
-    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
+    datagrid <- datawizard::data_restoretype(
+      datagrid,
+      insight::get_data(model, verbose = FALSE)
+    )
   }
 
 
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
 
-  # model df
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  # remove user-arguments from "..." that will be used when calling marginaleffects
+  dots[c("by", "conf_level", "type")] <- NULL
+
+  # model df - can be passed via `...`
+  if (is.null(dots$df)) {
+    dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
 
   # sanity check
   if (!is.null(datagrid)) {
@@ -111,11 +115,7 @@ get_marginalmeans <- function(model,
   }
 
   # setup arguments
-  fun_args <- list(
-    model,
-    conf_level = ci,
-    df = dof
-  )
+  fun_args <- list(model, conf_level = ci)
 
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
