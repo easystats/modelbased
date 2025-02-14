@@ -64,6 +64,8 @@ navbar:
           href: articles/modelisation_approach.html
     - text: "Case Studies"
       menu:
+        - text: "Understanding your models"
+          href: articles/workflow_modelbased.html
         - text: "Intersectionality analysis using the MAIHDA framework"
           href: articles/practical_intersectionality.html
     - icon: fa fa-newspaper

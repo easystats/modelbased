@@ -45,4 +45,5 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 
 ## Case Studies
 
+* [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
 * [Intersectionality analysis using the MAIHDA framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.html)
