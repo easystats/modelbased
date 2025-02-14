@@ -356,9 +356,9 @@ comparison for now, hence we use <code><a href="../reference/estimate_slopes.htm
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Petal.Width | Slope |   SE |         95% CI |     t |      p</span></span>
 <span><span class="co">#&gt; ------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 0.44        | -0.28 | 0.06 | [-0.39, -0.16] | -4.79 | &lt; .001</span></span>
+<span><span class="co">#&gt; 0.44        | -0.28 | 0.06 | [-0.39, -0.16] | -4.80 | &lt; .001</span></span>
 <span><span class="co">#&gt; 1.20        | -0.11 | 0.06 | [-0.23,  0.01] | -1.80 |  0.072</span></span>
-<span><span class="co">#&gt; 1.96        |  0.06 | 0.07 | [-0.09,  0.20] |  0.78 |  0.434</span></span>
+<span><span class="co">#&gt; 1.96        |  0.06 | 0.07 | [-0.09,  0.20] |  0.78 |  0.433</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Marginal effects estimated for Petal.Length</span></span>
 <span><span class="co">#&gt; Type of slope was dY/dX</span></span></code></pre></div>
@@ -371,14 +371,14 @@ that all linear trends (slopes) are significantly different from each
 other, i.e. the slope of the green line is significantly different from
 the slope of the red line, and so on.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="st">"Petal.Width=[sd]"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"Petal.Length"</span>, by <span class="op">=</span> <span class="st">"Petal.Width=[sd]"</span>, digits <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1           | Level2            | Difference |   SE |       95% CI |    t |      p</span></span>
-<span><span class="co">#&gt; ---------------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 1.19933333333333 | 0.437095664372987 |       0.17 | 0.02 | [0.12, 0.21] | 7.13 | &lt; .001</span></span>
-<span><span class="co">#&gt; 1.96157100229368 | 0.437095664372987 |       0.33 | 0.05 | [0.24, 0.43] | 7.13 | &lt; .001</span></span>
-<span><span class="co">#&gt; 1.96157100229368 | 1.19933333333333  |       0.17 | 0.02 | [0.12, 0.21] | 7.13 | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    t |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 1.2    | 0.4    |       0.18 | 0.02 | [0.13, 0.22] | 7.13 | &lt; .001</span></span>
+<span><span class="co">#&gt; 2      | 0.4    |       0.35 | 0.05 | [0.25, 0.45] | 7.13 | &lt; .001</span></span>
+<span><span class="co">#&gt; 2      | 1.2    |       0.18 | 0.02 | [0.13, 0.22] | 7.13 | &lt; .001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: Sepal.Width</span></span>
 <span><span class="co">#&gt; Predictors contrasted: Petal.Length</span></span>
