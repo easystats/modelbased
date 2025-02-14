@@ -99,6 +99,21 @@ estimate_contrasts.estimate_predicted <- function(model,
   # format output
   out <- format.marginaleffects_contrasts(out, model, p_adjust, comparison, ...)
 
+  # clean levels, remove levels from by-terms, which are already present as columns
+  if (!is.null(by) && all(by %in% colnames(out))) {
+    for (i in by) {
+      to_remove <- unique(out[[i]])
+      for (j in to_remove) {
+        if (all(c("Level1", "Level2") %in% colnames(out))) {
+          levels(out$Level1) <- insight::trim_ws(gsub(j, "", levels(out$Level1), fixed = TRUE))
+          levels(out$Level2) <- insight::trim_ws(gsub(j, "", levels(out$Level2), fixed = TRUE))
+        } else if ("Parameter" %in% colnames(out)) {
+          out$Parameter <- insight::trim_ws(gsub(j, "", out$Parameter, fixed = TRUE))
+        }
+      }
+    }
+  }
+
   # p-value adjustment?
   if (!is.null(p_adjust)) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
