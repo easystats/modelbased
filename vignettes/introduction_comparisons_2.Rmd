@@ -102,7 +102,7 @@ dat3 <- data.frame(
   group_col = "virginica",
   stringsAsFactors = FALSE
 )
-p + geom_segment(
+suppressWarning(p + geom_segment(
   data = dat1,
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[1]),
   color = "orange", linewidth = 1, linetype = "dashed"
@@ -139,7 +139,7 @@ p + geom_segment(
   mapping = aes(x = x[1], xend = x[2], y = y[1], yend = y[2]),
   color = "orange", linewidth = 1
 ) +
-  ggtitle("Linear trend of `Sepal.Length` by `Species`")
+  ggtitle("Linear trend of `Sepal.Length` by `Species`"))
 ```
 
 Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is significant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
