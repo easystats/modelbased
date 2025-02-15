@@ -13,7 +13,7 @@
 
   # handle distributional parameters
   if (!is.null(predict) && predict %in% .brms_aux_elements()) {
-    return(list(predict = "link", backtransform = FALSE, link_inverse = NULL))
+    return(list(predict = predict, backtransform = FALSE, link_inverse = NULL))
   }
 
   # extract all valid types for model class
