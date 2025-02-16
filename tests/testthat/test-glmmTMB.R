@@ -34,6 +34,8 @@ test_that("estimate_means - glmmTMB", {
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects")
   estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-3)
+  estim3 <- estimate_means(model, by = "mined", backend = "emmeans")
+  expect_equal(estim1$Mean, estim3$Rate, tolerance = 1e-1)
 
   ## marginaleffects for zero-inflated model, zero-inflation probabilities
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
