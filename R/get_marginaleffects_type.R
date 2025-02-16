@@ -50,6 +50,16 @@
       out <- predict
     }
 
+    # it is more accurate to calculate means and CI's on the link-scale,
+    # and then backtransform to the response scale. Else, we might have
+    # intervals or predictions outside plausible bounds or range. however,
+    # we only need to do this for means, not for contrasts (where we need
+    # delta method standard errors calculated on the response scale). the
+    # {marginaleffects} packages takes care of this using a "invlink(link)"
+    # option, however, this is currently not available for all necessry classes.
+    # as a temporary solution, we can (as we do in `insight::get_predicted()`)
+    # generally calculate predictions on the link-scale and then backtransform.
+
     # no transform if no "link" type available
     transform <- "link" %in% valid_types &&
       # no transform for linear models
