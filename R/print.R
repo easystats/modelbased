@@ -4,6 +4,7 @@
 #' of tables.
 #'
 #' @param x An object returned by the different `estimate_*()` functions.
+#' @param select Select what to print.
 #' @param include_grid Logical, if `TRUE`, the data grid is included in the
 #' table output. Only applies to prediction-functions like `estimate_relation()`
 #' or `estimate_link()`.
@@ -12,7 +13,6 @@
 #' @param ... Arguments passed to `insight::format_table()` or
 #' `insight::export_table()`.
 #'
-#' @inheritParams insight::format_table
 #'
 #' @return Invisibly returns `x`.
 #'

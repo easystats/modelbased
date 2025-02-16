@@ -15,6 +15,8 @@
 \arguments{
 \item{x}{An object returned by the different \verb{estimate_*()} functions.}
 
+\item{select}{Select what to print.}
+
 \item{include_grid}{Logical, if \code{TRUE}, the data grid is included in the
 table output. Only applies to prediction-functions like \code{estimate_relation()}
 or \code{estimate_link()}.}

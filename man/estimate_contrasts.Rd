@@ -17,7 +17,6 @@ estimate_contrasts(model, ...)
   estimate = getOption("modelbased_estimate", "typical"),
   p_adjust = "none",
   transform = NULL,
-  method = "pairwise",
   effectsize = "none",
   bootstraps = 200,
   bootES_type = "cohens.d",

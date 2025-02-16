@@ -151,7 +151,6 @@ estimate_contrasts.default <- function(model,
                                        estimate = getOption("modelbased_estimate", "typical"),
                                        p_adjust = "none",
                                        transform = NULL,
-                                       method = "pairwise",
                                        effectsize = "none",
                                        bootstraps = 200,
                                        bootES_type = "cohens.d",
@@ -186,6 +185,15 @@ estimate_contrasts.default <- function(model,
     )
     out <- format(estimated, model, p_adjust, comparison, ...)
   }
+
+  out <- .estimate_contrasts_effecsize(
+    model = model,
+    estimated = estimated,
+    contrasts_results = out,
+    effectsize = effectsize,
+    bootstraps = bootstraps,
+    bootES_type = bootES_type
+  )
 
   # restore attributes later
   info <- attributes(estimated)
