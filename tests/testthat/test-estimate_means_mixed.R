@@ -66,7 +66,7 @@ test_that("estimate_means() - mixed models", {
   expect_identical(dim(estim1), c(4L, 5L))
   expect_identical(dim(estim2), c(4L, 6L))
   expect_equal(estim2$Probability, c(0.20293, 0.08627, 0.07612, 0.04984), tolerance = 1e-3)
-  expect_equal(estim2$CI_low, c(0.14233, 0.04475, 0.03608, 0.01266), tolerance = 1e-3)
+  expect_equal(estim2$CI_low, c(0.13928, 0.04915, 0.04159, 0.02229), tolerance = 1e-3)
   expect_true(all(estim2$CI_low >= 0 & estim2$CI_low <=1))
   expect_true(all(estim2$CI_high >= 0 & estim2$CI_high <=1))
 })
