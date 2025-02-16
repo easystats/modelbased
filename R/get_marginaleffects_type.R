@@ -50,6 +50,9 @@
       out <- predict
     }
 
+    ## TODO: remove transform/backtransform stuff once all relevant model classes
+    ##       in {marginaleffects} have an "invlink(link)" option
+
     # it is more accurate to calculate means and CI's on the link-scale,
     # and then backtransform to the response scale. Else, we might have
     # intervals or predictions outside plausible bounds or range. however,
