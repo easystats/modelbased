@@ -10,18 +10,23 @@ test_that("estimate_contrasts - emmeans backend", {
   library(modelbased)
   model <- lm(Sepal.Width ~ Species, data = iris)
 
-  expect_snapshot(estimate_contrasts(model, backend = "emmeans"))
-  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "emmeans"))
-  expect_snapshot(estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans"))
-  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "emmeans"))
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans"),
+                  variant = "windows")
+  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "emmeans"),
+                  variant = "windows")
+  expect_snapshot(estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans"),
+                  variant = "windows")
+  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "emmeans"),
+                  variant = "windows")
   set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "emmeans"))
+  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "emmeans"),
+                  variant = "windows")
   set.seed(100)
   expect_snapshot(estimate_contrasts(model,
     effectsize = "bootES",
     bootES_type = "akp.robust.d",
     backend = "emmeans"
-  ))
+  ), variant = "windows")
 })
 
 test_that("estimate_contrasts - marginaleffects backend", {
@@ -30,20 +35,23 @@ test_that("estimate_contrasts - marginaleffects backend", {
   library(modelbased)
   model <- lm(Sepal.Width ~ Species, data = iris)
 
-  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
-  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"), variant = "windows")
+  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "marginaleffects"),
+                  variant = "windows")
   expect_error(
     estimate_contrasts(model, effectsize = "emmeans", backend = "marginaleffects"),
     "`effectsize = emmeans` only possible with `backend = emmeans`"
   )
-  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"),
+                  variant = "windows")
   skip() # marginaleffects backend isn't working with bootES yet
   set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "marginaleffects"))
+  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "marginaleffects"),
+                  variant = "windows")
   set.seed(100)
   expect_snapshot(estimate_contrasts(model,
     effectsize = "bootES",
     bootES_type = "akp.robust.d",
     backend = "marginaleffects"
-  ))
+  ), variant = "windows")
 })
