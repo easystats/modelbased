@@ -87,7 +87,7 @@
 }
 
 
-.get_residual_variance <- function (x) {
+.get_residual_variance <- function(x) {
   out <- .safe(insight::get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
   if (!length(out)) {
     return(0)
