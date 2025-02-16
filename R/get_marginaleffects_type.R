@@ -79,7 +79,9 @@
       # https://github.com/vincentarelbundock/marginaleffects/issues/1391
       # https://github.com/vincentarelbundock/marginaleffects/issues/1392
       ## TODO: allow these classes once issues are fixed in marginaleffects
-      !inherits(model, c("betareg", "brmsfit"))
+      # IMPORTANT! no backtransform for Bayesian models, we cause we extract
+      # the posterior draws later, which are on the reponse scale.
+      !inherits(model, c("betareg", "brmsfit", "stanreg"))
 
     if (transform) {
       list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)

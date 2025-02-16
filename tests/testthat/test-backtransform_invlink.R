@@ -57,6 +57,25 @@ test_that("estimate_means correct inverse link for glmer", {
     data = efc,
     family = binomial(link = "logit")
   )
-  modelbased::estimate_means(fit, "c172code")
-  modelbased::estimate_relation(fit, by = "c172code", verbose = FALSE)
+  out1 <- estimate_means(fit, "c172code")
+  out2 <- estimate_relation(fit, by = "c172code", verbose = FALSE)
+  expect_equal(out1$Probability, out2$Predicted, tolerance = 1e-4)
+  expect_equal(out1$CI_low, out2$CI_low, tolerance = 1e-4)
+  expect_true(all(out1$CI_low >= 0 & out1$CI_low <= 1))
+  expect_true(all(out1$CI_high >= 0 & out1$CI_high <= 1))
+})
+
+
+test_that("estimate_means correct inverse link for stan-glm", {
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("rstanarm")
+
+  m <- insight::download_model("stanreg_glm_1")
+  skip_if(is.null(m))
+
+  out <- estimate_means(m, "wt = [sd]")
+  expect_equal(out$Median, c(0.81144, 0.38844, 0.08599), tolerance = 1e-4)
+  expect_equal(out$Median, c(0.54837, 0.2029, 0.01342), tolerance = 1e-4)
 })

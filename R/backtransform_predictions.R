@@ -7,17 +7,24 @@
   # In `.get_marginaleffects_type_argument()`, where we set the `predict`
   # aergument, we check whether response-scale is requested - if so, we set
   # predict-type to "link" and now backtransform predictions and CIs
-  if (isTRUE(predict_args$backtransform) && all(c("conf.low", "conf.high", "std.error", "estimate") %in% colnames(means))) {
+  if (isTRUE(predict_args$backtransform) && all(c("conf.low", "conf.high", "estimate") %in% colnames(means))) {
     # extract link-inverse
     linv <- predict_args$link_inverse
-    # define factor for multiplying SE
-    alpha <- (1 + ci) / 2
-    t_crit <- stats::qt(alpha, df = df)
-    # first transform CI, then SE and finally estimates. this order is
-    # required - e.g., SE would be wrong if we backtransform estimate first
-    means$conf.low <- linv(means$estimate - t_crit * means$std.error)
-    means$conf.high <- linv(means$estimate + t_crit * means$std.error)
-    means$std.error <- exp(means$estimate) * means$std.error
+    # if we have a standard error column, we need to back-transform this as well
+    if ("std.error" %in% colnames(means)) {
+      # define factor for multiplying SE
+      alpha <- (1 + ci) / 2
+      t_crit <- stats::qt(alpha, df = df)
+      # first transform CI, then SE and finally estimates. this order is
+      # required - e.g., SE would be wrong if we backtransform estimate first
+      means$conf.low <- linv(means$estimate - t_crit * means$std.error)
+      means$conf.high <- linv(means$estimate + t_crit * means$std.error)
+      means$std.error <- exp(means$estimate) * means$std.error
+    } else {
+      # for some models, we have no std.error, so just transform CIs
+      means$conf.low <- linv(means$conf.low)
+      means$conf.high <- linv(means$conf.high)
+    }
     means$estimate <- linv(means$estimate)
   }
 
