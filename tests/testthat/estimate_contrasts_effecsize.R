@@ -32,9 +32,12 @@ test_that("estimate_contrasts - marginaleffects backend", {
 
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"))
   expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "marginaleffects"))
+  expect_error(
+    estimate_contrasts(model, effectsize = "emmeans", backend = "marginaleffects"),
+    "`effectsize = emmeans` only possible with `backend = emmeans`"
+  )
   expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"))
-  skip() # marginaleffects backend isn't working with those methods yet
-  expect_snapshot(estimate_contrasts(model, effectsize = "emmeans", backend = "marginaleffects"))
+  skip() # marginaleffects backend isn't working with bootES yet
   set.seed(100)
   expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "marginaleffects"))
   set.seed(100)

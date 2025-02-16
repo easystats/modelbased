@@ -60,12 +60,12 @@ print.estimate_contrasts <- function(x,
   # copy original
   out <- x
   # get attributes, but remove some of them - else, matching attribute fails
-  attr <- attributes(x)
-  attr <- attr[setdiff(names(attr), c("names", "row.names"))]
+  out_attr <- attributes(x)
+  out_attr <- out_attr[setdiff(names(out_attr), c("names", "row.names"))]
 
   # format table
   out <- format(out, select = select, include_grid = include_grid, ...)
-  attributes(out) <- utils::modifyList(attributes(out), attr)
+  attributes(out) <- utils::modifyList(attributes(out), out_attr)
 
   # remove redundant labels, for "by" variables
   out <- .remove_redundant_labels(x, out, full_labels)
@@ -104,15 +104,15 @@ print.estimate_grouplevel <- print.estimate_contrasts
 .remove_redundant_labels <- function(x, out, full_labels) {
   # remove redundant labels, for "by" variables
   if (!full_labels && nrow(out) > 1) {
-    by <- attributes(x)$by
+    out_by <- attributes(x)$by
     # for estimate_means, we don't want to remove labels for first focal term
     # only for grouping variable. in `estimate_slopes()`, the first variable
     # is saved in attribute $trend, so we need to remove it only for estimate_means
     if (inherits(x, "estimate_means")) {
-      by <- by[-1]
+      out_by <- out_by[-1]
     }
     # remove repeating elements in focal term columns
-    for (i in by) {
+    for (i in out_by) {
       if (i %in% colnames(out)) {
         for (j in nrow(x):2) {
           if (out[[i]][j] == out[[i]][j - 1]) out[[i]][j] <- ""
