@@ -59,7 +59,7 @@
       # no back-transform for `estimate_contrasts()`
       is.null(comparison) &&
       # accurate link-inv not working for Gamma-family / inverse-link?
-      !identical(model_info$link_function == "inverse")
+      !identical(model_info$link_function, "inverse")
 
     if (transform) {
       list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)
