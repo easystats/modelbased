@@ -172,7 +172,7 @@
 
 
 # the default "type" arguments for each model class. Used to set the
-# default type in "ggaverage()"
+# default type for the marginaleffects-backend
 # Run following code to update this list:
 # x <- marginaleffects:::type_dictionary_build()
 # x[!duplicated(x$class), ]
