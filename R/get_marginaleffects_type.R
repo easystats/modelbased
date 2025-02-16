@@ -59,12 +59,16 @@
     # we only need to do this for means, not for contrasts (where we need
     # delta method standard errors calculated on the response scale). the
     # {marginaleffects} packages takes care of this using a "invlink(link)"
-    # option, however, this is currently not available for all necessry classes.
+    # option, however, this is currently not available for all necessary classes.
     # as a temporary solution, we can (as we do in `insight::get_predicted()`)
-    # generally calculate predictions on the link-scale and then backtransform.
+    # generally calculate predictions on the link-scale and then back transform.
+
+    # find link-types
+    link_types <- c("link", "linear.predictor", "lp")
+    link_type <- link_types[which(link_types %in% valid_types)[1]]
 
     # no transform if no "link" type available
-    transform <- "link" %in% valid_types &&
+    transform <- !is.na(link_type) &&
       # no transform for linear models
       (isFALSE(model_info$is_linear) || isFALSE(model_info$is_tweedie)) &&
       # only back-transform if "response" is requested
@@ -79,12 +83,12 @@
       # https://github.com/vincentarelbundock/marginaleffects/issues/1391
       # https://github.com/vincentarelbundock/marginaleffects/issues/1392
       ## TODO: allow these classes once issues are fixed in marginaleffects
-      # IMPORTANT! no backtransform for Bayesian models, we cause we extract
-      # the posterior draws later, which are on the reponse scale.
+      # IMPORTANT! no back transform for Bayesian models, we cause we extract
+      # the posterior draws later, which are on the response scale.
       !inherits(model, c("betareg", "brmsfit", "stanreg"))
 
     if (transform) {
-      list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)
+      list(predict = link_type, backtransform = TRUE, link_inverse = link_inverse)
     } else {
       list(predict = out, backtransform = FALSE, link_inverse = NULL)
     }
