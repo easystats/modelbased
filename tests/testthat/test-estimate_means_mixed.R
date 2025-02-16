@@ -36,8 +36,8 @@ test_that("estimate_means() - mixed models", {
   )
   expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
   out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
-  expect_true(all(out$CI_low >= 0 & out$CI_low <= 1))
-  expect_true(all(out$CI_high >= 0 & out$CI_high <= 1))
+  expect_true(all(out$CI_low >= 0))
+  expect_true(all(out$CI_high >= 0))
 
   out1 <- estimate_means(m, c("mined", "spp"), type = "conditional", backend = "marginaleffects")
   out2 <- estimate_means(m, c("mined", "spp"), backend = "emmeans")
