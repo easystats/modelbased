@@ -44,3 +44,19 @@ test_that("estimate_means correct inverse link for glm", {
   expect_true(all(out$CI_low >= 0 & out$CI_low <= 1))
   expect_true(all(out$CI_high >= 0 & out$CI_high <= 1))
 })
+
+
+test_that("estimate_means correct inverse link for glmer", {
+  data(efc, package = "modelbased")
+
+  x <- which(efc$negc7d == 1 & efc$c172code == 3)
+  efc$negc7d[x[sample(1:length(x), round(length(x) / 1.1))]] <- 0
+  efc$c172code <- as.factor(efc$c172code)
+  fit <- lme4::glmer(
+  negc7d ~ c12hour + e42dep + c161sex + c172code + (1 | grp),
+  data = efc,
+  family = binomial(link = "logit")
+  )
+  modelbased::estimate_means(fit, "c172code")
+  modelbased::estimate_relation(fit, by = "c172code")
+})
