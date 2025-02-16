@@ -347,10 +347,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # columns named "Level1" and "Level2". For one contrast term, we just
       # need to rename the columns
       if (length(contrast) == 1) {
+        # we define this object to avoid scoping issues in data_rename(),
+        # see https://github.com/easystats/modelbased/issues/401
+        rename_columns <- paste0(contrast, 1:2)
         # rename columns
         params <- datawizard::data_rename(
           params,
-          select = paste0(contrast, 1:2),
+          select = rename_columns,
           replacement = c("Level1", "Level2"),
           verbose = FALSE
         )
@@ -360,9 +363,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           contrast_names <- paste0(contrast, i)
           params <- .fix_duplicated_contrastlevels(params, contrast_names)
           # finally, unite levels back into single column
+          rename_columns <- paste0("Level", i)
           params <- datawizard::data_unite(
             params,
-            new_column = paste0("Level", i),
+            new_column = rename_columns,
             select = contrast_names,
             separator = ", ",
             verbose = FALSE
