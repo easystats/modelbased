@@ -6,7 +6,7 @@ get_marginalcontrasts <- function(model,
                                   predict = NULL,
                                   ci = 0.95,
                                   comparison = "pairwise",
-                                  estimate = "average",
+                                  estimate = getOption("modelbased_estimate", "typical"),
                                   p_adjust = "none",
                                   transform = NULL,
                                   verbose = TRUE,
@@ -36,12 +36,24 @@ get_marginalcontrasts <- function(model,
   model_info <- insight::model_info(model, verbose = FALSE)
 
   # Guess arguments
-  my_args <- .guess_marginaleffects_arguments(model, by, contrast, verbose = verbose, ...)
+  my_args <- .guess_marginaleffects_arguments(
+    model,
+    by,
+    contrast,
+    verbose = verbose,
+    ...
+  )
 
   # sanitize comparison argument, to ensure compatibility between different
   # marginaleffects versions - newer versions don't accept a string argument,
   # only formulas (older versions don't accept formulas)
-  my_args <- .get_marginaleffects_hypothesis_argument(comparison, my_args, model_data, ...)
+  my_args <- .get_marginaleffects_hypothesis_argument(
+    comparison,
+    my_args,
+    model_data,
+    estimate,
+    ...
+  )
 
   # extract first focal term
   first_focal <- my_args$contrast[1]
@@ -88,9 +100,13 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-  # filter results
-  if (!is.null(my_args$by_filter) && all(my_args$by %in% colnames(out))) {
-    out <- out[out[[my_args$by]] == my_args$by_filter, ]
+  # filter results - for `estimate_contrasts()`, we don't filter using the
+  # data grid; due to the flexible way of defining comparisons, we need the
+  # full data grid and filter here (e.g., when we have `by="Petal.Width=c(1, 2)"`)
+  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
+    for (i in names(my_args$by_filter)) {
+      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
+    }
   }
 
   # adjust p-values
@@ -111,7 +127,8 @@ get_marginalcontrasts <- function(model,
       predict = predict,
       comparison = my_args$comparison,
       estimate = estimate,
-      p_adjust = p_adjust
+      p_adjust = p_adjust,
+      contrast_filter = my_args$contrast_filter
     )
   )
 
@@ -126,27 +143,73 @@ get_marginalcontrasts <- function(model,
 
 # make "comparison" argument compatible -----------------------------------
 
-.get_marginaleffects_hypothesis_argument <- function(comparison, my_args, model_data = NULL, ...) {
+# this function has two major tasks: format the "comparison" argument for use
+# in the marginaleffects package, and extract the potential filter values used
+# in `by` and `contrast` (if any), to "clean" these arguments and save the levels
+# or values at which rows should be filtered later...
+.get_marginaleffects_hypothesis_argument <- function(comparison,
+                                                     my_args,
+                                                     model_data = NULL,
+                                                     estimate = NULL,
+                                                     ...) {
   # init
-  comparison_slopes <- by_filter <- by_token <- NULL
+  comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
   # extract filter value for later - we have to filter rows manually after
   # calculating contrasts. Furthermore, "clean" `by` argument (remove filter)
   if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
-    # look for filter values
-    filter_value <- insight::trim_ws(unlist(strsplit(my_args$by, "=", fixed = TRUE), use.names = FALSE))
-    if (length(filter_value) > 1) {
-      # parse filter value and save for later user
-      by_filter <- .safe(eval(str2lang(filter_value[2])))
-      # check if evaluation was possible, or if we had a "token", like
-      # "[sd]" or "[fivenum]". If not, update `by`, else preserve
-      if (is.null(by_filter) && !grepl("[\\[\\]]", filter_value[2])) {
-        by_token <- filter_value[2]
+    # find which element in `by` has a filter
+    filter_index <- grep("=", my_args$by, fixed = TRUE)
+    for (f in filter_index) {
+      # look for filter values
+      filter_value <- insight::trim_ws(unlist(
+        strsplit(my_args$by[f], "=", fixed = TRUE),
+        use.names = FALSE
+      ))
+      if (length(filter_value) > 1) {
+        # parse filter value and save for later use - we create a named list,
+        # because we need to know *which* variables in `by` used a filter. we
+        # could have `by = c("x", "y=c(1,2)")`, but also `by = c("x=c('a','b')", "y")`.
+        # the list has the variable name as name, and the filter values as element
+        by_value <- stats::setNames(
+          list(.safe(eval(str2lang(filter_value[2])))),
+          filter_value[1]
+        )
+        by_filter <- c(by_filter, by_value)
+        # check if evaluation was possible, or if we had a "token", like
+        # "[sd]" or "[fivenum]". If not, update `by`, else preserve
+        if (is.null(by_value[[1]]) && !grepl("[\\[\\]]", filter_value[2])) {
+          by_token <- c(by_token, stats::setNames(list(filter_value[2]), filter_value[1]))
+        }
+        # copy "cleaned" variable
+        my_args$by[f] <- filter_value[1]
       }
-      # copy "cleaned" variable
-      my_args$by <- filter_value[1]
+    }
+  }
+
+  # if filtering is requested for contrasts, we also want to extract the filter
+  # values for later use. we only need this for `estimate = "average"`, because
+  # that is the only situation where we do *not* use a data grid, which we else
+  # could use for filtering, by dropping not-wanted rows from the grid.
+  if (identical(estimate, "average") && !is.null(my_args$contrast) && any(grepl("=", my_args$contrast, fixed = TRUE))) { # nolint
+    # find which element in `by` has a filter
+    filter_index <- grep("=", my_args$contrast, fixed = TRUE)
+    for (f in filter_index) {
+      # look for filter values
+      filter_value <- insight::trim_ws(unlist(
+        strsplit(my_args$contrast[f], "=", fixed = TRUE),
+        use.names = FALSE
+      ))
+      if (length(filter_value) > 1) {
+        # parse filter value and save for later user - we need as named list
+        # for the same reason as mentioned above...
+        contrast_filter <- c(
+          contrast_filter,
+          stats::setNames(list(.safe(eval(str2lang(filter_value[2])))), filter_value[1])
+        )
+      }
     }
   }
 
@@ -194,6 +257,9 @@ get_marginalcontrasts <- function(model,
         my_args$by <- formula_group
       }
       comparison <- stats::as.formula(f)
+    } else {
+      # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
+      comparison_slopes <- comparison
     }
   } else {
     # default to pairwise, if comparison = NULL
@@ -204,7 +270,9 @@ get_marginalcontrasts <- function(model,
 
   # add back token to `by`
   if (!is.null(by_token)) {
-    my_args$by <- paste(my_args$by, by_token, sep = "=")
+    for (i in names(by_token)) {
+      my_args$by[my_args$by == i] <- paste(i, by_token[[i]], sep = "=")
+    }
   }
 
   c(
@@ -215,8 +283,9 @@ get_marginalcontrasts <- function(model,
       comparison = comparison,
       # the modifed comparison, as formula, excluding "by" as group
       comparison_slopes = comparison_slopes,
-      # the filter-value, in case `by` indicated any filtering
-      by_filter = by_filter
+      # the filter-value, in case `by` or contrast indicated any filtering
+      by_filter = insight::compact_list(by_filter),
+      contrast_filter = insight::compact_list(contrast_filter)
     )
   )
 }
@@ -261,7 +330,10 @@ get_marginalcontrasts <- function(model,
   # this is the row-order we use in modelbased
   datagrid$.rowid <- 1:nrow(datagrid)
   # this is the row-order in marginaleffects
-  datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+  datagrid <- datawizard::data_arrange(
+    datagrid,
+    colnames(datagrid)[1:(length(datagrid) - 1)]
+  )
   # we need to extract all b's and the former parameter numbers
   b <- .extract_custom_comparison(comparison)
   old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))

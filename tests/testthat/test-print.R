@@ -75,6 +75,10 @@ withr::with_options(
     efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
     levels(efc$c172code) <- c("low", "mid", "high")
     fit <- lm(neg_c_7 ~ barthtot * c172code, data = efc)
+    expect_identical(
+      dim(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects", p_adjust = "holm")),
+      c(9L, 10L)
+    )
     expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
     expect_snapshot(print(estimate_contrasts(fit, c("c172code", "barthtot = [sd]"), backend = "marginaleffects", p_adjust = "holm"), table_width = Inf, zap_small = TRUE)) # nolint
     expect_snapshot(print(estimate_contrasts(fit, "c172code", "barthtot = [sd]", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE)) # nolint

@@ -10,7 +10,7 @@ test_that("table_footer", {
     out[11],
     "Predictors controlled: c12hour (42), barthtot (65), c161sex (Male), e42dep (independent)"
   )
-  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "average", verbose = FALSE))
+  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "typical", verbose = FALSE))
   expect_identical(
     out[11],
     "Predictors averaged: c12hour (42), barthtot (65), c161sex, e42dep"

@@ -84,3 +84,12 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
     tolerance = 1e-2
   )
 })
+
+
+test_that("estimate_slopes, custom comparison", {
+  data(iris)
+  m <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
+  out <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1 - b2) = (b1 - b3)")
+  expect_identical(dim(out), c(1L, 7L))
+  expect_equal(out$Difference, -0.08782885, tolerance = 1e-4)
+})

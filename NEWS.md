@@ -5,6 +5,10 @@
 * The deprecated function `visualisation_matrix()` has been removed. Use
   `insight::get_datagrid()` instead.
 
+* The `"average"` option for argument `estimate` was renamed into `"typical"`.
+  The former `"average"` option is still available, but now returned marginal
+  means fully averaged across the sample.
+
 ## Changes
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
@@ -41,6 +45,8 @@
 * Fixed issues with multivariate response models.
 
 * Fixed issues with plotting ordinal or multinomial models.
+
+* Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
 # modelbased 0.9.0
 

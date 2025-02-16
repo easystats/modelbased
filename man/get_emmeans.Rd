@@ -40,7 +40,7 @@ get_marginalcontrasts(
   predict = NULL,
   ci = 0.95,
   comparison = "pairwise",
-  estimate = "average",
+  estimate = getOption("modelbased_estimate", "typical"),
   p_adjust = "none",
   transform = NULL,
   verbose = TRUE,
@@ -52,7 +52,7 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  estimate = "average",
+  estimate = getOption("modelbased_estimate", "typical"),
   transform = NULL,
   verbose = TRUE,
   ...
@@ -90,9 +90,6 @@ for predictors of interest.}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for \code{predict} are:
 \itemize{
-\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
-\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}).
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
 any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
 for zero-inflation models from package \strong{glmmTMB}, you can choose
@@ -100,6 +97,9 @@ for zero-inflation models from package \strong{glmmTMB}, you can choose
 \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
 appropriate transformation is selected, which usually returns predictions
 or contrasts on the response-scale.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}).
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
@@ -154,12 +154,12 @@ appropriate transformation-function.}
 to functions from the \strong{emmeans} or \strong{marginaleffects} package, or to process
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
-\item \code{insight::get_datagrid()}: Argument such as \code{length} or \code{range} can be used
-to control the (number of) representative values.
+\item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
+can be used to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
-means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments
-for instance like \code{vcov}, \code{transform}, \code{equivalence}, \code{slope} or even
-\code{newdata} can be passed to those functions.
+means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
+passed to those functions.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -175,42 +175,73 @@ compute the slopes.}
 \item{estimate}{Character string, indicating the type of target population
 predictions refer to. This dictates how the predictions are "averaged" over
 the non-focal predictors, i.e. those variables that are not specified in
-\code{by} or \code{contrast}.
+\code{by} or \code{contrast}. We can roughly distinguish between "modelbased" and
+"empirical" predictions.
 \itemize{
-\item \code{"average"} (default): Takes the mean value for non-focal numeric
-predictors and marginalizes over the factor levels of non-focal terms,
-which computes a kind of "weighted average" for the values at which these
-terms are hold constant. These predictions are a good representation of the
-sample, because all possible values and levels of the non-focal predictors
-are considered. It answers the question, "What is the predicted value for
-an 'average' observation in \emph{my data}?". Cum grano salis, it refers to
-randomly picking a subject of your sample and the result you get on
-average. This approach is the one taken by default in the \code{emmeans}
-package.
-\item \code{"population"}: Non-focal predictors are marginalized over the observations
-in the sample, where the sample is replicated multiple times to produce
-"counterfactuals" and then takes the average of these predicted values
-(aggregated/grouped by the focal terms). It can be considered as
-extrapolation to a hypothetical target population. Counterfactual
-predictions are useful, insofar as the results can also be transferred to
-other contexts (Dickerman and Hernan, 2020). It answers the question, "What
-is the predicted response value for the 'average' observation in \emph{the
-broader target population}?". It does not only refer to the actual data in
-your observed sample, but also "what would be if" we had more data, or if
-we had data from a different sample.
+\item \code{"typical"} (default): Predictions are made for observations that are
+represented by a data grid, which is built from all combinations of the
+predictor levels in \code{by} (the focal predictors). \code{"typical"} then takes the
+mean value for non-focal numeric predictors and marginalizes over the
+factor levels of non-focal predictors, which computes a kind of "weighted
+average" for the values at which these terms are hold constant. These
+predictions are useful for comparing defined "groups" and are still a good
+representation of the sample, because all possible values and levels of the
+non-focal predictors are considered (averaged over). It answers the
+question, "What would be the average outcome for a 'typical' observation?",
+where 'typical' refers to subjects represented by (i.e., that share the
+characteristics from) the data grid. This approach is the one taken by
+default in the \code{emmeans} package.
+\item \code{"average"}: Predictions are made for each observation in the sample. Then,
+the average of all predictions is calculated within all groups (or levels)
+of the focal predictors defined in \code{by}. These predictions are the closest
+representation of the sample, because \code{estimate = "average"} averages
+across the full sample, where groups (in \code{by}) are not represented by a
+balanced data grid, but rather the empirical distributions of the
+characteristics of the sample. It answers the question, "What is the
+predicted value for an average observation (from a certain group in \code{by})
+in my data?".
+\item \code{"population"}: Each observation is "cloned" multiple times, where each
+duplicate gets one of the levels from the focal predictors in \code{by}. We then
+have one "original" and several copies of that original, each varying in
+the levels of the focal predictors. Hence, the sample is replicated
+multiple times to produce "counterfactuals" and then takes the average of
+these predicted values (aggregated/grouped by the focal predictors). It can
+be considered as extrapolation to a hypothetical target population.
+Counterfactual predictions are useful, insofar as the results can also be
+transferred to other contexts (Dickerman and Hernan, 2020). It answers the
+question, "What is the predicted response value for the 'average'
+observation in \emph{the broader target population}?". It does not only refer to
+the actual data in your observed sample, but also "what would be if" we had
+more data, or if we had data from a different sample.
 }
 
 In other words, the distinction between estimate types resides in whether
 the prediction are made for:
 \itemize{
-\item A specific "individual" from the sample (i.e., a specific combination of
-predictor values): this is what is obtained when using \code{\link[=estimate_relation]{estimate_relation()}}
-and the other prediction functions.
-\item An average individual from the sample: obtained with
+\item \emph{modelbased predictions} (focus lies on \emph{predictors}), which are useful to
+look at differences between typical groups, or for visualization
+\itemize{
+\item A specific individual from the sample (i.e., a specific combination of
+predictor values for focal and non-focal predictors): this is what is obtained
+when using \code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
+\item A typical individual from the sample: obtained with
+\code{estimate_means(..., estimate = "typical")}
+}
+\item \emph{empirical predictions} (focus lies on \emph{predictions} of the outcome), which
+are useful if you want realistic predictions of your outcome, assuming that
+the sample is representative for a special population (option \code{"average"}),
+or useful for "what-if" scenarios, especially if you want to make unbiased
+comparisons (G-computation, option \code{"population"})
+\itemize{
+\item The average individual from the sample: obtained with
 \code{estimate_means(..., estimate = "average")}
 \item The broader, hypothetical target population: obtained with
 \code{estimate_means(..., estimate = "population")}
-}}
+}
+}
+
+You can set a default option for the \code{estimate} argument via \code{options()},
+e.g. \code{options(modelbased_estimate = "average")}}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
@@ -240,12 +271,10 @@ get_emcontrasts(model)
 model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 # By default: selects first factor
 get_emcontrasts(model)
-# Can also run contrasts between points of numeric
-get_emcontrasts(model, contrast = "Petal.Width", length = 3)
 # Or both
 get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 # Or with custom specifications
-estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 # Or modulate it
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 }

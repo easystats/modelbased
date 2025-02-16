@@ -413,7 +413,7 @@ test_that("estimate_means, full averaging", {
   m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
 
   estim1 <- marginaleffects::avg_predictions(m, by = c("c161sex", "c172code"))
-  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "sample")
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "average")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim1 <- marginaleffects::avg_predictions(m, variables = c("c161sex", "c172code"))
@@ -421,9 +421,21 @@ test_that("estimate_means, full averaging", {
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
-  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "average")
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
-  estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "sample")
-  expect_identical(dim(estim2), c(6L, 8L))
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
+  expect_identical(dim(estim2), c(2L, 8L))
+})
+
+
+test_that("estimate_means, df", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ c12hour + barthtot + e42dep + c161sex * c172code, data = efc)
+
+  out1 <- estimate_contrasts(m, "c161sex", by = "c172code", df = Inf)
+  out2 <- estimate_contrasts(m, "c161sex", by = "c172code")
+  expect_true(all(out1$p != out2$p))
 })
