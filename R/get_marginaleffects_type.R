@@ -52,6 +52,8 @@
 
     # no transform if no "link" type available
     transform <- "link" %in% valid_types &&
+      # no transform for linear models
+      (isFALSE(model_info$is_linear) || isFALSE(model_info$is_tweedie))
       # only back-transform if "response" is requested
       out == "response" &&
       # only back-transform if we have a link-inverse function
