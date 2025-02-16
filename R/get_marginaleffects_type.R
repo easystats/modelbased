@@ -59,7 +59,11 @@
       # no back-transform for `estimate_contrasts()`
       is.null(comparison) &&
       # accurate link-inv not working for Gamma-family / inverse-link?
-      !identical(model_info$link_function, "inverse")
+      !identical(model_info$link_function, "inverse") &&
+      # betareg is currently broken for "link" type, see
+      # https://github.com/vincentarelbundock/marginaleffects/issues/1391
+      ## TODO: allow betareg once this issue is fixed in marginaleffects
+      !inherits(model, "betareg")
 
     if (transform) {
       list(predict = "link", backtransform = TRUE, link_inverse = link_inverse)

@@ -194,7 +194,11 @@ get_marginalmeans <- function(model,
   #   the delta-method for SEs on the response scale
   # - only called when `type` (i.e. `predict`) is "response" AND the model class
   #   has a "link" prediction type
-  means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+  if (predict_args$backtransform) {
+    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+    # make sure we have the original string value for the "predict" argument
+    predict_args$predict <- "response"
+  }
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
