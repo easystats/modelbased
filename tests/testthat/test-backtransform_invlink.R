@@ -53,9 +53,9 @@ test_that("estimate_means correct inverse link for glmer", {
   efc$negc7d[x[sample(1:length(x), round(length(x) / 1.1))]] <- 0
   efc$c172code <- as.factor(efc$c172code)
   fit <- lme4::glmer(
-  negc7d ~ c12hour + e42dep + c161sex + c172code + (1 | grp),
-  data = efc,
-  family = binomial(link = "logit")
+    negc7d ~ c12hour + e42dep + c161sex + c172code + (1 | grp),
+    data = efc,
+    family = binomial(link = "logit")
   )
   modelbased::estimate_means(fit, "c172code")
   modelbased::estimate_relation(fit, by = "c172code")
