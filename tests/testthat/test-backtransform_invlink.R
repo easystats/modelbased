@@ -58,5 +58,5 @@ test_that("estimate_means correct inverse link for glmer", {
     family = binomial(link = "logit")
   )
   modelbased::estimate_means(fit, "c172code")
-  modelbased::estimate_relation(fit, by = "c172code")
+  modelbased::estimate_relation(fit, by = "c172code", verbose = FALSE)
 })
