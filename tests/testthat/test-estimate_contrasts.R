@@ -106,13 +106,24 @@ test_that("estimate_contrasts - Frequentist, Three factors 1", {
   # estim <- suppressMessages(estimate_contrasts(model, by = "all", backend = "marginaleffects"))
   # expect_identical(dim(estim), c(12L, 11L))
 
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear='5'", backend = "marginaleffects"))
+  estim <- suppressMessages(estimate_contrasts(model,
+    contrast = c("vs", "am"), by = "gear='5'",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim), c(6L, 10L))
-  expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333), tolerance = 1e-4)
+  expect_equal(estim$Difference, c(6.98333, 11.275, 18.25833, 4.29167, 11.275, 6.98333),
+    tolerance = 1e-4
+  )
 
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"))
+  estim <- suppressMessages(estimate_contrasts(model,
+    contrast = c("vs", "am"), by = "gear",
+    backend = "marginaleffects"
+  ))
   expect_identical(dim(estim), c(18L, 10L))
-  expect_named(estim, c("Level1", "Level2", "gear", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_named(estim, c(
+    "Level1", "Level2", "gear", "Difference", "SE",
+    "CI_low", "CI_high", "t", "df", "p"
+  ))
   expect_equal(
     estim$Difference,
     c(
@@ -137,7 +148,10 @@ test_that("estimate_contrasts - Frequentist, Three factors 2", {
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   levels(efc$c172code) <- c("low", "mid", "high")
   fit <- lm(neg_c_7 ~ barthtot + e16sex * c172code * c161sex, data = efc)
-  estim <- estimate_contrasts(fit, contrast = c("c161sex", "c172code"), by = "e16sex='male'", backend = "marginaleffects")
+  estim <- estimate_contrasts(fit,
+    contrast = c("c161sex", "c172code"),
+    by = "e16sex='male'", backend = "marginaleffects"
+  )
 
   # validate against marginaleffects
   out <- marginaleffects::avg_predictions(
@@ -210,11 +224,20 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
 
   model <- lm(Petal.Width ~ factor1 * factor2 * factor3, data = dat)
 
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2", "factor3"), by = "all", backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    contrast = c("factor1", "factor2", "factor3"), by = "all", backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(28L, 9L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3='F'", backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    contrast = c("factor1", "factor2"), by = "factor3='F'", backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(6L, 10L))
-  estim <- suppressMessages(estimate_contrasts(model, contrast = c("factor1", "factor2"), by = "factor3", backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    contrast = c("factor1", "factor2"), by = "factor3", backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(12L, 10L))
 })
 
@@ -290,9 +313,15 @@ test_that("estimate_contrasts - Bayesian", {
   )
   estim <- suppressMessages(estimate_contrasts(model, contrast = "all", backend = "emmeans"))
   expect_identical(dim(estim), c(15L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Length_factor='A'"), backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    by = c("Species", "Petal.Length_factor='A'"), backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(3L, 8L))
-  estim <- estimate_contrasts(model, contrast = c("Species", "Petal.Length_factor"), backend = "marginaleffects")
+  estim <- estimate_contrasts(model,
+    contrast = c("Species", "Petal.Length_factor"),
+    backend = "marginaleffects"
+  )
   expect_identical(dim(estim), c(15L, 10L))
   expect_named(
     estim,
@@ -325,9 +354,15 @@ test_that("estimate_contrasts - Bayesian", {
   )
   estim <- suppressMessages(estimate_contrasts(model, backend = "emmeans"))
   expect_identical(dim(estim), c(3L, 7L))
-  estim <- suppressMessages(estimate_contrasts(model, by = c("Species", "Petal.Width=0"), backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    by = c("Species", "Petal.Width=0"), backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(3L, 8L))
-  estim <- suppressMessages(estimate_contrasts(model, by = "Petal.Width", length = 4, backend = "emmeans"))
+  estim <- suppressMessages(estimate_contrasts(
+    model,
+    by = "Petal.Width", length = 4, backend = "emmeans"
+  ))
   expect_identical(dim(estim), c(12L, 8L))
 
   # GLM
@@ -346,7 +381,10 @@ test_that("estimate_contrasts - Bayesian", {
 
   estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, test = "bf", backend = "emmeans")))
   expect_identical(dim(estim), c(3L, 6L))
-  estim <- suppressWarnings(suppressMessages(estimate_contrasts(model, predict = "link", test = "bf", backend = "emmeans")))
+  estim <- suppressWarnings(suppressMessages(estimate_contrasts(
+    model,
+    predict = "link", test = "bf", backend = "emmeans"
+  )))
   expect_identical(dim(estim), c(3L, 6L))
 })
 
@@ -387,8 +425,14 @@ test_that("estimate_contrasts - dfs", {
   data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
   model <- lme4::lmer(Sepal.Width ~ Species + (1 | Petal.Length_factor), data = data)
 
-  estim1 <- suppressMessages(estimate_contrasts(model, lmer.df = "satterthwaite", p_adjust = "holm", backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_contrasts(model, lmer.df = "kenward-roger", p_adjust = "holm", backend = "emmeans"))
+  estim1 <- suppressMessages(estimate_contrasts(model,
+    lmer.df = "satterthwaite",
+    p_adjust = "holm", backend = "emmeans"
+  ))
+  estim2 <- suppressMessages(estimate_contrasts(model,
+    lmer.df = "kenward-roger",
+    p_adjust = "holm", backend = "emmeans"
+  ))
 
   expect_true(all(estim1$CI_low != estim2$CI_low))
   expect_equal(estim1$CI_low, c(-2.43, -2.25692, -2.89384), tolerance = 1e-4)
@@ -430,11 +474,19 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
     ), zap_small = TRUE, table_width = Inf),
     variant = "windows"
   ) # nolint
-  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
+  out1 <- estimate_contrasts(m, c("time", "coffee"),
+    backend = "marginaleffects",
+    p_adjust = "none", comparison = "(b2-b1)=(b4-b3)"
+  )
   out2 <- predict(m, newdata = insight::get_datagrid(m, c("time", "coffee")))
   expect_equal(out1$Difference, 5.78298, tolerance = 1e-4)
-  expect_equal(out1$Difference, ((out2[2] - out2[1]) - (out2[4] - out2[3])), tolerance = 1e-4, ignore_attr = TRUE)
-  out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "b5=b3")
+  expect_equal(out1$Difference, ((out2[2] - out2[1]) - (out2[4] - out2[3])),
+    tolerance = 1e-4, ignore_attr = TRUE
+  )
+  out1 <- estimate_contrasts(m, c("time", "coffee"),
+    backend = "marginaleffects",
+    p_adjust = "none", comparison = "b5=b3"
+  )
   expect_equal(out1$Difference, -1.927659, tolerance = 1e-4)
   expect_equal(out1$Difference, (out2[5] - out2[3]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_snapshot(print(estimate_contrasts(
@@ -689,8 +741,13 @@ test_that("estimate_contrasts - contrasts for numeric by factor 2", {
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
   # all should return the same output
   out1 <- estimate_contrasts(fit, "c161sex", by = "c172code", backend = "marginaleffects")
-  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"), comparison = ~ pairwise | c172code, backend = "marginaleffects")
-  out3 <- estimate_contrasts(fit, "c161sex", by = "c172code", comparison = ~pairwise, backend = "marginaleffects")
+  out2 <- estimate_contrasts(fit, c("c161sex", "c172code"),
+    comparison = ~ pairwise | c172code, backend = "marginaleffects"
+  )
+  out3 <- estimate_contrasts(fit, "c161sex",
+    by = "c172code", comparison = ~pairwise,
+    backend = "marginaleffects"
+  )
   expect_named(
     out1,
     c("Level1", "Level2", "c172code", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
@@ -741,7 +798,7 @@ test_that("estimate_contrasts - row order in data grid doesn't matter", {
   d <- data.frame(
     score = rnorm(n),
     grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-    time = as.factor(sample(1:3, n, TRUE))
+    time = as.factor(sample.int(3, n, TRUE))
   )
 
   model2 <- lm(score ~ grp * time, data = d)
@@ -811,7 +868,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   d <- data.frame(
     score = rnorm(n),
     grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-    time = as.factor(sample(1:2, n, TRUE)),
+    time = as.factor(sample.int(2, n, TRUE)),
     x = as.factor(sample(letters[1:2], n, TRUE))
   )
   model2 <- lm(score ~ grp * time * x, data = d)
@@ -847,7 +904,7 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   d <- data.frame(
     score = rnorm(n),
     grp = as.factor(sample(c("treatment", "control"), n, TRUE)),
-    time = as.factor(sample(1:3, n, TRUE))
+    time = as.factor(sample.int(3, n, TRUE))
   )
   model2 <- lm(score ~ grp * time, data = d)
 
