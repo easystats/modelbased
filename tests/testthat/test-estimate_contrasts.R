@@ -122,9 +122,13 @@ test_that("estimate_contrasts - Frequentist, Three factors 1", {
     ),
     tolerance = 1e-4
   )
-  expect_snapshot(print(estimate_contrasts(
-    model, contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"),
-    zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(
+    estimate_contrasts(
+      model,
+      contrast = c("vs", "am"), by = "gear", backend = "marginaleffects"
+    ),
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
 })
 
 
@@ -186,11 +190,16 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
   set.seed(123)
   dat$three <- factor(sample(0:1, nrow(dat), replace = TRUE))
   model <- lm(mpg ~ three * vs * am, data = dat)
-  expect_snapshot(print(estimate_contrasts(
-    model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
-    zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(
+    estimate_contrasts(
+      model,
+      contrast = c("three", "vs", "am"), backend = "marginaleffects"
+    ),
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
 
 
   dat <- iris
@@ -398,17 +407,29 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
   skip_if_not_installed("Formula")
   data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-  expect_snapshot(print(estimate_contrasts(
-    m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none"),
-    zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none",
-    comparison = ratio ~ reference | coffee), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none",
-    comparison = "(b2-b1)=(b4-b3)"), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
+  expect_snapshot(print(
+    estimate_contrasts(
+      m, c("time", "coffee"),
+      backend = "marginaleffects", p_adjust = "none"
+    ),
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      m, c("time", "coffee"),
+      backend = "marginaleffects", p_adjust = "none",
+      comparison = ratio ~ reference | coffee
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      m, c("time", "coffee"),
+      backend = "marginaleffects", p_adjust = "none",
+      comparison = "(b2-b1)=(b4-b3)"
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
   out1 <- estimate_contrasts(m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none", comparison = "(b2-b1)=(b4-b3)")
   out2 <- predict(m, newdata = insight::get_datagrid(m, c("time", "coffee")))
   expect_equal(out1$Difference, 5.78298, tolerance = 1e-4)
@@ -417,16 +438,20 @@ test_that("estimate_contrasts - marginaleffects, comparisons, validate against p
   expect_equal(out1$Difference, -1.927659, tolerance = 1e-4)
   expect_equal(out1$Difference, (out2[5] - out2[3]), tolerance = 1e-4, ignore_attr = TRUE)
   expect_snapshot(print(estimate_contrasts(
-    m, c("time", "coffee"), backend = "marginaleffects", p_adjust = "none",
-    comparison = "b5=b3"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    m, c("time", "coffee"),
+    backend = "marginaleffects", p_adjust = "none",
+    comparison = "b5=b3"
+  ), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
 
   # validated against ggeffects::test_predictions()
   data(efc, package = "modelbased")
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep * c172code, data = efc)
   expect_snapshot(estimate_contrasts(
-    fit, c("e42dep", "c172code"), comparison = "b6-b3=0",
-    backend = "marginaleffects"), variant = "windows")
+    fit, c("e42dep", "c172code"),
+    comparison = "b6-b3=0",
+    backend = "marginaleffects"
+  ), variant = "windows")
   out <- estimate_contrasts(fit, c("e42dep", "c172code"), comparison = "b6-b3=0", backend = "marginaleffects")
   expect_equal(out$Difference, -0.3352769, tolerance = 1e-4)
 })
@@ -466,7 +491,9 @@ test_that("estimate_contrasts - marginaleffects vs emmeans", {
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"), variant = "windows")
   expect_snapshot(estimate_contrasts(model, backend = "emmeans", p_adjust = "holm"), variant = "windows")
   expect_snapshot(estimate_contrasts(
-    model, backend = "marginaleffects", p_adjust = "holm"), variant = "windows")
+    model,
+    backend = "marginaleffects", p_adjust = "holm"
+  ), variant = "windows")
 })
 
 
@@ -553,16 +580,19 @@ test_that("estimate_contrasts - filtering works", {
   levels(efc$c172code) <- c("low", "mid", "high")
   fit <- lm(neg_c_7 ~ e16sex + c161sex + c172code, data = efc)
   expect_snapshot(print(estimate_contrasts(fit, "c172code", backend = "marginaleffects"),
-                        table_width = Inf, zap_small = TRUE), variant = "windows") # nolint
+    table_width = Inf, zap_small = TRUE
+  ), variant = "windows") # nolint
 
   fit <- lm(neg_c_7 ~ e16sex + c161sex * c172code, data = efc)
   expect_snapshot(print(estimate_contrasts(fit, c("c161sex", "c172code"), backend = "marginaleffects"), table_width = Inf, zap_small = TRUE), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(fit, "c161sex", "c172code", backend = "marginaleffects"),
-                        table_width = Inf, zap_small = TRUE), variant = "windows") # nolint
+    table_width = Inf, zap_small = TRUE
+  ), variant = "windows") # nolint
 
   fit <- lm(neg_c_7 ~ barthtot + c161sex + c172code, data = efc)
   expect_snapshot(print(estimate_slopes(fit, "barthtot", backend = "marginaleffects"),
-                        table_width = Inf, zap_small = TRUE), variant = "windows") # nolint
+    table_width = Inf, zap_small = TRUE
+  ), variant = "windows") # nolint
   # error
   expect_error(
     estimate_contrasts(fit, "barthtot", backend = "marginaleffects"),
@@ -571,14 +601,24 @@ test_that("estimate_contrasts - filtering works", {
 
   fit <- lm(neg_c_7 ~ e16sex + barthtot * c172code, data = efc)
   expect_snapshot(print(estimate_slopes(fit, "barthtot", by = "c172code", backend = "marginaleffects"),
-                        table_width = Inf, zap_small = TRUE), variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    fit, "barthtot", "c172code", backend = "marginaleffects"), table_width = Inf, zap_small = TRUE),
-    variant = "windows") # nolint
+    table_width = Inf, zap_small = TRUE
+  ), variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      fit, "barthtot", "c172code",
+      backend = "marginaleffects"
+    ), table_width = Inf, zap_small = TRUE),
+    variant = "windows"
+  ) # nolint
   fit <- lm(neg_c_7 ~ e16sex * barthtot * c172code, data = efc)
-  expect_snapshot(print(estimate_contrasts(
-    fit, "barthtot", c("c172code", "e16sex"), backend = "marginaleffects"), table_width = Inf,
-    zap_small = TRUE), variant = "windows") # nolint
+  expect_snapshot(print(
+    estimate_contrasts(
+      fit, "barthtot", c("c172code", "e16sex"),
+      backend = "marginaleffects"
+    ),
+    table_width = Inf,
+    zap_small = TRUE
+  ), variant = "windows") # nolint
   # error
   expect_error(
     estimate_contrasts(fit, c("barthtot", "c172code"), backend = "marginaleffects"),
@@ -593,24 +633,35 @@ test_that("estimate_contrasts - simple contrasts and with - in levels works", {
 
   model <- lm(Sepal.Length ~ Species + Sepal.Width, data = iris)
   expect_snapshot(print(estimate_contrasts(model, "Species", backend = "marginaleffects"),
-                        table_width = Inf), variant = "windows") # nolint
+    table_width = Inf
+  ), variant = "windows") # nolint
 
   data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee + sex, data = coffee_data)
-  expect_snapshot(print(estimate_contrasts(
-    m, c("time", "coffee"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      m, c("time", "coffee"),
+      backend = "marginaleffects"
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
 
-  expect_snapshot(print(estimate_contrasts(
-    m, contrast = "time", by = "coffee", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      m,
+      contrast = "time", by = "coffee", backend = "marginaleffects"
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
 
   data(Salamanders, package = "glmmTMB")
   model <- glmmTMB::glmmTMB(count ~ mined * spp + cover + (1 | site), data = Salamanders, family = "poisson") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = c("mined", "spp"), backend = "marginaleffects"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "mined", by = "spp", backend = "marginaleffects"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
 })
 
 
@@ -722,18 +773,34 @@ test_that("estimate_contrasts - filtering in `by` works", {
 
 test_that("estimate_contrasts - examples from docs work as intendec", {
   model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
-  expect_snapshot(print(estimate_contrasts(
-    model, contrast = "Petal.Width", by = "Species"), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    model, contrast = c("Species", "Petal.Width"), length = 2), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    model, contrast = c("Species", "Petal.Width=c(1, 2)")), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    model, by = "Petal.Width", length = 4), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      model,
+      contrast = "Petal.Width", by = "Species"
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      model,
+      contrast = c("Species", "Petal.Width"), length = 2
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      model,
+      contrast = c("Species", "Petal.Width=c(1, 2)")
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      model,
+      by = "Petal.Width", length = 4
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
 })
 
 
@@ -750,20 +817,30 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   model2 <- lm(score ~ grp * time * x, data = d)
 
   expect_snapshot(print(estimate_contrasts(model2, c("grp", "time", "x")),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(
-    model2, c("grp", "time"), by = "x"), zap_small = TRUE, table_width = Inf),
-    variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
+  expect_snapshot(
+    print(estimate_contrasts(
+      model2, c("grp", "time"),
+      by = "x"
+    ), zap_small = TRUE, table_width = Inf),
+    variant = "windows"
+  ) # nolint
   expect_snapshot(print(estimate_contrasts(model2, "grp", by = c("time", "x")),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model2, "grp", by = "time"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model2, c("grp", "time", "x='a'")),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model2, c("grp", "time=1"), by = "x"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model2, "grp", by = c("time", "x='a'")),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
 
   set.seed(123)
   n <- 1000
@@ -775,9 +852,11 @@ test_that("estimate_contrasts - test all combinations of contrast and by, with f
   model2 <- lm(score ~ grp * time, data = d)
 
   expect_snapshot(print(estimate_contrasts(model2, "time=c(1,2)", by = "grp"),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model2, c("grp", "time=2")),
-                        zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+    zap_small = TRUE, table_width = Inf
+  ), variant = "windows") # nolint
 })
 
 

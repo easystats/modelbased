@@ -68,7 +68,7 @@
       three 1, vs 1, am 1 | three 1, vs 0, am 0 |      11.13 | 2.84 | [  5.28,  16.99] |  3.93 | < .001
       three 1, vs 1, am 0 | three 1, vs 0, am 1 |      -2.42 | 3.01 | [ -8.63,   3.78] | -0.81 |  0.428
       three 1, vs 1, am 1 | three 1, vs 0, am 1 |       3.05 | 3.47 | [ -4.12,  10.22] |  0.88 |  0.389
-      three 1, vs 1, am 1 | three 1, vs 1, am 0 |       5.48 | 3.01 | [ -0.73,  11.68] |  1.82 |  0.081
+      three 1, vs 1, am 1 | three 1, vs 1, am 0 |       5.47 | 3.01 | [ -0.73,  11.68] |  1.82 |  0.081
       
       Variable predicted: mpg
       Predictors contrasted: three, vs, am

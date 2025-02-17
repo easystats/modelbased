@@ -188,7 +188,7 @@ estimate_contrasts.default <- function(model,
 
   if (effectsize != "none") {
     if (effectsize == "emmeans" && backend != "emmeans") {
-      stop("`effectsize = emmeans` only possible with `backend = emmeans`")
+      insight::format_error("`effectsize = emmeans` only possible with `backend = emmeans`")
     }
 
     out <- .estimate_contrasts_effecsize(
