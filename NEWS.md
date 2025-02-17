@@ -12,7 +12,7 @@
 ## Changes
 
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
-  to calculate predictions on the link-scale and back-transfor them to the
+  to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
