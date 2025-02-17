@@ -35,12 +35,18 @@
     # if not, indicate wrong argument
     predict <- NA
     error_arg <- "predict"
-  } else if (identical(predict, "inverse_link") && !is.na(link_type)) {
+  } else if (identical(predict, "inverse_link")) {
     # handle special type of predict-scale. we allow predictions on the
     # link-scale with manual back-transformation, similar to {marginaleffects}'
-    # invlink(link) option...
-    predict <- "response"
-    inv_link <- TRUE
+    # invlink(link) option. but only, if we have a link-type.
+    if (!is.na(link_type)) {
+      predict <- "response"
+      inv_link <- TRUE
+    } else {
+      # if not, indicate wrong argument
+      predict <- NA
+      error_arg <- "predict"
+    }
   }
 
   if (isTRUE(is.na(predict))) {
