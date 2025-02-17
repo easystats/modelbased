@@ -79,7 +79,9 @@
     transform <- !is.na(link_type) &&
       # no transform for linear models
       (isFALSE(model_info$is_linear) || isFALSE(model_info$is_tweedie)) &&
-      # only back-transform if "response" is requested
+      # only back-transform if "response" is requested - this ensures that
+      # all model classes in {marginaleffects} that have an `invlink(link)`
+      # option are *not* processed (not necessary), unless bias_correction = TRUE
       out == "response" &&
       # only back-transform if we have a link-inverse function
       !is.null(link_inverse) &&
@@ -91,8 +93,9 @@
       # https://github.com/vincentarelbundock/marginaleffects/issues/1391
       # https://github.com/vincentarelbundock/marginaleffects/issues/1392
       ## TODO: allow these classes once issues are fixed in marginaleffects
-      # IMPORTANT! no back transform for Bayesian models, we cause we extract
-      # the posterior draws later, which are on the response scale.
+      # IMPORTANT! no back transform for Bayesian models, because we extract
+      # the posterior draws later in the format() method, and we do not yet
+      # back-transform posterior draws, so we need the "response" option.
       !inherits(model, c("betareg", "brmsfit", "stanreg"))
 
     if (transform) {
