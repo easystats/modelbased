@@ -30,7 +30,9 @@ test_that("estimate_contrasts - Frequentist, one factor", {
   expect_identical(dim(estim), c(1L, 9L))
 
   estim <- suppressMessages(estimate_contrasts(
-    model, contrast = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"))
+    model,
+    contrast = "Species=c('versicolor', 'virginica')", backend = "marginaleffects"
+  ))
   expect_identical(dim(estim), c(1L, 9L))
 })
 
@@ -52,7 +54,9 @@ test_that("estimate_contrasts - Frequentist, two factors", {
   estim <- suppressMessages(estimate_contrasts(model, contrast = "Species", backend = "marginaleffects"))
   expect_identical(dim(estim), c(3L, 9L))
   estim <- suppressMessages(estimate_contrasts(
-    model, contrast = "Species", by = "fac='A'", backend = "marginaleffects"))
+    model,
+    contrast = "Species", by = "fac='A'", backend = "marginaleffects"
+  ))
   expect_identical(dim(estim), c(3L, 10L))
 })
 
