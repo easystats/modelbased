@@ -1,7 +1,7 @@
 # estimate_means() - mixed models
 
     Code
-      estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+      estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
     Output
       Estimated Marginal Means
       
@@ -21,6 +21,35 @@
       no    | DES-L | 4.68 | 0.58 | [3.66, 5.97] | 12.34
       yes   | DF    | 1.22 | 0.38 | [0.67, 2.23] |  0.65
       no    | DF    | 2.53 | 0.39 | [1.87, 3.41] |  6.04
+      
+      Variable predicted: count
+      Predictors modulated: mined, spp
+      Predictors averaged: site
+      Predictions are on the response-scale.
+
+---
+
+    Code
+      estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+    Output
+      Estimated Marginal Means
+      
+      mined | spp   | Mean |   SE |        95% CI |    z
+      --------------------------------------------------
+      yes   | GP    | 0.04 | 0.03 | [-0.02, 0.11] | 1.33
+      no    | GP    | 2.03 | 0.30 | [ 1.44, 2.61] | 6.80
+      yes   | PR    | 0.11 | 0.06 | [ 0.00, 0.23] | 1.95
+      no    | PR    | 0.49 | 0.12 | [ 0.24, 0.73] | 3.93
+      yes   | DM    | 0.45 | 0.15 | [ 0.17, 0.74] | 3.12
+      no    | DM    | 2.44 | 0.35 | [ 1.75, 3.13] | 6.92
+      yes   | EC-A  | 0.09 | 0.05 | [-0.01, 0.18] | 1.80
+      no    | EC-A  | 1.15 | 0.24 | [ 0.68, 1.62] | 4.79
+      yes   | EC-L  | 0.21 | 0.08 | [ 0.06, 0.36] | 2.74
+      no    | EC-L  | 3.95 | 0.52 | [ 2.93, 4.96] | 7.60
+      yes   | DES-L | 0.47 | 0.14 | [ 0.20, 0.75] | 3.36
+      no    | DES-L | 3.61 | 0.47 | [ 2.68, 4.54] | 7.62
+      yes   | DF    | 0.46 | 0.13 | [ 0.21, 0.71] | 3.58
+      no    | DF    | 1.95 | 0.30 | [ 1.36, 2.55] | 6.43
       
       Variable predicted: count
       Predictors modulated: mined, spp

@@ -34,8 +34,9 @@ test_that("estimate_means() - mixed models", {
     family = poisson(),
     data = Salamanders
   )
+  expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link"))
   expect_snapshot(estimate_means(m, c("mined", "spp"), backend = "marginaleffects"))
-  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
+  out <- estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
   expect_true(all(out$CI_low >= 0))
   expect_true(all(out$CI_high >= 0))
 
@@ -66,11 +67,16 @@ test_that("estimate_means() - mixed models", {
     family = "binomial"
   )
   estim1 <- estimate_means(gm1, backend = "emmeans", verbose = FALSE)
-  estim2 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE)
+  estim2 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE, predict = "inverse_link")
   expect_identical(dim(estim1), c(4L, 5L))
   expect_identical(dim(estim2), c(4L, 6L))
   expect_equal(estim2$Probability, c(0.20293, 0.08627, 0.07612, 0.04984), tolerance = 1e-3)
   expect_equal(estim2$CI_low, c(0.13928, 0.04915, 0.04159, 0.02229), tolerance = 1e-3)
   expect_true(all(estim2$CI_low >= 0 & estim2$CI_low <= 1))
   expect_true(all(estim2$CI_high >= 0 & estim2$CI_high <= 1))
+
+  estim3 <- estimate_means(gm1, backend = "marginaleffects", verbose = FALSE)
+  expect_identical(dim(estim3), c(4L, 6L))
+  expect_equal(estim3$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
+  expect_equal(estim3$CI_low, c(0.14233, 0.04475, 0.03608, 0.01266), tolerance = 1e-3)
 })
