@@ -33,13 +33,17 @@
 
 
 # internal to return possibly bias correct link-function
-.link_inverse <- function(model = NULL, bias_correction = FALSE, residual_variance = NULL, ...) {
+.link_inverse <- function(model = NULL,
+                          bias_correction = FALSE,
+                          residual_variance = NULL,
+                          verbose = TRUE,
+                          ...) {
   if (isTRUE(bias_correction)) {
     dots <- list(...)
     if (!is.null(dots$sigma) && !is.na(dots$sigma)) {
       residual_variance <- dots$sigma^2
     }
-    l <- .bias_correction(model, residual_variance)$linkinv
+    l <- .bias_correction(model, residual_variance, verbose)$linkinv
     if (is.null(l)) {
       l <- insight::link_inverse(model)
     }
@@ -52,21 +56,20 @@
 
 # apply bias-correction for back-transformation of predictions on the link-scale
 # we want sigma^2 (residual_variance) here to calculate the correction
-.bias_correction <- function(model = NULL, residual_variance = NULL) {
+.bias_correction <- function(model = NULL, residual_variance = NULL, verbose = TRUE) {
   # we need a model object
   if (is.null(model)) {
     return(NULL)
   }
   # extract residual variance, if not provided
   if (is.null(residual_variance)) {
-    if (insight::is_mixed_model(model)) {
-      residual_variance <- .safe(insight::get_variance_residual(model))
-    } else {
-      residual_variance <- .get_residual_variance(model) # returns sigma^2
-    }
+    residual_variance <- .get_residual_variance(model) # returns sigma^2
   }
   # we need residual variance
   if (is.null(residual_variance)) {
+    if (verbose) {
+      insight::format_alert("Could not extract residual variance to apply bias correction. No bias adjustment carried out.") # nolint
+    }
     return(NULL)
   }
 
@@ -74,6 +77,9 @@
   link <- .safe(insight::get_family(model))
   # we need a link function
   if (is.null(link)) {
+    if (verbose) {
+      insight::format_alert("Could not extract information about the model's link-function to apply bias correction. No bias adjustment carried out.") # nolint
+    }
     return(NULL)
   }
 
@@ -95,9 +101,13 @@
 
 
 .get_residual_variance <- function(x) {
-  out <- .safe(insight::get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
-  if (!length(out)) {
-    return(0)
+  if (insight::is_mixed_model(model)) {
+    out <- .safe(insight::get_variance_residual(model))
+  } else {
+    out <- .safe(insight::get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
+    if (!length(out)) {
+      out <- 0
+    }
   }
   out
 }

@@ -3,6 +3,7 @@
                                                predict = NULL,
                                                comparison = NULL,
                                                model_info = NULL,
+                                               verbose = TRUE,
                                                ...) {
   dots <- list(...)
 
@@ -54,7 +55,7 @@
 
   # return default type
   if (is.null(dots$type)) {
-    link_inverse <- .link_inverse(model, ...)
+    link_inverse <- .link_inverse(model, verbose = verbose, ...)
     if (is.null(predict)) {
       out <- valid_types[1]
     } else {
