@@ -3,9 +3,14 @@
                                           contrasts_results,
                                           effectsize,
                                           bootstraps,
-                                          bootES_type) {
+                                          bootES_type,
+                                          backend) {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "bootES"))
+
+  if (effectsize == "emmeans" && backend != "emmeans") {
+    insight::format_error("`effectsize = emmeans` only possible with `backend = emmeans`")
+  }
 
   if (length(insight::find_random(model)) > 0) {
     insight::format_error(paste0(
@@ -39,8 +44,8 @@
       insight::check_if_installed("bootES")
       dat <- insight::get_data(model)
       resp <- insight::find_response(model)
-      group <- names(estimated@model.info$xlev)
-      contrast <- estimated@misc$con.coef
+      group <- .get_group_variable(estimated, backend)
+      contrast <- .get_contrasts(estimated, backend)
 
       contrast <- lapply(seq_len(nrow(contrast)), function(x) {
         z <- contrast[x, ]
@@ -68,4 +73,20 @@
     }
   )
   contrasts_results
+}
+
+.get_group_variable <- function(estimated, backend) {
+  if (backend == "emmeans") {
+    names(estimated@model.info$xlev)
+  } else if (backend == "marginaleffects") {
+    attributes(estimated)$contrast
+  }
+}
+
+.get_contrasts <- function(estimated, backend) {
+  if (backend == "emmeans") {
+    estimated@misc$con.coef
+  } else if (backend == "marginaleffects") {
+    attributes(estimated)$linfct # This is not correct
+  }
 }
