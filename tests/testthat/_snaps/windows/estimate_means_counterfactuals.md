@@ -6,6 +6,52 @@
     Output
       Estimated Marginal Means
       
+      spp   | Mean |   SE |       95% CI |    z
+      -----------------------------------------
+      GP    | 1.24 | 0.22 | [0.80, 1.67] | 5.55
+      PR    | 0.31 | 0.08 | [0.16, 0.46] | 4.08
+      DM    | 1.56 | 0.27 | [1.02, 2.09] | 5.72
+      EC-A  | 0.57 | 0.12 | [0.34, 0.81] | 4.81
+      EC-L  | 2.30 | 0.39 | [1.54, 3.06] | 5.96
+      DES-L | 2.44 | 0.41 | [1.64, 3.24] | 5.99
+      DF    | 1.34 | 0.24 | [0.87, 1.81] | 5.62
+      
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
+      Predictions are on the response-scale.
+
+---
+
+    Code
+      print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Average Counterfactual Predictions
+      
+      spp   | Mean |   SE |       95% CI |    z
+      -----------------------------------------
+      GP    | 1.17 | 0.21 | [0.76, 1.58] | 5.60
+      PR    | 0.29 | 0.07 | [0.15, 0.43] | 4.09
+      DM    | 1.48 | 0.26 | [0.97, 1.98] | 5.77
+      EC-A  | 0.54 | 0.11 | [0.32, 0.76] | 4.84
+      EC-L  | 2.18 | 0.36 | [1.47, 2.89] | 6.01
+      DES-L | 2.31 | 0.38 | [1.56, 3.06] | 6.04
+      DF    | 1.27 | 0.22 | [0.83, 1.71] | 5.66
+      
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
+      Predictions are on the response-scale.
+
+---
+
+    Code
+      print(estimate_means(m, "spp", backend = "marginaleffects", predict = "inverse_link"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
       spp   | Mean |   SE |       95% CI |     z
       ------------------------------------------
       GP    | 0.62 | 0.10 | [0.45, 0.87] | -2.83
@@ -24,8 +70,8 @@
 ---
 
     Code
-      print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population"),
-      zap_small = TRUE, table_width = Inf)
+      print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population",
+        predict = "inverse_link"), zap_small = TRUE, table_width = Inf)
     Output
       Average Counterfactual Predictions
       
