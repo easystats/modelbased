@@ -90,13 +90,16 @@ for predictors of interest.}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for \code{predict} are:
 \itemize{
-\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
-any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
-for zero-inflation models from package \strong{glmmTMB}, you can choose
-\code{predict = "zprob"} or \code{predict = "conditional"} etc., see
-\link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
-appropriate transformation is selected, which usually returns predictions
-or contrasts on the response-scale.
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
+\code{"inverse_link"} or any valid \code{type} option supported by model's class
+\code{predict()} method (e.g., for zero-inflation models from package
+\strong{glmmTMB}, you can choose \code{predict = "zprob"} or \code{predict = "conditional"}
+etc., see \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL},
+the most appropriate transformation is selected, which usually returns
+predictions or contrasts on the response-scale. The \code{"inverse_link"} is a
+special option, comparable to \emph{marginaleffects}' \code{invlink(link)} option. It
+will calculate predictions on the link scale and then back-transform to the
+response scale.
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
 transformation is selected (which usually is \code{"response"}).
@@ -109,7 +112,21 @@ in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities. To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
-for instance \code{"sigma"}, \code{"kappa"}, etc.}
+for instance \code{"sigma"}, \code{"kappa"}, etc.
+
+\code{"response"} and \code{"inverse_link"} both return predictions on the response
+scale, however, \code{"response"} first calculates predictions on the response
+scale for each observation and \emph{then} aggregates them by groups or levels
+defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
+scale for each observation, then aggregates them by groups or levels defined
+in \code{by}, and finally back-transforms the predictions to the response scale.
+Both approaches have advantages and disadvantages. \code{"response"} usually
+produces less biased predictions, but confidence intervals might be outside
+reasonable bounds (i.e., for instance can be negative for count data). The
+\code{"inverse_link"} approach is more robust in terms of confidence intervals, but
+might produce biased predictions. In particular for mixed models, using
+\code{"response"} is recommended, because averaging across random effects groups
+is more accurate.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
 carried out.

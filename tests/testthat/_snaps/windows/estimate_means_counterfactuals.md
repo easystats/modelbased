@@ -47,6 +47,52 @@
 ---
 
     Code
+      print(estimate_means(m, "spp", backend = "marginaleffects", predict = "inverse_link"),
+      zap_small = TRUE, table_width = Inf)
+    Output
+      Estimated Marginal Means
+      
+      spp   | Mean |   SE |       95% CI |     z
+      ------------------------------------------
+      GP    | 0.62 | 0.10 | [0.45, 0.87] | -2.83
+      PR    | 0.16 | 0.04 | [0.10, 0.25] | -7.88
+      DM    | 0.79 | 0.13 | [0.57, 1.08] | -1.50
+      EC-A  | 0.29 | 0.06 | [0.20, 0.42] | -6.32
+      EC-L  | 1.16 | 0.18 | [0.86, 1.57] |  0.97
+      DES-L | 1.23 | 0.19 | [0.91, 1.66] |  1.36
+      DF    | 0.68 | 0.11 | [0.49, 0.93] | -2.38
+      
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
+      Predictions are on the response-scale.
+
+---
+
+    Code
+      print(estimate_means(m, "spp", backend = "marginaleffects", estimate = "population",
+        predict = "inverse_link"), zap_small = TRUE, table_width = Inf)
+    Output
+      Average Counterfactual Predictions
+      
+      spp   | Mean |   SE |       95% CI |     z
+      ------------------------------------------
+      GP    | 0.66 | 0.11 | [0.47, 0.91] | -2.55
+      PR    | 0.16 | 0.04 | [0.10, 0.26] | -7.70
+      DM    | 0.82 | 0.13 | [0.60, 1.13] | -1.20
+      EC-A  | 0.30 | 0.06 | [0.21, 0.44] | -6.10
+      EC-L  | 1.22 | 0.19 | [0.90, 1.64] |  1.30
+      DES-L | 1.29 | 0.20 | [0.96, 1.74] |  1.69
+      DF    | 0.71 | 0.12 | [0.52, 0.98] | -2.10
+      
+      Variable predicted: count
+      Predictors modulated: spp
+      Predictors averaged: mined, site
+      Predictions are on the response-scale.
+
+---
+
+    Code
       print(estimate_means(m, "Days", backend = "marginaleffects"), zap_small = TRUE,
       table_width = Inf)
     Output
