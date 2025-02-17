@@ -101,8 +101,8 @@
 
 
 .get_residual_variance <- function(x) {
-  if (insight::is_mixed_model(model)) {
-    out <- .safe(insight::get_variance_residual(model))
+  if (insight::is_mixed_model(x)) {
+    out <- .safe(insight::get_variance_residual(x))
   } else {
     out <- .safe(insight::get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
     if (!length(out)) {
