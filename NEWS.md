@@ -11,6 +11,10 @@
 
 ## Changes
 
+* The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
+  to calculate predictions on the link-scale and back-transfor them to the
+  response scale after aggregation by groups.
+
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
   *modelbased* objects that were applied to imputed data sets. E.g., functions
   like `estimate_means()` can be run on several data sets where missing values
