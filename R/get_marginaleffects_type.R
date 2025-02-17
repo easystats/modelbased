@@ -20,15 +20,27 @@
   # extract all valid types for model class
   valid_types <- .valid_marginaleffects_types(model)
 
+  # find link-types - we need link-type when user wants bias-correction
+  link_types <- c("link", "linear.predictor", "lp")
+  link_type <- link_types[which(link_types %in% valid_types)[1]]
+  # by default, no prediction on the link-scale with back-transformation
+  inv_link <- FALSE
+
   # check if user supplied type- or predict argument, and if it's valid
   if (!is.null(dots$type) && !dots$type %in% valid_types) {
     # if not, indicate wrong argument
     predict <- NA
     error_arg <- "type"
-  } else if (!is.null(predict) && !predict %in% valid_types) {
+  } else if (!is.null(predict) && !predict %in% c("inverse_link", valid_types)) {
     # if not, indicate wrong argument
     predict <- NA
     error_arg <- "predict"
+  } else if (identical(predict, "inverse_link") && !is.na(link_type)) {
+    # handle special type of predict-scale. we allow predictions on the
+    # link-scale with manual back-transformation, similar to {marginaleffects}'
+    # invlink(link) option...
+    predict <- "response"
+    inv_link <- TRUE
   }
 
   if (isTRUE(is.na(predict))) {
@@ -42,15 +54,12 @@
     ))
   }
 
-  # find link-types - we need link-type when user wants bias-correction
-  link_types <- c("link", "linear.predictor", "lp")
-  link_type <- link_types[which(link_types %in% valid_types)[1]]
-
   # if we have bias-correction, and we are able to get predictions on the
   # link-scale, we set `predict` to "response" - only in this case,
   # a back transformation is applied
   if (isTRUE(dots$bias_correction) && !is.na(link_type)) {
     predict <- "response"
+    inv_link <- TRUE
   }
 
   # return default type
@@ -62,41 +71,20 @@
       out <- predict
     }
 
-    ## TODO: remove transform/backtransform stuff once all relevant model classes
-    ##       in {marginaleffects} have an "invlink(link)" option
+    # usually, predictions on the response scale for each observation, and then
+    # aggregated by groups, is less biased. However, this may result in confidence
+    # intervals that are outside plausible bounds. In this case, we can force
+    # to calculate predictions on the link-scale using `inverse_link`, and then
+    # back-tranform manually. However, in particular for mixed models, this does
+    # *not* accurately average across random effects. So we have to decide whether
+    # we want more accurate *predictions* or more accurate *uncertainty*.
 
-    # it is more accurate to calculate means and CI's on the link-scale,
-    # and then backtransform to the response scale. Else, we might have
-    # intervals or predictions outside plausible bounds or range. however,
-    # we only need to do this for means, not for contrasts (where we need
-    # delta method standard errors calculated on the response scale). the
-    # {marginaleffects} packages takes care of this using a "invlink(link)"
-    # option, however, this is currently not available for all necessary classes.
-    # as a temporary solution, we can (as we do in `insight::get_predicted()`)
-    # generally calculate predictions on the link-scale and then back transform.
-
-    # no transform if no "link" type available
-    transform <- !is.na(link_type) &&
-      # no transform for linear models
-      (isFALSE(model_info$is_linear) || isFALSE(model_info$is_tweedie)) &&
-      # only back-transform if "response" is requested - this ensures that
-      # all model classes in {marginaleffects} that have an `invlink(link)`
-      # option are *not* processed (not necessary), unless bias_correction = TRUE
-      out == "response" &&
+    # no transform if no "link" type available and if not explicitly requested by user
+    transform <- isTRUE(inv_link) &&
       # only back-transform if we have a link-inverse function
       !is.null(link_inverse) &&
       # no back-transform for `estimate_contrasts()`
-      is.null(comparison) &&
-      # accurate link-inv not working for Gamma-family / inverse-link?
-      !identical(model_info$link_function, "inverse") &&
-      # some classes are currently broken for "link" type, see
-      # https://github.com/vincentarelbundock/marginaleffects/issues/1391
-      # https://github.com/vincentarelbundock/marginaleffects/issues/1392
-      ## TODO: allow these classes once issues are fixed in marginaleffects
-      # IMPORTANT! no back transform for Bayesian models, because we extract
-      # the posterior draws later in the format() method, and we do not yet
-      # back-transform posterior draws, so we need the "response" option.
-      !inherits(model, c("betareg", "brmsfit", "stanreg"))
+      is.null(comparison)
 
     if (transform) {
       list(predict = link_type, backtransform = TRUE, link_inverse = link_inverse)

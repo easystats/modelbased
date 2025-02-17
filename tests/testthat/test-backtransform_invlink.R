@@ -11,7 +11,7 @@ test_that("estimate_means correct inverse link for glmmTMB", {
     data = datawizard::data_modify(d, cyl = as.factor(cyl)),
     family = "poisson"
   )
-  out1 <- estimate_means(m, backend = "marginaleffects")
+  out1 <- estimate_means(m, backend = "marginaleffects", predict = "inverse_link")
   out2 <- estimate_means(m, backend = "emmeans")
   expect_equal(out1$Mean, out2$Rate, tolerance = 1e-4)
   expect_equal(out1$CI_low, out2$CI_low, tolerance = 1e-4)
@@ -57,7 +57,7 @@ test_that("estimate_means correct inverse link for glmer", {
     data = efc,
     family = binomial(link = "logit")
   )
-  out1 <- estimate_means(fit, "c172code")
+  out1 <- estimate_means(fit, "c172code", predict = "inverse_link")
   out2 <- estimate_relation(fit, by = "c172code", verbose = FALSE)
   expect_equal(out1$Probability, out2$Predicted, tolerance = 1e-2)
   expect_equal(out1$CI_low, out2$CI_low, tolerance = 1e-2)
