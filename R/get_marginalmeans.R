@@ -50,8 +50,8 @@ get_marginalmeans <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
-  # find default response-type
-  predict <- .get_marginaleffects_type_argument(model, predict, ...)
+  # find default response-type, and get information about back transformation
+  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, verbose, ...) # nolint
 
 
   # Second step: create a data grid -------------------------------------------
@@ -99,7 +99,7 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits")] <- NULL
+  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma")] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df)) {
@@ -136,10 +136,10 @@ get_marginalmeans <- function(model,
   }
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
-    fun_args$dpar <- predict
+  if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict_args$predict
   } else {
-    fun_args$type <- predict
+    fun_args$type <- predict_args$predict
   }
 
   # =========================================================================
@@ -189,6 +189,16 @@ get_marginalmeans <- function(model,
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
   }
 
+  # back-transform from link-scale? this functions is...
+  # - only called for means, not contrasts, because for contrasts we rely on
+  #   the delta-method for SEs on the response scale
+  # - only called when `type` (i.e. `predict`) is "response" AND the model class
+  #   has a "link" prediction type
+  if (predict_args$backtransform) {
+    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+    # make sure we have the original string value for the "predict" argument
+    predict_args$predict <- "response"
+  }
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -211,7 +221,7 @@ get_marginalmeans <- function(model,
     info = c(
       datagrid_info,
       list(
-        predict = predict,
+        predict = predict_args$predict,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform)
