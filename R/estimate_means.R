@@ -22,13 +22,16 @@
 #' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #' Valid options for `predict` are:
 #'
-#' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"` or
-#'   any valid `type` option supported by model's class `predict()` method (e.g.,
-#'   for zero-inflation models from package **glmmTMB**, you can choose
-#'   `predict = "zprob"` or `predict = "conditional"` etc., see
-#'   [glmmTMB::predict.glmmTMB]). By default, when `predict = NULL`, the most
-#'   appropriate transformation is selected, which usually returns predictions
-#'   or contrasts on the response-scale.
+#' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"`,
+#'   `"inverse_link"` or any valid `type` option supported by model's class
+#'   `predict()` method (e.g., for zero-inflation models from package
+#'   **glmmTMB**, you can choose `predict = "zprob"` or `predict = "conditional"`
+#'   etc., see [glmmTMB::predict.glmmTMB]). By default, when `predict = NULL`,
+#'   the most appropriate transformation is selected, which usually returns
+#'   predictions or contrasts on the response-scale. The `"inverse_link"` is a
+#'   special option, comparable to *marginaleffects*' `invlink(link)` option. It
+#'   will calculate predictions on the link scale and then back-transform to the
+#'   response scale.
 #' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
 #'   transformation is selected (which usually is `"response"`).
@@ -41,6 +44,20 @@
 #' packages), for instance when using complex formulae in `brms` models, the
 #' `predict` argument can take the value of the parameter you want to estimate,
 #' for instance `"sigma"`, `"kappa"`, etc.
+#'
+#' `"response"` and `"inverse_link"` both return predictions on the response
+#' scale, however, `"response"` first calculates predictions on the response
+#' scale for each observation and *then* aggregates them by groups or levels
+#' defined in `by`. `"inverse_link"` first calculates predictions on the link
+#' scale for each observation, then aggregates them by groups or levels defined
+#' in `by`, and finally back-transforms the predictions to the response scale.
+#' Both approaches have advantages and disadvantages. `"response"` usually
+#' produces less biased predictions, but confidence intervals might be outside
+#' reasonable bounds (i.e., for instance can be negative for count data). The
+#' `"inverse_link"` approach is more robust in terms of confidence intervals, but
+#' might produce biased predictions. In particular for mixed models, using
+#' `"response"` is recommended, because averaging across random effects groups
+#' is more accurate.
 #' @param estimate Character string, indicating the type of target population
 #' predictions refer to. This dictates how the predictions are "averaged" over
 #' the non-focal predictors, i.e. those variables that are not specified in
