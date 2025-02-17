@@ -16,7 +16,8 @@ test_that("estimate_means bias_correction", {
     data = dat,
     family = binomial(link = "logit")
   )
-  out <- estimate_means(m1, "var_binom")
+  set.seed(123)
+  out <- estimate_means(m1, "var_binom", predict = "inverse_link")
   expect_equal(out$Probability, c(0.38508, 0.36696), tolerance = 1e-4)
   out <- estimate_means(m1, "var_binom", bias_correction = TRUE)
   expect_equal(out$Probability, c(0.4746, 0.46863), tolerance = 1e-4)
