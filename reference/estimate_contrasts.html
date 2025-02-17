@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.23</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -159,13 +159,16 @@ for predictors of interest.</p></dd>
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
 <code>backend = "marginaleffects"</code>). For emmeans, see also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code> or
-any valid <code>type</code> option supported by model's class <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g.,
-for zero-inflation models from package <strong>glmmTMB</strong>, you can choose
-<code>predict = "zprob"</code> or <code>predict = "conditional"</code> etc., see
-<a href="https://rdrr.io/pkg/glmmTMB/man/predict.glmmTMB.html" class="external-link">glmmTMB::predict.glmmTMB</a>). By default, when <code>predict = NULL</code>, the most
-appropriate transformation is selected, which usually returns predictions
-or contrasts on the response-scale.</p></li>
+Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
+<code>"inverse_link"</code> or any valid <code>type</code> option supported by model's class
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g., for zero-inflation models from package
+<strong>glmmTMB</strong>, you can choose <code>predict = "zprob"</code> or <code>predict = "conditional"</code>
+etc., see <a href="https://rdrr.io/pkg/glmmTMB/man/predict.glmmTMB.html" class="external-link">glmmTMB::predict.glmmTMB</a>). By default, when <code>predict = NULL</code>,
+the most appropriate transformation is selected, which usually returns
+predictions or contrasts on the response-scale. The <code>"inverse_link"</code> is a
+special option, comparable to <em>marginaleffects</em>' <code>invlink(link)</code> option. It
+will calculate predictions on the link scale and then back-transform to the
+response scale.</p></li>
 <li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>).</p></li>
@@ -176,7 +179,20 @@ in log-odds (probabilities on logit scale) and <code>"response"</code> in terms 
 probabilities. To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in <code>brms</code> models, the
 <code>predict</code> argument can take the value of the parameter you want to estimate,
-for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p></dd>
+for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
+<p><code>"response"</code> and <code>"inverse_link"</code> both return predictions on the response
+scale, however, <code>"response"</code> first calculates predictions on the response
+scale for each observation and <em>then</em> aggregates them by groups or levels
+defined in <code>by</code>. <code>"inverse_link"</code> first calculates predictions on the link
+scale for each observation, then aggregates them by groups or levels defined
+in <code>by</code>, and finally back-transforms the predictions to the response scale.
+Both approaches have advantages and disadvantages. <code>"response"</code> usually
+produces less biased predictions, but confidence intervals might be outside
+reasonable bounds (i.e., for instance can be negative for count data). The
+<code>"inverse_link"</code> approach is more robust in terms of confidence intervals, but
+might produce biased predictions. In particular for mixed models, using
+<code>"response"</code> is recommended, because averaging across random effects groups
+is more accurate.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
