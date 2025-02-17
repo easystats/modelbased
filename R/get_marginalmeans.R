@@ -99,7 +99,7 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits")] <- NULL
+  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma")] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df)) {

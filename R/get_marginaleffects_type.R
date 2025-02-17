@@ -41,9 +41,20 @@
     ))
   }
 
+  # find link-types - we need link-type when user wants bias-correction
+  link_types <- c("link", "linear.predictor", "lp")
+  link_type <- link_types[which(link_types %in% valid_types)[1]]
+
+  # if we have bias-correction, and we are able to get predictions on the
+  # link-scale, we set `predict` to "response" - only in this case,
+  # a back transformation is applied
+  if (isTRUE(dots$bias_correction) && !is.na(link_type)) {
+    predict <- "response"
+  }
+
   # return default type
   if (is.null(dots$type)) {
-    link_inverse <- .link_inverse(model)
+    link_inverse <- .link_inverse(model, ...)
     if (is.null(predict)) {
       out <- valid_types[1]
     } else {
@@ -62,10 +73,6 @@
     # option, however, this is currently not available for all necessary classes.
     # as a temporary solution, we can (as we do in `insight::get_predicted()`)
     # generally calculate predictions on the link-scale and then back transform.
-
-    # find link-types
-    link_types <- c("link", "linear.predictor", "lp")
-    link_type <- link_types[which(link_types %in% valid_types)[1]]
 
     # no transform if no "link" type available
     transform <- !is.na(link_type) &&
