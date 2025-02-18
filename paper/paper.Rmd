@@ -116,7 +116,7 @@ Answering research questions based on statistical models means describing the re
 
 - **Marginal Effects:** Quantify the strength of a predictor's effect on the outcome (the average slope), which is especially useful when slopes vary (e.g., with interactions or in logistic regression).
 
-- **Contrasts:**  Compare predicted outcomes between groups or levels of a predictor.
+- **Contrasts:** Compare predicted outcomes between groups or levels of a predictor.
 
 ## Predictions
 
@@ -171,13 +171,9 @@ For analyses emphasizing outcome differences between groups (e.g., when computin
 
 The algorithmic heavy lifting is done by `modelbased`'s two back-end packages, `emmeans` and `marginaleffects` (the default), which can be set as a global option (e.g., with `options(modelbased_backend = "emmeans")`).
 
-Of the two, `emmeans` [@russell2024emmeans] is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means").
-This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs:
-predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors.
-The package was renamed in 2016 to `emmeans` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
+Of the two, `emmeans` [@russell2024emmeans] is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means"). This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to `emmeans` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
 
-Within `emmeans`, estimates are generated as a linear function of the model's coefficients,
-with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
+Within `emmeans`, estimates are generated as a linear function of the model's coefficients, with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
 For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
 
 $$
@@ -194,30 +190,18 @@ L %*% b
 sqrt(diag(L %*% V %*% t(L)))
 ```
 
-These grid predictions are sometimes averaged over (averaging being a linear operation itself)
-to produce "marginal" predictions (in the sense of marginalized-over): means.
-These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects.
-Using linear combinations with regular grids often means that results from `emmeans` directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).
+These grid predictions are sometimes averaged over (averaging being a linear operation itself) to produce "marginal" predictions (in the sense of marginalized-over): means. These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects. Using linear combinations with regular grids often means that results from `emmeans` directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).
 
-`marginaleffects` [@arel2024interpret] was more recently introduced, and uses a different approach:
-various effects are estimated by generating two counter-factual predictions of unit-level observations, and then taking the difference between them [with SEs computed using the delta method, @arel2024interpret].
-By default, such effects are estimated for every observation in the original model frame.
-These unit-level effects are typically averaged to obtain average effects (e.g., an Average Treatment Effect, ATE).
+`marginaleffects` [@arel2024interpret] was more recently introduced, and uses a different approach: various effects are estimated by generating two counter-factual predictions of unit-level observations, and then taking the difference between them [with SEs computed using the delta method, @arel2024interpret].
+By default, such effects are estimated for every observation in the original model frame. These unit-level effects are typically averaged to obtain average effects (e.g., an Average Treatment Effect, ATE).
 
-Using the delta method affords more flexibility in the specification of the marginal effects to be estimated.
-For example, while `emmeans` by default compares predictions from GLMs on the link scale
-and then transforms the comparison back to something closer to the response scales
-(e.g., the difference between two log-odds is taken, and then exponentiation to produce odds ratios), `marginaleffects` by default compares predictions on the response scale directly (e.g, taking the difference between two probabilities).
-The delta method implemented in `marginaleffects` uses iterative estimation, making it more computationally costly relative to the simple matrix multiplication used for estimating linear combinations (though `marginaleffects` is very efficient).
+Using the delta method affords more flexibility in the specification of the marginal effects to be estimated. For example, while `emmeans` by default compares predictions from GLMs on the link scale and then transforms the comparison back to something closer to the response scales (e.g., the difference between two log-odds is taken, and then exponentiation to produce odds ratios), `marginaleffects` by default compares predictions on the response scale directly (e.g, taking the difference between two probabilities). The delta method implemented in `marginaleffects` uses iterative estimation, making it more computationally costly relative to the simple matrix multiplication used for estimating linear combinations (though `marginaleffects` is very efficient).
 
-This means that while `emmeans` typically produces _effects at the mean_, `marginaleffects` typically produces _mean effects_.
-Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
+This means that while `emmeans` typically produces _effects at the mean_, `marginaleffects` typically produces _mean effects_. Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
 
-Note that `emmeans` can also use the delta method and can use non-regular grids, and `marginaleffects` can also generate linear predictions at the mean.
-However, obtaining these requires some deeper knowledge of the relevant packages.
+Note that `emmeans` can also use the delta method and can use non-regular grids, and `marginaleffects` can also generate linear predictions at the mean. However, obtaining these requires some deeper knowledge of the relevant packages.
 
-Finally, `modelbased` leverages the `get_datagrid()` function from the `insight` package [@ludecke2019insight] to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated.
-Since these packages support a wider range of models—including generalized linear models, mixed models, and Bayesian models—`modelbased` also inherits the support for such models.
+Finally, `modelbased` leverages the `get_datagrid()` function from the `insight` package [@ludecke2019insight] to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models—including generalized linear models, mixed models, and Bayesian models—`modelbased` also inherits the support for such models.
 
 # Examples
 
