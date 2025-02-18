@@ -149,7 +149,7 @@ Again, the `modelbased` package has a simple function to do so, `estimate_slopes
 
 ## Contrasts
 
-Contrast analysis, or pairwise comparison, of estimated marginal means allows for direct statistical comparison of the predicted outcomes across different groups or levels of a focal predictor variable. Rather than simply observing differences in marginal means, contrast analysis quantifies these differences and assesses their statistical significance, which also involves determining the associated uncertainty (e.g., confidence intervals).
+Contrast analysis, or pairwise comparison, of estimated marginal means allows for direct statistical comparison of the predicted outcomes across different groups or levels of a focal predictor. Rather than simply observing differences in marginal means, contrast analysis quantifies these differences and assesses their statistical significance, which also involves determining the associated uncertainty (e.g., confidence intervals).
 
 In `modelbased`, this is achieved using the `estimate_contrasts()` function. Focal predictors are specified in the `contrast` argument, `by` can be used for further stratification or grouping.
 
