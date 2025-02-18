@@ -35,13 +35,16 @@ for predictors of interest.}
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 Valid options for \code{predict} are:
 \itemize{
-\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"} or
-any valid \code{type} option supported by model's class \code{predict()} method (e.g.,
-for zero-inflation models from package \strong{glmmTMB}, you can choose
-\code{predict = "zprob"} or \code{predict = "conditional"} etc., see
-\link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL}, the most
-appropriate transformation is selected, which usually returns predictions
-or contrasts on the response-scale.
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
+\code{"inverse_link"} or any valid \code{type} option supported by model's class
+\code{predict()} method (e.g., for zero-inflation models from package
+\strong{glmmTMB}, you can choose \code{predict = "zprob"} or \code{predict = "conditional"}
+etc., see \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL},
+the most appropriate transformation is selected, which usually returns
+predictions or contrasts on the response-scale. The \code{"inverse_link"} is a
+special option, comparable to \emph{marginaleffects}' \code{invlink(link)} option. It
+will calculate predictions on the link scale and then back-transform to the
+response scale.
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
 transformation is selected (which usually is \code{"response"}).
@@ -54,76 +57,51 @@ in log-odds (probabilities on logit scale) and \code{"response"} in terms of
 probabilities. To predict distributional parameters (called "dpar" in other
 packages), for instance when using complex formulae in \code{brms} models, the
 \code{predict} argument can take the value of the parameter you want to estimate,
-for instance \code{"sigma"}, \code{"kappa"}, etc.}
+for instance \code{"sigma"}, \code{"kappa"}, etc.
+
+\code{"response"} and \code{"inverse_link"} both return predictions on the response
+scale, however, \code{"response"} first calculates predictions on the response
+scale for each observation and \emph{then} aggregates them by groups or levels
+defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
+scale for each observation, then aggregates them by groups or levels defined
+in \code{by}, and finally back-transforms the predictions to the response scale.
+Both approaches have advantages and disadvantages. \code{"response"} usually
+produces less biased predictions, but confidence intervals might be outside
+reasonable bounds (i.e., for instance can be negative for count data). The
+\code{"inverse_link"} approach is more robust in terms of confidence intervals, but
+might produce biased predictions. In particular for mixed models, using
+\code{"response"} is recommended, because averaging across random effects groups
+is more accurate.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{estimate}{Character string, indicating the type of target population
-predictions refer to. This dictates how the predictions are "averaged" over
-the non-focal predictors, i.e. those variables that are not specified in
-\code{by} or \code{contrast}. We can roughly distinguish between "modelbased" and
-"empirical" predictions.
+\item{estimate}{The \code{estimate} argument determines how predictions are
+averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}
+(non-focal predictors). It controls whether predictions represent a "typical"
+individual, an "average" individual from the sample, or an "average"
+individual from a broader population.
 \itemize{
-\item \code{"typical"} (default): Predictions are made for observations that are
-represented by a data grid, which is built from all combinations of the
-predictor levels in \code{by} (the focal predictors). \code{"typical"} then takes the
-mean value for non-focal numeric predictors and marginalizes over the
-factor levels of non-focal predictors, which computes a kind of "weighted
-average" for the values at which these terms are hold constant. These
-predictions are useful for comparing defined "groups" and are still a good
-representation of the sample, because all possible values and levels of the
-non-focal predictors are considered (averaged over). It answers the
-question, "What would be the average outcome for a 'typical' observation?",
-where 'typical' refers to subjects represented by (i.e., that share the
-characteristics from) the data grid. This approach is the one taken by
-default in the \code{emmeans} package.
-\item \code{"average"}: Predictions are made for each observation in the sample. Then,
-the average of all predictions is calculated within all groups (or levels)
-of the focal predictors defined in \code{by}. These predictions are the closest
-representation of the sample, because \code{estimate = "average"} averages
-across the full sample, where groups (in \code{by}) are not represented by a
-balanced data grid, but rather the empirical distributions of the
-characteristics of the sample. It answers the question, "What is the
-predicted value for an average observation (from a certain group in \code{by})
-in my data?".
-\item \code{"population"}: Each observation is "cloned" multiple times, where each
-duplicate gets one of the levels from the focal predictors in \code{by}. We then
-have one "original" and several copies of that original, each varying in
-the levels of the focal predictors. Hence, the sample is replicated
-multiple times to produce "counterfactuals" and then takes the average of
-these predicted values (aggregated/grouped by the focal predictors). It can
-be considered as extrapolation to a hypothetical target population.
-Counterfactual predictions are useful, insofar as the results can also be
-transferred to other contexts (Dickerman and Hernan, 2020). It answers the
-question, "What is the predicted response value for the 'average'
-observation in \emph{the broader target population}?". It does not only refer to
-the actual data in your observed sample, but also "what would be if" we had
-more data, or if we had data from a different sample.
-}
-
-In other words, the distinction between estimate types resides in whether
-the prediction are made for:
-\itemize{
-\item \emph{modelbased predictions} (focus lies on \emph{predictors}), which are useful to
-look at differences between typical groups, or for visualization
-\itemize{
-\item A specific individual from the sample (i.e., a specific combination of
-predictor values for focal and non-focal predictors): this is what is obtained
-when using \code{\link[=estimate_relation]{estimate_relation()}} and the other prediction functions.
-\item A typical individual from the sample: obtained with
-\code{estimate_means(..., estimate = "typical")}
-}
-\item \emph{empirical predictions} (focus lies on \emph{predictions} of the outcome), which
-are useful if you want realistic predictions of your outcome, assuming that
-the sample is representative for a special population (option \code{"average"}),
-or useful for "what-if" scenarios, especially if you want to make unbiased
-comparisons (G-computation, option \code{"population"})
-\itemize{
-\item The average individual from the sample: obtained with
-\code{estimate_means(..., estimate = "average")}
-\item The broader, hypothetical target population: obtained with
-\code{estimate_means(..., estimate = "population")}
-}
+\item \code{"typical"} (Default): Calculates predictions for a balanced data grid
+representing all combinations of focal predictor levels (specified in \code{by}).
+For non-focal numeric predictors, it uses the mean; for non-focal
+categorical predictors, it marginalizes (averages) over the levels. This
+represents a "typical" observation based on the data grid and is useful for
+comparing groups. It answers: "What would the average outcome be for a
+'typical' observation?". This is the default approach when estimating
+marginal means using the \emph{emmeans} package.
+\item \code{"average"}: Calculates predictions for each observation in the sample and
+then averages these predictions within each group defined by the focal
+predictors. This reflects the sample's actual distribution of non-focal
+predictors, not a balanced grid. It answers: "What is the predicted value
+for an average observation in my data?"
+\item \code{"population"}: "Clones" each observation, creating copies with all
+possible combinations of focal predictor levels. It then averages the
+predictions across these "counterfactual" observations (non-observed
+permutations) within each group. This extrapolates to a hypothetical
+broader population, considering "what if" scenarios. It answers: "What is
+the predicted response for the 'average' observation in a broader possible
+target population? This approach entails more assumptions about the
+likelihood of different combinations, but can be more apt to generalize.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},

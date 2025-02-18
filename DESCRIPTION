@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.9.0.20
+Version: 0.9.0.24
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -74,6 +74,7 @@ Suggests:
     patchwork,
     pbkrtest,
     poorman,
+    pscl,
     RcppEigen,
     report,
     rmarkdown,

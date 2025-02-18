@@ -1,6 +1,35 @@
 # estimate_means() - mixed models
 
     Code
+      estimate_means(m, c("mined", "spp"), backend = "marginaleffects", predict = "inverse_link")
+    Output
+      Estimated Marginal Means
+      
+      mined | spp   | Mean |   SE |       95% CI |     z
+      --------------------------------------------------
+      yes   | GP    | 0.12 | 0.09 | [0.03, 0.55] | -2.71
+      no    | GP    | 2.63 | 0.38 | [1.98, 3.48] |  6.75
+      yes   | PR    | 0.30 | 0.17 | [0.10, 0.90] | -2.15
+      no    | PR    | 0.63 | 0.16 | [0.38, 1.05] | -1.76
+      yes   | DM    | 1.21 | 0.44 | [0.59, 2.48] |  0.51
+      no    | DM    | 3.16 | 0.44 | [2.40, 4.16] |  8.22
+      yes   | EC-A  | 0.23 | 0.14 | [0.07, 0.75] | -2.43
+      no    | EC-A  | 1.49 | 0.32 | [0.97, 2.27] |  1.83
+      yes   | EC-L  | 0.56 | 0.22 | [0.26, 1.22] | -1.47
+      no    | EC-L  | 5.11 | 0.64 | [3.99, 6.53] | 12.96
+      yes   | DES-L | 1.26 | 0.43 | [0.64, 2.47] |  0.66
+      no    | DES-L | 4.68 | 0.58 | [3.66, 5.97] | 12.34
+      yes   | DF    | 1.22 | 0.38 | [0.67, 2.23] |  0.65
+      no    | DF    | 2.53 | 0.39 | [1.87, 3.41] |  6.04
+      
+      Variable predicted: count
+      Predictors modulated: mined, spp
+      Predictors averaged: site
+      Predictions are on the response-scale.
+
+---
+
+    Code
       estimate_means(m, c("mined", "spp"), backend = "marginaleffects")
     Output
       Estimated Marginal Means
