@@ -137,7 +137,7 @@ For convenience, the `modelbased` package includes four related functions, which
 
 The concept of "marginal" in this context refers to how non-focal variables are treated. While predictions, as described above, fix non-focal variables at their reference level, marginal means compute the empirical or theoretical averages of them. These kind of predictions are a good representation of the sample, because they are not based on very specific characteristics. E.g., predictions are made for _female_ persons with _high_ income, while marginal means calculate the expected outcome for an _average_ observation.
 
-The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function, which can be considered as "marginal" pendant to `estimate_relation()`. `estimate_means()` typically returns results in line with the _emmeans_ package. Focal predictors are specifiec in the `by` argument.
+The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function, which can be considered as "marginal" pendant to `estimate_relation()`. `estimate_means()` typically returns results in line with the _emmeans_ package. Focal predictors are specified in the `by` argument.
 
 ## Marginal effects
 
@@ -145,13 +145,13 @@ Predictions and marginal means can be used to better understand the _relationshi
 
 For the simple case of linear regression without interaction terms, the regression coefficient (slope) equals the marginal effect. However, in even slightly more complex situations (e.g., when interaction terms are involved, or logistic regression models), the slope is not constant across the predictor's values. Here we can estimate an _average_ slope, or marginal effect.
 
-Again, the `modelbased` package has a simple function to do so, `estimate_slopes()`. This function calculates the _trend_ or average effect, usually for numeric predictors. Focal predictors are specifiec in the `trend` argument, `by` can be used for further stratification or grouping.
+Again, the `modelbased` package has a simple function to do so, `estimate_slopes()`. This function calculates the _trend_ or average effect, usually for numeric predictors. The `trend` argument specifies the focal predictors, while `by` allows for further grouping.
 
 ## Contrasts
 
 Contrast analysis, or pairwise comparison, of estimated marginal means allows for direct statistical comparison of the predicted outcomes across different groups or levels of a focal predictor. Rather than simply observing differences in marginal means, contrast analysis quantifies these differences and assesses their statistical significance, which also involves determining the associated uncertainty (e.g., confidence intervals).
 
-In `modelbased`, this is achieved using the `estimate_contrasts()` function. Focal predictors are specified in the `contrast` argument, `by` can be used for further stratification or grouping.
+In `modelbased`, this is achieved using the `estimate_contrasts()` function. Focal predictors are specified in the `contrast` argument. For further stratification or grouping, use the `by` argument.
 
 ## Interpretation
 
