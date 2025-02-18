@@ -201,8 +201,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population? This approach entails more assumptions about the
-likelihood of different combinations, but can be more apt to generalize.</p></li>
+target population?" This approach entails more assumptions about the
+likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for <strong>G-computation</strong>
+(<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 
@@ -316,7 +318,11 @@ set a default value for the <code>estimate</code> argument.</p></li>
 </ul></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
+    <p>Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for
+Propensity Scores, G-Computation, and Doubly Robust Standardization. Advances
+in Methods and Practices in Psychological Science. 2024;7(1).
+<a href="https://doi.org/10.1177/25152459241236149" class="external-link">doi:10.1177/25152459241236149</a></p>
+<p>Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
 Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 615–17. <a href="https://doi.org/10.1007/s10654-020-00659-8" class="external-link">doi:10.1007/s10654-020-00659-8</a></p>
 <p>Heiss, A. (2022). Marginal and conditional effects for GLMMs with
