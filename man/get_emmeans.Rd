@@ -214,8 +214,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population? This approach entails more assumptions about the
+target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for \strong{G-computation}
+(\emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},

@@ -82,8 +82,10 @@
 #'   permutations) within each group. This extrapolates to a hypothetical
 #'   broader population, considering "what if" scenarios. It answers: "What is
 #'   the predicted response for the 'average' observation in a broader possible
-#'   target population? This approach entails more assumptions about the
+#'   target population?" This approach entails more assumptions about the
 #'   likelihood of different combinations, but can be more apt to generalize.
+#'   This is also the option that should be used for **G-computation**
+#'   (_Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`
@@ -137,6 +139,11 @@
 #'   set a default value for the `estimate` argument.
 #'
 #' @references
+#' Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for
+#' Propensity Scores, G-Computation, and Doubly Robust Standardization. Advances
+#' in Methods and Practices in Psychological Science. 2024;7(1).
+#' \doi{10.1177/25152459241236149}
+#'
 #' Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
 #' Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 #' 615–17. \doi{10.1007/s10654-020-00659-8}

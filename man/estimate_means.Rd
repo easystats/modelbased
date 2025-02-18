@@ -100,8 +100,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population? This approach entails more assumptions about the
+target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for \strong{G-computation}
+(\emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
@@ -275,6 +277,11 @@ estimate_means(model, by = "Sepal.Width", length = 3)
 \dontshow{\}) # examplesIf}
 }
 \references{
+Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for
+Propensity Scores, G-Computation, and Doubly Robust Standardization. Advances
+in Methods and Practices in Psychological Science. 2024;7(1).
+\doi{10.1177/25152459241236149}
+
 Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
 Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 615–17. \doi{10.1007/s10654-020-00659-8}
