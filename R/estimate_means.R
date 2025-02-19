@@ -10,12 +10,14 @@
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired
 #' effect / mean / contrasts. Other predictors of the model that are not
 #' included here will be collapsed and "averaged" over (the effect will be
-#' estimated across them). The `by` argument is used to create a "reference grid"
-#' or "data grid" with representative values for the focal predictors. `by`
-#' can be a character (vector) naming the focal predictors (and optionally,
-#' representative values or levels), or a list of named elements. See details
-#' in [`insight::get_datagrid()`] to learn more about how to create data grids
-#' for predictors of interest.
+#' estimated across them). `by` can be a character (vector) naming the focal
+#' predictors, optionally including representative values or levels at which
+#' focal predictors are evaluated (e.g., `by="x=c(1,2)"`). When `estimate` is
+#' *not* `"average"`, the `by` argument is used to create a "reference grid" or
+#' "data grid" with representative values for the focal predictors. In this
+#' case, `by` can also be list of named elements. See details in
+#' [`insight::get_datagrid()`] to learn more about how to create data grids for
+#' predictors of interest.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
@@ -82,8 +84,10 @@
 #'   permutations) within each group. This extrapolates to a hypothetical
 #'   broader population, considering "what if" scenarios. It answers: "What is
 #'   the predicted response for the 'average' observation in a broader possible
-#'   target population? This approach entails more assumptions about the
+#'   target population?" This approach entails more assumptions about the
 #'   likelihood of different combinations, but can be more apt to generalize.
+#'   This is also the option that should be used for **G-computation**
+#'   (_Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`
@@ -137,6 +141,11 @@
 #'   set a default value for the `estimate` argument.
 #'
 #' @references
+#' Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for
+#' Propensity Scores, G-Computation, and Doubly Robust Standardization. Advances
+#' in Methods and Practices in Psychological Science. 2024;7(1).
+#' \doi{10.1177/25152459241236149}
+#'
 #' Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
 #' Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 #' 615–17. \doi{10.1007/s10654-020-00659-8}
@@ -234,7 +243,7 @@ estimate_means <- function(model,
       verbose = verbose,
       ...
     )
-    means <- format(estimated, model, ...)
+    means <- format(estimated, model, ci = ci, ...)
   }
 
   # restore attributes later

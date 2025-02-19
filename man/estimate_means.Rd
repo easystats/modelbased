@@ -22,12 +22,14 @@ estimate_means(
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors. \code{by}
-can be a character (vector) naming the focal predictors (and optionally,
-representative values or levels), or a list of named elements. See details
-in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
-for predictors of interest.}
+estimated across them). \code{by} can be a character (vector) naming the focal
+predictors, optionally including representative values or levels at which
+focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
+\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
+"data grid" with representative values for the focal predictors. In this
+case, \code{by} can also be list of named elements. See details in
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
+predictors of interest.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
@@ -100,8 +102,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population? This approach entails more assumptions about the
+target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for \strong{G-computation}
+(\emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
@@ -275,6 +279,11 @@ estimate_means(model, by = "Sepal.Width", length = 3)
 \dontshow{\}) # examplesIf}
 }
 \references{
+Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for
+Propensity Scores, G-Computation, and Doubly Robust Standardization. Advances
+in Methods and Practices in Psychological Science. 2024;7(1).
+\doi{10.1177/25152459241236149}
+
 Dickerman, Barbra A., and Miguel A. Hernán. 2020. Counterfactual Prediction
 Is Not Only for Causal Inference. European Journal of Epidemiology 35 (7):
 615–17. \doi{10.1007/s10654-020-00659-8}

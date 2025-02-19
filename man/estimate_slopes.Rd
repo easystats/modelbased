@@ -24,12 +24,14 @@ compute the slopes.}
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors. \code{by}
-can be a character (vector) naming the focal predictors (and optionally,
-representative values or levels), or a list of named elements. See details
-in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
-for predictors of interest.}
+estimated across them). \code{by} can be a character (vector) naming the focal
+predictors, optionally including representative values or levels at which
+focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
+\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
+"data grid" with representative values for the focal predictors. In this
+case, \code{by} can also be list of named elements. See details in
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
+predictors of interest.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 

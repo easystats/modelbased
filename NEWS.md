@@ -50,6 +50,8 @@
 
 * Fixed issues with plotting ordinal or multinomial models.
 
+* Fixed issues with `ci` argument, which was ignored for Bayesian models.
+
 * Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
 # modelbased 0.9.0

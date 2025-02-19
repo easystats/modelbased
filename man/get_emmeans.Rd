@@ -71,18 +71,21 @@ get_marginaltrends(
 \arguments{
 \item{model}{A statistical model.}
 
-\item{contrast}{A character vector indicating the name of the variable(s)
-for which to compute the contrasts.}
+\item{contrast}{A character vector indicating the name of the variable(s) for
+which to compute the contrasts, optionally including representative values or
+levels at which contrasts are evaluated (e.g., \code{contrast="x=c('a','b')"}).}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors. \code{by}
-can be a character (vector) naming the focal predictors (and optionally,
-representative values or levels), or a list of named elements. See details
-in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
-for predictors of interest.}
+estimated across them). \code{by} can be a character (vector) naming the focal
+predictors, optionally including representative values or levels at which
+focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
+\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
+"data grid" with representative values for the focal predictors. In this
+case, \code{by} can also be list of named elements. See details in
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
+predictors of interest.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
@@ -214,8 +217,10 @@ predictions across these "counterfactual" observations (non-observed
 permutations) within each group. This extrapolates to a hypothetical
 broader population, considering "what if" scenarios. It answers: "What is
 the predicted response for the 'average' observation in a broader possible
-target population? This approach entails more assumptions about the
+target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for \strong{G-computation}
+(\emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
