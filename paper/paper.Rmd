@@ -156,7 +156,7 @@ For the simple case of linear regression without interaction terms, the regressi
 Again, the `modelbased` package has a simple function to do so, `estimate_slopes()`. This function calculates the _trend_ or average effect, usually for numeric predictors. The `trend` argument specifies the focal predictors, while `by` allows for further grouping.
 
 
-## Marginalization Types
+### Marginalization Types
 
 Until this point we have discussed marginal means and effects as being "averaged" over non-focal predictors, but there are actually various ways of doing so. The `estimate_means()`, `estimate_contrasts()`, and `estimate_slopes()` have an `estimate` argument that determines how predictions are averaged ("marginalized"). The options are:
 
