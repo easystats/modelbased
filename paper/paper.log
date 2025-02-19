@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2025.2.19)  19 FEB 2025 11:22
+This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2025.2.19)  19 FEB 2025 12:05
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1208,11 +1208,11 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
-(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 372.
+(Font)              Font shape `TU/lmss/m/sl' tried instead on input line 371.
 [1
 
 ]
-Underfull \hbox (badness 6461) in paragraph at lines 426--426
+Underfull \hbox (badness 6461) in paragraph at lines 424--424
 [][][]\TU/lmr/m/n/8 These functions can become redundant if the defaults are ch
 anged. For instance,
  []
@@ -1231,6 +1231,12 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [2]
+Underfull \hbox (badness 1484) in paragraph at lines 506--512
+\TU/lmr/m/n/10 Until this point we have discussed marginal means and effects as
+ being “aver-
+ []
+
+
 
 File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
 /joss/resources/JOSS-logo.png Graphic file (type bmp)
@@ -1258,61 +1264,75 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [4]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 634.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 651.
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 644--644
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 661--661
 []\TU/lmtt/m/n/10 #> Parameter                           | Coefficient |       
  95% CI |      p 
  []
 
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 645--645
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 662--662
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------
 ----------------[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 646--646
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 663--663
 []\TU/lmtt/m/n/10 #> (Intercept)                         |       -0.05 | [-0.47
 , 0.38] | 0.823[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 647--647
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 664--664
 []\TU/lmtt/m/n/10 #> Petal Length                        |        0.20 | [-0.09
 , 0.49] | 0.170[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 648--648
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 665--665
 []\TU/lmtt/m/n/10 #> Species [versicolor]                |       -0.04 | [-0.66
 , 0.59] | 0.909[] 
  []
 
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 649--649
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 666--666
 []\TU/lmtt/m/n/10 #> Species [virginica]                 |        1.18 | [ 0.52
 , 1.84] | < .001[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 650--650
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 667--667
 []\TU/lmtt/m/n/10 #> Petal Length × Species [versicolor] |        0.13 | [-0.18
 , 0.44] | 0.405[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 651--651
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 668--668
 []\TU/lmtt/m/n/10 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34
 , 0.26] | 0.789[] 
  []
 
 
-Overfull \hbox (1.16139pt too wide) in paragraph at lines 656--656
+Overfull \hbox (1.16139pt too wide) in paragraph at lines 673--673
 []\TU/lmtt/m/n/10 #> Uncertainty intervals (equal-tailed) and p-values (two-tai
 led) computed[] 
  []
 
+
+
+File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
+/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
+/resources/JOSS-logo.png>
+
+Package fancyhdr Warning: \headheight is too small (62.59596pt): 
+(fancyhdr)                Make it at least 63.55022pt, for example:
+(fancyhdr)                \setlength{\headheight}{63.55022pt}.
+(fancyhdr)                You might also make \topmargin smaller:
+(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
+
+[5]
 File: paper_files/figure-latex/fig1-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/fig1-1.pdf>
 
@@ -1328,75 +1348,62 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
-[5]
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 725--725
+[6]
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 742--742
 []\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |        95% C
 I | t(144) |      p[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 726--726
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 743--743
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------
 -------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 727--727
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 744--744
 []\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12
 ] |   1.34 |  0.183[] 
  []
 
 
-
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
-
-Package fancyhdr Warning: \headheight is too small (62.59596pt): 
-(fancyhdr)                Make it at least 63.55022pt, for example:
-(fancyhdr)                \setlength{\headheight}{63.55022pt}.
-(fancyhdr)                You might also make \topmargin smaller:
-(fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
-
-[6]
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 728--728
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 745--745
 []\TU/lmtt/m/n/10 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72
 ] |   2.97 |  0.003[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 729--729
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 746--746
 []\TU/lmtt/m/n/10 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76
 ] |   6.18 | < .001[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 783--783
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 800--800
 []\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% 
 CI |     t |     p[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 784--784
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 801--801
 []\TU/lmtt/m/n/10 #> ----------------------------------------------------------
 ------------------[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 785--785
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 802--802
 []\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.4
 3] |  0.83 | 0.404[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 786--786
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 803--803
 []\TU/lmtt/m/n/10 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.2
 6] | -0.27 | 0.789[] 
  []
 
 
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 787--787
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 804--804
 []\TU/lmtt/m/n/10 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.0
 3] | -2.41 | 0.016[] 
  []
@@ -1415,7 +1422,7 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [7]
-Overfull \hbox (1.9914pt too wide) in paragraph at lines 822--831
+Overfull \hbox (1.9914pt too wide) in paragraph at lines 839--848
 \TU/lmtt/m/n/10 install.packages("modelbased", repos = "https://easystats.r-uni
 verse.dev")\TU/lmr/m/n/10 . 
  []
@@ -1452,18 +1459,18 @@ LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-08-30>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: CDD81DED7CD156DDF269E26F78E78400;3651.
+(rerunfilecheck)             Checksum: E4451A03596B26A17E9835E249B53FEC;3494.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36936 strings out of 409029
- 743771 string characters out of 5756944
- 1640538 words of memory out of 5000000
- 59122 multiletter control sequences out of 15000+600000
+ 36935 strings out of 409029
+ 743744 string characters out of 5756944
+ 1640322 words of memory out of 5000000
+ 59121 multiletter control sequences out of 15000+600000
  564973 words of font info for 88 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
- 84i,13n,87p,1196b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 84i,12n,87p,1196b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (9 pages).
