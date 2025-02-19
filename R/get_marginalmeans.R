@@ -39,10 +39,7 @@ get_marginalmeans <- function(model,
   comparison <- dots$hypothesis
 
   # validate input
-  estimate <- insight::validate_argument(
-    estimate,
-    c("typical", "population", "specific", "average")
-  )
+  estimate <- .sanitize_esimate(estimate)
 
   # model details
   model_info <- insight::model_info(model, verbose = FALSE)

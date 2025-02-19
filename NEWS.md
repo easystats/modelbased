@@ -11,6 +11,12 @@
 
 ## Changes
 
+* The `estimate` arguments gets aliases for its options. Labels now either refer
+  to the target or reference group for which predictions are made (e.g., `"typical"`
+  that refers to a typical individual), or the technical descriptions of how
+  predictions are calculated (e.g., `"balanced"` as alias, emphasizing that to
+  achieve predictions for a "typical" individual, a balanced data grid is used).
+
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.

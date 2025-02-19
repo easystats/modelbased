@@ -27,3 +27,25 @@
     tryCatch(code, error = function(e) on_error)
   }
 }
+
+
+#' @keywords internal
+#' @noRd
+.sanitize_estimate <- function(estimate) {
+  estimate <- insight::validate_argument(
+    estimate,
+    c(
+      "specific", "typical", "average", "population",
+      # aliases
+      "representative", "balanced", "empirical", "counterfactual"
+    )
+  )
+  # handle aliases
+  switch(estimate,
+    representative = "specific",
+    balanced = "typical",
+    empirical = "average",
+    counterfactual = "population",
+    estimate
+  )
+}

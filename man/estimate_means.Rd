@@ -83,29 +83,29 @@ averaged ("marginalized") over variables not specified in \code{by} or \code{con
 individual, an "average" individual from the sample, or an "average"
 individual from a broader population.
 \itemize{
-\item \code{"typical"} (Default): Calculates predictions for a balanced data grid
-representing all combinations of focal predictor levels (specified in \code{by}).
-For non-focal numeric predictors, it uses the mean; for non-focal
-categorical predictors, it marginalizes (averages) over the levels. This
-represents a "typical" observation based on the data grid and is useful for
-comparing groups. It answers: "What would the average outcome be for a
-'typical' observation?". This is the default approach when estimating
-marginal means using the \emph{emmeans} package.
-\item \code{"average"}: Calculates predictions for each observation in the sample and
-then averages these predictions within each group defined by the focal
-predictors. This reflects the sample's actual distribution of non-focal
-predictors, not a balanced grid. It answers: "What is the predicted value
-for an average observation in my data?"
-\item \code{"population"}: "Clones" each observation, creating copies with all
-possible combinations of focal predictor levels. It then averages the
-predictions across these "counterfactual" observations (non-observed
-permutations) within each group. This extrapolates to a hypothetical
-broader population, considering "what if" scenarios. It answers: "What is
-the predicted response for the 'average' observation in a broader possible
-target population?" This approach entails more assumptions about the
-likelihood of different combinations, but can be more apt to generalize.
-This is also the option that should be used for \strong{G-computation}
-(\emph{Chatton and Rohrer 2024}).
+\item \code{"typical"} (default, alias \code{"balanced"}): Calculates predictions for a
+balanced data grid representing all combinations of focal predictor levels
+(specified in \code{by}). For non-focal numeric predictors, it uses the mean;
+for non-focal categorical predictors, it marginalizes (averages) over the
+levels. This represents a "typical" observation based on the data grid and
+is useful for comparing groups. It answers: "What would the average outcome
+be for a 'typical' observation?". This is the default approach when
+estimating marginal means using the \emph{emmeans} package.
+\item \code{"average"} (alias \code{"empirical"}): Calculates predictions for each
+observation in the sample and then averages these predictions within each
+group defined by the focal predictors. This reflects the sample's actual
+distribution of non-focal predictors, not a balanced grid. It answers:
+"What is the predicted value for an average observation in my data?"
+\item \code{"population"} (alias \code{"counterfactual"}): "Clones" each observation,
+creating copies with all possible combinations of focal predictor levels.
+It then averages the predictions across these "counterfactual" observations
+(non-observed permutations) within each group. This extrapolates to a
+hypothetical broader population, considering "what if" scenarios. It
+answers: "What is the predicted response for the 'average' observation in a
+broader possible target population?" This approach entails more assumptions
+about the likelihood of different combinations, but can be more apt to
+generalize. This is also the option that should be used for
+\strong{G-computation} (\emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
