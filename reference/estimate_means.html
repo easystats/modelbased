@@ -124,12 +124,14 @@ representative value, respectively at values defined in a "data grid" or
 <dd><p>The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). The <code>by</code> argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors. <code>by</code>
-can be a character (vector) naming the focal predictors (and optionally,
-representative values or levels), or a list of named elements. See details
-in <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids
-for predictors of interest.</p></dd>
+estimated across them). <code>by</code> can be a character (vector) naming the focal
+predictors, optionally including representative values or levels at which
+focal predictos are evaluated (e.g., <code>by="x=c(1,2)"</code>). When <code>estimate</code> is
+<em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid" or
+"data grid" with representative values for the focal predictors. In this
+case, <code>by</code> can also be list of named elements. See details in
+<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids for
+predictors of interest.</p></dd>
 
 
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
