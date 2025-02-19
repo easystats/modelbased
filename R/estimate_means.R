@@ -10,12 +10,14 @@
 #' @param by The (focal) predictor variable(s) at which to evaluate the desired
 #' effect / mean / contrasts. Other predictors of the model that are not
 #' included here will be collapsed and "averaged" over (the effect will be
-#' estimated across them). The `by` argument is used to create a "reference grid"
-#' or "data grid" with representative values for the focal predictors. `by`
-#' can be a character (vector) naming the focal predictors (and optionally,
-#' representative values or levels), or a list of named elements. See details
-#' in [`insight::get_datagrid()`] to learn more about how to create data grids
-#' for predictors of interest.
+#' estimated across them). `by` can be a character (vector) naming the focal
+#' predictors, optionally including representative values or levels at which
+#' focal predictos are evaluated (e.g., `by="x=c(1,2)"`). When `estimate` is
+#' *not* `"average"`, the `by` argument is used to create a "reference grid" or
+#' "data grid" with representative values for the focal predictors. In this
+#' case, `by` can also be list of named elements. See details in
+#' [`insight::get_datagrid()`] to learn more about how to create data grids for
+#' predictors of interest.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
 #' `backend = "marginaleffects"`). For emmeans, see also
