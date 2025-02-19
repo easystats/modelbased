@@ -470,14 +470,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # "Mean")
   if (is.null(attributes(x)$posterior_draws)) {
     # frequentist
-    params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+    params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE))
     coefficient_name <- intersect(
       c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
       colnames(params)
     )[1]
   } else {
     # Bayesian
-    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE, ...))
+    params <- suppressWarnings(bayestestR::describe_posterior(x, ci = ci, verbose = FALSE, ...))
     ## FIXME: needs to be fixed in bayestestR: categorical models don't return group column
     # see https://github.com/easystats/bayestestR/issues/692
     if (info$is_categorical) {
