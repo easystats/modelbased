@@ -1,0 +1,38 @@
+---
+title: "Case Study: Casual inference for observational data using modelbased"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study: Casual inference for observational data using modelbased}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE
+)
+
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
+pkgs <- c("MatchIt", "marginaleffects")
+
+if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (!getRversion() >= "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+This vignette shows an example how to make _causual inference_ with observational data.
+
+```{r}
+data(lalonde, package = "MatchIt")
+```
