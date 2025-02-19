@@ -224,7 +224,7 @@ We can start by easily visualizing the relationship between our response variabl
 
 ```{r fig1, fig.cap = "Scatter plot of petal length by pelal width, grouped by species"}
 estimate_relation(model, by = c("Petal.Length", "Species"), length = 100) |>
-  plot()
+  plot(show_data = TRUE)
 ```
 
 But what is the **average value** of `Petal.Width` for each species?

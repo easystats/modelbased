@@ -229,7 +229,7 @@ We can start by easily visualizing the relationship between our response variabl
 
 ``` r
 estimate_relation(model, by = c("Petal.Length", "Species"), length = 100) |>
-  plot()
+  plot(show_data = TRUE)
 ```
 
 \begin{figure}
