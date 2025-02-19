@@ -243,7 +243,7 @@ estimate_means <- function(model,
       verbose = verbose,
       ...
     )
-    means <- format(estimated, model, ...)
+    means <- format(estimated, model, ci = ci, ...)
   }
 
   # restore attributes later
