@@ -163,7 +163,7 @@ This plot represents the "slope" of the curve at each point of the curve. As you
 
 Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
 
-```{r, eval=FALSE}
+```{r}
 summary(deriv)
 ```
 

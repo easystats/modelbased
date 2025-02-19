@@ -1,12 +1,38 @@
 # Format ------------------------------------------------------------------
 
 #' @export
-format.estimate_contrasts <- function(x, format = NULL, ...) {
+format.estimate_contrasts <- function(x,
+                                      format = NULL,
+                                      select = getOption("modelbased_select", NULL),
+                                      include_grid = getOption("modelbased_include_grid", FALSE),
+                                      ...) {
   # don't print columns of adjusted_for variables
   adjusted_for <- attr(x, "adjusted_for", exact = TRUE)
-  if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x))) {
+  if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
     # remove non-focal terms from data frame
     x[adjusted_for] <- NULL
+  } else if (isTRUE(include_grid)) {
+    # we include the data grid, so we don't need to add the same information
+    # to the footer
+    table_footer <- attributes(x)$table_footer
+    if (!is.null(table_footer)) {
+      # (Predictors controlled.*?): This is the first capturing group.
+      # - `Predictors controlled`: Matches the literal string "Predictors controlled".
+      # - `.*?`: Matches any character (.) zero or more times (*), but as few
+      #    times as possible (?). This is important to avoid matching across
+      #    multiple lines. This is a non-greedy quantifier.
+      # `(\n|$)`: This is the second capturing group.
+      # - \n: Matches a newline character.
+      # - $: Matches the end of the string.
+      # - |: Acts as an "OR" operator. So, this part matches either a newline
+      #   or the end of the string. This is necessary to capture the last match
+      #   if it's at the very end of the string and not followed by a newline.
+      # (powered by Gemini)
+      pattern <- "(Predictors controlled.*?)(\n|$)"
+      table_footer[1] <- gsub(pattern, "", table_footer[1])
+      # add back modified footer
+      attr(x, "table_footer") <- table_footer
+    }
   }
 
   # arrange columns (not for contrast now)
@@ -14,6 +40,10 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   # add "Level" columns from contrasts
   if (all(c("Level1", "Level2") %in% colnames(x))) {
     by <- unique(by, c("Level1", "Level2"))
+  }
+  # add "group" columns from multivariate models
+  if ("group" %in% colnames(x)) {
+    by <- unique("group", by)
   }
   # check which columns actually exist
   if (!is.null(by)) {
@@ -34,10 +64,15 @@ format.estimate_contrasts <- function(x, format = NULL, ...) {
   # remove all-NA columns
   x <- datawizard::remove_empty_columns(x)
 
+  # add back adjusted_for variables when we have custom column layouts
+  if (!is.null(select)) {
+    attr(x, "focal_terms") <- unique(c(attr(x, "focal_terms"), adjusted_for))
+  }
+
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
-    insight::format_table(x, ci_brackets = c("(", ")"), ...)
+    insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = "html", ...)
   } else {
-    insight::format_table(x, ...)
+    insight::format_table(x, select = select, ...)
   }
 }
 
@@ -71,10 +106,21 @@ format.visualisation_matrix <- function(x, ...) {
 
 
 #' @export
+format.summary_estimate_slopes <- function(x, ...) {
+  dots <- list(...)
+  dots$select <- NULL
+  do.call(insight::format_table, c(list(x, select = NULL), dots))
+}
+
+
+#' @export
 format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # model information
   model_data <- insight::get_data(model, verbose = FALSE)
-  info <- insight::model_info(model, verbose = FALSE)
+  info <- attributes(x)$model_info
+  if (is.null(info)) {
+    info <- insight::model_info(model)
+  }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
   predict_type <- attributes(x)$predict
@@ -112,7 +158,10 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
 #' @export
 format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
-  info <- insight::model_info(model, verbose = FALSE)
+  info <- attributes(x)$model_info
+  if (is.null(info)) {
+    info <- insight::model_info(model)
+  }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
   remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")
@@ -151,6 +200,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
+  contrast_filter <- attributes(x)$contrast_filter
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
 
@@ -297,10 +347,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # columns named "Level1" and "Level2". For one contrast term, we just
       # need to rename the columns
       if (length(contrast) == 1) {
+        # we define this object to avoid scoping issues in data_rename(),
+        # see https://github.com/easystats/modelbased/issues/401
+        rename_columns <- paste0(contrast, 1:2)
         # rename columns
         params <- datawizard::data_rename(
           params,
-          select = paste0(contrast, 1:2),
+          select = rename_columns,
           replacement = c("Level1", "Level2"),
           verbose = FALSE
         )
@@ -310,9 +363,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           contrast_names <- paste0(contrast, i)
           params <- .fix_duplicated_contrastlevels(params, contrast_names)
           # finally, unite levels back into single column
+          rename_columns <- paste0("Level", i)
           params <- datawizard::data_unite(
             params,
-            new_column = paste0("Level", i),
+            new_column = rename_columns,
             select = contrast_names,
             separator = ", ",
             verbose = FALSE
@@ -333,6 +387,27 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # make sure terms are factors, for data_arrange later
       for (i in contrast) {
         x[[i]] <- factor(x[[i]], levels = unique(x[[i]]))
+      }
+
+      # filter contrast-predictor levels, if requested (e.g., `contrast = "x=c('a', 'b')"`)
+      # we also need to include non-filtered contrast-predictors here, because
+      # if we have more than one contrast-predictor, we don't have the single
+      # values, but comma-separated levels from all predictor-combinations. we
+      # need to reconstruct these combinations for proper filtering
+      if (!is.null(contrast_filter)) {
+        # make sure we also have all levels for non-filtered variables
+        contrast_filter <- insight::compact_list(c(
+          lapply(dgrid[setdiff(focal_terms, unique(c(by, names(contrast_filter))))], unique),
+          contrast_filter
+        ))
+        # now create combinations of all filter variables
+        filter_levels <- apply(expand.grid(contrast_filter), 1, paste, collapse = ", ")
+        # sanity check anything left after filtering? else, filter already worked before
+        filtered_rows <- x$Level1 %in% filter_levels & x$Level2 %in% filter_levels
+        # filter...
+        if (any(filtered_rows)) {
+          x <- x[filtered_rows, ]
+        }
       }
     }
   }
@@ -529,6 +604,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
     estimate_name <- "Probability"
+  } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
+    estimate_name <- "Proportion"
   } else {
     estimate_name <- "Mean"
   }

@@ -10,11 +10,16 @@
 get_marginaltrends <- function(model,
                                trend = NULL,
                                by = NULL,
+                               ci = 0.95,
+                               p_adjust = "none",
                                verbose = TRUE,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
+
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
 
   # Guess arguments
   trend <- .guess_marginaltrends_arguments(model, trend, verbose, ...)
@@ -27,11 +32,7 @@ get_marginaltrends <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments
-    dg_args <- list(
-      model,
-      by = by,
-      verbose = FALSE
-    )
+    dg_args <- list(model, by = by, verbose = FALSE)
     # add user-arguments from "...", but remove those arguments that are already set
     dots[c("by", "verbose")] <- NULL
     dg_args <- insight::compact_list(c(dg_args, dots))
@@ -50,13 +51,17 @@ get_marginaltrends <- function(model,
     datagrid <- as.data.frame(datagrid)
   }
 
+  # remove user-arguments from "..." that will be used when calling marginaleffects
+  dots[c("by", "conf_level", "digits")] <- NULL
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(
       model,
       variables = trend,
       by = datagrid_info$at_specs$varname,
-      newdata = datagrid
+      newdata = datagrid,
+      conf_level = ci
     ),
     dots
   ))
@@ -74,12 +79,24 @@ get_marginaltrends <- function(model,
 
   estimated <- .add_attributes(
     estimated,
+    model_info = model_info,
     info = c(
       datagrid_info,
-      list(trend = trend, datagrid = datagrid, coef_name = "Slope")
+      list(
+        trend = trend,
+        datagrid = datagrid,
+        coef_name = "Slope",
+        p_adjust = p_adjust,
+        ci = ci
+      )
     )
   )
   class(estimated) <- unique(c("marginaleffects_slopes", class(estimated)))
+
+  # adjust p-values
+  if (!model_info$is_bayesian) {
+    estimated <- .p_adjust(model, estimated, p_adjust, verbose, ...)
+  }
 
   estimated
 }

@@ -1,3 +1,57 @@
+# modelbased (devel)
+
+## Breaking Changes
+
+* The deprecated function `visualisation_matrix()` has been removed. Use
+  `insight::get_datagrid()` instead.
+
+* The `"average"` option for argument `estimate` was renamed into `"typical"`.
+  The former `"average"` option is still available, but now returned marginal
+  means fully averaged across the sample.
+
+## Changes
+
+* The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
+  to calculate predictions on the link-scale and back-transform them to the
+  response scale after aggregation by groups.
+
+* New functions `pool_predictions()` and `pool_contrasts()`, to deal with
+  *modelbased* objects that were applied to imputed data sets. E.g., functions
+  like `estimate_means()` can be run on several data sets where missing values
+  were imputed, and the multiple results from `estimate_means()` can be pooled
+  using `pool_predictions()`.
+
+* The `print()` method is now explicitly documented and gets some new options
+  to customize the output for tables.
+
+* New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
+  specifically for the case of Johnson-Neyman intervals, i.e. when calling
+  `estimate_slopes()` with two numeric predictors in an interaction term.
+
+* `print_html()` and `print_md()` pass `...` to format-methods (e.g. to
+  `insight::format_table()`), to tweak the output.
+
+* The `show_data()` argument in `plot()` is automatically set to `FALSE` when
+  the models has a transformed response variable, but predictions were not
+  back-transformed using the `transform` argument.
+
+* The `plot()` method gets a `numeric_as_discrete` argument, to decide whether
+  numeric predictors should be treated as factor or continuous, based on the
+  of unique values in numeric predictors.
+
+* Plots now use a probability scale for the y-axis for models whose response
+  scale are probabilities (e.g., logistic regression).
+
+## Bug fixes
+
+* Fixed issue in the `summary()` method for `estimate_slopes()`.
+
+* Fixed issues with multivariate response models.
+
+* Fixed issues with plotting ordinal or multinomial models.
+
+* Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
+
 # modelbased 0.9.0
 
 ## Breaking Changes

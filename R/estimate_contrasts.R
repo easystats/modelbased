@@ -4,12 +4,16 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
-#' @param contrast A character vector indicating the name of the variable(s)
-#' for which to compute the contrasts.
+#' @param contrast A character vector indicating the name of the variable(s) for
+#' which to compute the contrasts, optionally including representative values or
+#' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"` or `"holm"`. See the
-#' p-value adjustment section in the `emmeans::test` documentation or
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
+#' `"holm"`. The `"esarey"` option is specifically for the case of Johnson-Neyman
+#' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
+#' in an interaction term. Details for the other options can be found in the
+#' p-value adjustment section of the `emmeans::test` documentation or
 #' `?stats::p.adjust`.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out.
@@ -87,7 +91,7 @@
 #'   data = iris,
 #'   refresh = 0
 #' )
-#' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length=[sd]", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
@@ -105,7 +109,7 @@ estimate_contrasts.default <- function(model,
                                        predict = NULL,
                                        ci = 0.95,
                                        comparison = "pairwise",
-                                       estimate = "average",
+                                       estimate = getOption("modelbased_estimate", "typical"),
                                        p_adjust = "none",
                                        transform = NULL,
                                        backend = getOption("modelbased_backend", "marginaleffects"),
@@ -144,11 +148,13 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(out, "table_title") <- c(ifelse(
-    estimate == "specific",
-    "Model-based Contrasts Analysis",
-    "Marginal Contrasts Analysis"
+  attr(out, "table_title") <- c(switch(estimate,
+    specific = "Model-based Contrasts Analysis",
+    typical = "Marginal Contrasts Analysis",
+    average = "Averaged Contrasts Analysis",
+    population = "Counterfactual Contrasts Analysis (G-computation)"
   ), "blue")
+
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,

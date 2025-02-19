@@ -19,8 +19,9 @@ test_that("attributes_means", {
     attributes(estim),
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
-      "predict", "estimate", "datagrid", "preserve_range", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "predict", "estimate", "transform", "datagrid", "preserve_range",
+      "model_info", "table_title", "table_footer", "model", "response", "ci",
+      "backend", "coef_name"
     )
   )
 })
@@ -46,7 +47,28 @@ test_that("attributes_means, contrasts", {
       "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "datagrid", "preserve_range", "coef_name"
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info"
+    )
+  )
+  estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects"))
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "row.names", "class", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "adjusted_for", "predict", "comparison", "contrast", "estimate",
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info"
+    )
+  )
+  estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects", estimate = "average"))
+  expect_named(
+    attributes(estim),
+    c(
+      "names", "row.names", "class", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "adjusted_for", "predict", "comparison", "contrast", "estimate",
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info",
+      "contrast_filter"
     )
   )
 })
@@ -68,8 +90,9 @@ test_that("attributes_means, slopes", {
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "trend", "comparison", "coef_name",
-      "slope", "table_title", "table_footer", "model", "response", "ci"
+      "names", "class", "row.names", "trend", "comparison", "p_adjust",
+      "coef_name", "slope", "ci", "model_info", "table_title", "table_footer",
+      "model", "response"
     )
   )
 })
@@ -88,8 +111,8 @@ test_that("attributes_means", {
     c(
       "names", "row.names", "class", "ci", "keep_iterations", "response",
       "model", "datagrid", "focal_terms", "preserve_range", "table_title",
-      "table_footer", "adjusted_for", "at_specs", "at", "by", "reference",
-      "data"
+      "coef_name", "model_info", "table_footer", "adjusted_for", "at_specs",
+      "at", "by", "reference", "data"
     )
   )
 })

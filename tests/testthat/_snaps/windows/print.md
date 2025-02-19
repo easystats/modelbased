@@ -24,12 +24,15 @@
 
     Code
       summary(deriv)
+    Message
+      There might be too few data to accurately determine intervals. Consider
+        setting `length = 100` (or larger) in your call to `estimate_slopes()`.
     Output
-      Average Marginal Effects
+      Johnson-Neymann Intervals
       
-      Start |  End |     x | Slope |   SE |         95% CI | t(998) |      p
-      ----------------------------------------------------------------------
-      -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] |  50.97 | < .001
+      Start |  End | Direction | Confidence 
+      --------------------------------------
+      -3.38 | 3.28 | positive  | Significant
       
       Marginal effects estimated for x
 
@@ -43,15 +46,15 @@
       x     | Slope |   SE |         95% CI |     t |      p
       ------------------------------------------------------
       -3.38 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
-      -2.64 | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      -2.64 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
       -1.90 | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
       -1.16 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
-      -0.42 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      -0.42 | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
       0.32  | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
-      1.06  | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      1.06  | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
       1.80  | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
       2.54  | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
-      3.28  | 12.75 | 0.25 | [12.26, 13.24] | 50.98 | < .001
+      3.28  | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
       
       Marginal effects estimated for x
       Type of slope was dY/dX
@@ -60,12 +63,15 @@
 
     Code
       summary(deriv2)
+    Message
+      There might be too few data to accurately determine intervals. Consider
+        setting `length = 100` (or larger) in your call to `estimate_slopes()`.
     Output
-      Average Marginal Effects
+      Johnson-Neymann Intervals
       
-      Start |  End |     x | Slope |   SE |         95% CI |     t |      p
-      ---------------------------------------------------------------------
-      -3.38 | 3.28 | -0.05 | 12.75 | 0.25 | [12.26, 13.24] | 50.97 | < .001
+      Start |  End | Direction | Confidence 
+      --------------------------------------
+      -3.38 | 3.28 | positive  | Significant
       
       Marginal effects estimated for x
       Type of slope was dY/dX
@@ -154,7 +160,7 @@
       168     |    64.73 | Male    | low level of education          | male   | 14.59 | 12.26 | [ -9.47,  38.66] |   1.19
       4       |    94.34 | Male    | low level of education          | male   |  9.03 |  2.38 | [  4.36,  13.71] |   3.79
       86      |    94.34 | Male    | low level of education          | male   |  2.18 | 16.20 | [-29.62,  33.98] |   0.13
-      168     |    94.34 | Male    | low level of education          | male   | -4.67 | 34.34 | [-72.09,  62.75] |  -0.14
+      168     |    94.34 | Male    | low level of education          | male   | -4.67 | 34.35 | [-72.09,  62.75] |  -0.14
       4       |    35.12 | Female  | low level of education          | male   | 14.36 |  0.86 | [ 12.67,  16.05] |  16.71
       86      |    35.12 | Female  | low level of education          | male   | 13.13 |  0.54 | [ 12.07,  14.18] |  24.50
       168     |    35.12 | Female  | low level of education          | male   | 11.89 |  1.03 | [  9.87,  13.91] |  11.58
@@ -171,7 +177,7 @@
       86      |    64.73 | Male    | intermediate level of education | male   | 14.82 |  5.47 | [  4.08,  25.56] |   2.71
       168     |    64.73 | Male    | intermediate level of education | male   | 14.19 | 12.22 | [ -9.81,  38.18] |   1.16
       4       |    94.34 | Male    | intermediate level of education | male   |  8.45 |  1.17 | [  6.16,  10.74] |   7.23
-      86      |    94.34 | Male    | intermediate level of education | male   | 22.27 |  7.76 | [  7.05,  37.49] |   2.87
+      86      |    94.34 | Male    | intermediate level of education | male   | 22.27 |  7.76 | [  7.05,  37.50] |   2.87
       168     |    94.34 | Male    | intermediate level of education | male   | 36.09 | 16.29 | [  4.11,  68.07] |   2.22
       4       |    35.12 | Female  | intermediate level of education | male   | 12.96 |  0.79 | [ 11.40,  14.52] |  16.34
       86      |    35.12 | Female  | intermediate level of education | male   | 14.46 |  0.47 | [ 13.55,  15.38] |  31.06
@@ -252,7 +258,7 @@
       86      |    64.73 | Female  | high level of education         | female | 13.54 |  0.86 | [ 11.84,  15.24] |  15.67
       168     |    64.73 | Female  | high level of education         | female | 14.76 |  1.86 | [ 11.10,  18.42] |   7.92
       4       |    94.34 | Female  | high level of education         | female | 10.77 |  0.73 | [  9.34,  12.20] |  14.77
-      86      |    94.34 | Female  | high level of education         | female | 12.07 |  1.35 | [  9.42,  14.73] |   8.92
+      86      |    94.34 | Female  | high level of education         | female | 12.07 |  1.35 | [  9.42,  14.73] |   8.91
       168     |    94.34 | Female  | high level of education         | female | 13.38 |  2.80 | [  7.87,  18.88] |   4.77
       
       Variable predicted: neg_c_7

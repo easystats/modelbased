@@ -12,7 +12,12 @@
   datagrid <- info$datagrid
   p_adjust <- info$p_adjust
   adjusted_for <- info$adjusted_for
-  model_info <- insight::model_info(model)
+  transform <- info$transform
+  model_info <- info$model_info
+  # make sure we definitely have model information
+  if (is.null(model_info) && !is.null(model)) {
+    model_info <- insight::model_info(model)
+  }
 
 
   # name of predicted response -----------------------------------------------
@@ -75,11 +80,12 @@
 
   # tell user about scale of predictions / contrasts -------------------------
 
+  result_type <- switch(type,
+    contrasts = "Contrasts",
+    "Predictions"
+  )
+
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
-    result_type <- switch(type,
-      contrasts = "Contrasts",
-      "Predictions"
-    )
     # exceptions
     predict <- switch(predict,
       none = "link",
@@ -89,6 +95,12 @@
       predict
     )
     table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
+  } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
+    # add information about response transformation
+    trans_fun <- .safe(insight::find_transformation(model))
+    if (!is.null(trans_fun) && trans_fun != "identity") {
+      table_footer <- paste0(table_footer, "\n", result_type, " are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
+    }
   }
 
 
@@ -127,5 +139,5 @@
     return(NULL)
   }
 
-  c(paste0(table_footer, "\n"), "blue")
+  c(paste0(table_footer, "\n"), "yellow")
 }

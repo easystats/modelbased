@@ -353,7 +353,7 @@ estimate_relation <- function(model,
     # for models, get predictors, response etc.
     variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     model_response <- insight::find_response(model)
-    is_nullmodel <- insight::is_nullmodel(model)
+    is_nullmodel <- isTRUE(.safe(insight::is_nullmodel(model)))
     grouplevel_effects <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
   } else {
     # for stuff like data frame, no response and no null model
@@ -462,23 +462,28 @@ estimate_relation <- function(model,
 
   # transform reponse?
   if (isTRUE(transform)) {
-    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+    trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    trans_fun <- transform
   }
-  if (!is.null(transform)) {
-    out$Predicted <- transform(out$Predicted)
-    out$CI_low <- transform(out$CI_low)
-    out$CI_high <- transform(out$CI_high)
+  if (!is.null(trans_fun)) {
+    out$Predicted <- trans_fun(out$Predicted)
+    out$CI_low <- trans_fun(out$CI_low)
+    out$CI_high <- trans_fun(out$CI_high)
   }
 
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
+  attr(out, "transform") <- transform
   attr(out, "model") <- model
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
   attr(out, "preserve_range") <- grid_specs$preserve_range
   attr(out, "table_title") <- c("Model-based Predictions", "blue")
+  attr(out, "coef_name") <- "Predicted"
+  attr(out, "model_info") <- insight::model_info(model)
   attr(out, "table_footer") <- .table_footer(
     out,
     by = grid_specs$at,

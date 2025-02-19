@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = "average",
+                              estimate = getOption("modelbased_estimate", "typical"),
                               transform = NULL,
                               verbose = TRUE,
                               ...) {
@@ -41,14 +41,17 @@ get_marginalmeans <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("average", "population", "specific")
+    c("typical", "population", "specific", "average")
   )
+
+  # model details
+  model_info <- insight::model_info(model, verbose = FALSE)
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
-  # find default response-type
-  predict <- .get_marginaleffects_type_argument(model, predict, ...)
+  # find default response-type, and get information about back transformation
+  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, verbose, ...) # nolint
 
 
   # Second step: create a data grid -------------------------------------------
@@ -85,19 +88,23 @@ get_marginalmeans <- function(model,
     # restore data types -  if we have defined numbers in `by`, like
     # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
     # numeric in the data grid. Fix this here, else marginal effects will fail
-    datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
-
-    # add user-arguments from "...", but remove those arguments that are
-    # already used (see below) when calling marginaleffects
-    dots[c("by", "conf_level", "df", "type", "verbose")] <- NULL
+    datagrid <- datawizard::data_restoretype(
+      datagrid,
+      insight::get_data(model, verbose = FALSE)
+    )
   }
 
 
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
 
-  # model df
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  # remove user-arguments from "..." that will be used when calling marginaleffects
+  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma")] <- NULL
+
+  # model df - can be passed via `...`
+  if (is.null(dots$df)) {
+    dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
 
   # sanity check
   if (!is.null(datagrid)) {
@@ -108,11 +115,7 @@ get_marginalmeans <- function(model,
   }
 
   # setup arguments
-  fun_args <- list(
-    model,
-    conf_level = ci,
-    df = dof
-  )
+  fun_args <- list(model, conf_level = ci)
 
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
@@ -123,7 +126,8 @@ get_marginalmeans <- function(model,
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
-    if (is.null(dots$newdata)) {
+    # we don't want a datagrid for "average" option
+    if (is.null(dots$newdata) && estimate != "average") {
       # we allow individual "newdata" options, so do not
       # # overwrite if explicitly set
       fun_args$newdata <- datagrid
@@ -132,10 +136,10 @@ get_marginalmeans <- function(model,
   }
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
-    fun_args$dpar <- predict
+  if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict_args$predict
   } else {
-    fun_args$type <- predict
+    fun_args$type <- predict_args$predict
   }
 
   # =========================================================================
@@ -178,6 +182,24 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+
+  # back-transform from link-scale? this functions is...
+  # - only called for means, not contrasts, because for contrasts we rely on
+  #   the delta-method for SEs on the response scale
+  # - only called when `type` (i.e. `predict`) is "response" AND the model class
+  #   has a "link" prediction type
+  if (predict_args$backtransform) {
+    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+    # make sure we have the original string value for the "predict" argument
+    predict_args$predict <- "response"
+  }
+
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
   # =========================================================================
@@ -195,9 +217,15 @@ get_marginalmeans <- function(model,
   means <- .add_attributes(
     means,
     by = my_args$by,
+    model_info = model_info,
     info = c(
       datagrid_info,
-      list(predict = predict, estimate = estimate, datagrid = datagrid)
+      list(
+        predict = predict_args$predict,
+        estimate = estimate,
+        datagrid = datagrid,
+        transform = !is.null(transform)
+      )
     )
   )
   class(means) <- unique(c("marginaleffects_means", class(means)))
@@ -222,17 +250,14 @@ get_marginalmeans <- function(model,
     } else {
       fun <- "marginal means"
     }
-    msg <- paste0(
-      "Sorry, calculating ", fun, " failed with following error:\n",
+    msg <- c(
+      paste0("Sorry, calculating ", fun, " failed with following error:"),
       insight::color_text(gsub("\n", "", out$message), "red")
     )
     # we get this error when we should use counterfactuals - tell
     # # user about possible solution
     if (grepl("not found in column names", out$message, fixed = TRUE)) {
-      msg <- paste0(
-        msg,
-        "\n\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"." # nolint
-      )
+      msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
     }
     # error
     insight::format_error(msg)
@@ -244,10 +269,22 @@ get_marginalmeans <- function(model,
 
 # handle attributes -----------------------------------------------------------
 
+# we have following attributes for modelbased-objects:
+# - at, by, trend, contrasts, comparison, estimate, predict, p_adjust, transform,
+#   ci: the values from the corresponding arguments from their related function
+# - focal_terms: all variables from arguments `by`, `trend` and `contrasts`
+# - adjusted_for: non-focal terms, all variables in the model that are not
+#   in focal_terms
+# - datagrid: the internal data grid that was used for the "newdata" argument
+# - coef_name: name of the column with the predictions/contrasts
+# - slope: the type of slope, e.g. "dx/dy". equals the "slope" argument when
+#   calling avg_slopes()
+# - model_info: object from insight::model_info()
 #' @keywords internal
-.add_attributes <- function(x, by = NULL, info = NULL) {
+.add_attributes <- function(x, by = NULL, model_info = NULL, info = NULL) {
   attr(x, "at") <- by
   attr(x, "by") <- by
+  attr(x, "model_info") <- model_info
 
   # compact list
   info <- insight::compact_list(info)
@@ -268,8 +305,8 @@ get_marginalmeans <- function(model,
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
-    "contrast", "estimate", "p_adjust", "datagrid", "preserve_range",
-    "coef_name", "slope"
+    "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
+    "coef_name", "slope", "ci", "model_info", "contrast_filter"
   )
 }
 

@@ -1,6 +1,6 @@
 skip_on_cran()
-skip_if_offline()
 skip_if_not_installed("curl")
+skip_if_offline()
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")
@@ -16,7 +16,7 @@ test_that("estimate_relation prints ordinal models correctly", {
   expect_snapshot(print(out, zap_small = TRUE))
 
   m <- MASS::polr(Species ~ Sepal.Width, data = iris)
-  out <- estimate_relation(m)
+  out <- estimate_relation(m, verbose = FALSE)
   expect_snapshot(print(out, zap_small = TRUE))
   out <- estimate_means(m, by = "Sepal.Width")
   expect_snapshot(print(out, zap_small = TRUE))

@@ -31,9 +31,11 @@ test_that("estimate_means - glmmTMB", {
   expect_equal(estim$Rate, estim2$rate, tolerance = 1e-3)
 
   ## marginaleffects for zero-inflated model, count component
-  estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects")
-  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects"))
+  estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "inverse_link")
+  estim2 <- suppressMessages(estimate_means(model, backend = "marginaleffects", predict = "inverse_link"))
   expect_equal(estim1$Mean, estim2$Mean, tolerance = 1e-3)
+  estim3 <- estimate_means(model, by = "mined", backend = "emmeans")
+  expect_equal(estim1$Mean, estim3$Rate, tolerance = 1e-1)
 
   ## marginaleffects for zero-inflated model, zero-inflation probabilities
   estim1 <- estimate_means(model, by = "mined", backend = "marginaleffects", predict = "zprob")
@@ -116,4 +118,19 @@ test_that("estimate_link - glmmTMB", {
 test_that("estimate_expectation - glmmTMB", {
   estim <- suppressMessages(estimate_expectation(model2))
   expect_identical(dim(estim), c(644L, 8L))
+})
+
+
+test_that("column name beta regression", {
+  data(mtcars)
+  mtcars$ord <- datawizard::normalize(mtcars$mpg)
+  m <- glmmTMB::glmmTMB(
+    ord ~ wt + hp + as.factor(gear) + (1 | cyl),
+    data = mtcars,
+    family = glmmTMB::ordbeta()
+  )
+  expect_named(
+    estimate_means(m, "gear"),
+    c("gear", "Proportion", "SE", "CI_low", "CI_high", "z")
+  )
 })

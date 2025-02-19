@@ -1,6 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("marginaleffects")
 skip_if_not_installed("nanoparquet")
+skip_if_not_installed("sandwich")
 skip_on_os("mac")
 
 test_that("estimate_contrasts - vcov", {

@@ -9,12 +9,10 @@
 #' model <- lm(Sepal.Width ~ Species * Petal.Width, data = iris)
 #' # By default: selects first factor
 #' get_emcontrasts(model)
-#' # Can also run contrasts between points of numeric
-#' get_emcontrasts(model, contrast = "Petal.Width", length = 3)
 #' # Or both
 #' get_emcontrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #' # Or with custom specifications
-#' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+#' get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 #' # Or modulate it
 #' get_emcontrasts(model, by = "Petal.Width", length = 4)
 #' }
@@ -36,29 +34,57 @@ get_emcontrasts <- function(model,
     predict <- transform
   }
 
+  # check whether contrasts should be made for numerics or categorical
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+  on_the_fly_factors <- attributes(model_data)$factors
+
   # Guess arguments
   my_args <- .guess_emcontrasts_arguments(model, contrast, by, verbose, ...)
 
   # find default response-type
   predict <- .get_emmeans_type_argument(model, predict, type = "contrasts", ...)
 
-  # Run emmeans
-  estimated <- emmeans::emmeans(
-    model,
-    specs = my_args$emmeans_specs,
-    at = my_args$emmeans_at,
-    type = predict,
-    ...
-  )
+  # extract first focal term
+  first_focal <- my_args$contrast[1]
+
+  # if first focal term is numeric, we contrast slopes
+  if (is.numeric(model_data[[first_focal]]) &&
+    !first_focal %in% on_the_fly_factors &&
+    # if these are identical, only slopes are contrasted - we need emmeans then
+    !identical(my_args$by, my_args$contrast)) {
+    # sanity check - contrast for slopes only makes sense when we have a "by" argument
+    if (is.null(my_args$by)) {
+      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+    }
+    # Run emmeans
+    estimated <- emmeans::emtrends(
+      model,
+      specs = my_args$by,
+      var = my_args$contrast,
+      type = predict,
+      ...
+    )
+    emm_by <- NULL
+  } else {
+    # Run emmeans
+    estimated <- emmeans::emmeans(
+      model,
+      specs = my_args$emmeans_specs,
+      at = my_args$emmeans_at,
+      type = predict,
+      ...
+    )
+    # Find by variables
+    emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
+    if (length(emm_by) == 0) {
+      emm_by <- NULL
+    }
+  }
 
   # If means are on the response scale (e.g., probabilities), need to regrid
   if (predict == "response") {
     estimated <- emmeans::regrid(estimated)
   }
-
-  # Find by variables
-  emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
-  if (length(emm_by) == 0) emm_by <- NULL
 
   out <- emmeans::contrast(estimated, by = emm_by, method = comparison, ...)
 
