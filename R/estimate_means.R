@@ -216,7 +216,7 @@ estimate_means <- function(model,
                            verbose = TRUE,
                            ...) {
   # validate input
-  estimate <- .sanitite_estimate(estimate)
+  estimate <- .sanitize_estimate(estimate)
 
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
