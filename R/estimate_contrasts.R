@@ -4,8 +4,9 @@
 #' factor. See also other related functions such as [estimate_means()]
 #' and [estimate_slopes()].
 #'
-#' @param contrast A character vector indicating the name of the variable(s)
-#' for which to compute the contrasts.
+#' @param contrast A character vector indicating the name of the variable(s) for
+#' which to compute the contrasts, optionally including representative values or
+#' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
 #' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
@@ -90,7 +91,7 @@
 #'   data = iris,
 #'   refresh = 0
 #' )
-#' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length=[sd]", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
