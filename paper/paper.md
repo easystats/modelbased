@@ -155,7 +155,7 @@ The `estimate_relation()` and `estimate_means()` functions utilize a balanced da
 
 When the focus is on the *predicted outcome*, it is more appropriate to consider the empirical distribution of focal predictor characteristics rather than a balanced data grid. This can be achieved by changing the `estimate` argument within `estimate_means()`. Setting `estimate = "average"` calculates the average expected outcome from those observations _from the sample_ defined by the focal predictors.
 
-For analyses emphasizing outcome differences between groups (e.g., when computing contrasts) and particularly when causal effects are being considered, it may be beneficial to model a hypothetical population not directly represented in the sample. This approach, known as *G-computation* [@chatton_rohrer_2024], is implemented by setting `estimate = "population"` within `estimate_means()`.  This `estimate` argument is also available for the `estimate_contrasts()` function.
+For analyses emphasizing outcome differences between groups (e.g., when computing contrasts) and particularly when causal effects are being considered, it may be beneficial to model a hypothetical population not directly represented in the sample. This approach, known as *G-computation* [@chatton_rohrer_2024], is implemented by setting `estimate = "population"` within `estimate_means()`.  This option is also available for the `estimate_contrasts()` function.
 
 ## Technical details
 
