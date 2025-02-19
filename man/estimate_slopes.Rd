@@ -26,7 +26,7 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). \code{by} can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictos are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
+focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
 \emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
 "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in

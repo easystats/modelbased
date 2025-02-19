@@ -12,7 +12,7 @@
 #' included here will be collapsed and "averaged" over (the effect will be
 #' estimated across them). `by` can be a character (vector) naming the focal
 #' predictors, optionally including representative values or levels at which
-#' focal predictos are evaluated (e.g., `by="x=c(1,2)"`). When `estimate` is
+#' focal predictors are evaluated (e.g., `by="x=c(1,2)"`). When `estimate` is
 #' *not* `"average"`, the `by` argument is used to create a "reference grid" or
 #' "data grid" with representative values for the focal predictors. In this
 #' case, `by` can also be list of named elements. See details in
