@@ -31,7 +31,11 @@ if (!getRversion() >= "4.1.0") {
 }
 ```
 
-This vignette shows an example how to make _causual inference_ with observational data.
+This vignette shows an example how to make _causual inference_ with observational data, using the _modelbased_ package.
+
+Randomized controlled trials (RCTs) are often used to estimate the average effect of a treatment or an intervention, also called _average treatmen effect_ (ATE). The ATE is the average difference in the estimated outcome between individuals from the treatment and the control group, and can be interpreted as _causal effect_.
+
+Outside RCTs, with observational data, or when the allocation of a treatment and control group could not be randomized, estimating causal effects is more difficult.
 
 ```{r}
 data(lalonde, package = "MatchIt")
