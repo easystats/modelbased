@@ -32,7 +32,8 @@ Once you have downloaded the package, you can then load it using:
 library("modelbased")
 ```
 
-> \[!TIP\] Instead of `library(modelbased)`, use `library(easystats)`,
+> \[!TIP\]
+> Instead of `library(modelbased)`, use `library(easystats)`,
 > which will make all features of the easystats-ecosystem available. You
 > can also use `easystats::install_latest()` to stay updated.
 
