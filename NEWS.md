@@ -31,7 +31,7 @@
 * `print_html()` and `print_md()` pass `...` to format-methods (e.g. to
   `insight::format_table()`), to tweak the output.
 
-* The `show_data()` argument in `plot()` is automatically set to `FALSE` when
+* The `show_data` argument in `plot()` is automatically set to `FALSE` when
   the models has a transformed response variable, but predictions were not
   back-transformed using the `transform` argument.
 
