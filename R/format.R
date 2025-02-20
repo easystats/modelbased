@@ -331,8 +331,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         for (j in seq_along(all_levels)) {
           comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
         }
-        # remove double spaces
-        gsub("  ", " ", comparison_pair, fixed = TRUE)
+        # remove multiple spaces
+        gsub("[[:space:]]{2,}", " ", comparison_pair)
       })
 
       # we now have a data frame with each comparison-pairs as single column.
