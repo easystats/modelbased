@@ -754,3 +754,30 @@ test_that("estimate_contrast, slopes with emmeans", {
   expect_equal(out$Difference, c(-0.12981, 0.04095, 0.17076), tolerance = 1e-4)
   expect_identical(as.character(out$Level1), c("setosa", "setosa", "versicolor"))
 })
+
+
+test_that("estimate_contrast, slopes with emmeans", {
+  set.seed(123)
+  dat <- data.frame(
+    outcome = rbinom(n = 100, size = 1, prob = 0.35),
+    var_binom = as.factor(rbinom(n = 100, size = 1, prob = 0.2)),
+    var_cont = rnorm(n = 100, mean = 10, sd = 7)
+  )
+  dat$var_cont <- datawizard::standardize(dat$var_cont)
+
+  m1 <- glm(
+    outcome ~ var_binom + var_cont,
+    data = dat,
+    family = binomial(link = "logit")
+  )
+
+  # range of values
+  out <- estimate_contrasts(
+    m1,
+    c("var_binom", "var_cont"),
+    predict = "link",
+    transform = exp,
+    length = 3
+  )
+  expect_snapshot(print(out, table_width = Inf))
+})
