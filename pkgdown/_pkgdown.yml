@@ -42,6 +42,7 @@ navbar:
       menu:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
+        - text: -------
         - text: "Data grids"
           href: articles/visualisation_matrix.html
         - text: "Marginal means"
@@ -50,14 +51,16 @@ navbar:
           href: articles/estimate_contrasts.html
         - text: "Marginal effects and derivatives"
           href: articles/estimate_slopes.html
-    - text: "Interpretation"
-      menu:
+        - text: -------
+        - text: "Interpretation"
         - text: "Use a model to make predictions"
           href: articles/estimate_response.html
         - text: "Interpret models using Effect Derivatives"
           href: articles/derivatives.html
         - text: "Estimate and re-use Random Effects"
           href: articles/estimate_grouplevel.html
+        - text: -------
+        - text: "Visualization"
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
