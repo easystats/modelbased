@@ -65,7 +65,7 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
-    - text: "Contrasts and Comparisons"
+    - text: "Contrasts"
       menu:
         - text: "Contrasts and comparisons"
           href: articles/introduction_comparisons_1.html
