@@ -439,3 +439,17 @@ test_that("estimate_means, df", {
   out2 <- estimate_contrasts(m, "c161sex", by = "c172code")
   expect_true(all(out1$p != out2$p))
 })
+
+
+test_that("estimate_means, error on invalid type", {
+  data(iris)
+  m <- lm(Sepal.Length ~ Species, data = iris)
+  expect_error(
+    estimate_contrasts(m, "Species", type = "abc"),
+    regex = "The option provided"
+  )
+  expect_error(
+    estimate_means(m, "Species", predict = "abc"),
+    regex = "The option provided"
+  )
+})
