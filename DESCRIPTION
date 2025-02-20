@@ -50,6 +50,7 @@ Suggests:
     collapse,
     correlation,
     curl,
+    DHARMa,
     easystats,
     effectsize (>= 1.0.0),
     emmeans (>= 1.10.2),

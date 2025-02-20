@@ -43,6 +43,7 @@ navbar:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
         - text: -------
+        - text: "Basics"
         - text: "Data grids"
           href: articles/visualisation_matrix.html
         - text: "Marginal means"
