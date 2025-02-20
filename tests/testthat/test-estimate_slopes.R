@@ -93,3 +93,44 @@ test_that("estimate_slopes, custom comparison", {
   expect_identical(dim(out), c(1L, 7L))
   expect_equal(out$Difference, -0.08782885, tolerance = 1e-4)
 })
+
+skip_on_cran()
+
+test_that("estimate_slopes, works with lme4", {
+  skip_if_not_installed("lme4")
+  data(CO2)
+  model_lme4 <- suppressWarnings(lme4::lmer(
+    uptake ~ conc * Plant + Treatment + (1 | Type),
+    data = CO2
+  ))
+  out <- estimate_slopes(model_lme4, trend = "conc", by = "Plant")
+  expect_identical(dim(out), c(12L, 7L))
+  expect_equal(
+    out$Slope,
+    c(
+      0.01847, 0.02553, 0.02322, 0.02119, 0.02458, 0.02548, 0.01366,
+      0.01519, 0.02286, 0.00541, 0.00632, 0.01085
+    ),
+    tolerance = 1e-3
+  )
+})
+
+
+test_that("estimate_slopes, works with glmmTMB", {
+  skip_if_not_installed("glmmTMB")
+  data(CO2)
+  model_glmmTMB <- suppressWarnings(glmmTMB::glmmTMB(
+    uptake ~ conc * Plant + (1 | Type),
+    data = CO2
+  ))
+  out <- estimate_slopes(model_glmmTMB, trend = "conc", by = "Plant")
+  expect_identical(dim(out), c(12L, 7L))
+  expect_equal(
+    out$Slope,
+    c(
+      0.01847, 0.02553, 0.02322, 0.02119, 0.02458, 0.02548, 0.01366,
+      0.01519, 0.02286, 0.00541, 0.00632, 0.01085
+    ),
+    tolerance = 1e-3
+  )
+})
