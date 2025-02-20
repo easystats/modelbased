@@ -42,6 +42,9 @@
 * Plots now use a probability scale for the y-axis for models whose response
   scale are probabilities (e.g., logistic regression).
 
+* Improved printing for `estimate_contrasts()` when one of the focal predictors
+  was numeric.
+
 ## Bug fixes
 
 * Fixed issue in the `summary()` method for `estimate_slopes()`.
