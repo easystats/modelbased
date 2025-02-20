@@ -784,4 +784,29 @@ test_that("estimate_contrast, slopes with emmeans", {
     length = 3
   )
   expect_snapshot(print(out, table_width = Inf))
+  expect_identical(
+    as.character(out$Level1),
+    c(
+      "0, 0.725", "0, 3.463", "1, -2.012", "1, 0.725", "1, 3.463",
+      "0, 3.463", "1, -2.012", "1, 0.725", "1, 3.463", "1, -2.012",
+      "1, 0.725", "1, 3.463", "1, 0.725", "1, 3.463", "1, 3.463"
+    )
+  )
+
+  out <- estimate_contrasts(
+    m1,
+    c("var_binom", "var_cont=[sd]"),
+    predict = "link",
+    transform = exp
+  )
+  expect_identical(
+    as.character(out$Level1),
+    c(
+      "var_binom 0, var_cont 0", "var_binom 0, var_cont 1", "var_binom 1, var_cont -1",
+      "var_binom 1, var_cont 0", "var_binom 1, var_cont 1", "var_binom 0, var_cont 1",
+      "var_binom 1, var_cont -1", "var_binom 1, var_cont 0", "var_binom 1, var_cont 1",
+      "var_binom 1, var_cont -1", "var_binom 1, var_cont 0", "var_binom 1, var_cont 1",
+      "var_binom 1, var_cont 0", "var_binom 1, var_cont 1", "var_binom 1, var_cont 1"
+    )
+  )
 })

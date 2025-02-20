@@ -10,13 +10,8 @@ print_md.estimate_contrasts <- function(x,
   attr <- attributes(x)
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
-  # select columns to print
-  if (!is.null(select)) {
-    out <- .format_layout(out, select)
-    attributes(out) <- utils::modifyList(attributes(out), attr)
-  }
-
-  formatted_table <- format(out, format = "markdown", include_grid = include_grid, ...)
+  formatted_table <- format(out, select = select, format = "markdown", include_grid = include_grid, ...)
+  attributes(formatted_table) <- utils::modifyList(attributes(formatted_table), attr)
 
   # remove redundant labels, for "by" variables
   formatted_table <- .remove_redundant_labels(x, formatted_table, full_labels)
