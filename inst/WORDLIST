@@ -104,6 +104,8 @@ intra
 io
 jmr
 lifecycle
+lme
+lme4
 loess
 marginaleffects
 marginalizations

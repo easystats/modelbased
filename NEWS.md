@@ -54,6 +54,8 @@
 
 * Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
+* Fixed issue in `estimate_slopes()` for models from package *lme4*.
+
 # modelbased 0.9.0
 
 ## Breaking Changes
