@@ -39,8 +39,9 @@ Randomized controlled trials (RCTs) are frequently employed to estimate the aver
 
 Estimating causal effects with observational data, where treatment and control group assignments are not randomized, presents a greater challenge due to the potential for confounding bias. In observational studies, individual characteristics associated with the outcome (e.g., age, gender, education, health status) are likely unequally distributed between the treatment and control groups. This imbalance violates a key assumption for causal effect estimation, an assumption typically satisfied by randomization in RCTs but often unmet in observational data.
 
-## Pseudo-randomization with propensity scores
+## Propensity scores and G-computation
 
+There are two approaches to address the problem of missing randomization in observational data, propensity scores and G-computation.
 
 
 ```{r}
