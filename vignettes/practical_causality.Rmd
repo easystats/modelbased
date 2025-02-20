@@ -31,11 +31,17 @@ if (!getRversion() >= "4.1.0") {
 }
 ```
 
-This vignette shows an example how to make _causual inference_ with observational data, using the _modelbased_ package.
+This vignette demonstrates how to perform causal inference with observational data using the `modelbased` package. While the examples below use the terms "treatment" and "control" groups, these labels are arbitrary and interchangeable. Causal inference can be applied to any scenario where observations are assigned to different conditions, regardless of whether a "treatment" in the medical sense is involved.
 
-Randomized controlled trials (RCTs) are often used to estimate the average effect of a treatment or an intervention, also called _average treatmen effect_ (ATE). The ATE is the average difference in the estimated outcome between individuals from the treatment and the control group, and can be interpreted as _causal effect_.
+## The lack of randomization
 
-Outside RCTs, with observational data, or when the allocation of a treatment and control group could not be randomized, estimating causal effects is more difficult.
+Randomized controlled trials (RCTs) are frequently employed to estimate the average treatment effect (ATE), which represents the average difference in outcomes between individuals in the treatment and control groups. In the context of RCTs, the ATE can be interpreted as a causal effect.
+
+Estimating causal effects with observational data, where treatment and control group assignments are not randomized, presents a greater challenge due to the potential for confounding bias. In observational studies, individual characteristics associated with the outcome (e.g., age, gender, education, health status) are likely unequally distributed between the treatment and control groups. This imbalance violates a key assumption for causal effect estimation, an assumption typically satisfied by randomization in RCTs but often unmet in observational data.
+
+## Pseudo-randomization with propensity scores
+
+
 
 ```{r}
 data(lalonde, package = "MatchIt")
