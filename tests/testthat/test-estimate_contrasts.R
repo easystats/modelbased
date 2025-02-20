@@ -84,7 +84,11 @@ test_that("estimate_contrasts - Frequentist, One factor and one continuous", {
   expect_identical(dim(estim), c(3L, 9L))
   estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2.3, 3)", backend = "marginaleffects")
   expect_identical(dim(estim), c(1L, 9L))
+  expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_identical(as.character(estim$Level1), "3")
   estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2, 3, 4)", backend = "marginaleffects")
+  expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_identical(as.character(estim$Level1), c("3", "4", "4"))
   expect_identical(dim(estim), c(3L, 9L))
 })
 
