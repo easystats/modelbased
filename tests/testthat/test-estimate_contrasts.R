@@ -856,10 +856,9 @@ test_that("estimate_contrast, filter by numeric values", {
 
   out1 <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')")
   expect_equal(out1$Difference, c(0.01746, 0.01782, 0.00036), tolerance = 1e-3)
-  expect_message(
-    estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')", comparison = "b1=b2"),
-    regex = "Filtering in"
-  )
+
+  out <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')", comparison = "b1=b2")
+  expect_equal(out$Difference, -0.01745914, tolerance = 1e-4)
 })
 
 
@@ -897,9 +896,4 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 
   out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')")
   expect_identical(dim(out), c(12L, 10L))
-
-  expect_message(
-    estimate_contrasts(m, "e42dep", by = "c172code=c('low','high')", comparison = "b1=b5"),
-    regex = "Filtering in"
-  )
 })
