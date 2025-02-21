@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("MatchIt", "marginaleffects")
+pkgs <- c("glmmTMB", "marginaleffects")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -45,5 +45,71 @@ There are two approaches to address the problem of missing randomization in obse
 
 
 ```{r}
-data(lalonde, package = "MatchIt")
+# example
+library(easystats)
+data(qol_cancer, package = "parameters")
+qol_cancer$time <- as.factor(qol_cancer$time)
+
+set.seed(123)
+d <- qol_cancer |>
+  data_arrange("ID") |>
+  data_group("ID") |>
+  data_modify(treatment = rbinom(1, 1, 0.3)) |>
+  data_ungroup()
+
+d$treatment <- as.factor(d$treatment)
+
+m <- glm(
+  treatment ~ time + hospital + phq4 + education + age,
+  data = d,
+  family = binomial()
+)
+
+d$predictions <- predict(m, newdata = d, type = "response")
+d$wts <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
+
+# no interaction - no need for contrasts
+m_simple <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  weights = wts,
+  data = d
+)
+
+modelbased::estimate_contrasts(m_simple, "treatment", estimate = "population")
+
+m1 <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
+  data = d
+)
+
+m2 <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
+  weights = wts,
+  data = d
+)
+
+m3 <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
+  data = d
+)
+
+m4 <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
+  weights = wts,
+  data = d
+)
+
+parameters::compare_parameters(m1, m2, m3, m4, keep = "^treatment")
+
+modelbased::estimate_contrasts(m1, "treatment")
+modelbased::estimate_contrasts(m1, "treatment", estimate = "population")
+
+modelbased::estimate_contrasts(m3, "treatment")
+modelbased::estimate_contrasts(m3, "treatment", estimate = "population")
+
+modelbased::estimate_contrasts(m2, "treatment")
+modelbased::estimate_contrasts(m2, "treatment", estimate = "population")
+
+modelbased::estimate_contrasts(m4, "treatment")
+modelbased::estimate_contrasts(m4, "treatment", estimate = "population")
 ```

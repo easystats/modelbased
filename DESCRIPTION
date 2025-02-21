@@ -65,7 +65,6 @@ Suggests:
     logspline,
     MASS,
     Matrix,
-    MatchIt,
     marginaleffects (>= 0.25.0),
     mice,
     mgcv,
