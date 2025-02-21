@@ -810,3 +810,43 @@ test_that("estimate_contrast, slopes with emmeans", {
     )
   )
 })
+
+
+test_that("estimate_contrast, filter by numeric values", {
+  skip_if_not_installed("lme4")
+  data(iris)
+  mod <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+  out1 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(9L, 10L))
+  expect_identical(dim(out2), c(9L, 10L))
+  expect_equal(
+    out1$Difference,
+    c(-0.23635, 0.2129, 0.44924, 0.25985, -0.06644, -0.32629, 0.75604, -0.34579, -1.10183),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    out2$Difference,
+    c(0.23635, -0.25985, -0.75604, -0.2129, 0.06644, 0.34579, -0.44924, 0.32629, 1.10183),
+    tolerance = 1e-4
+  )
+
+  out1 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out2), c(3L, 10L))
+  expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
+
+  data(CO2)
+  mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
+  out1 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(132L, 10L))
+  expect_identical(dim(out2), c(132L, 10L))
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(6L, 10L))
+  expect_identical(dim(out2), c(6L, 10L))
+  expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+})
