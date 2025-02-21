@@ -161,11 +161,18 @@ Again, the `modelbased` package has a simple function to do so, `estimate_slopes
 
 Until this point we have discussed marginal means and effects as being "averaged" over non-focal predictors, but there are actually various ways of doing so. The `estimate_means()`, `estimate_contrasts()`, and `estimate_slopes()` have an `estimate` argument that determines how predictions are averaged ("marginalized"). The options are:
 
-- **"typical"** (Default): Calculates predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). For non-focal numeric predictors, it uses the mean; for non-focal categorical predictors, it averages over all the levels. This represents a "typical" observation based on the data grid and is useful for comparing groups. It answers: *"What would the average outcome be for a 'typical' observation?"*. This is the default approach when estimating marginal means using the `emmeans` package.
+- **"typical"** (default): Calculates predictions for a balanced data grid representing all combinations of focal predictor levels (specified in `by`). For non-focal numeric predictors, it uses the mean; for non-focal categorical predictors, it averages over all the levels. This represents a "typical" observation based on the data grid and is useful for comparing groups. It answers: *"What would the average outcome be for a 'typical' observation?"*. This is the default approach when estimating marginal means using the `emmeans` package.
 - **"average"**: Calculates predictions for each observation in the sample and then averages these predictions within each group defined by the focal predictors. This reflects the sample's actual distribution of non-focal predictors, not a balanced grid. It answers: *"What is the predicted value for an average observation in my data?"*.
 - **"population"**: "Clones" each observation, creating copies with all possible combinations of focal predictor levels. It then averages the predictions across these "counterfactual" observations (non-observed permutations) within each group. This extrapolates to a hypothetical broader population, considering "what if" scenarios. It answers: *"What is the predicted response for the 'average' observation in a broader possible target population?"*. This approach entails more assumptions about the likelihood of different combinations, but can be more apt to generalize.
 
 Setting `estimate = "average"` can be useful to calculate the average expected outcome from those observations _from the sample_ at hand. For analyses emphasizing outcome differences between groups (e.g., when computing contrasts) and particularly when causal effects are being considered, it may be beneficial to model a hypothetical population not directly represented in the sample. This approach, known as *G-computation* [@chatton_rohrer_2024], is implemented by setting `estimate = "population"`.
+
+## Group-level estimates for Mixed Models
+
+The `modelbased` package also provides the `estimate_grouplevel()` function, useful to obtain parameters related to random factors. These are often useful to extract the individual-level parameters (e.g., the value of the effects for each participant) based on mixed models (which can have benefits such as shrinkage and uncertainty quantification). These group-level estimates can be estimated in two manners:
+
+- **"random"** (default): Corresponds to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect
+- **"total"**: Returns the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions) and are "absolute" values of the individual-level effects on the same scale as their corresponding fixed effects.
 
 
 ## Technical details
