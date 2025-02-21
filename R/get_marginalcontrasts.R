@@ -274,7 +274,7 @@ get_marginalcontrasts <- function(model,
   # for `estimate = "average"`, we cannot create a data grid, thus we need to
   # filter manually. However, for all other `estimate` options, we can simply
   # use the data grid for filtering
-  if (!identical(estimate, "average")) {
+  if (!identical(estimate, "average") && !is.null(original_by)) {
     my_args$by <- original_by
     by_filter <- NULL
   } else if (!is.null(by_token)) {
