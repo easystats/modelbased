@@ -849,4 +849,8 @@ test_that("estimate_contrast, filter by numeric values", {
   expect_identical(dim(out1), c(6L, 10L))
   expect_identical(dim(out2), c(6L, 10L))
   expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", comparison = "b1=b2", backend = "marginaleffects")
+  expect_equal(out1$Difference[1], -1 * out2$Difference, tolerance = 1e-4)
 })
