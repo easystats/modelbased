@@ -256,6 +256,7 @@ get_marginalcontrasts <- function(model,
       comparison <- stats::as.formula(f)
       if (!is.null(original_by)) {
         my_args$by <- original_by
+        by_filter <- NULL
       }
     } else {
       # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
