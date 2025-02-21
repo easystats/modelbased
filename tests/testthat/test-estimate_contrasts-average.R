@@ -65,4 +65,7 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 
   out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')", estimate = "average")
   expect_identical(dim(out), c(12L, 10L))
+
+  out <- estimate_contrasts(m, "e42dep=c('independent','slightly dependent')", by = "c172code=c('low','mid')", estimate = "average")
+  expect_identical(dim(out), c(2L, 10L))
 })
