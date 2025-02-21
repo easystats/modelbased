@@ -154,6 +154,7 @@ get_marginalcontrasts <- function(model,
                                                      ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
+  original_by <- my_args$by
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
@@ -230,10 +231,7 @@ get_marginalcontrasts <- function(model,
         formula_rhs <- f[2]
         formula_group <- f[3]
         # can be NA when no group
-        if (is.na(formula_group) || !nzchar(formula_group)) {
-          # no grouping via formula
-          formula_group <- NULL
-        } else {
+        if (!is.na(formula_group) && nzchar(formula_group)) {
           # else, if we have groups, update by-argument
           my_args$by <- formula_group
         }
@@ -254,9 +252,11 @@ get_marginalcontrasts <- function(model,
       # for contrasts of categorical, we add the group variable and update `by`
       if (!is.null(formula_group)) {
         f <- paste(f, "|", paste(formula_group, collapse = "+"))
-        my_args$by <- formula_group
       }
       comparison <- stats::as.formula(f)
+      if (!is.null(original_by)) {
+        my_args$by <- original_by
+      }
     } else {
       # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
       comparison_slopes <- comparison
@@ -285,7 +285,9 @@ get_marginalcontrasts <- function(model,
       comparison_slopes = comparison_slopes,
       # the filter-value, in case `by` or contrast indicated any filtering
       by_filter = insight::compact_list(by_filter),
-      contrast_filter = insight::compact_list(contrast_filter)
+      contrast_filter = insight::compact_list(contrast_filter),
+      # also keep original `by`
+      original_by = original_by
     )
   )
 }
