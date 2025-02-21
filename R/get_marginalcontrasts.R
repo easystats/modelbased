@@ -234,7 +234,7 @@ get_marginalcontrasts <- function(model,
       comparison_slopes <- comparison
       # did user wanted to filter in "by"? doesn't work with custom hypothesis
       if (has_by_filter) {
-        insight::format_alert("Filering in `by` is not supported for customized `comparison`.")
+        insight::format_alert("Filtering in `by` is not supported for customized `comparison`.")
       }
     }
   } else {

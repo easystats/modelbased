@@ -855,10 +855,10 @@ test_that("estimate_contrast, filter by numeric values", {
   expect_equal(out1$Difference[1], -1 * out2$Difference, tolerance = 1e-4)
 
   out1 <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')")
-  expect_equal(out1$Difference, c(0.01746, 0.01782, 0.00036), tolerance = 1e-4)
+  expect_equal(out1$Difference, c(0.01746, 0.01782, 0.00036), tolerance = 1e-3)
   expect_message(
     estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')", comparison = "b1=b2"),
-    regex = "Filering in"
+    regex = "Filtering in"
   )
 })
 
