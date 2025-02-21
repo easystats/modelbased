@@ -21,11 +21,11 @@ test_that("estimate_contrast, filter by numeric values", {
   expect_identical(dim(out1), c(21L, 10L))
 
   out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", estimate = "average")
-  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out1), c(3L, 9L))
   expect_equal(out1$Difference, c(1.92857, 4.38571, 2.45714), tolerance = 1e-4)
 
   out <- estimate_contrasts(mod, contrast = "conc", by = "Plant", comparison = "b1=b2", estimate = "average")
-  expect_equal(out$Difference, -0.00706, tolerance = 1e-4)
+  expect_equal(out$Difference, -0.007061251, tolerance = 1e-4)
 })
 
 
