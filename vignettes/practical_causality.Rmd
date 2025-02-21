@@ -46,7 +46,9 @@ There are two approaches to address the problem of missing randomization in obse
 
 ```{r}
 # example
-library(easystats)
+library(modelbased)
+library(datawizard)
+library(parameters)
 data(qol_cancer, package = "parameters")
 qol_cancer$time <- as.factor(qol_cancer$time)
 
@@ -69,14 +71,29 @@ d$predictions <- predict(m, newdata = d, type = "response")
 d$wts <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
 
 # no interaction - no need for contrasts
-m_simple <- glmmTMB::glmmTMB(
+m_simple1 <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  data = d
+)
+
+m_simple2 <- glmmTMB::glmmTMB(
   QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
   weights = wts,
   data = d
 )
+# simple case, no interaction. ATE directly extractable from coefficient table
+compare_parameters(m_simple1, m_simple2, keep = "^treatment")
 
-modelbased::estimate_contrasts(m_simple, "treatment", estimate = "population")
+# 1. no need for contrasts
+# 2. no difference if G-computation is applied or not
+estimate_contrasts(m_simple1, "treatment")
+estimate_contrasts(m_simple2, "treatment")
 
+estimate_contrasts(m_simple1, "treatment", estimate = "population")
+estimate_contrasts(m_simple2, "treatment", estimate = "population")
+
+
+# interaction terms involved
 m1 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
   data = d
@@ -88,6 +105,20 @@ m2 <- glmmTMB::glmmTMB(
   data = d
 )
 
+# ATE no longer visible from coefficient table
+parameters::compare_parameters(m1, m2, keep = "^treatment")
+
+# still no difference for G-computation or not
+modelbased::estimate_contrasts(m1, "treatment")
+modelbased::estimate_contrasts(m1, "treatment", estimate = "population")
+
+# better with IPW
+modelbased::estimate_contrasts(m2, "treatment")
+modelbased::estimate_contrasts(m2, "treatment", estimate = "population")
+
+
+
+# more complex model
 m3 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
   data = d
@@ -99,17 +130,11 @@ m4 <- glmmTMB::glmmTMB(
   data = d
 )
 
-parameters::compare_parameters(m1, m2, m3, m4, keep = "^treatment")
-
-modelbased::estimate_contrasts(m1, "treatment")
-modelbased::estimate_contrasts(m1, "treatment", estimate = "population")
-
+# complex model, no IPW, G-computation is more accurate!
 modelbased::estimate_contrasts(m3, "treatment")
 modelbased::estimate_contrasts(m3, "treatment", estimate = "population")
 
-modelbased::estimate_contrasts(m2, "treatment")
-modelbased::estimate_contrasts(m2, "treatment", estimate = "population")
-
+# complex model, with IPW *and* G-computation (double-robust) is more accurate!
 modelbased::estimate_contrasts(m4, "treatment")
 modelbased::estimate_contrasts(m4, "treatment", estimate = "population")
 ```
