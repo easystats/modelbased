@@ -144,22 +144,25 @@ get_marginalcontrasts <- function(model,
                                                      estimate = NULL,
                                                      ...) {
   # init
-  comparison_slopes <- by_filter <- contrast_filter <- NULL
+  comparison_slopes <- contrast_filter <- NULL
+  # save `by` argument, because we will make some modifications to it
+  # only for use in this sub-function
   original_by <- my_args$by
+  # toggle message later
   has_by_filter <- FALSE
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
   # extract only variable name, in order to set up a proper formula for the
   # `hypothesis` argument. We reset `by` later
-  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+  if (!is.null(original_by) && any(grepl("=", original_by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
-    filter_index <- grep("=", my_args$by, fixed = TRUE)
+    filter_index <- grep("=", original_by, fixed = TRUE)
     for (f in filter_index) {
       # look for filter values
-      clean <- insight::trim_ws(unlist(strsplit(my_args$by[f], "=", fixed = TRUE), use.names = FALSE))
+      clean <- insight::trim_ws(unlist(strsplit(original_by[f], "=", fixed = TRUE), use.names = FALSE))
       # copy "cleaned" variable
-      my_args$by[f] <- clean[1]
+      original_by[f] <- clean[1]
     }
     # needed for warning later...
     has_by_filter <- TRUE
@@ -208,7 +211,7 @@ get_marginalcontrasts <- function(model,
         # can be NA when no group
         if (!is.na(formula_group) && nzchar(formula_group)) {
           # else, if we have groups, update by-argument
-          my_args$by <- formula_group
+          original_by <- formula_group
         }
       } else {
         # if comparison is a string, do sanity check for "comparison" argument
@@ -218,8 +221,8 @@ get_marginalcontrasts <- function(model,
       }
       # we put "by" into the formula. user either provided "by", or we put the
       # group variable from the formula into "by" (see code above), hence,
-      # "my_args$by" definitely contains the requested groups
-      formula_group <- my_args$by
+      # "original_by" definitely contains the requested groups
+      formula_group <- original_by
       # compose formula
       f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
       # for contrasts of slopes, we don *not* want the group-variable in the formula
@@ -243,12 +246,7 @@ get_marginalcontrasts <- function(model,
   }
 
   # remove "by" from "contrast"
-  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
-
-  # reset `by` - we only needed the cleaned version for the formula
-  if (!is.null(original_by)) {
-    my_args$by <- original_by
-  }
+  my_args$contrast <- setdiff(my_args$contrast, original_by)
 
   c(
     # the "my_args" argument, containing "by" and "contrast"
