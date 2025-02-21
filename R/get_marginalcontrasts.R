@@ -100,6 +100,15 @@ get_marginalcontrasts <- function(model,
     )
   }
 
+  # filter results - for `estimate_contrasts()`, we don't filter using the
+  # data grid; due to the flexible way of defining comparisons, we need the
+  # full data grid and filter here (e.g., when we have `by="Petal.Width=c(1, 2)"`)
+  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
+    for (i in names(my_args$by_filter)) {
+      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
+    }
+  }
+
   # adjust p-values
   if (!model_info$is_bayesian) {
     out <- .p_adjust(model, out, p_adjust, verbose, ...)
@@ -144,28 +153,40 @@ get_marginalcontrasts <- function(model,
                                                      estimate = NULL,
                                                      ...) {
   # init
-  comparison_slopes <- contrast_filter <- NULL
-  # save `by` argument, because we will make some modifications to it
-  # only for use in this sub-function
-  original_by <- my_args$by
-  # toggle message later
-  has_by_filter <- FALSE
+  comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
 
   # make sure "by" is a valid column name, and no filter-directive,
   # like "Species='setosa'". If `by` is also used for filtering, split and
-  # extract only variable name, in order to set up a proper formula for the
-  # `hypothesis` argument. We reset `by` later
-  if (!is.null(original_by) && any(grepl("=", original_by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
+  # extract filter value for later - we have to filter rows manually after
+  # calculating contrasts. Furthermore, "clean" `by` argument (remove filter)
+  if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
-    filter_index <- grep("=", original_by, fixed = TRUE)
+    filter_index <- grep("=", my_args$by, fixed = TRUE)
     for (f in filter_index) {
       # look for filter values
-      clean <- insight::trim_ws(unlist(strsplit(original_by[f], "=", fixed = TRUE), use.names = FALSE))
-      # copy "cleaned" variable
-      original_by[f] <- clean[1]
+      filter_value <- insight::trim_ws(unlist(
+        strsplit(my_args$by[f], "=", fixed = TRUE),
+        use.names = FALSE
+      ))
+      if (length(filter_value) > 1) {
+        # parse filter value and save for later use - we create a named list,
+        # because we need to know *which* variables in `by` used a filter. we
+        # could have `by = c("x", "y=c(1,2)")`, but also `by = c("x=c('a','b')", "y")`.
+        # the list has the variable name as name, and the filter values as element
+        by_value <- stats::setNames(
+          list(.safe(eval(str2lang(filter_value[2])))),
+          filter_value[1]
+        )
+        by_filter <- c(by_filter, by_value)
+        # check if evaluation was possible, or if we had a "token", like
+        # "[sd]" or "[fivenum]". If not, update `by`, else preserve
+        if (is.null(by_value[[1]]) && !grepl("[\\[\\]]", filter_value[2])) {
+          by_token <- c(by_token, stats::setNames(list(filter_value[2]), filter_value[1]))
+        }
+        # copy "cleaned" variable
+        my_args$by[f] <- filter_value[1]
+      }
     }
-    # needed for warning later...
-    has_by_filter <- TRUE
   }
 
   # if filtering is requested for contrasts, we also want to extract the filter
@@ -209,9 +230,12 @@ get_marginalcontrasts <- function(model,
         formula_rhs <- f[2]
         formula_group <- f[3]
         # can be NA when no group
-        if (!is.na(formula_group) && nzchar(formula_group)) {
+        if (is.na(formula_group) || !nzchar(formula_group)) {
+          # no grouping via formula
+          formula_group <- NULL
+        } else {
           # else, if we have groups, update by-argument
-          original_by <- formula_group
+          my_args$by <- formula_group
         }
       } else {
         # if comparison is a string, do sanity check for "comparison" argument
@@ -221,8 +245,8 @@ get_marginalcontrasts <- function(model,
       }
       # we put "by" into the formula. user either provided "by", or we put the
       # group variable from the formula into "by" (see code above), hence,
-      # "original_by" definitely contains the requested groups
-      formula_group <- original_by
+      # "my_args$by" definitely contains the requested groups
+      formula_group <- my_args$by
       # compose formula
       f <- paste(formula_lhs, "~", paste(formula_rhs, collapse = "+"))
       # for contrasts of slopes, we don *not* want the group-variable in the formula
@@ -230,23 +254,26 @@ get_marginalcontrasts <- function(model,
       # for contrasts of categorical, we add the group variable and update `by`
       if (!is.null(formula_group)) {
         f <- paste(f, "|", paste(formula_group, collapse = "+"))
+        my_args$by <- formula_group
       }
       comparison <- stats::as.formula(f)
     } else {
       # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
       comparison_slopes <- comparison
-      # did user wanted to filter in "by"? doesn't work with custom hypothesis
-      if (has_by_filter) {
-        insight::format_alert("Filtering in `by` is not supported for customized `comparison`.")
-      }
     }
   } else {
     # default to pairwise, if comparison = NULL
     comparison <- comparison_slopes <- ~pairwise
   }
-
   # remove "by" from "contrast"
-  my_args$contrast <- setdiff(my_args$contrast, original_by)
+  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+
+  # add back token to `by`
+  if (!is.null(by_token)) {
+    for (i in names(by_token)) {
+      my_args$by[my_args$by == i] <- paste(i, by_token[[i]], sep = "=")
+    }
+  }
 
   c(
     # the "my_args" argument, containing "by" and "contrast"
@@ -256,7 +283,8 @@ get_marginalcontrasts <- function(model,
       comparison = comparison,
       # the modifed comparison, as formula, excluding "by" as group
       comparison_slopes = comparison_slopes,
-      # the filter-value, in case contrast indicated any filtering
+      # the filter-value, in case `by` or contrast indicated any filtering
+      by_filter = insight::compact_list(by_filter),
       contrast_filter = insight::compact_list(contrast_filter)
     )
   )
