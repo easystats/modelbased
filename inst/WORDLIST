@@ -18,6 +18,7 @@ Hernan
 Hernán
 ICC's
 ICCs
+IPW
 Intersectional
 Intersectionality
 Leckie
@@ -38,7 +39,9 @@ ORCID
 Owww
 PCVs
 PCV
+QoL
 Psychometrika
+RCTs
 README
 Rohrer
 RTs
@@ -70,6 +73,8 @@ codecov
 computable
 conditionspeed
 counterfactuals
+confounder
+confounders
 dat
 datagrid
 datawizard
@@ -81,6 +86,7 @@ effectsize
 emmeans
 emtrends
 et
+exchangeability
 favour
 fdr
 fmwww
@@ -111,6 +117,7 @@ marginaleffects
 marginalizations
 mattansb
 modelisation
+modelled
 modelling
 natively
 nd

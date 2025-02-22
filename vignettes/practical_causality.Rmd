@@ -97,7 +97,7 @@ m1 <- glmmTMB::glmmTMB(
 model_parameters(m1, keep = "^treatment")
 ```
 
-Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is caluclated.
+Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is calulated.
 
 ```{r}
 # logistic regression model
@@ -132,13 +132,13 @@ Given the simplicity of the model, g-computation offers no significant advantage
 estimate_contrasts(m2, "treatment", estimate = "population")
 ```
 
- However, we have not properly modelled the longitudinal nature of our data. Since patients' quality of life (QoL) was measured at three distinct time points, allowing for an examination of treatment effects over time, we need to include an interaction between `treatment` and `time`. This unreveals a substantially greater increase in QoL over time within the treatment group. In such more complex modeling scenarios, g-computation becomes particularly advantageous.
+ However, we have not properly modelled the longitudinal nature of our data. Since patients' quality of life (QoL) was measured at three distinct time points, allowing for an examination of treatment effects over time, we need to include an interaction between `treatment` and `time`. This revealed a substantially greater increase in QoL over time within the treatment group. In such more complex modeling scenarios, g-computation becomes particularly advantageous.
 
 ```{r fig.width = 6, fig.height = 4.5, out.width = "90%", out.height = "90%"}
 # interaction terms involved
 m3 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
-  weights = wts,
+  weights = ipw,
   data = d
 )
 estimate_means(
@@ -148,7 +148,7 @@ estimate_means(
 ) |> plot()
 ```
 
-We now see that the coefficient table is no longer helpful, because the treatment effect cannot be isolated. If we want to know the ATE of `treatment`, we need to calculate contrasts fo the levels of our `treatment` predictor.
+We now see that the coefficient table is no longer helpful, because the treatment effect cannot be isolated. If we want to know the ATE of `treatment`, we need to calculate contrasts for the levels of our `treatment` predictor.
 
 ```{r}
 # ATE no longer visible from coefficient table
@@ -164,7 +164,7 @@ In even more complex scenarios, g-computation remains a valuable tool for genera
 # more complex model
 m4 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
-  weights = wts,
+  weights = ipw,
   data = d
 )
 
