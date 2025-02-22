@@ -182,12 +182,14 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
+
+  # fitfth step: post-processin marginal means---------------------------------
+  # ---------------------------------------------------------------------------
+
   # filter "by" rows when we have "average" marginalization, because we don't
   # pass data grid in such situations - but we still created the data grid based
   # on the `by` variables, for internal use, for example filtering at this point
-  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
-    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
-  }
+  means <- .filter_datagrid_average(means, estimate, datagrid, datagrid_info)
 
   # back-transform from link-scale? this functions is...
   # - only called for means, not contrasts, because for contrasts we rely on
@@ -210,6 +212,7 @@ get_marginalmeans <- function(model,
     means$term <- gsub(" ", "", comparison, fixed = TRUE)
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
+
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
@@ -264,6 +267,51 @@ get_marginalmeans <- function(model,
   }
 
   out
+}
+
+
+# filter datagrid foe `estimate = "average"`---------------------------------
+
+.filter_datagrid_average <- function(means, estimate, datagrid, datagrid_info) {
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    # sanity check - are all filter values from the data grid in the marginaleffects
+    # object? For `estimate_average()`, predictions are based on the data, not
+    # the theoretical data grid. When users request filtering by numeric predictors,
+    # we need to make sure all filter-values (from which the dummy-data grid is built)
+    # are available for filter. E.g., `by = "Petal.Width=c(3,5)"` won't work for
+    # estimate = "average", because 3 and 5 don't appear in the iris data.
+    filter_ok <- vapply(
+      datagrid_info$at_specs$varname,
+      function(j) any(datagrid[[j]] %in% means[[j]]),
+      logical(1)
+    )
+    # stop if not...
+    if (!all(filter_ok)) {
+      # set up for informative error message
+      invalid_filters <- names(filter_ok)[!filter_ok]
+      first_invalid <- invalid_filters[1]
+      example_values <- sample(
+        unique(means[[first_invalid]]),
+        pmin(3, insight::n_unique(means[[first_invalid]]))
+      )
+      # tell user...
+      insight::format_error(paste0(
+        "None of the values specified for the predictors ",
+        datawizard::text_concatenate(invalid_filters, enclose = "`"),
+        " are available in the data. This is required for `estimate=\"average\"`.",
+        " Either use a different option for the `estimate` argument, or use values that",
+        " are present in the data, such as ",
+        datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
+        "."
+      ))
+    }
+    # else, filter values
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+  means
 }
 
 
