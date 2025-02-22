@@ -283,21 +283,22 @@ get_marginalmeans <- function(model,
     # we need to make sure all filter-values (from which the dummy-data grid is built)
     # are available for filter. E.g., `by = "Petal.Width=c(3,5)"` won't work for
     # estimate = "average", because 3 and 5 don't appear in the iris data.
-    all_available <- vapply(
+    filter_ok <- vapply(
       datagrid_info$at_specs$varname,
-      function(j) all(datagrid[[j]] %in% means[[j]]),
+      function(j) any(datagrid[[j]] %in% means[[j]]),
       logical(1)
     )
     # stop if not...
-    if (!all(all_available)) {
+    if (!all(filter_ok)) {
       # set up for informative error message
-      first_invalid <- names(all_available)[!all_available][1]
+      invalid_filters <- names(filter_ok)[!filter_ok]
+      first_invalid <- invalid_filters[1]
       nunique <- insight::n_unique(means[[first_invalid]])
       example_values <- sample(unique(means[[first_invalid]]), pmin(3, nunique))
       # tell user...
       insight::format_error(paste0(
         "Not all values specified for the predictors ",
-        datawizard::text_concatenate(names(all_available)[!all_available], enclose = "`"),
+        datawizard::text_concatenate(invalid_filters, enclose = "`"),
         " are available in the data. This is required for `estimate=\"average\"`.",
         " Either use a different option for the `estimate` argument, or use values that",
         " are present in the data, such as ",
