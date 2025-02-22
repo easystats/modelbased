@@ -152,7 +152,7 @@ get_marginalcontrasts <- function(model,
       if (!filter_ok) {
         # set up informative message
         example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
-          # tell user...
+        # tell user...
         insight::format_error(paste0(
           "None of the values specified for the predictor `", i,
           "` are available in the data. This is required for `estimate=\"average\"`.",

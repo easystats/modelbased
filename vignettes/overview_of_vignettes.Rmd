@@ -53,6 +53,8 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 ### Workflows
 
 * [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
+* [Causal inference for observational data](https://easystats.github.io/modelbased/articles/practical_causality.html)
+
 * [Intersectionality analysis using the MAIHDA framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.html)
 
 ### Contrasts
