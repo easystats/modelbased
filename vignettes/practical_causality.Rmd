@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("glmmTMB", "marginaleffects", "ggplot2")
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -158,7 +158,7 @@ model_parameters(m3, keep = "^treatment")
 estimate_contrasts(m3, "treatment", estimate = "population")
 ```
 
-In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This final example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results clearly demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
+In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results clearly demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
 
 ```{r}
 # more complex model
@@ -175,7 +175,7 @@ estimate_contrasts(m4, "treatment")
 estimate_contrasts(m4, "treatment", estimate = "population")
 ```
 
-The final example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
+The last example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
 The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
 
@@ -208,5 +208,7 @@ estimate_contrasts(
 This vignette explored the estimation of average treatment effects (ATEs) from observational data, focusing on the application of inverse probability weighting (IPW) and g-computation. While both methods address confounding bias inherent in non-randomized studies, they offer distinct strengths. IPW provides a straightforward approach for incorporating weights into regression models, simplifying ATE interpretation in basic models. However, g-computation excels in more complex scenarios, such as those involving longitudinal data and interaction terms, where isolating treatment effects becomes challenging.
 
 Our examples demonstrated the utility of both methods. Specifically, we showed that while IPW effectively estimates the ATE in a simple model, g-computation becomes essential when modeling the interaction between `treatment` and `time`. Furthermore, combining IPW with g-computation, as illustrated in our last examples, offers increased accuracy, highlighting the benefits of this "doubly robust" approach for estimating ATEs in complex models.
+
+Combining IPW and g-computation doesn't introduce any additional bias and hence has no negative effects. While IPW alone can sometimes be less accurate than g-computation, particularly when g-computation is feasible, the most reliable estimates are achieved by using both methods together. Therefore, we recommend their combined use.
 
 # References
