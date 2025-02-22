@@ -42,7 +42,7 @@ Estimating causal effects with observational data, where treatment and control g
 
 ## Propensity scores and G-computation
 
-Two primary methods exist for addressing the lack of randomization in observational data: propensity scores and g-computation. Regarding propensity scores, this vignette focuses on _inverse probability weighting_ (IPW), a common technique for estimating propensity scores ([@chatton_causal_2024; @gabriel_inverse_2024]).
+Two primary methods exist for addressing the lack of randomization in observational data: propensity scores and g-computation. Regarding propensity scores, this vignette focuses on _inverse probability weighting_ (IPW), a common technique for estimating propensity scores [@chatton_causal_2024; @gabriel_inverse_2024].
 
 IPW assigns weights to individual observations to reflect their contribution to the outcome under the assumption of exchangeability between groups. When specific characteristics are over-represented in the treatment group, IPW assigns lower weights to these individuals, thereby adjusting for the imbalanced distribution of confounders between treatment and control groups.
 
