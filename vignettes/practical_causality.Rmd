@@ -151,38 +151,62 @@ estimate_means(
 We now see that the coefficient table is no longer helpful, because the treatment effect cannot be isolated. If we want to know the ATE of `treatment`, we need to calculate contrasts fo the levels of our `treatment` predictor.
 
 ```{r}
-model_parameters(m3, keep = "^treatment")
-estimate_contrasts(m3, "treatment", estimate = "population")
-
 # ATE no longer visible from coefficient table
-parameters::compare_parameters(m1, m2, keep = "^treatment")
+model_parameters(m3, keep = "^treatment")
 
-# still no difference for G-computation or not
-modelbased::estimate_contrasts(m1, "treatment")
-modelbased::estimate_contrasts(m1, "treatment", estimate = "population")
+# contrasts of treatment levels, using g-computation
+estimate_contrasts(m3, "treatment", estimate = "population")
+```
 
-# better with IPW
-modelbased::estimate_contrasts(m2, "treatment")
-modelbased::estimate_contrasts(m2, "treatment", estimate = "population")
+In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This final example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results clearly demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
 
-
+```{r}
 # more complex model
-m3 <- glmmTMB::glmmTMB(
-  QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
-  data = d
-)
-
 m4 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
   weights = wts,
   data = d
 )
 
-# complex model, no IPW, G-computation is more accurate!
-modelbased::estimate_contrasts(m3, "treatment")
-modelbased::estimate_contrasts(m3, "treatment", estimate = "population")
+# complex model, no g-computation
+estimate_contrasts(m4, "treatment")
 
-# complex model, with IPW *and* G-computation (double-robust) is more accurate!
-modelbased::estimate_contrasts(m4, "treatment")
-modelbased::estimate_contrasts(m4, "treatment", estimate = "population")
+# complex model, with IPW *and* G-computation (double-robust) is accurate!
+estimate_contrasts(m4, "treatment", estimate = "population")
 ```
+
+The final example completes the "causual inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
+
+The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
+
+```{r}
+library(insight)
+
+# we need the data used to fit the model - this may not be
+# identical to the original data due to case-wise deletion
+model_data <- get_data(m4)
+
+# the ATT - apply g-computation only to the subset of the treated
+estimate_contrasts(
+  m4,
+  "treatment",
+  newdata = subset(model_data, treatment == 1),
+  estimate = "population"
+)
+
+# the ATU - apply g-computation only to the subset of the conrol
+estimate_contrasts(
+  m4,
+  "treatment",
+  newdata = subset(model_data, treatment == 0),
+  estimate = "population"
+)
+```
+
+# Conclusion
+
+This vignette explored the estimation of average treatment effects (ATEs) from observational data, focusing on the application of inverse probability weighting (IPW) and g-computation. While both methods address confounding bias inherent in non-randomized studies, they offer distinct strengths. IPW provides a straightforward approach for incorporating weights into regression models, simplifying ATE interpretation in basic models. However, g-computation excels in more complex scenarios, such as those involving longitudinal data and interaction terms, where isolating treatment effects becomes challenging.
+
+Our examples demonstrated the utility of both methods. Specifically, we showed that while IPW effectively estimates the ATE in a simple model, g-computation becomes essential when modeling the interaction between `treatment` and `time`. Furthermore, combining IPW with g-computation, as illustrated in our last examples, offers increased accuracy, highlighting the benefits of this "doubly robust" approach for estimating ATEs in complex models.
+
+# References
