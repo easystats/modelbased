@@ -58,13 +58,20 @@ library(parameters)
 data(qol_cancer, package = "parameters")
 qol_cancer$time <- as.factor(qol_cancer$time)
 
-set.seed(123)
+set.seed(1234)
 d <- qol_cancer |>
   data_arrange("ID") |>
   data_group("ID") |>
-  data_modify(treatment = rbinom(1, 1, 0.3)) |>
+  data_modify(treatment = rbinom(1, 1, ifelse(education == "high", 0.7, 0.4))) |>
   data_ungroup()
 
+set.seed(1234)
+# average treatment effect is about 4.8
+d$QoL <- d$QoL + rnorm(
+  nrow(d),
+  d$treatment * 6 + ifelse(d$education == "high", 4, 0),
+  sd = 2
+)
 d$treatment <- as.factor(d$treatment)
 
 m <- glm(
@@ -121,7 +128,6 @@ modelbased::estimate_contrasts(m1, "treatment", estimate = "population")
 # better with IPW
 modelbased::estimate_contrasts(m2, "treatment")
 modelbased::estimate_contrasts(m2, "treatment", estimate = "population")
-
 
 
 # more complex model
