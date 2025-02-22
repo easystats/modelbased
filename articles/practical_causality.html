@@ -317,6 +317,9 @@ particularly advantageous.</p>
 <span>  weights <span class="op">=</span> <span class="va">ipw</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># estimated marginal means, to show how treatment</span></span>
+<span><span class="co"># develops over time between treatment and control conditions</span></span>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">m3</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"treatment"</span><span class="op">)</span>,</span>
@@ -351,7 +354,7 @@ our <code>treatment</code> predictor.</p>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <p>In even more complex scenarios, g-computation remains a valuable tool
-for generating accurate estimates. This final example compares “simple”
+for generating accurate estimates. This example compares “simple”
 contrasts derived from an IPW model with contrasts generated from the
 same model using g-computation. The results clearly demonstrate the
 increased accuracy achieved by combining IPW with g-computation in such
@@ -389,7 +392,7 @@ situations.</p>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
-<p>The final example completes the “causal inference” topic by showing
+<p>The last example completes the “causal inference” topic by showing
 how to calculate the average treatment effect on the treated (ATT), and
 average treatment effect on the untreated (ATU).</p>
 <p>The ATT measures how much the treatment changes the outcome for those
@@ -464,6 +467,11 @@ between <code>treatment</code> and <code>time</code>. Furthermore,
 combining IPW with g-computation, as illustrated in our last examples,
 offers increased accuracy, highlighting the benefits of this “doubly
 robust” approach for estimating ATEs in complex models.</p>
+<p>Combining IPW and g-computation doesn’t introduce any additional bias
+and hence has no negative effects. While IPW alone can sometimes be less
+accurate than g-computation, particularly when g-computation is
+feasible, the most reliable estimates are achieved by using both methods
+together. Therefore, we recommend their combined use.</p>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
