@@ -810,3 +810,90 @@ test_that("estimate_contrast, slopes with emmeans", {
     )
   )
 })
+
+
+test_that("estimate_contrast, filter by numeric values", {
+  skip_if_not_installed("lme4")
+  data(iris)
+  mod <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+  out1 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(9L, 10L))
+  expect_identical(dim(out2), c(9L, 10L))
+  expect_equal(
+    out1$Difference,
+    c(-0.23635, 0.2129, 0.44924, 0.25985, -0.06644, -0.32629, 0.75604, -0.34579, -1.10183),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    out2$Difference,
+    c(0.23635, -0.25985, -0.75604, -0.2129, 0.06644, 0.34579, -0.44924, 0.32629, 1.10183),
+    tolerance = 1e-4
+  )
+
+  out1 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out2), c(3L, 10L))
+  expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
+
+  data(CO2)
+  mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
+  out1 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(132L, 10L))
+  expect_identical(dim(out2), c(132L, 10L))
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(6L, 10L))
+  expect_identical(dim(out2), c(6L, 10L))
+  expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", comparison = "b1=b2", backend = "marginaleffects")
+  expect_equal(out1$Difference[1], -1 * out2$Difference, tolerance = 1e-4)
+
+  out1 <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')")
+  expect_equal(out1$Difference, c(0.01746, 0.01782, 0.00036), tolerance = 1e-3)
+
+  out <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')", comparison = "b1=b2")
+  expect_equal(out$Difference, -0.01745914, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, filterin in `by` and `contrast`", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ barthtot + c172code * e42dep + c161sex, data = efc)
+
+  out <- estimate_contrasts(m, c("e42dep", "c172code"))
+  expect_identical(dim(out), c(66L, 9L))
+
+  out <- estimate_contrasts(
+    m,
+    c("e42dep=c('independent','slightly dependent','moderately dependent')"),
+    by = "c172code"
+  )
+  expect_identical(dim(out), c(9L, 10L))
+  expect_equal(
+    out$Difference,
+    c(
+      -0.77851, 0.12142, 0.89993, 0.87674, 1.97996, 1.10322, 2.69591,
+      2.59613, -0.09978
+    ),
+    tolerance = 1e-4
+  )
+
+  out <- estimate_contrasts(
+    m,
+    "e42dep=c('independent','slightly dependent','moderately dependent')",
+    by = "c172code",
+    comparison = "b1=b4"
+  )
+  expect_equal(out$Difference, 1.163197, tolerance = 1e-4)
+
+  out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')")
+  expect_identical(dim(out), c(12L, 10L))
+})
