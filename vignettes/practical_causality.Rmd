@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("glmmTMB", "marginaleffects")
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -50,6 +50,10 @@ G-computation, rooted in the traditional methods of stratification and standardi
 
 Both propensity score and g-computation methods offer distinct advantages and disadvantages. IPW, for instance, can be directly incorporated as weights within regression models, facilitating a straightforward interpretation of the treatment coefficient as the average treatment effect (ATE). However, deriving the ATE becomes more complex in models incorporating interaction terms or other complexities.  Conversely, *modelbased* g-computation readily estimates the ATE even within complex model specifications. A robust approach often involves combining IPW and g-computation to achieve "doubly robust" estimation of the ATE [@chatton_causal_2024; @gabriel_inverse_2024]. Illustrative examples will follow.
 
+## Calculating inverse probability weights
+
+First, we create some toy data with a treatment effect that is roughly 9 points higher than the effect in the control group. The example data set has health related quality of life `QoL` as outcome, which was measured for 188 cancer patient at three time points (baseline, two follow-ups). The `treatment` variable is simulated and not part of the original data set. Since we have repeated measurements, we use the `glmmTMB` package to fit a linear mixed model to the data.
+
 ```{r}
 # example
 library(modelbased)
@@ -57,6 +61,9 @@ library(datawizard)
 library(parameters)
 data(qol_cancer, package = "parameters")
 
+# sort and group data by patient ID, then assign each patient either to
+# the treatment or control condition, with higher educated patients having
+# a higher chance belonging to the treatment group
 set.seed(1234)
 d <- qol_cancer |>
   data_arrange("ID") |>
@@ -64,59 +71,88 @@ d <- qol_cancer |>
   data_modify(treatment = rbinom(1, 1, ifelse(education == "high", 0.7, 0.4))) |>
   data_ungroup()
 
-# average treatment effect is about 9 points improvement
+# create a treatment effect that increased over time
+# with more improvements for higher educated patients
 d$QoL <- d$QoL + rnorm(
   nrow(d),
   (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0),
   sd = 2
 )
 
-d$treatment <- as.factor(d$treatment)
-d$time <- as.factor(d$time)
+# convert to factors
+d <- to_factor(d, c("treatment", "time"))
+```
 
-m <- glm(
+We first look at the simple effect of `treatment`, which is about `9.3`.
+
+```{r}
+# simple pooled effect
+m1 <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  data = d
+)
+
+# we don't need the full summary table,
+# only the coefficient for treatment
+model_parameters(m1, keep = "^treatment")
+```
+
+Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is caluclated.
+
+```{r}
+# logistic regression model
+m_ipw <- glm(
   treatment ~ time + hospital + phq4 + education + age,
   data = d,
   family = binomial()
 )
 
-d$predictions <- predict(m, newdata = d, type = "response")
-d$wts <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
+# add predictions, i.e. the probability of belonging to treatment
+# or control for each patient in the sample
+d$predictions <- predict(m_ipw, newdata = d, type = "response")
 
-# no interaction - no need for contrasts
-m_simple1 <- glmmTMB::glmmTMB(
-  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
-  data = d
-)
+# calculating the IPW
+d$ipw <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
+```
 
-m_simple2 <- glmmTMB::glmmTMB(
-  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
-  weights = wts,
-  data = d
-)
-# simple case, no interaction. ATE directly extractable from coefficient table
-compare_parameters(m_simple1, m_simple2, keep = "^treatment")
+Next, we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
 
-# 1. no need for contrasts
-# 2. no difference if G-computation is applied or not
-estimate_contrasts(m_simple1, "treatment")
-estimate_contrasts(m_simple2, "treatment")
-
-estimate_contrasts(m_simple1, "treatment", estimate = "population")
-estimate_contrasts(m_simple2, "treatment", estimate = "population")
-
-
-# interaction terms involved
-m1 <- glmmTMB::glmmTMB(
-  QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
-  data = d
-)
-
+```{r}
 m2 <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  weights = ipw,
+  data = d
+)
+model_parameters(m2, keep = "^treatment")
+```
+
+Given the simplicity of the model, g-computation offers no significant advantage in calculating contrasts between `treatment` levels, as the results are equivalent to a simpler approach.
+
+```{r}
+estimate_contrasts(m2, "treatment", estimate = "population")
+```
+
+ However, we have not properly modelled the longitudinal nature of our data. Since patients' quality of life (QoL) was measured at three distinct time points, allowing for an examination of treatment effects over time, we need to include an interaction between `treatment` and `time`. This unreveals a substantially greater increase in QoL over time within the treatment group. In such more complex modeling scenarios, g-computation becomes particularly advantageous.
+
+```{r fig.width = 6, fig.height = 4.5, out.width = "90%", out.height = "90%"}
+# interaction terms involved
+m3 <- glmmTMB::glmmTMB(
   QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
   weights = wts,
   data = d
 )
+estimate_means(
+  m3,
+  c("time", "treatment"),
+  estimate = "population"
+) |> plot()
+```
+
+We now see that the coefficient table is no longer helpful, because the treatment effect cannot be isolated. If we want to know the ATE of `treatment`, we need to calculate contrasts fo the levels of our `treatment` predictor.
+
+```{r}
+model_parameters(m3, keep = "^treatment")
+estimate_contrasts(m3, "treatment", estimate = "population")
 
 # ATE no longer visible from coefficient table
 parameters::compare_parameters(m1, m2, keep = "^treatment")
