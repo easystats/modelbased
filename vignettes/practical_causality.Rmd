@@ -56,7 +56,6 @@ library(modelbased)
 library(datawizard)
 library(parameters)
 data(qol_cancer, package = "parameters")
-qol_cancer$time <- as.factor(qol_cancer$time)
 
 set.seed(1234)
 d <- qol_cancer |>
@@ -65,14 +64,15 @@ d <- qol_cancer |>
   data_modify(treatment = rbinom(1, 1, ifelse(education == "high", 0.7, 0.4))) |>
   data_ungroup()
 
-set.seed(1234)
-# average treatment effect is about 4.8
+# average treatment effect is about 9 points improvement
 d$QoL <- d$QoL + rnorm(
   nrow(d),
-  d$treatment * 6 + ifelse(d$education == "high", 4, 0),
+  (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0),
   sd = 2
 )
+
 d$treatment <- as.factor(d$treatment)
+d$time <- as.factor(d$time)
 
 m <- glm(
   treatment ~ time + hospital + phq4 + education + age,
