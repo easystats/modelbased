@@ -189,7 +189,8 @@ get_marginalcontrasts <- function(model,
   # "Species='setosa'". If `by` is also used for filtering, split and extract
   # filter value for later - we have to filter rows manually after calculating
   # contrasts (but only for `estimate = "average"`!). Furthermore, "clean" `by`
-  # argument (remove filter)
+  # argument (remove filter), because we need the pure variable name for setting
+  # up the hypothesis argument, where variables in `by` are used in the formula
   if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$by, fixed = TRUE)
