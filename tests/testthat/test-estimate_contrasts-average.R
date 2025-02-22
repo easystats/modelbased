@@ -12,6 +12,11 @@ test_that("estimate_contrast, filter by numeric values", {
   expect_identical(dim(out1), c(5L, 10L))
   expect_equal(out1$Difference, c(0.13903, 0.06148, -0.01608, -0.09363, -0.17118), tolerance = 1e-4)
 
+  expect_error(
+    estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(2,3)", estimate = "average"),
+    regex = "None of the values"
+  )
+
   data(CO2)
   mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
   out1 <- estimate_contrasts(mod, contrast = "Plant", by = "conc", estimate = "average")

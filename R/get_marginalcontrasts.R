@@ -100,15 +100,11 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-  # filter results - for `estimate_contrasts()`, and when `estimate =
-  # "average"`, we don't filter using the data grid; due to the flexible way of
-  # defining comparisons, we need the full data grid and filter here (e.g., when
-  # we have `by="Petal.Width=c(1, 2)"`)
-  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
-    for (i in names(my_args$by_filter)) {
-      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
-    }
-  }
+  # filter results - for `estimate_contrasts()`, and when `estimate = "average"`,
+  # we don't filter using the data grid; due to the flexible way of defining
+  # comparisons, we need the full data grid and filter here (e.g., when we have
+  # `by="Petal.Width=c(1, 2)"`)
+  out <- .filter_contrasts_average(out, my_args)
 
   # adjust p-values
   if (!model_info$is_bayesian) {
@@ -138,6 +134,37 @@ get_marginalcontrasts <- function(model,
     unique(c("marginaleffects_contrasts", class(out))),
     "estimate_means"
   )
+  out
+}
+
+
+# filter "contrasts" for `estimate = "average"` -------------------------------
+
+.filter_contrasts_average <- function(out, my_args) {
+  # filter results - for `estimate_contrasts()`, and when `estimate = "average"`,
+  # we don't filter using the data grid; due to the flexible way of defining
+  # comparisons, we need the full data grid and filter here (e.g., when we have
+  # `by="Petal.Width=c(1, 2)"`)
+  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
+    for (i in names(my_args$by_filter)) {
+      filter_ok <- any(my_args$by_filter[[i]] %in% out[[i]])
+      # stop if not...
+      if (!filter_ok) {
+        # set up informative message
+        example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
+          # tell user...
+        insight::format_error(paste0(
+          "None of the values specified for the predictor `", i,
+          "` are available in the data. This is required for `estimate=\"average\"`.",
+          " Either use a different option for the `estimate` argument, or use values that",
+          " are present in the data, such as ",
+          datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
+          "."
+        ))
+      }
+      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
+    }
+  }
   out
 }
 

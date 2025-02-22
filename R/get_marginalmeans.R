@@ -293,8 +293,10 @@ get_marginalmeans <- function(model,
       # set up for informative error message
       invalid_filters <- names(filter_ok)[!filter_ok]
       first_invalid <- invalid_filters[1]
-      nunique <- insight::n_unique(means[[first_invalid]])
-      example_values <- sample(unique(means[[first_invalid]]), pmin(3, nunique))
+      example_values <- sample(
+        unique(means[[first_invalid]]),
+        pmin(3, insight::n_unique(means[[first_invalid]]))
+      )
       # tell user...
       insight::format_error(paste0(
         "None of the values specified for the predictors ",
