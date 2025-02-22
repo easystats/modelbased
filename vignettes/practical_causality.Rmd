@@ -1,8 +1,8 @@
 ---
-title: "Case Study: Casual inference for observational data using modelbased"
+title: "Case Study: Causal inference for observational data using modelbased"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case Study: Casual inference for observational data using modelbased}
+  %\VignetteIndexEntry{Case Study: Causal inference for observational data using modelbased}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
@@ -97,7 +97,7 @@ m1 <- glmmTMB::glmmTMB(
 model_parameters(m1, keep = "^treatment")
 ```
 
-Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is calulated.
+Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is calculated.
 
 ```{r}
 # logistic regression model
@@ -175,7 +175,7 @@ estimate_contrasts(m4, "treatment")
 estimate_contrasts(m4, "treatment", estimate = "population")
 ```
 
-The final example completes the "causual inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
+The final example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
 The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
 
