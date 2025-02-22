@@ -15,10 +15,11 @@ articles:
   introduction_comparisons_4: introduction_comparisons_4.html
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
+  practical_causality: practical_causality.html
   practical_intersectionality: practical_intersectionality.html
   visualisation_matrix: visualisation_matrix.html
   workflow_modelbased: workflow_modelbased.html
-last_built: 2025-02-22T11:50Z
+last_built: 2025-02-22T16:57Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
