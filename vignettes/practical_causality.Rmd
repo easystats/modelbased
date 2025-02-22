@@ -48,6 +48,8 @@ IPW assigns weights to individual observations to reflect their contribution to 
 
 G-computation, rooted in the traditional methods of stratification and standardization, addresses confounding in observational studies by partitioning the study population into strata, calculating stratum-specific outcomes, and then weighting these outcomes to represent a target population (e.g., the general population). In _modelbased_, g-computation can be implemented by setting `estimate = "population"`. This approach directly models counterfactual scenarios by creating copies of each observation, effectively assigning each individual to both treatment and control conditions. The final estimate is then derived by averaging predictions across these counterfactual observations [@dickerman_counterfactual_2020].
 
+Both propensity score and g-computation methods offer distinct advantages and disadvantages. IPW, for instance, can be directly incorporated as weights within regression models, facilitating a straightforward interpretation of the treatment coefficient as the average treatment effect (ATE). However, deriving the ATE becomes more complex in models incorporating interaction terms or other complexities.  Conversely, *modelbased* g-computation readily estimates the ATE even within complex model specifications. A robust approach often involves combining IPW and g-computation to achieve "doubly robust" estimation of the ATE [@chatton_causal_2024; @gabriel_inverse_2024]. Illustrative examples will follow.
+
 ```{r}
 # example
 library(modelbased)
