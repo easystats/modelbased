@@ -71,6 +71,8 @@ navbar:
         - text: "Workflows"
         - text: "Understanding your models"
           href: articles/workflow_modelbased.html
+        - text: "Causal inference for observational data"
+          href: articles/practical_causality.html
         - text: "Intersectionality analysis using the MAIHDA framework"
           href: articles/practical_intersectionality.html
         - text: -------
