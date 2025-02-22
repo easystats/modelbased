@@ -141,6 +141,9 @@ m3 <- glmmTMB::glmmTMB(
   weights = ipw,
   data = d
 )
+
+# estimated marginal means, to show how treatment
+# develops over time between treatment and control conditions
 estimate_means(
   m3,
   c("time", "treatment"),
