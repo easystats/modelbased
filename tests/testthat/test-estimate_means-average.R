@@ -19,7 +19,7 @@ test_that("estimate_means, filter by numeric values", {
 
   expect_error(
     estimate_means(mod, c("Species=c('versicolor','setosa')", "Petal.Width=c(3,5)"), estimate = "average"),
-    regex = "Not all values"
+    regex = "None of the values specified"
   )
 
   # data(CO2)

@@ -297,7 +297,7 @@ get_marginalmeans <- function(model,
       example_values <- sample(unique(means[[first_invalid]]), pmin(3, nunique))
       # tell user...
       insight::format_error(paste0(
-        "Not all values specified for the predictors ",
+        "None of the values specified for the predictors ",
         datawizard::text_concatenate(invalid_filters, enclose = "`"),
         " are available in the data. This is required for `estimate=\"average\"`.",
         " Either use a different option for the `estimate` argument, or use values that",
