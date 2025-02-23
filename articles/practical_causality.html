@@ -270,7 +270,11 @@ IPW is calculated.</p>
 <span></span>
 <span><span class="co"># calculating the IPW</span></span>
 <span><span class="va">d</span><span class="op">$</span><span class="va">ipw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fl">1</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">predictions</span>, <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">predictions</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p>Next, we run the same model again, including the weights. We see that
+</div>
+<div class="section level3">
+<h3 id="ate-calculated-from-ipw-in-simpler-models">ATE calculated from IPW in simpler models<a class="anchor" aria-label="anchor" href="#ate-calculated-from-ipw-in-simpler-models"></a>
+</h3>
+<p>Now we run the same model again, including the weights. We see that
 the treatment effect, after weighting, is about <code>9</code> points,
 i.e. the treatment on average results in a 9-point higher score for
 QoL.</p>
@@ -302,6 +306,11 @@ simpler approach.</p>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="ate-calculated-from-ipw-and-g-computation-in-more-complex-models">ATE calculated from IPW and g-computation in more complex
+models<a class="anchor" aria-label="anchor" href="#ate-calculated-from-ipw-and-g-computation-in-more-complex-models"></a>
+</h3>
 <p>However, we have not properly modelled the longitudinal nature of our
 data. Since patients’ quality of life (QoL) was measured at three
 distinct time points, allowing for an examination of treatment effects
@@ -392,6 +401,10 @@ situations.</p>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="average-treatment-effect-on-the-treated-and-untreated">Average treatment effect on the treated and untreated<a class="anchor" aria-label="anchor" href="#average-treatment-effect-on-the-treated-and-untreated"></a>
+</h3>
 <p>The last example completes the “causal inference” topic by showing
 how to calculate the average treatment effect on the treated (ATT), and
 average treatment effect on the untreated (ATU).</p>
