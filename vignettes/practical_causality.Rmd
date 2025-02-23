@@ -1,8 +1,8 @@
 ---
-title: "Case Study: Casual inference for observational data using modelbased"
+title: "Case Study: Causal inference for observational data using modelbased"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Case Study: Casual inference for observational data using modelbased}
+  %\VignetteIndexEntry{Case Study: Causal inference for observational data using modelbased}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("glmmTMB", "marginaleffects", "ggplot2")
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see")
 
 if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -42,7 +42,7 @@ Estimating causal effects with observational data, where treatment and control g
 
 ## Propensity scores and G-computation
 
-Two primary methods exist for addressing the lack of randomization in observational data: propensity scores and g-computation. Regarding propensity scores, this vignette focuses on _inverse probability weighting_ (IPW), a common technique for estimating propensity scores [@chatton_causal_2024; @gabriel_inverse_2024].
+Two primary methods exist for addressing the lack of randomization in observational data: propensity scores and g-computation. Regarding propensity scores, this vignette focuses on _inverse probability weighting_ (IPW), a common technique for estimating propensity scores [@chatton_causal_2024; @gabriel_inverse_2024]. Other established techniques involve _matching_ [@ho_matchit_2005], which are, however, beyond the scope of this discussion.
 
 IPW assigns weights to individual observations to reflect their contribution to the outcome under the assumption of exchangeability between groups. When specific characteristics are over-represented in the treatment group, IPW assigns lower weights to these individuals, thereby adjusting for the imbalanced distribution of confounders between treatment and control groups.
 
@@ -97,7 +97,7 @@ m1 <- glmmTMB::glmmTMB(
 model_parameters(m1, keep = "^treatment")
 ```
 
-Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is calulated.
+Next, inverse probability weights are calculated. This involves employing a regression model with the predictor of interest, `treatment`, as the outcome variable. This model estimates the probability of observed confounder variables given the treatment assignment. For binary predictors, such as the `treatment` variable in this analysis, a logistic regression model is utilized. Potential confounders serve as independent variables in this model, generating predicted probabilities for each observation's membership in either the treatment or control group. Based on these probabilities, the IPW is calculated.
 
 ```{r}
 # logistic regression model
@@ -115,7 +115,9 @@ d$predictions <- predict(m_ipw, newdata = d, type = "response")
 d$ipw <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
 ```
 
-Next, we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
+## ATE calculated from IPW in simpler models
+
+Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(
@@ -132,6 +134,8 @@ Given the simplicity of the model, g-computation offers no significant advantage
 estimate_contrasts(m2, "treatment", estimate = "population")
 ```
 
+## ATE calculated from IPW and g-computation in more complex models
+
  However, we have not properly modelled the longitudinal nature of our data. Since patients' quality of life (QoL) was measured at three distinct time points, allowing for an examination of treatment effects over time, we need to include an interaction between `treatment` and `time`. This revealed a substantially greater increase in QoL over time within the treatment group. In such more complex modeling scenarios, g-computation becomes particularly advantageous.
 
 ```{r fig.width = 6, fig.height = 4.5, out.width = "90%", out.height = "90%"}
@@ -141,6 +145,9 @@ m3 <- glmmTMB::glmmTMB(
   weights = ipw,
   data = d
 )
+
+# estimated marginal means, to show how treatment
+# develops over time between treatment and control conditions
 estimate_means(
   m3,
   c("time", "treatment"),
@@ -158,7 +165,7 @@ model_parameters(m3, keep = "^treatment")
 estimate_contrasts(m3, "treatment", estimate = "population")
 ```
 
-In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This final example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results clearly demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
+In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results clearly demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
 
 ```{r}
 # more complex model
@@ -175,7 +182,9 @@ estimate_contrasts(m4, "treatment")
 estimate_contrasts(m4, "treatment", estimate = "population")
 ```
 
-The final example completes the "causual inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
+## Average treatment effect on the treated and untreated
+
+The last example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
 The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
 
@@ -208,5 +217,7 @@ estimate_contrasts(
 This vignette explored the estimation of average treatment effects (ATEs) from observational data, focusing on the application of inverse probability weighting (IPW) and g-computation. While both methods address confounding bias inherent in non-randomized studies, they offer distinct strengths. IPW provides a straightforward approach for incorporating weights into regression models, simplifying ATE interpretation in basic models. However, g-computation excels in more complex scenarios, such as those involving longitudinal data and interaction terms, where isolating treatment effects becomes challenging.
 
 Our examples demonstrated the utility of both methods. Specifically, we showed that while IPW effectively estimates the ATE in a simple model, g-computation becomes essential when modeling the interaction between `treatment` and `time`. Furthermore, combining IPW with g-computation, as illustrated in our last examples, offers increased accuracy, highlighting the benefits of this "doubly robust" approach for estimating ATEs in complex models.
+
+Combining IPW and g-computation doesn't introduce any additional bias and hence has no negative effects. While IPW alone can sometimes be less accurate than g-computation, particularly when g-computation is feasible, the most reliable estimates are achieved by using both methods together. Therefore, we recommend their combined use.
 
 # References
