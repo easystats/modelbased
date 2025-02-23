@@ -9,6 +9,7 @@
 \method{visualisation_recipe}{estimate_predicted}(
   x,
   show_data = FALSE,
+  show_residuals = FALSE,
   point = NULL,
   line = NULL,
   pointrange = NULL,
