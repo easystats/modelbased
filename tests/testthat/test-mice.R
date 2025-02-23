@@ -13,6 +13,15 @@ test_that("pool_predictions", {
   out <- pool_predictions(predictions)
   expect_equal(out$Mean, c(29.84661, 25.20021, 23.14022), tolerance = 1e-3)
   expect_equal(out$CI_low, c(2.10117, 3.44548, -5.79522), tolerance = 1e-3)
+
+  # transformed response
+  predictions <- lapply(1:5, function(i) {
+    m <- lm(log1p(bmi) ~ age + hyp + chl, data = mice::complete(imp, action = i))
+    estimate_means(m, "age")
+  })
+  out <- pool_predictions(predictions, transform = TRUE)
+  expect_equal(out$Mean, c(29.67473, 24.99382, 23.19148), tolerance = 1e-3)
+  expect_equal(out$CI_low, c(10.58962, 11.13011, 7.43196), tolerance = 1e-3)
 })
 
 
