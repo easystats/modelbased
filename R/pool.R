@@ -142,6 +142,10 @@ pool_predictions <- function(x, transform = NULL, ...) {
   model <- attributes(x[[1]])$model
   dof <- x[[1]]$df
 
+  # we don't use the link-inverse because standard errors are calculated using
+  # the delta method, hence, these would be incorrect if we apply link-inverse
+  # transformation to calculate CIs.
+
   if (is.null(dof)) {
     dof <- Inf
   }
