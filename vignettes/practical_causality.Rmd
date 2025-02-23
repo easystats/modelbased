@@ -115,7 +115,9 @@ d$predictions <- predict(m_ipw, newdata = d, type = "response")
 d$ipw <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
 ```
 
-Next, we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
+## ATE calculated from IPW in simpler models
+
+Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(
@@ -131,6 +133,8 @@ Given the simplicity of the model, g-computation offers no significant advantage
 ```{r}
 estimate_contrasts(m2, "treatment", estimate = "population")
 ```
+
+## ATE calculated from IPW and g-computation in more complex models
 
  However, we have not properly modelled the longitudinal nature of our data. Since patients' quality of life (QoL) was measured at three distinct time points, allowing for an examination of treatment effects over time, we need to include an interaction between `treatment` and `time`. This revealed a substantially greater increase in QoL over time within the treatment group. In such more complex modeling scenarios, g-computation becomes particularly advantageous.
 
@@ -177,6 +181,8 @@ estimate_contrasts(m4, "treatment")
 # complex model, with IPW *and* G-computation (double-robust) is accurate!
 estimate_contrasts(m4, "treatment", estimate = "population")
 ```
+
+## Average treatment effect on the treated and untreated
 
 The last example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
