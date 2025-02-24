@@ -64,11 +64,11 @@ In the following example, we use the `Salamanders` dataset from the `glmmTMB` pa
 
 Adjusted predictions using `estimate_means()` can be made for the different model components:
 
-- The **conditional, or count component**, which predicts the average count of salamanders. This is the default and uses `type = "fixed"`. This would return the predicted mean from the count component only, which is the conditional mean (average counts) of the response only for "counting zeros". It does not take into account the probability of "true zeros".
+- The **conditional, or count component**, which predicts the average count of salamanders. Depending on the model-class (i.e. which package was used to fit the model), use `predict = "conditional"` (e.g., package *glmmTMB*) or `predict = "count"` (e.g., packge *pscl*). This would return the predicted mean from the count component only, which is the conditional mean (average counts) of the response only for "counting zeros". It does not take into account the probability of "true zeros".
 
-- The **full model**, which predicts the average count of the response, including the zero-inflation component. This would return the expected value of the response for an average observation, which *can* be a "true zero" or a "count zero". Use `type = "zero_inflation"` to calculate adjusted predictions that also take the zero-inflation component into account. For the above example, use this option if you want to predict the average number of customers per week, including days the store is closed.
+- The **full model**, which predicts the average count of the response, including the zero-inflation component. This would return the expected value of the response for an average observation, which *can* be a "true zero" or a "count zero". This is the default, which uses `predict = "response"`. For the above example, use this option if you want to predict the average number of customers per week, including days the store is closed.
 
-- The **zero-inflation probabilities**, which predicts the probabilities whether an observation is a "true zero" or not. Use `type = "zi_prob"` for this. It only related to the zero-inflation component of the model.
+- The **zero-inflation probabilities**, which predicts the probabilities whether an observation is a "true zero" or not. Again, this option depeends on the model-class. Use option like `predict = "zprob"` or `predict = "zero"`. These predictions only related to the zero-inflation component of the model.
 
 ```{r}
 library(modelbased)
