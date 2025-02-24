@@ -466,8 +466,9 @@ population.</p>
 <h3 id="an-important-note-on-uncertainty-estimators">An important note on uncertainty estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-uncertainty-estimators"></a>
 </h3>
 <p>For statistical inference, avoid using basic standard error
-estimators. More robust approaches include calculating bootstrapped or
-heteroskedasticity-consistent standard errors <span class="citation">(Gabriel et al. 2024)</span>.
+estimators. More robust approaches are recommended and include
+calculating bootstrapped or heteroskedasticity-consistent standard
+errors <span class="citation">(Gabriel et al. 2024)</span>.
 Heteroskedasticity-consistent errors are easily computed using the
 <code>vcov</code> argument within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
 function. However, this option is currently unavailable for models
