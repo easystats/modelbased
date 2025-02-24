@@ -203,7 +203,7 @@ for the different model components:</p>
 predicts the average count of salamanders. Depending on the model-class
 (i.e. which package was used to fit the model), use
 <code>predict = "conditional"</code> (e.g., package <em>glmmTMB</em>) or
-<code>predict = "count"</code> (e.g., packge <em>pscl</em>). This would
+<code>predict = "count"</code> (e.g., package <em>pscl</em>). This would
 return the predicted mean from the count component only, which is the
 conditional mean (average counts) of the response only for “counting
 zeros”. It does not take into account the probability of “true
@@ -217,7 +217,7 @@ example, use this option if you want to predict the average number of
 customers per week, including days the store is closed.</p></li>
 <li><p>The <strong>zero-inflation probabilities</strong>, which predicts
 the probabilities whether an observation is a “true zero” or not. Again,
-this option depeends on the model-class. Use option like
+this option depends on the model-class. Use option like
 <code>predict = "zprob"</code> or <code>predict = "zero"</code>. These
 predictions only related to the zero-inflation component of the
 model.</p></li>
