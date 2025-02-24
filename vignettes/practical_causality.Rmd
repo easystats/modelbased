@@ -214,7 +214,7 @@ estimate_contrasts(
 
 ## An important note on uncertainty estimators
 
-For statistical inference, avoid using basic standard error estimators. More robust approaches include calculating bootstrapped or heteroskedasticity-consistent standard errors [@gabriel_inverse_2024]. Heteroskedasticity-consistent errors are easily computed using the `vcov` argument within the `estimate_contrasts()` function. However, this option is currently unavailable for models created with the *glmmTMB* package. Therefore, for *glmmTMB* models, bootstrapping is the recommended alternative for robust standard errors. A fully Bayesian approach, as demonstrated here, is another option.
+For statistical inference, avoid using basic standard error estimators. More robust approaches are recommended and include calculating bootstrapped or heteroskedasticity-consistent standard errors [@gabriel_inverse_2024]. Heteroskedasticity-consistent errors are easily computed using the `vcov` argument within the `estimate_contrasts()` function. However, this option is currently unavailable for models created with the *glmmTMB* package. Therefore, for *glmmTMB* models, bootstrapping is the recommended alternative for robust standard errors. A fully Bayesian approach, as demonstrated here, is another option.
 
 ```{r eval=FALSE}
 m4 <- brms::brm(
