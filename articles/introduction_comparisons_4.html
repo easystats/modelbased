@@ -200,23 +200,27 @@ variable.</p>
 for the different model components:</p>
 <ul>
 <li><p>The <strong>conditional, or count component</strong>, which
-predicts the average count of salamanders. This is the default and uses
-<code>type = "fixed"</code>. This would return the predicted mean from
-the count component only, which is the conditional mean (average counts)
-of the response only for “counting zeros”. It does not take into account
-the probability of “true zeros”.</p></li>
+predicts the average count of salamanders. Depending on the model-class
+(i.e. which package was used to fit the model), use
+<code>predict = "conditional"</code> (e.g., package <em>glmmTMB</em>) or
+<code>predict = "count"</code> (e.g., packge <em>pscl</em>). This would
+return the predicted mean from the count component only, which is the
+conditional mean (average counts) of the response only for “counting
+zeros”. It does not take into account the probability of “true
+zeros”.</p></li>
 <li><p>The <strong>full model</strong>, which predicts the average count
 of the response, including the zero-inflation component. This would
 return the expected value of the response for an average observation,
-which <em>can</em> be a “true zero” or a “count zero”. Use
-<code>type = "zero_inflation"</code> to calculate adjusted predictions
-that also take the zero-inflation component into account. For the above
+which <em>can</em> be a “true zero” or a “count zero”. This is the
+default, which uses <code>predict = "response"</code>. For the above
 example, use this option if you want to predict the average number of
 customers per week, including days the store is closed.</p></li>
 <li><p>The <strong>zero-inflation probabilities</strong>, which predicts
-the probabilities whether an observation is a “true zero” or not. Use
-<code>type = "zi_prob"</code> for this. It only related to the
-zero-inflation component of the model.</p></li>
+the probabilities whether an observation is a “true zero” or not. Again,
+this option depeends on the model-class. Use option like
+<code>predict = "zprob"</code> or <code>predict = "zero"</code>. These
+predictions only related to the zero-inflation component of the
+model.</p></li>
 </ul>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
