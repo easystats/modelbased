@@ -212,6 +212,18 @@ estimate_contrasts(
 )
 ```
 
+## An important note on uncertainty estimators
+
+For statistical inference, avoid using basic standard error estimators. More robust approaches include calculating bootstrapped or heteroskedasticity-consistent standard errors [@gabriel_inverse_2024]. Heteroskedasticity-consistent errors are easily computed using the `vcov` argument within the `estimate_contrasts()` function. However, this option is currently unavailable for models created with the *glmmTMB* package. Therefore, for *glmmTMB* models, bootstrapping is the recommended alternative for robust standard errors. A fully Bayesian approach, as demonstrated here, is another option.
+
+```{r eval=FALSE}
+m4 <- brms::brm(
+  QoL | weights(ipw) ~ treatment * time + treatment * education + hospital +
+    age + phq4 + (1 | ID),
+  data = d
+)
+```
+
 # Conclusion
 
 This vignette explored the estimation of average treatment effects (ATEs) from observational data, focusing on the application of inverse probability weighting (IPW) and g-computation. While both methods address confounding bias inherent in non-randomized studies, they offer distinct strengths. IPW provides a straightforward approach for incorporating weights into regression models, simplifying ATE interpretation in basic models. However, g-computation excels in more complex scenarios, such as those involving longitudinal data and interaction terms, where isolating treatment effects becomes challenging.
