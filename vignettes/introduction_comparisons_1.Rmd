@@ -308,7 +308,7 @@ Let's replicate this step-by-step:
 4. Predicted value of _outcome_ for `episode = 1` in the treatment group is -0.39.
 5. Predicted value of _outcome_ for `episode = 2` in the treatment group is 0.18.
 6. The second difference is -0.17.
-7. Our quantity of interest is the difference between these two differences, which is (considering rounding inaccuray) 0.36. This difference is not statistically significant (p = 0.277).
+7. Our quantity of interest is the difference between these two differences, which is (considering rounding inaccuracy) 0.36. This difference is not statistically significant (p = 0.277).
 
 # Conclusion
 
