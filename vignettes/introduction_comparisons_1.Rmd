@@ -167,7 +167,7 @@ Again, to answer this question, we calculate all pairwise comparisons, i.e. the 
 estimate_contrasts(model2, contrast = c("episode", "grp"))
 ```
 
-For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is 0.35. We find this comparison in row 8 of the above output.
+For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is 0.06. We find this comparison in row 10 of the above output.
 
 As we can see, `estimate_contrasts()` returns pairwise comparisons of all possible combinations of factor levels from our focal variables. If we're only interested in a very specific comparison, we have two options to simplify the output:
 
