@@ -303,12 +303,12 @@ estimate_contrasts(
 Let's replicate this step-by-step:
 
 1. Predicted value of _outcome_ for `episode = 1` in the control group is 0.03.
-2. Predicted value of _outcome_ for `episode = 2` in the control group is -0.39.
-3. The first difference is 0.42.
-4. Predicted value of _outcome_ for `episode = 1` in the treatment group is 0.18.
-5. Predicted value of _outcome_ for `episode = 2` in the treatment group is -0.04.
-6. The second difference is 0.22.
-7. Our quantity of interest is the difference between these two differences, which is 0.20. This difference is not statistically significant (p = 0.277).
+2. Predicted value of _outcome_ for `episode = 2` in the control group is 0.23.
+3. The first difference is 0.20.
+4. Predicted value of _outcome_ for `episode = 1` in the treatment group is -0.39.
+5. Predicted value of _outcome_ for `episode = 2` in the treatment group is 0.18.
+6. The second difference is -0.17.
+7. Our quantity of interest is the difference between these two differences, which is (considering rounding inaccuray) 0.36. This difference is not statistically significant (p = 0.277).
 
 # Conclusion
 
