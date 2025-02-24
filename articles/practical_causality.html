@@ -462,6 +462,26 @@ population.</p>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="an-important-note-on-uncertainty-estimators">An important note on uncertainty estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-uncertainty-estimators"></a>
+</h3>
+<p>For statistical inference, avoid using basic standard error
+estimators. More robust approaches include calculating bootstrapped or
+heteroskedasticity-consistent standard errors <span class="citation">(Gabriel et al. 2024)</span>.
+Heteroskedasticity-consistent errors are easily computed using the
+<code>vcov</code> argument within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
+function. However, this option is currently unavailable for models
+created with the <em>glmmTMB</em> package. Therefore, for
+<em>glmmTMB</em> models, bootstrapping is the recommended alternative
+for robust standard errors. A fully Bayesian approach, as demonstrated
+here, is another option.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
+<span>  <span class="va">QoL</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/stats/weights.html" class="external-link">weights</a></span><span class="op">(</span><span class="va">ipw</span><span class="op">)</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span></span>
+<span>    <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">d</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
