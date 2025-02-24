@@ -13,7 +13,7 @@ predictions.
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
+[![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
 [![modelbased status
 badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
 [![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
