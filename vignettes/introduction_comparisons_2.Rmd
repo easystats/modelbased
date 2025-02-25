@@ -219,7 +219,7 @@ estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]", digits = 1)
 
 ### Floodlight analysis and Johnson-Neyman intervals
 
-Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable, which is implemented in the `johnson_neyman()` function that creates Johnson-Neyman intervals. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
+Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
 
 Let's look at an example. We first plot the predicted values of `Income` for `Murder` at different values of `Illiteracy`.
 
