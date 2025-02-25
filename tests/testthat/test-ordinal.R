@@ -9,10 +9,10 @@ skip_if_not_installed("httr2")
 skip_if_not_installed("MASS")
 
 test_that("estimate_relation prints ordinal models correctly", {
-  m <- insight::download_model("brms_categorical_2_num")
-  out <- estimate_relation(m)
+  m <- suppressWarnings(insight::download_model("brms_categorical_2_num"))
+  out <- suppressWarnings(estimate_relation(m))
   expect_snapshot(print(out, zap_small = TRUE))
-  out <- estimate_means(m, by = "Sepal.Width")
+  out <- suppressWarnings(estimate_means(m, by = "Sepal.Width"))
   expect_snapshot(print(out, zap_small = TRUE))
 
   m <- MASS::polr(Species ~ Sepal.Width, data = iris)

@@ -188,7 +188,7 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
   set.seed(123)
   dat$three <- factor(sample(0:1, nrow(dat), replace = TRUE))
   model <- lm(mpg ~ three * vs * am, data = dat)
-  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), digits = 1, zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
 
 

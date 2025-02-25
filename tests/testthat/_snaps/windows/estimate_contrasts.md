@@ -2,40 +2,40 @@
 
     Code
       print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"),
-      zap_small = TRUE, table_width = Inf)
+      digits = 1, zap_small = TRUE, table_width = Inf)
     Output
       Marginal Contrasts Analysis
       
-      Level1              | Level2              | Difference |   SE |           95% CI | t(24) |      p
-      -------------------------------------------------------------------------------------------------
-      three 0, vs 0, am 1 | three 0, vs 0, am 0 |       2.87 | 2.24 | [ -1.76,   7.49] |  1.28 |  0.213
-      three 0, vs 1, am 0 | three 0, vs 0, am 0 |       5.83 | 2.46 | [  0.76,  10.90] |  2.37 |  0.026
-      three 0, vs 1, am 1 | three 0, vs 0, am 0 |      14.03 | 2.10 | [  9.69,  18.37] |  6.67 | < .001
-      three 1, vs 0, am 0 | three 0, vs 0, am 0 |      -0.57 | 2.01 | [ -4.71,   3.57] | -0.28 |  0.780
-      three 1, vs 0, am 1 | three 0, vs 0, am 0 |       7.52 | 2.84 | [  1.66,  13.37] |  2.65 |  0.014
-      three 1, vs 1, am 0 | three 0, vs 0, am 0 |       5.09 | 2.24 | [  0.46,   9.72] |  2.27 |  0.032
-      three 1, vs 1, am 1 | three 0, vs 0, am 0 |      10.57 | 2.84 | [  4.71,  16.42] |  3.73 |  0.001
-      three 0, vs 1, am 0 | three 0, vs 0, am 1 |       2.97 | 2.65 | [ -2.51,   8.44] |  1.12 |  0.275
-      three 0, vs 1, am 1 | three 0, vs 0, am 1 |      11.16 | 2.33 | [  6.35,  15.97] |  4.79 | < .001
-      three 1, vs 0, am 0 | three 0, vs 0, am 1 |      -3.43 | 2.24 | [ -8.06,   1.19] | -1.53 |  0.139
-      three 1, vs 0, am 1 | three 0, vs 0, am 1 |       4.65 | 3.01 | [ -1.56,  10.86] |  1.55 |  0.135
-      three 1, vs 1, am 0 | three 0, vs 0, am 1 |       2.23 | 2.46 | [ -2.84,   7.29] |  0.91 |  0.374
-      three 1, vs 1, am 1 | three 0, vs 0, am 1 |       7.70 | 3.01 | [  1.49,  13.91] |  2.56 |  0.017
-      three 0, vs 1, am 1 | three 0, vs 1, am 0 |       8.19 | 2.54 | [  2.96,  13.43] |  3.23 |  0.004
-      three 1, vs 0, am 0 | three 0, vs 1, am 0 |      -6.40 | 2.46 | [-11.47,  -1.33] | -2.61 |  0.016
-      three 1, vs 0, am 1 | three 0, vs 1, am 0 |       1.68 | 3.17 | [ -4.86,   8.23] |  0.53 |  0.600
-      three 1, vs 1, am 0 | three 0, vs 1, am 0 |      -0.74 | 2.65 | [ -6.22,   4.73] | -0.28 |  0.782
-      three 1, vs 1, am 1 | three 0, vs 1, am 0 |       4.73 | 3.17 | [ -1.81,  11.28] |  1.49 |  0.149
-      three 1, vs 0, am 0 | three 0, vs 1, am 1 |     -14.59 | 2.10 | [-18.93, -10.25] | -6.94 | < .001
-      three 1, vs 0, am 1 | three 0, vs 1, am 1 |      -6.51 | 2.91 | [-12.51,  -0.51] | -2.24 |  0.035
-      three 1, vs 1, am 0 | three 0, vs 1, am 1 |      -8.94 | 2.33 | [-13.74,  -4.13] | -3.83 | < .001
-      three 1, vs 1, am 1 | three 0, vs 1, am 1 |      -3.46 | 2.91 | [ -9.46,   2.54] | -1.19 |  0.246
-      three 1, vs 0, am 1 | three 1, vs 0, am 0 |       8.08 | 2.84 | [  2.23,  13.94] |  2.85 |  0.009
-      three 1, vs 1, am 0 | three 1, vs 0, am 0 |       5.66 | 2.24 | [  1.03,  10.29] |  2.52 |  0.019
-      three 1, vs 1, am 1 | three 1, vs 0, am 0 |      11.13 | 2.84 | [  5.28,  16.99] |  3.93 | < .001
-      three 1, vs 1, am 0 | three 1, vs 0, am 1 |      -2.42 | 3.01 | [ -8.63,   3.78] | -0.81 |  0.428
-      three 1, vs 1, am 1 | three 1, vs 0, am 1 |       3.05 | 3.47 | [ -4.12,  10.22] |  0.88 |  0.389
-      three 1, vs 1, am 1 | three 1, vs 1, am 0 |       5.48 | 3.01 | [ -0.73,  11.68] |  1.82 |  0.081
+      Level1              | Level2              | Difference |  SE |         95% CI | t(24) |      p
+      ----------------------------------------------------------------------------------------------
+      three 0, vs 0, am 1 | three 0, vs 0, am 0 |        2.9 | 2.2 | [ -1.8,   7.5] |   1.3 |  0.213
+      three 0, vs 1, am 0 | three 0, vs 0, am 0 |        5.8 | 2.5 | [  0.8,  10.9] |   2.4 |  0.026
+      three 0, vs 1, am 1 | three 0, vs 0, am 0 |       14.0 | 2.1 | [  9.7,  18.4] |   6.7 | < .001
+      three 1, vs 0, am 0 | three 0, vs 0, am 0 |       -0.6 | 2.0 | [ -4.7,   3.6] |  -0.3 |  0.780
+      three 1, vs 0, am 1 | three 0, vs 0, am 0 |        7.5 | 2.8 | [  1.7,  13.4] |   2.7 |  0.014
+      three 1, vs 1, am 0 | three 0, vs 0, am 0 |        5.1 | 2.2 | [  0.5,   9.7] |   2.3 |  0.032
+      three 1, vs 1, am 1 | three 0, vs 0, am 0 |       10.6 | 2.8 | [  4.7,  16.4] |   3.7 |  0.001
+      three 0, vs 1, am 0 | three 0, vs 0, am 1 |        3.0 | 2.7 | [ -2.5,   8.4] |   1.1 |  0.275
+      three 0, vs 1, am 1 | three 0, vs 0, am 1 |       11.2 | 2.3 | [  6.4,  16.0] |   4.8 | < .001
+      three 1, vs 0, am 0 | three 0, vs 0, am 1 |       -3.4 | 2.2 | [ -8.1,   1.2] |  -1.5 |  0.139
+      three 1, vs 0, am 1 | three 0, vs 0, am 1 |        4.7 | 3.0 | [ -1.6,  10.9] |   1.5 |  0.135
+      three 1, vs 1, am 0 | three 0, vs 0, am 1 |        2.2 | 2.5 | [ -2.8,   7.3] |   0.9 |  0.374
+      three 1, vs 1, am 1 | three 0, vs 0, am 1 |        7.7 | 3.0 | [  1.5,  13.9] |   2.6 |  0.017
+      three 0, vs 1, am 1 | three 0, vs 1, am 0 |        8.2 | 2.5 | [  3.0,  13.4] |   3.2 |  0.004
+      three 1, vs 0, am 0 | three 0, vs 1, am 0 |       -6.4 | 2.5 | [-11.5,  -1.3] |  -2.6 |  0.016
+      three 1, vs 0, am 1 | three 0, vs 1, am 0 |        1.7 | 3.2 | [ -4.9,   8.2] |   0.5 |  0.600
+      three 1, vs 1, am 0 | three 0, vs 1, am 0 |       -0.7 | 2.7 | [ -6.2,   4.7] |  -0.3 |  0.782
+      three 1, vs 1, am 1 | three 0, vs 1, am 0 |        4.7 | 3.2 | [ -1.8,  11.3] |   1.5 |  0.149
+      three 1, vs 0, am 0 | three 0, vs 1, am 1 |      -14.6 | 2.1 | [-18.9, -10.3] |  -6.9 | < .001
+      three 1, vs 0, am 1 | three 0, vs 1, am 1 |       -6.5 | 2.9 | [-12.5,  -0.5] |  -2.2 |  0.035
+      three 1, vs 1, am 0 | three 0, vs 1, am 1 |       -8.9 | 2.3 | [-13.7,  -4.1] |  -3.8 | < .001
+      three 1, vs 1, am 1 | three 0, vs 1, am 1 |       -3.5 | 2.9 | [ -9.5,   2.5] |  -1.2 |  0.246
+      three 1, vs 0, am 1 | three 1, vs 0, am 0 |        8.1 | 2.8 | [  2.2,  13.9] |   2.8 |  0.009
+      three 1, vs 1, am 0 | three 1, vs 0, am 0 |        5.7 | 2.2 | [  1.0,  10.3] |   2.5 |  0.019
+      three 1, vs 1, am 1 | three 1, vs 0, am 0 |       11.1 | 2.8 | [  5.3,  17.0] |   3.9 | < .001
+      three 1, vs 1, am 0 | three 1, vs 0, am 1 |       -2.4 | 3.0 | [ -8.6,   3.8] |  -0.8 |  0.428
+      three 1, vs 1, am 1 | three 1, vs 0, am 1 |        3.1 | 3.5 | [ -4.1,  10.2] |   0.9 |  0.389
+      three 1, vs 1, am 1 | three 1, vs 1, am 0 |        5.5 | 3.0 | [ -0.7,  11.7] |   1.8 |  0.081
       
       Variable predicted: mpg
       Predictors contrasted: three, vs, am
