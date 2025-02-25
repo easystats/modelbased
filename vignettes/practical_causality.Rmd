@@ -212,9 +212,9 @@ estimate_contrasts(
 )
 ```
 
-## An important note on uncertainty estimators
+## An important note on variance estimators
 
-For statistical inference, avoid using basic standard error estimators. More robust approaches are recommended and include calculating bootstrapped or heteroskedasticity-consistent standard errors [@gabriel_inverse_2024]. Heteroskedasticity-consistent errors are easily computed using the `vcov` argument within the `estimate_contrasts()` function. However, this option is currently unavailable for models created with the *glmmTMB* package. Therefore, for *glmmTMB* models, bootstrapping is the recommended alternative for robust standard errors. A fully Bayesian approach, as demonstrated here, is another option.
+When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE). For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping or calculating heteroskedasticity-consistent standard errors [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022]. While heteroskedasticity-consistent errors can be easily computed for many models using the `vcov` argument within the `estimate_contrasts()` function, this option is not currently available for models built with the *glmmTMB* package. Consequently, for *glmmTMB* models, bootstrapping is the preferred method for obtaining robust standard errors. A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
 
 ```{r eval=FALSE}
 m4 <- brms::brm(
