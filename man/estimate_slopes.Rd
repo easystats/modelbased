@@ -65,7 +65,10 @@ can be used to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
-passed to those functions.
+passed to those functions. A \code{weights} argument is passed to the \code{wts}
+argument in \code{avg_predictions()} or \code{avg_slopes()}, however, weights can
+only be applied when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for
+those marginalization options that do not use data grids).
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using

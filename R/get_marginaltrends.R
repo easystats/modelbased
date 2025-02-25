@@ -59,6 +59,12 @@ get_marginaltrends <- function(model,
   # remove user-arguments from "..." that will be used when calling marginaleffects
   dots[c("by", "conf_level", "digits")] <- NULL
 
+  # handle weights - argument is named "wts" in marginal effects
+  if (!is.null(dots$weights)) {
+    dots$wts <- dots$weights
+    dots$weights <- NULL
+  }
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(
