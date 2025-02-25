@@ -463,19 +463,23 @@ population.</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="an-important-note-on-uncertainty-estimators">An important note on uncertainty estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-uncertainty-estimators"></a>
+<h3 id="an-important-note-on-variance-estimators">An important note on variance estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-variance-estimators"></a>
 </h3>
-<p>For statistical inference, avoid using basic standard error
-estimators. More robust approaches are recommended and include
-calculating bootstrapped or heteroskedasticity-consistent standard
-errors <span class="citation">(Gabriel et al. 2024)</span>.
-Heteroskedasticity-consistent errors are easily computed using the
-<code>vcov</code> argument within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
-function. However, this option is currently unavailable for models
-created with the <em>glmmTMB</em> package. Therefore, for
-<em>glmmTMB</em> models, bootstrapping is the recommended alternative
-for robust standard errors. A fully Bayesian approach, as demonstrated
-here, is another option.</p>
+<p>When performing statistical inference with inverse probability
+weighting (IPW), using standard variance estimators is discouraged.
+These estimators often fail to account for the variance introduced by
+the IPW itself, resulting in conservative standard errors for the
+average treatment effect (ATE). For the average treatment effect on the
+treated (ATT), standard errors can be either over- or underestimated.
+More robust methods are therefore recommended, such as bootstrapping or
+calculating heteroskedasticity-consistent standard errors <span class="citation">(Gabriel et al. 2024; Kostouraki et al. 2024; Reifeis
+and Hudgens 2022)</span>. While heteroskedasticity-consistent errors can
+be easily computed for many models using the <code>vcov</code> argument
+within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> function, this option is
+not currently available for models built with the <em>glmmTMB</em>
+package. Consequently, for <em>glmmTMB</em> models, bootstrapping is the
+preferred method for obtaining robust standard errors. A fully Bayesian
+approach, as demonstrated here, also provides a robust alternative.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">|</span> <span class="fu"><a href="https://rdrr.io/r/stats/weights.html" class="external-link">weights</a></span><span class="op">(</span><span class="va">ipw</span><span class="op">)</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span></span>
@@ -539,6 +543,22 @@ Ho, Daniel, Kosuke Imai, Gary King, Elizabeth Stuart, and Noah Greifer.
 2005. <span>“<span>MatchIt</span>: <span>Nonparametric</span>
 <span>Preprocessing</span> for <span>Parametric</span>
 <span>Causal</span> <span>Inference</span>.”</span> <a href="https://doi.org/10.32614/CRAN.package.MatchIt" class="external-link">https://doi.org/10.32614/CRAN.package.MatchIt</a>.
+</div>
+<div id="ref-kostouraki_variance_2024" class="csl-entry">
+Kostouraki, Andriana, David Hajage, Bernard Rachet, Elizabeth J.
+Williamson, Guillaume Chauvet, Aurélien Belot, and Clémence Leyrat.
+2024. <span>“On Variance Estimation of the Inverse
+Probability‐of‐treatment Weighting Estimator: <span>A</span> Tutorial
+for Different Types of Propensity Score Weights.”</span> <em>Statistics
+in Medicine</em> 43 (13): 2672–94. <a href="https://doi.org/10.1002/sim.10078" class="external-link">https://doi.org/10.1002/sim.10078</a>.
+</div>
+<div id="ref-reifeis_variance_2022" class="csl-entry">
+Reifeis, Sarah A, and Michael G Hudgens. 2022. <span>“On
+<span>Variance</span> of the <span>Treatment</span> <span>Effect</span>
+in the <span>Treated</span> <span>When</span> <span>Estimated</span> by
+<span>Inverse</span> <span>Probability</span>
+<span>Weighting</span>.”</span> <em>American Journal of
+Epidemiology</em> 191 (6): 1092–97. <a href="https://doi.org/10.1093/aje/kwac014" class="external-link">https://doi.org/10.1093/aje/kwac014</a>.
 </div>
 </div>
 </div>
