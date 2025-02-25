@@ -216,19 +216,28 @@ estimate_contrasts(
 
 When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE). For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping or calculating robust standard errors (Huber-White sandwich estimators) [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022]. While robust standard errors can be easily computed for many models using the `vcov` argument within the `estimate_contrasts()` function, this option is not currently available for models built with the *glmmTMB* package. Consequently, for *glmmTMB* models, bootstrapping is the preferred method for obtaining robust standard errors. A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
 
-```{r message=FALSE, warning=FALSE}
+```{r message=FALSE, warning=FALSE, echo=FALSE}
+library(brms)
+m5 <- suppressWarnings(brm(
+  QoL | weights(ipw) ~ treatment * time + treatment * education + hospital +
+    age + phq4 + (1 | ID),
+  refresh = 0,
+  seed = 123,
+  data = d
+))
+```
+```{r message=FALSE, warning=FALSE, eval=FALSE}
 # Same model as m4, within a Bayesian framework, using the Stan and brms package
 library(brms)
 m5 <- brm(
   QoL | weights(ipw) ~ treatment * time + treatment * education + hospital +
     age + phq4 + (1 | ID),
   refresh = 0,
-  chains = 2,
-  iter = 500,
   seed = 123,
   data = d
 )
-
+```
+```{r}
 estimate_contrasts(m5, "treatment", estimate = "population")
 ```
 
