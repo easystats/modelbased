@@ -16,15 +16,15 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300,
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  package.startup.message = FALSE
 )
 
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see")
-
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 if (!getRversion() >= "4.1.0") {
@@ -216,12 +216,19 @@ estimate_contrasts(
 
 When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE). For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping or calculating heteroskedasticity-consistent standard errors [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022]. While heteroskedasticity-consistent errors can be easily computed for many models using the `vcov` argument within the `estimate_contrasts()` function, this option is not currently available for models built with the *glmmTMB* package. Consequently, for *glmmTMB* models, bootstrapping is the preferred method for obtaining robust standard errors. A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
 
-```{r eval=FALSE}
-m4 <- brms::brm(
+```{r message=FALSE, warning=FALSE}
+library(brms)
+m5 <- brm(
   QoL | weights(ipw) ~ treatment * time + treatment * education + hospital +
     age + phq4 + (1 | ID),
+  refresh = 0,
+  chains = 2,
+  iter = 500,
+  seed = 123,
   data = d
 )
+
+estimate_contrasts(m5, "treatment", estimate = "population")
 ```
 
 # Conclusion

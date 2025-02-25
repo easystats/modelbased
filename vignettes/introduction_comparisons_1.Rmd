@@ -14,7 +14,9 @@ knitr::opts_chunk$set(
   dev = "png",
   fig.width = 7,
   fig.height = 3.5,
-  message = FALSE, warning = FALSE
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
 )
 options(width = 800)
 arrow_color <- "#FF00cc"
@@ -25,7 +27,7 @@ pkgs <- c("ggplot2", "marginaleffects", "see", "parameters")
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
