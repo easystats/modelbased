@@ -252,7 +252,9 @@ instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <cod
 passed to those functions. A <code>weights</code> argument is passed to the <code>wts</code>
 argument in <code>avg_predictions()</code> or <code>avg_slopes()</code>, however, weights can
 only be applied when <code>estimate</code> is <code>"average"</code> or <code>"population"</code> (i.e. for
-those marginalization options that do not use data grids).</p></li>
+those marginalization options that do not use data grids). Other arguments,
+such as <code>re.form</code> or <code>allow.new.levels</code>, may be passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (which
+is internally used by <em>marginaleffects</em>) if supported by that model class.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
