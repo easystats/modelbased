@@ -14,7 +14,9 @@ knitr::opts_chunk$set(
   dev = "png",
   fig.width = 7,
   fig.height = 3.5,
-  message = FALSE, warning = FALSE
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
 )
 options(width = 800)
 options(modelbased_join_dots = FALSE)
@@ -24,7 +26,7 @@ arrow_color <- "#FF00cc"
 
 pkgs <- c("ggplot2", "see", "marginaleffects", "parameters")
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
@@ -217,7 +219,7 @@ estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]", digits = 1)
 
 ### Floodlight analysis and Johnson-Neyman intervals
 
-Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable, which is implemented in the `johnson_neyman()` function that creates Johnson-Neyman intervals. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
+Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
 
 Let's look at an example. We first plot the predicted values of `Income` for `Murder` at different values of `Illiteracy`.
 

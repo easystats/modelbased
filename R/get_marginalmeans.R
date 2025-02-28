@@ -73,6 +73,13 @@ get_marginalmeans <- function(model,
       include_random = TRUE,
       verbose = FALSE
     )
+    # did user request weights? These are not supported for data-grid
+    # marginalization types
+    if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
+      insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
+      dots[c("weights", "wts")] <- NULL
+    }
+
     # always show all theoretical values by default
     if (is.null(dots$preserve_range)) {
       dg_args$preserve_range <- FALSE
@@ -117,6 +124,9 @@ get_marginalmeans <- function(model,
   # setup arguments
   fun_args <- list(model, conf_level = ci)
 
+  # handle variables/by/newdata
+  # ---------------------------
+
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
     # sanity check
@@ -135,11 +145,23 @@ get_marginalmeans <- function(model,
     fun_args$by <- datagrid_info$at_specs$varname
   }
 
+  # handle brms auxiliary
+  # ---------------------------
+
   # handle distributional parameters
   if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict_args$predict
   } else {
     fun_args$type <- predict_args$predict
+  }
+
+  # weights?
+  # ---------------------------
+
+  # handle weights - argument is named "wts" in marginal effects
+  if (!is.null(dots$weights)) {
+    dots$wts <- dots$weights
+    dots$weights <- NULL
   }
 
   # =========================================================================
