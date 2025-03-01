@@ -89,9 +89,27 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
 
   # Clean-up brms output
+  if(inherits(model, "brmsfit")) {
+    # Save brms name (just in case)
+    random$Name <- random$Parameter
+    # Filter out non-random effects
+    random <- random[grepl("^r_", random$Parameter), ]
+    # Remove Group from Level
+    random$Level <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i]))
+    # Find the group name (what follows "r_" and before the first "[" or "__")
+    random$Group <- gsub("^r_(.*?)(\\[.*|__.*)", "\\1", random$Name)
+    # Keep Parameter what's in between [ and ]
+    random$Parameter <- gsub("^r_.*?\\[(.*?)\\].*", "\\1", random$Name)
+    # Remove Level from it
+    random$Parameter <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i]))
+  }
 
   # Sort
-  random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
+  if ("Component" %in% names(random)) {
+    random <- random[order(random$Component, random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
+  } else {
+    random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
+  }
 
 
   # Assign new class
