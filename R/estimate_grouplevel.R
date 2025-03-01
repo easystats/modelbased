@@ -65,7 +65,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Filter more columns
   random <- random[, grepl("Group|Level|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
 
-  # Correct for fixed effect
+  # Correct for fixed effect (BLUPs)
   type <- match.arg(type, c("random", "total"))
   if (type == "total") {
     fixed <- as.data.frame(params[params$Effects == "fixed", ])
@@ -78,15 +78,21 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     for (col in c("SE", "SD", "MAD")) random[[col]] <- NULL
   }
 
-  # Reorganize columns
+  # Clean
+  row.names(random) <- NULL
   random$Effects <- NULL
-  random <- random[c("Group", "Level", names(random)[!names(random) %in% c("Group", "Level")])]
+  if("Component" %in% names(random) && length(unique(random$Component)) == 1 && unique(random$Component) == "conditional") {
+    random$Component <- NULL
+  }
+
+  # Reorganize columns
+  random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
+
+  # Clean-up brms output
 
   # Sort
   random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
 
-  # Clean
-  row.names(random) <- NULL
 
   # Assign new class
   attr(random, "type") <- type
