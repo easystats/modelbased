@@ -36,7 +36,7 @@ This vignette demonstrates how to perform causal inference with observational da
 
 ## The lack of randomization
 
-Randomized controlled trials (RCTs) are frequently employed to estimate the average treatment effect (ATE), which represents the average difference in outcomes between individuals in the treatment and control groups. In the context of RCTs, the ATE can be interpreted as a causal effect.
+Randomized controlled trials (RCTs) are frequently employed to estimate the average treatment effect (ATE), which represents the average difference in outcomes between individuals in the treatment and control groups (i.e., how would the outcome differ, on average, if all participants were treated versus if no participants was treated). In the context of RCTs, the ATE can be interpreted as a causal effect.
 
 Estimating causal effects with observational data, where treatment and control group assignments are not randomized, presents a greater challenge due to the potential for confounding bias. In observational studies, individual characteristics associated with the outcome (e.g., age, gender, education, health status) are likely unequally distributed between the treatment and control groups. This imbalance violates a key assumption for causal effect estimation, an assumption typically satisfied by randomization in RCTs but often unmet in observational data.
 
@@ -245,7 +245,7 @@ estimate_contrasts(m5, "treatment", estimate = "population")
 
 This vignette explored the estimation of average treatment effects (ATEs) from observational data, focusing on the application of inverse probability weighting (IPW) and g-computation. While both methods address confounding bias inherent in non-randomized studies, they offer distinct strengths. IPW provides a straightforward approach for incorporating weights into regression models, simplifying ATE interpretation in basic models. However, g-computation excels in more complex scenarios, such as those involving longitudinal data and interaction terms, where isolating treatment effects becomes challenging.
 
-Our examples demonstrated the utility of both methods. Specifically, we showed that while IPW effectively estimates the ATE in a simple model, g-computation becomes essential when modeling the interaction between `treatment` and `time`. Furthermore, combining IPW with g-computation, as illustrated in our last examples, offers increased accuracy, highlighting the benefits of this "doubly robust" approach for estimating ATEs in complex models.
+ Our examples demonstrated the utility of both methods. Specifically, we showed that while IPW effectively estimates the ATE in a simple model, g-computation becomes essential when modeling the interaction between `treatment` and `time`. IPW performs well with rare outcomes, whereas g-computation is better suited for studies with imbalanced treatment group sizes. Therefore, combining IPW with g-computation, as illustrated in our last examples, offers increased accuracy, highlighting the benefits of this "doubly robust" approach for estimating ATEs in complex models.
 
 Combining IPW and g-computation doesn't introduce any additional bias and hence has no negative effects. While IPW alone can sometimes be less accurate than g-computation, particularly when g-computation is feasible, the most reliable estimates are achieved by using both methods together. Therefore, we recommend their combined use.
 

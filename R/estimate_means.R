@@ -200,6 +200,17 @@
 #' plot(means) # which runs visualisation_recipe()
 #' standardize(means)
 #'
+#' # grids for numeric predictors, combine range and length
+#' model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+#' # range from minimum to maximum spread over four values,
+#' # and mean +/- 1 SD (a total of three values)
+#' estimate_means(
+#'   model,
+#'   by = c("Sepal.Width", "Petal.Length"),
+#'   range = c("range", "sd"),
+#'   length = c(4, 3)
+#' )
+#'
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
