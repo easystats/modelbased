@@ -518,6 +518,37 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species, Sepal.Width=0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># grids for numeric predictors, combine range and length</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># range from minimum to maximum spread over four values,</span></span></span>
+<span class="r-in"><span><span class="co"># and mean +/- 1 SD (a total of three values)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"range"</span>, <span class="st">"sd"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  length <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width | Petal.Length | Mean |   SE |       95% CI | t(146)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.00        |         1.99 | 4.23 | 0.13 | [3.98, 4.48] |  33.47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.80        |         1.99 | 4.79 | 0.06 | [4.66, 4.91] |  76.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.60        |         1.99 | 5.34 | 0.05 | [5.25, 5.43] | 116.74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.40        |         1.99 | 5.90 | 0.10 | [5.70, 6.10] |  57.96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.00        |         3.76 | 5.23 | 0.08 | [5.07, 5.38] |  67.09</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.80        |         3.76 | 5.67 | 0.03 | [5.61, 5.74] | 169.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.60        |         3.76 | 6.12 | 0.05 | [6.02, 6.23] | 117.07</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.40        |         3.76 | 6.57 | 0.10 | [6.36, 6.78] |  62.95</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.00        |         5.52 | 6.22 | 0.12 | [5.98, 6.46] |  51.44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.80        |         5.52 | 6.56 | 0.04 | [6.47, 6.65] | 148.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.60        |         5.52 | 6.90 | 0.08 | [6.74, 7.07] |  82.43</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.40        |         5.52 | 7.24 | 0.17 | [6.90, 7.58] |  41.93</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Sepal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width, Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;</span> <span class="fl">4.2</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
