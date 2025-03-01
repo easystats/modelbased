@@ -62,6 +62,9 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
+  # Filter more columns
+  random <- random[, grepl("Group|Level|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
+
   # Correct for fixed effect
   type <- match.arg(type, c("random", "total"))
   if (type == "total") {
@@ -93,10 +96,4 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 
   class(random) <- c("estimate_grouplevel", class(random))
   random
-}
-
-
-.estimate_grouplevel_bayesian <- function(model, type = "random", ...) {
-  param_names <- insight::clean_parameters(model)
-  posteriors <- insight::get_parameters(model, effects = "all", component = "all", ...)
 }

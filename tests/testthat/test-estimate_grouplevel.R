@@ -39,4 +39,13 @@ test_that("estimate_grouplevel - lme4", {
   all(reshaped$Subject == ref$Subject)
   all(reshaped$grp == ref$grp)
   all(reshaped$subgrp == ref$subgrp)
+
+
+  # # Bayesian
+  # data <- iris
+  # data$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
+  #
+  # model <- brms::brm(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data, refresh=0)
+  #
+  # random <- estimate_grouplevel(model)
 })
