@@ -1,78 +1,74 @@
-This is XeTeX, Version 3.141592653-2.6-0.999996 (MiKTeX 24.4) (preloaded format=xelatex 2025.2.19)  19 FEB 2025 12:09
+This is XeTeX, Version 3.141592653-2.6-0.999996 (TeX Live 2024) (preloaded format=xelatex 2025.2.21)  1 MAR 2025 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**./paper.tex
-(paper.tex
-LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2024-08-30>
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
-Document Class: article 2024/02/08 v1.4n Standard LaTeX document class
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\size10.clo
-File: size10.clo 2024/02/08 v1.4n Standard LaTeX file (size option)
+**paper.tex
+(./paper.tex
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2024/06/29 v1.4n Standard LaTeX document class
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2024/06/29 v1.4n Standard LaTeX file (size option)
 )
-\c@part=\count190
-\c@section=\count191
-\c@subsection=\count192
-\c@subsubsection=\count193
-\c@paragraph=\count194
-\c@subparagraph=\count195
-\c@figure=\count196
-\c@table=\count197
+\c@part=\count192
+\c@section=\count193
+\c@subsection=\count194
+\c@subsubsection=\count195
+\c@paragraph=\count196
+\c@subparagraph=\count197
+\c@figure=\count198
+\c@table=\count199
 \abovecaptionskip=\skip49
 \belowcaptionskip=\skip50
 \bibindent=\dimen141
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/marginnote\marginnote.st
-y
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/marginnote/marginnote.sty
 Package: marginnote 2018/08/09 1.4b non floating margin notes for LaTeX
-\c@mn@abspage=\count198
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+\c@mn@abspage=\count266
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
 \KV@toks@=\toks17
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
-Package: graphics 2024/05/23 v1.4g Standard LaTeX Graphics (DPC,SPQR)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.cf
-g
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
 Package graphics Info: Driver file: xetex.def on input line 106.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\xetex.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-def/xetex.def
 File: xetex.def 2022/09/22 v5.0n Graphics/color driver for xetex
 ))
 \Gin@req@height=\dimen142
 \Gin@req@width=\dimen143
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
-Package: xcolor 2023/11/15 v3.01 LaTeX color extensions (UK)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: xetex.def on input line 274.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
-Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1350.
-Package xcolor Info: Model `RGB' extended on input line 1366.
-Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1368.
-Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1369.
-Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1370.
-Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1371.
-Package xcolor Info: Model `Gray' substituted by `gray' on input line 1372.
-Package xcolor Info: Model `wave' substituted by `hsb' on input line 1373.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/preprint\authblk.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/graphics/mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/preprint/authblk.sty
 Package: authblk 2001/02/27 1.3 (PWD)
 \affilsep=\skip51
 \@affilsep=\skip52
-\c@Maxaffil=\count199
-\c@authors=\count266
-\c@affil=\count267
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
-Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count268
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/titlesec\titlesec.sty
+\c@Maxaffil=\count267
+\c@authors=\count268
+\c@affil=\count269
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2025/02/11 v2.5l e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count270
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/titlesec/titlesec.sty
 Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \ttl@box=\box52
 \beforetitleunit=\skip53
@@ -83,56 +79,34 @@ Package: titlesec 2025/01/04 v2.17 Sectioning titles
 \titlewidth=\dimen146
 \titlewidthlast=\dimen147
 \titlewidthfirst=\dimen148
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count269
-\calc@Bcount=\count270
+\calc@Acount=\count271
+\calc@Bcount=\count272
 \calc@Adimen=\dimen149
 \calc@Bdimen=\dimen150
 \calc@Askip=\skip55
 \calc@Bskip=\skip56
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count271
+\calc@Ccount=\count273
 \calc@Cskip=\skip57
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/frontendlayer\tikz.s
-ty (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgf.st
-y
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfrcs.sty
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
-common.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
 \pgfutil@everybye=\toks19
 \pgfutil@tempdima=\dimen151
 \pgfutil@tempdimb=\dimen152
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfutil-
-latex.def
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
 \pgfutil@abb=\box53
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfrcs.c
-ode.tex (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf\pgf.revisi
-on.tex)
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/pgf.revision.tex)
 Package: pgfrcs 2023-01-15 v3.1.10 (3.1.10)
 ))
 Package: pgf 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/basiclayer\pgfcore.s
-ty
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/systemlayer\pgfsys.s
-ty
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-.code.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
 Package: pgfsys 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
-code.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
 \pgfkeys@pathtoks=\toks20
 \pgfkeys@temptoks=\toks21
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeysl
-ibraryfiltered.code.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeyslibraryfiltered.code.tex
 \pgfkeys@tmptoks=\toks22
 ))
 \pgf@x=\dimen153
@@ -147,90 +121,44 @@ ibraryfiltered.code.tex
 \pgf@yd=\dimen162
 \w@pgf@writea=\write3
 \r@pgf@reada=\read2
-\c@pgf@counta=\count272
-\c@pgf@countb=\count273
-\c@pgf@countc=\count274
-\c@pgf@countd=\count275
+\c@pgf@counta=\count274
+\c@pgf@countb=\count275
+\c@pgf@countc=\count276
+\c@pgf@countd=\count277
 \t@pgf@toka=\toks23
 \t@pgf@tokb=\toks24
 \t@pgf@tokc=\toks25
-\pgf@sys@id@count=\count276
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgf.cf
-g
+\pgf@sys@id@count=\count278
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
 File: pgf.cfg 2023-01-15 v3.1.10 (3.1.10)
 )
 Driver file for pgf: pgfsys-xetex.def
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
--xetex.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-xetex.def
 File: pgfsys-xetex.def 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
--dvipdfmx.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-dvipdfmx.def
 File: pgfsys-dvipdfmx.def 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
--common-pdf.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
 File: pgfsys-common-pdf.def 2023-01-15 v3.1.10 (3.1.10)
 )
-\pgfsys@objnum=\count277
-)))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-softpath.code.tex
+\pgfsys@objnum=\count279
+))) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
 File: pgfsyssoftpath.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfsyssoftpath@smallbuffer@items=\count278
-\pgfsyssoftpath@bigbuffer@items=\count279
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/systemlayer\pgfsys
-protocol.code.tex
+\pgfsyssoftpath@smallbuffer@items=\count280
+\pgfsyssoftpath@bigbuffer@items=\count281
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
 File: pgfsysprotocol.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-.code.tex
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
 Package: pgfcore 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
-tex
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathutil.c
-ode.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathparser
-.code.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
 \pgfmath@dimen=\dimen163
-\pgfmath@count=\count280
+\pgfmath@count=\count282
 \pgfmath@box=\box54
 \pgfmath@toks=\toks26
 \pgfmath@stack@operand=\toks27
 \pgfmath@stack@operation=\toks28
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.basic.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.trigonometric.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.random.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.comparison.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.base.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.round.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.misc.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfuncti
-ons.integerarithmetics.code.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathcalc.c
-ode.tex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmathfloat.
-code.tex
-\c@pgfmathroundto@lastzeros=\count281
-))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfint.code.t
-ex)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-points.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count283
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfint.code.tex) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@picminx=\dimen164
 \pgf@picmaxx=\dimen165
@@ -246,132 +174,77 @@ File: pgfcorepoints.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@yy=\dimen175
 \pgf@zx=\dimen176
 \pgf@zy=\dimen177
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathconstruct.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
 File: pgfcorepathconstruct.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@path@lastx=\dimen178
 \pgf@path@lasty=\dimen179
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathusage.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
 File: pgfcorepathusage.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@shorten@end@additional=\dimen180
 \pgf@shorten@start@additional=\dimen181
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-scopes.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
 File: pgfcorescopes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfpic=\box55
 \pgf@hbox=\box56
 \pgf@layerbox@main=\box57
-\pgf@picture@serial@count=\count282
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-graphicstate.code.tex
+\pgf@picture@serial@count=\count284
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
 File: pgfcoregraphicstate.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgflinewidth=\dimen182
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-transformations.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
 File: pgfcoretransformations.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@pt@x=\dimen183
 \pgf@pt@y=\dimen184
 \pgf@pt@temp=\dimen185
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-quick.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
 File: pgfcorequick.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-objects.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
 File: pgfcoreobjects.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-pathprocessing.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
 File: pgfcorepathprocessing.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-arrows.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
 File: pgfcorearrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfarrowsep=\dimen186
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-shade.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
 File: pgfcoreshade.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgf@max=\dimen187
-\pgf@sys@shading@range@num=\count283
-\pgf@shadingcount=\count284
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-image.code.tex
+\pgf@sys@shading@range@num=\count285
+\pgf@shadingcount=\count286
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
 File: pgfcoreimage.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-external.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
 File: pgfcoreexternal.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfexternal@startupbox=\box58
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-layers.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
 File: pgfcorelayers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-transparency.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
 File: pgfcoretransparency.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-patterns.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
 File: pgfcorepatterns.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/basiclayer\pgfcore
-rdf.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
 File: pgfcorerdf.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodules
-hapes.code.tex
+))) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
 File: pgfmoduleshapes.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfnodeparttextbox=\box59
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulep
-lot.code.tex
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
 File: pgfmoduleplot.code.tex 2023-01-15 v3.1.10 (3.1.10)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
-p-version-0-65.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
 Package: pgfcomp-version-0-65 2023-01-15 v3.1.10 (3.1.10)
 \pgf@nodesepstart=\dimen188
 \pgf@nodesepend=\dimen189
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/compatibility\pgfcom
-p-version-1-18.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
 Package: pgfcomp-version-1-18 2023-01-15 v3.1.10 (3.1.10)
-))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgffor.sty
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/utilities\pgfkeys.st
-y
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgfkeys.
-code.tex)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/pgf/math\pgfm
-ath.sty
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/math\pgfmath.code.
-tex))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/utilities\pgffor.c
-ode.tex
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/pgf/math/pgfmath.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
 Package: pgffor 2023-01-15 v3.1.10 (3.1.10)
 \pgffor@iter=\dimen190
 \pgffor@skip=\dimen191
 \pgffor@stack=\toks29
 \pgffor@toks=\toks30
-))
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-\tikz.code.tex
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
 Package: tikz 2023-01-15 v3.1.10 (3.1.10)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/libraries\pgflibra
-ryplothandlers.code.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
 File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgf@plot@mark@count=\count285
+\pgf@plot@mark@count=\count287
 \pgfplotmarksize=\dimen192
 )
 \tikz@lastx=\dimen193
@@ -386,85 +259,65 @@ File: pgflibraryplothandlers.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \tikz@figbox@bg=\box61
 \tikz@tempbox=\box62
 \tikz@tempbox@bg=\box63
-\tikztreelevel=\count286
-\tikznumberofchildren=\count287
-\tikznumberofcurrentchild=\count288
-\tikz@fig@count=\count289
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/modules\pgfmodulem
-atrix.code.tex
+\tikztreelevel=\count288
+\tikznumberofchildren=\count289
+\tikznumberofcurrentchild=\count290
+\tikz@fig@count=\count291
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
 File: pgfmodulematrix.code.tex 2023-01-15 v3.1.10 (3.1.10)
-\pgfmatrixcurrentrow=\count290
-\pgfmatrixcurrentcolumn=\count291
-\pgf@matrix@numberofcolumns=\count292
+\pgfmatrixcurrentrow=\count292
+\pgfmatrixcurrentcolumn=\count293
+\pgf@matrix@numberofcolumns=\count294
 )
-\tikz@expandcount=\count293
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pgf/frontendlayer/tikz
-/libraries\tikzlibrarytopaths.code.tex
+\tikz@expandcount=\count295
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
 File: tikzlibrarytopaths.code.tex 2023-01-15 v3.1.10 (3.1.10)
-))) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.st
-y
-Package: hyperref 2024-07-10 v7.01j Hypertext links for LaTeX
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
-Package: iftex 2022/02/03 v1.0f TeX engine tests
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.st
-y
+))) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2024-11-05 v7.01l Hypertext links for LaTeX
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefinek
-eys.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
 Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.st
-y
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdfescape/pdfescape.sty
 Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
 Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds.
-sty
-Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.st
-y
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/infwarerr/infwarerr.sty
 Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
 )
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode not found.
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2023-11-26 v2.56 Cross-referencing by name of section
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettitl
-estring.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/kvoptions/kvoptions.sty
 Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
 ))
-\c@section@level=\count294
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.st
-y
-Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
-)
+\c@section@level=\count296
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 )
 \@linkdim=\dimen257
-\Hy@linkcounter=\count295
-\Hy@pagecounter=\count296
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
-File: pd1enc.def 2024-07-10 v7.01j Hyperref: PDFDocEncoding definition (HO)
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
+\Hy@linkcounter=\count297
+\Hy@pagecounter=\count298
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2024-11-05 v7.01l Hyperref: PDFDocEncoding definition (HO)
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count297
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
-File: puenc.def 2024-07-10 v7.01j Hyperref: PDF Unicode definition (HO)
+\Hy@SavedSpaceFactor=\count299
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2024-11-05 v7.01l Hyperref: PDF Unicode definition (HO)
 )
 Package hyperref Info: Hyper figures OFF on input line 4157.
 Package hyperref Info: Link nesting OFF on input line 4162.
@@ -473,22 +326,19 @@ Package hyperref Info: Plain pages OFF on input line 4172.
 Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
-\c@Hy@tempcnt=\count298
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\c@Hy@tempcnt=\count300
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 4763.
 \XeTeXLinkMargin=\dimen258
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc.
-sty
-Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
-)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 ))
-\Fld@menulength=\count299
+\Fld@menulength=\count301
 \Field@Width=\dimen259
 \Fld@charsize=\dimen260
 Package hyperref Info: Hyper figures OFF on input line 6042.
@@ -498,45 +348,39 @@ Package hyperref Info: backreferencing OFF on input line 6057.
 Package hyperref Info: Link coloring OFF on input line 6062.
 Package hyperref Info: Link coloring with OCG OFF on input line 6067.
 Package hyperref Info: PDF/A mode OFF on input line 6072.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\atbegshi-ltx.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atbegshi-ltx.sty
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count300
-\c@Item=\count301
-\c@Hfootnote=\count302
+\Hy@abspage=\count302
+\c@Item=\count303
+\c@Hfootnote=\count304
 )
 Package hyperref Info: Driver (autodetected): hxetex.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hxetex.def
-File: hxetex.def 2024-07-10 v7.01j Hyperref driver for XeTeX
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2024-11-05 v7.01l Hyperref driver for XeTeX
 \pdfm@box=\box64
-\c@Hy@AnnotLevel=\count303
-\HyField@AnnotCount=\count304
-\Fld@listcount=\count305
-\c@bookmark@seq@number=\count306
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfile
-check.sty
+\c@Hy@AnnotLevel=\count305
+\HyField@AnnotCount=\count306
+\Fld@listcount=\count307
+\c@bookmark@seq@number=\count308
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\atveryend-ltx.sty
-Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
-kage
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
 with kernel methods
-)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniqueco
-unter.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 )
-Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
-85.
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 285.
 )
 \Hy@SectionHShift=\skip58
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 12.
 Package hyperref Info: Option `breaklinks' set `true' on input line 12.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2023/08/05 v3.6o Customizing captions (AR)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@tempdima=\dimen261
 \captionmargin=\dimen262
@@ -548,22 +392,19 @@ Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
 \caption@hangindent=\dimen268
 Package caption Info: Standard document class detected.
 )
-\c@caption@flags=\count307
-\c@continuedfloat=\count308
+\c@caption@flags=\count309
+\c@continuedfloat=\count310
 Package caption Info: hyperref package is loaded.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/tcolorbox\tcolorbox.st
-y
-Package: tcolorbox 2024/07/10 version 6.3.0 text color boxes
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/tools\verbatim.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tcolorbox/tcolorbox.sty
+Package: tcolorbox 2024/10/22 version 6.4.1 text color boxes
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/verbatim.sty
 Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
 \every@verbatim=\toks31
 \verbatim@line=\toks32
 \verbatim@in@stream=\read3
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/environ\environ.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/environ/environ.sty
 Package: environ 2014/05/04 v0.3 A new way to define environments
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/trimspaces\trimspaces.st
-y
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/trimspaces/trimspaces.sty
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 )
 \@envbody=\toks33
@@ -572,18 +413,18 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 \tcb@upperbox=\box66
 \tcb@lowerbox=\box67
 \tcb@phantombox=\box68
-\c@tcbbreakpart=\count309
-\c@tcblayer=\count310
-\c@tcolorbox@number=\count311
+\c@tcbbreakpart=\count311
+\c@tcblayer=\count312
+\c@tcolorbox@number=\count313
 \l__tcobox_tmpa_box=\box69
 \l__tcobox_tmpa_dim=\dimen269
 \tcb@temp=\box70
 \tcb@temp=\box71
 \tcb@temp=\box72
 \tcb@temp=\box73
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amssymb.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\amsfonts.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks34
 \symAMSa=\mathgroup4
@@ -591,30 +432,30 @@ Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsmath.sty
-Package: amsmath 2024/05/23 v2.17q AMS math features
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2024/11/05 v2.17t AMS math features
 \@mathmargin=\skip59
 For additional information on amsmath, use the `?' option.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amstext.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2021/08/26 v2.01 AMS text
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsgen.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks35
 \ex@=\dimen270
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsbsy.sty
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen271
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsmath\amsopn.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2022/04/08 v2.04 operator names
 )
-\inf@bad=\count312
+\inf@bad=\count314
 LaTeX Info: Redefining \frac on input line 233.
-\uproot@=\count313
-\leftroot@=\count314
+\uproot@=\count315
+\leftroot@=\count316
 LaTeX Info: Redefining \overline on input line 398.
 LaTeX Info: Redefining \colon on input line 409.
-\classnum@=\count315
-\DOTSCASE@=\count316
+\classnum@=\count317
+\DOTSCASE@=\count318
 LaTeX Info: Redefining \ldots on input line 495.
 LaTeX Info: Redefining \dots on input line 498.
 LaTeX Info: Redefining \cdots on input line 619.
@@ -627,20 +468,20 @@ LaTeX Info: Redefining \Bigg on input line 724.
 \big@size=\dimen272
 LaTeX Font Info:    Redeclaring font encoding OML on input line 742.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 743.
-\macc@depth=\count317
+\macc@depth=\count319
 LaTeX Info: Redefining \bmod on input line 904.
 LaTeX Info: Redefining \pmod on input line 909.
 LaTeX Info: Redefining \smash on input line 939.
 LaTeX Info: Redefining \relbar on input line 969.
 LaTeX Info: Redefining \Relbar on input line 970.
-\c@MaxMatrixCols=\count318
+\c@MaxMatrixCols=\count320
 \dotsspace@=\muskip18
-\c@parentequation=\count319
-\dspbrk@lvl=\count320
+\c@parentequation=\count321
+\dspbrk@lvl=\count322
 \tag@help=\toks36
-\row@=\count321
-\column@=\count322
-\maxfields@=\count323
+\row@=\count323
+\column@=\count324
+\maxfields@=\count325
 \andhelp@=\toks37
 \eqnshift@=\dimen273
 \alignsep@=\dimen274
@@ -654,14 +495,13 @@ LaTeX Info: Redefining \Relbar on input line 970.
 \mathdisplay@stack=\toks39
 LaTeX Info: Redefining \[ on input line 2953.
 LaTeX Info: Redefining \] on input line 2954.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifxetex.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifxetex.sty
 Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifluatex.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifluatex.sty
 Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/seqsplit\seqsplit.sty
-Package: seqsplit 2006/08/07 v0.1 Splitting long sequences (DNA, RNA, proteins,
- etc.) 
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\fixltx2e.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/seqsplit/seqsplit.sty
+Package: seqsplit 2006/08/07 v0.1 Splitting long sequences (DNA, RNA, proteins, etc.) 
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fixltx2e.sty
 Package: fixltx2e 2016/12/29 v2.1a fixes to LaTeX (obsolete)
 Applying: [2015/01/01] Old fixltx2e package on input line 46.
 
@@ -670,59 +510,59 @@ Package fixltx2e Warning: fixltx2e is not required with releases after 2015
 (fixltx2e)                See the latexrelease package for details.
 
 Already applied: [0000/00/00] Old fixltx2e package on input line 53.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2024/03/21 v3.20 programmable bibliographies (PK/MW)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count324
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/logreq\logreq.def
+\lrq@indent=\count326
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/logreq/logreq.def
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 )
-\c@tabx@nest=\count325
-\c@listtotal=\count326
-\c@listcount=\count327
-\c@liststart=\count328
-\c@liststop=\count329
-\c@citecount=\count330
-\c@citetotal=\count331
-\c@multicitecount=\count332
-\c@multicitetotal=\count333
-\c@instcount=\count334
-\c@maxnames=\count335
-\c@minnames=\count336
-\c@maxitems=\count337
-\c@minitems=\count338
-\c@citecounter=\count339
-\c@maxcitecounter=\count340
-\c@savedcitecounter=\count341
-\c@uniquelist=\count342
-\c@uniquename=\count343
-\c@refsection=\count344
-\c@refsegment=\count345
-\c@maxextratitle=\count346
-\c@maxextratitleyear=\count347
-\c@maxextraname=\count348
-\c@maxextradate=\count349
-\c@maxextraalpha=\count350
-\c@abbrvpenalty=\count351
-\c@highnamepenalty=\count352
-\c@lownamepenalty=\count353
-\c@maxparens=\count354
-\c@parenlevel=\count355
-\blx@tempcnta=\count356
-\blx@tempcntb=\count357
-\blx@tempcntc=\count358
-\c@blx@maxsection=\count359
-\blx@maxsegment@0=\count360
-\blx@notetype=\count361
-\blx@parenlevel@text=\count362
-\blx@parenlevel@foot=\count363
-\blx@sectionciteorder@0=\count364
-\blx@sectionciteorderinternal@0=\count365
-\blx@entrysetcounter=\count366
-\blx@biblioinstance=\count367
+\c@tabx@nest=\count327
+\c@listtotal=\count328
+\c@listcount=\count329
+\c@liststart=\count330
+\c@liststop=\count331
+\c@citecount=\count332
+\c@citetotal=\count333
+\c@multicitecount=\count334
+\c@multicitetotal=\count335
+\c@instcount=\count336
+\c@maxnames=\count337
+\c@minnames=\count338
+\c@maxitems=\count339
+\c@minitems=\count340
+\c@citecounter=\count341
+\c@maxcitecounter=\count342
+\c@savedcitecounter=\count343
+\c@uniquelist=\count344
+\c@uniquename=\count345
+\c@refsection=\count346
+\c@refsegment=\count347
+\c@maxextratitle=\count348
+\c@maxextratitleyear=\count349
+\c@maxextraname=\count350
+\c@maxextradate=\count351
+\c@maxextraalpha=\count352
+\c@abbrvpenalty=\count353
+\c@highnamepenalty=\count354
+\c@lownamepenalty=\count355
+\c@maxparens=\count356
+\c@parenlevel=\count357
+\blx@tempcnta=\count358
+\blx@tempcntb=\count359
+\blx@tempcntc=\count360
+\c@blx@maxsection=\count361
+\blx@maxsegment@0=\count362
+\blx@notetype=\count363
+\blx@parenlevel@text=\count364
+\blx@parenlevel@foot=\count365
+\blx@sectionciteorder@0=\count366
+\blx@sectionciteorderinternal@0=\count367
+\blx@entrysetcounter=\count368
+\blx@biblioinstance=\count369
 \labelnumberwidth=\skip62
 \labelalphawidth=\skip63
 \biblabelsep=\skip64
@@ -733,85 +573,85 @@ Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
 \bibhang=\skip69
 \blx@bcfin=\read4
 \blx@bcfout=\write4
-\blx@langwohyphens=\language79
-\c@mincomprange=\count368
-\c@maxcomprange=\count369
-\c@mincompwidth=\count370
+\blx@langwohyphens=\language5
+\c@mincomprange=\count370
+\c@maxcomprange=\count371
+\c@mincompwidth=\count372
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-dm.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-dm.def
 File: blx-dm.def 2024/03/21 v3.20 biblatex datamodel (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count371
-\c@savedafterword=\count372
-\c@annotator=\count373
-\c@savedannotator=\count374
-\c@author=\count375
-\c@savedauthor=\count376
-\c@bookauthor=\count377
-\c@savedbookauthor=\count378
-\c@commentator=\count379
-\c@savedcommentator=\count380
-\c@editor=\count381
-\c@savededitor=\count382
-\c@editora=\count383
-\c@savededitora=\count384
-\c@editorb=\count385
-\c@savededitorb=\count386
-\c@editorc=\count387
-\c@savededitorc=\count388
-\c@foreword=\count389
-\c@savedforeword=\count390
-\c@holder=\count391
-\c@savedholder=\count392
-\c@introduction=\count393
-\c@savedintroduction=\count394
-\c@namea=\count395
-\c@savednamea=\count396
-\c@nameb=\count397
-\c@savednameb=\count398
-\c@namec=\count399
-\c@savednamec=\count400
-\c@translator=\count401
-\c@savedtranslator=\count402
-\c@shortauthor=\count403
-\c@savedshortauthor=\count404
-\c@shorteditor=\count405
-\c@savedshorteditor=\count406
-\c@labelname=\count407
-\c@savedlabelname=\count408
-\c@institution=\count409
-\c@savedinstitution=\count410
-\c@lista=\count411
-\c@savedlista=\count412
-\c@listb=\count413
-\c@savedlistb=\count414
-\c@listc=\count415
-\c@savedlistc=\count416
-\c@listd=\count417
-\c@savedlistd=\count418
-\c@liste=\count419
-\c@savedliste=\count420
-\c@listf=\count421
-\c@savedlistf=\count422
-\c@location=\count423
-\c@savedlocation=\count424
-\c@organization=\count425
-\c@savedorganization=\count426
-\c@origlocation=\count427
-\c@savedoriglocation=\count428
-\c@origpublisher=\count429
-\c@savedorigpublisher=\count430
-\c@publisher=\count431
-\c@savedpublisher=\count432
-\c@language=\count433
-\c@savedlanguage=\count434
-\c@origlanguage=\count435
-\c@savedoriglanguage=\count436
-\c@pageref=\count437
-\c@savedpageref=\count438
+\c@afterword=\count373
+\c@savedafterword=\count374
+\c@annotator=\count375
+\c@savedannotator=\count376
+\c@author=\count377
+\c@savedauthor=\count378
+\c@bookauthor=\count379
+\c@savedbookauthor=\count380
+\c@commentator=\count381
+\c@savedcommentator=\count382
+\c@editor=\count383
+\c@savededitor=\count384
+\c@editora=\count385
+\c@savededitora=\count386
+\c@editorb=\count387
+\c@savededitorb=\count388
+\c@editorc=\count389
+\c@savededitorc=\count390
+\c@foreword=\count391
+\c@savedforeword=\count392
+\c@holder=\count393
+\c@savedholder=\count394
+\c@introduction=\count395
+\c@savedintroduction=\count396
+\c@namea=\count397
+\c@savednamea=\count398
+\c@nameb=\count399
+\c@savednameb=\count400
+\c@namec=\count401
+\c@savednamec=\count402
+\c@translator=\count403
+\c@savedtranslator=\count404
+\c@shortauthor=\count405
+\c@savedshortauthor=\count406
+\c@shorteditor=\count407
+\c@savedshorteditor=\count408
+\c@labelname=\count409
+\c@savedlabelname=\count410
+\c@institution=\count411
+\c@savedinstitution=\count412
+\c@lista=\count413
+\c@savedlista=\count414
+\c@listb=\count415
+\c@savedlistb=\count416
+\c@listc=\count417
+\c@savedlistc=\count418
+\c@listd=\count419
+\c@savedlistd=\count420
+\c@liste=\count421
+\c@savedliste=\count422
+\c@listf=\count423
+\c@savedlistf=\count424
+\c@location=\count425
+\c@savedlocation=\count426
+\c@organization=\count427
+\c@savedorganization=\count428
+\c@origlocation=\count429
+\c@savedoriglocation=\count430
+\c@origpublisher=\count431
+\c@savedorigpublisher=\count432
+\c@publisher=\count433
+\c@savedpublisher=\count434
+\c@language=\count435
+\c@savedlanguage=\count436
+\c@origlanguage=\count437
+\c@savedoriglanguage=\count438
+\c@pageref=\count439
+\c@savedpageref=\count440
 \shorthandwidth=\skip70
 \shortjournalwidth=\skip71
 \shortserieswidth=\skip72
@@ -828,50 +668,44 @@ Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \localshorteditorwidth=\skip83
 Package biblatex Info: Trying to load enhanced support for Unicode engines...
 Package biblatex Info: ... file 'blx-unicode.def' found.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-unicode.def
-)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-unicode.def)
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-compat.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-compat.def
 File: blx-compat.def 2024/03/21 v3.20 biblatex compatibility (PK/MW)
 )
 Package biblatex Info: Trying to load generic definitions...
 Package biblatex Info: ... file 'biblatex.def' found.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 2024/03/21 v3.20 biblatex compatibility (PK/MW)
-\c@textcitecount=\count439
-\c@textcitetotal=\count440
-\c@textcitemaxnames=\count441
-\c@biburlbigbreakpenalty=\count442
-\c@biburlbreakpenalty=\count443
-\c@biburlnumpenalty=\count444
-\c@biburlucpenalty=\count445
-\c@biburllcpenalty=\count446
+\c@textcitecount=\count441
+\c@textcitetotal=\count442
+\c@textcitemaxnames=\count443
+\c@biburlbigbreakpenalty=\count444
+\c@biburlbreakpenalty=\count445
+\c@biburlnumpenalty=\count446
+\c@biburlucpenalty=\count447
+\c@biburllcpenalty=\count448
 \biburlbigskip=\muskip19
 \biburlnumskip=\muskip20
 \biburlucskip=\muskip21
 \biburllcskip=\muskip22
-\c@smartand=\count447
+\c@smartand=\count449
 )
 Package biblatex Info: Trying to load bibliography style 'numeric'...
 Package biblatex Info: ... file 'numeric.bbx' found.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/bbx\numeric.bbx
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/numeric.bbx
 File: numeric.bbx 2024/03/21 v3.20 biblatex bibliography style (PK/MW)
 Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/bbx\standard.bb
-x
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2024/03/21 v3.20 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count448
-\c@bbx:relatedtotal=\count449
+\c@bbx:relatedcount=\count450
+\c@bbx:relatedtotal=\count451
 ))
 Package biblatex Info: Trying to load citation style 'numeric'...
 Package biblatex Info: ... file 'numeric.cbx' found.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/cbx\numeric.cbx
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/cbx/numeric.cbx
 File: numeric.cbx 2024/03/21 v3.20 biblatex citation style (PK/MW)
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
@@ -887,43 +721,37 @@ Package biblatex Info: Redefining '\smartcites'.
 )
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\biblatex.cfg
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/biblatex.cfg
 File: biblatex.cfg 
 )
 Package biblatex Info: XeTeX detected.
 (biblatex)             Assuming input encoding 'utf8'.
 Package biblatex Info: Document encoding is UTF8 ....
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/l3kernel\expl3.sty
-Package: expl3 2024-08-30 L3 programming layer (loader) 
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-xete
-x.def
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2025-01-18 L3 programming layer (loader) 
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
 File: l3backend-xetex.def 2024-05-08 L3 backend support: XeTeX
-\g__graphics_track_int=\count450
+\g__graphics_track_int=\count452
 \l__pdf_internal_box=\box76
-\g__pdf_backend_annotation_int=\count451
-\g__pdf_backend_link_int=\count452
+\g__pdf_backend_annotation_int=\count453
+\g__pdf_backend_link_int=\count454
 ))
 Package biblatex Info: ... and expl3
-(biblatex)             2024-08-30 L3 programming layer (loader) 
+(biblatex)             2025-01-18 L3 programming layer (loader) 
 (biblatex)             is new enough (at least 2020/04/06),
 (biblatex)             setting 'casechanger=expl3'.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex\blx-case-expl3.
-sty
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/l3packages/xparse\xparse
-.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
 Package: xparse 2024-08-16 L3 Experimental document command parser
 )
 Package: blx-case-expl3 2024/03/21 v3.20 expl3 case changing code for biblatex
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+)) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/geometry/geometry.sty
 Package: geometry 2020/01/02 v5.9 Page Geometry
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/iftex/ifvtex.sty
 Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 )
-\Gm@cnth=\count453
-\Gm@cntv=\count454
-\c@Gm@tempcnt=\count455
+\Gm@cnth=\count455
+\Gm@cntv=\count456
+\c@Gm@tempcnt=\count457
 \Gm@bindingoffset=\dimen279
 \Gm@wd@mp=\dimen280
 \Gm@odd@mp=\dimen281
@@ -933,10 +761,8 @@ Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 \Gm@layouthoffset=\dimen285
 \Gm@layoutvoffset=\dimen286
 \Gm@dimlist=\toks40
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg)) 
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
-Package: fancyhdr 2025/01/07 v5.1.1 Extensive control of page headers and foote
-rs
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
 \f@nch@headwidth=\skip84
 \f@nch@offset@elh=\skip85
 \f@nch@offset@erh=\skip86
@@ -952,111 +778,69 @@ rs
 \f@nch@widthC=\skip96
 \f@nch@widthR=\skip97
 \@temptokenb=\toks41
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/xelatex/mathspec\mathspec.st
-y
-Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection fo
-r XeLaTeX)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/xelatex/mathspec/mathspec.sty
+Package: mathspec 2016/12/22 v0.2b LaTeX Package (Mathematics font selection for XeLaTeX)
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.sty
 Package: fontspec 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec-xetex.
-sty
-Package: fontspec-xetex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTe
-X
-\l__fontspec_script_int=\count456
-\l__fontspec_language_int=\count457
-\l__fontspec_strnum_int=\count458
-\l__fontspec_tmp_int=\count459
-\l__fontspec_tmpa_int=\count460
-\l__fontspec_tmpb_int=\count461
-\l__fontspec_tmpc_int=\count462
-\l__fontspec_em_int=\count463
-\l__fontspec_emdef_int=\count464
-\l__fontspec_strong_int=\count465
-\l__fontspec_strongdef_int=\count466
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+Package: fontspec-xetex 2024/05/11 v2.9e Font selection for XeLaTeX and LuaLaTeX
+\l__fontspec_script_int=\count458
+\l__fontspec_language_int=\count459
+\l__fontspec_strnum_int=\count460
+\l__fontspec_tmp_int=\count461
+\l__fontspec_tmpa_int=\count462
+\l__fontspec_tmpb_int=\count463
+\l__fontspec_tmpc_int=\count464
+\l__fontspec_em_int=\count465
+\l__fontspec_emdef_int=\count466
+\l__fontspec_strong_int=\count467
+\l__fontspec_strongdef_int=\count468
 \l__fontspec_tmpa_dim=\dimen287
 \l__fontspec_tmpb_dim=\dimen288
 \l__fontspec_tmpc_dim=\dimen289
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/fontenc.sty
 Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/fontspec\fontspec.cfg)
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/xkeyval\xkeyval.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fontspec/fontspec.cfg))) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/xkeyval/xkeyval.sty
 Package: xkeyval 2022/06/16 v2.9 package option processing (HA)
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkeyval.tex (C
-:\Users\mail\AppData\Local\Programs\MiKTeX\tex/generic/xkeyval\xkvutils.tex
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkeyval.tex (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/generic/xkeyval/xkvutils.tex
 \XKV@toks=\toks42
 \XKV@tempa@toks=\toks43
 )
-\XKV@depth=\count467
+\XKV@depth=\count469
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 ))
-\c@eu@=\count468
-\c@eu@i=\count469
-\c@mkern=\count470
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
-Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
-tim
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
-Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
-)) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.s
-ty
-Package: microtype 2024/12/12 v3.2 Micro-typographical refinements (RS)
-\MT@toks=\toks44
-\MT@tempbox=\box77
-\MT@count=\count471
-LaTeX Info: Redefining \noprotrusionifhmode on input line 1075.
-LaTeX Info: Redefining \leftprotrusion on input line 1076.
-\MT@prot@toks=\toks45
-LaTeX Info: Redefining \rightprotrusion on input line 1095.
-LaTeX Info: Redefining \textls on input line 1437.
-\MT@outer@kern=\dimen290
-LaTeX Info: Redefining \microtypecontext on input line 2041.
-LaTeX Info: Redefining \textmicrotypecontext on input line 2058.
-\MT@listname@count=\count472
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype-xete
-x.def
-File: microtype-xetex.def 2024/12/12 v3.2 Definitions specific to xetex (RS)
-LaTeX Info: Redefining \lsstyle on input line 443.
-LaTeX Info: Redefining \lslig on input line 451.
-\MT@outer@space=\skip98
-)
-Package microtype Info: Loading configuration file microtype.cfg.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\microtype.cfg
-File: microtype.cfg 2024/12/12 v3.2 microtype main configuration file (RS)
-)
-LaTeX Info: Redefining \microtypesetup on input line 3053.
+\c@eu@=\count470
+\c@eu@i=\count471
+\c@mkern=\count472
 )
 Package hyperref Info: Option `unicode' set `true' on input line 155.
 Package hyperref Info: Option `breaklinks' set `true' on input line 155.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/grffile\grffile.sty
-Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legac
-y)
-Package grffile Info: This package is an empty stub for compatibility on input 
-line 40.
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/parskip\parskip.sty
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/grffile/grffile.sty
+Package: grffile 2019/11/11 v2.1 Extended file name support for graphics (legacy)
+Package grffile Info: This package is an empty stub for compatibility on input line 40.
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/parskip/parskip.sty
 Package: parskip 2021-03-14 v2.0h non-zero parskip adjustments
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/fancyvrb\fancyvrb.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/fancyvrb/fancyvrb.sty
 Package: fancyvrb 2024/01/20 4.5c verbatim text (tvz,hv)
 \FV@CodeLineNo=\count473
 \FV@InFile=\read5
-\FV@TabBox=\box78
+\FV@TabBox=\box77
 \c@FancyVerbLine=\count474
 \FV@StepNumber=\count475
 \FV@OutFile=\write5
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/framed\framed.sty
+) (c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/framed/framed.sty
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip99
-\fb@frw=\dimen291
-\fb@frh=\dimen292
-\FrameRule=\dimen293
-\FrameSep=\dimen294
+\OuterFrameSep=\skip98
+\fb@frw=\dimen290
+\fb@frh=\dimen291
+\FrameRule=\dimen292
+\FrameSep=\dimen293
 )
-\cslhangindent=\skip100
-\csllabelwidth=\skip101
+\cslhangindent=\skip99
+\csllabelwidth=\skip100
 \@quotelevel=\count476
 \@quotereset=\count477
-(paper.aux)
+(./paper.aux)
 \openout1 = `paper.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 293.
@@ -1068,11 +852,6 @@ LaTeX Font Info:    ... okay on input line 293.
 LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 293.
 LaTeX Font Info:    ... okay on input line 293.
 LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 293.
-LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 2
-93.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/base\ts1cmr.fd
-File: ts1cmr.fd 2023/04/13 v2.5m Standard LaTeX font definitions
-)
 LaTeX Font Info:    ... okay on input line 293.
 LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 293.
 LaTeX Font Info:    ... okay on input line 293.
@@ -1085,7 +864,7 @@ LaTeX Font Info:    ... okay on input line 293.
 LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 293.
 LaTeX Font Info:    ... okay on input line 293.
 Package hyperref Info: Link coloring ON on input line 293.
-(paper.out) (paper.out)
+(./paper.out) (./paper.out)
 \@outlinefile=\write6
 \openout6 = `paper.out'.
 
@@ -1093,8 +872,7 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/biblatex/lbx\english.lbx
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2024/03/21 v3.20 biblatex localization (PK/MW)
 )
 Package biblatex Info: XeTeX detected.
@@ -1142,64 +920,27 @@ Package biblatex Info: Reference segment=0 on input line 293.
 * \@reversemargintrue
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 293.
-Package microtype Info: Applying patch `item' on input line 293.
-Package microtype Info: Applying patch `toc' on input line 293.
-Package microtype Info: Applying patch `eqnum' on input line 293.
-Package microtype Info: Applying patch `footnote' on input line 293.
-Package microtype Info: Applying patch `verbatim' on input line 293.
-LaTeX Info: Redefining \microtypesetup on input line 293.
-Package microtype Info: Character protrusion enabled (level 2).
-Package microtype Info: Using protrusion set `basicmath'.
-Package microtype Info: No adjustment of tracking.
-Package microtype Info: No adjustment of spacing.
-Package microtype Info: No adjustment of kerning.
-
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-LatinModern
-Roman.cfg
-File: mt-LatinModernRoman.cfg 2021/02/21 v1.1 microtype config. file: Latin Mod
-ern Roman (RS)
-)
-Package microtype Info: Loading generic protrusion settings for font family
-(microtype)             `lmss' (encoding: TU).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-cmr.cfg
-File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman 
-(RS)
-)
-LaTeX Font Info:    Trying to load font information for U+msa on input line 294
-.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsa.fd
+LaTeX Font Info:    Trying to load font information for U+msa on input line 294.
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msa.cfg
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 294
-.
-(C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/amsfonts\umsb.fd
+LaTeX Font Info:    Trying to load font information for U+msb on input line 294.
+(c:/Users/domma/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) (C:\Users\mail\AppData\Local\Programs\MiKTeX\tex/latex/microtype\mt-msb.cfg
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 
 Package hyperref Warning: Suppressing link with empty target on input line 320.
 
 
+Package hyperref Warning: Suppressing link with empty target on input line 320.
+
 
 Package hyperref Warning: Suppressing link with empty target on input line 320.
 
 
 
-Package hyperref Warning: Suppressing link with empty target on input line 320.
-
-
-
-
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1212,17 +953,14 @@ LaTeX Font Info:    Font shape `TU/lmss/m/it' in size <8> not available
 [1
 
 ]
-Underfull \hbox (badness 6461) in paragraph at lines 424--424
-[][][]\TU/lmr/m/n/8 These functions can become redundant if the defaults are ch
-anged. For instance,
+Underfull \hbox (badness 6078) in paragraph at lines 409--409
+[][][]\TU/lmr/m/n/8 These functions can become redundant if the defaults are changed. For instance,
  []
 
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1231,17 +969,14 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [2]
-Underfull \hbox (badness 1484) in paragraph at lines 506--512
-\TU/lmr/m/n/10 Until this point we have discussed marginal means and effects as
- being “aver-
+Underfull \hbox (badness 1342) in paragraph at lines 489--495
+\TU/lmr/m/n/10 Until this point we have discussed marginal means and effects as being “aver-
  []
 
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1251,10 +986,8 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [3]
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1264,67 +997,51 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [4]
 LaTeX Font Info:    Font shape `TU/lmtt/bx/n' in size <10> not available
-(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 650.
+(Font)              Font shape `TU/lmtt/b/n' tried instead on input line 661.
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 660--660
-[]\TU/lmtt/m/n/10 #> Parameter                           | Coefficient |       
- 95% CI |      p 
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 671--671
+[]\TU/lmtt/m/n/10 #> Parameter                           | Coefficient |        95% CI |      p 
  []
 
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 661--661
-[]\TU/lmtt/m/n/10 #> ----------------------------------------------------------
-----------------[] 
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 672--672
+[]\TU/lmtt/m/n/10 #> --------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 662--662
-[]\TU/lmtt/m/n/10 #> (Intercept)                         |       -0.05 | [-0.47
-, 0.38] | 0.823[] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 673--673
+[]\TU/lmtt/m/n/10 #> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 663--663
-[]\TU/lmtt/m/n/10 #> Petal Length                        |        0.20 | [-0.09
-, 0.49] | 0.170[] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 674--674
+[]\TU/lmtt/m/n/10 #> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 664--664
-[]\TU/lmtt/m/n/10 #> Species [versicolor]                |       -0.04 | [-0.66
-, 0.59] | 0.909[] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 675--675
+[]\TU/lmtt/m/n/10 #> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909[] 
  []
 
 
-Overfull \hbox (16.91139pt too wide) in paragraph at lines 665--665
-[]\TU/lmtt/m/n/10 #> Species [virginica]                 |        1.18 | [ 0.52
-, 1.84] | < .001[] 
+Overfull \hbox (16.91139pt too wide) in paragraph at lines 676--676
+[]\TU/lmtt/m/n/10 #> Species [virginica]                 |        1.18 | [ 0.52, 1.84] | < .001[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 666--666
-[]\TU/lmtt/m/n/10 #> Petal Length × Species [versicolor] |        0.13 | [-0.18
-, 0.44] | 0.405[] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 677--677
+[]\TU/lmtt/m/n/10 #> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405[] 
  []
 
 
-Overfull \hbox (11.66139pt too wide) in paragraph at lines 667--667
-[]\TU/lmtt/m/n/10 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34
-, 0.26] | 0.789[] 
- []
-
-
-Overfull \hbox (1.16139pt too wide) in paragraph at lines 672--672
-[]\TU/lmtt/m/n/10 #> Uncertainty intervals (equal-tailed) and p-values (two-tai
-led) computed[] 
+Overfull \hbox (11.66139pt too wide) in paragraph at lines 678--678
+[]\TU/lmtt/m/n/10 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34, 0.26] | 0.789[] 
  []
 
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1333,14 +1050,16 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [5]
+Overfull \hbox (1.16139pt too wide) in paragraph at lines 683--683
+[]\TU/lmtt/m/n/10 #> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed[] 
+ []
+
 File: paper_files/figure-latex/fig1-1.pdf Graphic file (type pdf)
 <use paper_files/figure-latex/fig1-1.pdf>
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1349,71 +1068,34 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [6]
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 741--741
-[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |        95% C
-I | t(144) |      p[] 
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 752--752
+[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |      p[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 742--742
-[]\TU/lmtt/m/n/10 #> ----------------------------------------------------------
--------------------[] 
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 753--753
+[]\TU/lmtt/m/n/10 #> -----------------------------------------------------------------------------[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 743--743
-[]\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12
-] |   1.34 |  0.183[] 
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 754--754
+[]\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12] |   1.34 |  0.183[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 744--744
-[]\TU/lmtt/m/n/10 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72
-] |   2.97 |  0.003[] 
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 755--755
+[]\TU/lmtt/m/n/10 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72] |   2.97 |  0.003[] 
  []
 
 
-Overfull \hbox (32.66139pt too wide) in paragraph at lines 745--745
-[]\TU/lmtt/m/n/10 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76
-] |   6.18 | < .001[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 799--799
-[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% 
-CI |     t |     p[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 800--800
-[]\TU/lmtt/m/n/10 #> ----------------------------------------------------------
-------------------[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 801--801
-[]\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.4
-3] |  0.83 | 0.404[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 802--802
-[]\TU/lmtt/m/n/10 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.2
-6] | -0.27 | 0.789[] 
- []
-
-
-Overfull \hbox (27.41139pt too wide) in paragraph at lines 803--803
-[]\TU/lmtt/m/n/10 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.0
-3] | -2.41 | 0.016[] 
+Overfull \hbox (32.66139pt too wide) in paragraph at lines 756--756
+[]\TU/lmtt/m/n/10 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76] |   6.18 | < .001[] 
  []
 
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1422,17 +1104,39 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
 [7]
-Overfull \hbox (1.9914pt too wide) in paragraph at lines 838--847
-\TU/lmtt/m/n/10 install.packages("modelbased", repos = "https://easystats.r-uni
-verse.dev")\TU/lmr/m/n/10 . 
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 810--810
+[]\TU/lmtt/m/n/10 #> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 811--811
+[]\TU/lmtt/m/n/10 #> ----------------------------------------------------------------------------[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 812--812
+[]\TU/lmtt/m/n/10 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.43] |  0.83 | 0.404[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 813--813
+[]\TU/lmtt/m/n/10 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] | -0.27 | 0.789[] 
+ []
+
+
+Overfull \hbox (27.41139pt too wide) in paragraph at lines 814--814
+[]\TU/lmtt/m/n/10 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] | -2.41 | 0.016[] 
+ []
+
+
+Overfull \hbox (3.94139pt too wide) in paragraph at lines 849--858
+\TU/lmtt/m/n/10 install.packages("modelbased", repos = "https://easystats.r-universe.dev")\TU/lmr/m/n/10 . 
  []
 
 
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1442,10 +1146,8 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 
 [8]
 
-File: C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates
-/joss/resources/JOSS-logo.png Graphic file (type bmp)
-<C:/Users/mail/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss
-/resources/JOSS-logo.png>
+File: C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png Graphic file (type bmp)
+<C:/Users/domma/AppData/Local/R/win-library/4.4/rticles/rmarkdown/templates/joss/resources/JOSS-logo.png>
 
 Package fancyhdr Warning: \headheight is too small (62.59596pt): 
 (fancyhdr)                Make it at least 63.55022pt, for example:
@@ -1453,24 +1155,24 @@ Package fancyhdr Warning: \headheight is too small (62.59596pt):
 (fancyhdr)                You might also make \topmargin smaller:
 (fancyhdr)                \addtolength{\topmargin}{-0.95425pt}.
 
-[9] (paper.aux)
+[9] (./paper.aux)
  ***********
-LaTeX2e <2024-06-01> patch level 2
-L3 programming layer <2024-08-30>
+LaTeX2e <2024-11-01> patch level 2
+L3 programming layer <2025-01-18>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: E4451A03596B26A17E9835E249B53FEC;3494.
+(rerunfilecheck)             Checksum: 1FC0EEE149659B7D48F1856696E8F299;3755.
 Package logreq Info: Writing requests to 'paper.run.xml'.
 \openout1 = `paper.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36935 strings out of 409029
- 743744 string characters out of 5756944
- 1640322 words of memory out of 5000000
- 59121 multiletter control sequences out of 15000+600000
- 564973 words of font info for 88 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 84i,13n,87p,1196b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 35115 strings out of 475845
+ 724860 string characters out of 5772620
+ 1586013 words of memory out of 5000000
+ 57539 multiletter control sequences out of 15000+600000
+ 565741 words of font info for 88 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 84i,13n,87p,1194b,850s stack positions out of 10000i,1000n,20000p,200000b,200000s
 
 Output written on paper.pdf (9 pages).
