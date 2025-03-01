@@ -15,7 +15,8 @@ knitr::opts_chunk$set(
   out.width = "100%",
   dpi = 300,
   message = FALSE,
-  warning = FALSE
+  warning = FALSE,
+  package.startup.message = FALSE
 )
 
 options(modelbased_join_dots = FALSE)
@@ -32,7 +33,7 @@ pkgs <- c(
   "ggplot2"
 )
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 if (!getRversion() >= "4.1.0") {

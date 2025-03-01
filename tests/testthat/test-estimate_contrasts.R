@@ -188,7 +188,7 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
   set.seed(123)
   dat$three <- factor(sample(0:1, nrow(dat), replace = TRUE))
   model <- lm(mpg ~ three * vs * am, data = dat)
-  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), digits = 1, zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
   expect_snapshot(print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
 
 
@@ -896,4 +896,20 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 
   out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')")
   expect_identical(dim(out), c(12L, 10L))
+})
+
+
+test_that("estimate_contrast, don't calculate slopes for integers", {
+  data(mtcars)
+  m <- lm(mpg ~ hp + gear, data = mtcars)
+  expect_silent(estimate_contrasts(m, "gear"))
+  out <- estimate_contrasts(m, "gear")
+  expect_identical(dim(out), c(3L, 9L))
+
+  expect_error(
+    estimate_contrasts(m, "hp"),
+    regex = "Please specify"
+  )
+  out <- estimate_contrasts(m, "hp", by = "gear")
+  expect_identical(dim(out), c(3L, 8L))
 })

@@ -117,7 +117,12 @@
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments for
 #'   instance like `vcov`, `equivalence`, `df`, `slope` or even `newdata` can be
-#'   passed to those functions.
+#'   passed to those functions. A `weights` argument is passed to the `wts`
+#'   argument in `avg_predictions()` or `avg_slopes()`, however, weights can
+#'   only be applied when `estimate` is `"average"` or `"population"` (i.e. for
+#'   those marginalization options that do not use data grids). Other arguments,
+#'   such as `re.form` or `allow.new.levels`, may be passed to `predict()` (which
+#'   is internally used by *marginaleffects*) if supported by that model class.
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using

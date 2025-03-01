@@ -12,7 +12,7 @@ get_marginalcontrasts <- function(model,
                                   verbose = TRUE,
                                   ...) {
   # check if available
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.25.0")
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
@@ -67,8 +67,9 @@ get_marginalcontrasts <- function(model,
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
-  # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
+  # if first focal term is numeric, we contrast slopes, but slopes only for
+  # # numerics with many values, not for binary or likert-alike
+  if (is.numeric(model_data[[first_focal]]) && !.is_likert(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) { # nolint
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
