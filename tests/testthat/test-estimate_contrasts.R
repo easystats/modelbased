@@ -897,3 +897,19 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
   out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')")
   expect_identical(dim(out), c(12L, 10L))
 })
+
+
+test_that("estimate_contrast, don't calculate slopes for integers", {
+  data(mtcars)
+  m <- lm(mpg ~ hp + gear, data = mtcars)
+  expect_silent(estimate_contrasts(m, "gear"))
+  out <- estimate_contrasts(m, "gear")
+  expect_identical(dim(out), c(3L, 9L))
+
+  expect_error(
+    estimate_contrasts(m, "hp"),
+    regex = "Please specify"
+  )
+  out <- estimate_contrasts(m, "hp", by = "gear")
+  expect_identical(dim(out), c(3L, 8L))
+})

@@ -27,3 +27,27 @@
     tryCatch(code, error = function(e) on_error)
   }
 }
+
+
+#' @keywords internal
+#' @noRd
+.is_integer <- function(x) {
+  tryCatch(
+    expr = {
+      ifelse(is.infinite(x), FALSE, x %% 1 == 0)
+    },
+    warning = function(w) {
+      is.integer(x)
+    },
+    error = function(e) {
+      FALSE
+    }
+  )
+}
+
+
+#' @keywords internal
+#' @noRd
+.is_likert <- function(x, n_uniques = 5) {
+  all(.is_integer(x)) && insight::n_unique(x) <= n_uniques
+}
