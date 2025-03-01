@@ -45,7 +45,23 @@ test_that("estimate_grouplevel - lme4", {
   # data <- iris
   # data$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
   #
-  # model <- brms::brm(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data, refresh=0)
+  # m1 <- glmmTMB::glmmTMB(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data)
   #
-  # random <- estimate_grouplevel(model)
+  # modelbased::estimate_grouplevel(m1)
+  #
+  # m2 <- lme4::lmer(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data)
+  #
+  # modelbased::estimate_grouplevel(m2)
+  #
+  # # m3 <- brms::brm(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data, refresh=0)
+  #
+  # modelbased::estimate_grouplevel(m3)
+  #
+  # m4 <- brms::brm(brms::bf(Sepal.Width ~ Petal.Width + (Petal.Width | Group),
+  #                          sigma ~ Petal.Width + (Petal.Width | Group)),
+  #                 data = data, refresh=0)
+  #
+  # random <- modelbased::estimate_grouplevel(m4)
+  # random
+
 })
