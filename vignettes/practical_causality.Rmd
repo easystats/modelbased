@@ -36,7 +36,7 @@ This vignette demonstrates how to perform causal inference with observational da
 
 ## The lack of randomization
 
-Randomized controlled trials (RCTs) are frequently employed to estimate the average treatment effect (ATE), which represents the average difference in outcomes between individuals in the treatment and control groups. In the context of RCTs, the ATE can be interpreted as a causal effect.
+Randomized controlled trials (RCTs) are frequently employed to estimate the average treatment effect (ATE), which represents the average difference in outcomes between individuals in the treatment and control groups (i.e., how would the outcome differ, on average, if all participants were treated versus if no participants was treated). In the context of RCTs, the ATE can be interpreted as a causal effect.
 
 Estimating causal effects with observational data, where treatment and control group assignments are not randomized, presents a greater challenge due to the potential for confounding bias. In observational studies, individual characteristics associated with the outcome (e.g., age, gender, education, health status) are likely unequally distributed between the treatment and control groups. This imbalance violates a key assumption for causal effect estimation, an assumption typically satisfied by randomization in RCTs but often unmet in observational data.
 
