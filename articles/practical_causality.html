@@ -520,10 +520,13 @@ challenging.</p>
 <p>Our examples demonstrated the utility of both methods. Specifically,
 we showed that while IPW effectively estimates the ATE in a simple
 model, g-computation becomes essential when modeling the interaction
-between <code>treatment</code> and <code>time</code>. Furthermore,
-combining IPW with g-computation, as illustrated in our last examples,
-offers increased accuracy, highlighting the benefits of this “doubly
-robust” approach for estimating ATEs in complex models.</p>
+between <code>treatment</code> and <code>time</code>. IPW has strengths
+when the outcome is scarce, while g-computation is preferred when
+allocation into treatment and control group is unbalanced (i.e. much
+more participants in one of the two groups). Therefore, combining IPW
+with g-computation, as illustrated in our last examples, offers
+increased accuracy, highlighting the benefits of this “doubly robust”
+approach for estimating ATEs in complex models.</p>
 <p>Combining IPW and g-computation doesn’t introduce any additional bias
 and hence has no negative effects. While IPW alone can sometimes be less
 accurate than g-computation, particularly when g-computation is
