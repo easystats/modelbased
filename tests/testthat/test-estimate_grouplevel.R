@@ -55,28 +55,22 @@ test_that("estimate_grouplevel - glmmTMB", {
   out <- estimate_grouplevel(m1)
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+})
 
-  # # Bayesian
-  # data <- iris
-  # data$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
-  #
-  # m1 <- glmmTMB::glmmTMB(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data)
-  #
-  # modelbased::estimate_grouplevel(m1)
-  #
-  # m2 <- lme4::lmer(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data)
-  #
-  # modelbased::estimate_grouplevel(m2)
-  #
-  # # m3 <- brms::brm(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = data, refresh=0)
-  #
-  # modelbased::estimate_grouplevel(m3)
-  #
-  # m4 <- brms::brm(brms::bf(Sepal.Width ~ Petal.Width + (Petal.Width | Group),
-  #                          sigma ~ Petal.Width + (Petal.Width | Group)),
-  #                 data = data, refresh=0)
-  #
-  # random <- modelbased::estimate_grouplevel(m4)
-  # random
+test_that("estimate_grouplevel - Bayesian", {
+  skip_on_cran()
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
 
+  # m <- insight::download_model("brms_mixed_10")
+  # skip_if(is.null(m))
+
+  # out <- estimate_grouplevel(m)
+  # expect_identical(dim(out), c(6L, 8L))
+  # expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+
+  # m <- insight::download_model("brms_sigma_3")
+  # skip_if(is.null(m))
 })
