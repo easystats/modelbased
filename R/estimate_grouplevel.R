@@ -69,7 +69,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- random[, grepl("Group|Level|Name|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
 
   # Correct for fixed effect (BLUPs)
-  type <- match.arg(type, c("random", "total"))
+  type <- insight::validate_argument(type, c("random", "total"))
   if (type == "total") {
     fixed <- as.data.frame(params[params$Effects == "fixed", ])
     cols <- intersect(c("Coefficient", "Median", "Mean", "MAP_Estimate"), names(random))
