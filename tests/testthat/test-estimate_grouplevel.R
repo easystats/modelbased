@@ -79,13 +79,17 @@ test_that("estimate_grouplevel - Bayesian", {
   skip_if_not_installed("httr2")
   skip_if_not_installed("brms")
 
-  # m <- insight::download_model("brms_mixed_10")
-  # skip_if(is.null(m))
+  m <- insight::download_model("brms_mixed_10")
+  skip_if(is.null(m))
 
-  # out <- estimate_grouplevel(m)
-  # expect_identical(dim(out), c(6L, 8L))
-  # expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+  out <- estimate_grouplevel(m)
+  expect_identical(dim(out), c(6L, 7L))
+  expect_named(out, c("Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 
-  # m <- insight::download_model("brms_sigma_3")
-  # skip_if(is.null(m))
+  m <- insight::download_model("brms_sigma_3")
+  skip_if(is.null(m))
+
+  out <- estimate_grouplevel(m)
+  expect_identical(dim(out), c(12L, 8L))
+  expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 })
