@@ -39,7 +39,22 @@ test_that("estimate_grouplevel - lme4", {
   all(reshaped$Subject == ref$Subject)
   all(reshaped$grp == ref$grp)
   all(reshaped$subgrp == ref$subgrp)
+})
 
+test_that("estimate_grouplevel - glmmTMB", {
+  skip_on_cran()
+  skip_if_not_installed("glmmTMB")
+  data <- iris
+  data$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
+
+  m1 <- glmmTMB::glmmTMB(
+    Sepal.Width ~ Petal.Width + (Petal.Width | Group),
+    data = data
+  )
+
+  out <- estimate_grouplevel(m1)
+  expect_identical(dim(out), c(6L, 8L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
 
   # # Bayesian
   # data <- iris
