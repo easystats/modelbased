@@ -49,12 +49,12 @@ random
 plot(random)
 
 # Show group-specific effects
-estimate_grouplevel(model, deviation = FALSE)
+estimate_grouplevel(model)
 
 # Reshape to wide data so that it matches the original dataframe...
 reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
 
-# ... and can be easily combined
+# ...and can be easily combined with the original data
 alldata <- cbind(mtcars, reshaped)
 
 # Use summary() to remove duplicated rows
