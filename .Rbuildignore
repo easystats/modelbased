@@ -16,6 +16,7 @@
 ^vignettes/w.
 ^logo.png
 ^README.Rmd
+^air.toml
 ^logo.png
 ^pkgdown/.
 ^\.github$
