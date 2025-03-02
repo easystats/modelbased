@@ -52,8 +52,12 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   )
 
   # Re-add info
-  if (!"Group" %in% names(params)) params$Group <- attributes(params)$clean_parameters$Group
-  if (!"Level" %in% names(params)) params$Level <- attributes(params)$clean_parameters$Cleaned_Parameter
+  if (!"Group" %in% names(params)) {
+    params$Group <- attributes(params)$clean_parameters$Group
+  }
+  if (!"Level" %in% names(params)) {
+    params$Level <- attributes(params)$clean_parameters$Cleaned_Parameter
+  }
 
   # TODO: improve / add new printing that groups by group/level?
   random <- as.data.frame(params[params$Effects == "random", ])
@@ -62,7 +66,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
   # Filter more columns
-  random <- random[, grepl("Group|Level|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
+  random <- random[, grepl("Group|Level|Name|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
 
   # Correct for fixed effect (BLUPs)
   type <- match.arg(type, c("random", "total"))
@@ -80,7 +84,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Clean
   row.names(random) <- NULL
   random$Effects <- NULL
-  if ("Component" %in% names(random) && length(unique(random$Component)) == 1 && unique(random$Component) == "conditional") {
+  if ("Component" %in% names(random) && insight::n_unique(random$Component) == 1 && unique(random$Component) == "conditional") {
     random$Component <- NULL
   }
 
@@ -101,6 +105,8 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     random$Parameter <- gsub("^r_.*?\\[(.*?)\\].*", "\\1", random$Name)
     # Remove Level from it
     random$Parameter <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i]))
+    # remove temporary name column
+    random$Name <- NULL
   }
 
   # Sort
@@ -114,7 +120,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
-  attr(random, "data") <- insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
+  attr(random, "data") <- .safe(insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)])
 
   class(random) <- c("estimate_grouplevel", class(random))
   random
