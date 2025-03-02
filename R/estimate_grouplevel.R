@@ -116,11 +116,15 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
   }
 
+  # find data and random effects
+  model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
+  model_random <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
+
   # Assign new class
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
-  attr(random, "data") <- .safe(insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)])
+  attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))
   random
