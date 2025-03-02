@@ -41,15 +41,30 @@ test_that("estimate_grouplevel - lme4", {
   all(reshaped$subgrp == ref$subgrp)
 })
 
+test_that("estimate_grouplevel - lme4", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(iris)
+  d <- iris
+  d$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
+
+  m <- lme4::lmer(Sepal.Width ~ Petal.Width + (Petal.Width | Group), data = d)
+
+  out <- estimate_grouplevel(m)
+  expect_identical(dim(out), c(6L, 8L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+})
+
 test_that("estimate_grouplevel - glmmTMB", {
   skip_on_cran()
   skip_if_not_installed("glmmTMB")
-  data <- iris
-  data$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
+  data(iris)
+  d <- iris
+  d$Group <- as.factor(rep(c("G1", "G2", "G3"), each = 50))
 
   m1 <- glmmTMB::glmmTMB(
     Sepal.Width ~ Petal.Width + (Petal.Width | Group),
-    data = data
+    data = d
   )
 
   out <- estimate_grouplevel(m1)
