@@ -78,3 +78,6 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
   class(data) <- c("reshape_grouplevel", class(data))
   data
 }
+
+#' @export
+reshape_grouplevel.data.frame <- reshape_grouplevel.estimate_grouplevel
