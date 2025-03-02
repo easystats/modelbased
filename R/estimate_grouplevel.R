@@ -58,7 +58,6 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # TODO: improve / add new printing that groups by group/level?
   random <- as.data.frame(params[params$Effects == "random", ])
 
-
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
@@ -81,7 +80,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Clean
   row.names(random) <- NULL
   random$Effects <- NULL
-  if("Component" %in% names(random) && length(unique(random$Component)) == 1 && unique(random$Component) == "conditional") {
+  if ("Component" %in% names(random) && length(unique(random$Component)) == 1 && unique(random$Component) == "conditional") {
     random$Component <- NULL
   }
 
@@ -89,7 +88,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
 
   # Clean-up brms output
-  if(inherits(model, "brmsfit")) {
+  if (inherits(model, "brmsfit")) {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
@@ -110,7 +109,6 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   } else {
     random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
   }
-
 
   # Assign new class
   attr(random, "type") <- type
