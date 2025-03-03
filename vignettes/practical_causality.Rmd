@@ -108,11 +108,27 @@ m_ipw <- glm(
 )
 
 # add predictions, i.e. the probability of belonging to treatment
-# or control for each patient in the sample
-d$predictions <- predict(m_ipw, newdata = d, type = "response")
+# or control for each patient in the sample (propensity score)
+d$propensity_score <- predict(m_ipw, newdata = d, type = "response")
 
 # calculating the IPW
-d$ipw <- ifelse(d$treatment == 1, 1 / d$predictions, 1 / (1 - d$predictions))
+d$ipw <- ifelse(
+  d$treatment == 1,
+  1 / d$propensity_score,      # IPW for treatment group
+  1 / (1 - d$propensity_score) # IPW for control group
+)
+```
+
+## Calculating matching weights
+
+The IPW may suffer from extreme values, where certain observations can get very high or low weights, because they have no good match in the other group. Extreme weights can bias estimates and increase variance, especially for the ATE. These weights may signal a need to shift focus to the overlap population, where groups are more comparable. Two common alternatives to IPW are _overlap weights_ (OW) or _matching weights_ (MW), the latter acting as a weighting analog to pair matching [@li_weighting_2013; @kostouraki_variance_2024]. While we demonstrate the calculation of Matching Weights (MW) here, we will use Inverse Probability Weighting (IPW) for illustrative purposes in the subsequent examples.
+
+```{r}
+d$matching_weights <- ifelse(
+  d$treatment == 1,
+  min(d$propensity_score, 1 - d$propensity_score) / d$propensity_score,
+  min(d$propensity_score, 1 - d$propensity_score) / (1 - d$propensity_score)
+)
 ```
 
 ## ATE calculated from IPW in simpler models
