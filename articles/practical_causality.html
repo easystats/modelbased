@@ -279,7 +279,7 @@ IPW is calculated.</p>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="calculating-matching-weights">Calculating matching weights<a class="anchor" aria-label="anchor" href="#calculating-matching-weights"></a>
+<h3 id="calculating-matching-and-overlap-weights">Calculating matching and overlap weights<a class="anchor" aria-label="anchor" href="#calculating-matching-and-overlap-weights"></a>
 </h3>
 <p>The IPW may suffer from extreme values, where certain observations
 can get very high or low weights, because they have no good match in the
@@ -290,13 +290,22 @@ alternatives to IPW are <em>overlap weights</em> (OW) or <em>matching
 weights</em> (MW), the latter acting as a weighting analog to pair
 matching <span class="citation">(Li and Greene 2013; Kostouraki et al.
 2024)</span>. While we demonstrate the calculation of Matching Weights
-(MW) here, we will use Inverse Probability Weighting (IPW) for
-illustrative purposes in the subsequent examples.</p>
+(MW) and Overlap Weights (OW) here, we will use Inverse Probability
+Weighting (IPW) for illustrative purposes in the subsequent
+examples.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span><span class="op">$</span><span class="va">matching_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="co"># calculating matching weights</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">matching_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>, <span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>, <span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># calculating overlap weights</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">overlap_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>  <span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>,</span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -495,18 +504,20 @@ population.</p>
 weighting (IPW), using standard variance estimators is discouraged.
 These estimators often fail to account for the variance introduced by
 the IPW itself, resulting in conservative standard errors for the
-average treatment effect (ATE). For the average treatment effect on the
+average treatment effect (ATE), especially when we have observations
+with large or extreme weights. For the average treatment effect on the
 treated (ATT), standard errors can be either over- or underestimated.
-More robust methods are therefore recommended, such as bootstrapping or
-calculating robust standard errors (Huber-White sandwich estimators)
-<span class="citation">(Gabriel et al. 2024; Kostouraki et al. 2024;
-Reifeis and Hudgens 2022)</span>. While robust standard errors can be
-easily computed for many models using the <code>vcov</code> argument
-within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> function, this option is
-not currently available for models built with the <em>glmmTMB</em>
-package. Consequently, for <em>glmmTMB</em> models, bootstrapping is the
-preferred method for obtaining robust standard errors. A fully Bayesian
-approach, as demonstrated here, also provides a robust alternative.</p>
+More robust methods are therefore recommended, such as bootstrapping,
+using overlap or matching weights, or calculating robust standard errors
+(Huber-White sandwich estimators) <span class="citation">(Gabriel et al.
+2024; Kostouraki et al. 2024; Reifeis and Hudgens 2022)</span>. While
+robust standard errors can be easily computed for many models using the
+<code>vcov</code> argument within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
+function, this option is not currently available for models built with
+the <em>glmmTMB</em> package. Consequently, for <em>glmmTMB</em> models,
+bootstrapping or applying matching or overlap weights is the preferred
+method for obtaining robust standard errors. A fully Bayesian approach,
+as demonstrated here, also provides a robust alternative.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same model as m4, within a Bayesian framework, using the Stan and brms package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms" class="external-link">brms</a></span><span class="op">)</span></span>
