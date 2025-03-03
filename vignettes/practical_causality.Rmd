@@ -114,7 +114,7 @@ d$propensity_score <- predict(m_ipw, newdata = d, type = "response")
 # calculating the IPW
 d$ipw <- ifelse(
   d$treatment == 1,
-  1 / d$propensity_score,      # IPW for treatment group
+  1 / d$propensity_score, # IPW for treatment group
   1 / (1 - d$propensity_score) # IPW for control group
 )
 ```
