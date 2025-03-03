@@ -268,11 +268,36 @@ IPW is calculated.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># add predictions, i.e. the probability of belonging to treatment</span></span>
-<span><span class="co"># or control for each patient in the sample</span></span>
-<span><span class="va">d</span><span class="op">$</span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">m_ipw</span>, newdata <span class="op">=</span> <span class="va">d</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
+<span><span class="co"># or control for each patient in the sample (propensity score)</span></span>
+<span><span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">m_ipw</span>, newdata <span class="op">=</span> <span class="va">d</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># calculating the IPW</span></span>
-<span><span class="va">d</span><span class="op">$</span><span class="va">ipw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fl">1</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">predictions</span>, <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">predictions</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">d</span><span class="op">$</span><span class="va">ipw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>  <span class="fl">1</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>,      <span class="co"># IPW for treatment group</span></span>
+<span>  <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="co"># IPW for control group</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="calculating-matching-weights">Calculating matching weights<a class="anchor" aria-label="anchor" href="#calculating-matching-weights"></a>
+</h3>
+<p>The IPW may suffer from extreme values, where certain observations
+can get very high or low weights, because they have no good match in the
+other group. Extreme weights can bias estimates and increase variance,
+especially for the ATE. These weights may signal a need to shift focus
+to the overlap population, where groups are more comparable. Two common
+alternatives to IPW are <em>overlap weights</em> (OW) or <em>matching
+weights</em> (MW), the latter acting as a weighting analog to pair
+matching <span class="citation">(Li and Greene 2013; Kostouraki et al.
+2024)</span>. While we demonstrate the calculation of Matching Weights
+(MW) here, we will use Inverse Probability Weighting (IPW) for
+illustrative purposes in the subsequent examples.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">d</span><span class="op">$</span><span class="va">matching_weights</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>, <span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>,</span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>, <span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="ate-calculated-from-ipw-in-simpler-models">ATE calculated from IPW in simpler models<a class="anchor" aria-label="anchor" href="#ate-calculated-from-ipw-in-simpler-models"></a>
@@ -281,7 +306,7 @@ IPW is calculated.</p>
 the treatment effect, after weighting, is about <code>9</code> points,
 i.e. the treatment on average results in a 9-point higher score for
 QoL.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
 <span>  weights <span class="op">=</span> <span class="va">ipw</span>,</span>
@@ -297,7 +322,7 @@ QoL.</p>
 significant advantage in calculating contrasts between
 <code>treatment</code> levels, as the results are equivalent to a
 simpler approach.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -322,7 +347,7 @@ over time, we need to include an interaction between
 substantially greater increase in QoL over time within the treatment
 group. In such more complex modeling scenarios, g-computation becomes
 particularly advantageous.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># interaction terms involved</span></span>
 <span><span class="va">m3</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -337,12 +362,12 @@ particularly advantageous.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"treatment"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_causality_files/figure-html/unnamed-chunk-6-1.png" width="90%" height="90%"></p>
+<p><img src="practical_causality_files/figure-html/unnamed-chunk-7-1.png" width="90%" height="90%"></p>
 <p>We now see that the coefficient table is no longer helpful, because
 the treatment effect cannot be isolated. If we want to know the ATE of
 <code>treatment</code>, we need to calculate contrasts for the levels of
 our <code>treatment</code> predictor.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># ATE no longer visible from coefficient table</span></span>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m3</span>, keep <span class="op">=</span> <span class="st">"^treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
@@ -371,7 +396,7 @@ contrasts derived from an IPW model with contrasts generated from the
 same model using g-computation. The results clearly demonstrate the
 increased accuracy achieved by combining IPW with g-computation in such
 situations.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># more complex model</span></span>
 <span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span> <span class="va">treatment</span> <span class="op">*</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -420,7 +445,7 @@ helps us decide whether a program or treatment should be expanded to
 include those who haven’t yet benefited from it. It helps to assess the
 potential benefits of extending a program or treatment to a wider
 population.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># we need the data used to fit the model - this may not be</span></span>
@@ -482,7 +507,7 @@ not currently available for models built with the <em>glmmTMB</em>
 package. Consequently, for <em>glmmTMB</em> models, bootstrapping is the
 preferred method for obtaining robust standard errors. A fully Bayesian
 approach, as demonstrated here, also provides a robust alternative.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same model as m4, within a Bayesian framework, using the Stan and brms package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms" class="external-link">brms</a></span><span class="op">)</span></span>
 <span><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
@@ -492,7 +517,7 @@ approach, as demonstrated here, also provides a robust alternative.</p>
 <span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -570,6 +595,13 @@ Williamson, Guillaume Chauvet, Aurélien Belot, and Clémence Leyrat.
 Probability‐of‐treatment Weighting Estimator: <span>A</span> Tutorial
 for Different Types of Propensity Score Weights.”</span> <em>Statistics
 in Medicine</em> 43 (13): 2672–94. <a href="https://doi.org/10.1002/sim.10078" class="external-link">https://doi.org/10.1002/sim.10078</a>.
+</div>
+<div id="ref-li_weighting_2013" class="csl-entry">
+Li, Liang, and Tom Greene. 2013. <span>“A <span>Weighting</span>
+<span>Analogue</span> to <span>Pair</span> <span>Matching</span> in
+<span>Propensity</span> <span>Score</span>
+<span>Analysis</span>.”</span> <em>The International Journal of
+Biostatistics</em> 9 (2). <a href="https://doi.org/10.1515/ijb-2012-0030" class="external-link">https://doi.org/10.1515/ijb-2012-0030</a>.
 </div>
 <div id="ref-reifeis_variance_2022" class="csl-entry">
 Reifeis, Sarah A, and Michael G Hudgens. 2022. <span>“On
