@@ -274,7 +274,7 @@ IPW is calculated.</p>
 <span><span class="co"># calculating the IPW</span></span>
 <span><span class="va">d</span><span class="op">$</span><span class="va">ipw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
 <span>  <span class="va">d</span><span class="op">$</span><span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span>,</span>
-<span>  <span class="fl">1</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>,      <span class="co"># IPW for treatment group</span></span>
+<span>  <span class="fl">1</span> <span class="op">/</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span>, <span class="co"># IPW for treatment group</span></span>
 <span>  <span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">d</span><span class="op">$</span><span class="va">propensity_score</span><span class="op">)</span> <span class="co"># IPW for control group</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </div>
