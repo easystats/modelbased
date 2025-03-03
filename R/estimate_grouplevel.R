@@ -5,17 +5,17 @@
 #' which can be useful to add the random effects to the original data.
 #'
 #' @param model A mixed model with random effects.
-#' @param type If `"random"` (default), the coefficients are the ones
-#'   estimated natively by the model (as they are returned by, for instance,
-#'   `lme4::ranef()`). They correspond to the deviation of each individual
+#' @param type If `"random"` (default), the coefficients correspond to the
+#'   conditional estimates of  the random effects (as they are returned by
+#'   `lme4::ranef()`). They typically correspond to the deviation of each individual
 #'   group from their fixed effect. As such, a coefficient close to 0 means that
 #'   the participants' effect is the same as the population-level effect (in
 #'   other words, it is "in the norm"). If "total", it will return the sum of
 #'   the random effect and its corresponding fixed effects. These are known as
 #'   BLUPs (Best Linear Unbiased Predictions). This argument can be used to
 #'   reproduce the results given by `lme4::ranef()` and `coef()` (see
-#'   `?coef.merMod`). Note that BLUPs currently don't have uncertainty
-#'   indices (such as SE and CI), as these are not computable.
+#'   `?coef.merMod`). Note that BLUPs of frequentist models currently don't have
+#'   uncertainty indices (such as SE and CI), as these are not computable.
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @examplesIf all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE))

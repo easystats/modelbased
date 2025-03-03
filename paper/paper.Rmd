@@ -161,7 +161,7 @@ Setting `estimate = "average"` can be useful to calculate the average expected o
 
 ## Group-level estimates for Mixed Models
 
-The `modelbased` package also provides the `estimate_grouplevel()` function to conveniently extract parameters related to random factors, which typically correspond to group-level parameters (e.g., the intercept's or slope's value for each participant). Estimating these indices using mixed models can have important benefits (such as shrinkage and better convergence) over an empirical approach consisting of fitting individual models to all individuals separately. These group-level estimates can be estimated in two manners:
+The `modelbased` package also provides the `estimate_grouplevel()` function to conveniently extract parameters related to random factors, which typically correspond to group-level parameters (e.g., the intercept's or slope's value for each participant). Estimating these indices using mixed models can have important benefits (such as partial-pooling - *aka* "shrinkage" - and better convergence) over an empirical approach consisting of fitting individual models to all individuals separately. These group-level estimates can be estimated in two manners:
 
 - **"random"** (default): Corresponds to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect
 - **"total"**: Returns the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions) and are "absolute" values of the individual-level effects on the same scale as their corresponding fixed effects.
