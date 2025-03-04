@@ -64,7 +64,11 @@
     }
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
-    aes$y <- att$coef_name
+    if (!is.null(att$coef_name) && length(att$coef_name)) {
+      aes$y <- att$coef_name
+    } else {
+      aes$y <- "Coefficient"
+    }
     aes$type <- "grouplevel"
     if (length(unique(data$Parameter)) > 1) {
       aes$color <- "Parameter"
