@@ -15,7 +15,7 @@
   terms when these are integers with only few values. In this case, it is assumed
   that contrasts of values ("levels") are desired, because integer variables with
   only two to five unique values are factor-alike.
-  
+
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
@@ -28,6 +28,10 @@
 
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
+
+* `estimate_grouplevel()` gets a new option, `type = "total"`, to return the
+  sum of fixed and random effects (similar to what `coef()` returns for (Bayesian)
+  mixed models).
 
 * New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
   specifically for the case of Johnson-Neyman intervals, i.e. when calling
@@ -63,6 +67,8 @@
 * Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
 * Fixed issues in `estimate_contrasts()` when filtering numeric values in `by`.
+
+* Fixed issues in `estimate_grouplevel()`.
 
 * Fixed issue in `estimate_slopes()` for models from package *lme4*.
 
