@@ -48,18 +48,12 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   type <- insight::validate_argument(type, c("random", "total"))
 
   # Extract params
-  if (type == "random") {
-    params <- parameters::model_parameters(model,
-      effects = "all",
-      group_level = TRUE,
-      ...
-    )
-  } else {
-    params <- parameters::model_parameters(model,
-      effects = "total",
-      ...
-    )
-  }
+  params <- parameters::model_parameters(
+    model,
+    effects = type,
+    group_level = identical(type, "random"),
+    ...
+  )
 
   # Re-add info
   if (!"Group" %in% names(params)) {
