@@ -121,6 +121,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
+  attr(random, "coef_name") <- intersect(.valid_coefficient_names(), colnames(random))
   attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))
