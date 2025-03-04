@@ -1,3 +1,6 @@
+skip_if(utils::packageVersion("insight") <= "1.1.0")
+skip_if(utils::packageVersion("parameters") <= "0.24.1")
+
 test_that("estimate_grouplevel - lme4", {
   skip_if_not_installed("lme4")
   set.seed(333)
@@ -83,13 +86,13 @@ test_that("estimate_grouplevel - Bayesian", {
   skip_if(is.null(m))
 
   out <- estimate_grouplevel(m)
-  expect_identical(dim(out), c(6L, 7L))
+  expect_identical(dim(out), c(9L, 7L))
   expect_named(out, c("Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 
   m <- insight::download_model("brms_sigma_3")
   skip_if(is.null(m))
 
   out <- estimate_grouplevel(m)
-  expect_identical(dim(out), c(12L, 8L))
+  expect_identical(dim(out), c(18L, 8L))
   expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 })

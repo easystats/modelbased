@@ -89,7 +89,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
 
   # Clean-up brms output
-  if (inherits(model, "brmsfit") && FALSE) {
+  if (inherits(model, "brmsfit") && type == "random") {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
