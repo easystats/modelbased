@@ -40,7 +40,7 @@
 #' # Use summary() to remove duplicated rows
 #' summary(reshaped)
 #'
-#' # Compute BLUPs
+#' # overall coefficients
 #' estimate_grouplevel(model, type = "total")
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {

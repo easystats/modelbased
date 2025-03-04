@@ -60,7 +60,7 @@ alldata <- cbind(mtcars, reshaped)
 # Use summary() to remove duplicated rows
 summary(reshaped)
 
-# Compute BLUPs
+# overall coefficients
 estimate_grouplevel(model, type = "total")
 \dontshow{\}) # examplesIf}
 }
