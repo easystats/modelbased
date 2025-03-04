@@ -193,6 +193,9 @@
   if (length(ci_lows) > 0) {
     aes$ymin <- ci_lows
     aes$ymax <- ci_highs
+  } else {
+    aes$ymin <- NA_real_
+    aes$ymax <- NA_real_
   }
   aes
 }
