@@ -44,12 +44,22 @@
 #' estimate_grouplevel(model, type = "total")
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {
+  # validate argument
+  type <- insight::validate_argument(type, c("random", "total"))
+
   # Extract params
-  params <- parameters::model_parameters(model,
-    effects = "all",
-    group_level = TRUE,
-    ...
-  )
+  if (type == "random") {
+    params <- parameters::model_parameters(model,
+      effects = "all",
+      group_level = TRUE,
+      ...
+    )
+  } else {
+    params <- parameters::model_parameters(model,
+      effects = "total",
+      ...
+    )
+  }
 
   # Re-add info
   if (!"Group" %in% names(params)) {
@@ -68,19 +78,6 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Filter more columns
   random <- random[, grepl("Group|Level|Name|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
 
-  # Correct for fixed effect (BLUPs)
-  type <- insight::validate_argument(type, c("random", "total"))
-  if (type == "total") {
-    fixed <- as.data.frame(params[params$Effects == "fixed", ])
-    cols <- intersect(c("Coefficient", "Median", "Mean", "MAP_Estimate"), names(random))
-    for (p in fixed$Parameter) {
-      random[random$Parameter == p, cols] <- random[random$Parameter == p, cols] + fixed[fixed$Parameter == p, cols[1]]
-    }
-    # Remove uncertainty indices
-    for (col in c("CI", "CI_low", "CI_high")) random[[col]] <- NULL
-    for (col in c("SE", "SD", "MAD")) random[[col]] <- NULL
-  }
-
   # Clean
   row.names(random) <- NULL
   random$Effects <- NULL
@@ -92,7 +89,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
 
   # Clean-up brms output
-  if (inherits(model, "brmsfit")) {
+  if (inherits(model, "brmsfit") && FALSE) {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
