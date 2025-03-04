@@ -83,7 +83,14 @@
       facet_by <- c(facet_by, "Component")
     }
     if (!is.null(facet_by)) {
-      aes$facet <- stats::as.formula(paste("~", paste(rev(facet_by), collapse = " * ")))
+      data$facet <- data$Group
+      if ("Parameter" %in% facet_by) {
+        data$facet <- paste0(data$facet, ": ", data$Parameter)
+      }
+      if ("Component" %in% facet_by) {
+        data$facet <- paste0(data$facet, " (", gsub("_", " ", data$Component, fixed = TRUE), ")")
+      }
+      aes$facet <- "facet"
     }
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
