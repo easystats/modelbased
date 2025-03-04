@@ -71,12 +71,12 @@
       aes$y <- "Coefficient"
     }
     aes$type <- "grouplevel"
-    if (length(unique(data$Parameter)) > 1) {
-      aes$color <- "Parameter"
-      data$.group <- paste(data$.group, data$Parameter)
-    }
     # setup facets
     facet_by <- NULL
+    if (insight::n_unique(data$Parameter) > 1) {
+      facet_by <- c(facet_by, "Parameter")
+      aes$color <- "Parameter"
+    }
     if (insight::n_unique(data$Group) > 1) {
       facet_by <- c(facet_by, "Group")
     }
@@ -84,7 +84,14 @@
       facet_by <- c(facet_by, "Component")
     }
     if (!is.null(facet_by)) {
-      aes$facet <- stats::as.formula(paste("~", paste(facet_by, collapse = " * ")))
+      data$facet <- data$Group
+      if ("Parameter" %in% facet_by) {
+        data$facet <- paste0(data$facet, ": ", data$Parameter)
+      }
+      if ("Component" %in% facet_by) {
+        data$facet <- paste0(data$facet, " (", gsub("_", " ", data$Component, fixed = TRUE), ")")
+      }
+      aes$facet <- "facet"
     }
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
