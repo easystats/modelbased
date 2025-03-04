@@ -23,7 +23,7 @@ Authors@R:
              role = "aut",
              email = "patilindrajeet.science@gmail.com",
              comment = c(ORCID = "0000-0003-1995-6531")))
-Maintainer: Dominique Makowski <dom.makowski@gmail.com>
+Maintainer: Dominique Makowski <officialeasystats@gmail.com>
 Description: Implements a general interface for model-based estimations
     for a wide variety of models, used in the computation of
     marginal means, contrast analysis and predictions. For a list of supported models,
