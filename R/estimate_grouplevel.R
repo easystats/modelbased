@@ -13,23 +13,22 @@
 #'   effect (in other words, it is "in the norm"). If `"total"`, it will return
 #'   the sum of the random effect and its corresponding fixed effects, which
 #'   corresponds to `coef()` (see `?coef.merMod`). Note that `type = "total"`
-#'   currently don't have uncertainty indices (such as SE and CI) for models
-#'   from *lme4* or *glmmTMB*, as these are not computable. However, for
+#'   currently does not return uncertainty indices (such as SE and CI) for
+#'   models from *lme4* or *glmmTMB*, as these are not computable. However, for
 #'   Bayesian models, it is possible to compute them.
 #' @param ... Other arguments passed to or from other methods.
 #'
-#' @examplesIf all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE)) && packageVersion("insight") > "1.1.0" && packageVersion("parameters") > "0.24.1"
 #' # lme4 model
 #' data(mtcars)
 #' model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
 #' random <- estimate_grouplevel(model)
+#'
+#' # Show group-specific effects
 #' random
 #'
 #' # Visualize random effects
 #' plot(random)
-#'
-#' # Show group-specific effects
-#' estimate_grouplevel(model)
 #'
 #' # Reshape to wide data so that it matches the original dataframe...
 #' reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
