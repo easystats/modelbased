@@ -91,10 +91,13 @@ get_marginaltrends <- function(model,
   } else {
     trans_fun <- transform
   }
+  # if we have back-transformation, do that, but remove standard errors
+  # these are no longer correct
   if (!is.null(trans_fun)) {
     estimated$estimate <- trans_fun(estimated$estimate)
     estimated$conf.low <- trans_fun(estimated$conf.low)
     estimated$conf.high <- trans_fun(estimated$conf.high)
+    estimated$std.error <- NULL
   }
 
 
