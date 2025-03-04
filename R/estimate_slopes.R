@@ -123,6 +123,7 @@ estimate_slopes <- function(model,
                             by = NULL,
                             ci = 0.95,
                             p_adjust = "none",
+                            transform = NULL,
                             backend = getOption("modelbased_backend", "marginaleffects"),
                             verbose = TRUE,
                             ...) {
@@ -143,6 +144,7 @@ estimate_slopes <- function(model,
       by = by,
       ci = ci,
       p_adjust = p_adjust,
+      transform = transform,
       verbose = verbose,
       ...
     )

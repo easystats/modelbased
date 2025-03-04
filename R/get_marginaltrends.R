@@ -12,6 +12,7 @@ get_marginaltrends <- function(model,
                                by = NULL,
                                ci = 0.95,
                                p_adjust = "none",
+                               transform = NULL,
                                verbose = TRUE,
                                ...) {
   # check if available
@@ -83,6 +84,18 @@ get_marginaltrends <- function(model,
 
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    trans_fun <- transform
+  }
+  if (!is.null(trans_fun)) {
+    estimated$estimate <- trans_fun(estimated$estimate)
+    estimated$conf.low <- trans_fun(estimated$conf.low)
+    estimated$conf.high <- trans_fun(estimated$conf.high)
+  }
 
 
   # Last step: Save information in attributes  --------------------------------

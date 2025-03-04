@@ -82,6 +82,7 @@ get_marginalcontrasts <- function(model,
       ci = ci,
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
+      transform = transform,
       verbose = verbose,
       ...
     )
