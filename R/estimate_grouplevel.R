@@ -10,12 +10,12 @@
 #'   `lme4::ranef()`). They typically correspond to the deviation of each individual
 #'   group from their fixed effect. As such, a coefficient close to 0 means that
 #'   the participants' effect is the same as the population-level effect (in
-#'   other words, it is "in the norm"). If "total", it will return the sum of
-#'   the random effect and its corresponding fixed effects. These are known as
-#'   BLUPs (Best Linear Unbiased Predictions). This argument can be used to
-#'   reproduce the results given by `lme4::ranef()` and `coef()` (see
-#'   `?coef.merMod`). Note that BLUPs of frequentist models currently don't have
-#'   uncertainty indices (such as SE and CI), as these are not computable.
+#'   other words, it is "in the norm"). If `"total"`, it will return the sum of the
+#'   random effect and its corresponding fixed effects, which corresponds to
+#'   `coef()` (see `?coef.merMod`). Note that `type = "total"` currently don't
+#'   have uncertainty indices (such as SE and CI) for models from *lme4* or
+#'   *glmmTMB*, as these are not computable. However, for Bayesian models, it is
+#'   possible to compute them.
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @examplesIf all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE))
@@ -40,14 +40,18 @@
 #' # Use summary() to remove duplicated rows
 #' summary(reshaped)
 #'
-#' # Compute BLUPs
+#' # overall coefficients
 #' estimate_grouplevel(model, type = "total")
 #' @export
 estimate_grouplevel <- function(model, type = "random", ...) {
+  # validate argument
+  type <- insight::validate_argument(type, c("random", "total"))
+
   # Extract params
-  params <- parameters::model_parameters(model,
-    effects = "all",
-    group_level = TRUE,
+  params <- parameters::model_parameters(
+    model,
+    effects = ifelse(type == "random", "all", "total"),
+    group_level = identical(type, "random"),
     ...
   )
 
@@ -60,26 +64,13 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == "random", ])
+  random <- as.data.frame(params[params$Effects == type, ])
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
   # Filter more columns
   random <- random[, grepl("Group|Level|Name|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
-
-  # Correct for fixed effect (BLUPs)
-  type <- insight::validate_argument(type, c("random", "total"))
-  if (type == "total") {
-    fixed <- as.data.frame(params[params$Effects == "fixed", ])
-    cols <- intersect(c("Coefficient", "Median", "Mean", "MAP_Estimate"), names(random))
-    for (p in fixed$Parameter) {
-      random[random$Parameter == p, cols] <- random[random$Parameter == p, cols] + fixed[fixed$Parameter == p, cols[1]]
-    }
-    # Remove uncertainty indices
-    for (col in c("CI", "CI_low", "CI_high")) random[[col]] <- NULL
-    for (col in c("SE", "SD", "MAD")) random[[col]] <- NULL
-  }
 
   # Clean
   row.names(random) <- NULL
@@ -92,7 +83,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
 
   # Clean-up brms output
-  if (inherits(model, "brmsfit")) {
+  if (inherits(model, "brmsfit") && type == "random") {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
@@ -124,6 +115,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
+  attr(random, "coef_name") <- intersect(.valid_coefficient_names(), colnames(random))
   attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))
