@@ -1,3 +1,6 @@
+skip_if(utils::packageVersion("insight") <= "1.1.0")
+skip_if(utils::packageVersion("parameters") <= "0.24.1")
+
 test_that("estimate_grouplevel - lme4", {
   skip_if_not_installed("lme4")
   set.seed(333)
@@ -53,6 +56,10 @@ test_that("estimate_grouplevel - lme4", {
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+
+  out <- estimate_grouplevel(m, type = "total")
+  expect_identical(dim(out), c(6L, 4L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
 
 test_that("estimate_grouplevel - glmmTMB", {
@@ -70,6 +77,10 @@ test_that("estimate_grouplevel - glmmTMB", {
   out <- estimate_grouplevel(m1)
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+
+  out <- estimate_grouplevel(m1, type = "total")
+  expect_identical(dim(out), c(6L, 4L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
 
 test_that("estimate_grouplevel - Bayesian", {
@@ -86,10 +97,18 @@ test_that("estimate_grouplevel - Bayesian", {
   expect_identical(dim(out), c(6L, 7L))
   expect_named(out, c("Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 
+  out <- estimate_grouplevel(m, type = "total")
+  expect_identical(dim(out), c(6L, 7L))
+  expect_named(out, c("Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
+
   m <- insight::download_model("brms_sigma_3")
   skip_if(is.null(m))
 
   out <- estimate_grouplevel(m)
+  expect_identical(dim(out), c(12L, 8L))
+  expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
+
+  out <- estimate_grouplevel(m, type = "total")
   expect_identical(dim(out), c(12L, 8L))
   expect_named(out, c("Component", "Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 })
