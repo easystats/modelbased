@@ -1,8 +1,11 @@
+skip_on_cran()
 skip_on_os(c("mac", "solaris", "linux"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
-skip_on_cran()
+
+skip_if(utils::packageVersion("insight") <= "1.1.0")
+skip_if(utils::packageVersion("parameters") <= "0.24.1")
 
 test_that("plots grouplevel frequentist", {
   skip_if_not_installed("lme4")
