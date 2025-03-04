@@ -11,11 +11,14 @@
 
 ## Changes
 
+* The `transform` argument now also works for `estimate_slopes()` and for
+  `estimate_contrasts()` with numeric focal terms.
+
 * `estimate_contrasts()` no longer calls `estimate_slopes()` for numeric focal
   terms when these are integers with only few values. In this case, it is assumed
   that contrasts of values ("levels") are desired, because integer variables with
   only two to five unique values are factor-alike.
-  
+
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
