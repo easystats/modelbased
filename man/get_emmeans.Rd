@@ -64,6 +64,7 @@ get_marginaltrends(
   by = NULL,
   ci = 0.95,
   p_adjust = "none",
+  transform = NULL,
   verbose = TRUE,
   ...
 )

@@ -12,6 +12,7 @@ get_marginaltrends <- function(model,
                                by = NULL,
                                ci = 0.95,
                                p_adjust = "none",
+                               transform = NULL,
                                verbose = TRUE,
                                ...) {
   # check if available
@@ -84,6 +85,21 @@ get_marginaltrends <- function(model,
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
+  # transform reponse?
+  if (isTRUE(transform)) {
+    trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
+  } else {
+    trans_fun <- transform
+  }
+  # if we have back-transformation, do that, but remove standard errors
+  # these are no longer correct
+  if (!is.null(trans_fun)) {
+    estimated$estimate <- trans_fun(estimated$estimate)
+    estimated$conf.low <- trans_fun(estimated$conf.low)
+    estimated$conf.high <- trans_fun(estimated$conf.high)
+    estimated$std.error <- NULL
+  }
+
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
@@ -98,7 +114,8 @@ get_marginaltrends <- function(model,
         datagrid = datagrid,
         coef_name = "Slope",
         p_adjust = p_adjust,
-        ci = ci
+        ci = ci,
+        transform = !is.null(transform)
       )
     )
   )
