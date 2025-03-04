@@ -11,6 +11,9 @@
 
 ## Changes
 
+* The `transform` argument now also works for `estimate_slopes()` and for
+  `estimate_contrasts()` with numeric focal terms.
+
 * `estimate_contrasts()` no longer calls `estimate_slopes()` for numeric focal
   terms when these are integers with only few values. In this case, it is assumed
   that contrasts of values ("levels") are desired, because integer variables with
