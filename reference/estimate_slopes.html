@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.39</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.40</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -127,6 +127,7 @@ various examples, tutorials and use cases.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"marginaleffects"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -172,6 +173,16 @@ predictors (one specified in <code>trend</code>, one in <code>by</code>). In thi
 option is recommended, but <code>p_adjust</code> can also be one of <code>"none"</code> (default),
 <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>,
 <code>"sidak"</code>, or <code>"holm"</code>.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be <code>TRUE</code>, in
+which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
+appropriate transformation-function.</p></dd>
 
 
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
