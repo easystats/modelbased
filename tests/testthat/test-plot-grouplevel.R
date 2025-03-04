@@ -41,4 +41,8 @@ test_that("plots grouplevel Bayesian", {
 
   out <- estimate_grouplevel(model, type = "total")
   vdiffr::expect_doppelganger("plot-grouplevel-Bayes-4", plot(out))
+
+  out <- estimate_grouplevel(model, type = "total")
+  vr <- visualisation_recipe(out, pointrange = list(color = "black"))
+  vdiffr::expect_doppelganger("plot-grouplevel-Bayes-5", plot(vr))
 })
