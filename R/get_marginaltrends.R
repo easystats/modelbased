@@ -114,7 +114,8 @@ get_marginaltrends <- function(model,
         datagrid = datagrid,
         coef_name = "Slope",
         p_adjust = p_adjust,
-        ci = ci
+        ci = ci,
+        transform = !is.null(transform)
       )
     )
   )
