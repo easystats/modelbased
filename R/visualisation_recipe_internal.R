@@ -64,13 +64,28 @@
     }
   } else if ("estimate_grouplevel" %in% att$class) {
     aes$x <- "Level"
-    aes$y <- "Coefficient"
+    # find coefficient name, this may differ for Bayesian models
+    if (!is.null(att$coef_name) && length(att$coef_name)) {
+      aes$y <- att$coef_name
+    } else {
+      aes$y <- "Coefficient"
+    }
     aes$type <- "grouplevel"
     if (length(unique(data$Parameter)) > 1) {
       aes$color <- "Parameter"
       data$.group <- paste(data$.group, data$Parameter)
     }
-    if (length(unique(data$Group)) > 1) aes$facet <- "Group"
+    # setup facets
+    facet_by <- NULL
+    if (insight::n_unique(data$Group) > 1) {
+      facet_by <- c(facet_by, "Group")
+    }
+    if (insight::n_unique(data$Component) > 1) {
+      facet_by <- c(facet_by, "Component")
+    }
+    if (!is.null(facet_by)) {
+      aes$facet <- stats::as.formula(paste("~", paste(facet_by, collapse = " * ")))
+    }
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
   }
@@ -189,6 +204,9 @@
   if (length(ci_lows) > 0) {
     aes$ymin <- ci_lows
     aes$ymax <- ci_highs
+  } else {
+    aes$ymin <- NA_real_
+    aes$ymax <- NA_real_
   }
   aes
 }

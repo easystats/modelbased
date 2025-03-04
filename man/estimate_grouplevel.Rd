@@ -12,17 +12,17 @@ reshape_grouplevel(x, indices = "all", group = "all", ...)
 \arguments{
 \item{model}{A mixed model with random effects.}
 
-\item{type}{If \code{"random"} (default), the coefficients are the ones
-estimated natively by the model (as they are returned by, for instance,
-\code{lme4::ranef()}). They correspond to the deviation of each individual
-group from their fixed effect. As such, a coefficient close to 0 means that
-the participants' effect is the same as the population-level effect (in
-other words, it is "in the norm"). If "total", it will return the sum of
-the random effect and its corresponding fixed effects. These are known as
-BLUPs (Best Linear Unbiased Predictions). This argument can be used to
-reproduce the results given by \code{lme4::ranef()} and \code{coef()} (see
-\code{?coef.merMod}). Note that BLUPs currently don't have uncertainty
-indices (such as SE and CI), as these are not computable.}
+\item{type}{If \code{"random"} (default), the coefficients are the ones estimated
+natively by the model (as they are returned by, for instance,
+\code{lme4::ranef()}). They correspond to the deviation of each individual group
+from their fixed effect. As such, a coefficient close to 0 means that the
+participants' effect is the same as the population-level effect (in other
+words, it is "in the norm"). If \code{"total"}, it will return the sum of the
+random effect and its corresponding fixed effects, which corresponds to
+\code{coef()} (see \code{?coef.merMod}). Note that \code{type = "total"} currently don't
+have uncertainty indices (such as SE and CI) for models from \emph{lme4} or
+\emph{glmmTMB}, as these are not computable. However, for Bayesian models, it is
+possible to compute them.}
 
 \item{...}{Other arguments passed to or from other methods.}
 
@@ -60,7 +60,7 @@ alldata <- cbind(mtcars, reshaped)
 # Use summary() to remove duplicated rows
 summary(reshaped)
 
-# Compute BLUPs
+# overall coefficients
 estimate_grouplevel(model, type = "total")
 \dontshow{\}) # examplesIf}
 }
