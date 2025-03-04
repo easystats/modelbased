@@ -56,6 +56,10 @@ test_that("estimate_grouplevel - lme4", {
   out <- estimate_grouplevel(m)
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+
+  out <- estimate_grouplevel(m, type = "total")
+  expect_identical(dim(out), c(6L, 4L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
 
 test_that("estimate_grouplevel - glmmTMB", {
@@ -73,6 +77,10 @@ test_that("estimate_grouplevel - glmmTMB", {
   out <- estimate_grouplevel(m1)
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient", "SE", "CI", "CI_low", "CI_high"))
+
+  out <- estimate_grouplevel(m1, type = "total")
+  expect_identical(dim(out), c(6L, 4L))
+  expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
 
 test_that("estimate_grouplevel - Bayesian", {
