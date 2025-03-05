@@ -5,7 +5,7 @@ skip_if_not_installed("glmmTMB")
 test_that("estimate_means correct inverse link for glmmTMB", {
   data(mtcars)
   d <- mtcars
-  d$count <- rep(c(0, 0, 0, 0, 1, 2, 4), length.out = nrow(mtcars))
+  d$count <- rep_len(c(0, 0, 0, 0, 1, 2, 4), nrow(mtcars))
   m <- glmmTMB::glmmTMB(
     count ~ cyl,
     data = datawizard::data_modify(d, cyl = as.factor(cyl)),
@@ -50,7 +50,7 @@ test_that("estimate_means correct inverse link for glmer", {
   data(efc, package = "modelbased")
 
   x <- which(efc$negc7d == 1 & efc$c172code == 3)
-  efc$negc7d[x[sample(1:length(x), round(length(x) / 1.1))]] <- 0
+  efc$negc7d[x[sample.int(length(x), round(length(x) / 1.1))]] <- 0
   efc$c172code <- as.factor(efc$c172code)
   fit <- lme4::glmer(
     negc7d ~ c12hour + e42dep + c161sex + c172code + (1 | grp),
