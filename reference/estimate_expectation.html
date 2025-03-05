@@ -61,7 +61,7 @@ See the details section below for details about the different possibilities.'><m
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.40</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.41</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -262,8 +262,8 @@ their <code>data</code> argument.</p></dd>
 to (back-) transform results, which can be useful in case the regression
 model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). Can also
 be <code>TRUE</code>, in which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to
-determine the appropriate transformation-function. <strong>Note:</strong> Standard errors
-are not (back-) transformed!</p></dd>
+determine the appropriate transformation-function. Note that no standard
+errors are returned when transformations are applied.</p></dd>
 
 
 <dt id="arg-keep-iterations">keep_iterations<a class="anchor" aria-label="anchor" href="#arg-keep-iterations"></a></dt>
