@@ -86,7 +86,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
-    random <- random[grepl("^r_", random$Parameter), ]
+    random <- random[startsWith(random$Parameter, "r_"), ]
     # Remove Group from Level
     random$Level <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i]))
     # Find the group name (what follows "r_" and before the first "[" or "__")
