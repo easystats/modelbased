@@ -167,7 +167,8 @@ model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
 Bayesian models, this function is applied to individual draws from the
 posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function.}
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 

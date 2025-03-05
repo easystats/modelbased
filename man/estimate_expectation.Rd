@@ -85,8 +85,8 @@ their \code{data} argument.}
 to (back-) transform results, which can be useful in case the regression
 model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). Can also
 be \code{TRUE}, in which case \code{insight::get_transformation()} is called to
-determine the appropriate transformation-function. \strong{Note:} Standard errors
-are not (back-) transformed!}
+determine the appropriate transformation-function. Note that no standard
+errors are returned when transformations are applied.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns

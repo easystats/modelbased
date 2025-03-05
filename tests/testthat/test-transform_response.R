@@ -4,6 +4,7 @@ test_that("estimate_means, transform", {
   data(cars)
   m <- lm(log(dist) ~ speed, data = cars)
   out <- estimate_means(m, "speed")
+  expect_named(out, c("speed", "Mean", "SE", "CI_low", "CI_high", "t", "df"))
   expect_equal(
     out$Mean,
     c(
@@ -14,6 +15,7 @@ test_that("estimate_means, transform", {
   )
   expect_snapshot(out)
   out1 <- estimate_means(m, "speed", transform = TRUE)
+  expect_named(out1, c("speed", "Mean", "CI_low", "CI_high", "df"))
   expect_equal(
     out1$Mean,
     c(
@@ -32,6 +34,7 @@ test_that("estimate_expectation, transform", {
   data(cars)
   m <- lm(log(dist) ~ speed, data = cars)
   out <- estimate_expectation(m, by = "speed")
+  expect_named(out, c("speed", "Predicted", "SE", "CI_low", "CI_high"))
   expect_equal(
     out$Predicted,
     c(
@@ -41,6 +44,7 @@ test_that("estimate_expectation, transform", {
     tolerance = 1e-4
   )
   out1 <- estimate_expectation(m, by = "speed", transform = TRUE)
+  expect_named(out1, c("speed", "Predicted", "CI_low", "CI_high"))
   expect_equal(
     out1$Predicted,
     c(
