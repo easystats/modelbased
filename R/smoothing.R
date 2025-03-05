@@ -41,7 +41,7 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
       {
         stats::predict(stats::loess(
           paste0("y ~ x"),
-          data = data.frame(y = x, x = seq_len(length(x))),
+          data = data.frame(y = x, x = seq_along(x)),
           span = strength
         ))
       },
@@ -55,7 +55,7 @@ smoothing.numeric <- function(x, method = "loess", strength = 0.25, ...) {
         )
         stats::predict(stats::loess(
           paste0("y ~ x"),
-          data = data.frame(y = x, x = seq_len(length(x))),
+          data = data.frame(y = x, x = seq_along(x)),
           span = strength
         ))
       }

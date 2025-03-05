@@ -294,7 +294,7 @@
 
   # Uncertainty -----------------------------------
   if (!identical(ribbon, "none") && aes$type == "ribbon" && is.null(aes$alpha)) {
-    for (i in seq_len(length(aes$ymin))) {
+    for (i in seq_along(aes$ymin)) {
       # base list elements
       aes_list <- list(
         y = aes$y,
