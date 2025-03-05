@@ -107,7 +107,8 @@
 #' Bayesian models, this function is applied to individual draws from the
 #' posterior distribution, before computing summaries. Can also be `TRUE`, in
 #' which case `insight::get_transformation()` is called to determine the
-#' appropriate transformation-function.
+#' appropriate transformation-function. Note that no standard errors are returned
+#' when transformations are applied.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process

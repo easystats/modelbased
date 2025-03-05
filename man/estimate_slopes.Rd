@@ -10,6 +10,7 @@ estimate_slopes(
   by = NULL,
   ci = 0.95,
   p_adjust = "none",
+  transform = NULL,
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -42,6 +43,15 @@ predictors (one specified in \code{trend}, one in \code{by}). In this case, the 
 option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
