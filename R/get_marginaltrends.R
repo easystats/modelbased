@@ -85,6 +85,9 @@ get_marginaltrends <- function(model,
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
+  # Fourth step: back-transform response --------------------------------------
+  # ---------------------------------------------------------------------------
+
   # transform reponse?
   if (isTRUE(transform)) {
     trans_fun <- insight::get_transformation(model, verbose = FALSE)$inverse
