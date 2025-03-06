@@ -12,7 +12,7 @@ get_marginalcontrasts <- function(model,
                                   verbose = TRUE,
                                   ...) {
   # check if available
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.25.0")
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")
@@ -67,8 +67,9 @@ get_marginalcontrasts <- function(model,
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
-  # if first focal term is numeric, we contrast slopes
-  if (is.numeric(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) {
+  # if first focal term is numeric, we contrast slopes, but slopes only for
+  # # numerics with many values, not for binary or likert-alike
+  if (is.numeric(model_data[[first_focal]]) && !.is_likert(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) { # nolint
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
@@ -81,6 +82,7 @@ get_marginalcontrasts <- function(model,
       ci = ci,
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
+      transform = transform,
       verbose = verbose,
       ...
     )
@@ -100,14 +102,11 @@ get_marginalcontrasts <- function(model,
     )
   }
 
-  # filter results - for `estimate_contrasts()`, we don't filter using the
-  # data grid; due to the flexible way of defining comparisons, we need the
-  # full data grid and filter here (e.g., when we have `by="Petal.Width=c(1, 2)"`)
-  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
-    for (i in names(my_args$by_filter)) {
-      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
-    }
-  }
+  # filter results - for `estimate_contrasts()`, and when `estimate = "average"`,
+  # we don't filter using the data grid; due to the flexible way of defining
+  # comparisons, we need the full data grid and filter here (e.g., when we have
+  # `by="Petal.Width=c(1, 2)"`)
+  out <- .filter_contrasts_average(out, my_args)
 
   # adjust p-values
   if (!model_info$is_bayesian) {
@@ -141,6 +140,37 @@ get_marginalcontrasts <- function(model,
 }
 
 
+# filter "contrasts" for `estimate = "average"` -------------------------------
+
+.filter_contrasts_average <- function(out, my_args) {
+  # filter results - for `estimate_contrasts()`, and when `estimate = "average"`,
+  # we don't filter using the data grid; due to the flexible way of defining
+  # comparisons, we need the full data grid and filter here (e.g., when we have
+  # `by="Petal.Width=c(1, 2)"`)
+  if (!is.null(my_args$by_filter) && all(names(my_args$by_filter) %in% colnames(out))) {
+    for (i in names(my_args$by_filter)) {
+      filter_ok <- any(my_args$by_filter[[i]] %in% out[[i]])
+      # stop if not...
+      if (!filter_ok) {
+        # set up informative message
+        example_values <- sample(unique(out[[i]]), pmin(3, insight::n_unique(out[[i]])))
+        # tell user...
+        insight::format_error(paste0(
+          "None of the values specified for the predictor `", i,
+          "` are available in the data. This is required for `estimate=\"average\"`.",
+          " Either use a different option for the `estimate` argument, or use values that",
+          " are present in the data, such as ",
+          datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
+          "."
+        ))
+      }
+      out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
+    }
+  }
+  out
+}
+
+
 # make "comparison" argument compatible -----------------------------------
 
 # this function has two major tasks: format the "comparison" argument for use
@@ -154,11 +184,15 @@ get_marginalcontrasts <- function(model,
                                                      ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
+  # save original `by`
+  original_by <- my_args$by
 
-  # make sure "by" is a valid column name, and no filter-directive,
-  # like "Species='setosa'". If `by` is also used for filtering, split and
-  # extract filter value for later - we have to filter rows manually after
-  # calculating contrasts. Furthermore, "clean" `by` argument (remove filter)
+  # make sure "by" is a valid column name, and no filter-directive, like
+  # "Species='setosa'". If `by` is also used for filtering, split and extract
+  # filter value for later - we have to filter rows manually after calculating
+  # contrasts (but only for `estimate = "average"`!). Furthermore, "clean" `by`
+  # argument (remove filter), because we need the pure variable name for setting
+  # up the hypothesis argument, where variables in `by` are used in the formula
   if (!is.null(my_args$by) && any(grepl("=", my_args$by, fixed = TRUE))) { # "[^0-9A-Za-z\\._]"
     # find which element in `by` has a filter
     filter_index <- grep("=", my_args$by, fixed = TRUE)
@@ -268,8 +302,14 @@ get_marginalcontrasts <- function(model,
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
 
-  # add back token to `by`
-  if (!is.null(by_token)) {
+  # for `estimate = "average"`, we cannot create a data grid, thus we need to
+  # filter manually. However, for all other `estimate` options, we can simply
+  # use the data grid for filtering
+  if (!identical(estimate, "average") && !is.null(original_by)) {
+    my_args$by <- original_by
+    by_filter <- NULL
+  } else if (!is.null(by_token)) {
+    # add back token to `by`
     for (i in names(by_token)) {
       my_args$by[my_args$by == i] <- paste(i, by_token[[i]], sep = "=")
     }

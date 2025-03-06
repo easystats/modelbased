@@ -193,6 +193,13 @@ test_that("plots, grouplevel lme4", {
     "plot-grouplevel-lme4-1",
     plot(estimate_grouplevel(model))
   )
+  out <- estimate_grouplevel(model)
+  vr <- visualisation_recipe(out, pointrange = list(color = "black"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-grouplevel-lme4-2",
+    plot(vr)
+  )
 })
 
 

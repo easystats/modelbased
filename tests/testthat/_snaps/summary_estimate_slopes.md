@@ -29,7 +29,7 @@
       -------------------------------------------------------
       setosa     |  1.00 | 1.89 | positive  | Not Significant
       versicolor |  3.03 | 5.05 | positive  | Significant    
-      virginica  |  4.52 | 4.69 | positive  | Not Significant
+      virginica  |  4.52 | 4.70 | positive  | Not Significant
       virginica  |  4.75 | 5.77 | positive  | Significant    
       virginica  |  5.83 | 6.90 | positive  | Not Significant
       

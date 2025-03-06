@@ -14,7 +14,9 @@ knitr::opts_chunk$set(
   dev = "png",
   fig.width = 7,
   fig.height = 3.5,
-  message = FALSE, warning = FALSE
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
 )
 options(width = 800)
 arrow_color <- "#FF00cc"
@@ -25,7 +27,7 @@ pkgs <- c("ggplot2", "marginaleffects", "see", "parameters")
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-if (!all(vapply(pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1L)))) {
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```
@@ -167,7 +169,7 @@ Again, to answer this question, we calculate all pairwise comparisons, i.e. the 
 estimate_contrasts(model2, contrast = c("episode", "grp"))
 ```
 
-For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is 0.35. We find this comparison in row 8 of the above output.
+For our quantity of interest, the contrast between groups `treatment` and `control` when `episode = 2` is 0.06. We find this comparison in row 10 of the above output.
 
 As we can see, `estimate_contrasts()` returns pairwise comparisons of all possible combinations of factor levels from our focal variables. If we're only interested in a very specific comparison, we have two options to simplify the output:
 
@@ -303,12 +305,12 @@ estimate_contrasts(
 Let's replicate this step-by-step:
 
 1. Predicted value of _outcome_ for `episode = 1` in the control group is 0.03.
-2. Predicted value of _outcome_ for `episode = 2` in the control group is -0.39.
-3. The first difference is 0.42.
-4. Predicted value of _outcome_ for `episode = 1` in the treatment group is 0.18.
-5. Predicted value of _outcome_ for `episode = 2` in the treatment group is -0.04.
-6. The second difference is 0.22.
-7. Our quantity of interest is the difference between these two differences, which is 0.20. This difference is not statistically significant (p = 0.277).
+2. Predicted value of _outcome_ for `episode = 2` in the control group is 0.23.
+3. The first difference is 0.20.
+4. Predicted value of _outcome_ for `episode = 1` in the treatment group is -0.39.
+5. Predicted value of _outcome_ for `episode = 2` in the treatment group is 0.18.
+6. The second difference is -0.17.
+7. Our quantity of interest is the difference between these two differences, which is (considering rounding inaccuracy) 0.36. This difference is not statistically significant (p = 0.277).
 
 # Conclusion
 

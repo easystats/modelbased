@@ -1,29 +1,53 @@
 #' @keywords internal
-.get_marginaleffects_type_argument <- function(model, predict = NULL, ...) {
+.get_marginaleffects_type_argument <- function(model,
+                                               predict = NULL,
+                                               comparison = NULL,
+                                               model_info = NULL,
+                                               verbose = TRUE,
+                                               ...) {
   dots <- list(...)
 
   # no transformation always returns link-scale
   if (identical(predict, "link")) {
-    return("link")
+    return(list(predict = "link", backtransform = FALSE, link_inverse = NULL))
   }
 
   # handle distributional parameters
   if (!is.null(predict) && predict %in% .brms_aux_elements()) {
-    return(predict)
+    return(list(predict = predict, backtransform = FALSE, link_inverse = NULL))
   }
 
-  # extract all valid types for model class
+  # extract all valid types and the default type for model class
   valid_types <- .valid_marginaleffects_types(model)
+  default_type <- .default_marginaleffects_types(model)
+
+  # find link-types - we need link-type when user wants bias-correction
+  link_types <- c("link", "linear.predictor", "lp")
+  link_type <- link_types[which(link_types %in% valid_types)[1]]
+  # by default, no prediction on the link-scale with back-transformation
+  inv_link <- FALSE
 
   # check if user supplied type- or predict argument, and if it's valid
   if (!is.null(dots$type) && !dots$type %in% valid_types) {
     # if not, indicate wrong argument
     predict <- NA
     error_arg <- "type"
-  } else if (!is.null(predict) && !predict %in% valid_types) {
+  } else if (!is.null(predict) && !predict %in% c("inverse_link", valid_types)) {
     # if not, indicate wrong argument
     predict <- NA
     error_arg <- "predict"
+  } else if (identical(predict, "inverse_link")) {
+    # handle special type of predict-scale. we allow predictions on the
+    # link-scale with manual back-transformation, similar to {marginaleffects}'
+    # invlink(link) option. but only, if we have a link-type.
+    if (!is.na(link_type)) {
+      predict <- "response"
+      inv_link <- TRUE
+    } else {
+      # if not, indicate wrong argument
+      predict <- NA
+      error_arg <- "predict"
+    }
   }
 
   if (isTRUE(is.na(predict))) {
@@ -37,20 +61,50 @@
     ))
   }
 
+  # if we have bias-correction, and we are able to get predictions on the
+  # link-scale, we set `predict` to "response" - only in this case,
+  # a back transformation is applied
+  if (isTRUE(dots$bias_correction) && !is.na(link_type)) {
+    predict <- "response"
+    inv_link <- TRUE
+  }
+
   # return default type
   if (is.null(dots$type)) {
+    link_inverse <- .link_inverse(model, verbose = verbose, ...)
     if (is.null(predict)) {
-      valid_types[1]
+      out <- default_type
     } else {
-      predict
+      out <- predict
+    }
+
+    # usually, predictions on the response scale for each observation, and then
+    # aggregated by groups, is less biased. However, this may result in confidence
+    # intervals that are outside plausible bounds. In this case, we can force
+    # to calculate predictions on the link-scale using `inverse_link`, and then
+    # back-tranform manually. However, in particular for mixed models, this does
+    # *not* accurately average across random effects. So we have to decide whether
+    # we want more accurate *predictions* or more accurate *uncertainty*.
+
+    # no transform if no "link" type available and if not explicitly requested by user
+    transform <- isTRUE(inv_link) &&
+      # only back-transform if we have a link-inverse function
+      !is.null(link_inverse) &&
+      # no back-transform for `estimate_contrasts()`
+      is.null(comparison)
+
+    if (transform) {
+      list(predict = link_type, backtransform = TRUE, link_inverse = link_inverse)
+    } else {
+      list(predict = out, backtransform = FALSE, link_inverse = NULL)
     }
   } else {
-    dots$type
+    list(predict = dots$type, backtransform = FALSE, link_inverse = NULL)
   }
 }
 
 
-# return default "type" argument - this differs, depending on model class
+# return all "type" arguments
 .valid_marginaleffects_types <- function(model) {
   model_class <- class(model)[1]
   # for unrecognized model classes, return "response"
@@ -59,6 +113,20 @@
   }
   # extract all valid types for model class
   .typedic$type[.typedic$class == model_class]
+}
+
+
+# return default type argument for model class, as defined in marginaleffecs
+# we can overwrite the default, e.g. using "inverse_link" as an option when
+# not provided by marginaleffects, in the ".default_type" data frame
+.default_marginaleffects_types <- function(model) {
+  model_class <- class(model)[1]
+  # for unrecognized model classes, return "response"
+  if (!model_class %in% .default_type$class) {
+    return("response")
+  }
+  # extract all valid types for model class
+  .default_type$type[.default_type$class == model_class]
 }
 
 
@@ -130,7 +198,7 @@
 
 
 # the default "type" arguments for each model class. Used to set the
-# default type in "ggaverage()"
+# default type for the marginaleffects-backend
 # Run following code to update this list:
 # x <- marginaleffects:::type_dictionary_build()
 # x[!duplicated(x$class), ]

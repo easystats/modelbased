@@ -90,7 +90,11 @@ test_that("estimate_contrasts - Frequentist, One factor and one continuous", {
   expect_identical(dim(estim), c(3L, 9L))
   estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2.3, 3)", backend = "marginaleffects")
   expect_identical(dim(estim), c(1L, 9L))
+  expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_identical(as.character(estim$Level1), "3")
   estim <- estimate_contrasts(model, contrast = "Petal.Length=c(2, 3, 4)", backend = "marginaleffects")
+  expect_named(estim, c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
+  expect_identical(as.character(estim$Level1), c("3", "4", "4"))
   expect_identical(dim(estim), c(3L, 9L))
 })
 
@@ -210,17 +214,8 @@ test_that("estimate_contrasts - Frequentist, duplicated levels", {
   set.seed(123)
   dat$three <- factor(sample(0:1, nrow(dat), replace = TRUE))
   model <- lm(mpg ~ three * vs * am, data = dat)
-  expect_snapshot(print(
-    estimate_contrasts(
-      model,
-      contrast = c("three", "vs", "am"), backend = "marginaleffects"
-    ),
-    zap_small = TRUE, table_width = Inf
-  ), variant = "windows") # nolint
-  expect_snapshot(print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"),
-    zap_small = TRUE, table_width = Inf
-  ), variant = "windows") # nolint
-
+  expect_snapshot(print(estimate_contrasts(model, contrast = c("three", "vs", "am"), backend = "marginaleffects"), digits = 1, zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
+  expect_snapshot(print(estimate_contrasts(model, contrast = "am", backend = "marginaleffects"), zap_small = TRUE, table_width = Inf), variant = "windows") # nolint
 
   dat <- iris
   dat$factor1 <- ifelse(dat$Sepal.Width > 3, "A", "B")
@@ -946,4 +941,159 @@ test_that("estimate_contrast, slopes with emmeans", {
   expect_identical(dim(out), c(3L, 9L))
   expect_equal(out$Difference, c(-0.12981, 0.04095, 0.17076), tolerance = 1e-4)
   expect_identical(as.character(out$Level1), c("setosa", "setosa", "versicolor"))
+})
+
+
+test_that("estimate_contrast, slopes with emmeans", {
+  set.seed(123)
+  dat <- data.frame(
+    outcome = rbinom(n = 100, size = 1, prob = 0.35),
+    var_binom = as.factor(rbinom(n = 100, size = 1, prob = 0.2)),
+    var_cont = rnorm(n = 100, mean = 10, sd = 7)
+  )
+  dat$var_cont <- datawizard::standardize(dat$var_cont)
+
+  m1 <- glm(
+    outcome ~ var_binom + var_cont,
+    data = dat,
+    family = binomial(link = "logit")
+  )
+
+  # range of values
+  out <- estimate_contrasts(
+    m1,
+    c("var_binom", "var_cont"),
+    predict = "link",
+    transform = exp,
+    length = 3
+  )
+  expect_snapshot(print(out, table_width = Inf))
+  expect_identical(
+    as.character(out$Level1),
+    c(
+      "0, 0.725", "0, 3.463", "1, -2.012", "1, 0.725", "1, 3.463",
+      "0, 3.463", "1, -2.012", "1, 0.725", "1, 3.463", "1, -2.012",
+      "1, 0.725", "1, 3.463", "1, 0.725", "1, 3.463", "1, 3.463"
+    )
+  )
+
+  out <- estimate_contrasts(
+    m1,
+    c("var_binom", "var_cont=[sd]"),
+    predict = "link",
+    transform = exp
+  )
+  expect_identical(
+    as.character(out$Level1),
+    c(
+      "var_binom 0, var_cont 0", "var_binom 0, var_cont 1", "var_binom 1, var_cont -1",
+      "var_binom 1, var_cont 0", "var_binom 1, var_cont 1", "var_binom 0, var_cont 1",
+      "var_binom 1, var_cont -1", "var_binom 1, var_cont 0", "var_binom 1, var_cont 1",
+      "var_binom 1, var_cont -1", "var_binom 1, var_cont 0", "var_binom 1, var_cont 1",
+      "var_binom 1, var_cont 0", "var_binom 1, var_cont 1", "var_binom 1, var_cont 1"
+    )
+  )
+})
+
+
+test_that("estimate_contrast, filter by numeric values", {
+  skip_if_not_installed("lme4")
+  data(iris)
+  mod <- lm(Sepal.Length ~ Petal.Width * Species, data = iris)
+  out1 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(9L, 10L))
+  expect_identical(dim(out2), c(9L, 10L))
+  expect_equal(
+    out1$Difference,
+    c(-0.23635, 0.2129, 0.44924, 0.25985, -0.06644, -0.32629, 0.75604, -0.34579, -1.10183),
+    tolerance = 1e-4
+  )
+  expect_equal(
+    out2$Difference,
+    c(0.23635, -0.25985, -0.75604, -0.2129, 0.06644, 0.34579, -0.44924, 0.32629, 1.10183),
+    tolerance = 1e-4
+  )
+
+  out1 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Species=c('versicolor','setosa')", by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+  expect_identical(dim(out1), c(3L, 10L))
+  expect_identical(dim(out2), c(3L, 10L))
+  expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
+
+  data(CO2)
+  mod <- suppressWarnings(lme4::lmer(uptake ~ conc * Plant + (1 | Type), data = CO2))
+  out1 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(132L, 10L))
+  expect_identical(dim(out2), c(132L, 10L))
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "emmeans")
+  expect_identical(dim(out1), c(6L, 10L))
+  expect_identical(dim(out2), c(6L, 10L))
+  expect_equal(out1$Difference[c(1, 6)], -1 * out2$Difference[c(1, 6)], tolerance = 1e-4)
+
+  out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", backend = "marginaleffects")
+  out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", comparison = "b1=b2", backend = "marginaleffects")
+  expect_equal(out1$Difference[1], -1 * out2$Difference, tolerance = 1e-4)
+
+  out1 <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')")
+  expect_equal(out1$Difference, c(0.01746, 0.01782, 0.00036), tolerance = 1e-3)
+
+  out <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')", comparison = "b1=b2")
+  expect_equal(out$Difference, -0.01745914, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, filterin in `by` and `contrast`", {
+  data(efc, package = "modelbased")
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
+  levels(efc$c172code) <- c("low", "mid", "high")
+  m <- lm(neg_c_7 ~ barthtot + c172code * e42dep + c161sex, data = efc)
+
+  out <- estimate_contrasts(m, c("e42dep", "c172code"))
+  expect_identical(dim(out), c(66L, 9L))
+
+  out <- estimate_contrasts(
+    m,
+    c("e42dep=c('independent','slightly dependent','moderately dependent')"),
+    by = "c172code"
+  )
+  expect_identical(dim(out), c(9L, 10L))
+  expect_equal(
+    out$Difference,
+    c(
+      -0.77851, 0.12142, 0.89993, 0.87674, 1.97996, 1.10322, 2.69591,
+      2.59613, -0.09978
+    ),
+    tolerance = 1e-4
+  )
+
+  out <- estimate_contrasts(
+    m,
+    "e42dep=c('independent','slightly dependent','moderately dependent')",
+    by = "c172code",
+    comparison = "b1=b4"
+  )
+  expect_equal(out$Difference, 1.163197, tolerance = 1e-4)
+
+  out <- estimate_contrasts(m, "e42dep", by = "c172code=c('low','mid')")
+  expect_identical(dim(out), c(12L, 10L))
+})
+
+
+test_that("estimate_contrast, don't calculate slopes for integers", {
+  data(mtcars)
+  m <- lm(mpg ~ hp + gear, data = mtcars)
+  expect_silent(estimate_contrasts(m, "gear"))
+  out <- estimate_contrasts(m, "gear")
+  expect_identical(dim(out), c(3L, 9L))
+
+  expect_error(
+    estimate_contrasts(m, "hp"),
+    regex = "Please specify"
+  )
+  out <- estimate_contrasts(m, "hp", by = "gear")
+  expect_identical(dim(out), c(3L, 8L))
 })

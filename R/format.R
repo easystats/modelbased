@@ -70,7 +70,7 @@ format.estimate_contrasts <- function(x,
   }
 
   if (!is.null(format) && format %in% c("md", "markdown", "html")) {
-    insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = "html", ...)
+    insight::format_table(x, ci_brackets = c("(", ")"), select = select, format = format, ...)
   } else {
     insight::format_table(x, select = select, ...)
   }
@@ -288,10 +288,30 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # levels correctly, we now replace levels with a special "token", and later
       # replace those tokens with the original levels again
 
-      # extract all comparison levels
-      all_levels <- unlist(lapply(dgrid[contrast], function(i) as.character(unique(i))), use.names = FALSE)
+      # extract all comparison levels, separately for numerics and factors/character
+      # we have to do this for numeric values and factors&character separately,
+      # because we need different regular expressions when "escaping" the "levels"
+      # of our focal predictors. we do this escaping because we want each
+      # contrasted level-combination in an own column.
+      all_levels <- all_num_levels <- NULL
+      # find numeric focal terms
+      numeric_focals <- vapply(dgrid[contrast], is.numeric, logical(1))
+      # extract levels of non-numerics
+      if (!all(numeric_focals)) {
+        all_levels <- unlist(lapply(
+          dgrid[contrast[!numeric_focals]],
+          function(i) as.character(unique(i))
+        ), use.names = FALSE)
+      }
+      # extract levels of non-numerics
+      if (any(numeric_focals)) {
+        all_num_levels <- unlist(lapply(
+          dgrid[contrast[numeric_focals]],
+          function(i) as.character(unique(i))
+        ), use.names = FALSE)
+      }
       # create replacement vector
-      replace_levels <- NULL
+      replace_levels <- replace_num_levels <- NULL
       # this looks strange, but we need to make sure we have unique tokens that
       # do not contain any letters or numbers, or similar characters that may
       # appear as a single level in the data. thus, we use a sequence of "~"
@@ -299,13 +319,20 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       for (i in seq_along(all_levels)) {
         replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
       }
+      for (i in seq_along(all_num_levels)) {
+        replace_num_levels <- c(replace_num_levels, paste0("#", paste(rep_len("@", i), collapse = ""), "#"))
+      }
 
       # replace all comparison levels with tokens
       params[] <- lapply(params, function(comparison_pair) {
+        for (j in seq_along(all_num_levels)) {
+          comparison_pair <- sub(all_num_levels[j], replace_num_levels[j], comparison_pair)
+        }
         for (j in seq_along(all_levels)) {
           comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
         }
-        comparison_pair
+        # remove multiple spaces
+        gsub("[[:space:]]{2,}", " ", comparison_pair)
       })
 
       # we now have a data frame with each comparison-pairs as single column.
@@ -326,6 +353,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       params[] <- lapply(params, function(comparison_pair) {
         for (j in seq_along(all_levels)) {
           comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
+        }
+        for (j in seq_along(all_num_levels)) {
+          comparison_pair <- sub(replace_num_levels[j], all_num_levels[j], comparison_pair, fixed = TRUE)
         }
         comparison_pair
       })
@@ -470,14 +500,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # "Mean")
   if (is.null(attributes(x)$posterior_draws)) {
     # frequentist
-    params <- suppressWarnings(parameters::model_parameters(x, verbose = FALSE))
+    params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE))
     coefficient_name <- intersect(
       c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
       colnames(params)
     )[1]
   } else {
     # Bayesian
-    params <- suppressWarnings(bayestestR::describe_posterior(x, verbose = FALSE, ...))
+    params <- suppressWarnings(bayestestR::describe_posterior(x, ci = ci, verbose = FALSE, ...))
     ## FIXME: needs to be fixed in bayestestR: categorical models don't return group column
     # see https://github.com/easystats/bayestestR/issues/692
     if (info$is_categorical) {

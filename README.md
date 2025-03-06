@@ -2,6 +2,8 @@
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
 
 [![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
+[![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
 ***Make the most out of your models***
 
@@ -13,10 +15,10 @@ predictions.
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
+[![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
 [![modelbased status
 badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
-[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
+[![codecov](https://codecov.io/gh/easystats/modelbased/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
 
 The *modelbased* package is available on CRAN, while its latest
 development version is available on R-universe (from *rOpenSci*).
@@ -32,11 +34,18 @@ Once you have downloaded the package, you can then load it using:
 library("modelbased")
 ```
 
-> \[!TIP\] Instead of `library(modelbased)`, use `library(easystats)`,
-> which will make all features of the easystats-ecosystem available. You
-> can also use `easystats::install_latest()` to stay updated.
+> **Tip:**
+>
+> Instead of `library(modelbased)`, use `library(easystats)`. This will
+> make all features of the easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
 
 ## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-modelbased-orange.svg?colorB=E91E63)](https://easystats.github.io/modelbased/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-modelbased-orange.svg?colorB=2196F3)](https://easystats.github.io/modelbased/reference/index.html)
 
 Access the package
 [**documentation**](https://easystats.github.io/modelbased/), and
@@ -161,6 +170,14 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
 
 <img src="man/figures/unnamed-chunk-3-1.png" width="100%" />
 
+You can also get a “quick” plot using the `plot()` function:
+
+``` r
+plot(means)
+```
+
+<img src="man/figures/unnamed-chunk-4-1.png" width="100%" />
+
 ### Contrast analysis
 
 - **Problem**: The parameters of my model only return the difference
@@ -194,7 +211,7 @@ contrasts
 ## p-values are uncorrected.
 ```
 
-<img src="man/figures/unnamed-chunk-5-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-6-1.png" width="100%" />
 
 ### Check the contrasts at different points of another linear predictor
 
@@ -261,7 +278,7 @@ ggplot(contrasts, aes(x = Petal.Length, y = Difference, )) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-7-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-8-1.png" width="100%" />
 
 ### Create smart grids to represent complex interactions
 
@@ -305,7 +322,7 @@ ggplot(iris, aes(x = Petal.Length, y = Sepal.Length)) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-8-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-9-1.png" width="100%" />
 
 ### Generate predictions from your model to compare it with original data
 
@@ -361,7 +378,7 @@ ggplot(data = pred1, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-10-1.png" width="100%" />
 
 ### Extract and format group-level random effects
 
@@ -395,7 +412,7 @@ plot(random) +
   theme_minimal()
 ```
 
-<img src="man/figures/unnamed-chunk-10-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-11-1.png" width="100%" />
 
 ### Estimate derivative of non-linear relationships (e.g., in GAMs)
 
@@ -438,7 +455,7 @@ plot(estimate_relation(model, length = 200)) /
   geom_hline(yintercept = 0, linetype = "dashed")
 ```
 
-<img src="man/figures/unnamed-chunk-11-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-12-1.png" width="100%" />
 
 ### Describe the smooth term by its linear parts
 
@@ -464,7 +481,7 @@ ggplot(vizdata, aes(x = Petal.Length, y = Predicted)) +
   theme_modern()
 ```
 
-<img src="man/figures/unnamed-chunk-12-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-13-1.png" width="100%" />
 
 ``` r
 
@@ -501,7 +518,7 @@ slopes <- estimate_slopes(model, trend = "hp", by = "wt", length = 200)
 plot(slopes)
 ```
 
-<img src="man/figures/unnamed-chunk-13-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
 
 ### Visualize predictions with random effects
 
@@ -525,7 +542,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0)) # Make CI ribbon transparent for clarity
 ```
 
-<img src="man/figures/unnamed-chunk-14-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
 
 As we can see, each participant has a different “intercept” (starting
 point on the y-axis), but all their slopes are the same: this is because
@@ -541,7 +558,7 @@ preds <- estimate_relation(model, include_random = TRUE)
 plot(preds, ribbon = list(alpha = 0.1))
 ```
 
-<img src="man/figures/unnamed-chunk-15-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
 
 As we can see, the effect is now different for all participants. Let’s
 plot, on top of that, the “fixed” effect estimated across all these
@@ -555,7 +572,7 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
 
-<img src="man/figures/unnamed-chunk-16-1.png" width="100%" />
+<img src="man/figures/unnamed-chunk-17-1.png" width="100%" />
 
 ## Code of Conduct
 

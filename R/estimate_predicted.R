@@ -177,8 +177,8 @@
 #' to (back-) transform results, which can be useful in case the regression
 #' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). Can also
 #' be `TRUE`, in which case `insight::get_transformation()` is called to
-#' determine the appropriate transformation-function. **Note:** Standard errors
-#' are not (back-) transformed!
+#' determine the appropriate transformation-function. Note that no standard
+#' errors are returned when transformations are applied.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -470,13 +470,14 @@ estimate_relation <- function(model,
     out$Predicted <- trans_fun(out$Predicted)
     out$CI_low <- trans_fun(out$CI_low)
     out$CI_high <- trans_fun(out$CI_high)
+    out$SE <- NULL
   }
 
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
-  attr(out, "transform") <- transform
+  attr(out, "transform") <- !is.null(transform)
   attr(out, "model") <- model
   attr(out, "datagrid") <- data
   attr(out, "focal_terms") <- grid_specs$at_specs$varname
@@ -489,7 +490,11 @@ estimate_relation <- function(model,
     by = grid_specs$at,
     type = "predictions",
     model = model,
-    info = c(grid_specs, list(predict = predict))
+    info = c(
+      grid_specs,
+      list(predict = predict),
+      transform = !is.null(transform)
+    )
   )
 
   attributes(out) <- c(attributes(out), grid_specs[!names(grid_specs) %in% names(attributes(out))])

@@ -42,6 +42,8 @@ navbar:
       menu:
         - text: "Overview of Vignettes"
           href: articles/overview_of_vignettes.html
+        - text: -------
+        - text: "Basics"
         - text: "Data grids"
           href: articles/visualisation_matrix.html
         - text: "Marginal means"
@@ -50,20 +52,31 @@ navbar:
           href: articles/estimate_contrasts.html
         - text: "Marginal effects and derivatives"
           href: articles/estimate_slopes.html
-    - text: "Interpretation"
-      menu:
+        - text: -------
+        - text: "Interpretation"
         - text: "Use a model to make predictions"
           href: articles/estimate_response.html
         - text: "Interpret models using Effect Derivatives"
           href: articles/derivatives.html
         - text: "Estimate and re-use Random Effects"
           href: articles/estimate_grouplevel.html
+        - text: -------
+        - text: "Visualization"
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
-    - text: "Contrasts and Comparisons"
+    - text: "Case Studies"
       menu:
+        - text: "Workflows"
+        - text: "Understanding your models"
+          href: articles/workflow_modelbased.html
+        - text: "Causal inference for observational data"
+          href: articles/practical_causality.html
+        - text: "Intersectionality analysis using the MAIHDA framework"
+          href: articles/practical_intersectionality.html
+        - text: -------
+        - text: "Contrasts"
         - text: "Contrasts and comparisons"
           href: articles/introduction_comparisons_1.html
         - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
@@ -72,12 +85,6 @@ navbar:
           href: articles/introduction_comparisons_3.html
         - text: "Contrasts and comparisons for zero-inflation models"
           href: articles/introduction_comparisons_4.html
-    - text: "Case Studies"
-      menu:
-        - text: "Understanding your models"
-          href: articles/workflow_modelbased.html
-        - text: "Intersectionality analysis using the MAIHDA framework"
-          href: articles/practical_intersectionality.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html

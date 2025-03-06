@@ -50,8 +50,8 @@ get_marginalmeans <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
-  # find default response-type
-  predict <- .get_marginaleffects_type_argument(model, predict, ...)
+  # find default response-type, and get information about back transformation
+  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, verbose, ...) # nolint
 
 
   # Second step: create a data grid -------------------------------------------
@@ -73,6 +73,13 @@ get_marginalmeans <- function(model,
       include_random = TRUE,
       verbose = FALSE
     )
+    # did user request weights? These are not supported for data-grid
+    # marginalization types
+    if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
+      insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
+      dots[c("weights", "wts")] <- NULL
+    }
+
     # always show all theoretical values by default
     if (is.null(dots$preserve_range)) {
       dg_args$preserve_range <- FALSE
@@ -99,7 +106,7 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits")] <- NULL
+  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma")] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df)) {
@@ -116,6 +123,9 @@ get_marginalmeans <- function(model,
 
   # setup arguments
   fun_args <- list(model, conf_level = ci)
+
+  # handle variables/by/newdata
+  # ---------------------------
 
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
@@ -135,11 +145,23 @@ get_marginalmeans <- function(model,
     fun_args$by <- datagrid_info$at_specs$varname
   }
 
+  # handle brms auxiliary
+  # ---------------------------
+
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
-    fun_args$dpar <- predict
+  if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+    fun_args$dpar <- predict_args$predict
   } else {
-    fun_args$type <- predict
+    fun_args$type <- predict_args$predict
+  }
+
+  # weights?
+  # ---------------------------
+
+  # handle weights - argument is named "wts" in marginal effects
+  if (!is.null(dots$weights)) {
+    dots$wts <- dots$weights
+    dots$weights <- NULL
   }
 
   # =========================================================================
@@ -182,13 +204,25 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
+
+  # fitfth step: post-processin marginal means---------------------------------
+  # ---------------------------------------------------------------------------
+
   # filter "by" rows when we have "average" marginalization, because we don't
   # pass data grid in such situations - but we still created the data grid based
   # on the `by` variables, for internal use, for example filtering at this point
-  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
-    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
-  }
+  means <- .filter_datagrid_average(means, estimate, datagrid, datagrid_info)
 
+  # back-transform from link-scale? this functions is...
+  # - only called for means, not contrasts, because for contrasts we rely on
+  #   the delta-method for SEs on the response scale
+  # - only called when `type` (i.e. `predict`) is "response" AND the model class
+  #   has a "link" prediction type
+  if (predict_args$backtransform) {
+    means <- .backtransform_predictions(means, model, predict_args, ci, df = dots$df)
+    # make sure we have the original string value for the "predict" argument
+    predict_args$predict <- "response"
+  }
 
   # =========================================================================
   # only needed to estimate_contrasts() with custom hypothesis ==============
@@ -201,6 +235,7 @@ get_marginalmeans <- function(model,
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
 
+
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -211,7 +246,7 @@ get_marginalmeans <- function(model,
     info = c(
       datagrid_info,
       list(
-        predict = predict,
+        predict = predict_args$predict,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform)
@@ -254,6 +289,51 @@ get_marginalmeans <- function(model,
   }
 
   out
+}
+
+
+# filter datagrid foe `estimate = "average"`---------------------------------
+
+.filter_datagrid_average <- function(means, estimate, datagrid, datagrid_info) {
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+    # sanity check - are all filter values from the data grid in the marginaleffects
+    # object? For `estimate_average()`, predictions are based on the data, not
+    # the theoretical data grid. When users request filtering by numeric predictors,
+    # we need to make sure all filter-values (from which the dummy-data grid is built)
+    # are available for filter. E.g., `by = "Petal.Width=c(3,5)"` won't work for
+    # estimate = "average", because 3 and 5 don't appear in the iris data.
+    filter_ok <- vapply(
+      datagrid_info$at_specs$varname,
+      function(j) any(datagrid[[j]] %in% means[[j]]),
+      logical(1)
+    )
+    # stop if not...
+    if (!all(filter_ok)) {
+      # set up for informative error message
+      invalid_filters <- names(filter_ok)[!filter_ok]
+      first_invalid <- invalid_filters[1]
+      example_values <- sample(
+        unique(means[[first_invalid]]),
+        pmin(3, insight::n_unique(means[[first_invalid]]))
+      )
+      # tell user...
+      insight::format_error(paste0(
+        "None of the values specified for the predictors ",
+        datawizard::text_concatenate(invalid_filters, enclose = "`"),
+        " are available in the data. This is required for `estimate=\"average\"`.",
+        " Either use a different option for the `estimate` argument, or use values that",
+        " are present in the data, such as ",
+        datawizard::text_concatenate(example_values, last = " or ", enclose = "`"),
+        "."
+      ))
+    }
+    # else, filter values
+    means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+  }
+  means
 }
 
 

@@ -141,15 +141,11 @@ pool_predictions <- function(x, transform = NULL, ...) {
   ci <- attributes(x[[1]])$ci
   model <- attributes(x[[1]])$model
   dof <- x[[1]]$df
-  link_inv <- insight::link_inverse(model)
-  link_fun <- insight::link_function(model)
 
-  if (is.null(link_inv)) {
-    link_inv <- function(x) x
-  }
-  if (is.null(link_fun)) {
-    link_fun <- function(x) x
-  }
+  # we don't use the link-inverse because standard errors are calculated using
+  # the delta method, hence, these would be incorrect if we apply link-inverse
+  # transformation to calculate CIs.
+
   if (is.null(dof)) {
     dof <- Inf
   }
@@ -166,7 +162,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
   for (i in 1:n_rows) {
     # pooled estimate
-    pooled_pred <- unlist(lapply(original_x, function(j) link_fun(j[[estimate_name]][i])), use.names = FALSE)
+    pooled_pred <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
     pooled_predictions[[estimate_name]][i] <- mean(pooled_pred, na.rm = TRUE)
 
     # pooled standard error
@@ -187,8 +183,8 @@ pool_predictions <- function(x, transform = NULL, ...) {
   # confidence intervals ----
   alpha <- (1 + ci) / 2
   fac <- stats::qt(alpha, df = pooled_df)
-  pooled_predictions$CI_low <- link_inv(pooled_predictions[[estimate_name]] - fac * pooled_predictions$SE)
-  pooled_predictions$CI_high <- link_inv(pooled_predictions[[estimate_name]] + fac * pooled_predictions$SE)
+  pooled_predictions$CI_low <- pooled_predictions[[estimate_name]] - fac * pooled_predictions$SE
+  pooled_predictions$CI_high <- pooled_predictions[[estimate_name]] + fac * pooled_predictions$SE
 
   # udpate df ----
   pooled_predictions$df <- pooled_df
@@ -199,9 +195,6 @@ pool_predictions <- function(x, transform = NULL, ...) {
     pooled_predictions$CI_low <- transform_fun(pooled_predictions$CI_low)
     pooled_predictions$CI_high <- transform_fun(pooled_predictions$CI_high)
   }
-
-  # backtransform
-  pooled_predictions[[estimate_name]] <- link_inv(pooled_predictions[[estimate_name]])
 
   pooled_predictions
 }

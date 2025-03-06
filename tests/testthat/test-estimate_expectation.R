@@ -1,3 +1,5 @@
+skip_if_not_installed("insight", minimum_version = "1.1.0")
+
 test_that("estimate_expectation", {
   skip_if_not_installed("lme4")
   model <- lme4::lmer(mpg ~ wt + factor(am) + (1 | cyl), data = mtcars)

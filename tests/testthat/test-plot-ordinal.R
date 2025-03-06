@@ -16,7 +16,7 @@ test_that("plots ordinal", {
     plot(out, show_data = FALSE)
   )
 
-  out <- estimate_relation(m, by = "Sepal.Width")
+  out <- estimate_relation(m, by = "Sepal.Width", verbose = FALSE)
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-ordinal-2",
@@ -36,7 +36,7 @@ test_that("plots package ordinal", {
     plot(out, show_data = FALSE)
   )
 
-  out <- estimate_relation(m1, by = "temp")
+  out <- estimate_relation(m1, by = "temp", verbose = FALSE)
   set.seed(123)
   vdiffr::expect_doppelganger(
     "plot-ordinal-4",

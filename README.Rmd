@@ -30,7 +30,8 @@ options(marginaleffects_safe = FALSE)
 ```
 
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
+[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION) [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
+[![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
 ***Make the most out of your models***
 
@@ -41,8 +42,8 @@ options(marginaleffects_safe = FALSE)
 
 ## Installation
 
-[![CRAN](http://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased) [![modelbased status badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
-[![codecov](https://codecov.io/gh/easystats/modelbased/branch/master/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
+[![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased) [![modelbased status badge](https://easystats.r-universe.dev/badges/modelbased)](https://easystats.r-universe.dev)
+[![codecov](https://codecov.io/gh/easystats/modelbased/branch/main/graph/badge.svg)](https://app.codecov.io/gh/easystats/modelbased)
 
 The *modelbased* package is available on CRAN, while its latest development version is available on R-universe (from _rOpenSci_).
 
@@ -57,11 +58,19 @@ Once you have downloaded the package, you can then load it using:
 library("modelbased")
 ```
 
-> [!TIP]
-> Instead of `library(modelbased)`, use `library(easystats)`, which will make all features of the  easystats-ecosystem available. You can also use `easystats::install_latest()` to stay updated.
+> **Tip:**
+>
+> Instead of `library(modelbased)`, use `library(easystats)`.
+> This will make all features of the  easystats-ecosystem available.
+>
+> To stay updated, use `easystats::install_latest()`.
 
 
 ## Documentation
+
+[![Documentation](https://img.shields.io/badge/documentation-modelbased-orange.svg?colorB=E91E63)](https://easystats.github.io/modelbased/)
+[![Blog](https://img.shields.io/badge/blog-easystats-orange.svg?colorB=FF9800)](https://easystats.github.io/blog/posts/)
+[![Features](https://img.shields.io/badge/features-modelbased-orange.svg?colorB=2196F3)](https://easystats.github.io/modelbased/reference/index.html)
 
 Access the package [**documentation**](https://easystats.github.io/modelbased/), and check-out these vignettes:
 
@@ -126,6 +135,12 @@ ggplot(iris, aes(x = Species, y = Sepal.Width)) +
   # Improve colors
   scale_fill_manual(values = c("pink", "lightblue", "lightgreen")) +
   theme_minimal()
+```
+
+You can also get a "quick" plot using the `plot()` function:
+
+```{r}
+plot(means)
 ```
 
 

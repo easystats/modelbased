@@ -10,6 +10,7 @@ estimate_slopes(
   by = NULL,
   ci = 0.95,
   p_adjust = "none",
+  transform = NULL,
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -24,12 +25,14 @@ compute the slopes.}
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
-estimated across them). The \code{by} argument is used to create a "reference grid"
-or "data grid" with representative values for the focal predictors. \code{by}
-can be a character (vector) naming the focal predictors (and optionally,
-representative values or levels), or a list of named elements. See details
-in \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids
-for predictors of interest.}
+estimated across them). \code{by} can be a character (vector) naming the focal
+predictors, optionally including representative values or levels at which
+focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
+\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
+"data grid" with representative values for the focal predictors. In this
+case, \code{by} can also be list of named elements. See details in
+\code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
+predictors of interest.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -40,6 +43,15 @@ predictors (one specified in \code{trend}, one in \code{by}). In this case, the 
 option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
@@ -63,7 +75,12 @@ can be used to control the (number of) representative values.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
-passed to those functions.
+passed to those functions. A \code{weights} argument is passed to the \code{wts}
+argument in \code{avg_predictions()} or \code{avg_slopes()}, however, weights can
+only be applied when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for
+those marginalization options that do not use data grids). Other arguments,
+such as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which
+is internally used by \emph{marginaleffects}) if supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
