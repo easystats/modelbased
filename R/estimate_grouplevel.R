@@ -57,7 +57,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   # Extract params
   params <- parameters::model_parameters(
     model,
-    effects = ifelse(type == "random", "random", "total"),
+    effects = type,
     group_level = identical(type, "random"),
     ...
   )
