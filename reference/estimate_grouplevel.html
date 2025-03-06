@@ -111,17 +111,17 @@ which can be useful to add the random effects to the original data.</p>
 
 
 <dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p>If <code>"random"</code> (default), the coefficients are the ones estimated
-natively by the model (as they are returned by, for instance,
-<code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>). They correspond to the deviation of each individual group
-from their fixed effect. As such, a coefficient close to 0 means that the
-participants' effect is the same as the population-level effect (in other
-words, it is "in the norm"). If <code>"total"</code>, it will return the sum of the
-random effect and its corresponding fixed effects, which corresponds to
-<code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> (see <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">?coef.merMod</a></code>). Note that <code>type = "total"</code> currently don't
-have uncertainty indices (such as SE and CI) for models from <em>lme4</em> or
-<em>glmmTMB</em>, as these are not computable. However, for Bayesian models, it is
-possible to compute them.</p></dd>
+<dd><p>If <code>"random"</code> (default), the coefficients correspond to the
+conditional estimates of  the random effects (as they are returned by
+<code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>). They typically correspond to the deviation of each
+individual group from their fixed effect. As such, a coefficient close to 0
+means that the participants' effect is the same as the population-level
+effect (in other words, it is "in the norm"). If <code>"total"</code>, it will return
+the sum of the random effect and its corresponding fixed effects, which
+corresponds to <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> (see <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">?coef.merMod</a></code>). Note that <code>type = "total"</code>
+currently does not return uncertainty indices (such as SE and CI) for
+models from <em>lme4</em> or <em>glmmTMB</em>, as these are not computable. However, for
+Bayesian models, it is possible to compute them.</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -147,6 +147,8 @@ possible to compute them.</p></dd>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">hp</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">carb</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">random</span> <span class="op">&lt;-</span> <span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Show group-specific effects</span></span></span>
 <span class="r-in"><span><span class="va">random</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient |   SE |        95% CI</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
@@ -160,17 +162,6 @@ possible to compute them.</p></dd>
 <span class="r-in"><span><span class="co"># Visualize random effects</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">random</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="estimate_grouplevel-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Show group-specific effects</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Group | Level | Parameter   | Coefficient |   SE |        95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 1     | (Intercept) |        0.41 | 0.84 | [-1.24, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 2     | (Intercept) |        0.11 | 0.78 | [-1.42, 1.65]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 3     | (Intercept) |       -0.32 | 0.94 | [-2.16, 1.51]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 4     | (Intercept) |       -0.78 | 0.78 | [-2.31, 0.75]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 6     | (Intercept) |        0.09 | 1.00 | [-1.87, 2.05]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> carb  | 8     | (Intercept) |        0.50 | 1.00 | [-1.47, 2.46]</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Reshape to wide data so that it matches the original dataframe...</span></span></span>
 <span class="r-in"><span><span class="va">reshaped</span> <span class="op">&lt;-</span> <span class="fu">reshape_grouplevel</span><span class="op">(</span><span class="va">random</span>, indices <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Coefficient"</span>, <span class="st">"SE"</span><span class="op">)</span><span class="op">)</span></span></span>
