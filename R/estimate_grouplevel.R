@@ -71,7 +71,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
