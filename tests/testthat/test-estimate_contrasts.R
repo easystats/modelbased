@@ -1016,11 +1016,15 @@ test_that("estimate_contrast, filter by numeric values", {
   )
 
   out1 <- estimate_contrasts(
-    mod, contrast = "Species=c('versicolor','setosa')",
-    by = "Petal.Width=c(1,2,3)", backend = "marginaleffects")
+    mod,
+    contrast = "Species=c('versicolor','setosa')",
+    by = "Petal.Width=c(1,2,3)", backend = "marginaleffects"
+  )
   out2 <- estimate_contrasts(
-    mod, contrast = "Species=c('versicolor','setosa')",
-    by = "Petal.Width=c(1,2,3)", backend = "emmeans")
+    mod,
+    contrast = "Species=c('versicolor','setosa')",
+    by = "Petal.Width=c(1,2,3)", backend = "emmeans"
+  )
   expect_identical(dim(out1), c(3L, 10L))
   expect_identical(dim(out2), c(3L, 10L))
   expect_equal(out1$Difference, -1 * out2$Difference, tolerance = 1e-4)
@@ -1033,8 +1037,10 @@ test_that("estimate_contrast, filter by numeric values", {
   expect_identical(dim(out2), c(132L, 10L))
 
   out1 <- estimate_contrasts(
-    mod, contrast = "Plant=c('Qn1','Qn2','Qn3')",
-    by = "conc=c(100,200)", backend = "marginaleffects")
+    mod,
+    contrast = "Plant=c('Qn1','Qn2','Qn3')",
+    by = "conc=c(100,200)", backend = "marginaleffects"
+  )
   out2 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", by = "conc=c(100,200)", backend = "emmeans")
   expect_identical(dim(out1), c(6L, 10L))
   expect_identical(dim(out2), c(6L, 10L))
@@ -1042,8 +1048,10 @@ test_that("estimate_contrast, filter by numeric values", {
 
   out1 <- estimate_contrasts(mod, contrast = "Plant=c('Qn1','Qn2','Qn3')", backend = "marginaleffects")
   out2 <- estimate_contrasts(
-    mod, contrast = "Plant=c('Qn1','Qn2','Qn3')",
-    comparison = "b1=b2", backend = "marginaleffects")
+    mod,
+    contrast = "Plant=c('Qn1','Qn2','Qn3')",
+    comparison = "b1=b2", backend = "marginaleffects"
+  )
   expect_equal(out1$Difference[1], -1 * out2$Difference, tolerance = 1e-4)
 
   out1 <- estimate_contrasts(mod, contrast = "conc", by = "Plant=c('Mc2','Mn1','Qn3')")
