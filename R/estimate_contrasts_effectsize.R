@@ -104,6 +104,6 @@
 .rename_es_columns <- function(x) {
   colnames(x) <- gsub("cohens.d", "Cohens_d", colnames(x), fixed = TRUE)
   colnames(x) <- gsub("hedges.d", "Hedges_g", colnames(x), fixed = TRUE)
-  colnames(x) <- gsub("partial.d", "partial_d", colnames(x), fixed = TRUE)
+  colnames(x) <- gsub("partial.d", "d_partial", colnames(x), fixed = TRUE)
   x
 }
