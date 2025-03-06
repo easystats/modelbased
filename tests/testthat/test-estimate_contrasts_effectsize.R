@@ -6,8 +6,6 @@ skip_if_not_installed("lme4")
 skip_on_os("mac")
 
 data(iris)
-library(modelbased)
-
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 test_that("estimate_contrasts - emmeans backend", {
@@ -24,13 +22,13 @@ test_that("estimate_contrasts - emmeans backend", {
     variant = "windows"
   )
   set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "emmeans"),
+  expect_snapshot(estimate_contrasts(model, effectsize = "boot", backend = "emmeans"),
     variant = "windows"
   )
   set.seed(100)
   expect_snapshot(estimate_contrasts(model,
-    effectsize = "bootES",
-    bootES_type = "akp.robust.d",
+    effectsize = "boot",
+    boot_type = "akp.robust.d",
     backend = "emmeans"
   ), variant = "windows")
 })
@@ -49,13 +47,13 @@ test_that("estimate_contrasts - marginaleffects backend", {
   )
   skip() # marginaleffects backend isn't working with bootES yet
   set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "bootES", backend = "marginaleffects"),
+  expect_snapshot(estimate_contrasts(model, effectsize = "boot", backend = "marginaleffects"),
     variant = "windows"
   )
   set.seed(100)
   expect_snapshot(estimate_contrasts(model,
-    effectsize = "bootES",
-    bootES_type = "akp.robust.d",
+    effectsize = "boot",
+    boot_type = "akp.robust.d",
     backend = "marginaleffects"
   ), variant = "windows")
 })

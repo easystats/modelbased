@@ -1,12 +1,12 @@
-.estimate_contrasts_effecsize <- function(model,
-                                          estimated,
-                                          contrasts_results,
-                                          effectsize,
-                                          bootstraps,
-                                          bootES_type,
-                                          backend) {
+.estimate_contrasts_effectsize <- function(model,
+                                           estimated,
+                                           contrasts_results,
+                                           effectsize,
+                                           bootstraps,
+                                           bootES_type,
+                                           backend) {
   # Add standardized effect size
-  insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "bootES"))
+  insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
 
   if (effectsize == "emmeans" && backend != "emmeans") {
     insight::format_error("`effectsize = emmeans` only possible with `backend = emmeans`")
@@ -16,6 +16,13 @@
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
       "argument with models containing random effects."
+    ))
+  }
+
+  if (insight::get_family(model)$family != "gaussian") {
+    insight::format_error(paste0(
+      "We strongly recommend not using the `effectsize` ",
+      "argument with non-Gaussian models."
     ))
   }
 
@@ -40,7 +47,7 @@
       d_adj <- contrasts_results$Difference * (1 - R2) / stats::sigma(model)
       contrasts_results <- cbind(contrasts_results, marginal_d = d_adj)
     },
-    bootES = {
+    boot = {
       insight::check_if_installed("bootES")
       dat <- insight::get_data(model)
       resp <- insight::find_response(model)
