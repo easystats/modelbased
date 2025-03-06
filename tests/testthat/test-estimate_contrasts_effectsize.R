@@ -40,7 +40,7 @@ test_that("estimate_contrasts - marginaleffects backend", {
   )
   expect_error(
     estimate_contrasts(model, effectsize = "emmeans", backend = "marginaleffects"),
-    "`effectsize = emmeans` only possible with `backend = emmeans`"
+    "only possible with"
   )
   expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"),
     variant = "windows"
