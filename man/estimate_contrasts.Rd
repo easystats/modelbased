@@ -19,7 +19,7 @@ estimate_contrasts(model, ...)
   transform = NULL,
   effectsize = NULL,
   iterations = 200,
-  bootES_type = "cohens.d",
+  es_type = "cohens.d",
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -194,13 +194,13 @@ appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
 \item{effectsize}{Desired measure of standardized effect size, one of
-\code{"emmeans"}, \code{"marginal"}, or \code{"bootES"}. Default is \code{NULL}, i.e. no effect
+\code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
 size will be computed.}
 
 \item{iterations}{The number of bootstrap resamples to perform.}
 
-\item{bootES_type}{Specifies the type of effect-size measure to estimate when
-using \code{effectsize = "bootES"}. One of \code{"unstandardized"}, \code{"cohens.d"},
+\item{es_type}{Specifies the type of effect-size measure to estimate when
+using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
 \code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
@@ -287,7 +287,7 @@ sizes; or, indeed, whether any effect-size measure is appropriate for some
 situations. The user is completely responsible for specifying appropriate
 parameters (or for failing to do so)."
 
-In particular, effect size method \code{"bootES"} does not correct for covariates
+In particular, effect size method \code{"boot"} does not correct for covariates
 in the model, so should probably only be used when there is just one
 categorical predictor (with however many levels). Some believe that if there
 are multiple predictors or any covariates, it is important to re-compute
@@ -308,7 +308,7 @@ using the response SD with only the between-groups variance on the focal
 factor/contrast removed. This allows for groups to be equated on their
 covariates, but creates an appropriate scale for standardizing the response.
 
-\code{effectsize = "bootES"} uses bootstrapping (defaults to a low value of
+\code{effectsize = "boot"} uses bootstrapping (defaults to a low value of
 200) through \link[bootES:bootES]{bootES::bootES}. Adjusts for contrasts, but not for covariates.
 }
 

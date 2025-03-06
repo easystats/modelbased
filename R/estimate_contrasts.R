@@ -40,10 +40,10 @@
 #'     can be carried out within subsets by indicating the grouping variable
 #'     after a vertical bar ( `|`).
 #' @param effectsize Desired measure of standardized effect size, one of
-#' `"emmeans"`, `"marginal"`, or `"bootES"`. Default is `NULL`, i.e. no effect
+#' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.
-#' @param bootES_type Specifies the type of effect-size measure to estimate when
-#' using `effectsize = "bootES"`. One of `"unstandardized"`, `"cohens.d"`,
+#' @param es_type Specifies the type of effect-size measure to estimate when
+#' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
 #' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See`
 #' effect.type` argument of [bootES::bootES] for details.
 #' @param iterations The number of bootstrap resamples to perform.
@@ -61,7 +61,7 @@
 #' situations. The user is completely responsible for specifying appropriate
 #' parameters (or for failing to do so)."
 #'
-#' In particular, effect size method `"bootES"` does not correct for covariates
+#' In particular, effect size method `"boot"` does not correct for covariates
 #' in the model, so should probably only be used when there is just one
 #' categorical predictor (with however many levels). Some believe that if there
 #' are multiple predictors or any covariates, it is important to re-compute
@@ -82,7 +82,7 @@
 #' factor/contrast removed. This allows for groups to be equated on their
 #' covariates, but creates an appropriate scale for standardizing the response.
 #'
-#' `effectsize = "bootES"` uses bootstrapping (defaults to a low value of
+#' `effectsize = "boot"` uses bootstrapping (defaults to a low value of
 #' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
@@ -156,7 +156,7 @@ estimate_contrasts.default <- function(model,
                                        transform = NULL,
                                        effectsize = NULL,
                                        iterations = 200,
-                                       bootES_type = "cohens.d",
+                                       es_type = "cohens.d",
                                        backend = getOption("modelbased_backend", "marginaleffects"),
                                        verbose = TRUE,
                                        ...) {
@@ -197,7 +197,7 @@ estimate_contrasts.default <- function(model,
       contrasts_results = out,
       effectsize = effectsize,
       bootstraps = iterations,
-      bootES_type = bootES_type,
+      bootES_type = es_type,
       backend = backend
     )
   }
