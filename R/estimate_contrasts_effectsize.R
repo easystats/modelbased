@@ -30,7 +30,7 @@
     emmeans = {
       eff <- emmeans::eff_size(
         estimated,
-        sigma = insight::get_sigma(model),
+        sigma = insight::get_sigma(model, verbose = FALSE),
         edf = insight::get_df(model),
         method = "identity"
       )
@@ -44,7 +44,7 @@
       # d_adj <- contrasts$t * contrasts$SE / sigma(model) * sqrt(1 - R2)
       # New: d_adj <- difference * (1- R2)/ sigma
       R2 <- summary(model)$r.squared
-      d_adj <- contrasts_results$Difference * (1 - R2) / stats::sigma(model)
+      d_adj <- contrasts_results$Difference * (1 - R2) / insight::get_sigma(model, verbose = FALSE)
       contrasts_results <- cbind(contrasts_results, marginal_d = d_adj)
     },
     boot = {
@@ -79,8 +79,9 @@
       contrasts_results <- cbind(contrasts_results, eff)
     }
   )
-  contrasts_results
+  .rename_es_columns(contrasts_results)
 }
+
 
 .get_group_variable <- function(estimated, backend) {
   if (backend == "emmeans") {
@@ -90,10 +91,19 @@
   }
 }
 
+
 .get_contrasts <- function(estimated, backend) {
   if (backend == "emmeans") {
     estimated@misc$con.coef
   } else if (backend == "marginaleffects") {
     attributes(estimated)$linfct # This is not correct
   }
+}
+
+
+.rename_es_columns <- function(x) {
+  colnames(x) <- gsub("cohens.d", "Cohens_d", colnames(x), fixed = TRUE)
+  colnames(x) <- gsub("hedges.d", "Hedges_g", colnames(x), fixed = TRUE)
+  colnames(x) <- gsub("partial.d", "partial_d", colnames(x), fixed = TRUE)
+  x
 }
