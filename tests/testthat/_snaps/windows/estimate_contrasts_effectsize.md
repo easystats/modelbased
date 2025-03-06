@@ -113,7 +113,7 @@
 ---
 
     Code
-      estimate_contrasts(model, effectsize = "boot", boot_type = "akp.robust.d",
+      estimate_contrasts(model, effectsize = "boot", es_type = "akp.robust.d",
         backend = "emmeans")
     Message
       No variable was specified for contrast estimation. Selecting `contrast =
@@ -127,11 +127,11 @@
       setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
       versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
       
-      Level1     | Cohen's d | Cohen's d 95% CI
-      -----------------------------------------
-      setosa     |      1.94 |   [ 1.52,  2.39]
-      setosa     |      1.34 |   [ 0.82,  1.72]
-      versicolor |     -0.60 |   [-0.92, -0.22]
+      Level1     | akp.robust.d | akp.robust.d 95% CI
+      -----------------------------------------------
+      setosa     |         1.88 |      [ 1.42,  2.49]
+      setosa     |         1.37 |      [ 0.92,  1.78]
+      versicolor |        -0.51 |      [-0.90, -0.17]
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Species

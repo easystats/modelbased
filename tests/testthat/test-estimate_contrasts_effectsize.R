@@ -28,7 +28,7 @@ test_that("estimate_contrasts - emmeans backend", {
   set.seed(100)
   expect_snapshot(estimate_contrasts(model,
     effectsize = "boot",
-    boot_type = "akp.robust.d",
+    es_type = "akp.robust.d",
     backend = "emmeans"
   ), variant = "windows")
 })
@@ -45,17 +45,6 @@ test_that("estimate_contrasts - marginaleffects backend", {
   expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"),
     variant = "windows"
   )
-  skip() # marginaleffects backend isn't working with bootES yet
-  set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "boot", backend = "marginaleffects"),
-    variant = "windows"
-  )
-  set.seed(100)
-  expect_snapshot(estimate_contrasts(model,
-    effectsize = "boot",
-    boot_type = "akp.robust.d",
-    backend = "marginaleffects"
-  ), variant = "windows")
 })
 
 test_that("estimate_contrasts - random effects", {
