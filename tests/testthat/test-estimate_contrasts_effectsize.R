@@ -4,6 +4,7 @@ skip_if_not_installed("marginaleffects")
 skip_if_not_installed("bootES")
 skip_if_not_installed("lme4")
 skip_on_os("mac")
+skip_if(packageVersion("insight") <= "1.1.0")
 
 data(iris)
 model <- lm(Sepal.Width ~ Species, data = iris)
