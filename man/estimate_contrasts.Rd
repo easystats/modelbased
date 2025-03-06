@@ -17,8 +17,8 @@ estimate_contrasts(model, ...)
   estimate = getOption("modelbased_estimate", "typical"),
   p_adjust = "none",
   transform = NULL,
-  effectsize = "none",
-  bootstraps = 200,
+  effectsize = NULL,
+  iterations = 200,
   bootES_type = "cohens.d",
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
@@ -193,13 +193,15 @@ which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
-\item{effectsize}{Desired measure of standardized effect size, one of "none"
-(default), "emmeans", "marginal", or "bootES".}
+\item{effectsize}{Desired measure of standardized effect size, one of
+\code{"emmeans"}, \code{"marginal"}, or \code{"bootES"}. Default is \code{NULL}, i.e. no effect
+size will be computed.}
 
-\item{bootstraps}{The number of bootstrap resamples to perform.}
+\item{iterations}{The number of bootstrap resamples to perform.}
 
-\item{bootES_type}{Specifies the type of effect-size measure to
-estimate when using \code{effectsize = "bootES"}. One of \code{c("unstandardized", "cohens.d", "hedges.g", "cohens.d.sigma", "r", "akp.robust.d")}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
+\item{bootES_type}{Specifies the type of effect-size measure to estimate when
+using \code{effectsize = "bootES"}. One of \code{"unstandardized"}, \code{"cohens.d"},
+\code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed
@@ -275,21 +277,22 @@ the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
 \section{Effect Size}{
- By default, \code{estimate_contrasts} reports no
-standardized effect size on purpose. Should one request one, some things
-are to keep in mind. As the authors of \code{emmeans} write, "There is
-substantial disagreement among practitioners on what is the appropriate
-sigma to use in computing effect sizes; or, indeed, whether any effect-size
-measure is appropriate for some situations. The user is completely
-responsible for specifying appropriate parameters (or for failing to do
-so)."
 
-In particular, effect size method \code{"bootES"} does not correct
-for covariates in the model, so should probably only be used when there is
-just one categorical predictor (with however many levels). Some believe that
-if there are multiple predictors or any covariates, it is important to
-re-compute sigma adding back in the response variance associated with the
-variables that aren't part of the contrast.
+
+By default, \code{estimate_contrasts()} reports no standardized effect size on
+purpose. Should one request one, some things are to keep in mind. As the
+authors of \emph{emmeans} write, "There is substantial disagreement among
+practitioners on what is the appropriate sigma to use in computing effect
+sizes; or, indeed, whether any effect-size measure is appropriate for some
+situations. The user is completely responsible for specifying appropriate
+parameters (or for failing to do so)."
+
+In particular, effect size method \code{"bootES"} does not correct for covariates
+in the model, so should probably only be used when there is just one
+categorical predictor (with however many levels). Some believe that if there
+are multiple predictors or any covariates, it is important to re-compute
+sigma adding back in the response variance associated with the variables that
+aren't part of the contrast.
 
 \code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
 \code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
