@@ -39,9 +39,51 @@
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
 #'     after a vertical bar ( `|`).
+#' @param effectsize Desired measure of standardized effect size, one of
+#' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
+#' size will be computed.
+#' @param es_type Specifies the type of effect-size measure to estimate when
+#' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
+#' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See`
+#' effect.type` argument of [bootES::bootES] for details.
+#' @param iterations The number of bootstrap resamples to perform.
 #' @inheritParams estimate_means
 #'
 #' @inherit estimate_slopes details
+#'
+#' @section Effect Size:
+#'
+#' By default, `estimate_contrasts()` reports no standardized effect size on
+#' purpose. Should one request one, some things are to keep in mind. As the
+#' authors of *emmeans* write, "There is substantial disagreement among
+#' practitioners on what is the appropriate sigma to use in computing effect
+#' sizes; or, indeed, whether any effect-size measure is appropriate for some
+#' situations. The user is completely responsible for specifying appropriate
+#' parameters (or for failing to do so)."
+#'
+#' In particular, effect size method `"boot"` does not correct for covariates
+#' in the model, so should probably only be used when there is just one
+#' categorical predictor (with however many levels). Some believe that if there
+#' are multiple predictors or any covariates, it is important to re-compute
+#' sigma adding back in the response variance associated with the variables that
+#' aren't part of the contrast.
+#'
+#' `effectsize = "emmeans"` uses [emmeans::eff_size] with
+#' `sigma = stats::sigma(model)`, `edf = stats::df.residual(model)` and
+#' `method = "identity"`. This standardizes using the MSE (sigma). Some believe
+#' this works when the contrasts are the only predictors in the model, but not
+#' when there are covariates. The response variance accounted for by the
+#' covariates should not be removed from the SD used to standardize. Otherwise,
+#' _d_ will be overestimated.
+#'
+#' `effectsize = "marginal"` uses the following formula to compute effect
+#' size: `d_adj <- difference * (1- R2)/ sigma`. This standardizes
+#' using the response SD with only the between-groups variance on the focal
+#' factor/contrast removed. This allows for groups to be equated on their
+#' covariates, but creates an appropriate scale for standardizing the response.
+#'
+#' `effectsize = "boot"` uses bootstrapping (defaults to a low value of
+#' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
@@ -112,6 +154,9 @@ estimate_contrasts.default <- function(model,
                                        estimate = getOption("modelbased_estimate", "typical"),
                                        p_adjust = "none",
                                        transform = NULL,
+                                       effectsize = NULL,
+                                       iterations = 200,
+                                       es_type = "cohens.d",
                                        backend = getOption("modelbased_backend", "marginaleffects"),
                                        verbose = TRUE,
                                        ...) {
@@ -142,6 +187,19 @@ estimate_contrasts.default <- function(model,
       ...
     )
     out <- format(estimated, model, p_adjust, comparison, ...)
+  }
+
+  # add effect size ----------------------------------------------------------
+  if (!is.null(effectsize)) {
+    out <- .estimate_contrasts_effectsize(
+      model = model,
+      estimated = estimated,
+      contrasts_results = out,
+      effectsize = effectsize,
+      bootstraps = iterations,
+      bootES_type = es_type,
+      backend = backend
+    )
   }
 
   # restore attributes later

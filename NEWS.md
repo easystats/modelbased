@@ -19,6 +19,9 @@
   that contrasts of values ("levels") are desired, because integer variables with
   only two to five unique values are factor-alike.
 
+* `estimate_contrasts`: now supports optional standardized effect sizes, one of
+  "none" (default), "emmeans", or "bootES" (#227, @rempsyc).
+
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
