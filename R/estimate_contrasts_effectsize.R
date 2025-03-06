@@ -1,10 +1,10 @@
-.estimate_contrasts_effectsize <- function(model,
-                                           estimated,
-                                           contrasts_results,
-                                           effectsize,
-                                           bootstraps,
-                                           bootES_type,
-                                           backend) {
+.estimate_contrasts_effecsize <- function(model,
+                                          estimated,
+                                          contrasts_results,
+                                          effectsize,
+                                          bootstraps,
+                                          bootES_type,
+                                          backend) {
   # Add standardized effect size
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "bootES"))
 
@@ -16,13 +16,6 @@
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
       "argument with models containing random effects."
-    ))
-  }
-
-  if (insight::get_family(model)$family != "gaussian") {
-    insight::format_error(paste0(
-      "We strongly recommend not using the `effectsize` ",
-      "argument with non-Gaussian models."
     ))
   }
 

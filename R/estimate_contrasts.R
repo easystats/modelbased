@@ -188,7 +188,7 @@ estimate_contrasts.default <- function(model,
   }
 
   if (effectsize != "none") {
-    out <- .estimate_contrasts_effecsize(
+    out <- .estimate_contrasts_effectsize(
       model = model,
       estimated = estimated,
       contrasts_results = out,
