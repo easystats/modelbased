@@ -32,6 +32,13 @@ test_that("estimate_contrasts - emmeans backend", {
     es_type = "akp.robust.d",
     backend = "emmeans"
   ), variant = "windows")
+  set.seed(100)
+  expect_snapshot(estimate_contrasts(
+    model,
+    effectsize = "boot",
+    es_type = "hedges.g",
+    backend = "emmeans"
+  ), variant = "windows")
 })
 
 test_that("estimate_contrasts - marginaleffects backend", {

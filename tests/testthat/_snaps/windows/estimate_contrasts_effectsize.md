@@ -137,6 +137,32 @@
       Predictors contrasted: Species
       p-values are uncorrected.
 
+---
+
+    Code
+      estimate_contrasts(model, effectsize = "boot", es_type = "hedges.g", backend = "emmeans")
+    Message
+      No variable was specified for contrast estimation. Selecting `contrast =
+        "Species"`.
+    Output
+      Marginal Contrasts Analysis
+      
+      Level1     | Level2     | Difference |         95% CI |   SE | t(147) |      p
+      ------------------------------------------------------------------------------
+      setosa     | versicolor |       0.66 | [ 0.52,  0.79] | 0.07 |   9.69 | < .001
+      setosa     | virginica  |       0.45 | [ 0.32,  0.59] | 0.07 |   6.68 | < .001
+      versicolor | virginica  |      -0.20 | [-0.34, -0.07] | 0.07 |  -3.00 |  0.003
+      
+      Level1     | Hedges' g | Hedges' g 95% CI
+      -----------------------------------------
+      setosa     |      1.93 |   [ 1.51,  2.38]
+      setosa     |      1.33 |   [ 0.82,  1.71]
+      versicolor |     -0.60 |   [-0.91, -0.22]
+      
+      Variable predicted: Sepal.Width
+      Predictors contrasted: Species
+      p-values are uncorrected.
+
 # estimate_contrasts - marginaleffects backend
 
     Code
