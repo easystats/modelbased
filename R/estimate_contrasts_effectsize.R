@@ -9,9 +9,15 @@
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
 
   if (effectsize == "emmeans" && backend != "emmeans") {
-    insight::format_error("`effectsize = emmeans` only possible with `backend = emmeans`")
+    insight::format_error("`effectsize = \"emmeans\"` only possible with `backend = emmeans`")
   }
 
+  # Check if the model includes any random effects. Effect size calculations in
+  # the current implementation are not designed for, or may not be appropriate
+  # for, models with random effects. Random effects complicate the calculation
+  # of standardized effect sizes, as it's not straightforward how to account for
+  # the variance explained by the random effects in the denominator of the
+  # effect size calculation.
   if (length(insight::find_random(model)) > 0) {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
@@ -19,6 +25,10 @@
     ))
   }
 
+  # Check if the model's response variable follows a Gaussian (normal)
+  # distribution. Effect size calculations implemented in this function are
+  # designed for Gaussian models and may not be appropriate or meaningful for
+  # other types of distributions.
   if (insight::get_family(model)$family != "gaussian") {
     insight::format_error(paste0(
       "We strongly recommend not using the `effectsize` ",
