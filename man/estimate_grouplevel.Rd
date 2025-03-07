@@ -12,16 +12,17 @@ reshape_grouplevel(x, indices = "all", group = "all", ...)
 \arguments{
 \item{model}{A mixed model with random effects.}
 
-\item{type}{If \code{"random"} (default), the coefficients correspond to the
+\item{type}{\code{"random"} or \code{"total"}. If \code{"random"} (default), the coefficients correspond to the
 conditional estimates of  the random effects (as they are returned by
 \code{lme4::ranef()}). They typically correspond to the deviation of each
-individual group from their fixed effect. As such, a coefficient close to 0
+individual group from their fixed effect (assuming the random effect is
+also included as a fixed effect). As such, a coefficient close to 0
 means that the participants' effect is the same as the population-level
 effect (in other words, it is "in the norm"). If \code{"total"}, it will return
 the sum of the random effect and its corresponding fixed effects, which
-corresponds to \code{coef()} (see \code{?coef.merMod}). Note that \code{type = "total"}
-currently does not return uncertainty indices (such as SE and CI) for
-models from \emph{lme4} or \emph{glmmTMB}, as these are not computable. However, for
+internally relies on the \code{coef()} method (see \code{?coef.merMod}). Note that
+\code{type = "total"} yet does not return uncertainty indices (such as SE and CI)
+for models from \emph{lme4} or \emph{glmmTMB}, as these are not computable. However, for
 Bayesian models, it is possible to compute them.}
 
 \item{...}{Other arguments passed to or from other methods.}
@@ -34,8 +35,14 @@ Bayesian models, it is possible to compute them.}
 }
 \description{
 Extract random parameters of each individual group in the context of mixed
-models. Can be reshaped to be of the same dimensions as the original data,
+models, commonly referred to as BLUPs (Best Linear Unbiased Predictors).
+Can be reshaped to be of the same dimensions as the original data,
 which can be useful to add the random effects to the original data.
+}
+\details{
+Unlike raw group means, BLUPs apply shrinkage: they are a compromise between
+the group estimate and the population estimate. This improves generalizability
+and prevents overfitting.
 }
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE)) && packageVersion("insight") > "1.1.0" && packageVersion("parameters") > "0.24.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
