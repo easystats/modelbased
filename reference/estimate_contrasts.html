@@ -110,6 +110,9 @@ and <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p>
 <span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_estimate"</span>, <span class="st">"typical"</span><span class="op">)</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  effectsize <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  iterations <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  es_type <span class="op">=</span> <span class="st">"cohens.d"</span>,</span>
 <span>  backend <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_backend"</span>, <span class="st">"marginaleffects"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -292,6 +295,22 @@ appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.</p></dd>
 
 
+<dt id="arg-effectsize">effectsize<a class="anchor" aria-label="anchor" href="#arg-effectsize"></a></dt>
+<dd><p>Desired measure of standardized effect size, one of
+<code>"emmeans"</code>, <code>"marginal"</code>, or <code>"boot"</code>. Default is <code>NULL</code>, i.e. no effect
+size will be computed.</p></dd>
+
+
+<dt id="arg-iterations">iterations<a class="anchor" aria-label="anchor" href="#arg-iterations"></a></dt>
+<dd><p>The number of bootstrap resamples to perform.</p></dd>
+
+
+<dt id="arg-es-type">es_type<a class="anchor" aria-label="anchor" href="#arg-es-type"></a></dt>
+<dd><p>Specifies the type of effect-size measure to estimate when
+using <code>effectsize = "boot"</code>. One of <code>"unstandardized"</code>, <code>"cohens.d"</code>,
+<code>"hedges.g"</code>, <code>"cohens.d.sigma"</code>, <code>"r"</code>, or <code>"akp.robust.d"</code>. See<code> effect.type</code> argument of <a href="https://rdrr.io/pkg/bootES/man/bootES.html" class="external-link">bootES::bootES</a> for details.</p></dd>
+
+
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
 <dd><p>Whether to use <code>"marginaleffects"</code> or <code>"emmeans"</code>as a backend.
 Results are usually very similar. The major difference will be found for mixed
@@ -360,6 +379,39 @@ visualize them. Another possibility is to evaluate the difference between
 these levels (using <code>estimate_contrasts()</code>). Finally, one could also estimate
 the effect of x averaged over all conditions, or instead within each
 condition (<code>using [estimate_slopes]</code>).</p>
+    </div>
+    <div class="section level2">
+    <h2 id="effect-size">Effect Size<a class="anchor" aria-label="anchor" href="#effect-size"></a></h2>
+
+
+
+<p>By default, <code>estimate_contrasts()</code> reports no standardized effect size on
+purpose. Should one request one, some things are to keep in mind. As the
+authors of <em>emmeans</em> write, "There is substantial disagreement among
+practitioners on what is the appropriate sigma to use in computing effect
+sizes; or, indeed, whether any effect-size measure is appropriate for some
+situations. The user is completely responsible for specifying appropriate
+parameters (or for failing to do so)."</p>
+<p>In particular, effect size method <code>"boot"</code> does not correct for covariates
+in the model, so should probably only be used when there is just one
+categorical predictor (with however many levels). Some believe that if there
+are multiple predictors or any covariates, it is important to re-compute
+sigma adding back in the response variance associated with the variables that
+aren't part of the contrast.</p>
+<p><code>effectsize = "emmeans"</code> uses <a href="https://rvlenth.github.io/emmeans/reference/eff_size.html" class="external-link">emmeans::eff_size</a> with
+<code>sigma = stats::sigma(model)</code>, <code>edf = stats::df.residual(model)</code> and
+<code>method = "identity"</code>. This standardizes using the MSE (sigma). Some believe
+this works when the contrasts are the only predictors in the model, but not
+when there are covariates. The response variance accounted for by the
+covariates should not be removed from the SD used to standardize. Otherwise,
+<em>d</em> will be overestimated.</p>
+<p><code>effectsize = "marginal"</code> uses the following formula to compute effect
+size: <code>d_adj &lt;- difference * (1- R2)/ sigma</code>. This standardizes
+using the response SD with only the between-groups variance on the focal
+factor/contrast removed. This allows for groups to be equated on their
+covariates, but creates an appropriate scale for standardizing the response.</p>
+<p><code>effectsize = "boot"</code> uses bootstrapping (defaults to a low value of
+200) through <a href="https://rdrr.io/pkg/bootES/man/bootES.html" class="external-link">bootES::bootES</a>. Adjusts for contrasts, but not for covariates.</p>
     </div>
 
     <div class="section level2">
@@ -625,7 +677,7 @@ condition (<code>using [estimate_slopes]</code>).</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>.</p>
+  <p>Developed by <a href="https://dominiquemakowski.github.io/" class="external-link">Dominique Makowski</a>, <a href="https://github.com/strengejacke" class="external-link">Daniel Lüdecke</a>, <a href="https://home.msbstats.info/" class="external-link">Mattan S. Ben-Shachar</a>, <a href="https://sites.google.com/site/indrajeetspatilmorality/" class="external-link">Indrajeet Patil</a>, <a href="https://remi-theriault.com/" class="external-link">Rémi Thériault</a>.</p>
 </div>
 
 <div class="pkgdown-footer-right">
