@@ -10,7 +10,7 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   x[names(data)] <- datawizard::standardize(as.data.frame(x)[names(data)], reference = data, ...)
 
   # Standardize response
-  if (include_response == TRUE && insight::model_info(attributes(x)$model)$is_linear) {
+  if (include_response && insight::model_info(attributes(x)$model)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
 

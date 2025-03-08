@@ -141,3 +141,29 @@
 
   c(paste0(table_footer, "\n"), "yellow")
 }
+
+
+# Table footer slopes =========================================================
+
+
+.table_footer_slopes <- function(x, model = NULL, info = NULL) {
+  model_info <- info$model_info
+  # make sure we definitely have model information
+  if (is.null(model_info) && !is.null(model)) {
+    model_info <- insight::model_info(model)
+  }
+  transform <- info$transform
+
+  table_footer <- paste("\nMarginal effects estimated for", info$trend)
+  if (!is.null(attributes(x)$slope)) {
+    table_footer <- paste0(table_footer, "\nType of slope was ", attributes(x)$slope)
+  }
+  if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
+    # add information about response transformation
+    trans_fun <- .safe(insight::find_transformation(model))
+    if (!is.null(trans_fun) && trans_fun != "identity") {
+      table_footer <- paste0(table_footer, "\nSlopes are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
+    }
+  }
+  table_footer
+}

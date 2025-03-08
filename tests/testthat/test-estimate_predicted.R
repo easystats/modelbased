@@ -11,7 +11,7 @@ test_that("estimate_relation - shape", {
   model <- lm(Petal.Length ~ Petal.Width, data = iris)
   estim <- estimate_relation(model, ci = 0.90)
   expect_equal(attributes(estim)$ci, 0.9)
-  estim <- estimate_relation(model, ci = c(0.90, .95))
+  estim <- estimate_relation(model, ci = c(0.90, 0.95))
   expect_equal(attributes(estim)$ci, c(0.90, 0.95))
   expect_equal(dim(estim), c(10, 7))
 

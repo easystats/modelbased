@@ -27,7 +27,7 @@ pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
-if (!getRversion() >= "4.1.0") {
+if (getRversion() < "4.1.0") {
   knitr::opts_chunk$set(eval = FALSE)
 }
 ```

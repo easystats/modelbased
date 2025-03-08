@@ -130,7 +130,7 @@ iris |>
   theme_minimal()
 ```
 
-However, you might notice that the **Credible Interval (CI) bands are quite big**. 
+However, you might notice that the **Credible Interval (CI) bands are quite big**.
 This is where `estimate_relation()` is coming in. In a traditional,
 frequentist, regression, the predictions are deterministic: they will always
 fall on the regression line. However, in a Bayesian framework, they are
@@ -164,7 +164,7 @@ directly related to the shape of the posterior distribution. Thus, showing
 different CI levels (for instance, 69\%, 89\% and 99\%).
 
 ```{r}
-predicted <- estimate_relation(model, ci = c(0.69, .89, 0.99))
+predicted <- estimate_relation(model, ci = c(0.69, 0.89, 0.99))
 
 iris |>
   ggplot(aes(x = Sepal.Length)) +

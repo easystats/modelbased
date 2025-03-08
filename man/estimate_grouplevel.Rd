@@ -22,8 +22,9 @@ effect (in other words, it is "in the norm"). If \code{"total"}, it will return
 the sum of the random effect and its corresponding fixed effects, which
 internally relies on the \code{coef()} method (see \code{?coef.merMod}). Note that
 \code{type = "total"} yet does not return uncertainty indices (such as SE and CI)
-for models from \emph{lme4} or \emph{glmmTMB}, as these are not computable. However, for
-Bayesian models, it is possible to compute them.}
+for models from \emph{lme4} or \emph{glmmTMB}, as the necessary information to
+compute them is not yet available. However, for Bayesian models, it is
+possible to compute them.}
 
 \item{...}{Other arguments passed to or from other methods.}
 
