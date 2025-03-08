@@ -16,8 +16,9 @@
 #'   the sum of the random effect and its corresponding fixed effects, which
 #'   internally relies on the `coef()` method (see `?coef.merMod`). Note that
 #'   `type = "total"` yet does not return uncertainty indices (such as SE and CI)
-#'   for models from *lme4* or *glmmTMB*, as these are not computable. However, for
-#'   Bayesian models, it is possible to compute them.
+#'   for models from *lme4* or *glmmTMB*, as the necessary information to
+#'   compute them is not yet available. However, for Bayesian models, it is
+#'   possible to compute them.
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @details
