@@ -382,7 +382,7 @@ get_marginalmeans <- function(model,
     if (!is.null(info$at_specs$varname)) {
       attr(x, "focal_terms") <- info$at_specs$varname
     }
-    for (i in .info_elements(isTRUE(info$keep_iterations))) {
+    for (i in .info_elements(info$keep_iterations)) {
       if (!is.null(info[[i]])) {
         attr(x, i) <- info[[i]]
       }
