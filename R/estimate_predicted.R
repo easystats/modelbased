@@ -476,6 +476,7 @@ estimate_relation <- function(model,
   # Store relevant information
   attr(out, "ci") <- ci
   attr(out, "keep_iterations") <- keep_iterations
+  attr(out, "posterior_draws") <- attributes(predictions)$iterations
   attr(out, "response") <- model_response
   attr(out, "transform") <- !is.null(transform)
   attr(out, "model") <- model

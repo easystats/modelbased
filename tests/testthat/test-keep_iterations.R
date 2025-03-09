@@ -268,3 +268,26 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   )
   expect_identical(dim(out), c(1L, 8L))
 })
+
+
+test_that("estimate_slopes() - posterior draws, get_predicted", {
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  out <- estimate_relation(m, by = "wt", keep_iterations = 5)
+  expect_named(
+    attributes(out),
+    c(
+      "names", "row.names", "class", "ci", "keep_iterations", "posterior_draws",
+      "response", "transform", "model", "datagrid", "focal_terms",
+      "preserve_range", "table_title", "coef_name", "model_info", "table_footer",
+      "adjusted_for", "at_specs", "at", "by", "reference", "data"
+    )
+  )
+  expect_named(
+    out,
+    c(
+      "wt", "cyl", "Predicted", "SE", "CI_low", "CI_high", "iter_1",
+      "iter_2", "iter_3", "iter_4", "iter_5"
+    )
+  )
+})
