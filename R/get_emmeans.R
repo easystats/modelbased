@@ -189,7 +189,7 @@ get_emmeans <- function(model,
   # add posterior draws?
   if (!is.null(info$posterior_draws) && is.numeric(info$add_iterations)) {
     posterior_draws <- datawizard::data_transpose(info$posterior_draws)
-    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
+    colnames(posterior_draws) <- paste0("iter_", seq_len(ncol(posterior_draws)))
     estimated <- cbind(estimated, posterior_draws[, 1:info$add_iterations, drop = FALSE])
   }
   estimated
