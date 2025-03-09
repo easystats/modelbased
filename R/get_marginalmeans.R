@@ -206,22 +206,7 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-  # Fifth step: add posterior draws -------------------------------------------
-  # ---------------------------------------------------------------------------
-
-  posterior_draws <- attributes(means)$posterior_draws
-  if (!is.null(posterior_draws)) {
-    # bring posterior draws into shape. {marginaleffects} returns samples
-    # as rows, not as columns
-    posterior_draws <- as.data.frame(posterior_draws)
-    # remove old attribute, because we overwrite it
-    attr(means, "posterior_draws") <- NULL
-    # standard column names
-    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
-    rownames(posterior_draws) <- NULL
-  }
-
-  # Sixth step: post-processin marginal means----------------------------------
+  # Fifth step: post-processin marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
   # filter "by" rows when we have "average" marginalization, because we don't
@@ -265,8 +250,7 @@ get_marginalmeans <- function(model,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations,
-        posterior_draws = posterior_draws
+        keep_iterations = keep_iterations
       )
     )
   )
@@ -380,7 +364,7 @@ get_marginalmeans <- function(model,
     if (!is.null(info$at_specs$varname)) {
       attr(x, "focal_terms") <- info$at_specs$varname
     }
-    for (i in .info_elements(info$keep_iterations)) {
+    for (i in .info_elements()) {
       if (!is.null(info[[i]])) {
         attr(x, i) <- info[[i]]
       }
@@ -391,17 +375,13 @@ get_marginalmeans <- function(model,
 
 # these are the names of attributes that can be flexibly added via
 # `info` argument in `.add_attributes()`
-.info_elements <- function(keep_iterations = FALSE) {
-  out <- c(
+.info_elements <- function() {
+  c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations",
+    "posterior_draws"
   )
-  if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
-    out <- c(out, "posterior_draws")
-  }
-
-  out
 }
 
 

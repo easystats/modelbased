@@ -231,10 +231,7 @@ estimate_contrasts.default <- function(model,
   attr(out, "backend") <- backend
 
   # add attributes from workhorse function
-  attributes(out) <- utils::modifyList(
-    attributes(out),
-    info[.info_elements(keep_iterations)]
-  )
+  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))

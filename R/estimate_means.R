@@ -297,10 +297,7 @@ estimate_means <- function(model,
   attr(means, "coef_name") <- intersect(.valid_coefficient_names(), colnames(means))
 
   # add attributes from workhorse function
-  attributes(means) <- utils::modifyList(
-    attributes(means),
-    info[.info_elements(keep_iterations)]
-  )
+  attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
 
   # Output
   class(means) <- unique(c("estimate_means", class(means)))

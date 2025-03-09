@@ -84,22 +84,7 @@ get_marginaltrends <- function(model,
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
-  # Fourth step: add posterior draws ------------------------------------------
-  # ---------------------------------------------------------------------------
-
-  posterior_draws <- attributes(estimated)$posterior_draws
-  if (!is.null(posterior_draws)) {
-    # bring posterior draws into shape. {marginaleffects} returns samples
-    # as rows, not as columns
-    posterior_draws <- as.data.frame(posterior_draws)
-    # remove old attribute, because we overwrite it
-    attr(estimated, "posterior_draws") <- NULL
-    # standard column names
-    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
-    rownames(posterior_draws) <- NULL
-  }
-
-  # Fifth step: back-transform response ---------------------------------------
+  # Fourth step: back-transform response --------------------------------------
   # ---------------------------------------------------------------------------
 
   # transform reponse?
@@ -133,8 +118,7 @@ get_marginaltrends <- function(model,
         p_adjust = p_adjust,
         ci = ci,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations,
-        posterior_draws = posterior_draws
+        keep_iterations = keep_iterations
       )
     )
   )

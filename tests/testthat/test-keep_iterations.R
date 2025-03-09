@@ -14,8 +14,8 @@ test_that("estimate_means() - posterior draws", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "posterior_draws"
+      "model_info", "keep_iterations", "posterior_draws", "table_title",
+      "table_footer", "model", "response", "ci", "backend", "coef_name"
     )
   )
   expect_named(
@@ -34,8 +34,8 @@ test_that("estimate_means() - posterior draws", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "posterior_draws"
+      "model_info", "keep_iterations", "posterior_draws", "table_title",
+      "table_footer", "model", "response", "ci", "backend", "coef_name"
     )
   )
   expect_named(
