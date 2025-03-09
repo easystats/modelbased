@@ -124,6 +124,7 @@ estimate_slopes <- function(model,
                             ci = 0.95,
                             p_adjust = "none",
                             transform = NULL,
+                            keep_iterations = FALSE,
                             backend = getOption("modelbased_backend", "marginaleffects"),
                             verbose = TRUE,
                             ...) {
@@ -145,6 +146,7 @@ estimate_slopes <- function(model,
       ci = ci,
       p_adjust = p_adjust,
       transform = transform,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
@@ -168,7 +170,10 @@ estimate_slopes <- function(model,
   attr(trends, "ci") <- ci
 
   # add attributes from workhorse function
-  attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
+  attributes(trends) <- utils::modifyList(
+    attributes(trends),
+    info[.info_elements(keep_iterations)]
+  )
 
   # Output
   class(trends) <- c("estimate_slopes_summary", "estimate_slopes", class(trends))

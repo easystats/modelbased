@@ -17,6 +17,7 @@ estimate_contrasts(model, ...)
   estimate = getOption("modelbased_estimate", "typical"),
   p_adjust = "none",
   transform = NULL,
+  keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
   es_type = "cohens.d",
@@ -192,6 +193,12 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as attribute to the
+returned object. If \code{keep_iteration} is a positive number, iterations will
+also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
+and so on. This currently only works for \code{backend = "marginaleffects"}.}
 
 \item{effectsize}{Desired measure of standardized effect size, one of
 \code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect

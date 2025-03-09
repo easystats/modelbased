@@ -397,13 +397,17 @@ get_marginalmeans <- function(
 
 # these are the names of attributes that can be flexibly added via
 # `info` argument in `.add_attributes()`
-.info_elements <- function() {
-  c(
+.info_elements <- function(keep_iterations = FALSE) {
+  out <- c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "posterior_draws",
-    "keep_iterations"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
   )
+  if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
+    out <- c(out, "posterior_draws",)
+  }
+
+  out
 }
 
 

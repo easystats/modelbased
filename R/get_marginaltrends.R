@@ -7,14 +7,17 @@
 #' get_marginaltrends(model, trend = "Petal.Length", by = "Petal.Length")
 #' get_marginaltrends(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
-get_marginaltrends <- function(model,
-                               trend = NULL,
-                               by = NULL,
-                               ci = 0.95,
-                               p_adjust = "none",
-                               transform = NULL,
-                               verbose = TRUE,
-                               ...) {
+get_marginaltrends <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  ci = 0.95,
+  p_adjust = "none",
+  transform = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
@@ -48,7 +51,6 @@ get_marginaltrends <- function(model,
     datagrid_info <- attributes(datagrid)
   }
 
-
   # Second step: prepare arguments for marginaleffects ------------------------
   # ---------------------------------------------------------------------------
 
@@ -78,14 +80,28 @@ get_marginaltrends <- function(model,
     dots
   ))
 
-
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
-  # Fourth step: back-transform response --------------------------------------
+
+  # Fourth step: add posterior draws ------------------------------------------
+  # ---------------------------------------------------------------------------
+
+  posterior_draws <- attributes(estimated)$posterior_draws
+  if (!is.null(posterior_draws)) {
+    # bring posterior draws into shape. {marginaleffects} returns samples
+    # as rows, not as columns
+    posterior_draws <- as.data.frame(posterior_draws)
+    # standard column names
+    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
+    rownames(posterior_draws) <- NULL
+  }
+
+
+  # Fifth step: back-transform response ---------------------------------------
   # ---------------------------------------------------------------------------
 
   # transform reponse?
@@ -118,7 +134,9 @@ get_marginaltrends <- function(model,
         coef_name = "Slope",
         p_adjust = p_adjust,
         ci = ci,
-        transform = !is.null(transform)
+        transform = !is.null(transform),
+        keep_iterations = keep_iterations,
+        posterior_draws = posterior_draws
       )
     )
   )

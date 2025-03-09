@@ -154,6 +154,7 @@ estimate_contrasts.default <- function(model,
                                        estimate = getOption("modelbased_estimate", "typical"),
                                        p_adjust = "none",
                                        transform = NULL,
+                                       keep_iterations = FALSE,
                                        effectsize = NULL,
                                        iterations = 200,
                                        es_type = "cohens.d",
@@ -183,6 +184,7 @@ estimate_contrasts.default <- function(model,
       ci = ci,
       estimate = estimate,
       transform = transform,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
@@ -229,7 +231,10 @@ estimate_contrasts.default <- function(model,
   attr(out, "backend") <- backend
 
   # add attributes from workhorse function
-  attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
+  attributes(out) <- utils::modifyList(
+    attributes(out),
+    info[.info_elements(keep_iterations)]
+  )
 
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))

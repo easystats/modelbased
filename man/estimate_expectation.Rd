@@ -89,9 +89,10 @@ determine the appropriate transformation-function. Note that no standard
 errors are returned when transformations are applied.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
-bootstrapped or Bayesian models. They will be added as additional columns
-named \verb{iter_1, iter_2, ...}. You can reshape them to a long format by
-running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
+bootstrapped or Bayesian models. They will be added as attribute to the
+returned object. If \code{keep_iteration} is a positive number, iterations will
+also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
+and so on. This currently only works for \code{backend = "marginaleffects"}.}
 
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and
