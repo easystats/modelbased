@@ -26,6 +26,10 @@
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
 
+* `estimate_means()` gets a `keep_iterations` argument, to keep all posterior
+  draws from Bayesian models as attributes, and if numeric, adds columns of
+  posterior draws to the output.
+
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
   *modelbased* objects that were applied to imputed data sets. E.g., functions
   like `estimate_means()` can be run on several data sets where missing values
