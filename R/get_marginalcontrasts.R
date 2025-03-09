@@ -252,7 +252,10 @@ get_marginalcontrasts <- function(model,
   }
 
   # convert comparison and by into a formula
-  if (!is.null(comparison)) {
+  if (is.null(comparison)) {
+    # default to pairwise, if comparison = NULL
+    comparison <- comparison_slopes <- ~pairwise
+  } else {
     # only proceed if we don't have custom comparisons
     if (!.is_custom_comparison(comparison)) {
       # if we have a formula as comparison, we convert it into strings in order
@@ -299,9 +302,6 @@ get_marginalcontrasts <- function(model,
       # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
       comparison_slopes <- comparison
     }
-  } else {
-    # default to pairwise, if comparison = NULL
-    comparison <- comparison_slopes <- ~pairwise
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
