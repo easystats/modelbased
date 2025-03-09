@@ -281,7 +281,7 @@ get_marginalmeans <- function(model,
     }
     msg <- c(
       paste0("Sorry, calculating ", fun, " failed with following error:"),
-      insight::color_text(gsub("\n", "", out$message), "red")
+      insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
     )
     # we get this error when we should use counterfactuals - tell
     # # user about possible solution
