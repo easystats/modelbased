@@ -38,6 +38,7 @@ get_emmeans <- function(model,
                         by = "auto",
                         predict = NULL,
                         transform = NULL,
+                        keep_iterations = FALSE,
                         verbose = TRUE,
                         ...) {
   # check if available
@@ -84,10 +85,19 @@ get_emmeans <- function(model,
     }
   }
 
+  # for Bayesian model, keep iterations
+  if (insight::model_info(model)$is_bayesian) {
+    attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
+  } else {
+    keep_iterations <- FALSE
+  }
+
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
   attr(estimated, "predict") <- predict
   attr(estimated, "focal_terms") <- my_args$emmeans_specs
+  attr(estimated, "transform") <- TRUE
+  attr(estimated, "keep_iterations") <- keep_iterations
 
   estimated
 }

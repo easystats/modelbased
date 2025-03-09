@@ -134,6 +134,7 @@ estimate_slopes <- function(model,
       model,
       trend = trend,
       by = by,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )

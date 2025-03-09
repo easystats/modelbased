@@ -92,7 +92,7 @@ errors are returned when transformations are applied.}
 bootstrapped or Bayesian models. They will be added as attribute to the
 returned object. If \code{keep_iteration} is a positive number, iterations will
 also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
-and so on. This currently only works for \code{backend = "marginaleffects"}.}
+and so on.}
 
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and

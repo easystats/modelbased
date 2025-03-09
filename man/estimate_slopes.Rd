@@ -58,7 +58,7 @@ when transformations are applied.}
 bootstrapped or Bayesian models. They will be added as attribute to the
 returned object. If \code{keep_iteration} is a positive number, iterations will
 also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
-and so on. This currently only works for \code{backend = "marginaleffects"}.}
+and so on.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed

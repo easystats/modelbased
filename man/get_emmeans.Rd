@@ -18,6 +18,7 @@ get_emcontrasts(
   predict = NULL,
   comparison = "pairwise",
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -27,11 +28,19 @@ get_emmeans(
   by = "auto",
   predict = NULL,
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
 
-get_emtrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
+get_emtrends(
+  model,
+  trend = NULL,
+  by = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 get_marginalcontrasts(
   model,
@@ -173,6 +182,12 @@ which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as attribute to the
+returned object. If \code{keep_iteration} is a positive number, iterations will
+also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
+and so on.}
+
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
 \item{...}{Other arguments passed, for instance, to \code{\link[insight:get_datagrid]{insight::get_datagrid()}},
@@ -243,12 +258,6 @@ predictors (one specified in \code{trend}, one in \code{by}). In this case, the 
 option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
-
-\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
-bootstrapped or Bayesian models. They will be added as attribute to the
-returned object. If \code{keep_iteration} is a positive number, iterations will
-also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
-and so on. This currently only works for \code{backend = "marginaleffects"}.}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the

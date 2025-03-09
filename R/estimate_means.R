@@ -113,7 +113,7 @@
 #' bootstrapped or Bayesian models. They will be added as attribute to the
 #' returned object. If `keep_iteration` is a positive number, iterations will
 #' also be added as additional columns to the output named `⁠iter_1`, `iter_2`,
-#' and so on. This currently only works for `backend = "marginaleffects"`.
+#' and so on.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -250,6 +250,7 @@ estimate_means <- function(model,
       model,
       by = by,
       predict = predict,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )

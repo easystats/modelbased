@@ -163,11 +163,13 @@ estimate_contrasts.default <- function(model,
                                        ...) {
   if (backend == "emmeans") {
     # Emmeans ------------------------------------------------------------------
-    estimated <- get_emcontrasts(model,
+    estimated <- get_emcontrasts(
+      model,
       contrast = contrast,
       by = by,
       predict = predict,
       comparison = comparison,
+      keep_iterations = keep_iterations,
       adjust = p_adjust,
       verbose = verbose,
       ...
@@ -175,7 +177,8 @@ estimate_contrasts.default <- function(model,
     out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
   } else {
     # Marginalmeans ------------------------------------------------------------
-    estimated <- get_marginalcontrasts(model,
+    estimated <- get_marginalcontrasts(
+      model,
       contrast = contrast,
       by = by,
       predict = predict,
