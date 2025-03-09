@@ -7,17 +7,15 @@
 #' get_marginaltrends(model, trend = "Petal.Length", by = "Petal.Length")
 #' get_marginaltrends(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
-get_marginaltrends <- function(
-  model,
-  trend = NULL,
-  by = NULL,
-  ci = 0.95,
-  p_adjust = "none",
-  transform = NULL,
-  keep_iterations = FALSE,
-  verbose = TRUE,
-  ...
-) {
+get_marginaltrends <- function(model,
+                               trend = NULL,
+                               by = NULL,
+                               ci = 0.95,
+                               p_adjust = "none",
+                               transform = NULL,
+                               keep_iterations = FALSE,
+                               verbose = TRUE,
+                               ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
@@ -86,7 +84,6 @@ get_marginaltrends <- function(
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
 
-
   # Fourth step: add posterior draws ------------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -101,7 +98,6 @@ get_marginaltrends <- function(
     colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
     rownames(posterior_draws) <- NULL
   }
-
 
   # Fifth step: back-transform response ---------------------------------------
   # ---------------------------------------------------------------------------
