@@ -27,7 +27,7 @@ get_marginalmeans <- function(model,
                               ci = 0.95,
                               estimate = getOption("modelbased_estimate", "typical"),
                               transform = NULL,
-                              keep_iterations = FALSE,
+                              add_iterations = FALSE,
                               verbose = TRUE,
                               ...) {
   # check if available
@@ -253,7 +253,7 @@ get_marginalmeans <- function(model,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations
+        add_iterations = add_iterations
       )
     )
   )
@@ -382,7 +382,7 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations",
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "add_iterations",
     "posterior_draws"
   )
 }

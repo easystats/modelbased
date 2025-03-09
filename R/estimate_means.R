@@ -109,11 +109,11 @@
 #' which case `insight::get_transformation()` is called to determine the
 #' appropriate transformation-function. Note that no standard errors are returned
 #' when transformations are applied.
-#' @param keep_iterations If `TRUE`, will keep all iterations (draws) of
-#' bootstrapped or Bayesian models. They will be added as attribute to the
-#' returned object. If `keep_iteration` is a positive number, iterations will
-#' also be added as additional columns to the output named `⁠iter_1`, `iter_2`,
-#' and so on.
+#' @param add_iterations Iterations (draws) of bootstrapped or Bayesian models
+#' are added as attribute to the returned object. If `add_iterations` is a
+#' positive number, iterations will also be added as additional columns to the
+#' output named `iter_1`, `iter_2`, and so on. `add_iterations` indicates the
+#' number of columns that are added.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -234,7 +234,7 @@ estimate_means <- function(model,
                            ci = 0.95,
                            estimate = getOption("modelbased_estimate", "typical"),
                            transform = NULL,
-                           keep_iterations = FALSE,
+                           add_iterations = FALSE,
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
                            ...) {
@@ -250,7 +250,7 @@ estimate_means <- function(model,
       model,
       by = by,
       predict = predict,
-      keep_iterations = keep_iterations,
+      add_iterations = add_iterations,
       verbose = verbose,
       ...
     )
@@ -264,7 +264,7 @@ estimate_means <- function(model,
       ci = ci,
       estimate = estimate,
       transform = transform,
-      keep_iterations = keep_iterations,
+      add_iterations = add_iterations,
       verbose = verbose,
       ...
     )

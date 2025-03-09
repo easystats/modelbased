@@ -26,7 +26,7 @@
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
 
-* `estimate_means()` gets a `keep_iterations` argument, to keep all posterior
+* `estimate_means()` gets a `add_iterations` argument, to keep all posterior
   draws from Bayesian models as attributes, and if numeric, adds columns of
   posterior draws to the output.
 

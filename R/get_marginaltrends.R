@@ -13,7 +13,7 @@ get_marginaltrends <- function(model,
                                ci = 0.95,
                                p_adjust = "none",
                                transform = NULL,
-                               keep_iterations = FALSE,
+                               add_iterations = FALSE,
                                verbose = TRUE,
                                ...) {
   # check if available
@@ -118,7 +118,7 @@ get_marginaltrends <- function(model,
         p_adjust = p_adjust,
         ci = ci,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations
+        add_iterations = add_iterations
       )
     )
   )

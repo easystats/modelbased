@@ -576,10 +576,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # add posterior draws?
-  if (!is.null(attributes(x)$posterior_draws) && is.numeric(attributes(x)$keep_iterations)) {
+  if (!is.null(attributes(x)$posterior_draws) && is.numeric(attributes(x)$add_iterations)) {
     posterior_draws <- as.data.frame(attributes(x)$posterior_draws)
     colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
-    params <- cbind(params, posterior_draws[, 1:attributes(x)$keep_iterations, drop = FALSE])
+    params <- cbind(params, posterior_draws[, 1:attributes(x)$add_iterations, drop = FALSE])
   }
 
   params

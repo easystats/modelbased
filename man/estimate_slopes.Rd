@@ -11,7 +11,7 @@ estimate_slopes(
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,
-  keep_iterations = FALSE,
+  add_iterations = FALSE,
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -54,11 +54,11 @@ which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
 
-\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
-bootstrapped or Bayesian models. They will be added as attribute to the
-returned object. If \code{keep_iteration} is a positive number, iterations will
-also be added as additional columns to the output named \verb{⁠iter_1}, \code{iter_2},
-and so on.}
+\item{add_iterations}{Iterations (draws) of bootstrapped or Bayesian models
+are added as attribute to the returned object. If \code{add_iterations} is a
+positive number, iterations will also be added as additional columns to the
+output named \code{iter_1}, \code{iter_2}, and so on. \code{add_iterations} indicates the
+number of columns that are added.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed

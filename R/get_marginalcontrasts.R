@@ -9,7 +9,7 @@ get_marginalcontrasts <- function(model,
                                   estimate = getOption("modelbased_estimate", "typical"),
                                   p_adjust = "none",
                                   transform = NULL,
-                                  keep_iterations = FALSE,
+                                  add_iterations = FALSE,
                                   verbose = TRUE,
                                   ...) {
   # check if available
@@ -84,7 +84,7 @@ get_marginalcontrasts <- function(model,
       hypothesis = my_args$comparison_slopes,
       backend = "marginaleffects",
       transform = transform,
-      keep_iterations = keep_iterations,
+      add_iterations = add_iterations,
       verbose = verbose,
       ...
     )
@@ -99,7 +99,7 @@ get_marginalcontrasts <- function(model,
       backend = "marginaleffects",
       estimate = estimate,
       transform = transform,
-      keep_iterations = keep_iterations,
+      add_iterations = add_iterations,
       verbose = verbose,
       ...
     )
@@ -131,7 +131,7 @@ get_marginalcontrasts <- function(model,
       estimate = estimate,
       p_adjust = p_adjust,
       contrast_filter = my_args$contrast_filter,
-      keep_iterations = keep_iterations
+      add_iterations = add_iterations
     )
   )
 

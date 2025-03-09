@@ -23,7 +23,7 @@ get_emcontrasts <- function(model,
                             predict = NULL,
                             comparison = "pairwise",
                             transform = NULL,
-                            keep_iterations = FALSE,
+                            add_iterations = FALSE,
                             verbose = TRUE,
                             ...) {
   # check if available
@@ -93,7 +93,7 @@ get_emcontrasts <- function(model,
   if (insight::model_info(model)$is_bayesian) {
     attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
-    keep_iterations <- FALSE
+    add_iterations <- FALSE
   }
 
   attr(out, "contrast") <- my_args$contrast
@@ -104,7 +104,7 @@ get_emcontrasts <- function(model,
   attr(out, "p_adjust") <- list(...)$adjust
   attr(out, "comparison") <- comparison
   attr(out, "transform") <- TRUE
-  attr(out, "keep_iterations") <- keep_iterations
+  attr(out, "add_iterations") <- add_iterations
 
   out
 }
