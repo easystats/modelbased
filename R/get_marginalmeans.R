@@ -21,14 +21,17 @@
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' }
 #' @export
-get_marginalmeans <- function(model,
-                              by = "auto",
-                              predict = NULL,
-                              ci = 0.95,
-                              estimate = getOption("modelbased_estimate", "typical"),
-                              transform = NULL,
-                              verbose = TRUE,
-                              ...) {
+get_marginalmeans <- function(
+  model,
+  by = "auto",
+  predict = NULL,
+  ci = 0.95,
+  estimate = getOption("modelbased_estimate", "typical"),
+  transform = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("marginaleffects")
 
@@ -51,8 +54,14 @@ get_marginalmeans <- function(model,
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type, and get information about back transformation
-  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, verbose, ...) # nolint
-
+  predict_args <- .get_marginaleffects_type_argument(
+    model,
+    predict,
+    comparison,
+    model_info,
+    verbose,
+    ...
+  ) # nolint
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -62,10 +71,7 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    dg_factors <- switch(estimate,
-      specific = "reference",
-      "all"
-    )
+    dg_factors <- switch(estimate, specific = "reference", "all")
     dg_args <- list(
       model,
       by = my_args$by,
@@ -76,7 +82,9 @@ get_marginalmeans <- function(model,
     # did user request weights? These are not supported for data-grid
     # marginalization types
     if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
-      insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
+      insight::format_warning(
+        "Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts."
+      ) # nolint
       dots[c("weights", "wts")] <- NULL
     }
 
@@ -100,7 +108,6 @@ get_marginalmeans <- function(model,
       insight::get_data(model, verbose = FALSE)
     )
   }
-
 
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
@@ -131,7 +138,9 @@ get_marginalmeans <- function(model,
   if (estimate == "population") {
     # sanity check
     if (is.null(datagrid)) {
-      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
+      insight::format_error(
+        "Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set."
+      ) # nolint
     }
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
@@ -196,7 +205,6 @@ get_marginalmeans <- function(model,
     fun_args$transform <- transform
   }
 
-
   # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -205,7 +213,21 @@ get_marginalmeans <- function(model,
   means <- .call_marginaleffects(fun_args)
 
 
-  # fitfth step: post-processin marginal means---------------------------------
+  # Fifth step: add posterior draws -------------------------------------------
+  # ---------------------------------------------------------------------------
+
+  posterior_draws <- attributes(means)$posterior_draws
+  if (!is.null(posterior_draws)) {
+    # bring posterior draws into shape. {marginaleffects} returns samples
+    # as rows, not as columns
+    posterior_draws <- as.data.frame(posterior_draws)
+    # standard column names
+    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
+    rownames(posterior_draws) <- NULL
+  }
+
+
+  # Sixth step: post-processin marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
   # filter "by" rows when we have "average" marginalization, because we don't
@@ -235,7 +257,6 @@ get_marginalmeans <- function(model,
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
 
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -249,7 +270,9 @@ get_marginalmeans <- function(model,
         predict = predict_args$predict,
         estimate = estimate,
         datagrid = datagrid,
-        transform = !is.null(transform)
+        transform = !is.null(transform),
+        keep_iterations = keep_iterations,
+        posterior_draws = posterior_draws
       )
     )
   )
@@ -372,11 +395,14 @@ get_marginalmeans <- function(model,
   x
 }
 
+# these are the names of attributes that can be flexibly added via
+# `info` argument in `.add_attributes()`
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "posterior_draws",
+    "keep_iterations"
   )
 }
 

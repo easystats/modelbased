@@ -573,7 +573,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # finally, make sure we have original data types
-  data.frame(datawizard::data_restoretype(params, model_data))
+  params <- data.frame(datawizard::data_restoretype(params, model_data))
+
+  # add posterior draws?
+  if (!is.null(attributes(x)$posterior_draws) && is.numeric(attributes(x)$keep_iterations)) {
+    params <- cbind(params, attributes(x)$posterior_draws[, 1:attributes(x)$keep_iterations, drop = FALSE])
+  }
+
+  params
 }
 
 

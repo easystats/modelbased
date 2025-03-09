@@ -109,6 +109,11 @@
 #' which case `insight::get_transformation()` is called to determine the
 #' appropriate transformation-function. Note that no standard errors are returned
 #' when transformations are applied.
+#' @param keep_iterations If `TRUE`, will keep all iterations (draws) of
+#' bootstrapped or Bayesian models. They will be added as attribute to the
+#' returned object. If `keep_iteration` is a positive number, iterations will
+#' also be added as additional columns to the output named `⁠iter_1`, `iter_2`,
+#' and so on. This currently only works for `backend = "marginaleffects"`.
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -229,6 +234,7 @@ estimate_means <- function(model,
                            ci = 0.95,
                            estimate = getOption("modelbased_estimate", "typical"),
                            transform = NULL,
+                           keep_iterations = FALSE,
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
                            ...) {
@@ -257,6 +263,7 @@ estimate_means <- function(model,
       ci = ci,
       estimate = estimate,
       transform = transform,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
