@@ -67,8 +67,8 @@ test_that("estimate_contrasts() - posterior draws", {
     out,
     c(
       "Level1", "Level2", "ROPE_CI", "Median", "CI_low", "CI_high",
-      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage", "1", "2", "3",
-      "4", "5"
+      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage", "iter_1", "iter_2",
+      "iter_3", "iter_4", "iter_5"
     )
   )
   expect_identical(dim(out), c(3L, 15L))

@@ -96,7 +96,7 @@ get_marginaltrends <- function(
     # as rows, not as columns
     posterior_draws <- as.data.frame(posterior_draws)
     # remove old attribute, because we overwrite it
-    attributes(estimated)$posterior_draws <- NULL
+    attr(estimated, "posterior_draws") <- NULL
     # standard column names
     colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
     rownames(posterior_draws) <- NULL
