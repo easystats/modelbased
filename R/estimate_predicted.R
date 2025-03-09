@@ -439,7 +439,7 @@ estimate_relation <- function(model,
     dots$allow.new.levels <- NULL
   }
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
-  out <- as.data.frame(predictions, add_iterations = add_iterations)
+  out <- as.data.frame(predictions, keep_iterations = add_iterations)
 
   # select columns to copy - we don't want duplicates from the data grid
   columns_to_copy <- setdiff(colnames(data), colnames(out))
