@@ -145,47 +145,38 @@ test_that("estimate_means() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
-      "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "add_iterations", "posterior_draws", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "backend", "coef_name", "at", "by",
+      "focal_terms", "predict", "transform", "add_iterations", "posterior_draws"
     )
   )
   expect_named(
     out,
     c(
-      "wt", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
-      "ROPE_high", "ROPE_Percentage", "iter_1", "iter_2", "iter_3",
-      "iter_4", "iter_5"
+      "wt", "Mean", "CI_low", "CI_high", "pd", "iter_1", "iter_2",
+      "iter_3", "iter_4", "iter_5"
     )
   )
-  expect_identical(dim(out), c(10L, 14L))
+  expect_identical(dim(out), c(10L, 10L))
 
   out <- estimate_means(m, by = "wt", add_iterations = TRUE, backend = "emmeans")
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
-      "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "add_iterations", "posterior_draws", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "names", "row.names", "class", "at", "by", "table_title", "table_footer",
+      "model", "response", "ci", "backend", "coef_name", "focal_terms",
+      "predict", "transform", "add_iterations", "posterior_draws"
     )
   )
-  expect_named(
-    out,
-    c(
-      "wt", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
-      "ROPE_high", "ROPE_Percentage"
-    )
-  )
-  expect_identical(dim(out), c(10L, 9L))
+  expect_named(out, c("wt", "Mean", "CI_low", "CI_high", "pd"))
+  expect_identical(dim(out), c(10L, 5L))
 })
 
 
 test_that("estimate_contrasts() - posterior draws, emmeans", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
-  out <- estimate_contrasts(m, "wt=c(3,4,5)", add_iterations = 5, backend = "emmeans")
+  out <- estimate_contrasts(m, by = "wt=c(3,4,5)", add_iterations = 5, backend = "emmeans")
   expect_named(
     attributes(out),
     c(
@@ -210,21 +201,19 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
-      "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "add_iterations", "posterior_draws"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "at", "by",
+      "predict", "comparison", "contrast", "transform", "add_iterations"
     )
   )
   expect_named(
     out,
     c(
-      "Level1", "Level2", "ROPE_CI", "Median", "CI_low", "CI_high",
-      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+      "Level1", "Level2", "Difference", "CI_low", "CI_high", "pd",
+      "ROPE_Percentage"
     )
   )
-  expect_identical(dim(out), c(3L, 10L))
+  expect_identical(dim(out), c(3L, 7L))
 })
 
 
@@ -235,38 +224,31 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "add_iterations",
-      "posterior_draws", "table_title", "table_footer", "model", "response"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "trend", "transform", "coef_name",
+      "add_iterations", "posterior_draws"
     )
   )
   expect_named(
     out,
     c(
-      "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
-      "ROPE_high", "ROPE_Percentage", "iter_1", "iter_2", "iter_3",
-      "iter_4", "iter_5"
+      "X1", "Slope", "CI_low", "CI_high", "pd", "iter_1", "iter_2",
+      "iter_3", "iter_4", "iter_5"
     )
   )
-  expect_identical(dim(out), c(1L, 13L))
+  expect_identical(dim(out), c(1L, 10L))
 
   out <- estimate_slopes(m, "wt", add_iterations = TRUE, backend = "emmeans")
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "add_iterations",
-      "posterior_draws", "table_title", "table_footer", "model", "response"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "trend", "transform", "coef_name",
+      "add_iterations", "posterior_draws"
     )
   )
-  expect_named(
-    out,
-    c(
-      "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
-      "ROPE_high", "ROPE_Percentage"
-    )
-  )
-  expect_identical(dim(out), c(1L, 8L))
+  expect_named(out, c("X1", "Slope", "CI_low", "CI_high", "pd"))
+  expect_identical(dim(out), c(1L, 5L))
 })
 
 
