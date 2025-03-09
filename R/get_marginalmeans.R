@@ -206,7 +206,6 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-
   # Fifth step: add posterior draws -------------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -221,7 +220,6 @@ get_marginalmeans <- function(model,
     colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
     rownames(posterior_draws) <- NULL
   }
-
 
   # Sixth step: post-processin marginal means----------------------------------
   # ---------------------------------------------------------------------------
