@@ -131,8 +131,7 @@ get_marginalcontrasts <- function(model,
       estimate = estimate,
       p_adjust = p_adjust,
       contrast_filter = my_args$contrast_filter,
-      keep_iterations = keep_iterations,
-      posterior_draws = posterior_draws
+      keep_iterations = keep_iterations
     )
   )
 
