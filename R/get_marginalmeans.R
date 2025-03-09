@@ -69,7 +69,10 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    dg_factors <- switch(estimate, specific = "reference", "all")
+    dg_factors <- switch(estimate,
+      specific = "reference",
+      "all"
+    )
     dg_args <- list(
       model,
       by = my_args$by,
