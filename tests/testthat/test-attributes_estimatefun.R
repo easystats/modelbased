@@ -11,7 +11,7 @@ test_that("attributes_means", {
     c(
       "names", "row.names", "class", "at", "by", "table_title", "table_footer",
       "model", "response", "ci", "backend", "coef_name", "focal_terms",
-      "predict"
+      "predict", "transform", "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_means(model, "Species", backend = "marginaleffects"))
@@ -37,7 +37,7 @@ test_that("attributes_means, contrasts", {
     c(
       "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "predict",
-      "comparison", "contrast"
+      "comparison", "contrast", "transform", "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "marginaleffects"))
@@ -85,7 +85,8 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "trend", "coef_name"
+      "model", "response", "ci", "trend", "transform", "coef_name",
+      "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))

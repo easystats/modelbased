@@ -152,7 +152,6 @@ get_emmeans <- function(model,
 
 # Table formatting emmeans ----------------------------------------------------
 
-
 .format_emmeans_means <- function(x, model, ci = 0.95, verbose = TRUE, ...) {
   predict <- attributes(x)$predict
   # Summarize and clean
@@ -176,11 +175,18 @@ get_emmeans <- function(model,
   # Restore factor levels
   means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
 
-
   info <- attributes(x)
 
   attr(means, "at") <- info$by
   attr(means, "by") <- info$by
+
+  # add posterior draws?
+  if (!is.null(info$posterior_draws) && is.numeric(info$keep_iterations)) {
+    posterior_draws <- datawizard::data_transpose(info$posterior_draws)
+    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
+    means <- cbind(means, posterior_draws[, 1:info$keep_iterations, drop = FALSE])
+  }
+
   means
 }
 

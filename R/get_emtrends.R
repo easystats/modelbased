@@ -93,7 +93,6 @@ get_emtrends <- function(model,
 
 # Formatting ===============================================================
 
-
 .format_emmeans_slopes <- function(model, estimated, ci, ...) {
   # Summarize and clean
   if (insight::model_info(model)$is_bayesian) {
@@ -115,5 +114,14 @@ get_emtrends <- function(model,
   trends <- datawizard::data_rename(trends, select = c(Slope = "Coefficient"))
 
   # Restore factor levels
-  datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+  out <- datawizard::data_restoretype(trends, insight::get_data(model, verbose = FALSE))
+
+  # add posterior draws?
+  if (!is.null(attributes(estimated)$posterior_draws) && is.numeric(attributes(estimated)$keep_iterations)) {
+    posterior_draws <- datawizard::data_transpose(attributes(estimated)$posterior_draws)
+    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
+    out <- cbind(out, posterior_draws[, 1:attributes(estimated)$keep_iterations, drop = FALSE])
+  }
+
+  out
 }
