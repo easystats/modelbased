@@ -164,7 +164,7 @@ directly related to the shape of the posterior distribution. Thus, showing
 different CI levels (for instance, 69\%, 89\% and 99\%).
 
 ```{r}
-predicted <- estimate_relation(model, ci = c(0.69, .89, 0.99))
+predicted <- estimate_relation(model, ci = c(0.69, 0.89, 0.99))
 
 iris |>
   ggplot(aes(x = Sepal.Length)) +
