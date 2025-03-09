@@ -180,24 +180,21 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
-      "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "add_iterations", "posterior_draws"
+      "names", "class", "row.names", "table_title", "table_footer",
+      "model", "response", "ci", "p_adjust", "backend", "at", "by",
+      "predict", "comparison", "contrast", "transform", "add_iterations"
     )
   )
   expect_named(
     out,
     c(
-      "Level1", "Level2", "ROPE_CI", "Median", "CI_low", "CI_high",
-      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage", "iter_1", "iter_2",
-      "iter_3", "iter_4", "iter_5"
+      "Level1", "Level2", "Difference", "CI_low", "CI_high", "pd",
+      "ROPE_Percentage"
     )
   )
-  expect_identical(dim(out), c(3L, 15L))
+  expect_identical(dim(out), c(3L, 7L))
 
-  out <- estimate_contrasts(m, "wt=c(3,4,5)", add_iterations = TRUE, backend = "emmeans")
+  out <- estimate_contrasts(m, by = "wt=c(3,4,5)", add_iterations = TRUE, backend = "emmeans")
   expect_named(
     attributes(out),
     c(
@@ -242,7 +239,7 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "table_title", "table_footer",
+      "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "trend", "transform", "coef_name",
       "add_iterations", "posterior_draws"
     )
