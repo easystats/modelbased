@@ -93,4 +93,45 @@ test_that("estimate_contrasts() - posterior draws", {
   )
   expect_identical(dim(out), c(3L, 10L))
 })
-# modelbased::estimate_slopes(m, "wt", keep_iterations = 5)
+
+
+test_that("estimate_slopes() - posterior draws", {
+  m <- insight::download_model("brms_1")
+  skip_if(is.null(m))
+  out <- estimate_slopes(m, "wt", keep_iterations = 5)
+  expect_named(
+    attributes(out),
+    c(
+      "names", "class", "row.names", "trend", "comparison", "p_adjust",
+      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "posterior_draws", "table_title", "table_footer", "model", "response"
+    )
+  )
+  expect_named(
+    out,
+    c(
+      "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+      "ROPE_high", "ROPE_Percentage", "iter_1", "iter_2", "iter_3",
+      "iter_4", "iter_5"
+    )
+  )
+  expect_identical(dim(out), c(1L, 13L))
+
+  out <- estimate_slopes(m, "wt", keep_iterations = TRUE)
+  expect_named(
+    attributes(out),
+    c(
+      "names", "class", "row.names", "trend", "comparison", "p_adjust",
+      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "posterior_draws", "table_title", "table_footer", "model", "response"
+    )
+  )
+  expect_named(
+    out,
+    c(
+      "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+      "ROPE_high", "ROPE_Percentage"
+    )
+  )
+  expect_identical(dim(out), c(1L, 8L))
+})
