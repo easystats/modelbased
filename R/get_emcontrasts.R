@@ -188,11 +188,5 @@ get_emcontrasts <- function(model,
   out <- cbind(level_cols, out)
 
   # add posterior draws?
-  if (!is.null(attributes(estimated)$posterior_draws) && is.numeric(attributes(estimated)$keep_iterations)) {
-    posterior_draws <- datawizard::data_transpose(attributes(estimated)$posterior_draws)
-    colnames(posterior_draws) <- paste0("iter_", 1:ncol(posterior_draws))
-    out <- cbind(out, posterior_draws[, 1:attributes(estimated)$keep_iterations, drop = FALSE])
-  }
-
-  out
+  .add_posterior_draws_emmeans(attributes(estimated), out)
 }
