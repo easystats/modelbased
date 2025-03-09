@@ -21,17 +21,15 @@
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' }
 #' @export
-get_marginalmeans <- function(
-  model,
-  by = "auto",
-  predict = NULL,
-  ci = 0.95,
-  estimate = getOption("modelbased_estimate", "typical"),
-  transform = NULL,
-  keep_iterations = FALSE,
-  verbose = TRUE,
-  ...
-) {
+get_marginalmeans <- function(model,
+                              by = "auto",
+                              predict = NULL,
+                              ci = 0.95,
+                              estimate = getOption("modelbased_estimate", "typical"),
+                              transform = NULL,
+                              keep_iterations = FALSE,
+                              verbose = TRUE,
+                              ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
 
@@ -82,9 +80,7 @@ get_marginalmeans <- function(
     # did user request weights? These are not supported for data-grid
     # marginalization types
     if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
-      insight::format_warning(
-        "Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts."
-      ) # nolint
+      insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
       dots[c("weights", "wts")] <- NULL
     }
 
@@ -138,9 +134,7 @@ get_marginalmeans <- function(
   if (estimate == "population") {
     # sanity check
     if (is.null(datagrid)) {
-      insight::format_error(
-        "Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set."
-      ) # nolint
+      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
     }
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
