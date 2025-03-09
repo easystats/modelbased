@@ -9,6 +9,8 @@
   The former `"average"` option is still available, but now returns marginal
   means fully averaged across the sample.
 
+* Argument `keep_iterations` was renamed into `add_iterations`.
+
 ## Changes
 
 * The `transform` argument now also works for `estimate_slopes()` and for
@@ -25,6 +27,10 @@
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
+
+* `estimate_means()` gets a `add_iterations` argument, to keep all posterior
+  draws from Bayesian models as attributes, and if numeric, adds columns of
+  posterior draws to the output.
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
   *modelbased* objects that were applied to imputed data sets. E.g., functions

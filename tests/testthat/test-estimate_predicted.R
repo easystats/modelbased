@@ -11,7 +11,7 @@ test_that("estimate_relation - shape", {
   model <- lm(Petal.Length ~ Petal.Width, data = iris)
   estim <- estimate_relation(model, ci = 0.90)
   expect_equal(attributes(estim)$ci, 0.9)
-  estim <- estimate_relation(model, ci = c(0.90, .95))
+  estim <- estimate_relation(model, ci = c(0.90, 0.95))
   expect_equal(attributes(estim)$ci, c(0.90, 0.95))
   expect_equal(dim(estim), c(10, 7))
 
@@ -113,13 +113,13 @@ test_that("estimate_expectation - Bayesian", {
       chains = 2
     )
   )
-  estim <- estimate_link(model, keep_iterations = TRUE)
+  estim <- estimate_link(model, add_iterations = TRUE)
   draws <- bayestestR::reshape_iterations(estim)
   expect_equal(c(nrow(draws), ncol(draws)), c(2000, 8))
 
   # Non-sampling algorithms
   model <- rstanarm::stan_glm(mpg ~ disp, data = mtcars, algorithm = "meanfield", refresh = 0)
-  estim <- estimate_link(model, keep_iterations = TRUE)
+  estim <- estimate_link(model, add_iterations = TRUE)
   expect_equal(dim(estim), c(10, 1005))
 })
 

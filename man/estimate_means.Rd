@@ -11,6 +11,7 @@ estimate_means(
   ci = 0.95,
   estimate = getOption("modelbased_estimate", "typical"),
   transform = NULL,
+  add_iterations = FALSE,
   backend = getOption("modelbased_backend", "marginaleffects"),
   verbose = TRUE,
   ...
@@ -119,6 +120,12 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{add_iterations}{Iterations (draws) of bootstrapped or Bayesian models
+are added as attribute to the returned object. If \code{add_iterations} is a
+positive number, iterations will also be added as additional columns to the
+output named \code{iter_1}, \code{iter_2}, and so on. \code{add_iterations} indicates the
+number of columns that are added.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
 Results are usually very similar. The major difference will be found for mixed

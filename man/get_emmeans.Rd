@@ -18,6 +18,7 @@ get_emcontrasts(
   predict = NULL,
   comparison = "pairwise",
   transform = NULL,
+  add_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -27,11 +28,19 @@ get_emmeans(
   by = "auto",
   predict = NULL,
   transform = NULL,
+  add_iterations = FALSE,
   verbose = TRUE,
   ...
 )
 
-get_emtrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
+get_emtrends(
+  model,
+  trend = NULL,
+  by = NULL,
+  add_iterations = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 get_marginalcontrasts(
   model,
@@ -43,6 +52,7 @@ get_marginalcontrasts(
   estimate = getOption("modelbased_estimate", "typical"),
   p_adjust = "none",
   transform = NULL,
+  add_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -54,6 +64,7 @@ get_marginalmeans(
   ci = 0.95,
   estimate = getOption("modelbased_estimate", "typical"),
   transform = NULL,
+  add_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -65,6 +76,7 @@ get_marginaltrends(
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,
+  add_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -169,6 +181,12 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{add_iterations}{Iterations (draws) of bootstrapped or Bayesian models
+are added as attribute to the returned object. If \code{add_iterations} is a
+positive number, iterations will also be added as additional columns to the
+output named \code{iter_1}, \code{iter_2}, and so on. \code{add_iterations} indicates the
+number of columns that are added.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 
