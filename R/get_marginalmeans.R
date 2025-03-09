@@ -404,7 +404,7 @@ get_marginalmeans <- function(
     "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
   )
   if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
-    out <- c(out, "posterior_draws",)
+    out <- c(out, "posterior_draws")
   }
 
   out
