@@ -130,7 +130,7 @@ iris |>
   theme_minimal()
 ```
 
-However, you might notice that the **Credible Interval (CI) bands are quite big**. 
+However, you might notice that the **Credible Interval (CI) bands are quite big**.
 This is where `estimate_relation()` is coming in. In a traditional,
 frequentist, regression, the predictions are deterministic: they will always
 fall on the regression line. However, in a Bayesian framework, they are
@@ -198,7 +198,7 @@ Instead (or in addition to) representing confidence intervals, one can also repr
 
 ```{r}
 # Keep only 100 draws (keeping all the draws is slower)
-predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 100)
+predicted <- estimate_relation(model, add_iterations = TRUE, iterations = 100)
 
 # Format draws for plotting
 iterations <- bayestestR::reshape_iterations(predicted)
@@ -219,7 +219,7 @@ Note that it is also possible to obtain similar plots without Bayesian models, b
 model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
 
 # Bootstrap with n=50 iterations
-predicted <- estimate_relation(model, keep_iterations = TRUE, iterations = 50)
+predicted <- estimate_relation(model, add_iterations = TRUE, iterations = 50)
 
 # Format draws for plotting
 iterations <- bayestestR::reshape_iterations(predicted)

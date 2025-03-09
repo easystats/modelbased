@@ -9,6 +9,8 @@
   The former `"average"` option is still available, but now returns marginal
   means fully averaged across the sample.
 
+* Argument `keep_iterations` was renamed into `add_iterations`.
+
 ## Changes
 
 * The `transform` argument now also works for `estimate_slopes()` and for
