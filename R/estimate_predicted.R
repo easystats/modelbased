@@ -235,14 +235,14 @@ estimate_expectation <- function(model,
                                  predict = "expectation",
                                  ci = 0.95,
                                  transform = NULL,
-                                 add_iterations = FALSE,
+                                 keep_iterations = FALSE,
                                  ...) {
   .estimate_predicted(
     model,
     data = data,
     by = by,
     ci = ci,
-    add_iterations = add_iterations,
+    keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
     ...
@@ -258,7 +258,7 @@ estimate_link <- function(model,
                           predict = "link",
                           ci = 0.95,
                           transform = NULL,
-                          add_iterations = FALSE,
+                          keep_iterations = FALSE,
                           ...) {
   # reset to NULL if only "by" was specified
   if (missing(data) && !missing(by)) {
@@ -270,7 +270,7 @@ estimate_link <- function(model,
     data = data,
     by = by,
     ci = ci,
-    add_iterations = add_iterations,
+    keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
     ...
@@ -285,14 +285,14 @@ estimate_prediction <- function(model,
                                 predict = "prediction",
                                 ci = 0.95,
                                 transform = NULL,
-                                add_iterations = FALSE,
+                                keep_iterations = FALSE,
                                 ...) {
   .estimate_predicted(
     model,
     data = data,
     by = by,
     ci = ci,
-    add_iterations = add_iterations,
+    keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
     ...
@@ -307,7 +307,7 @@ estimate_relation <- function(model,
                               predict = "expectation",
                               ci = 0.95,
                               transform = NULL,
-                              add_iterations = FALSE,
+                              keep_iterations = FALSE,
                               ...) {
   # reset to NULL if only "by" was specified
   if (missing(data) && !missing(by)) {
@@ -319,7 +319,7 @@ estimate_relation <- function(model,
     data = data,
     by = by,
     ci = ci,
-    add_iterations = add_iterations,
+    keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
     ...
@@ -336,7 +336,7 @@ estimate_relation <- function(model,
                                 predict = "expectation",
                                 ci = 0.95,
                                 transform = NULL,
-                                add_iterations = FALSE,
+                                keep_iterations = FALSE,
                                 ...) {
   # only "by" or "data", but not both
   if (!is.null(by) && !is.null(data)) {
@@ -439,7 +439,7 @@ estimate_relation <- function(model,
     dots$allow.new.levels <- NULL
   }
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
-  out <- as.data.frame(predictions, keep_iterations = add_iterations)
+  out <- as.data.frame(predictions, keep_iterations = keep_iterations)
 
   # select columns to copy - we don't want duplicates from the data grid
   columns_to_copy <- setdiff(colnames(data), colnames(out))
@@ -475,8 +475,7 @@ estimate_relation <- function(model,
 
   # Store relevant information
   attr(out, "ci") <- ci
-  attr(out, "add_iterations") <- add_iterations
-  attr(out, "posterior_draws") <- attributes(predictions)$iterations
+  attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "transform") <- !is.null(transform)
   attr(out, "model") <- model

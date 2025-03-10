@@ -14,7 +14,7 @@ estimate_expectation(
   predict = "expectation",
   ci = 0.95,
   transform = NULL,
-  add_iterations = FALSE,
+  keep_iterations = FALSE,
   ...
 )
 
@@ -25,7 +25,7 @@ estimate_link(
   predict = "link",
   ci = 0.95,
   transform = NULL,
-  add_iterations = FALSE,
+  keep_iterations = FALSE,
   ...
 )
 
@@ -36,7 +36,7 @@ estimate_prediction(
   predict = "prediction",
   ci = 0.95,
   transform = NULL,
-  add_iterations = FALSE,
+  keep_iterations = FALSE,
   ...
 )
 
@@ -47,7 +47,7 @@ estimate_relation(
   predict = "expectation",
   ci = 0.95,
   transform = NULL,
-  add_iterations = FALSE,
+  keep_iterations = FALSE,
   ...
 )
 }
@@ -88,11 +88,12 @@ be \code{TRUE}, in which case \code{insight::get_transformation()} is called to
 determine the appropriate transformation-function. Note that no standard
 errors are returned when transformations are applied.}
 
-\item{add_iterations}{Iterations (draws) of bootstrapped or Bayesian models
-are added as attribute to the returned object. If \code{add_iterations} is a
-positive number, iterations will also be added as additional columns to the
-output named \code{iter_1}, \code{iter_2}, and so on. \code{add_iterations} indicates the
-number of columns that are added.}
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
+number, only as many columns as indicated in \code{keep_iterations} will be added
+to the output. You can reshape them to a long format by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and

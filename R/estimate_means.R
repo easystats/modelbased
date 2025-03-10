@@ -109,11 +109,12 @@
 #' which case `insight::get_transformation()` is called to determine the
 #' appropriate transformation-function. Note that no standard errors are returned
 #' when transformations are applied.
-#' @param add_iterations Iterations (draws) of bootstrapped or Bayesian models
-#' are added as attribute to the returned object. If `add_iterations` is a
-#' positive number, iterations will also be added as additional columns to the
-#' output named `iter_1`, `iter_2`, and so on. `add_iterations` indicates the
-#' number of columns that are added.
+#' @param keep_iterations If `TRUE`, will keep all iterations (draws) of
+#' bootstrapped or Bayesian models. They will be added as additional columns
+#' named `iter_1`, `iter_2`, and so on. If `keep_iterations` is a positive
+#' number, only as many columns as indicated in `keep_iterations` will be added
+#' to the output. You can reshape them to a long format by running
+#' [`bayestestR::reshape_iterations()`].
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -234,7 +235,7 @@ estimate_means <- function(model,
                            ci = 0.95,
                            estimate = getOption("modelbased_estimate", "typical"),
                            transform = NULL,
-                           add_iterations = FALSE,
+                           keep_iterations = FALSE,
                            backend = getOption("modelbased_backend", "marginaleffects"),
                            verbose = TRUE,
                            ...) {
@@ -250,7 +251,7 @@ estimate_means <- function(model,
       model,
       by = by,
       predict = predict,
-      add_iterations = add_iterations,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
@@ -264,7 +265,7 @@ estimate_means <- function(model,
       ci = ci,
       estimate = estimate,
       transform = transform,
-      add_iterations = add_iterations,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )

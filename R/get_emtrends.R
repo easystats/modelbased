@@ -16,7 +16,7 @@
 get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
-                         add_iterations = FALSE,
+                         keep_iterations = FALSE,
                          verbose = TRUE,
                          ...) {
   # check if available
@@ -38,7 +38,7 @@ get_emtrends <- function(model,
   if (insight::model_info(model)$is_bayesian) {
     attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
-    add_iterations <- FALSE
+    keep_iterations <- FALSE
   }
 
   attr(estimated, "trend") <- my_args$trend
@@ -46,7 +46,7 @@ get_emtrends <- function(model,
   attr(estimated, "by") <- my_args$by
   attr(estimated, "coef_name") <- "Slope"
   attr(estimated, "transform") <- TRUE
-  attr(estimated, "add_iterations") <- add_iterations
+  attr(estimated, "keep_iterations") <- keep_iterations
 
   estimated
 }
