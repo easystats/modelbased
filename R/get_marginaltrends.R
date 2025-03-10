@@ -13,6 +13,7 @@ get_marginaltrends <- function(model,
                                ci = 0.95,
                                p_adjust = "none",
                                transform = NULL,
+                               keep_iterations = FALSE,
                                verbose = TRUE,
                                ...) {
   # check if available
@@ -48,7 +49,6 @@ get_marginaltrends <- function(model,
     datagrid_info <- attributes(datagrid)
   }
 
-
   # Second step: prepare arguments for marginaleffects ------------------------
   # ---------------------------------------------------------------------------
 
@@ -77,7 +77,6 @@ get_marginaltrends <- function(model,
     ),
     dots
   ))
-
 
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
@@ -118,7 +117,8 @@ get_marginaltrends <- function(model,
         coef_name = "Slope",
         p_adjust = p_adjust,
         ci = ci,
-        transform = !is.null(transform)
+        transform = !is.null(transform),
+        keep_iterations = keep_iterations
       )
     )
   )
