@@ -56,7 +56,7 @@ affiliations:
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-03-04"
+date: "2025-03-10"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
@@ -151,11 +151,12 @@ Setting `estimate = "average"` can be useful to calculate the average expected o
 
 ## Group-level estimates for Mixed Models
 
-The `modelbased` package also provides the `estimate_grouplevel()` function to conveniently extract parameters related to random factors, which typically correspond to group-level parameters (e.g., the intercept's or slope's value for each participant). Estimating these indices using mixed models can have important benefits (such as partial-pooling - *aka* "shrinkage" - and better convergence) over an empirical approach consisting of fitting individual models to all individuals separately. These group-level estimates can be estimated in two manners:
+The `modelbased` package also provides the `estimate_grouplevel()` function to conveniently extract parameters related to random factors, which typically correspond to group-level parameters (e.g., the intercept's or slope's value for each participant). These are known as BLUPs (Best Linear Unbiased Predictions) and can be estimated in two manners:
 
-- **"random"** (default): Corresponds to the deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect
-- **"total"**: Returns the sum of the random effect and its corresponding fixed effects. These are known as BLUPs (Best Linear Unbiased Predictions) and are "absolute" values of the individual-level effects on the same scale as their corresponding fixed effects.
+- **"random"** (default): Corresponds typically to the relative deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect
+- **"total"**: Returns the absolute individual-level effects, which typically corresponds to the sum of the relative random effect with its corresponding fixed effects.
 
+Estimating these indices using mixed models can have important benefits over an empirical approach consisting of computing raw group means, of fitting individual models to all individuals separately. In particular, it is more resilient and robust to the presence of few or missing data, and naturally applies partial-pooling - *aka* "shrinkage", which combines information from the group and the overall population. This means that group estimates are "pulled" towards the population-level estimate if they are more uncertain (i.e., includes less observations), in essence giving more weight to more reliable estimates. Estimates shrinkage prevents overfitting and improves generalizability.
 
 ## Technical details
 
