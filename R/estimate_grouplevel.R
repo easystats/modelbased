@@ -16,8 +16,9 @@
 #'   the sum of the random effect and its corresponding fixed effects, which
 #'   internally relies on the `coef()` method (see `?coef.merMod`). Note that
 #'   `type = "total"` yet does not return uncertainty indices (such as SE and CI)
-#'   for models from *lme4* or *glmmTMB*, as these are not computable. However, for
-#'   Bayesian models, it is possible to compute them.
+#'   for models from *lme4* or *glmmTMB*, as the necessary information to
+#'   compute them is not yet available. However, for Bayesian models, it is
+#'   possible to compute them.
 #' @param ... Other arguments passed to or from other methods.
 #'
 #' @details
@@ -94,7 +95,7 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
-    random <- random[grepl("^r_", random$Parameter), ]
+    random <- random[startsWith(random$Parameter, "r_"), ]
     # Remove Group from Level
     random$Level <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i]))
     # Find the group name (what follows "r_" and before the first "[" or "__")

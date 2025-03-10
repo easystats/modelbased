@@ -22,10 +22,10 @@ looking at the zero crossings of its derivative.
 }
 \examples{
 x <- sin(seq(0, 4 * pi, length.out = 100))
-plot(x, type = "b")
+# plot(x, type = "b")
 
-zero_crossings(x)
-find_inversions(x)
+modelbased::zero_crossings(x)
+modelbased::find_inversions(x)
 }
 \seealso{
 Based on the \code{uniroot.all} function from the rootSolve package.

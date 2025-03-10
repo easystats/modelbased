@@ -873,7 +873,7 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 
   out <- estimate_contrasts(
     m,
-    c("e42dep=c('independent','slightly dependent','moderately dependent')"),
+    "e42dep=c('independent','slightly dependent','moderately dependent')",
     by = "c172code"
   )
   expect_identical(dim(out), c(9L, 10L))
