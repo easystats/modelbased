@@ -1,4 +1,4 @@
-# modelbased (devel)
+# modelbased 0.10.0
 
 ## Breaking Changes
 
@@ -39,6 +39,10 @@
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
 
+* `estimate_grouplevel()` gets a new option, `type = "total"`, to return the
+  sum of fixed and random effects (similar to what `coef()` returns for (Bayesian)
+  mixed models).
+
 * New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
   specifically for the case of Johnson-Neyman intervals, i.e. when calling
   `estimate_slopes()` with two numeric predictors in an interaction term.
@@ -73,6 +77,8 @@
 * Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
 * Fixed issues in `estimate_contrasts()` when filtering numeric values in `by`.
+
+* Fixed issues in `estimate_grouplevel()`.
 
 * Fixed issue in `estimate_slopes()` for models from package *lme4*.
 

@@ -314,6 +314,6 @@ Let's replicate this step-by-step:
 
 # Conclusion
 
-While the current implementation in `estimate_contrasts()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, we recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/vignettes/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/vignettes/hypothesis.html).
+While the current implementation in `estimate_contrasts()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, we recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/chapters/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/chapters/hypothesis.html).
 
 [Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
