@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.41</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.42</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -113,6 +113,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -122,11 +123,19 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  by <span class="op">=</span> <span class="st">"auto"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, trend <span class="op">=</span> <span class="cn">NULL</span>, by <span class="op">=</span> <span class="cn">NULL</span>, verbose <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">get_emtrends</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  trend <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">get_marginalcontrasts</span><span class="op">(</span></span>
 <span>  <span class="va">model</span>,</span>
@@ -138,6 +147,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_estimate"</span>, <span class="st">"typical"</span><span class="op">)</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -149,6 +159,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_estimate"</span>, <span class="st">"typical"</span><span class="op">)</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
@@ -160,6 +171,7 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -270,6 +282,15 @@ posterior distribution, before computing summaries. Can also be <code>TRUE</code
 which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.</p></dd>
+
+
+<dt id="arg-keep-iterations">keep_iterations<a class="anchor" aria-label="anchor" href="#arg-keep-iterations"></a></dt>
+<dd><p>If <code>TRUE</code>, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named <code>iter_1</code>, <code>iter_2</code>, and so on. If <code>keep_iterations</code> is a positive
+number, only as many columns as indicated in <code>keep_iterations</code> will be added
+to the output. You can reshape them to a long format by running
+<code><a href="https://easystats.github.io/bayestestR/reference/reshape_iterations.html" class="external-link">bayestestR::reshape_iterations()</a></code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>

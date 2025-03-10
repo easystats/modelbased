@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.41</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.9.0.42</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -255,7 +255,7 @@ credible intervals are directly related to the shape of the posterior
 distribution. Thus, showing different CI levels (for instance, 69%, 89%
 and 99%).</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">.89</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">predicted</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/estimate_expectation.html">estimate_relation</a></span><span class="op">(</span><span class="va">model</span>, ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.69</span>, <span class="fl">0.89</span>, <span class="fl">0.99</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">iris</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Sepal.Length</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
