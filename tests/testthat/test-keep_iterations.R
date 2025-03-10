@@ -194,10 +194,10 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
     out,
     c(
       "Level1", "Level2", "Difference", "CI_low", "CI_high", "pd",
-      "ROPE_Percentage"
+      "ROPE_Percentage", "iter_1", "iter_2", "iter_3", "iter_4", "iter_5"
     )
   )
-  expect_identical(dim(out), c(3L, 7L))
+  expect_identical(dim(out), c(3L, 12L))
 
   out <- estimate_contrasts(m, by = "wt=c(3,4,5)", keep_iterations = TRUE, backend = "emmeans")
   expect_named(
@@ -208,7 +208,7 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
       "predict", "comparison", "contrast", "transform", "keep_iterations"
     )
   )
-  expect_identical(dim(out), c(3L, 7L))
+  expect_identical(dim(out), c(3L, 4007L))
 })
 
 
@@ -237,13 +237,12 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   expect_named(
     attributes(out),
     c(
-      "names", "row.names", "class", "table_title", "table_footer",
+      "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "trend", "transform", "coef_name",
       "keep_iterations"
     )
   )
-  expect_named(out, c("X1", "Slope", "CI_low", "CI_high", "pd"))
-  expect_identical(dim(out), c(1L, 5L))
+  expect_identical(dim(out), c(1L, 4005L))
 })
 
 
@@ -267,4 +266,6 @@ test_that("estimate_slopes() - posterior draws, get_predicted", {
       "iter_2", "iter_3", "iter_4", "iter_5"
     )
   )
+  out <- estimate_relation(m, by = "wt", keep_iterations = TRUE)
+  expect_identical(dim(out), c(10L, 4006L))
 })
