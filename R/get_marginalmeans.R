@@ -27,6 +27,7 @@ get_marginalmeans <- function(model,
                               ci = 0.95,
                               estimate = getOption("modelbased_estimate", "typical"),
                               transform = NULL,
+                              keep_iterations = FALSE,
                               verbose = TRUE,
                               ...) {
   # check if available
@@ -51,8 +52,14 @@ get_marginalmeans <- function(model,
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
   # find default response-type, and get information about back transformation
-  predict_args <- .get_marginaleffects_type_argument(model, predict, comparison, model_info, verbose, ...) # nolint
-
+  predict_args <- .get_marginaleffects_type_argument(
+    model,
+    predict,
+    comparison,
+    model_info,
+    verbose,
+    ...
+  ) # nolint
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -100,7 +107,6 @@ get_marginalmeans <- function(model,
       insight::get_data(model, verbose = FALSE)
     )
   }
-
 
   # Third step: prepare arguments for marginaleffects ------------------------
   # --------------------------------------------------------------------------
@@ -196,7 +202,6 @@ get_marginalmeans <- function(model,
     fun_args$transform <- transform
   }
 
-
   # Fourth step: compute marginal means ---------------------------------------
   # ---------------------------------------------------------------------------
 
@@ -204,8 +209,7 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-
-  # fitfth step: post-processin marginal means---------------------------------
+  # Fifth step: post-processin marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
   # filter "by" rows when we have "average" marginalization, because we don't
@@ -235,7 +239,6 @@ get_marginalmeans <- function(model,
     means$hypothesis <- gsub(" ", "", comparison, fixed = TRUE)
   }
 
-
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
 
@@ -249,7 +252,8 @@ get_marginalmeans <- function(model,
         predict = predict_args$predict,
         estimate = estimate,
         datagrid = datagrid,
-        transform = !is.null(transform)
+        transform = !is.null(transform),
+        keep_iterations = keep_iterations
       )
     )
   )
@@ -277,7 +281,7 @@ get_marginalmeans <- function(model,
     }
     msg <- c(
       paste0("Sorry, calculating ", fun, " failed with following error:"),
-      insight::color_text(gsub("\n", "", out$message), "red")
+      insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
     )
     # we get this error when we should use counterfactuals - tell
     # # user about possible solution
@@ -372,11 +376,13 @@ get_marginalmeans <- function(model,
   x
 }
 
+# these are the names of attributes that can be flexibly added via
+# `info` argument in `.add_attributes()`
 .info_elements <- function() {
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
   )
 }
 

@@ -38,6 +38,7 @@ get_emmeans <- function(model,
                         by = "auto",
                         predict = NULL,
                         transform = NULL,
+                        keep_iterations = FALSE,
                         verbose = TRUE,
                         ...) {
   # check if available
@@ -84,10 +85,19 @@ get_emmeans <- function(model,
     }
   }
 
+  # for Bayesian model, keep iterations
+  if (insight::model_info(model)$is_bayesian) {
+    attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
+  } else {
+    keep_iterations <- FALSE
+  }
+
   attr(estimated, "at") <- my_args$by
   attr(estimated, "by") <- my_args$by
   attr(estimated, "predict") <- predict
   attr(estimated, "focal_terms") <- my_args$emmeans_specs
+  attr(estimated, "transform") <- TRUE
+  attr(estimated, "keep_iterations") <- keep_iterations
 
   estimated
 }
@@ -142,7 +152,6 @@ get_emmeans <- function(model,
 
 # Table formatting emmeans ----------------------------------------------------
 
-
 .format_emmeans_means <- function(x, model, ci = 0.95, verbose = TRUE, ...) {
   predict <- attributes(x)$predict
   # Summarize and clean
@@ -166,12 +175,36 @@ get_emmeans <- function(model,
   # Restore factor levels
   means <- datawizard::data_restoretype(means, insight::get_data(model, verbose = FALSE))
 
-
   info <- attributes(x)
 
   attr(means, "at") <- info$by
   attr(means, "by") <- info$by
-  means
+
+  .add_posterior_draws_emmeans(info, means)
+}
+
+
+# adds posterior draws to output for emmeans objects
+.add_posterior_draws_emmeans <- function(info, estimated) {
+  # add posterior draws?
+  if (!is.null(info$posterior_draws)) {
+    # how many?
+    keep_iterations <- info$keep_iterations
+    # check if user wants to keep any posterior draws
+    if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
+      # reshape draws
+      posterior_draws <- datawizard::data_transpose(info$posterior_draws)
+      # keep all iterations when `TRUE`
+      if (isTRUE(keep_iterations)) {
+        keep_iterations <- ncol(posterior_draws)
+      }
+      colnames(posterior_draws) <- paste0("iter_", seq_len(ncol(posterior_draws)))
+      estimated <- cbind(estimated, posterior_draws[, 1:keep_iterations, drop = FALSE])
+    }
+  }
+  # remove from attributes
+  attr(estimated, "posterior_draws") <- NULL
+  estimated
 }
 
 

@@ -11,7 +11,7 @@ test_that("attributes_means", {
     c(
       "names", "row.names", "class", "at", "by", "table_title", "table_footer",
       "model", "response", "ci", "backend", "coef_name", "focal_terms",
-      "predict"
+      "predict", "transform", "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_means(model, "Species", backend = "marginaleffects"))
@@ -20,8 +20,8 @@ test_that("attributes_means", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "table_title", "table_footer", "model", "response", "ci",
-      "backend", "coef_name"
+      "model_info", "keep_iterations", "table_title", "table_footer", "model",
+      "response", "ci", "backend", "coef_name"
     )
   )
 })
@@ -37,7 +37,7 @@ test_that("attributes_means, contrasts", {
     c(
       "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "predict",
-      "comparison", "contrast"
+      "comparison", "contrast", "transform", "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "marginaleffects"))
@@ -47,7 +47,8 @@ test_that("attributes_means, contrasts", {
       "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "transform", "datagrid", "preserve_range", "coef_name", "model_info"
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info",
+      "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects"))
@@ -57,7 +58,8 @@ test_that("attributes_means, contrasts", {
       "names", "row.names", "class", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
-      "transform", "datagrid", "preserve_range", "coef_name", "model_info"
+      "transform", "datagrid", "preserve_range", "coef_name", "model_info",
+      "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects", estimate = "average"))
@@ -68,7 +70,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "contrast_filter"
+      "contrast_filter", "keep_iterations"
     )
   )
 })
@@ -83,7 +85,8 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "trend", "coef_name"
+      "model", "response", "ci", "trend", "transform", "coef_name",
+      "keep_iterations"
     )
   )
   estim <- suppressMessages(estimate_slopes(model, "Sepal.Width", backend = "marginaleffects"))
@@ -91,8 +94,8 @@ test_that("attributes_means, slopes", {
     attributes(estim),
     c(
       "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "table_title",
-      "table_footer", "model", "response"
+      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "table_title", "table_footer", "model", "response"
     )
   )
 })
