@@ -20,7 +20,8 @@
 #'   compute them is not yet available. However, for Bayesian models, it is
 #'   possible to compute them.
 #' @param dispersion,test,diagnostic Arguments passed to [parameters::model_parameters()] for
-#'    Bayesian models.
+#'    Bayesian models. By default, it won't return significance or diagnostic indices
+#'    (as it is not typically very useful).
 #' @param ... Other arguments passed to [parameters::model_parameters()].
 #'
 #' @details

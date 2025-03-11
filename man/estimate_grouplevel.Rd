@@ -5,7 +5,14 @@
 \alias{reshape_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
-estimate_grouplevel(model, type = "random", ...)
+estimate_grouplevel(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+)
 
 reshape_grouplevel(x, indices = "all", group = "all", ...)
 }
@@ -26,11 +33,16 @@ for models from \emph{lme4} or \emph{glmmTMB}, as the necessary information to
 compute them is not yet available. However, for Bayesian models, it is
 possible to compute them.}
 
-\item{...}{Other arguments passed to or from other methods.}
+\item{dispersion, test, diagnostic}{Arguments passed to \code{\link[parameters:model_parameters]{parameters::model_parameters()}} for
+Bayesian models. By default, it won't return significance or diagnostic indices
+(as it is not typically very useful).}
+
+\item{...}{Other arguments passed to \code{\link[parameters:model_parameters]{parameters::model_parameters()}}.}
 
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
-\item{indices}{A list containing the indices to extract (e.g., "Coefficient").}
+\item{indices}{A list containing the indices (i.e., which columns) to
+extract (e.g., "Coefficient").}
 
 \item{group}{A list containing the random factors to select.}
 }

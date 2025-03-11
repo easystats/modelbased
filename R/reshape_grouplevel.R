@@ -1,6 +1,7 @@
 #' @rdname estimate_grouplevel
 #' @param x The output of `estimate_grouplevel()`.
-#' @param indices A list containing the indices to extract (e.g., "Coefficient").
+#' @param indices A list containing the indices (i.e., which columns) to
+#'   extract (e.g., "Coefficient").
 #' @param group A list containing the random factors to select.
 #' @export
 reshape_grouplevel <- function(x, indices = "all", group = "all", ...) {
@@ -18,13 +19,9 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
     indices <- c(indices, "Median", "Mean", "MAP") # Accommodate Bayesian
   }
   if ("SE" %in% indices) {
-    indices <- c(indices, "SD") # Accommodate Bayesian
+    indices <- c(indices, "SD", "MAD") # Accommodate Bayesian
   }
   indices <- names(x)[names(x) %in% unique(indices)]
-
-
-  # Get original dataframe of random
-  data <- attributes(x)$data
 
   # Random parameters
   if (all(group == "all")) group <- unique(x$Group)
@@ -66,6 +63,7 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
     }
 
     # Merge while preserving order of original random
+    data <- attributes(x)$data  # Get original dataframe of random
     data[["__sort_id"]] <- seq_len(nrow(data))
     data <- merge(data, data_wide, by = g, sort = FALSE)
     data <- data[order(data[["__sort_id"]]), ]
