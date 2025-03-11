@@ -19,7 +19,9 @@
 #'   for models from *lme4* or *glmmTMB*, as the necessary information to
 #'   compute them is not yet available. However, for Bayesian models, it is
 #'   possible to compute them.
-#' @param ... Other arguments passed to or from other methods.
+#' @param dispersion,test,diagnostic Arguments passed to [parameters::model_parameters()] for
+#'    Bayesian models.
+#' @param ... Other arguments passed to [parameters::model_parameters()].
 #'
 #' @details
 #' Unlike raw group means, BLUPs apply shrinkage: they are a compromise between
@@ -51,7 +53,7 @@
 #' # overall coefficients
 #' estimate_grouplevel(model, type = "total")
 #' @export
-estimate_grouplevel <- function(model, type = "random", ...) {
+estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test = NULL, diagnostic = NULL, ...) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -60,6 +62,9 @@ estimate_grouplevel <- function(model, type = "random", ...) {
     model,
     effects = ifelse(type == "random", "all", "total"),
     group_level = identical(type, "random"),
+    dispersion = dispersion,
+    test = test,
+    diagnostic = diagnostic,
     ...
   )
 
@@ -76,9 +81,6 @@ estimate_grouplevel <- function(model, type = "random", ...) {
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
-
-  # Filter more columns
-  random <- random[, grepl("Group|Level|Name|Parameter|Component|Median|Mean|MAP|Coefficient|CI|SE", names(random))]
 
   # Clean
   row.names(random) <- NULL
