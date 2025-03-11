@@ -211,11 +211,11 @@ size will be computed.}
 using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
 \code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
 
-\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
-Results are usually very similar. The major difference will be found for mixed
-models, where \code{backend = "marginaleffects"} will also average across random
-effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).
+\item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
+a backend. Results are usually very similar. The major difference will be
+found for mixed models, where \code{backend = "marginaleffects"} will also average
+across random effects levels, producing "marginal predictions" (instead of
+"conditional predictions", see Heiss 2022).
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
