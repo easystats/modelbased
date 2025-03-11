@@ -6,7 +6,7 @@ get_marginalcontrasts <- function(model,
                                   predict = NULL,
                                   ci = 0.95,
                                   comparison = "pairwise",
-                                  estimate = getOption("modelbased_estimate", "typical"),
+                                  estimate = NULL,
                                   p_adjust = "none",
                                   transform = NULL,
                                   keep_iterations = FALSE,
@@ -27,6 +27,9 @@ get_marginalcontrasts <- function(model,
   # set default, if NULL
   if (is.null(contrast)) {
     contrast <- "auto"
+  }
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
   }
 
   # check whether contrasts should be made for numerics or categorical
