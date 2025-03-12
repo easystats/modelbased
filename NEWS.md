@@ -2,7 +2,7 @@
 
 ## Changes
 
-* `estimate_grouplevel()` gets arguments `test`, `disperision` and `diagnostic`,
+* `estimate_grouplevel()` gets arguments `test`, `dispersion` and `diagnostic`,
   that are internally passed to `parameters::model_parameters()`, but with
   different defaults.
 
