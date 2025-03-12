@@ -59,7 +59,7 @@ estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test 
   type <- insight::validate_argument(type, c("random", "total"))
 
   # sanity check
-  if (is.null(insight::find_ranom(model))) {
+  if (is.null(insight::find_random(model))) {
     insight::format_error("Model must be a mixed model with random effects.")
   }
 
