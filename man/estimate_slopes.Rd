@@ -12,7 +12,7 @@ estimate_slopes(
   p_adjust = "none",
   transform = NULL,
   keep_iterations = FALSE,
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  backend = NULL,
   verbose = TRUE,
   ...
 )
@@ -61,11 +61,11 @@ number, only as many columns as indicated in \code{keep_iterations} will be adde
 to the output. You can reshape them to a long format by running
 \code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
-\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
-Results are usually very similar. The major difference will be found for mixed
-models, where \code{backend = "marginaleffects"} will also average across random
-effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).
+\item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
+a backend. Results are usually very similar. The major difference will be
+found for mixed models, where \code{backend = "marginaleffects"} will also average
+across random effects levels, producing "marginal predictions" (instead of
+"conditional predictions", see Heiss 2022).
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or

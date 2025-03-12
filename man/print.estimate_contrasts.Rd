@@ -4,13 +4,7 @@
 \alias{print.estimate_contrasts}
 \title{Printing modelbased-objects}
 \usage{
-\method{print}{estimate_contrasts}(
-  x,
-  select = getOption("modelbased_select", NULL),
-  include_grid = getOption("modelbased_include_grid", FALSE),
-  full_labels = getOption("modelbased_full_labels", TRUE),
-  ...
-)
+\method{print}{estimate_contrasts}(x, select = NULL, include_grid = NULL, full_labels = NULL, ...)
 }
 \arguments{
 \item{x}{An object returned by the different \verb{estimate_*()} functions.}
@@ -64,10 +58,13 @@ columns are considers as "parameter columns" and placed first:
 
 \item{include_grid}{Logical, if \code{TRUE}, the data grid is included in the
 table output. Only applies to prediction-functions like \code{estimate_relation()}
-or \code{estimate_link()}.}
+or \code{estimate_link()}. Default is \code{NULL}, which will set the value based on
+\code{options(modelbased_include_grid)}, and use \code{FALSE} is no option is set.}
 
 \item{full_labels}{Logical, if \code{TRUE} (default), all labels for focal terms
-are shown. If \code{FALSE}, redundant (duplicated) labels are removed from rows.}
+are shown. If \code{FALSE}, redundant (duplicated) labels are removed from rows.
+Default is \code{NULL}, which will set the value based on
+\code{options(modelbased_full_labels)}, and use \code{TRUE} is no option is set.}
 
 \item{...}{Arguments passed to \code{insight::format_table()} or
 \code{insight::export_table()}.}

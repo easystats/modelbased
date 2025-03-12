@@ -125,11 +125,16 @@ estimate_slopes <- function(model,
                             p_adjust = "none",
                             transform = NULL,
                             keep_iterations = FALSE,
-                            backend = getOption("modelbased_backend", "marginaleffects"),
+                            backend = NULL,
                             verbose = TRUE,
                             ...) {
+  # Process argument ---------------------------------------------------------
+  if (is.null(backend)) {
+    backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emtrends(
       model,
       trend = trend,
@@ -140,6 +145,7 @@ estimate_slopes <- function(model,
     )
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
+    # Marginaleffects --------------------------------------------------------
     estimated <- get_marginaltrends(
       model,
       trend = trend,
