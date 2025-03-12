@@ -84,6 +84,8 @@ estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test 
   # fix for rstanarm, which contains a sigma columns
   if (inherits(model, "stanreg")) {
     clean_parameters <- clean_parameters[clean_parameters$Component != "sigma", ]
+    params$Group <- clean_parameters$Group
+    params$Level <- clean_parameters$Cleaned_Parameter
   }
 
   # Re-add info
