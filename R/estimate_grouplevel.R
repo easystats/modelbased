@@ -69,12 +69,20 @@ estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test 
     ...
   )
 
-  # Re-add info
-  if (!"Group" %in% names(params)) {
-    params$Group <- attributes(params)$clean_parameters$Group
+  # get cleaned parameter names with additional information
+  clean_parameters <- attributes(params)$clean_parameters$Group
+
+  # fix for rstanarm, which contains a sigma columns
+  if (inherits(model, "stanreg")) {
+    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma", ]
   }
-  if (!"Level" %in% names(params)) {
-    params$Level <- attributes(params)$clean_parameters$Cleaned_Parameter
+
+  # Re-add info
+  if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
+    params$Group <- clean_parameters$Group
+  }
+  if (!"Level" %in% names(params) && !is.null(clean_parameters)) {
+    params$Level <- clean_parameters$Cleaned_Parameter
   }
 
   # TODO: improve / add new printing that groups by group/level?
