@@ -13,7 +13,7 @@ which can be useful to add the random effects to the original data."><meta prope
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -100,7 +100,20 @@ which can be useful to add the random effects to the original data.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"random"</span>, <span class="va">...</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Default S3 method</span></span>
+<span><span class="fu">estimate_grouplevel</span><span class="op">(</span><span class="va">model</span>, type <span class="op">=</span> <span class="st">"random"</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'brmsfit'</span></span>
+<span><span class="fu">estimate_grouplevel</span><span class="op">(</span></span>
+<span>  <span class="va">model</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"random"</span>,</span>
+<span>  dispersion <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  test <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  diagnostic <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">reshape_grouplevel</span><span class="op">(</span><span class="va">x</span>, indices <span class="op">=</span> <span class="st">"all"</span>, group <span class="op">=</span> <span class="st">"all"</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -113,24 +126,31 @@ which can be useful to add the random effects to the original data.</p>
 <dd><p>A mixed model with random effects.</p></dd>
 
 
-<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
-<dd><p><code>"random"</code> or <code>"total"</code>. If <code>"random"</code> (default), the coefficients correspond to the
-conditional estimates of  the random effects (as they are returned by
-<code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>). They typically correspond to the deviation of each
-individual group from their fixed effect (assuming the random effect is
-also included as a fixed effect). As such, a coefficient close to 0
-means that the participants' effect is the same as the population-level
-effect (in other words, it is "in the norm"). If <code>"total"</code>, it will return
-the sum of the random effect and its corresponding fixed effects, which
-internally relies on the <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> method (see <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">?coef.merMod</a></code>). Note that
-<code>type = "total"</code> yet does not return uncertainty indices (such as SE and CI)
-for models from <em>lme4</em> or <em>glmmTMB</em>, as the necessary information to
-compute them is not yet available. However, for Bayesian models, it is
-possible to compute them.</p></dd>
-
-
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
-<dd><p>Other arguments passed to or from other methods.</p></dd>
+<dd><p>Other arguments passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>.</p></dd>
+
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p><code>"random"</code> or <code>"total"</code>. If <code>"random"</code> (default), the
+coefficients correspond to the conditional estimates of  the random effects
+(as they are returned by <code><a href="https://rdrr.io/pkg/nlme/man/random.effects.html" class="external-link">lme4::ranef()</a></code>). They typically correspond to the
+deviation of each individual group from their fixed effect (assuming the
+random effect is also included as a fixed effect). As such, a coefficient
+close to 0 means that the participants' effect is the same as the
+population-level effect (in other words, it is "in the norm"). If
+<code>"total"</code>, it will return the sum of the random effect and its
+corresponding fixed effects, which internally relies on the <code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code> method
+(see <code><a href="https://rdrr.io/pkg/lme4/man/merMod-class.html" class="external-link">?coef.merMod</a></code>). Note that <code>type = "total"</code> yet does not return
+uncertainty indices (such as SE and CI) for models from <em>lme4</em> or
+<em>glmmTMB</em>, as the necessary information to compute them is not yet
+available. However, for Bayesian models, it is possible to compute them.</p></dd>
+
+
+<dt id="arg-dispersion-test-diagnostic">dispersion, test, diagnostic<a class="anchor" aria-label="anchor" href="#arg-dispersion-test-diagnostic"></a></dt>
+<dd><p>Arguments passed to
+<code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code> for Bayesian models. By default, it won't
+return significance or diagnostic indices (as it is not typically very
+useful).</p></dd>
 
 
 <dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
@@ -138,7 +158,8 @@ possible to compute them.</p></dd>
 
 
 <dt id="arg-indices">indices<a class="anchor" aria-label="anchor" href="#arg-indices"></a></dt>
-<dd><p>A list containing the indices to extract (e.g., "Coefficient").</p></dd>
+<dd><p>A list containing the indices (i.e., which columns) to
+extract (e.g., "Coefficient").</p></dd>
 
 
 <dt id="arg-group">group<a class="anchor" aria-label="anchor" href="#arg-group"></a></dt>
