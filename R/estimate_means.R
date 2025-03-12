@@ -257,7 +257,7 @@ estimate_means <- function(model,
   )
 
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emmeans(
       model,
       by = by,
@@ -268,7 +268,7 @@ estimate_means <- function(model,
     )
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
-    # Marginalmeans ------------------------------------------------------------
+    # Marginalmeans ----------------------------------------------------------
     estimated <- get_marginalmeans(
       model,
       by = by,

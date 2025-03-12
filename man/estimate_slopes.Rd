@@ -12,7 +12,7 @@ estimate_slopes(
   p_adjust = "none",
   transform = NULL,
   keep_iterations = FALSE,
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  backend = NULL,
   verbose = TRUE,
   ...
 )

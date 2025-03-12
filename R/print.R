@@ -6,9 +6,12 @@
 #' @param x An object returned by the different `estimate_*()` functions.
 #' @param include_grid Logical, if `TRUE`, the data grid is included in the
 #' table output. Only applies to prediction-functions like `estimate_relation()`
-#' or `estimate_link()`.
+#' or `estimate_link()`. Default is `NULL`, which will set the value based on
+#' `options(modelbased_include_grid)`, and use `FALSE` is no option is set.
 #' @param full_labels Logical, if `TRUE` (default), all labels for focal terms
 #' are shown. If `FALSE`, redundant (duplicated) labels are removed from rows.
+#' Default is `NULL`, which will set the value based on
+#' `options(modelbased_full_labels)`, and use `TRUE` is no option is set.
 #' @param ... Arguments passed to `insight::format_table()` or
 #' `insight::export_table()`.
 #'
@@ -53,10 +56,24 @@
 #'
 #' @export
 print.estimate_contrasts <- function(x,
-                                     select = getOption("modelbased_select", NULL),
-                                     include_grid = getOption("modelbased_include_grid", FALSE),
-                                     full_labels = getOption("modelbased_full_labels", TRUE),
+                                     select = NULL,
+                                     include_grid = NULL,
+                                     full_labels = NULL,
                                      ...) {
+  # Process argument ---------------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  # set defaults
+  if (is.null(select)) {
+    select <- getOption("modelbased_select", NULL)
+  }
+  if (is.null(include_grid)) {
+    include_grid <- getOption("modelbased_include_grid", FALSE)
+  }
+  if (is.null(full_labels)) {
+    full_labels <- getOption("modelbased_full_labels", TRUE)
+  }
+
   # copy original
   out <- x
   # get attributes, but remove some of them - else, matching attribute fails

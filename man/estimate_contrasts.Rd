@@ -14,14 +14,14 @@ estimate_contrasts(model, ...)
   predict = NULL,
   ci = 0.95,
   comparison = "pairwise",
-  estimate = getOption("modelbased_estimate", "typical"),
+  estimate = NULL,
   p_adjust = "none",
   transform = NULL,
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
   es_type = "cohens.d",
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  backend = NULL,
   verbose = TRUE,
   ...
 )

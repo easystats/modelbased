@@ -151,18 +151,29 @@ estimate_contrasts.default <- function(model,
                                        predict = NULL,
                                        ci = 0.95,
                                        comparison = "pairwise",
-                                       estimate = getOption("modelbased_estimate", "typical"),
+                                       estimate = NULL,
                                        p_adjust = "none",
                                        transform = NULL,
                                        keep_iterations = FALSE,
                                        effectsize = NULL,
                                        iterations = 200,
                                        es_type = "cohens.d",
-                                       backend = getOption("modelbased_backend", "marginaleffects"),
+                                       backend = NULL,
                                        verbose = TRUE,
                                        ...) {
+  # Process argument ---------------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  # set defaults
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
+  }
+  if (is.null(backend)) {
+    backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emcontrasts(
       model,
       contrast = contrast,
@@ -176,7 +187,7 @@ estimate_contrasts.default <- function(model,
     )
     out <- .format_emmeans_contrasts(model, estimated, ci, p_adjust, ...)
   } else {
-    # Marginalmeans ------------------------------------------------------------
+    # Marginalmeans ----------------------------------------------------------
     estimated <- get_marginalcontrasts(
       model,
       contrast = contrast,
