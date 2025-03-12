@@ -54,7 +54,18 @@
 #' # overall coefficients
 #' estimate_grouplevel(model, type = "total")
 #' @export
-estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test = NULL, diagnostic = NULL, ...) {
+estimate_grouplevel <- function(model, ...) {
+  UseMethod("estimate_grouplevel")
+}
+
+
+#' @export
+estimate_grouplevel.default <- function(model,
+                                        type = "random",
+                                        dispersion = TRUE,
+                                        test = NULL,
+                                        diagnostic = NULL,
+                                        ...) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -102,42 +113,154 @@ estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
 
-  # Clean
-  row.names(random) <- NULL
-  random$Effects <- NULL
-  if ("Component" %in% names(random) && insight::n_unique(random$Component) == 1 && unique(random$Component) == "conditional") {
-    random$Component <- NULL
+  # Clean and Reorganize columns
+  random <- .clean_grouplevel(random)
+
+  # Sort
+  random <- .sort_random_effects(random)
+
+  # add data and attributes
+  .add_grouplevel_attributes(model, type, params, random)
+}
+
+
+#' @export
+estimate_grouplevel.brmsfit <- function(model,
+                                        type = "random",
+                                        dispersion = TRUE,
+                                        test = NULL,
+                                        diagnostic = NULL,
+                                        ...) {
+  # validate argument
+  type <- insight::validate_argument(type, c("random", "total"))
+
+  # sanity check
+  if (is.null(insight::find_random(model))) {
+    insight::format_error("Model must be a mixed model with random effects.")
   }
 
-  # Reorganize columns
-  random <- datawizard::data_relocate(random, c("Component", "Group", "Level", "Parameter"), verbose = FALSE)
+  # Extract params
+  params <- parameters::model_parameters(
+    model,
+    effects = ifelse(type == "random", "all", "total"),
+    group_level = identical(type, "random"),
+    dispersion = dispersion,
+    test = test,
+    diagnostic = diagnostic,
+    ...
+  )
+
+  # get cleaned parameter names with additional information
+  clean_parameters <- attributes(params)$clean_parameters
+
+  # Re-add info
+  if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
+    params$Group <- clean_parameters$Group
+  }
+  if (!"Level" %in% names(params) && !is.null(clean_parameters)) {
+    params$Level <- clean_parameters$Cleaned_Parameter
+  }
+
+  # TODO: improve / add new printing that groups by group/level?
+  random <- as.data.frame(params[params$Effects == type, ])
+
+  # Remove columns with only NaNs (as these are probably those of fixed effects)
+  random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
+
+  # Clean and Reorganize columns
+  random <- .clean_grouplevel(random)
 
   # Clean-up brms output
-  if (inherits(model, "brmsfit") && type == "random") {
+  if (type == "random") {
     # Save brms name (just in case)
     random$Name <- random$Parameter
     # Filter out non-random effects
     random <- random[startsWith(random$Parameter, "r_"), ]
     # Remove Group from Level
-    random$Level <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i]))
+    random$Level <- sapply(
+      1:nrow(random),
+      function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i])
+    )
     # Find the group name (what follows "r_" and before the first "[" or "__")
     random$Group <- gsub("^r_(.*?)(\\[.*|__.*)", "\\1", random$Name)
     # Keep Parameter what's in between [ and ]
     random$Parameter <- gsub("^r_.*?\\[(.*?)\\].*", "\\1", random$Name)
     # Remove Level from it
-    random$Parameter <- sapply(1:nrow(random), function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i]))
+    random$Parameter <- sapply(
+      1:nrow(random),
+      function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i])
+    )
     # remove temporary name column
     random$Name <- NULL
   }
 
   # Sort
-  if ("Component" %in% names(random)) {
-    random <- random[order(random$Component, random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
-  } else {
-    random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ]
+  random <- .sort_random_effects(random)
+
+  # add data and attributes
+  .add_grouplevel_attributes(model, type, params, random)
+}
+
+
+#' @export
+estimate_grouplevel.stanreg <- function(model,
+                                        type = "random",
+                                        dispersion = TRUE,
+                                        test = NULL,
+                                        diagnostic = NULL,
+                                        ...) {
+  # validate argument
+  type <- insight::validate_argument(type, c("random", "total"))
+
+  # sanity check
+  if (is.null(insight::find_random(model))) {
+    insight::format_error("Model must be a mixed model with random effects.")
   }
 
-  # find data and random effects
+  # Extract params
+  params <- parameters::model_parameters(
+    model,
+    effects = ifelse(type == "random", "all", "total"),
+    group_level = identical(type, "random"),
+    dispersion = dispersion,
+    test = test,
+    diagnostic = diagnostic,
+    ...
+  )
+
+  # get cleaned parameter names with additional information
+  clean_parameters <- attributes(params)$clean_parameters
+
+  ## TODO: for now, rstanarm has no random effects on the sigma parameter
+  ## however, if this changes, we need another solution here (and in
+  ## insight::clean_parameter())
+
+  # fix for rstanarm, which contains a sigma columns
+  clean_parameters <- clean_parameters[clean_parameters$Component != "sigma", ]
+
+  params$Group <- clean_parameters$Group
+  params$Level <- clean_parameters$Cleaned_Parameter
+
+  # TODO: improve / add new printing that groups by group/level?
+  random <- as.data.frame(params[params$Effects == type, ])
+
+  # Remove columns with only NaNs (as these are probably those of fixed effects)
+  random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
+
+  # Clean and Reorganize columns
+  random <- .clean_grouplevel(random)
+
+  # Sort
+  random <- .sort_random_effects(random)
+
+  # add data and attributes
+  .add_grouplevel_attributes(model, type, params, random)
+}
+
+
+# helpers ----------------------------------------------------------
+
+.add_grouplevel_attributes <- function(model, type, params, random) {
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
   model_random <- insight::find_random(model, split_nested = TRUE, flatten = TRUE)
 
@@ -149,5 +272,44 @@ estimate_grouplevel <- function(model, type = "random", dispersion = TRUE, test 
   attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))
+  random
+}
+
+
+.clean_grouplevel <- function(random) {
+  row.names(random) <- NULL
+  random$Effects <- NULL
+  if (
+    "Component" %in%
+      names(random) &&
+      insight::n_unique(random$Component) == 1 &&
+      unique(random$Component) == "conditional"
+  ) {
+    random$Component <- NULL
+  }
+
+  # Reorganize columns
+  random <- datawizard::data_relocate(
+    random,
+    c("Component", "Group", "Level", "Parameter"),
+    verbose = FALSE
+  )
+  random
+}
+
+
+.sort_random_effects <- function(random) {
+  if ("Component" %in% names(random)) {
+    random <- random[
+      order(
+        random$Component,
+        random$Group,
+        datawizard::coerce_to_numeric(random$Level),
+        random$Parameter
+      ),
+    ]
+  } else {
+    random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ] # nolint
+  }
   random
 }
