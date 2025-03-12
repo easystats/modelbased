@@ -214,6 +214,7 @@ estimate_grouplevel.stanreg <- function(model,
     dispersion = dispersion,
     test = test,
     diagnostic = diagnostic,
+    drop = "^Sigma\\[",
     ...
   )
 
@@ -225,10 +226,13 @@ estimate_grouplevel.stanreg <- function(model,
   ## insight::clean_parameter())
 
   # fix for rstanarm, which contains a sigma columns
-  clean_parameters <- clean_parameters[clean_parameters$Component != "sigma", ]
+  clean_parameters <- clean_parameters[
+    clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), # nolint
+  ]
 
-  params$Group <- clean_parameters$Group
-  params$Level <- clean_parameters$Cleaned_Parameter
+  params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
+  params$Group <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Group))
+  params$Level <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Cleaned_Parameter))
 
   # TODO: improve / add new printing that groups by group/level?
   random <- as.data.frame(params[params$Effects == type, ])
