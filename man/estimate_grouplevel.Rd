@@ -2,35 +2,54 @@
 % Please edit documentation in R/estimate_grouplevel.R, R/reshape_grouplevel.R
 \name{estimate_grouplevel}
 \alias{estimate_grouplevel}
+\alias{estimate_grouplevel.default}
+\alias{estimate_grouplevel.brmsfit}
 \alias{reshape_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
-estimate_grouplevel(model, type = "random", ...)
+estimate_grouplevel(model, ...)
+
+\method{estimate_grouplevel}{default}(model, type = "random", ...)
+
+\method{estimate_grouplevel}{brmsfit}(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+)
 
 reshape_grouplevel(x, indices = "all", group = "all", ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
 
-\item{type}{\code{"random"} or \code{"total"}. If \code{"random"} (default), the coefficients correspond to the
-conditional estimates of  the random effects (as they are returned by
-\code{lme4::ranef()}). They typically correspond to the deviation of each
-individual group from their fixed effect (assuming the random effect is
-also included as a fixed effect). As such, a coefficient close to 0
-means that the participants' effect is the same as the population-level
-effect (in other words, it is "in the norm"). If \code{"total"}, it will return
-the sum of the random effect and its corresponding fixed effects, which
-internally relies on the \code{coef()} method (see \code{?coef.merMod}). Note that
-\code{type = "total"} yet does not return uncertainty indices (such as SE and CI)
-for models from \emph{lme4} or \emph{glmmTMB}, as the necessary information to
-compute them is not yet available. However, for Bayesian models, it is
-possible to compute them.}
+\item{...}{Other arguments passed to \code{\link[parameters:model_parameters]{parameters::model_parameters()}}.}
 
-\item{...}{Other arguments passed to or from other methods.}
+\item{type}{\code{"random"} or \code{"total"}. If \code{"random"} (default), the
+coefficients correspond to the conditional estimates of  the random effects
+(as they are returned by \code{lme4::ranef()}). They typically correspond to the
+deviation of each individual group from their fixed effect (assuming the
+random effect is also included as a fixed effect). As such, a coefficient
+close to 0 means that the participants' effect is the same as the
+population-level effect (in other words, it is "in the norm"). If
+\code{"total"}, it will return the sum of the random effect and its
+corresponding fixed effects, which internally relies on the \code{coef()} method
+(see \code{?coef.merMod}). Note that \code{type = "total"} yet does not return
+uncertainty indices (such as SE and CI) for models from \emph{lme4} or
+\emph{glmmTMB}, as the necessary information to compute them is not yet
+available. However, for Bayesian models, it is possible to compute them.}
+
+\item{dispersion, test, diagnostic}{Arguments passed to
+\code{\link[parameters:model_parameters]{parameters::model_parameters()}} for Bayesian models. By default, it won't
+return significance or diagnostic indices (as it is not typically very
+useful).}
 
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
-\item{indices}{A list containing the indices to extract (e.g., "Coefficient").}
+\item{indices}{A list containing the indices (i.e., which columns) to
+extract (e.g., "Coefficient").}
 
 \item{group}{A list containing the random factors to select.}
 }
