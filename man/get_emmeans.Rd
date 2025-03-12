@@ -18,6 +18,7 @@ get_emcontrasts(
   predict = NULL,
   comparison = "pairwise",
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -27,11 +28,19 @@ get_emmeans(
   by = "auto",
   predict = NULL,
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
 
-get_emtrends(model, trend = NULL, by = NULL, verbose = TRUE, ...)
+get_emtrends(
+  model,
+  trend = NULL,
+  by = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+)
 
 get_marginalcontrasts(
   model,
@@ -40,9 +49,10 @@ get_marginalcontrasts(
   predict = NULL,
   ci = 0.95,
   comparison = "pairwise",
-  estimate = getOption("modelbased_estimate", "typical"),
+  estimate = NULL,
   p_adjust = "none",
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -52,8 +62,9 @@ get_marginalmeans(
   by = "auto",
   predict = NULL,
   ci = 0.95,
-  estimate = getOption("modelbased_estimate", "typical"),
+  estimate = NULL,
   transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -64,6 +75,8 @@ get_marginaltrends(
   by = NULL,
   ci = 0.95,
   p_adjust = "none",
+  transform = NULL,
+  keep_iterations = FALSE,
   verbose = TRUE,
   ...
 )
@@ -166,7 +179,15 @@ model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
 Bayesian models, this function is applied to individual draws from the
 posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function.}
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
+
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
+number, only as many columns as indicated in \code{keep_iterations} will be added
+to the output. You can reshape them to a long format by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 

@@ -11,14 +11,14 @@
 #'
 #' @examples
 #' x <- sin(seq(0, 4 * pi, length.out = 100))
-#' plot(x, type = "b")
+#' # plot(x, type = "b")
 #'
-#' zero_crossings(x)
-#' find_inversions(x)
+#' modelbased::zero_crossings(x)
+#' modelbased::find_inversions(x)
 #' @export
 zero_crossings <- function(x) {
   # Estimate gradient
-  zerocrossings <- .uniroot.all(stats::approxfun(seq_len(length(x)), x), interval = range(seq_len(length(x))))
+  zerocrossings <- .uniroot.all(stats::approxfun(seq_along(x), x), interval = range(seq_along(x)))
   if (length(zerocrossings) == 0) {
     return(NA)
   }

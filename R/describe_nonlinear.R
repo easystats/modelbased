@@ -41,7 +41,7 @@ describe_nonlinear.estimate_predicted <- function(data,
 #' @export
 describe_nonlinear.numeric <- function(data, x = NULL, ...) {
   if (is.null(x)) {
-    x <- seq_len(length(data))
+    x <- seq_along(data)
   }
 
   describe_nonlinear(data.frame(x = x, y = data), x = "x", y = "y")
@@ -100,22 +100,36 @@ estimate_smooth <- describe_nonlinear
   }
 
   out <- data.frame()
+  # Iterate through each identified segment of the non-linear trend.
+  # Each segment is defined by two consecutive inversion points.
   for (i in 1:(length(inversions) - 1)) {
+    # Determine the start and end indices of the current segment.
+    # The start index is the current inversion point.
     idx_start <- round(inversions[i])
+    # The end index is the next inversion point.
     idx_end <- round(inversions[i + 1])
 
+    # Create a data frame to store the characteristics of the current segment.
     segment <- data.frame(
+      # The x-value at the start of the segment.
       Start = x[idx_start],
+      # The x-value at the end of the segment.
       End = x[idx_end],
+      # The proportional length of the segment relative to the entire x-axis.
       Length = (inversions[i + 1] - inversions[i]) / n,
+      # The change in the y-value across the segment (end - start).
       Change = y[idx_end] - y[idx_start],
       stringsAsFactors = FALSE
     )
+    # Calculate the slope of the segment (change in y divided by change in x).
     segment$Slope <- segment$Change / (segment$End - segment$Start)
 
-    # Check linearity
+    # Check the linearity of the segment by calculating the R-squared value
+    # of a linear model fitted to the y and x values within the segment.
+    # This provides a measure of how well a straight line fits the data within the segment.
     segment$R2 <- performance::r2(stats::lm(y ~ x))$R2
 
+    # Append the current segment's characteristics to the output data frame.
     out <- rbind(out, segment)
   }
 

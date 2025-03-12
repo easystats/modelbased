@@ -123,26 +123,37 @@ estimate_slopes <- function(model,
                             by = NULL,
                             ci = 0.95,
                             p_adjust = "none",
-                            backend = getOption("modelbased_backend", "marginaleffects"),
+                            transform = NULL,
+                            keep_iterations = FALSE,
+                            backend = NULL,
                             verbose = TRUE,
                             ...) {
+  # Process argument ---------------------------------------------------------
+  if (is.null(backend)) {
+    backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emtrends(
       model,
       trend = trend,
       by = by,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
     trends <- .format_emmeans_slopes(model, estimated, ci, ...)
   } else {
+    # Marginaleffects --------------------------------------------------------
     estimated <- get_marginaltrends(
       model,
       trend = trend,
       by = by,
       ci = ci,
       p_adjust = p_adjust,
+      transform = transform,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
@@ -153,10 +164,7 @@ estimate_slopes <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  table_footer <- paste("\nMarginal effects estimated for", info$trend)
-  if (!is.null(attributes(trends)$slope)) {
-    table_footer <- paste0(table_footer, "\nType of slope was ", attributes(trends)$slope)
-  }
+  table_footer <- .table_footer_slopes(trends, model = model, info = info)
   attr(trends, "table_title") <- c("Estimated Marginal Effects", "blue")
   attr(trends, "table_footer") <- c(table_footer, "yellow")
 

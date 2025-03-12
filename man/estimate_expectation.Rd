@@ -85,13 +85,15 @@ their \code{data} argument.}
 to (back-) transform results, which can be useful in case the regression
 model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). Can also
 be \code{TRUE}, in which case \code{insight::get_transformation()} is called to
-determine the appropriate transformation-function. \strong{Note:} Standard errors
-are not (back-) transformed!}
+determine the appropriate transformation-function. Note that no standard
+errors are returned when transformations are applied.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
-named \verb{iter_1, iter_2, ...}. You can reshape them to a long format by
-running \code{\link[bayestestR:reshape_iterations]{reshape_iterations()}}.}
+named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
+number, only as many columns as indicated in \code{keep_iterations} will be added
+to the output. You can reshape them to a long format by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
 
 \item{...}{You can add all the additional control arguments from
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} (used when \code{data = "grid"}) and

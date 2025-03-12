@@ -23,6 +23,7 @@ get_emcontrasts <- function(model,
                             predict = NULL,
                             comparison = "pairwise",
                             transform = NULL,
+                            keep_iterations = FALSE,
                             verbose = TRUE,
                             ...) {
   # check if available
@@ -88,6 +89,13 @@ get_emcontrasts <- function(model,
 
   out <- emmeans::contrast(estimated, by = emm_by, method = comparison, ...)
 
+  # for Bayesian model, keep iterations
+  if (insight::model_info(model)$is_bayesian) {
+    attr(out, "posterior_draws") <- insight::get_parameters(estimated)
+  } else {
+    keep_iterations <- FALSE
+  }
+
   attr(out, "contrast") <- my_args$contrast
   attr(out, "predict") <- predict
   attr(out, "at") <- my_args$by
@@ -95,6 +103,9 @@ get_emcontrasts <- function(model,
   attr(out, "focal_terms") <- emm_by
   attr(out, "p_adjust") <- list(...)$adjust
   attr(out, "comparison") <- comparison
+  attr(out, "transform") <- TRUE
+  attr(out, "keep_iterations") <- keep_iterations
+
   out
 }
 
@@ -174,5 +185,8 @@ get_emcontrasts <- function(model,
 
   # Merge levels and rest
   out$contrast <- NULL
-  cbind(level_cols, out)
+  out <- cbind(level_cols, out)
+
+  # add posterior draws?
+  .add_posterior_draws_emmeans(attributes(estimated), out)
 }

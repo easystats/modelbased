@@ -14,10 +14,14 @@ estimate_contrasts(model, ...)
   predict = NULL,
   ci = 0.95,
   comparison = "pairwise",
-  estimate = getOption("modelbased_estimate", "typical"),
+  estimate = NULL,
   p_adjust = "none",
   transform = NULL,
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  keep_iterations = FALSE,
+  effectsize = NULL,
+  iterations = 200,
+  es_type = "cohens.d",
+  backend = NULL,
   verbose = TRUE,
   ...
 )
@@ -187,13 +191,31 @@ model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
 Bayesian models, this function is applied to individual draws from the
 posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function.}
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 
-\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
-Results are usually very similar. The major difference will be found for mixed
-models, where \code{backend = "marginaleffects"} will also average across random
-effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
+number, only as many columns as indicated in \code{keep_iterations} will be added
+to the output. You can reshape them to a long format by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
+
+\item{effectsize}{Desired measure of standardized effect size, one of
+\code{"emmeans"}, \code{"marginal"}, or \code{"boot"}. Default is \code{NULL}, i.e. no effect
+size will be computed.}
+
+\item{iterations}{The number of bootstrap resamples to perform.}
+
+\item{es_type}{Specifies the type of effect-size measure to estimate when
+using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
+\code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
+
+\item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
+a backend. Results are usually very similar. The major difference will be
+found for mixed models, where \code{backend = "marginaleffects"} will also average
+across random effects levels, producing "marginal predictions" (instead of
+"conditional predictions", see Heiss 2022).
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
@@ -262,6 +284,42 @@ these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Fi
 the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
+\section{Effect Size}{
+
+
+By default, \code{estimate_contrasts()} reports no standardized effect size on
+purpose. Should one request one, some things are to keep in mind. As the
+authors of \emph{emmeans} write, "There is substantial disagreement among
+practitioners on what is the appropriate sigma to use in computing effect
+sizes; or, indeed, whether any effect-size measure is appropriate for some
+situations. The user is completely responsible for specifying appropriate
+parameters (or for failing to do so)."
+
+In particular, effect size method \code{"boot"} does not correct for covariates
+in the model, so should probably only be used when there is just one
+categorical predictor (with however many levels). Some believe that if there
+are multiple predictors or any covariates, it is important to re-compute
+sigma adding back in the response variance associated with the variables that
+aren't part of the contrast.
+
+\code{effectsize = "emmeans"} uses \link[emmeans:eff_size]{emmeans::eff_size} with
+\code{sigma = stats::sigma(model)}, \code{edf = stats::df.residual(model)} and
+\code{method = "identity"}. This standardizes using the MSE (sigma). Some believe
+this works when the contrasts are the only predictors in the model, but not
+when there are covariates. The response variance accounted for by the
+covariates should not be removed from the SD used to standardize. Otherwise,
+\emph{d} will be overestimated.
+
+\code{effectsize = "marginal"} uses the following formula to compute effect
+size: \code{d_adj <- difference * (1- R2)/ sigma}. This standardizes
+using the response SD with only the between-groups variance on the focal
+factor/contrast removed. This allows for groups to be equated on their
+covariates, but creates an appropriate scale for standardizing the response.
+
+\code{effectsize = "boot"} uses bootstrapping (defaults to a low value of
+200) through \link[bootES:bootES]{bootES::bootES}. Adjusts for contrasts, but not for covariates.
+}
+
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{

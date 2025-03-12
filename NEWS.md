@@ -1,5 +1,19 @@
 # modelbased (devel)
 
+## Changes
+
+* `estimate_grouplevel()` gets arguments `test`, `dispersion` and `diagnostic`,
+  that are internally passed to `parameters::model_parameters()`, but with
+  different defaults.
+
+* Minor improvements to the documentation.
+
+## Bug fixes
+
+* Fixed issues in `estimate_grouplevel()` for models from package *rstanarm*.
+
+# modelbased 0.10.0
+
 ## Breaking Changes
 
 * The deprecated function `visualisation_matrix()` has been removed. Use
@@ -11,14 +25,24 @@
 
 ## Changes
 
+* The `transform` argument now also works for `estimate_slopes()` and for
+  `estimate_contrasts()` with numeric focal terms.
+
 * `estimate_contrasts()` no longer calls `estimate_slopes()` for numeric focal
   terms when these are integers with only few values. In this case, it is assumed
   that contrasts of values ("levels") are desired, because integer variables with
   only two to five unique values are factor-alike.
-  
+
+* `estimate_contrasts`: now supports optional standardized effect sizes, one of
+  "none" (default), "emmeans", or "bootES" (#227, @rempsyc).
+
 * The `predict()` argument for `estimate_means()` gets an `"inverse_link"` option,
   to calculate predictions on the link-scale and back-transform them to the
   response scale after aggregation by groups.
+
+* `estimate_means()`, `estimate_slopes()` and `estimate_contrasts()` get a
+  `keep_iterations` argument, to keep all posterior draws from Bayesian models
+  added as columns to the output.
 
 * New functions `pool_predictions()` and `pool_contrasts()`, to deal with
   *modelbased* objects that were applied to imputed data sets. E.g., functions
@@ -28,6 +52,10 @@
 
 * The `print()` method is now explicitly documented and gets some new options
   to customize the output for tables.
+
+* `estimate_grouplevel()` gets a new option, `type = "total"`, to return the
+  sum of fixed and random effects (similar to what `coef()` returns for (Bayesian)
+  mixed models).
 
 * New option `"esarey"` for the `p_adjust` argument. The `"esarey"` option is
   specifically for the case of Johnson-Neyman intervals, i.e. when calling
@@ -63,6 +91,8 @@
 * Fixed issues with contrasting slopes when `backend` was `"emmeans"`.
 
 * Fixed issues in `estimate_contrasts()` when filtering numeric values in `by`.
+
+* Fixed issues in `estimate_grouplevel()`.
 
 * Fixed issue in `estimate_slopes()` for models from package *lme4*.
 

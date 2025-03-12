@@ -91,11 +91,11 @@
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`
-#' @param backend Whether to use `"marginaleffects"` or `"emmeans"`as a backend.
-#' Results are usually very similar. The major difference will be found for mixed
-#' models, where `backend = "marginaleffects"` will also average across random
-#' effects levels, producing "marginal predictions" (instead of "conditional
-#' predictions", see Heiss 2022).
+#' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
+#' a backend. Results are usually very similar. The major difference will be
+#' found for mixed models, where `backend = "marginaleffects"` will also average
+#' across random effects levels, producing "marginal predictions" (instead of
+#' "conditional predictions", see Heiss 2022).
 #'
 #' You can set a default backend via `options()`, e.g. use
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
@@ -107,7 +107,14 @@
 #' Bayesian models, this function is applied to individual draws from the
 #' posterior distribution, before computing summaries. Can also be `TRUE`, in
 #' which case `insight::get_transformation()` is called to determine the
-#' appropriate transformation-function.
+#' appropriate transformation-function. Note that no standard errors are returned
+#' when transformations are applied.
+#' @param keep_iterations If `TRUE`, will keep all iterations (draws) of
+#' bootstrapped or Bayesian models. They will be added as additional columns
+#' named `iter_1`, `iter_2`, and so on. If `keep_iterations` is a positive
+#' number, only as many columns as indicated in `keep_iterations` will be added
+#' to the output. You can reshape them to a long format by running
+#' [`bayestestR::reshape_iterations()`].
 #' @param verbose Use `FALSE` to silence messages and warnings.
 #' @param ... Other arguments passed, for instance, to [insight::get_datagrid()],
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
@@ -226,11 +233,23 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           estimate = getOption("modelbased_estimate", "typical"),
+                           estimate = NULL,
                            transform = NULL,
-                           backend = getOption("modelbased_backend", "marginaleffects"),
+                           keep_iterations = FALSE,
+                           backend = NULL,
                            verbose = TRUE,
                            ...) {
+  # Process argument ---------------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  # set defaults
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
+  }
+  if (is.null(backend)) {
+    backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
   # validate input
   estimate <- insight::validate_argument(
     estimate,
@@ -238,17 +257,18 @@ estimate_means <- function(model,
   )
 
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emmeans(
       model,
       by = by,
       predict = predict,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
-    # Marginalmeans ------------------------------------------------------------
+    # Marginalmeans ----------------------------------------------------------
     estimated <- get_marginalmeans(
       model,
       by = by,
@@ -256,6 +276,7 @@ estimate_means <- function(model,
       ci = ci,
       estimate = estimate,
       transform = transform,
+      keep_iterations = keep_iterations,
       verbose = verbose,
       ...
     )

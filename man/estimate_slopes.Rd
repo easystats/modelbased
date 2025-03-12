@@ -10,7 +10,9 @@ estimate_slopes(
   by = NULL,
   ci = 0.95,
   p_adjust = "none",
-  backend = getOption("modelbased_backend", "marginaleffects"),
+  transform = NULL,
+  keep_iterations = FALSE,
+  backend = NULL,
   verbose = TRUE,
   ...
 )
@@ -43,11 +45,27 @@ option is recommended, but \code{p_adjust} can also be one of \code{"none"} (def
 \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
 \code{"sidak"}, or \code{"holm"}.}
 
-\item{backend}{Whether to use \code{"marginaleffects"} or \code{"emmeans"}as a backend.
-Results are usually very similar. The major difference will be found for mixed
-models, where \code{backend = "marginaleffects"} will also average across random
-effects levels, producing "marginal predictions" (instead of "conditional
-predictions", see Heiss 2022).
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
+
+\item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
+bootstrapped or Bayesian models. They will be added as additional columns
+named \code{iter_1}, \code{iter_2}, and so on. If \code{keep_iterations} is a positive
+number, only as many columns as indicated in \code{keep_iterations} will be added
+to the output. You can reshape them to a long format by running
+\code{\link[bayestestR:reshape_iterations]{bayestestR::reshape_iterations()}}.}
+
+\item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
+a backend. Results are usually very similar. The major difference will be
+found for mixed models, where \code{backend = "marginaleffects"} will also average
+across random effects levels, producing "marginal predictions" (instead of
+"conditional predictions", see Heiss 2022).
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
