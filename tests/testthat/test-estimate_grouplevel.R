@@ -97,7 +97,7 @@ test_that("estimate_grouplevel - Bayesian", {
   expect_identical(dim(out), c(6L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
 
-  out <- estimate_grouplevel(m, type = "total", dispersion=FALSE)
+  out <- estimate_grouplevel(m, type = "total", dispersion = FALSE)
   expect_identical(dim(out), c(6L, 7L))
   expect_named(out, c("Group", "Level", "Parameter", "Median", "CI", "CI_low", "CI_high"))
 

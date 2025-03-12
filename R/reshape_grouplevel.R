@@ -63,7 +63,7 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = "
     }
 
     # Merge while preserving order of original random
-    data <- attributes(x)$data  # Get original dataframe of random
+    data <- attributes(x)$data # Get original dataframe of random
     data[["__sort_id"]] <- seq_len(nrow(data))
     data <- merge(data, data_wide, by = g, sort = FALSE)
     data <- data[order(data[["__sort_id"]]), ]

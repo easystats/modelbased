@@ -2,7 +2,15 @@
 
 ## Changes
 
+* `estimate_grouplevel()` gets arguments `test`, `disperision` and `diagnostic`,
+  that are internally passed to `parameters::model_parameters()`, but with
+  different defaults.
+
 * Minor improvements to the documentation.
+
+## Bug fixes
+
+* Fixed issues in `estimate_grouplevel()` for models from package *rstanarm*.
 
 # modelbased 0.10.0
 
