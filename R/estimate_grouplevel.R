@@ -88,17 +88,6 @@ estimate_grouplevel.default <- function(model,
   # get cleaned parameter names with additional information
   clean_parameters <- attributes(params)$clean_parameters
 
-  ## TODO: for now, rstanarm has no random effects on the sigma parameter
-  ## however, if this changes, we need another solution here (and in
-  ## insight::clean_parameter())
-
-  # fix for rstanarm, which contains a sigma columns
-  if (inherits(model, "stanreg")) {
-    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma", ]
-    params$Group <- clean_parameters$Group
-    params$Level <- clean_parameters$Cleaned_Parameter
-  }
-
   # Re-add info
   if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
     params$Group <- clean_parameters$Group
