@@ -15,8 +15,8 @@
   ribbon = NULL,
   facet = NULL,
   grid = NULL,
-  join_dots = getOption("modelbased_join_dots", TRUE),
-  numeric_as_discrete = getOption("modelbased_numeric_as_discrete", 8),
+  join_dots = NULL,
+  numeric_as_discrete = NULL,
   ...
 )
 

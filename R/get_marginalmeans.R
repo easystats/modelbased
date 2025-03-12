@@ -25,7 +25,7 @@ get_marginalmeans <- function(model,
                               by = "auto",
                               predict = NULL,
                               ci = 0.95,
-                              estimate = getOption("modelbased_estimate", "typical"),
+                              estimate = NULL,
                               transform = NULL,
                               keep_iterations = FALSE,
                               verbose = TRUE,
@@ -38,6 +38,11 @@ get_marginalmeans <- function(model,
 
   dots <- list(...)
   comparison <- dots$hypothesis
+
+  # set defaults
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
+  }
 
   # validate input
   estimate <- insight::validate_argument(

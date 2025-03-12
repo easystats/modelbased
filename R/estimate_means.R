@@ -91,11 +91,11 @@
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`
-#' @param backend Whether to use `"marginaleffects"` or `"emmeans"`as a backend.
-#' Results are usually very similar. The major difference will be found for mixed
-#' models, where `backend = "marginaleffects"` will also average across random
-#' effects levels, producing "marginal predictions" (instead of "conditional
-#' predictions", see Heiss 2022).
+#' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
+#' a backend. Results are usually very similar. The major difference will be
+#' found for mixed models, where `backend = "marginaleffects"` will also average
+#' across random effects levels, producing "marginal predictions" (instead of
+#' "conditional predictions", see Heiss 2022).
 #'
 #' You can set a default backend via `options()`, e.g. use
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
@@ -233,12 +233,23 @@ estimate_means <- function(model,
                            by = "auto",
                            predict = NULL,
                            ci = 0.95,
-                           estimate = getOption("modelbased_estimate", "typical"),
+                           estimate = NULL,
                            transform = NULL,
                            keep_iterations = FALSE,
-                           backend = getOption("modelbased_backend", "marginaleffects"),
+                           backend = NULL,
                            verbose = TRUE,
                            ...) {
+  # Process argument ---------------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  # set defaults
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
+  }
+  if (is.null(backend)) {
+    backend <- getOption("modelbased_backend", "marginaleffects")
+  }
+
   # validate input
   estimate <- insight::validate_argument(
     estimate,
@@ -246,7 +257,7 @@ estimate_means <- function(model,
   )
 
   if (backend == "emmeans") {
-    # Emmeans ------------------------------------------------------------------
+    # Emmeans ----------------------------------------------------------------
     estimated <- get_emmeans(
       model,
       by = by,
@@ -257,7 +268,7 @@ estimate_means <- function(model,
     )
     means <- .format_emmeans_means(estimated, model, ci = ci, verbose = verbose, ...)
   } else {
-    # Marginalmeans ------------------------------------------------------------
+    # Marginalmeans ----------------------------------------------------------
     estimated <- get_marginalmeans(
       model,
       by = by,
