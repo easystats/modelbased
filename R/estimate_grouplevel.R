@@ -6,22 +6,23 @@
 #' which can be useful to add the random effects to the original data.
 #'
 #' @param model A mixed model with random effects.
-#' @param type `"random"` or `"total"`. If `"random"` (default), the coefficients correspond to the
-#'   conditional estimates of  the random effects (as they are returned by
-#'   `lme4::ranef()`). They typically correspond to the deviation of each
-#'   individual group from their fixed effect (assuming the random effect is
-#'   also included as a fixed effect). As such, a coefficient close to 0
-#'   means that the participants' effect is the same as the population-level
-#'   effect (in other words, it is "in the norm"). If `"total"`, it will return
-#'   the sum of the random effect and its corresponding fixed effects, which
-#'   internally relies on the `coef()` method (see `?coef.merMod`). Note that
-#'   `type = "total"` yet does not return uncertainty indices (such as SE and CI)
-#'   for models from *lme4* or *glmmTMB*, as the necessary information to
-#'   compute them is not yet available. However, for Bayesian models, it is
-#'   possible to compute them.
-#' @param dispersion,test,diagnostic Arguments passed to [parameters::model_parameters()] for
-#'    Bayesian models. By default, it won't return significance or diagnostic indices
-#'    (as it is not typically very useful).
+#' @param type `"random"` or `"total"`. If `"random"` (default), the
+#'   coefficients correspond to the conditional estimates of  the random effects
+#'   (as they are returned by `lme4::ranef()`). They typically correspond to the
+#'   deviation of each individual group from their fixed effect (assuming the
+#'   random effect is also included as a fixed effect). As such, a coefficient
+#'   close to 0 means that the participants' effect is the same as the
+#'   population-level effect (in other words, it is "in the norm"). If
+#'   `"total"`, it will return the sum of the random effect and its
+#'   corresponding fixed effects, which internally relies on the `coef()` method
+#'   (see `?coef.merMod`). Note that `type = "total"` yet does not return
+#'   uncertainty indices (such as SE and CI) for models from *lme4* or
+#'   *glmmTMB*, as the necessary information to compute them is not yet
+#'   available. However, for Bayesian models, it is possible to compute them.
+#' @param dispersion,test,diagnostic Arguments passed to
+#'    [parameters::model_parameters()] for Bayesian models. By default, it won't
+#'    return significance or diagnostic indices (as it is not typically very
+#'    useful).
 #' @param ... Other arguments passed to [parameters::model_parameters()].
 #'
 #' @details
@@ -59,12 +60,10 @@ estimate_grouplevel <- function(model, ...) {
 }
 
 
+#' @rdname estimate_grouplevel
 #' @export
 estimate_grouplevel.default <- function(model,
                                         type = "random",
-                                        dispersion = TRUE,
-                                        test = NULL,
-                                        diagnostic = NULL,
                                         ...) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
@@ -79,9 +78,6 @@ estimate_grouplevel.default <- function(model,
     model,
     effects = ifelse(type == "random", "all", "total"),
     group_level = identical(type, "random"),
-    dispersion = dispersion,
-    test = test,
-    diagnostic = diagnostic,
     ...
   )
 
@@ -113,6 +109,7 @@ estimate_grouplevel.default <- function(model,
 }
 
 
+#' @rdname estimate_grouplevel
 #' @export
 estimate_grouplevel.brmsfit <- function(model,
                                         type = "random",
