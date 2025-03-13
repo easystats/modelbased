@@ -33,13 +33,7 @@ get_marginaltrends <- function(model,
   if (is.null(by)) {
     datagrid <- datagrid_info <- NULL
   } else {
-    dg_args <- list(
-      model,
-      by = by,
-      factors = "all",
-      include_random = TRUE,
-      verbose = FALSE
-    )
+    dg_args <- list(model, by = by, factors = "all", include_random = TRUE, verbose = FALSE)
     # add user-arguments from "...", but remove those arguments that are already set
     dots[c("by", "factors", "include_random", "verbose")] <- NULL
     dg_args <- insight::compact_list(c(dg_args, dots))
@@ -101,7 +95,6 @@ get_marginaltrends <- function(model,
     estimated$conf.high <- trans_fun(estimated$conf.high)
     estimated$std.error <- NULL
   }
-
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------
