@@ -498,27 +498,17 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # coefficient column is named, because we replace that column name with an
   # appropriate name of the predictions (e.g. "Difference", "Probability" or
   # "Mean")
-  if (is.null(attributes(x)$posterior_draws)) {
-    # frequentist
-    params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE))
-    coefficient_name <- intersect(
-      c(attributes(params)$coefficient_name, "Coefficient", "Slope", "Predicted"),
-      colnames(params)
-    )[1]
-  } else {
-    # Bayesian
-    params <- suppressWarnings(bayestestR::describe_posterior(x, ci = ci, verbose = FALSE, ...))
-    ## FIXME: needs to be fixed in bayestestR: categorical models don't return group column
-    # see https://github.com/easystats/bayestestR/issues/692
-    if (info$is_categorical) {
-      params$group <- .safe(x$group)
-    }
-    coefficient_name <- intersect(
-      c(attributes(params)$coefficient_name, "Median", "Mean", "MAP"),
-      colnames(params)
-    )[1]
-    # we need to remove some more columns
-    remove_columns <- c(remove_columns, "rowid")
+  params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE, ...))
+  # the different functions and models (Bayesian, frequentist) have different
+  # column names for their "coefficient". We now extract the relevant one.
+  possible_colnames <- c(
+    attributes(params)$coefficient_name,
+    "Coefficient", "Slope", "Predicted", "Median", "Mean", "MAP"
+  )
+  coefficient_name <- intersect(possible_colnames, colnames(params))[1]
+  # we need to remove some more columns
+  remove_columns <- c(remove_columns, "rowid")
+  if (!is.null(attributes(x)$posterior_draws)) {
     # and modify the estimate name - if it's not a dpar
     if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
       estimate_name <- coefficient_name
