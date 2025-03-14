@@ -508,11 +508,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   coefficient_name <- intersect(possible_colnames, colnames(params))[1]
   # we need to remove some more columns
   remove_columns <- c(remove_columns, "rowid")
-  if (!is.null(attributes(x)$posterior_draws)) {
-    # and modify the estimate name - if it's not a dpar
-    if (!is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) {
-      estimate_name <- coefficient_name
-    }
+  # and modify the estimate name - if it's not a dpar
+  if (!is.null(attributes(x)$posterior_draws) && !is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) { # nolint
+    estimate_name <- coefficient_name
   }
   # rename the "term" and "hypothesis" column (which we get from contrasts)
   colnames(params)[colnames(params) == "term"] <- "Parameter"
