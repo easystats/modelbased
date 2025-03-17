@@ -169,7 +169,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # however, for estimating trends/slope, the "Parameter" column is usually
   # redundant. Since we cannot check for class-attributes, we simply check if
   # all values are identical
-  if ("term" %in% colnames(x) && insight::n_unique(x$term) == 1) {
+  if ("term" %in% colnames(x) && insight::has_single_value(x$term)) {
     remove_columns <- c("Parameter", remove_columns)
   }
   # there are some exceptions for `estimate_slope()`, when the `Comparison`
