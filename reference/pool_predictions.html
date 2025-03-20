@@ -9,7 +9,7 @@ a similar fashion as mice::pool().'><meta property="og:image" content="https://e
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,7 +94,9 @@ a similar fashion as <code><a href="https://amices.org/mice/reference/pool.html"
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pool_predictions</span><span class="op">(</span><span class="va">x</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">pool_predictions</span><span class="op">(</span><span class="va">x</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">pool_slopes</span><span class="op">(</span><span class="va">x</span>, transform <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -102,9 +104,10 @@ a similar fashion as <code><a href="https://amices.org/mice/reference/pool.html"
 
 
 <dl><dt id="arg-x">x<a class="anchor" aria-label="anchor" href="#arg-x"></a></dt>
-<dd><p>A list of <code>estimate_means</code> objects, as returned by <code><a href="estimate_means.html">estimate_means()</a></code>,
-or <code>estimate_predicted</code>, as returned by <code><a href="estimate_expectation.html">estimate_relation()</a></code> and related
-functions.</p></dd>
+<dd><p>A list of <code>estimate_means</code> objects, as returned by
+<code><a href="estimate_means.html">estimate_means()</a></code>, or <code>estimate_predicted</code> objects, as returned by
+<code><a href="estimate_expectation.html">estimate_relation()</a></code> and related functions. For <code>pool_slopes()</code>, must be
+a list of <code>estimate_slopes</code> objects, as returned by <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
@@ -129,10 +132,14 @@ when transformations are applied.</p></dd>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Averaging of parameters follows Rubin's rules (<em>Rubin, 1987, p. 76</em>).
-Pooling is applied to the predicted values on the scale of the <em>linear predictor</em>,
-not on the response scale, in order to have accurate pooled estimates and
-standard errors. The final pooled predicted values are then transformed to
-the response scale, using <code><a href="https://easystats.github.io/insight/reference/link_inverse.html" class="external-link">insight::link_inverse()</a></code>.</p>
+Pooling is applied to the predicted values and based on the standard errors
+as they are calculated in the <code>estimate_means</code> or <code>estimate_predicted</code>
+objects provided in <code>x</code>. For objects of class <code>estimate_means</code>, the predicted
+values are on the response scale by default, and standard errors are
+calculated using the delta method. Then, pooling estimates and calculating
+standard errors for the pooled estimates based ob Rubin's rule is carried
+out. There is no back-transformation to the link-scale of predicted values
+before applying Rubin's rule.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -145,6 +152,8 @@ John Wiley and Sons.</p>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># example for multiple imputed datasets</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"nhanes2"</span>, package <span class="op">=</span> <span class="st">"mice"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">imp</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://amices.org/mice/reference/mice.html" class="external-link">mice</a></span><span class="op">(</span><span class="va">nhanes2</span>, printFlag <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimated marginal means</span></span></span>
 <span class="r-in"><span><span class="va">predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bmi</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">hyp</span> <span class="op">+</span> <span class="va">chl</span>, data <span class="op">=</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html" class="external-link">complete</a></span><span class="op">(</span><span class="va">imp</span>, action <span class="op">=</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"age"</span><span class="op">)</span></span></span>
@@ -154,14 +163,29 @@ John Wiley and Sons.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> age   |  Mean |   SE |        95% CI |  t(1)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20-39 | 30.54 | 1.67 | [9.38, 51.71] | 29.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40-59 | 24.83 | 1.55 | [5.16, 44.50] | 22.84</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60-99 | 23.15 | 1.71 | [1.48, 44.82] | 17.44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20-39 | 30.54 | 1.67 | [9.38, 51.71] | 18.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40-59 | 24.83 | 1.55 | [5.16, 44.50] | 16.04</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60-99 | 23.15 | 1.71 | [1.48, 44.82] | 13.58</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: bmi</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: age</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: hyp, chl (1.9e+02)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># estimated slopes (marginal effects)</span></span></span>
+<span class="r-in"><span><span class="va">slopes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="kw">function</span><span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">bmi</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">hyp</span> <span class="op">+</span> <span class="va">chl</span>, data <span class="op">=</span> <span class="fu">mice</span><span class="fu">::</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/complete.html" class="external-link">complete</a></span><span class="op">(</span><span class="va">imp</span>, action <span class="op">=</span> <span class="va">i</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"chl"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">pool_slopes</span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Slope |   SE |       95% CI | t(Inf) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 0.06  | 0.02 | [0.01, 0.10] |   2.59 | 0.010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for chl</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
