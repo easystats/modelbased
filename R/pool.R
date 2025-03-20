@@ -51,7 +51,7 @@ pool_contrasts <- function(x, ...) {
   pooled_comparisons <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  pooled_comparisons <- .pooled_ci(pooled_comparisons, estimate_name, ci, dof)
+  pooled_comparisons <- .pool_ci_and_stats(pooled_comparisons, estimate_name, ci, dof)
 
   attributes(pooled_comparisons) <- utils::modifyList(attributes(original_x[[1]]), attributes(pooled_comparisons))
   pooled_comparisons
@@ -132,7 +132,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
   pooled_predictions <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  pooled_predictions <- .pooled_ci(pooled_predictions, estimate_name, ci, dof)
+  pooled_predictions <- .pool_ci_and_stats(pooled_predictions, estimate_name, ci, dof)
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {
@@ -169,7 +169,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
 
 # caluclate confidence intervals for pooled estimates
-.pooled_ci <- function(pooled_estimates, estimate_name, ci, dof) {
+.pool_ci_and_stats <- function(pooled_estimates, estimate_name, ci, dof) {
   # pooled degrees of freedom for t-statistics
   pooled_df <- .barnad_rubin(
     m = nrow(pooled_estimates),
