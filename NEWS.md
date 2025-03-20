@@ -6,11 +6,17 @@
   that are internally passed to `parameters::model_parameters()`, but with
   different defaults.
 
+* Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
+  imputed data.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
 
 * Fixed issues in `estimate_grouplevel()` for models from package *rstanarm*.
+
+* Fixed issues in calculating correct confidence intervals (and possibly p-values)
+  for pooling functions `pool_parameters()` and `pool_predictions()`.
 
 # modelbased 0.10.0
 

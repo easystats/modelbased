@@ -2,14 +2,18 @@
 % Please edit documentation in R/pool.R
 \name{pool_predictions}
 \alias{pool_predictions}
+\alias{pool_slopes}
 \title{Pool Predictions and Estimated Marginal Means}
 \usage{
 pool_predictions(x, transform = NULL, ...)
+
+pool_slopes(x, transform = NULL, ...)
 }
 \arguments{
-\item{x}{A list of \code{estimate_means} objects, as returned by \code{\link[=estimate_means]{estimate_means()}},
-or \code{estimate_predicted}, as returned by \code{\link[=estimate_relation]{estimate_relation()}} and related
-functions.}
+\item{x}{A list of \code{estimate_means} objects, as returned by
+\code{\link[=estimate_means]{estimate_means()}}, or \code{estimate_predicted} objects, as returned by
+\code{\link[=estimate_relation]{estimate_relation()}} and related functions. For \code{pool_slopes()}, must be
+a list of \code{estimate_slopes} objects, as returned by \code{\link[=estimate_slopes]{estimate_slopes()}}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -31,21 +35,34 @@ a similar fashion as \code{\link[mice:pool]{mice::pool()}}.
 }
 \details{
 Averaging of parameters follows Rubin's rules (\emph{Rubin, 1987, p. 76}).
-Pooling is applied to the predicted values on the scale of the \emph{linear predictor},
-not on the response scale, in order to have accurate pooled estimates and
-standard errors. The final pooled predicted values are then transformed to
-the response scale, using \code{\link[insight:link_inverse]{insight::link_inverse()}}.
+Pooling is applied to the predicted values and based on the standard errors
+as they are calculated in the \code{estimate_means} or \code{estimate_predicted}
+objects provided in \code{x}. For objects of class \code{estimate_means}, the predicted
+values are on the response scale by default, and standard errors are
+calculated using the delta method. Then, pooling estimates and calculating
+standard errors for the pooled estimates based ob Rubin's rule is carried
+out. There is no back-transformation to the link-scale of predicted values
+before applying Rubin's rule.
 }
 \examples{
-\dontshow{if (require("mice")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mice") && requireNamespace("marginaleffects")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # example for multiple imputed datasets
 data("nhanes2", package = "mice")
 imp <- mice::mice(nhanes2, printFlag = FALSE)
+
+# estimated marginal means
 predictions <- lapply(1:5, function(i) {
   m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
   estimate_means(m, "age")
 })
 pool_predictions(predictions)
+
+# estimated slopes (marginal effects)
+slopes <- lapply(1:5, function(i) {
+  m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
+  estimate_slopes(m, "chl")
+})
+pool_slopes(slopes)
 \dontshow{\}) # examplesIf}
 }
 \references{
