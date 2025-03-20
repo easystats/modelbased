@@ -2,14 +2,18 @@
 % Please edit documentation in R/pool.R
 \name{pool_predictions}
 \alias{pool_predictions}
+\alias{pool_slopes}
 \title{Pool Predictions and Estimated Marginal Means}
 \usage{
 pool_predictions(x, transform = NULL, ...)
+
+pool_slopes(x, transform = NULL, ...)
 }
 \arguments{
 \item{x}{A list of \code{estimate_means} objects, as returned by
 \code{\link[=estimate_means]{estimate_means()}}, or \code{estimate_predicted} objects, as returned by
-\code{\link[=estimate_relation]{estimate_relation()}} and related functions.}
+\code{\link[=estimate_relation]{estimate_relation()}} and related functions. For \code{pool_slopes()}, must be
+a list of \code{estimate_slopes} objects, as returned by \code{\link[=estimate_slopes]{estimate_slopes()}}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -41,15 +45,24 @@ out. There is no back-transformation to the link-scale of predicted values
 before applying Rubin's rule.
 }
 \examples{
-\dontshow{if (require("mice")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mice") && requireNamespace("marginaleffects")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # example for multiple imputed datasets
 data("nhanes2", package = "mice")
 imp <- mice::mice(nhanes2, printFlag = FALSE)
+
+# estimated marginal means
 predictions <- lapply(1:5, function(i) {
   m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
   estimate_means(m, "age")
 })
 pool_predictions(predictions)
+
+# estimated slopes (marginal effects)
+slopes <- lapply(1:5, function(i) {
+  m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
+  estimate_slopes(m, "chl")
+})
+pool_slopes(slopes)
 \dontshow{\}) # examplesIf}
 }
 \references{

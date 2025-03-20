@@ -65,7 +65,8 @@ pool_contrasts <- function(x, ...) {
 #'
 #' @param x A list of `estimate_means` objects, as returned by
 #' [`estimate_means()`], or `estimate_predicted` objects, as returned by
-#' [`estimate_relation()`] and related functions.
+#' [`estimate_relation()`] and related functions. For `pool_slopes()`, must be
+#' a list of `estimate_slopes` objects, as returned by [`estimate_slopes()`].
 #' @param ... Currently not used.
 #' @inheritParams estimate_means
 #'
@@ -83,15 +84,24 @@ pool_contrasts <- function(x, ...) {
 #' Rubin, D.B. (1987). Multiple Imputation for Nonresponse in Surveys. New York:
 #' John Wiley and Sons.
 #'
-#' @examplesIf require("mice")
+#' @examplesIf require("mice") && requireNamespace("marginaleffects")
 #' # example for multiple imputed datasets
 #' data("nhanes2", package = "mice")
 #' imp <- mice::mice(nhanes2, printFlag = FALSE)
+#'
+#' # estimated marginal means
 #' predictions <- lapply(1:5, function(i) {
 #'   m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
 #'   estimate_means(m, "age")
 #' })
 #' pool_predictions(predictions)
+#'
+#' # estimated slopes (marginal effects)
+#' slopes <- lapply(1:5, function(i) {
+#'   m <- lm(bmi ~ age + hyp + chl, data = mice::complete(imp, action = i))
+#'   estimate_slopes(m, "chl")
+#' })
+#' pool_slopes(slopes)
 #' @return A data frame with pooled predictions.
 #' @export
 pool_predictions <- function(x, transform = NULL, ...) {
@@ -100,7 +110,7 @@ pool_predictions <- function(x, transform = NULL, ...) {
   obj_name <- deparse(substitute(x), width.cutoff = 500)
   original_x <- x
 
-  if (!all(vapply(x, inherits, logical(1), c("estimate_means", "estimate_predicted")))) {
+  if (!all(vapply(x, inherits, logical(1), c("estimate_means", "estimate_slopes", "estimate_predicted")))) {
     insight::format_error(
       "`x` must be a list of `estimate_means` objects, as returned by `estimate_means()`, or a list of `estimate_predicted` objects, as returned by functions like `estimate_expectation()`." # nolint
     )
@@ -143,6 +153,11 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
   pooled_predictions
 }
+
+
+#' @rdname pool_predictions
+#' @export
+pool_slopes <- pool_predictions
 
 
 # helper ------
