@@ -40,7 +40,6 @@ pool_contrasts <- function(x, ...) {
 
   # preparation ----
 
-  len <- length(x)
   ci <- attributes(x[[1]])$ci
   dof <- x[[1]]$df
 
@@ -112,7 +111,6 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
   # preparation ----
 
-  len <- length(x)
   ci <- attributes(x[[1]])$ci
   model <- attributes(x[[1]])$model
   dof <- x[[1]]$df
@@ -153,6 +151,8 @@ pool_predictions <- function(x, transform = NULL, ...) {
 # pool estimate
 .pool_estimates <- function(original_x, estimate_name, pooled_predictions) {
   n_rows <- nrow(original_x[[1]])
+  len <- length(original_x)
+
   for (i in 1:n_rows) {
     # pooled estimate
     pooled_pred <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
