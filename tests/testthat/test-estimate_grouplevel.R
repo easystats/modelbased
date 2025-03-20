@@ -129,11 +129,11 @@ test_that("estimate_grouplevel - Bayesian, rstanarm", {
   skip_if(is.null(m))
 
   out <- estimate_grouplevel(m)
-  expect_identical(dim(out), c(4L, 8L))
+  expect_identical(dim(out), c(3L, 8L))
   expect_named(out, c("Group", "Level", "Parameter", "Median", "MAD", "CI", "CI_low", "CI_high"))
 
   out <- estimate_grouplevel(m, dispersion = FALSE)
-  expect_identical(dim(out), c(4L, 7L))
+  expect_identical(dim(out), c(3L, 7L))
 
   out <- estimate_grouplevel(m, type = "total", dispersion = FALSE)
   expect_identical(dim(out), c(3L, 4L))
