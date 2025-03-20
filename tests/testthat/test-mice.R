@@ -40,7 +40,6 @@ test_that("pool_contrasts", {
 })
 
 
-
 test_that("pool_slopes", {
   set.seed(123)
   data("nhanes2", package = "mice")
