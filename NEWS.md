@@ -6,6 +6,9 @@
   that are internally passed to `parameters::model_parameters()`, but with
   different defaults.
 
+* Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
+  imputed data.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
