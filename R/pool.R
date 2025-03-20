@@ -48,40 +48,11 @@ pool_contrasts <- function(x, ...) {
     dof <- Inf
   }
 
-  # pool predictions -----
-
-  pooled_comparisons <- original_x[[1]]
-  pooled_comparisons$SE <- NA
-  n_rows <- nrow(original_x[[1]])
-
-  for (i in 1:n_rows) {
-    # pooled estimate
-    pooled_comp <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
-    pooled_comparisons[[estimate_name]][i] <- mean(pooled_comp, na.rm = TRUE)
-
-    # pooled standard error
-    pooled_se <- unlist(lapply(original_x, function(j) j$SE[i]), use.names = FALSE)
-    ubar <- mean(pooled_se^2, na.rm = TRUE)
-    tmp <- ubar + (1 + 1 / len) * stats::var(pooled_comp)
-    pooled_comparisons$SE[i] <- sqrt(tmp)
-  }
-
-  # pooled degrees of freedom for t-statistics
-  pooled_df <- .barnad_rubin(
-    m = nrow(pooled_comparisons),
-    b = stats::var(pooled_comparisons[[estimate_name]]),
-    t = pooled_comparisons$SE^2,
-    dfcom = dof
-  )
+  # pool contrasts -----
+  pooled_comparisons <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  alpha <- (1 + ci) / 2
-  fac <- stats::qt(alpha, df = dof)
-  pooled_comparisons$CI_low <- pooled_comparisons[[estimate_name]] - fac * pooled_comparisons$SE
-  pooled_comparisons$CI_high <- pooled_comparisons[[estimate_name]] + fac * pooled_comparisons$SE
-
-  # udpate df ----
-  pooled_comparisons$df <- pooled_df
+  pooled_comparisons <- .pooled_ci(pooled_comparisons, estimate_name, ci, dof)
 
   attributes(pooled_comparisons) <- utils::modifyList(attributes(original_x[[1]]), attributes(pooled_comparisons))
   pooled_comparisons
@@ -93,17 +64,21 @@ pool_contrasts <- function(x, ...) {
 #' This function "pools" (i.e. combines) multiple `estimate_means` objects, in
 #' a similar fashion as [`mice::pool()`].
 #'
-#' @param x A list of `estimate_means` objects, as returned by [`estimate_means()`],
-#' or `estimate_predicted`, as returned by [`estimate_relation()`] and related
-#' functions.
+#' @param x A list of `estimate_means` objects, as returned by
+#' [`estimate_means()`], or `estimate_predicted` objects, as returned by
+#' [`estimate_relation()`] and related functions.
 #' @param ... Currently not used.
 #' @inheritParams estimate_means
 #'
 #' @details Averaging of parameters follows Rubin's rules (*Rubin, 1987, p. 76*).
-#' Pooling is applied to the predicted values on the scale of the *linear predictor*,
-#' not on the response scale, in order to have accurate pooled estimates and
-#' standard errors. The final pooled predicted values are then transformed to
-#' the response scale, using [`insight::link_inverse()`].
+#' Pooling is applied to the predicted values and based on the standard errors
+#' as they are calculated in the `estimate_means` or `estimate_predicted`
+#' objects provided in `x`. For objects of class `estimate_means`, the predicted
+#' values are on the response scale by default, and standard errors are
+#' calculated using the delta method. Then, pooling estimates and calculating
+#' standard errors for the pooled estimates based ob Rubin's rule is carried
+#' out. There is no back-transformation to the link-scale of predicted values
+#' before applying Rubin's rule.
 #'
 #' @references
 #' Rubin, D.B. (1987). Multiple Imputation for Nonresponse in Surveys. New York:
@@ -156,38 +131,10 @@ pool_predictions <- function(x, transform = NULL, ...) {
   }
 
   # pool predictions -----
-
-  pooled_predictions <- original_x[[1]]
-  n_rows <- nrow(original_x[[1]])
-
-  for (i in 1:n_rows) {
-    # pooled estimate
-    pooled_pred <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
-    pooled_predictions[[estimate_name]][i] <- mean(pooled_pred, na.rm = TRUE)
-
-    # pooled standard error
-    pooled_se <- unlist(lapply(original_x, function(j) j$SE[i]), use.names = FALSE)
-    ubar <- mean(pooled_se^2, na.rm = TRUE)
-    tmp <- ubar + (1 + 1 / len) * stats::var(pooled_pred)
-    pooled_predictions$SE[i] <- sqrt(tmp)
-  }
-
-  # pooled degrees of freedom for t-statistics
-  pooled_df <- .barnad_rubin(
-    m = nrow(pooled_predictions),
-    b = stats::var(pooled_predictions[[estimate_name]]),
-    t = pooled_predictions$SE^2,
-    dfcom = dof
-  )
+  pooled_predictions <- .pool_estimates(original_x, estimate_name, original_x[[1]])
 
   # confidence intervals ----
-  alpha <- (1 + ci) / 2
-  fac <- stats::qt(alpha, df = pooled_df)
-  pooled_predictions$CI_low <- pooled_predictions[[estimate_name]] - fac * pooled_predictions$SE
-  pooled_predictions$CI_high <- pooled_predictions[[estimate_name]] + fac * pooled_predictions$SE
-
-  # udpate df ----
-  pooled_predictions$df <- pooled_df
+  pooled_predictions <- .pooled_ci(pooled_predictions, estimate_name, ci, dof)
 
   # back-transform response and CI?
   if (!is.null(transform_fun)) {
@@ -201,6 +148,48 @@ pool_predictions <- function(x, transform = NULL, ...) {
 
 
 # helper ------
+
+
+# pool estimate
+.pool_estimates <- function(original_x, estimate_name, pooled_predictions) {
+  n_rows <- nrow(original_x[[1]])
+  for (i in 1:n_rows) {
+    # pooled estimate
+    pooled_pred <- unlist(lapply(original_x, function(j) j[[estimate_name]][i]), use.names = FALSE)
+    pooled_predictions[[estimate_name]][i] <- mean(pooled_pred, na.rm = TRUE)
+
+    # pooled standard error
+    pooled_se <- unlist(lapply(original_x, function(j) j$SE[i]), use.names = FALSE)
+    ubar <- mean(pooled_se^2, na.rm = TRUE)
+    tmp <- ubar + (1 + 1 / len) * stats::var(pooled_pred)
+    pooled_predictions$SE[i] <- sqrt(tmp)
+  }
+  pooled_predictions
+}
+
+
+# caluclate confidence intervals for pooled estimates
+.pooled_ci <- function(pooled_estimates, estimate_name, ci, dof) {
+  # pooled degrees of freedom for t-statistics
+  pooled_df <- .barnad_rubin(
+    m = nrow(pooled_estimates),
+    b = stats::var(pooled_estimates[[estimate_name]]),
+    t = pooled_estimates$SE^2,
+    dfcom = dof
+  )
+
+  # calculate confidence intervals
+  alpha <- (1 + ci) / 2
+  fac <- stats::qt(alpha, df = pooled_df)
+  pooled_estimates$CI_low <- pooled_estimates[[estimate_name]] - fac * pooled_estimates$SE
+  pooled_estimates$CI_high <- pooled_estimates[[estimate_name]] + fac * pooled_estimates$SE
+
+  # udpate df
+  pooled_estimates$df <- pooled_df
+
+  pooled_estimates
+}
+
 
 # adjustment for degrees of freedom
 .barnad_rubin <- function(m, b, t, dfcom = 999999) {
