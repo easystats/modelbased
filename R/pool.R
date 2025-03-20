@@ -184,8 +184,18 @@ pool_predictions <- function(x, transform = NULL, ...) {
   pooled_estimates$CI_low <- pooled_estimates[[estimate_name]] - fac * pooled_estimates$SE
   pooled_estimates$CI_high <- pooled_estimates[[estimate_name]] + fac * pooled_estimates$SE
 
-  # udpate df
+  # update statistic column
+  statistic <- pooled_estimates[[estimate_name]] / pooled_estimates$SE
+  stat_column <- intersect(colnames(pooled_estimates), .stat_column_names())[1]
+  if (!is.na(stat_column)) {
+    pooled_estimates[[stat_column]] <- statistic
+  }
+
+  # udpate df and p-value
   pooled_estimates$df <- pooled_df
+  if ("p" %in% colnames(pooled_estimates)) {
+    pooled_estimates$p <- 2 * stats::pt(abs(statistic), df = pooled_df, lower.tail = FALSE)
+  }
 
   pooled_estimates
 }
@@ -203,4 +213,14 @@ pool_predictions <- function(x, transform = NULL, ...) {
   dfobs <- (dfcom + 1) / (dfcom + 3) * dfcom * (1 - lambda)
   result <- dfold * dfobs / (dfold + dfobs)
   pmax(round(mean(result, na.rm = TRUE)), 1)
+}
+
+
+.stat_column_names <- function() {
+  t_names <- c("t", "t-value", "t value", "t.value", "Pr(>|t|)")
+  z_names <- c("z", "z-value", "z value", "z.value", "Pr(>|z|)", "Pr(>|Z|)", "Naive z", "Robust z", "san.z", "Wald Z")
+  f_names <- c("F", "F-value", "F value", "F.value", "Pr(>|F|)")
+  chi_names <- c("Chisq", "chi-sq", "chi.sq", "Wald", "W", "Pr(>|W|)")
+
+  c(t_names, z_names, f_names, chi_names)
 }
