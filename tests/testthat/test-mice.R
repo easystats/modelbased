@@ -35,5 +35,6 @@ test_that("pool_contrasts", {
   })
   out <- pool_contrasts(comparisons)
   expect_equal(out$Difference, c(-4.6464, -6.70639, -2.05999), tolerance = 1e-3)
-  expect_equal(out$CI_low, c(-9.67001, -14.71457, -8.5372), tolerance = 1e-3)
+  expect_equal(out$CI_low, c(-12.31066, -18.92406, -11.94194), tolerance = 1e-3)
+  expect_equal(out$p, c(0.14926, 0.17899, 0.55449), tolerance = 1e-3)
 })
