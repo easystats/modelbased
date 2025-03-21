@@ -179,6 +179,14 @@ pool_slopes <- pool_predictions
     tmp <- ubar + (1 + 1 / len) * stats::var(pooled_pred)
     pooled_predictions$SE[i] <- sqrt(tmp)
   }
+
+  # check if we have standard errors?
+  if (all(is.na(pooled_predictions$SE))) {
+    insight::format_warning(
+      "Could not extract standard errors of predictions. Try adding `type=\"response\"` to your call to `estimate_means()`." # nolint
+    )
+  }
+
   pooled_predictions
 }
 
