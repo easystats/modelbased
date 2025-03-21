@@ -1,0 +1,98 @@
+---
+title: "Plotting"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Plotting}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
+)
+
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+
+```{r}
+library(modelbased)
+data(efc)
+m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
+
+estimate_means(
+  m,
+  c("c12hour", "barthtot", "c160age")
+) |> plot()
+
+estimate_means(
+  m,
+  c("c12hour", "barthtot", "c160age"),
+  range = "sd"
+) |> plot()
+
+estimate_means(
+  m,
+  c("c12hour", "barthtot", "c160age"),
+  range = "sd",
+  length = 3
+) |> plot()
+
+estimate_means(
+  m,
+  c("c12hour", "barthtot", "c160age"),
+  range = c("range", "sd", "sd"),
+  length = c(100, 3, 3)
+) |> plot()
+
+efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
+m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
+
+estimate_means(
+  m,
+  c("e16sex", "c172code", "e42dep")
+) |> plot()
+
+m <- lm(neg_c_7 ~ c12hour * c172code * c160age, data = efc)
+estimate_means(
+  m,
+  c("c12hour", "c172code", "c160age")
+) |> plot()
+
+estimate_means(
+  m,
+  c("c12hour", "c160age", "c172code")
+) |> plot()
+
+estimate_means(
+  m,
+  c("c12hour", "c160age", "c172code"),
+  range = c("range", "sd"),
+  length = c(100, 3)
+) |> plot()
+
+estimate_means(
+  m,
+  c("c172code", "c160age", "c12hour"),
+  range = "sd",
+  length = 3
+) |> plot()
+```
