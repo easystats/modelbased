@@ -346,7 +346,7 @@ type of representative values:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
-\item \code{length} and \code{range} apply to all numeric docal predictors.
+\item \code{length} and \code{range} apply to all numeric focal predictors.
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
 multiple elements, one for each predictor.
 }

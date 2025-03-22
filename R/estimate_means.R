@@ -164,7 +164,7 @@
 #'   type of representative values:
 #'   * `length` determines how many equally spaced values are generated.
 #'   * `range` specifies the type of values, like `"range"` or `"sd"`.
-#'   * `length` and `range` apply to all numeric docal predictors.
+#'   * `length` and `range` apply to all numeric focal predictors.
 #'   * If you have multiple numeric predictors, `length` and `range` can accept
 #'     multiple elements, one for each predictor.
 #'
