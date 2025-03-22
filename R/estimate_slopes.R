@@ -82,6 +82,8 @@
 #' the effect of x averaged over all conditions, or instead within each
 #' condition (`using [estimate_slopes]`).
 #'
+#' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
+#'
 #' @return A data.frame of class `estimate_slopes`.
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))

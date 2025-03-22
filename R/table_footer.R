@@ -94,12 +94,28 @@
       `invlink(link)` = "response",
       predict
     )
-    table_footer <- paste0(table_footer, "\n", result_type, " are on the ", predict, "-scale.")
+    table_footer <- paste0(
+      table_footer,
+      "\n",
+      result_type,
+      " are on the ",
+      predict,
+      "-scale",
+      .contrast_units(type, predict, model_info),
+      "."
+    )
   } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))
     if (!is.null(trans_fun) && trans_fun != "identity") {
-      table_footer <- paste0(table_footer, "\n", result_type, " are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
+      table_footer <- paste0(
+        table_footer,
+        "\n",
+        result_type,
+        " are on the ",
+        trans_fun,
+        "-scale (consider `transform=TRUE`)."
+      )
     }
   }
 
@@ -140,6 +156,24 @@
   }
 
   c(paste0(table_footer, "\n"), "yellow")
+}
+
+
+.contrast_units <- function(type, predict, info) {
+  # estimate name
+  if (is.null(predict) || is.null(info) || type != "contrasts") {
+    return(NULL)
+  }
+
+  if (
+    (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) ||
+      predict %in% c("zprob", "zero") ||
+      (predict %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta))
+  ) {
+    " (in %-points)"
+  } else {
+    NULL
+  }
 }
 
 

@@ -66,7 +66,7 @@
 #' plot(estimate_relation(lm(mpg ~ qsec, data = mtcars)))
 #'
 #' \dontrun{
-#' # And can be used in a pipe workflow
+#' # It can be used in a pipe workflow
 #' lm(mpg ~ qsec, data = mtcars) |>
 #'   estimate_relation(ci = c(0.5, 0.8, 0.9)) |>
 #'   plot()

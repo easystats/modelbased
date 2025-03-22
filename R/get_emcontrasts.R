@@ -58,23 +58,23 @@ get_emcontrasts <- function(model,
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
     }
     # Run emmeans
-    estimated <- emmeans::emtrends(
+    estimated <- suppressMessages(emmeans::emtrends(
       model,
       specs = my_args$by,
       var = my_args$contrast,
       type = predict,
       ...
-    )
+    ))
     emm_by <- NULL
   } else {
     # Run emmeans
-    estimated <- emmeans::emmeans(
+    estimated <- suppressMessages(emmeans::emmeans(
       model,
       specs = my_args$emmeans_specs,
       at = my_args$emmeans_at,
       type = predict,
       ...
-    )
+    ))
     # Find by variables
     emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
     if (length(emm_by) == 0) {
@@ -150,8 +150,10 @@ get_emcontrasts <- function(model,
 
 .format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
   predict <- attributes(estimated)$predict
+  m_info <- insight::model_info(model)
+
   # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
+  if (m_info$is_bayesian) {
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
@@ -159,7 +161,7 @@ get_emcontrasts <- function(model,
       as.data.frame(estimated),
       stats::confint(estimated, level = ci, adjust = p_adjust)
     ))
-    out <- .clean_names_frequentist(out)
+    out <- .clean_names_frequentist(out, predict, m_info)
   }
   out$null <- NULL # introduced in emmeans 1.6.1 (#115)
   out <- datawizard::data_relocate(

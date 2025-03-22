@@ -26,13 +26,13 @@ get_emtrends <- function(model,
   my_args <- .guess_emtrends_arguments(model, trend, by, verbose, ...)
 
   # Run emtrends
-  estimated <- emmeans::emtrends(
+  estimated <- suppressMessages(emmeans::emtrends(
     model,
     specs = my_args$emmeans_specs,
     var = my_args$trend,
     at = my_args$emmeans_at,
     ...
-  )
+  ))
 
   # for Bayesian model, keep iterations
   if (insight::model_info(model)$is_bayesian) {
