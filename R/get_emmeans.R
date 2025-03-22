@@ -75,7 +75,7 @@ get_emmeans <- function(model,
   fun_args <- insight::compact_list(c(fun_args, dots))
 
   # Run emmeans
-  estimated <- suppressWarnings(do.call(emmeans::emmeans, fun_args))
+  estimated <- suppressMessages(suppressWarnings(do.call(emmeans::emmeans, fun_args)))
 
   # Special behaviour for transformations #138 (see below)
   if ("retransform" %in% names(my_args) && length(my_args$retransform) > 0) {
