@@ -154,8 +154,10 @@ get_emmeans <- function(model,
 
 .format_emmeans_means <- function(x, model, ci = 0.95, verbose = TRUE, ...) {
   predict <- attributes(x)$predict
+  m_info <- insight::model_info(model)
+
   # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
+  if (m_info$is_bayesian) {
     means <- parameters::parameters(x, ci = ci, ...)
     means <- .clean_names_bayesian(means, model, predict, type = "mean")
     em_grid <- as.data.frame(x@grid)
@@ -167,8 +169,9 @@ get_emmeans <- function(model,
   } else {
     means <- as.data.frame(stats::confint(x, level = ci))
     means$df <- NULL
-    means <- .clean_names_frequentist(means)
+    means <- .clean_names_frequentist(means, predict, m_info)
   }
+
   # Remove the "1 - overall" column that can appear in cases like at = NULL
   means <- means[names(means) != "1"]
 
