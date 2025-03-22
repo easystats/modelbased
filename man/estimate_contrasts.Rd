@@ -331,7 +331,7 @@ documentation for more details.
 \item You can directly specify values as strings or lists for \code{by}, \code{contrast},
 and \code{trend}.
 \itemize{
-\item For numeric predictors, use examples like:
+\item For numeric focal predictors, use examples like:
 \itemize{
 \item \code{by = "gear=c(4,8)"}
 \item \code{by = list(gear = c(4, 8))}
@@ -347,12 +347,12 @@ and \code{trend}.
 \item \code{by = "Sepal.Width=[sd]"}
 \item \code{by = "Sepal.Width=[1.5,2.5,3.5]"}
 }
-\item For numeric predictors, \code{length} and \code{range} control the number and type of
-representative values:
+\item For numeric focal predictors, \code{length} and \code{range} control the number and
+type of representative values:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
-\item \code{length} and \code{range} apply to all numeric predictors.
+\item \code{length} and \code{range} apply to all numeric docal predictors.
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
 multiple elements, one for each predictor.
 }

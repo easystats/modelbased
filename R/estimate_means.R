@@ -151,7 +151,7 @@
 #'
 #' * You can directly specify values as strings or lists for `by`, `contrast`,
 #'   and `trend`.
-#'   * For numeric predictors, use examples like:
+#'   * For numeric focal predictors, use examples like:
 #'     * `by = "gear=c(4,8)"`
 #'     * `by = list(gear = c(4, 8))`
 #' * For factor or character predictors, use:
@@ -160,11 +160,11 @@
 #' * You can use "shortcuts" within square brackets, such as:
 #'    * `by = "Sepal.Width=[sd]"`
 #'    * `by = "Sepal.Width=[1.5,2.5,3.5]"`
-#' * For numeric predictors, `length` and `range` control the number and type of
-#'   representative values:
+#' * For numeric focal predictors, `length` and `range` control the number and
+#'   type of representative values:
 #'   * `length` determines how many equally spaced values are generated.
 #'   * `range` specifies the type of values, like `"range"` or `"sd"`.
-#'   * `length` and `range` apply to all numeric predictors.
+#'   * `length` and `range` apply to all numeric docal predictors.
 #'   * If you have multiple numeric predictors, `length` and `range` can accept
 #'     multiple elements, one for each predictor.
 #'
