@@ -168,6 +168,9 @@
 #'   * If you have multiple numeric predictors, `length` and `range` can accept
 #'     multiple elements, one for each predictor.
 #'
+#' See also [this vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
+#' for some examples.
+#'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
 #' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a

@@ -262,6 +262,9 @@ type of representative values:
 multiple elements, one for each predictor.
 }
 }
+
+See also \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{this vignette}
+for some examples.
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{
