@@ -250,7 +250,7 @@ Can also be <code>FALSE</code>.</p></li>
 <span class="r-plt img"><img src="visualisation_recipe.estimate_predicted-2.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># And can be used in a pipe workflow</span></span></span>
+<span class="r-in"><span><span class="co"># It can be used in a pipe workflow</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="estimate_expectation.html">estimate_relation</a></span><span class="op">(</span>ci <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">0.9</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></span>

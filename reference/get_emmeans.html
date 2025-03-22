@@ -301,7 +301,9 @@ to the output. You can reshape them to a long format by running
 <dd><p>Other arguments passed, for instance, to <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>,
 to functions from the <strong>emmeans</strong> or <strong>marginaleffects</strong> package, or to process
 Bayesian models via <code><a href="https://easystats.github.io/bayestestR/reference/describe_posterior.html" class="external-link">bayestestR::describe_posterior()</a></code>. Examples:</p><ul><li><p><code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>: Argument such as <code>length</code>, <code>digits</code> or <code>range</code>
-can be used to control the (number of) representative values.</p></li>
+can be used to control the (number of) representative values. For integer
+variables, <code>protect_integers</code> modulates whether these should also be
+treated as numerics, i.e. values can have fractions or not.</p></li>
 <li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
 means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments for
 instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <code>slope</code> or even <code>newdata</code> can be
@@ -357,7 +359,7 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
+e.g. <code>options(modelbased_estimate="average")</code></p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
@@ -392,7 +394,6 @@ option is recommended, but <code>p_adjust</code> can also be one of <code>"none"
 <span class="r-in"><span><span class="fu">get_emcontrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No variable was specified for contrast estimation. Selecting `contrast =</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   "Species"`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  contrast               estimate    SE  df t.ratio p.value</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - versicolor       1.590 0.394 144   4.039  0.0003</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa - virginica        1.774 0.413 144   4.293  0.0001</span>
@@ -537,7 +538,6 @@ option is recommended, but <code>p_adjust</code> can also be one of <code>"none"
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">get_emmeans</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `by = c("Species")`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Species    emmean     SE  df lower.CL upper.CL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  setosa       4.32 0.5990 144     3.13     5.50</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  versicolor   2.58 0.0658 144     2.45     2.71</span>
@@ -591,7 +591,6 @@ option is recommended, but <code>p_adjust</code> can also be one of <code>"none"
 <span class="r-in"><span><span class="fu">get_emtrends</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Length"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> No numeric variable was specified for slope estimation. Selecting `trend</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span>   = "Petal.Length"`.</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> NOTE: Results may be misleading due to involvement in interactions</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Petal.Length Petal.Length.trend     SE  df lower.CL upper.CL</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          1.00              0.332 0.0964 144    0.142    0.523</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>          1.66              0.332 0.0964 144    0.142    0.523</span>
