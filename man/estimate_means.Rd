@@ -151,7 +151,9 @@ to functions from the \strong{emmeans} or \strong{marginaleffects} package, or t
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
 \item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
-can be used to control the (number of) representative values.
+can be used to control the (number of) representative values. For integer
+variables, \code{protect_integers} modulates whether these should also be
+treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be

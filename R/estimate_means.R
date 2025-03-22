@@ -125,7 +125,9 @@
 #' to functions from the **emmeans** or **marginaleffects** package, or to process
 #' Bayesian models via [bayestestR::describe_posterior()]. Examples:
 #' - `insight::get_datagrid()`: Argument such as `length`, `digits` or `range`
-#'   can be used to control the (number of) representative values.
+#'   can be used to control the (number of) representative values. For integer
+#'   variables, `protect_integers` modulates whether these should also be
+#'   treated as numerics, i.e. values can have fractions or not.
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments for
 #'   instance like `vcov`, `equivalence`, `df`, `slope` or even `newdata` can be
