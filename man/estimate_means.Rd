@@ -137,7 +137,7 @@ across random effects levels, producing "marginal predictions" (instead of
 Another difference is that \code{backend="marginaleffects"} will be slower than
 \code{backend="emmeans"}. For most models, this difference is negligible. However,
 in particular complex models or large data sets fitted with \emph{glmmTMB} can be
-up to 10 times slower.
+significantly slower.
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend="emmeans")} to use the \strong{emmeans} package or

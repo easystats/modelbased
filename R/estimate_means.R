@@ -100,7 +100,7 @@
 #' Another difference is that `backend="marginaleffects"` will be slower than
 #' `backend="emmeans"`. For most models, this difference is negligible. However,
 #' in particular complex models or large data sets fitted with *glmmTMB* can be
-#' up to 10 times slower.
+#' significantly slower.
 #'
 #' You can set a default backend via `options()`, e.g. use
 #' `options(modelbased_backend="emmeans")` to use the **emmeans** package or
