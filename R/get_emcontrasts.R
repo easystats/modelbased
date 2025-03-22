@@ -58,23 +58,23 @@ get_emcontrasts <- function(model,
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
     }
     # Run emmeans
-    estimated <- emmeans::emtrends(
+    estimated <- suppressMessages(emmeans::emtrends(
       model,
       specs = my_args$by,
       var = my_args$contrast,
       type = predict,
       ...
-    )
+    ))
     emm_by <- NULL
   } else {
     # Run emmeans
-    estimated <- emmeans::emmeans(
+    estimated <- suppressMessages(emmeans::emmeans(
       model,
       specs = my_args$emmeans_specs,
       at = my_args$emmeans_at,
       type = predict,
       ...
-    )
+    ))
     # Find by variables
     emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
     if (length(emm_by) == 0) {
