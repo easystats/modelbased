@@ -180,13 +180,13 @@ documentation for more details.
 \item You can directly specify values as strings or lists for \code{by}, \code{contrast},
 and \code{trend}.
 \itemize{
-\item For numeric focal predictors, use examples like \code{by = "gear=c(4,8)"} or
-\code{by = list(gear = c(4, 8))}
-\item For factor or character predictors, use \code{by = "Species=c('setosa', 'virginica')"}
-or \code{by = list(Species = c('setosa', 'virginica'))}
+\item For numeric focal predictors, use examples like \code{by="gear=c(4,8)"} or
+\code{by=list(gear=c(4,8))}
+\item For factor or character predictors, use \code{by="Species=c('setosa','virginica')"}
+or \code{by=list(Species=c('setosa','virginica'))}
 }
-\item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width=[sd]"}
-or \code{by = "Sepal.Width=[1.5,2.5,3.5]"}
+\item You can use "shortcuts" within square brackets, such as \code{by="Sepal.Width=[sd]"}
+or \code{by="Sepal.Width=[1.5,2.5,3.5]"}
 \item For numeric focal predictors, \code{length} and \code{range} control the number and
 type of representative values:
 \itemize{
