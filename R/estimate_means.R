@@ -171,6 +171,10 @@
 #'   * `length` and `range` apply to all numeric focal predictors.
 #'   * If you have multiple numeric predictors, `length` and `range` can accept
 #'     multiple elements, one for each predictor.
+#' * For integer variables, only values that appear in the data will be included
+#'   in the data grid, independent from the `length` argument. This behaviour
+#'   can changed by setting `protect_integers = FALSE`, which will then treat
+#'   integer variables as numerics (and possibly produce fractions).
 #'
 #' See also [this vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 #' for some examples.

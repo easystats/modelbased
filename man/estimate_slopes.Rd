@@ -200,6 +200,10 @@ type of representative values:
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
 multiple elements, one for each predictor.
 }
+\item For integer variables, only values that appear in the data will be included
+in the data grid, independent from the \code{length} argument. This behaviour
+can changed by setting \code{protect_integers = FALSE}, which will then treat
+integer variables as numerics (and possibly produce fractions).
 }
 
 See also \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{this vignette}
