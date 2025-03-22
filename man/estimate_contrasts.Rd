@@ -174,7 +174,7 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}}
+e.g. \code{options(modelbased_estimate="average")}}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
@@ -213,17 +213,19 @@ using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.
 
 \item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
 a backend. Results are usually very similar. The major difference will be
-found for mixed models, where \code{backend = "marginaleffects"} will also average
+found for mixed models, where \code{backend="marginaleffects"} will also average
 across random effects levels, producing "marginal predictions" (instead of
-"conditional predictions", see Heiss 2022). Another difference is that
-\code{backend = "marginaleffects"} will be slower than \code{backend = "emmeans"}. For
-most models, this difference is negligible. However, in particular complex
-models from package \emph{glmmTMB} can be up to 10 times slower.
+"conditional predictions", see Heiss 2022).
+
+Another difference is that \code{backend="marginaleffects"} will be slower than
+\code{backend="emmeans"}. For most models, this difference is negligible. However,
+in particular complex models or large data sets fitted with \emph{glmmTMB} can be
+up to 10 times slower.
 
 You can set a default backend via \code{options()}, e.g. use
-\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
-\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects}
-as default backend.}
+\code{options(modelbased_backend="emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend="marginaleffects")} to set \strong{marginaleffects} as
+default backend.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
 }

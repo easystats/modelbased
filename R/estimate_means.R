@@ -90,20 +90,22 @@
 #'   (_Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
-#' e.g. `options(modelbased_estimate = "average")`
+#' e.g. `options(modelbased_estimate="average")`
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
-#' found for mixed models, where `backend = "marginaleffects"` will also average
+#' found for mixed models, where `backend="marginaleffects"` will also average
 #' across random effects levels, producing "marginal predictions" (instead of
-#' "conditional predictions", see Heiss 2022). Another difference is that
-#' `backend = "marginaleffects"` will be slower than `backend = "emmeans"`. For
-#' most models, this difference is negligible. However, in particular complex
-#' models from package *glmmTMB* can be up to 10 times slower.
+#' "conditional predictions", see Heiss 2022).
+#'
+#' Another difference is that `backend="marginaleffects"` will be slower than
+#' `backend="emmeans"`. For most models, this difference is negligible. However,
+#' in particular complex models or large data sets fitted with *glmmTMB* can be
+#' up to 10 times slower.
 #'
 #' You can set a default backend via `options()`, e.g. use
-#' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
-#' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects**
-#' as default backend.
+#' `options(modelbased_backend="emmeans")` to use the **emmeans** package or
+#' `options(modelbased_backend="marginaleffects")` to set **marginaleffects** as
+#' default backend.
 #' @param transform A function applied to predictions and confidence intervals
 #' to (back-) transform results, which can be useful in case the regression
 #' model has a transformed response variable (e.g., `lm(log(y) ~ x)`). For
