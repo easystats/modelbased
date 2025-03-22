@@ -95,7 +95,10 @@
 #' a backend. Results are usually very similar. The major difference will be
 #' found for mixed models, where `backend = "marginaleffects"` will also average
 #' across random effects levels, producing "marginal predictions" (instead of
-#' "conditional predictions", see Heiss 2022).
+#' "conditional predictions", see Heiss 2022). Another difference is that
+#' `backend = "marginaleffects"` will be slower than `backend = "emmeans"`. For
+#' most models, this difference is negligible. However, in particular complex
+#' models from package *glmmTMB* can be up to 10 times slower.
 #'
 #' You can set a default backend via `options()`, e.g. use
 #' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or

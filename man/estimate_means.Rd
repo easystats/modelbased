@@ -132,7 +132,10 @@ to the output. You can reshape them to a long format by running
 a backend. Results are usually very similar. The major difference will be
 found for mixed models, where \code{backend = "marginaleffects"} will also average
 across random effects levels, producing "marginal predictions" (instead of
-"conditional predictions", see Heiss 2022).
+"conditional predictions", see Heiss 2022). Another difference is that
+\code{backend = "marginaleffects"} will be slower than \code{backend = "emmeans"}. For
+most models, this difference is negligible. However, in particular complex
+models from package \emph{glmmTMB} can be up to 10 times slower.
 
 You can set a default backend via \code{options()}, e.g. use
 \code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
