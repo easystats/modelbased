@@ -13,7 +13,7 @@
 .valid_coefficient_names <- function() {
   c(
     "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
-    "Proportion", "Median", "MAP", "Coefficient",
+    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio",
     tools::toTitleCase(.brms_aux_elements())
   )
 }
