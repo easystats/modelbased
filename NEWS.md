@@ -9,6 +9,10 @@
 * Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
   imputed data.
 
+* Column names of predicted values for `backend = "emmeans"` has changed for
+  models like logistic regression, or beta regression. Formerly, name was
+  `Mean`, now it is `Probability` or `Proportion`, depending on the model.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes

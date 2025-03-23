@@ -634,7 +634,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 #' @keywords internal
 .guess_estimate_name <- function(predict_type, info) {
   # estimate name
-  if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
+  if (is.null(predict_type) && is.null(info)) {
+    estimate_name <- "Mean"
+  } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
   } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {

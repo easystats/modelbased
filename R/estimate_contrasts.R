@@ -51,6 +51,8 @@
 #'
 #' @inherit estimate_slopes details
 #'
+#' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
+#'
 #' @section Effect Size:
 #'
 #' By default, `estimate_contrasts()` reports no standardized effect size on
