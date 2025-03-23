@@ -197,9 +197,9 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). <code>by</code> can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., <code>by="x=c(1,2)"</code>). When <code>estimate</code> is
-<em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., <code>by = "x = c(1, 2)"</code>). When <code>estimate</code>
+is <em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, <code>by</code> can also be list of named elements. See details in
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids for
 predictors of interest.</p></dd>
@@ -208,9 +208,7 @@ predictors of interest.</p></dd>
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Is passed to the <code>type</code> argument in <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> (when
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
-<code>backend = "marginaleffects"</code>). For emmeans, see also
-<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
+<code>backend = "marginaleffects"</code>). Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
 <code>"inverse_link"</code> or any valid <code>type</code> option supported by model's class
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g., for zero-inflation models from package
 <strong>glmmTMB</strong>, you can choose <code>predict = "zprob"</code> or <code>predict = "conditional"</code>
@@ -222,7 +220,8 @@ will calculate predictions on the link scale and then back-transform to the
 response scale.</p></li>
 <li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
-transformation is selected (which usually is <code>"response"</code>).</p></li>
+transformation is selected (which usually is <code>"response"</code>). See also
+<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
@@ -359,7 +358,7 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate="average")</code></p></dd>
+e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>

@@ -131,9 +131,9 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). <code>by</code> can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., <code>by="x=c(1,2)"</code>). When <code>estimate</code> is
-<em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., <code>by = "x = c(1, 2)"</code>). When <code>estimate</code>
+is <em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, <code>by</code> can also be list of named elements. See details in
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids for
 predictors of interest.</p></dd>
@@ -142,9 +142,7 @@ predictors of interest.</p></dd>
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Is passed to the <code>type</code> argument in <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> (when
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
-<code>backend = "marginaleffects"</code>). For emmeans, see also
-<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
+<code>backend = "marginaleffects"</code>). Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
 <code>"inverse_link"</code> or any valid <code>type</code> option supported by model's class
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g., for zero-inflation models from package
 <strong>glmmTMB</strong>, you can choose <code>predict = "zprob"</code> or <code>predict = "conditional"</code>
@@ -156,7 +154,8 @@ will calculate predictions on the link scale and then back-transform to the
 response scale.</p></li>
 <li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
-transformation is selected (which usually is <code>"response"</code>).</p></li>
+transformation is selected (which usually is <code>"response"</code>). See also
+<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
@@ -213,7 +212,7 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate="average")</code></p></dd>
+e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
@@ -239,16 +238,16 @@ to the output. You can reshape them to a long format by running
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
 <dd><p>Whether to use <code>"marginaleffects"</code> (default) or <code>"emmeans"</code> as
 a backend. Results are usually very similar. The major difference will be
-found for mixed models, where <code>backend="marginaleffects"</code> will also average
+found for mixed models, where <code>backend = "marginaleffects"</code> will also average
 across random effects levels, producing "marginal predictions" (instead of
 "conditional predictions", see Heiss 2022).</p>
-<p>Another difference is that <code>backend="marginaleffects"</code> will be slower than
-<code>backend="emmeans"</code>. For most models, this difference is negligible. However,
+<p>Another difference is that <code>backend = "marginaleffects"</code> will be slower than
+<code>backend = "emmeans"</code>. For most models, this difference is negligible. However,
 in particular complex models or large data sets fitted with <em>glmmTMB</em> can be
 significantly slower.</p>
 <p>You can set a default backend via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. use
-<code>options(modelbased_backend="emmeans")</code> to use the <strong>emmeans</strong> package or
-<code>options(modelbased_backend="marginaleffects")</code> to set <strong>marginaleffects</strong> as
+<code>options(modelbased_backend = "emmeans")</code> to use the <strong>emmeans</strong> package or
+<code>options(modelbased_backend = "marginaleffects")</code> to set <strong>marginaleffects</strong> as
 default backend.</p></dd>
 
 
@@ -342,15 +341,15 @@ condition (<code>using [estimate_slopes]</code>).</p>
 <code>contrast</code>, and <code>trend</code>), you can use several methods. These values are
 internally generated by <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>, so consult its
 documentation for more details.</p><ul><li><p>You can directly specify values as strings or lists for <code>by</code>, <code>contrast</code>,
-and <code>trend</code>.</p><ul><li><p>For numeric focal predictors, use examples like <code>by="gear=c(4,8)"</code> or
-<code>by=list(gear=c(4,8))</code></p></li>
-<li><p>For factor or character predictors, use <code>by="Species=c('setosa','virginica')"</code>
-or <code>by=list(Species=c('setosa','virginica'))</code></p></li>
+and <code>trend</code>.</p><ul><li><p>For numeric focal predictors, use examples like <code>by = "gear = c(4, 8)"</code>,
+<code>by = list(gear = c(4, 8))</code> or <code>by = "gear = 5:10"</code></p></li>
+<li><p>For factor or character predictors, use <code>by = "Species = c('setosa', 'virginica')"</code>
+or <code>by = list(Species = c('setosa', 'virginica'))</code></p></li>
 </ul></li>
-<li><p>You can use "shortcuts" within square brackets, such as <code>by="Sepal.Width=[sd]"</code>
-or <code>by="Sepal.Width=[1.5,2.5,3.5]"</code></p></li>
-<li><p>For numeric focal predictors, <code>length</code> and <code>range</code> control the number and
-type of representative values:</p><ul><li><p><code>length</code> determines how many equally spaced values are generated.</p></li>
+<li><p>You can use "shortcuts" within square brackets, such as <code>by = "Sepal.Width = [sd]"</code>
+or <code>by = "Sepal.Width = [fivenum]"</code></p></li>
+<li><p>For numeric focal predictors, if no representative values are specified,
+<code>length</code> and <code>range</code> control the number and type of representative values:</p><ul><li><p><code>length</code> determines how many equally spaced values are generated.</p></li>
 <li><p><code>range</code> specifies the type of values, like <code>"range"</code> or <code>"sd"</code>.</p></li>
 <li><p><code>length</code> and <code>range</code> apply to all numeric focal predictors.</p></li>
 <li><p>If you have multiple numeric predictors, <code>length</code> and <code>range</code> can accept
@@ -358,7 +357,7 @@ multiple elements, one for each predictor.</p></li>
 </ul></li>
 <li><p>For integer variables, only values that appear in the data will be included
 in the data grid, independent from the <code>length</code> argument. This behaviour
-can changed by setting <code>protect_integers = FALSE</code>, which will then treat
+can be changed by setting <code>protect_integers = FALSE</code>, which will then treat
 integer variables as numerics (and possibly produce fractions).</p></li>
 </ul><p>See also <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">this vignette</a>
 for some examples.</p>
@@ -475,7 +474,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
 <span class="r-in"><span><span class="co"># same for factors: filter by specific levels</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species=c('versicolor', 'setosa')"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species = c('versicolor', 'setosa')"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Mean |   SE |       95% CI | t(144)</span>
@@ -484,10 +483,10 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | 1.43 | 0.08 | [1.28, 1.58] |  18.70</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species=c('versicolor', 'setosa')</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species = c('versicolor', 'setosa')</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: Sepal.Width (3.1)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width = 0"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Sepal.Width | Mean |   SE |       95% CI | t(144)</span>
@@ -497,7 +496,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |           0 | 3.51 | 0.51 | [2.50, 4.52] |   6.88</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species, Sepal.Width=0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species, Sepal.Width = 0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># estimate marginal average of response at values for numeric predictor</span></span></span>
@@ -516,7 +515,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width=c(2, 4)"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Sepal.Width = c(2, 4)"</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width | Mean |   SE |       95% CI | t(144)</span>
@@ -525,7 +524,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4           | 4.35 | 0.10 | [4.15, 4.55] |  42.81</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width=c(2, 4)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width = c(2, 4)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
@@ -548,7 +547,7 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods that can be applied to it:</span></span></span>
-<span class="r-in"><span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width=0"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">means</span> <span class="op">&lt;-</span> <span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Sepal.Width = 0"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">means</span><span class="op">)</span> <span class="co"># which runs visualisation_recipe()</span></span></span>
 <span class="r-plt img"><img src="estimate_means-1.png" alt="" width="700" height="433"></span>
@@ -562,11 +561,54 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica  |       -7.01 | -0.14 | 0.29 | [-0.71,  0.43] |   6.88</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species, Sepal.Width=0</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species, Sepal.Width = 0</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># grids for numeric predictors, combine range and length</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">Sepal.Width</span> <span class="op">*</span> <span class="va">Petal.Length</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># create a "grid": value range for first numeric predictor, mean +/-1 SD</span></span></span>
+<span class="r-in"><span><span class="co"># for remaining numeric predictors.</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Sepal.Width"</span>, <span class="st">"Petal.Length"</span><span class="op">)</span>, range <span class="op">=</span> <span class="st">"grid"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Sepal.Width | Petal.Length | Mean |   SE |       95% CI | t(146)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31        |         1.99 | 3.75 | 0.19 | [3.39, 4.12] |  20.25</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.75        |         1.99 | 4.06 | 0.15 | [3.76, 4.35] |  27.47</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.19        |         1.99 | 4.36 | 0.11 | [4.14, 4.58] |  39.35</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.62        |         1.99 | 4.66 | 0.08 | [4.51, 4.81] |  61.38</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.06        |         1.99 | 4.97 | 0.05 | [4.87, 5.06] | 104.51</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.49        |         1.99 | 5.27 | 0.04 | [5.19, 5.35] | 125.68</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.93        |         1.99 | 5.57 | 0.07 | [5.44, 5.70] |  85.29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.37        |         1.99 | 5.88 | 0.10 | [5.68, 6.07] |  59.39</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.80        |         1.99 | 6.18 | 0.14 | [5.91, 6.45] |  45.65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.24        |         1.99 | 6.48 | 0.17 | [6.14, 6.83] |  37.52</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31        |         3.76 | 4.84 | 0.12 | [4.59, 5.09] |  38.86</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.75        |         3.76 | 5.09 | 0.09 | [4.90, 5.27] |  53.74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.19        |         3.76 | 5.33 | 0.07 | [5.20, 5.46] |  80.96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.62        |         3.76 | 5.57 | 0.04 | [5.49, 5.65] | 136.71</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.06        |         3.76 | 5.82 | 0.03 | [5.76, 5.88] | 190.96</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.49        |         3.76 | 6.06 | 0.05 | [5.97, 6.15] | 131.05</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.93        |         3.76 | 6.31 | 0.07 | [6.16, 6.45] |  86.65</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.37        |         3.76 | 6.55 | 0.10 | [6.35, 6.75] |  64.24</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.80        |         3.76 | 6.80 | 0.13 | [6.53, 7.06] |  51.44</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.24        |         3.76 | 7.04 | 0.16 | [6.72, 7.36] |  43.29</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.31        |         5.52 | 5.93 | 0.20 | [5.54, 6.32] |  29.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.75        |         5.52 | 6.12 | 0.15 | [5.82, 6.41] |  41.01</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.19        |         5.52 | 6.30 | 0.10 | [6.10, 6.50] |  62.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.62        |         5.52 | 6.49 | 0.06 | [6.37, 6.60] | 113.88</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.06        |         5.52 | 6.67 | 0.04 | [6.59, 6.75] | 164.81</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.49        |         5.52 | 6.86 | 0.07 | [6.71, 7.00] |  94.13</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.93        |         5.52 | 7.04 | 0.12 | [6.80, 7.28] |  59.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.37        |         5.52 | 7.23 | 0.17 | [6.89, 7.56] |  42.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.80        |         5.52 | 7.41 | 0.22 | [6.98, 7.84] |  33.85</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.24        |         5.52 | 7.60 | 0.27 | [7.06, 8.13] |  28.18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Sepal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width, Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># range from minimum to maximum spread over four values,</span></span></span>
 <span class="r-in"><span><span class="co"># and mean +/- 1 SD (a total of three values)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span></span></span>

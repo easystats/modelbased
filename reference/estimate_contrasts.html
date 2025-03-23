@@ -164,9 +164,9 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). <code>by</code> can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., <code>by="x=c(1,2)"</code>). When <code>estimate</code> is
-<em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., <code>by = "x = c(1, 2)"</code>). When <code>estimate</code>
+is <em>not</em> <code>"average"</code>, the <code>by</code> argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, <code>by</code> can also be list of named elements. See details in
 <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code> to learn more about how to create data grids for
 predictors of interest.</p></dd>
@@ -175,9 +175,7 @@ predictors of interest.</p></dd>
 <dt id="arg-predict">predict<a class="anchor" aria-label="anchor" href="#arg-predict"></a></dt>
 <dd><p>Is passed to the <code>type</code> argument in <code><a href="https://rvlenth.github.io/emmeans/reference/emmeans.html" class="external-link">emmeans::emmeans()</a></code> (when
 <code>backend = "emmeans"</code>) or in <code><a href="https://marginaleffects.com/man/r/predictions.html" class="external-link">marginaleffects::avg_predictions()</a></code> (when
-<code>backend = "marginaleffects"</code>). For emmeans, see also
-<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.
-Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
+<code>backend = "marginaleffects"</code>). Valid options for <code>predict</code> are:</p><ul><li><p><code>backend = "marginaleffects"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>,
 <code>"inverse_link"</code> or any valid <code>type</code> option supported by model's class
 <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method (e.g., for zero-inflation models from package
 <strong>glmmTMB</strong>, you can choose <code>predict = "zprob"</code> or <code>predict = "conditional"</code>
@@ -189,7 +187,8 @@ will calculate predictions on the link scale and then back-transform to the
 response scale.</p></li>
 <li><p><code>backend = "emmeans"</code>: <code>predict</code> can be <code>"response"</code>, <code>"link"</code>, <code>"mu"</code>,
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
-transformation is selected (which usually is <code>"response"</code>).</p></li>
+transformation is selected (which usually is <code>"response"</code>). See also
+<a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
 </ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
@@ -273,7 +272,7 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate="average")</code></p></dd>
+e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
@@ -326,16 +325,16 @@ using <code>effectsize = "boot"</code>. One of <code>"unstandardized"</code>, <c
 <dt id="arg-backend">backend<a class="anchor" aria-label="anchor" href="#arg-backend"></a></dt>
 <dd><p>Whether to use <code>"marginaleffects"</code> (default) or <code>"emmeans"</code> as
 a backend. Results are usually very similar. The major difference will be
-found for mixed models, where <code>backend="marginaleffects"</code> will also average
+found for mixed models, where <code>backend = "marginaleffects"</code> will also average
 across random effects levels, producing "marginal predictions" (instead of
 "conditional predictions", see Heiss 2022).</p>
-<p>Another difference is that <code>backend="marginaleffects"</code> will be slower than
-<code>backend="emmeans"</code>. For most models, this difference is negligible. However,
+<p>Another difference is that <code>backend = "marginaleffects"</code> will be slower than
+<code>backend = "emmeans"</code>. For most models, this difference is negligible. However,
 in particular complex models or large data sets fitted with <em>glmmTMB</em> can be
 significantly slower.</p>
 <p>You can set a default backend via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>, e.g. use
-<code>options(modelbased_backend="emmeans")</code> to use the <strong>emmeans</strong> package or
-<code>options(modelbased_backend="marginaleffects")</code> to set <strong>marginaleffects</strong> as
+<code>options(modelbased_backend = "emmeans")</code> to use the <strong>emmeans</strong> package or
+<code>options(modelbased_backend = "marginaleffects")</code> to set <strong>marginaleffects</strong> as
 default backend.</p></dd>
 
 
@@ -438,15 +437,15 @@ covariates, but creates an appropriate scale for standardizing the response.</p>
 <code>contrast</code>, and <code>trend</code>), you can use several methods. These values are
 internally generated by <code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">insight::get_datagrid()</a></code>, so consult its
 documentation for more details.</p><ul><li><p>You can directly specify values as strings or lists for <code>by</code>, <code>contrast</code>,
-and <code>trend</code>.</p><ul><li><p>For numeric focal predictors, use examples like <code>by="gear=c(4,8)"</code> or
-<code>by=list(gear=c(4,8))</code></p></li>
-<li><p>For factor or character predictors, use <code>by="Species=c('setosa','virginica')"</code>
-or <code>by=list(Species=c('setosa','virginica'))</code></p></li>
+and <code>trend</code>.</p><ul><li><p>For numeric focal predictors, use examples like <code>by = "gear = c(4, 8)"</code>,
+<code>by = list(gear = c(4, 8))</code> or <code>by = "gear = 5:10"</code></p></li>
+<li><p>For factor or character predictors, use <code>by = "Species = c('setosa', 'virginica')"</code>
+or <code>by = list(Species = c('setosa', 'virginica'))</code></p></li>
 </ul></li>
-<li><p>You can use "shortcuts" within square brackets, such as <code>by="Sepal.Width=[sd]"</code>
-or <code>by="Sepal.Width=[1.5,2.5,3.5]"</code></p></li>
-<li><p>For numeric focal predictors, <code>length</code> and <code>range</code> control the number and
-type of representative values:</p><ul><li><p><code>length</code> determines how many equally spaced values are generated.</p></li>
+<li><p>You can use "shortcuts" within square brackets, such as <code>by = "Sepal.Width = [sd]"</code>
+or <code>by = "Sepal.Width = [fivenum]"</code></p></li>
+<li><p>For numeric focal predictors, if no representative values are specified,
+<code>length</code> and <code>range</code> control the number and type of representative values:</p><ul><li><p><code>length</code> determines how many equally spaced values are generated.</p></li>
 <li><p><code>range</code> specifies the type of values, like <code>"range"</code> or <code>"sd"</code>.</p></li>
 <li><p><code>length</code> and <code>range</code> apply to all numeric focal predictors.</p></li>
 <li><p>If you have multiple numeric predictors, <code>length</code> and <code>range</code> can accept
@@ -454,7 +453,7 @@ multiple elements, one for each predictor.</p></li>
 </ul></li>
 <li><p>For integer variables, only values that appear in the data will be included
 in the data grid, independent from the <code>length</code> argument. This behaviour
-can changed by setting <code>protect_integers = FALSE</code>, which will then treat
+can be changed by setting <code>protect_integers = FALSE</code>, which will then treat
 integer variables as numerics (and possibly produce fractions).</p></li>
 </ul><p>See also <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">this vignette</a>
 for some examples.</p>
@@ -544,7 +543,7 @@ for some examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Or with custom specifications</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width=c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Species"</span>, <span class="st">"Petal.Width = c(1, 2)"</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1        | Level2        | Difference |   SE |         95% CI | t(144) |      p</span>
@@ -566,7 +565,7 @@ for some examples.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> virginica, 2  | virginica, 1  |       0.63 | 0.16 | [ 0.32,  0.94] |   4.04 | &lt; .001</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Sepal.Width</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: Species, Petal.Width=c(1, 2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: Species, Petal.Width = c(1, 2)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
@@ -695,7 +694,7 @@ for some examples.</p>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">iris</span>,</span></span>
 <span class="r-in"><span>  refresh <span class="op">=</span> <span class="fl">0</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Length=[sd]"</span>, test <span class="op">=</span> <span class="st">"bf"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Petal.Length = [sd]"</span>, test <span class="op">=</span> <span class="st">"bf"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("Species")`.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
