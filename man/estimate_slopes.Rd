@@ -28,9 +28,9 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). \code{by} can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
-\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., \code{by = "x = c(1, 2)"}). When \code{estimate}
+is \emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest.}
@@ -63,18 +63,18 @@ to the output. You can reshape them to a long format by running
 
 \item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
 a backend. Results are usually very similar. The major difference will be
-found for mixed models, where \code{backend="marginaleffects"} will also average
+found for mixed models, where \code{backend = "marginaleffects"} will also average
 across random effects levels, producing "marginal predictions" (instead of
 "conditional predictions", see Heiss 2022).
 
-Another difference is that \code{backend="marginaleffects"} will be slower than
-\code{backend="emmeans"}. For most models, this difference is negligible. However,
+Another difference is that \code{backend = "marginaleffects"} will be slower than
+\code{backend = "emmeans"}. For most models, this difference is negligible. However,
 in particular complex models or large data sets fitted with \emph{glmmTMB} can be
 significantly slower.
 
 You can set a default backend via \code{options()}, e.g. use
-\code{options(modelbased_backend="emmeans")} to use the \strong{emmeans} package or
-\code{options(modelbased_backend="marginaleffects")} to set \strong{marginaleffects} as
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects} as
 default backend.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
@@ -184,15 +184,15 @@ documentation for more details.
 \item You can directly specify values as strings or lists for \code{by}, \code{contrast},
 and \code{trend}.
 \itemize{
-\item For numeric focal predictors, use examples like \code{by="gear=c(4,8)"} or
-\code{by=list(gear=c(4,8))}
-\item For factor or character predictors, use \code{by="Species=c('setosa','virginica')"}
-or \code{by=list(Species=c('setosa','virginica'))}
+\item For numeric focal predictors, use examples like \code{by = "gear = c(4, 8)"},
+\code{by = list(gear = c(4, 8))} or \code{by = "gear = 5:10"}
+\item For factor or character predictors, use \code{by = "Species = c('setosa', 'virginica')"}
+or \code{by = list(Species = c('setosa', 'virginica'))}
 }
-\item You can use "shortcuts" within square brackets, such as \code{by="Sepal.Width=[sd]"}
-or \code{by="Sepal.Width=[1.5,2.5,3.5]"}
-\item For numeric focal predictors, \code{length} and \code{range} control the number and
-type of representative values:
+\item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width = [sd]"}
+or \code{by = "Sepal.Width = [fivenum]"}
+\item For numeric focal predictors, if no representative values are specified,
+\code{length} and \code{range} control the number and type of representative values:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
@@ -202,7 +202,7 @@ multiple elements, one for each predictor.
 }
 \item For integer variables, only values that appear in the data will be included
 in the data grid, independent from the \code{length} argument. This behaviour
-can changed by setting \code{protect_integers = FALSE}, which will then treat
+can be changed by setting \code{protect_integers = FALSE}, which will then treat
 integer variables as numerics (and possibly produce fractions).
 }
 

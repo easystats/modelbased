@@ -12,17 +12,15 @@
 #' included here will be collapsed and "averaged" over (the effect will be
 #' estimated across them). `by` can be a character (vector) naming the focal
 #' predictors, optionally including representative values or levels at which
-#' focal predictors are evaluated (e.g., `by="x=c(1,2)"`). When `estimate` is
-#' *not* `"average"`, the `by` argument is used to create a "reference grid" or
-#' "data grid" with representative values for the focal predictors. In this
+#' focal predictors are evaluated (e.g., `by = "x = c(1, 2)"`). When `estimate`
+#' is *not* `"average"`, the `by` argument is used to create a "reference grid"
+#' or "data grid" with representative values for the focal predictors. In this
 #' case, `by` can also be list of named elements. See details in
 #' [`insight::get_datagrid()`] to learn more about how to create data grids for
 #' predictors of interest.
 #' @param predict Is passed to the `type` argument in `emmeans::emmeans()` (when
 #' `backend = "emmeans"`) or in `marginaleffects::avg_predictions()` (when
-#' `backend = "marginaleffects"`). For emmeans, see also
-#' [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
-#' Valid options for `predict` are:
+#' `backend = "marginaleffects"`). Valid options for `predict` are:
 #'
 #' * `backend = "marginaleffects"`: `predict` can be `"response"`, `"link"`,
 #'   `"inverse_link"` or any valid `type` option supported by model's class
@@ -36,7 +34,8 @@
 #'   response scale.
 #' * `backend = "emmeans"`: `predict` can be `"response"`, `"link"`, `"mu"`,
 #'   `"unlink"`, or `"log"`. If `predict = NULL` (default), the most appropriate
-#'   transformation is selected (which usually is `"response"`).
+#'   transformation is selected (which usually is `"response"`). See also
+#'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #'
 #' `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` (or `NULL`) will transform them on scale of the response
@@ -90,21 +89,21 @@
 #'   (_Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
-#' e.g. `options(modelbased_estimate="average")`
+#' e.g. `options(modelbased_estimate = "average")`
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
-#' found for mixed models, where `backend="marginaleffects"` will also average
+#' found for mixed models, where `backend = "marginaleffects"` will also average
 #' across random effects levels, producing "marginal predictions" (instead of
 #' "conditional predictions", see Heiss 2022).
 #'
-#' Another difference is that `backend="marginaleffects"` will be slower than
-#' `backend="emmeans"`. For most models, this difference is negligible. However,
+#' Another difference is that `backend = "marginaleffects"` will be slower than
+#' `backend = "emmeans"`. For most models, this difference is negligible. However,
 #' in particular complex models or large data sets fitted with *glmmTMB* can be
 #' significantly slower.
 #'
 #' You can set a default backend via `options()`, e.g. use
-#' `options(modelbased_backend="emmeans")` to use the **emmeans** package or
-#' `options(modelbased_backend="marginaleffects")` to set **marginaleffects** as
+#' `options(modelbased_backend = "emmeans")` to use the **emmeans** package or
+#' `options(modelbased_backend = "marginaleffects")` to set **marginaleffects** as
 #' default backend.
 #' @param transform A function applied to predictions and confidence intervals
 #' to (back-) transform results, which can be useful in case the regression
@@ -158,14 +157,14 @@
 #'
 #' * You can directly specify values as strings or lists for `by`, `contrast`,
 #'   and `trend`.
-#'   * For numeric focal predictors, use examples like `by="gear=c(4,8)"` or
-#'     `by=list(gear=c(4,8))`
-#'   * For factor or character predictors, use `by="Species=c('setosa','virginica')"`
-#'     or `by=list(Species=c('setosa','virginica'))`
-#' * You can use "shortcuts" within square brackets, such as `by="Sepal.Width=[sd]"`
-#'   or `by="Sepal.Width=[1.5,2.5,3.5]"`
-#' * For numeric focal predictors, `length` and `range` control the number and
-#'   type of representative values:
+#'   * For numeric focal predictors, use examples like `by = "gear = c(4, 8)"`,
+#'     `by = list(gear = c(4, 8))` or `by = "gear = 5:10"`
+#'   * For factor or character predictors, use `by = "Species = c('setosa', 'virginica')"`
+#'     or `by = list(Species = c('setosa', 'virginica'))`
+#' * You can use "shortcuts" within square brackets, such as `by = "Sepal.Width = [sd]"`
+#'   or `by = "Sepal.Width = [fivenum]"`
+#' * For numeric focal predictors, if no representative values are specified,
+#'   `length` and `range` control the number and type of representative values:
 #'   * `length` determines how many equally spaced values are generated.
 #'   * `range` specifies the type of values, like `"range"` or `"sd"`.
 #'   * `length` and `range` apply to all numeric focal predictors.
@@ -173,7 +172,7 @@
 #'     multiple elements, one for each predictor.
 #' * For integer variables, only values that appear in the data will be included
 #'   in the data grid, independent from the `length` argument. This behaviour
-#'   can changed by setting `protect_integers = FALSE`, which will then treat
+#'   can be changed by setting `protect_integers = FALSE`, which will then treat
 #'   integer variables as numerics (and possibly produce fractions).
 #'
 #' See also [this vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
@@ -225,12 +224,12 @@
 #'
 #' \dontrun{
 #' # same for factors: filter by specific levels
-#' estimate_means(model, by = "Species=c('versicolor', 'setosa')")
-#' estimate_means(model, by = c("Species", "Sepal.Width=0"))
+#' estimate_means(model, by = "Species = c('versicolor', 'setosa')")
+#' estimate_means(model, by = c("Species", "Sepal.Width = 0"))
 #'
 #' # estimate marginal average of response at values for numeric predictor
 #' estimate_means(model, by = "Sepal.Width", length = 5)
-#' estimate_means(model, by = "Sepal.Width=c(2, 4)")
+#' estimate_means(model, by = "Sepal.Width = c(2, 4)")
 #'
 #' # or provide the definition of the data grid as list
 #' estimate_means(
@@ -239,13 +238,18 @@
 #' )
 #'
 #' # Methods that can be applied to it:
-#' means <- estimate_means(model, by = c("Species", "Sepal.Width=0"))
+#' means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))
 #'
 #' plot(means) # which runs visualisation_recipe()
 #' standardize(means)
 #'
 #' # grids for numeric predictors, combine range and length
 #' model <- lm(Sepal.Length ~ Sepal.Width * Petal.Length, data = iris)
+#'
+#' # create a "grid": value range for first numeric predictor, mean +/-1 SD
+#' # for remaining numeric predictors.
+#' estimate_means(model, c("Sepal.Width", "Petal.Length"), range = "grid")
+#'
 #' # range from minimum to maximum spread over four values,
 #' # and mean +/- 1 SD (a total of three values)
 #' estimate_means(
