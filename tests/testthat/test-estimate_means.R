@@ -247,6 +247,17 @@ test_that("estimate_means() - lm", {
 })
 
 
+test_that("estimate_means() - lm, protect integers", {
+  skip_if(packageVersion("insight") <= "1.1.0")
+  data(mtcars)
+  model <- lm(vs ~ cyl, data = mtcars)
+  out1 <- estimate_means(model, "cyl", protect_integers = TRUE)
+  out2 <- estimate_means(model, "cyl", protect_integers = FALSE)
+  expect_identical(dim(out1), c(3L, 7L))
+  expect_identical(dim(out2), c(10L, 7L))
+})
+
+
 test_that("estimate_expectation() - at specific values", {
   data(iris)
   m <- lm(Sepal.Width ~ Petal.Length + Species * Petal.Width, data = iris)
