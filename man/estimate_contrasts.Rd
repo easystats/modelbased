@@ -62,18 +62,16 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). \code{by} can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
-\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., \code{by = "x = c(1, 2)"}). When \code{estimate}
+is \emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
-\code{backend = "marginaleffects"}). For emmeans, see also
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Valid options for \code{predict} are:
+\code{backend = "marginaleffects"}). Valid options for \code{predict} are:
 \itemize{
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
 \code{"inverse_link"} or any valid \code{type} option supported by model's class
@@ -87,7 +85,8 @@ will calculate predictions on the link scale and then back-transform to the
 response scale.
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}).
+transformation is selected (which usually is \code{"response"}). See also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
@@ -176,7 +175,7 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate="average")}}
+e.g. \code{options(modelbased_estimate = "average")}}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
@@ -215,18 +214,18 @@ using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.
 
 \item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
 a backend. Results are usually very similar. The major difference will be
-found for mixed models, where \code{backend="marginaleffects"} will also average
+found for mixed models, where \code{backend = "marginaleffects"} will also average
 across random effects levels, producing "marginal predictions" (instead of
 "conditional predictions", see Heiss 2022).
 
-Another difference is that \code{backend="marginaleffects"} will be slower than
-\code{backend="emmeans"}. For most models, this difference is negligible. However,
+Another difference is that \code{backend = "marginaleffects"} will be slower than
+\code{backend = "emmeans"}. For most models, this difference is negligible. However,
 in particular complex models or large data sets fitted with \emph{glmmTMB} can be
 significantly slower.
 
 You can set a default backend via \code{options()}, e.g. use
-\code{options(modelbased_backend="emmeans")} to use the \strong{emmeans} package or
-\code{options(modelbased_backend="marginaleffects")} to set \strong{marginaleffects} as
+\code{options(modelbased_backend = "emmeans")} to use the \strong{emmeans} package or
+\code{options(modelbased_backend = "marginaleffects")} to set \strong{marginaleffects} as
 default backend.}
 
 \item{verbose}{Use \code{FALSE} to silence messages and warnings.}
@@ -338,15 +337,15 @@ documentation for more details.
 \item You can directly specify values as strings or lists for \code{by}, \code{contrast},
 and \code{trend}.
 \itemize{
-\item For numeric focal predictors, use examples like \code{by="gear=c(4,8)"} or
-\code{by=list(gear=c(4,8))}
-\item For factor or character predictors, use \code{by="Species=c('setosa','virginica')"}
-or \code{by=list(Species=c('setosa','virginica'))}
+\item For numeric focal predictors, use examples like \code{by = "gear = c(4, 8)"},
+\code{by = list(gear = c(4, 8))} or \code{by = "gear = 5:10"}
+\item For factor or character predictors, use \code{by = "Species = c('setosa', 'virginica')"}
+or \code{by = list(Species = c('setosa', 'virginica'))}
 }
-\item You can use "shortcuts" within square brackets, such as \code{by="Sepal.Width=[sd]"}
-or \code{by="Sepal.Width=[1.5,2.5,3.5]"}
-\item For numeric focal predictors, \code{length} and \code{range} control the number and
-type of representative values:
+\item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width = [sd]"}
+or \code{by = "Sepal.Width = [fivenum]"}
+\item For numeric focal predictors, if no representative values are specified,
+\code{length} and \code{range} control the number and type of representative values:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
@@ -356,7 +355,7 @@ multiple elements, one for each predictor.
 }
 \item For integer variables, only values that appear in the data will be included
 in the data grid, independent from the \code{length} argument. This behaviour
-can changed by setting \code{protect_integers = FALSE}, which will then treat
+can be changed by setting \code{protect_integers = FALSE}, which will then treat
 integer variables as numerics (and possibly produce fractions).
 }
 
@@ -384,7 +383,7 @@ estimate_contrasts(model, contrast = "Petal.Width", by = "Species")
 estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 
 # Or with custom specifications
-estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+estimate_contrasts(model, contrast = c("Species", "Petal.Width = c(1, 2)"))
 
 # Or modulate it
 estimate_contrasts(model, by = "Petal.Width", length = 4)
@@ -413,7 +412,7 @@ model <- rstanarm::stan_glm(
   data = iris,
   refresh = 0
 )
-estimate_contrasts(model, by = "Petal.Length=[sd]", test = "bf")
+estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 }
 \dontshow{\}) # examplesIf}
 }

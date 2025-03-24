@@ -106,7 +106,7 @@
 #' estimate_contrasts(model, contrast = c("Species", "Petal.Width"), length = 2)
 #'
 #' # Or with custom specifications
-#' estimate_contrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
+#' estimate_contrasts(model, contrast = c("Species", "Petal.Width = c(1, 2)"))
 #'
 #' # Or modulate it
 #' estimate_contrasts(model, by = "Petal.Width", length = 4)
@@ -135,7 +135,7 @@
 #'   data = iris,
 #'   refresh = 0
 #' )
-#' estimate_contrasts(model, by = "Petal.Length=[sd]", test = "bf")
+#' estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 #' }
 #'
 #' @return A data frame of estimated contrasts.
