@@ -36,7 +36,7 @@ if (getRversion() < "4.1.0") {
 
 This vignette provides a quick overview with different examples that show how to plot estimated marginal means.
 
-In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance. See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
+In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance. See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
 
 Although the **modelbased** package does not focus on publication-ready plots, the default plots can already be used directly. Furthermore, a few modifications are already applies, like a percentage-scale for logistic regression models, or using variable labels for _labelled data_.
 
