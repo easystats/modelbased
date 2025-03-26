@@ -1,8 +1,8 @@
 ---
-title: "Plotting"
+title: "Plotting estimated marginal means"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Plotting}
+  %\VignetteIndexEntry{Plotting estimated marginal means}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
+pkgs <- c("marginaleffects", "ggplot2", "see")
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -32,17 +32,55 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
+This vignette provides a quick overview with different examples that show how to plot estimated marginal means.
+
+## One predictor - categorical
 
 ```{r}
 library(modelbased)
-data(efc)
-m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
+data(efc, package = "modelbased")
+efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 
-estimate_means(
-  m,
-  c("c12hour", "barthtot", "c160age")
-) |> plot()
+m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
+estimate_means(m, "c172code") |> plot()
+```
 
+## One predictor - numeric
+
+```{r}
+estimate_means(m, "barthtot") |> plot()
+```
+
+## Two predictors - categorical
+
+```{r}
+m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
+estimate_means(m, c("e16sex", "c172code")) |> plot()
+```
+
+## Two predictors - numeric * categorical
+
+```{r}
+m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
+estimate_means(m, c("barthtot", "c172code")) |> plot()
+```
+
+## Two predictors - categorical * numeric
+
+```{r}
+estimate_means(m, c("c172code", "barthtot")) |> plot()
+
+estimate_means(m, c("c172code", "barthtot"), length = 20) |> plot()
+
+# in the next example, using range = "grid" would be the same as
+# estimate_means(m, c("c172code", "barthtot = [sd]")) |> plot()
+estimate_means(m, c("c172code", "barthtot"), range = "grid") |> plot()
+
+estimate_means(m, c("c172code", "barthtot = [fivenum]")) |> plot()
+```
+
+
+```{r}
 estimate_means(
   m,
   c("c12hour", "barthtot", "c160age"),
@@ -55,6 +93,8 @@ estimate_means(
   range = "sd",
   length = 3
 ) |> plot()
+
+m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
 
 estimate_means(
   m,
