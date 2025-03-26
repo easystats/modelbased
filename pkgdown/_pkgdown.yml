@@ -62,6 +62,8 @@ navbar:
           href: articles/estimate_grouplevel.html
         - text: -------
         - text: "Visualization"
+        - text: "Plotting estimated marginal means"
+          href: articles/plotting.html
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
