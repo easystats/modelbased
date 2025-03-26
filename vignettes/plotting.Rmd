@@ -36,9 +36,9 @@ if (getRversion() < "4.1.0") {
 
 This vignette provides a quick overview with different examples that show how to plot estimated marginal means.
 
-In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance.
+In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance. See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
 
-See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
+Although the **modelbased** package does not focus on publication-ready plots, the default plots can already be used directly. Furthermore, a few modifications are already applies, like a percentage-scale for logistic regression models, or using variable labels for _labelled data_.
 
 ## One predictor - categorical
 
@@ -153,11 +153,26 @@ estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |> plot()
 estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plot()
 ```
 
-## Three numeric predictors
+## Three categorical predictors
 
 Multiple categorical predictors are usually less problematic, since discrete color scales and faceting are used to distinguish between factor levels.
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
 estimate_means(m, c("e16sex", "c172code", "e42dep")) |> plot()
+```
+
+## Smooth plots
+
+Remember that by default a range of ten values is chosen for numeric focal predictors. While this mostly works well for plotting linear relationships, plots may look less smooth for certain models that involve quadratic or cubic terms, or splines, or for instance if you have GAMs.
+
+```{r}
+m <- lm(neg_c_7 ~ e16sex * c12hour + e16sex * I(c12hour^2), data = efc)
+estimate_means(m, c("c12hour", "e16sex")) |> plot()
+```
+
+In this case, simply increase the number of representative values by setting `length` to a higher number.
+
+```{r}
+estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plot()
 ```
