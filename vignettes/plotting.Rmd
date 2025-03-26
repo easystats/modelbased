@@ -63,7 +63,7 @@ estimate_means(m, "barthtot") |> plot()
 
 ## Two predictors - categorical
 
-For two categorical predictors, the first focal predictors is plotted along the x-asis, while the levels of the second predictor are mapped to different colors.
+For two categorical predictors, the first focal predictors is plotted along the x-axis, while the levels of the second predictor are mapped to different colors.
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
@@ -72,14 +72,14 @@ estimate_means(m, c("e16sex", "c172code")) |> plot()
 
 ## Two predictors - numeric * categorical
 
-For two predictors, where the first ist numeric and the second categorical, range of predictions including confidence bands are shown, with the different levels of the second (categorical) predictor mapped to colors again.
+For two predictors, where the first is numeric and the second categorical, range of predictions including confidence bands are shown, with the different levels of the second (categorical) predictor mapped to colors again.
 
 ```{r}
 m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
 estimate_means(m, c("barthtot", "c172code")) |> plot()
 ```
 
-In general, plots can be further modified using functions from the **ggplot2** package. Thereby, other themes, color scales, facetting and so on, can be applies.
+In general, plots can be further modified using functions from the **ggplot2** package. Thereby, other themes, color scales, faceting and so on, can be applies.
 
 ```{r}
 library(ggplot2)
@@ -155,7 +155,7 @@ estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plot()
 
 ## Three numeric predictors
 
-Multiple categorical predictors are usually less problematic, since discrete color scales and facetting are used to distinguish between factor levels.
+Multiple categorical predictors are usually less problematic, since discrete color scales and faceting are used to distinguish between factor levels.
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
