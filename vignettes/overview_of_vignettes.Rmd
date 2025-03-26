@@ -45,6 +45,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 
 ### Visualization
 
+* [Plotting estimated marginal means](https://easystats.github.io/modelbased/articles/plotting.html)
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 
