@@ -22,6 +22,19 @@ test_that("pool_predictions", {
   out <- pool_predictions(predictions, transform = TRUE)
   expect_equal(out$Mean, c(29.67473, 24.99382, 23.19148), tolerance = 1e-2)
   expect_equal(out$CI_low, c(10.58962, 11.13011, 7.43196), tolerance = 1e-2)
+
+  # glm, logistic
+  predictions <- lapply(1:5, function(i) {
+    m <- glm(hyp ~ age + chl, data = mice::complete(imp, action = i), family = binomial())
+    estimate_means(m, "age")
+  })
+  expect_warning(pool_predictions(predictions), regex = "Could not extract")
+
+  predictions <- lapply(1:5, function(i) {
+    m <- glm(hyp ~ age + chl, data = mice::complete(imp, action = i), family = binomial())
+    estimate_means(m, "age", type = "response")
+  })
+  expect_silent(pool_predictions(predictions))
 })
 
 

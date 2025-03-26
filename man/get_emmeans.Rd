@@ -93,18 +93,16 @@ effect / mean / contrasts. Other predictors of the model that are not
 included here will be collapsed and "averaged" over (the effect will be
 estimated across them). \code{by} can be a character (vector) naming the focal
 predictors, optionally including representative values or levels at which
-focal predictors are evaluated (e.g., \code{by="x=c(1,2)"}). When \code{estimate} is
-\emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid" or
-"data grid" with representative values for the focal predictors. In this
+focal predictors are evaluated (e.g., \code{by = "x = c(1, 2)"}). When \code{estimate}
+is \emph{not} \code{"average"}, the \code{by} argument is used to create a "reference grid"
+or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest.}
 
 \item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
 \code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
-\code{backend = "marginaleffects"}). For emmeans, see also
-\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
-Valid options for \code{predict} are:
+\code{backend = "marginaleffects"}). Valid options for \code{predict} are:
 \itemize{
 \item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
 \code{"inverse_link"} or any valid \code{type} option supported by model's class
@@ -118,7 +116,8 @@ will calculate predictions on the link scale and then back-transform to the
 response scale.
 \item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
 \code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
-transformation is selected (which usually is \code{"response"}).
+transformation is selected (which usually is \code{"response"}). See also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 }
 
 \code{"link"} will leave the values on scale of the linear predictors.
@@ -196,7 +195,9 @@ to functions from the \strong{emmeans} or \strong{marginaleffects} package, or t
 Bayesian models via \code{\link[bayestestR:describe_posterior]{bayestestR::describe_posterior()}}. Examples:
 \itemize{
 \item \code{insight::get_datagrid()}: Argument such as \code{length}, \code{digits} or \code{range}
-can be used to control the (number of) representative values.
+can be used to control the (number of) representative values. For integer
+variables, \code{protect_integers} modulates whether these should also be
+treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
 instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
