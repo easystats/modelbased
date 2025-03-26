@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
   comment = "#>",
   dev = "png",
   out.width = "100%",
+  fig.width = 7,
+  fig.height = 4,
   dpi = 300,
   message = FALSE,
   warning = FALSE,
@@ -34,7 +36,13 @@ if (getRversion() < "4.1.0") {
 
 This vignette provides a quick overview with different examples that show how to plot estimated marginal means.
 
+In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance.
+
+See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
+
 ## One predictor - categorical
+
+The simplest case is possibly plotting one categorical predictor. Predicted values for each level and its confidence intervals are shown.
 
 ```{r}
 library(modelbased)
@@ -47,11 +55,15 @@ estimate_means(m, "c172code") |> plot()
 
 ## One predictor - numeric
 
+For numeric predictors, the range of predictions at different values of the focal predictor are plotted, the uncertainty is displayed as confidence band.
+
 ```{r}
 estimate_means(m, "barthtot") |> plot()
 ```
 
 ## Two predictors - categorical
+
+For two categorical predictors, the first focal predictors is plotted along the x-asis, while the levels of the second predictor are mapped to different colors.
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
@@ -60,79 +72,92 @@ estimate_means(m, c("e16sex", "c172code")) |> plot()
 
 ## Two predictors - numeric * categorical
 
+For two predictors, where the first ist numeric and the second categorical, range of predictions including confidence bands are shown, with the different levels of the second (categorical) predictor mapped to colors again.
+
 ```{r}
 m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
 estimate_means(m, c("barthtot", "c172code")) |> plot()
 ```
 
-## Two predictors - categorical * numeric
+In general, plots can be further modified using functions from the **ggplot2** package. Thereby, other themes, color scales, facetting and so on, can be applies.
 
 ```{r}
+library(ggplot2)
+estimate_means(m, c("barthtot", "c172code")) |>
+  plot() +
+  see::theme_modern(show.ticks = TRUE)
+
+estimate_means(m, c("barthtot", "c172code")) |>
+  plot() +
+  facet_grid(~c172code)
+
+estimate_means(m, c("barthtot", "c172code")) |>
+  plot() +
+  scale_color_brewer(palette = "Dark2") +
+  scale_fill_brewer(palette = "Dark2")
+```
+
+## Two predictors - categorical * numeric
+
+If the numeric predictor is the _second_ focal term, its values are still mapped to colors, however, by default to a continuous (gradient) scale, because a range of representative values for that numeric predictor is used by default.
+
+Focal predictors specified in `estimate_means()` are passed to `insight::get_datagrid()`. If not specified otherwise, representative values for numeric predictors are evenly distributed from the minimum to the maximum, with a total number of `length` values covering that range.
+
+I.e., by default, arguments `range = "range"` and `length = 10` in `insight::get_datagrid()`, and thus for numeric predictors, a _range_ of _length_ values is used to estimate predictions.
+
+```{r}
+# by default, `range = "range"` and `length = 10`
 estimate_means(m, c("c172code", "barthtot")) |> plot()
+```
 
+That means that the `length` argument can be used to control how many values (lines) for the numeric predictors are chosen.
+
+```{r}
 estimate_means(m, c("c172code", "barthtot"), length = 20) |> plot()
+```
 
-# in the next example, using range = "grid" would be the same as
-# estimate_means(m, c("c172code", "barthtot = [sd]")) |> plot()
+Another option would be to use `range = "grid"`, in which case the mean and +/- one standard deviation around the mean are chosen as representative values for numeric predictors.
+
+```{r}
 estimate_means(m, c("c172code", "barthtot"), range = "grid") |> plot()
+```
+
+It is also possible to specify representative values, at which the estimated marginal means of the outcome should be plotted. Again, consult the documentation at `?ìnsight::get_datagrid` for further details.
+
+```{r}
+estimate_means(
+  m,
+  c(
+    "c172code = c('low level of education', 'high level of education')",
+    "barthtot = c(30, 50, 80)"
+  )
+) |> plot()
 
 estimate_means(m, c("c172code", "barthtot = [fivenum]")) |> plot()
 ```
 
+## Three numeric predictors
+
+The default plot-setting for three numeric predictors can be rather confusing.
 
 ```{r}
-estimate_means(
-  m,
-  c("c12hour", "barthtot", "c160age"),
-  range = "sd"
-) |> plot()
-
-estimate_means(
-  m,
-  c("c12hour", "barthtot", "c160age"),
-  range = "sd",
-  length = 3
-) |> plot()
-
 m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
+estimate_means(m, c("c12hour", "barthtot", "c160age")) |> plot()
+```
 
-estimate_means(
-  m,
-  c("c12hour", "barthtot", "c160age"),
-  range = c("range", "sd", "sd"),
-  length = c(100, 3, 3)
-) |> plot()
+Instead, it is recommended to use `length`, create a "reference grid", or again specify meaningful values directly in the `by` argument.
 
-efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
+```{r}
+estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |> plot()
+
+estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plot()
+```
+
+## Three numeric predictors
+
+Multiple categorical predictors are usually less problematic, since discrete color scales and facetting are used to distinguish between factor levels.
+
+```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
-
-estimate_means(
-  m,
-  c("e16sex", "c172code", "e42dep")
-) |> plot()
-
-m <- lm(neg_c_7 ~ c12hour * c172code * c160age, data = efc)
-estimate_means(
-  m,
-  c("c12hour", "c172code", "c160age")
-) |> plot()
-
-estimate_means(
-  m,
-  c("c12hour", "c160age", "c172code")
-) |> plot()
-
-estimate_means(
-  m,
-  c("c12hour", "c160age", "c172code"),
-  range = c("range", "sd"),
-  length = c(100, 3)
-) |> plot()
-
-estimate_means(
-  m,
-  c("c172code", "c160age", "c12hour"),
-  range = "sd",
-  length = 3
-) |> plot()
+estimate_means(m, c("e16sex", "c172code", "e42dep")) |> plot()
 ```
