@@ -176,8 +176,12 @@
   # axis and legend labels
   # ------------------------------------------------------------------------
   if (!is.null(model_data) && !is.null(model_response)) {
-    # response - mapped to the y-axis
-    ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
+    if ("estimate_slopes" %in% att$class) {
+      ylab <- att$trend
+    } else {
+      # response - mapped to the y-axis if not slopes
+      ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
+    }
     # fix default y-label, if necessary
     y_prefix <- aes$y
     if (y_prefix == "Predicted") {
