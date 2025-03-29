@@ -37,14 +37,17 @@
 #'   transformation is selected (which usually is `"response"`). See also
 #'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #'
-#' `"link"` will leave the values on scale of the linear predictors.
+#' The `"link"` option does not apply to all models, and usually not to Gaussian
+#' models. `"link"` will leave the values on scale of the linear predictors.
 #' `"response"` (or `NULL`) will transform them on scale of the response
 #' variable. Thus for a logistic model, `"link"` will give estimations expressed
 #' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities. To predict distributional parameters (called "dpar" in other
-#' packages), for instance when using complex formulae in `brms` models, the
-#' `predict` argument can take the value of the parameter you want to estimate,
-#' for instance `"sigma"`, `"kappa"`, etc.
+#' probabilities.
+#'
+#' To predict distributional parameters (called "dpar" in other packages), for
+#' instance when using complex formulae in `brms` models, the `predict` argument
+#' can take the value of the parameter you want to estimate, for instance
+#' `"sigma"`, `"kappa"`, etc.
 #'
 #' `"response"` and `"inverse_link"` both return predictions on the response
 #' scale, however, `"response"` first calculates predictions on the response
@@ -58,7 +61,7 @@
 #' `"inverse_link"` approach is more robust in terms of confidence intervals, but
 #' might produce biased predictions. In particular for mixed models, using
 #' `"response"` is recommended, because averaging across random effects groups
-#' is more accurate.
+#' is then more accurate.
 #' @param estimate The `estimate` argument determines how predictions are
 #' averaged ("marginalized") over variables not specified in `by` or `contrast`
 #' (non-focal predictors). It controls whether predictions represent a "typical"

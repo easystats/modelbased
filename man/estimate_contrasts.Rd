@@ -89,14 +89,17 @@ transformation is selected (which usually is \code{"response"}). See also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 }
 
-\code{"link"} will leave the values on scale of the linear predictors.
+The \code{"link"} option does not apply to all models, and usually not to Gaussian
+models. \code{"link"} will leave the values on scale of the linear predictors.
 \code{"response"} (or \code{NULL}) will transform them on scale of the response
 variable. Thus for a logistic model, \code{"link"} will give estimations expressed
 in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
-packages), for instance when using complex formulae in \code{brms} models, the
-\code{predict} argument can take the value of the parameter you want to estimate,
-for instance \code{"sigma"}, \code{"kappa"}, etc.
+probabilities.
+
+To predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in \code{brms} models, the \code{predict} argument
+can take the value of the parameter you want to estimate, for instance
+\code{"sigma"}, \code{"kappa"}, etc.
 
 \code{"response"} and \code{"inverse_link"} both return predictions on the response
 scale, however, \code{"response"} first calculates predictions on the response
@@ -110,7 +113,7 @@ reasonable bounds (i.e., for instance can be negative for count data). The
 \code{"inverse_link"} approach is more robust in terms of confidence intervals, but
 might produce biased predictions. In particular for mixed models, using
 \code{"response"} is recommended, because averaging across random effects groups
-is more accurate.}
+is then more accurate.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
