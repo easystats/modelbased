@@ -190,14 +190,16 @@ response scale.</p></li>
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>). See also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
-</ul><p><code>"link"</code> will leave the values on scale of the linear predictors.
+</ul><p>The <code>"link"</code> option does not apply to all models, and usually not to Gaussian
+models. <code>"link"</code> will leave the values on scale of the linear predictors.
 <code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
 variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
 in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
-packages), for instance when using complex formulae in <code>brms</code> models, the
-<code>predict</code> argument can take the value of the parameter you want to estimate,
-for instance <code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
+probabilities.</p>
+<p>To predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in <code>brms</code> models, the <code>predict</code> argument
+can take the value of the parameter you want to estimate, for instance
+<code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
 <p><code>"response"</code> and <code>"inverse_link"</code> both return predictions on the response
 scale, however, <code>"response"</code> first calculates predictions on the response
 scale for each observation and <em>then</em> aggregates them by groups or levels
@@ -210,7 +212,7 @@ reasonable bounds (i.e., for instance can be negative for count data). The
 <code>"inverse_link"</code> approach is more robust in terms of confidence intervals, but
 might produce biased predictions. In particular for mixed models, using
 <code>"response"</code> is recommended, because averaging across random effects groups
-is more accurate.</p></dd>
+is then more accurate.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
