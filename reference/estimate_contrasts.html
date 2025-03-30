@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,6 +150,14 @@ Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
 <code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
 <code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
+<li><p>Especially for <code>estimate_contrasts()</code> with integer focal predictors, for
+which contrasts should be calculated, use argument <code>integer_as_numeric</code> to
+set the maximum number of unique values in an integer predictor to treat
+that predictor as "discrete integer" or as numeric. For the first case,
+contrasts are calculated between values of the predictor, for the latter,
+contrasts of slopes are calculated. If the integer has more than
+<code>integer_as_numeric</code> unique values, it is treated as numeric. Defaults to
+<code>5</code>.</p></li>
 </ul></dd>
 
 
@@ -190,29 +198,7 @@ response scale.</p></li>
 <code>"unlink"</code>, or <code>"log"</code>. If <code>predict = NULL</code> (default), the most appropriate
 transformation is selected (which usually is <code>"response"</code>). See also
 <a href="https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html" class="external-link">this vignette</a>.</p></li>
-</ul><p>The <code>"link"</code> option does not apply to all models, and usually not to Gaussian
-models. <code>"link"</code> will leave the values on scale of the linear predictors.
-<code>"response"</code> (or <code>NULL</code>) will transform them on scale of the response
-variable. Thus for a logistic model, <code>"link"</code> will give estimations expressed
-in log-odds (probabilities on logit scale) and <code>"response"</code> in terms of
-probabilities.</p>
-<p>To predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in <code>brms</code> models, the <code>predict</code> argument
-can take the value of the parameter you want to estimate, for instance
-<code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
-<p><code>"response"</code> and <code>"inverse_link"</code> both return predictions on the response
-scale, however, <code>"response"</code> first calculates predictions on the response
-scale for each observation and <em>then</em> aggregates them by groups or levels
-defined in <code>by</code>. <code>"inverse_link"</code> first calculates predictions on the link
-scale for each observation, then aggregates them by groups or levels defined
-in <code>by</code>, and finally back-transforms the predictions to the response scale.
-Both approaches have advantages and disadvantages. <code>"response"</code> usually
-produces less biased predictions, but confidence intervals might be outside
-reasonable bounds (i.e., for instance can be negative for count data). The
-<code>"inverse_link"</code> approach is more robust in terms of confidence intervals, but
-might produce biased predictions. In particular for mixed models, using
-<code>"response"</code> is recommended, because averaging across random effects groups
-is then more accurate.</p></dd>
+</ul><p>See also section <em>Predictions on different scales</em>.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -460,6 +446,37 @@ can be changed by setting <code>protect_integers = FALSE</code>, which will then
 integer variables as numerics (and possibly produce fractions).</p></li>
 </ul><p>See also <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">this vignette</a>
 for some examples.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="predictions-on-different-scales">Predictions on different scales<a class="anchor" aria-label="anchor" href="#predictions-on-different-scales"></a></h2>
+
+
+
+<p>The <code>predict</code> argument allows to generate predictions on different scales of
+the response variable. The <code>"link"</code> option does not apply to all models, and
+usually not to Gaussian models. <code>"link"</code> will leave the values on scale of
+the linear predictors. <code>"response"</code> (or <code>NULL</code>) will transform them on scale
+of the response variable. Thus for a logistic model, <code>"link"</code> will give
+estimations expressed in log-odds (probabilities on logit scale) and
+<code>"response"</code> in terms of probabilities.</p>
+<p>To predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in <code>brms</code> models, the <code>predict</code> argument
+can take the value of the parameter you want to estimate, for instance
+<code>"sigma"</code>, <code>"kappa"</code>, etc.</p>
+<p><code>"response"</code> and <code>"inverse_link"</code> both return predictions on the response
+scale, however, <code>"response"</code> first calculates predictions on the response
+scale for each observation and <em>then</em> aggregates them by groups or levels
+defined in <code>by</code>. <code>"inverse_link"</code> first calculates predictions on the link
+scale for each observation, then aggregates them by groups or levels defined
+in <code>by</code>, and finally back-transforms the predictions to the response scale.
+Both approaches have advantages and disadvantages. <code>"response"</code> usually
+produces less biased predictions, but confidence intervals might be outside
+reasonable bounds (i.e., for instance can be negative for count data). The
+<code>"inverse_link"</code> approach is more robust in terms of confidence intervals,
+but might produce biased predictions. However, you can try to set
+<code>bias_correction = TRUE</code>, to adjust for this bias.</p>
+<p>In particular for mixed models, using <code>"response"</code> is recommended, because
+averaging across random effects groups is then more accurate.</p>
     </div>
 
     <div class="section level2">
