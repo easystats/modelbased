@@ -49,6 +49,9 @@
 
 #' @keywords internal
 #' @noRd
-.is_likert <- function(x, n_uniques = 5) {
-  all(.is_integer(x)) && insight::n_unique(x) <= n_uniques
+.is_likert <- function(x, integer_as_numeric = 5, ...) {
+  if (is.null(integer_as_numeric) || is.na(integer_as_numeric)) {
+    return(FALSE)
+  }
+  all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
 }

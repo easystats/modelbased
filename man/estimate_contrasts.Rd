@@ -51,6 +51,14 @@ Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
+\item Especially for \code{estimate_contrasts()} with integer focal predictors, for
+which contrasts should be calculated, use argument \code{integer_as_numeric} to
+set the maximum number of unique values in an integer predictor to treat
+that predictor as "discrete inetger" or as numeric. For the first case,
+contasts are calculated between values of the predictor, for the latter,
+contrasts of slopes are calculated. If the integer has more than
+\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
+\code{5}.
 }}
 
 \item{contrast}{A character vector indicating the name of the variable(s) for
@@ -89,31 +97,7 @@ transformation is selected (which usually is \code{"response"}). See also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 }
 
-The \code{"link"} option does not apply to all models, and usually not to Gaussian
-models. \code{"link"} will leave the values on scale of the linear predictors.
-\code{"response"} (or \code{NULL}) will transform them on scale of the response
-variable. Thus for a logistic model, \code{"link"} will give estimations expressed
-in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities.
-
-To predict distributional parameters (called "dpar" in other packages), for
-instance when using complex formulae in \code{brms} models, the \code{predict} argument
-can take the value of the parameter you want to estimate, for instance
-\code{"sigma"}, \code{"kappa"}, etc.
-
-\code{"response"} and \code{"inverse_link"} both return predictions on the response
-scale, however, \code{"response"} first calculates predictions on the response
-scale for each observation and \emph{then} aggregates them by groups or levels
-defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
-scale for each observation, then aggregates them by groups or levels defined
-in \code{by}, and finally back-transforms the predictions to the response scale.
-Both approaches have advantages and disadvantages. \code{"response"} usually
-produces less biased predictions, but confidence intervals might be outside
-reasonable bounds (i.e., for instance can be negative for count data). The
-\code{"inverse_link"} approach is more robust in terms of confidence intervals, but
-might produce biased predictions. In particular for mixed models, using
-\code{"response"} is recommended, because averaging across random effects groups
-is then more accurate.}
+See also section \emph{Predictions on different scales}.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -364,6 +348,39 @@ integer variables as numerics (and possibly produce fractions).
 
 See also \href{https://easystats.github.io/modelbased/articles/visualisation_matrix.html}{this vignette}
 for some examples.
+}
+
+\section{Predictions on different scales}{
+
+
+The \code{predict} argument allows to generate predictions on different scales of
+the response variable. The \code{"link"} option does not apply to all models, and
+usually not to Gaussian models. \code{"link"} will leave the values on scale of
+the linear predictors. \code{"response"} (or \code{NULL}) will transform them on scale
+of the response variable. Thus for a logistic model, \code{"link"} will give
+estimations expressed in log-odds (probabilities on logit scale) and
+\code{"response"} in terms of probabilities.
+
+To predict distributional parameters (called "dpar" in other packages), for
+instance when using complex formulae in \code{brms} models, the \code{predict} argument
+can take the value of the parameter you want to estimate, for instance
+\code{"sigma"}, \code{"kappa"}, etc.
+
+\code{"response"} and \code{"inverse_link"} both return predictions on the response
+scale, however, \code{"response"} first calculates predictions on the response
+scale for each observation and \emph{then} aggregates them by groups or levels
+defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
+scale for each observation, then aggregates them by groups or levels defined
+in \code{by}, and finally back-transforms the predictions to the response scale.
+Both approaches have advantages and disadvantages. \code{"response"} usually
+produces less biased predictions, but confidence intervals might be outside
+reasonable bounds (i.e., for instance can be negative for count data). The
+\code{"inverse_link"} approach is more robust in terms of confidence intervals,
+but might produce biased predictions. However, you can try to set
+\code{bias_correction = TRUE}, to adjust for this bias.
+
+In particular for mixed models, using \code{"response"} is recommended, because
+averaging across random effects groups is then more accurate.
 }
 
 \examples{

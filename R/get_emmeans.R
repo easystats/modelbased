@@ -37,18 +37,11 @@
 get_emmeans <- function(model,
                         by = "auto",
                         predict = NULL,
-                        transform = NULL,
                         keep_iterations = FALSE,
                         verbose = TRUE,
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
 
   # Guess arguments
   my_args <- .guess_emmeans_arguments(model, by, verbose, ...)
