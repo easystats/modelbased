@@ -49,9 +49,11 @@
 #' @param iterations The number of bootstrap resamples to perform.
 #' @inheritParams estimate_means
 #'
-#' @inherit estimate_slopes details
+#' @inherit estimate_means details
 #'
 #' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
+#'
+#' @inheritSection estimate_means Predictions on different scales
 #'
 #' @section Effect Size:
 #'

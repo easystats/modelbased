@@ -37,31 +37,8 @@
 #'   transformation is selected (which usually is `"response"`). See also
 #'   [this vignette](https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html).
 #'
-#' The `"link"` option does not apply to all models, and usually not to Gaussian
-#' models. `"link"` will leave the values on scale of the linear predictors.
-#' `"response"` (or `NULL`) will transform them on scale of the response
-#' variable. Thus for a logistic model, `"link"` will give estimations expressed
-#' in log-odds (probabilities on logit scale) and `"response"` in terms of
-#' probabilities.
+#' See also section _Predictions on different scales_.
 #'
-#' To predict distributional parameters (called "dpar" in other packages), for
-#' instance when using complex formulae in `brms` models, the `predict` argument
-#' can take the value of the parameter you want to estimate, for instance
-#' `"sigma"`, `"kappa"`, etc.
-#'
-#' `"response"` and `"inverse_link"` both return predictions on the response
-#' scale, however, `"response"` first calculates predictions on the response
-#' scale for each observation and *then* aggregates them by groups or levels
-#' defined in `by`. `"inverse_link"` first calculates predictions on the link
-#' scale for each observation, then aggregates them by groups or levels defined
-#' in `by`, and finally back-transforms the predictions to the response scale.
-#' Both approaches have advantages and disadvantages. `"response"` usually
-#' produces less biased predictions, but confidence intervals might be outside
-#' reasonable bounds (i.e., for instance can be negative for count data). The
-#' `"inverse_link"` approach is more robust in terms of confidence intervals, but
-#' might produce biased predictions. In particular for mixed models, using
-#' `"response"` is recommended, because averaging across random effects groups
-#' is then more accurate.
 #' @param estimate The `estimate` argument determines how predictions are
 #' averaged ("marginalized") over variables not specified in `by` or `contrast`
 #' (non-focal predictors). It controls whether predictions represent a "typical"
@@ -144,12 +121,72 @@
 #' - Bayesian models: For Bayesian models, parameters are cleaned using
 #'   `describe_posterior()`, thus, arguments like, for example, `centrality`,
 #'   `rope_range`, or `test` are passed to that function.
+#' - Especially for `estimate_contrasts()` with integer focal predictors, for
+#'   which contrasts should be calculated, use argument `integer_as_numeric` to
+#'   set the maximum number of unique values in an integer predictor to treat
+#'   that predictor as "discrete integer" or as numeric. For the first case,
+#'   contrasts are calculated between values of the predictor, for the latter,
+#'   contrasts of slopes are calculated. If the integer has more than
+#'   `integer_as_numeric` unique values, it is treated as numeric. Defaults to
+#'   `5`.
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation
-#' @inherit estimate_slopes details
 #'
-#' @return A data frame of estimated marginal means.
+#' @details
+#' The [estimate_slopes()], [estimate_means()] and [estimate_contrasts()]
+#' functions are forming a group, as they are all based on *marginal*
+#' estimations (estimations based on a model). All three are built on the
+#' **emmeans** or **marginaleffects** package (depending on the `backend`
+#' argument), so reading its documentation (for instance [emmeans::emmeans()],
+#' [emmeans::emtrends()] or this [website](https://marginaleffects.com/)) is
+#' recommended to understand the idea behind these types of procedures.
+#'
+#' - Model-based **predictions** is the basis for all that follows. Indeed,
+#' the first thing to understand is how models can be used to make predictions
+#' (see [estimate_link()]). This corresponds to the predicted response (or
+#' "outcome variable") given specific predictor values of the predictors (i.e.,
+#' given a specific data configuration). This is why the concept of [`reference
+#' grid()`][insight::get_datagrid()] is so important for direct predictions.
+#'
+#' - **Marginal "means"**, obtained via [estimate_means()], are an extension
+#' of such predictions, allowing to "average" (collapse) some of the predictors,
+#' to obtain the average response value at a specific predictors configuration.
+#' This is typically used when some of the predictors of interest are factors.
+#' Indeed, the parameters of the model will usually give you the intercept value
+#' and then the "effect" of each factor level (how different it is from the
+#' intercept). Marginal means can be used to directly give you the mean value of
+#' the response variable at all the levels of a factor. Moreover, it can also be
+#' used to control, or average over predictors, which is useful in the case of
+#' multiple predictors with or without interactions.
+#'
+#' - **Marginal contrasts**, obtained via [estimate_contrasts()], are
+#' themselves at extension of marginal means, in that they allow to investigate
+#' the difference (i.e., the contrast) between the marginal means. This is,
+#' again, often used to get all pairwise differences between all levels of a
+#' factor. It works also for continuous predictors, for instance one could also
+#' be interested in whether the difference at two extremes of a continuous
+#' predictor is significant.
+#'
+#' - Finally, **marginal effects**, obtained via [estimate_slopes()], are
+#' different in that their focus is not values on the response variable, but the
+#' model's parameters. The idea is to assess the effect of a predictor at a
+#' specific configuration of the other predictors. This is relevant in the case
+#' of interactions or non-linear relationships, when the effect of a predictor
+#' variable changes depending on the other predictors. Moreover, these effects
+#' can also be "averaged" over other predictors, to get for instance the
+#' "general trend" of a predictor over different factor levels.
+#'
+#' **Example:** Let's imagine the following model `lm(y ~ condition * x)` where
+#' `condition` is a factor with 3 levels A, B and C and `x` a continuous
+#' variable (like age for example). One idea is to see how this model performs,
+#' and compare the actual response y to the one predicted by the model (using
+#' [estimate_expectation()]). Another idea is evaluate the average mean at each of
+#' the condition's levels (using [estimate_means()]), which can be useful to
+#' visualize them. Another possibility is to evaluate the difference between
+#' these levels (using [estimate_contrasts()]). Finally, one could also estimate
+#' the effect of x averaged over all conditions, or instead within each
+#' condition (`using [estimate_slopes]`).
 #'
 #' @section Predictions and contrasts at meaningful values (data grids):
 #'
@@ -181,6 +218,37 @@
 #' See also [this vignette](https://easystats.github.io/modelbased/articles/visualisation_matrix.html)
 #' for some examples.
 #'
+#' @section Predictions on different scales:
+#'
+#' The `predict` argument allows to generate predictions on different scales of
+#' the response variable. The `"link"` option does not apply to all models, and
+#' usually not to Gaussian models. `"link"` will leave the values on scale of
+#' the linear predictors. `"response"` (or `NULL`) will transform them on scale
+#' of the response variable. Thus for a logistic model, `"link"` will give
+#' estimations expressed in log-odds (probabilities on logit scale) and
+#' `"response"` in terms of probabilities.
+#'
+#' To predict distributional parameters (called "dpar" in other packages), for
+#' instance when using complex formulae in `brms` models, the `predict` argument
+#' can take the value of the parameter you want to estimate, for instance
+#' `"sigma"`, `"kappa"`, etc.
+#'
+#' `"response"` and `"inverse_link"` both return predictions on the response
+#' scale, however, `"response"` first calculates predictions on the response
+#' scale for each observation and *then* aggregates them by groups or levels
+#' defined in `by`. `"inverse_link"` first calculates predictions on the link
+#' scale for each observation, then aggregates them by groups or levels defined
+#' in `by`, and finally back-transforms the predictions to the response scale.
+#' Both approaches have advantages and disadvantages. `"response"` usually
+#' produces less biased predictions, but confidence intervals might be outside
+#' reasonable bounds (i.e., for instance can be negative for count data). The
+#' `"inverse_link"` approach is more robust in terms of confidence intervals,
+#' but might produce biased predictions. However, you can try to set
+#' `bias_correction = TRUE`, to adjust for this bias.
+#'
+#' In particular for mixed models, using `"response"` is recommended, because
+#' averaging across random effects groups is then more accurate.
+#'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
 #' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a
@@ -190,6 +258,8 @@
 #'
 #' - `modelbased_estimate`: `options(modelbased_estimate = <string>)` will
 #'   set a default value for the `estimate` argument.
+#'
+#' @return A data frame of estimated marginal means.
 #'
 #' @references
 #' Chatton, A. and Rohrer, J.M. 2024. The Causal Cookbook: Recipes for

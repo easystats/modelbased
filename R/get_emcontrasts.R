@@ -22,18 +22,11 @@ get_emcontrasts <- function(model,
                             by = NULL,
                             predict = NULL,
                             comparison = "pairwise",
-                            transform = NULL,
                             keep_iterations = FALSE,
                             verbose = TRUE,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
