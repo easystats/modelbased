@@ -149,8 +149,8 @@ Additional arguments can be passed to these functions.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
 which contrasts should be calculated, use argument \code{integer_as_numeric} to
 set the maximum number of unique values in an integer predictor to treat
-that predictor as "discrete inetger" or as numeric. For the first case,
-contasts are calculated between values of the predictor, for the latter,
+that predictor as "discrete integer" or as numeric. For the first case,
+contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
 \code{5}.
