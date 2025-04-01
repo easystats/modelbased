@@ -53,7 +53,7 @@ To use the summaries from Heiss (2022):
 > - **Conditional effect** = the effect of a variable in an *average cluster* (i.e. group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
 > - **Marginal effect** = effect of a variable *across clusters on average* (i.e. global/population-level effect, or clusters on average).
 
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions...
+When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions...
 
 - ... are usually similar for linear mixed models
 - ... are usually different for generalized linear mixed models
