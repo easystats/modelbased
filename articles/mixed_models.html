@@ -394,14 +394,14 @@ to conditional predictions (using <code>re.form = NA</code> or the
 <code>camper = 0</code> and 1.68 for <code>camper = 1</code>).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"fish"</span>, package <span class="op">=</span> <span class="st">"insight"</span><span class="op">)</span></span>
-<span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/glmer.html" class="external-link">glmer</a></span><span class="op">(</span></span>
 <span>  <span class="va">count</span> <span class="op">~</span> <span class="va">child</span> <span class="op">+</span> <span class="va">camper</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">persons</span><span class="op">)</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">fish</span>,</span>
 <span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># marginal predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m1</span>, <span class="st">"camper"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
@@ -415,7 +415,7 @@ to conditional predictions (using <code>re.form = NA</code> or the
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># conditional predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m1</span>, <span class="st">"camper"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
@@ -429,7 +429,7 @@ to conditional predictions (using <code>re.form = NA</code> or the
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># conditional predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m1</span>, <span class="st">"camper"</span>, backend <span class="op">=</span> <span class="st">"emmeans"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, backend <span class="op">=</span> <span class="st">"emmeans"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |         Rate (CI) | Rate</span></span>
@@ -449,7 +449,7 @@ observations based on the default <code>estimate</code> option (or
 <code>"emmeans"</code> backend), as shown in the previous output.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># average marginal predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m1</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Average Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |           Mean (CI)</span></span>
@@ -463,7 +463,7 @@ observations based on the default <code>estimate</code> option (or
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="co"># average conditional predictions</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m1</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"camper"</span>, estimate <span class="op">=</span> <span class="st">"average"</span>, re.form <span class="op">=</span> <span class="cn">NA</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Average Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; camper |          Mean (CI)</span></span>
