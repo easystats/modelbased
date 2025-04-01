@@ -8,8 +8,7 @@ vignette: >
   \usepackage[utf8]{inputenc}
   %\VignetteIndexEntry{Mixed models}
   %\VignetteEngine{knitr::rmarkdown}
-editor_options:
-  chunk_output_type: console
+bibliography: bibliography.bib
 ---
 
 ```{r set-options, echo = FALSE, message = FALSE}
@@ -22,8 +21,14 @@ knitr::opts_chunk$set(
   warning = FALSE,
   message = TRUE
 )
-options(knitr.kable.NA = "", digits = 2, width = 800, modelbased_join_dots = FALSE)
-pkgs <- c("ggplot2", "marginaleffects", "collapse", "Formula")
+options(
+  knitr.kable.NA = "",
+  digits = 2,
+  width = 800,
+  modelbased_join_dots = FALSE,
+  modelbased_select = "minimal"
+)
+pkgs <- c("lme4", "marginaleffects", "collapse", "Formula")
 successfully_loaded <- suppressPackageStartupMessages(vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE))
 can_evaluate <- all(successfully_loaded)
 
@@ -39,23 +44,75 @@ if (can_evaluate) {
 
 Mixed models, with their ability to account for hierarchical or clustered data, offer powerful tools for understanding complex relationships. A key aspect of interpreting these models is understanding **estimated marginal means (EMMs)**, which represent the predicted outcome for specific groups or conditions, while holding other variables constant. However, calculating EMMs in mixed models is not always straightforward, and the results can vary depending on the approach taken.
 
-One crucial distinction is between **conditional** and **marginal** predictions (or effects). Conditional predictions are specific to a particular level of the random effect (e.g., the predicted outcome for a specific individual in a study). Marginal predictions, on the other hand, average over the random effects, providing an overall estimate of the effect in the population. This is a crucial difference, as the marginal effect is often the quantity of interest when we want to generalize to the population.
+One crucial distinction is between **conditional** and **marginal** predictions (or effects). Conditional predictions are specific to a particular level of the random effect (e.g., the predicted outcome for a specific individual in a study). Marginal predictions, on the other hand, average over the random effects, providing an overall estimate of the effect in the population. This is a crucial difference, as the marginal effect is often the quantity of interest when we want to generalize to the population [@heiss_marginal_2022].
+
+To use the summaries from Heiss (2022):
+
+> This conditional vs. marginal distinction applies to any sort of hierarchical structure in multilevel models:
+>
+> - **Conditional effect** = the effect of a variable in an *average cluster* (i.e. group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
+> - **Marginal effect** = effect of a variable *across clusters on average* (i.e. global/population-level effect, or clusters on average).
 
 When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. `marginaleffects` typically focuses on marginal predictions by averaging over the random effects, while `emmeans` provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ, particularly for imbalanced groups, or when models are not Gaussian.
 
 In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
 
-**Add reference: Heiss, A. (2022). Marginal and conditional effects for GLMMs with marginaleffects. Andrew Heiss. \doi{10.59350/xwnfm-x1827}**
+> **Technical Note:**
+>
+> For `backend = "marginaleffects"`, the `re.form` argument is set to `NULL` for mixed models by default, to calculate _marginal predictions_. You can use for instance `re.form = NA` in your `estimate_means()` call to change the default value (`NA` will produce _conditional predictions_).
+
+This vignette shows some examples to demonstrate where results are similar and where they differ.
+
+## Linear mixed models
+
+### Balanced Data
+
+```{r}
+library(modelbased)
+data(sleepstudy, package = "lme4")
+# for later, create a slightly imbalanced distributed predictor
+set.seed(1234)
+sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
+
+model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+
+# default, marginaleffects backend (marginalpredictions)
+# in this case, same as conditional predictions
+estimate_means(model, "Days")
+
+# emmeans backend, always conditional predictions
+estimate_means(model, "Days", backend = "emmeans")
+```
+
+### Imbalanced
+
+```{r}
+# marginal predictions, same as conditional predictions
+estimate_means(model, "Days", estimate = "average")
+```
+
+```{r}
+
+model <- lme4::lmer(Reaction ~ Days + x + (1 + Days | Subject), data = sleepstudy)
+
+estimate_means(model, "x")
+estimate_means(model, "x", re.form = NA)
+estimate_means(model, "x", backend = "emmeans")
+
+estimate_means(model, "x", estimate = "average")
+estimate_means(model, "x", estimate = "average", re.form = NA)
+```
 
 ```{r}
 data("fish", package = "insight")
-m1 <- glmmTMB::glmmTMB(
+m1 <- lme4::glmer(
   count ~ child + camper + (1 | persons),
   data = fish,
   family = poisson()
 )
 
 estimate_means(m1, "camper")
+estimate_means(m1, "camper", re.form = NA)
 estimate_means(m1, "camper", backend = "emmeans")
 
 estimate_means(m1, "camper", estimate = "average")
@@ -71,22 +128,6 @@ estimate_means(m2, "camper")
 estimate_means(m2, "camper", backend = "emmeans")
 
 estimate_means(m2, "camper", estimate = "average")
-
-data(sleepstudy, package = "lme4")
-set.seed(1234)
-sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
-m3 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
-
-estimate_means(m3, "Days")
-estimate_means(m3, "Days", backend = "emmeans")
-
-estimate_means(m3, "Days", estimate = "average")
-
-m4 <- lme4::lmer(Reaction ~ Days + x + (1 + Days | Subject), data = sleepstudy)
-
-estimate_means(m4, "x")
-estimate_means(m4, "x", backend = "emmeans")
-
-estimate_means(m4, "x", estimate = "average")
-
 ```
+
+# References
