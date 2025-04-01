@@ -76,6 +76,7 @@ Suggests:
     mgcv,
     nanoparquet,
     ordinal,
+    palmerpenguins,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,
