@@ -73,7 +73,7 @@ This vignette shows some examples to demonstrate where results are similar and w
 
 This section demonstrates the calculation of estimated marginal means (EMMs) in a linear mixed model using balanced data. We'll use the `sleepstudy` dataset from the **lme4** package.
 
-In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced and we have a linear, the results are similar.
+In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced and we have a linear, the results are similar (**exception:** we find small differences for the confidence intervals, but ignore this for now...).
 
 ```{r}
 library(modelbased)
