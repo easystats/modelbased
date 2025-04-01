@@ -53,7 +53,7 @@ To use the summaries from Heiss (2022):
 > - **Conditional effect** = the effect of a variable in an *average cluster* (i.e. group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
 > - **Marginal effect** = effect of a variable *across clusters on average* (i.e. global/population-level effect, or clusters on average).
 
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. `marginaleffects` typically focuses on marginal predictions by averaging over the random effects, while `emmeans` provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ, particularly for imbalanced groups, or when models are not Gaussian.
+When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ, particularly for imbalanced groups, or when models are not Gaussian.
 
 In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
 
@@ -66,6 +66,10 @@ This vignette shows some examples to demonstrate where results are similar and w
 ## Linear mixed models
 
 ### Balanced Data
+
+This section demonstrates the calculation of estimated marginal means (EMMs) in a linear mixed model using balanced data. We'll use the `sleepstudy` dataset from the **lme4** package.
+
+In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced, the results are similar.
 
 ```{r}
 library(modelbased)
@@ -84,12 +88,16 @@ estimate_means(model, "Days")
 estimate_means(model, "Days", backend = "emmeans")
 ```
 
-### Imbalanced
+Here, we calculate the marginal predictions for the `Days` variable using the `estimate = "average"` argument. In this case, because the model is linear and the data is balanced, the marginal predictions are the same as the conditional predictions.
 
 ```{r}
 # marginal predictions, same as conditional predictions
 estimate_means(model, "Days", estimate = "average")
 ```
+
+### Imbalanced Data
+
+This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll continue using the `sleepstudy` dataset, but we'll introduce an imbalanced predictor variable `x`.
 
 ```{r}
 
