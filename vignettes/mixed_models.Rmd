@@ -108,7 +108,7 @@ This section explores the impact of imbalanced data on EMM calculations in linea
 
 ```{r}
 data(penguins, package = "palmerpenguins")
-model <- lme4::lmer(bill_length_mm  ~ sex + island   + (1 | species), data = penguins)
+model <- lme4::lmer(bill_length_mm ~ sex + island + (1 | species), data = penguins)
 
 # marginal predictions
 estimate_means(model, "sex")
