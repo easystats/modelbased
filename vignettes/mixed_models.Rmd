@@ -35,6 +35,18 @@ if (can_evaluate) {
 }
 ```
 
+## Estimated Marginal Means in Mixed Models: Navigating Conditional and Marginal Effects
+
+Mixed models, with their ability to account for hierarchical or clustered data, offer powerful tools for understanding complex relationships. A key aspect of interpreting these models is understanding **estimated marginal means (EMMs)**, which represent the predicted outcome for specific groups or conditions, while holding other variables constant. However, calculating EMMs in mixed models is not always straightforward, and the results can vary depending on the approach taken.
+
+One crucial distinction is between **conditional** and **marginal** predictions (or effects). Conditional predictions are specific to a particular level of the random effect (e.g., the predicted outcome for a specific individual in a study). Marginal predictions, on the other hand, average over the random effects, providing an overall estimate of the effect in the population. This is a crucial difference, as the marginal effect is often the quantity of interest when we want to generalize to the population.
+
+When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. `marginaleffects` typically focuses on marginal predictions by averaging over the random effects, while `emmeans` provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ, particularly for imbalanced groups, or when models are not Gaussian.
+
+In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
+
+**Add reference: Heiss, A. (2022). Marginal and conditional effects for GLMMs with marginaleffects. Andrew Heiss. \doi{10.59350/xwnfm-x1827}**
+
 ```{r}
 data("fish", package = "insight")
 m1 <- glmmTMB::glmmTMB(
