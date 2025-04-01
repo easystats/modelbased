@@ -131,6 +131,8 @@ estimate_means(model, "sex", estimate = "average", re.form = NA)
 
 ## Generalized linear mixed models
 
+The generalized linear mixed model (GLMM) example, using a Poisson distribution to model fish counts, demonstrates the substantial differences between marginal and conditional predictions in non-linear models. When examining the effect of the `camper` variable, marginal predictions yield higher estimated means (1.26 for `camper = 0` and 3.21 for `camper = 1`) compared to conditional predictions (using `re.form = NA` or the `"emmeans"` backend), which are lower (0.66 for `camper = 0` and 1.68 for `camper = 1`).
+
 ```{r}
 data("fish", package = "insight")
 m1 <- lme4::glmer(
@@ -139,23 +141,26 @@ m1 <- lme4::glmer(
   family = poisson()
 )
 
+# marginal predictions
 estimate_means(m1, "camper")
-estimate_means(m1, "camper", re.form = NA)
-estimate_means(m1, "camper", backend = "emmeans")
 
+# conditional predictions
+estimate_means(m1, "camper", re.form = NA)
+
+# conditional predictions
+estimate_means(m1, "camper", backend = "emmeans")
+```
+
+Furthermore, when using `estimate = "average"` to average across all observations, the differences between marginal and conditional predictions persist, with marginal predictions showing higher means (1.52 and 4.54) than conditional predictions (1.20 and 3.19), but both results differ from the predictions for "typical" observations based on the default `estimate` option (or `"emmeans"` backend), as shown in the previous output.
+
+```{r}
+# average marginal predictions
 estimate_means(m1, "camper", estimate = "average")
 
-
-m2 <- glm(
-  count ~ child + camper,
-  data = fish,
-  family = poisson()
-)
-
-estimate_means(m2, "camper")
-estimate_means(m2, "camper", backend = "emmeans")
-
-estimate_means(m2, "camper", estimate = "average")
+# average conditional predictions
+estimate_means(m1, "camper", estimate = "average", re.form = NA)
 ```
+
+This highlights that in GLMMs, the choice between marginal and conditional predictions significantly impacts the estimated means and, consequently, the interpretation of the model's results. In this case, the marginal predictions are higher than the conditional predictions.
 
 # References
