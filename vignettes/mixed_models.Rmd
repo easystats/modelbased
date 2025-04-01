@@ -1,0 +1,80 @@
+---
+title: "Mixed models"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+tags: [r, programing]
+vignette: >
+  \usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{Mixed models}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options:
+  chunk_output_type: console
+---
+
+```{r set-options, echo = FALSE, message = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+  package.startup.message = FALSE,
+  dpi = 300,
+  collapse = TRUE,
+  comment = "#>",
+  warning = FALSE,
+  message = TRUE
+)
+options(knitr.kable.NA = "", digits = 2, width = 800, modelbased_join_dots = FALSE)
+pkgs <- c("ggplot2", "marginaleffects", "collapse", "Formula")
+successfully_loaded <- suppressPackageStartupMessages(vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE))
+can_evaluate <- all(successfully_loaded)
+
+if (can_evaluate) {
+  knitr::opts_chunk$set(eval = TRUE)
+  junk <- suppressMessages(suppressPackageStartupMessages(vapply(pkgs, require, FUN.VALUE = logical(1L), quietly = TRUE, character.only = TRUE)))
+} else {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+```{r}
+data("fish", package = "insight")
+m1 <- glmmTMB::glmmTMB(
+  count ~ child + camper + (1 | persons),
+  data = fish,
+  family = poisson()
+)
+
+estimate_means(m1, "camper")
+estimate_means(m1, "camper", backend = "emmeans")
+
+estimate_means(m1, "camper", estimate = "average")
+
+
+m2 <- glm(
+  count ~ child + camper,
+  data = fish,
+  family = poisson()
+)
+
+estimate_means(m2, "camper")
+estimate_means(m2, "camper", backend = "emmeans")
+
+estimate_means(m2, "camper", estimate = "average")
+
+data(sleepstudy, package = "lme4")
+set.seed(1234)
+sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
+m3 <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
+
+estimate_means(m3, "Days")
+estimate_means(m3, "Days", backend = "emmeans")
+
+estimate_means(m3, "Days", estimate = "average")
+
+m4 <- lme4::lmer(Reaction ~ Days + x + (1 + Days | Subject), data = sleepstudy)
+
+estimate_means(m4, "x")
+estimate_means(m4, "x", backend = "emmeans")
+
+estimate_means(m4, "x", estimate = "average")
+
+```
