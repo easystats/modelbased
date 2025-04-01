@@ -101,12 +101,12 @@ estimate_means(model, "Days", estimate = "average")
 
 ### Imbalanced Data
 
-This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher unit, as well as imbalanced predictors.
+This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher-level unit, as well as imbalanced predictors.
 
 ```{r}
 
 data(penguins, package = "palmerpenguins")
-model <- lme4::lmer(bill_length_mm  ~ bill_depth_mm + sex + island   + (1 | species), data = penguins)
+model <- lme4::lmer(bill_length_mm  ~ sex + island   + (1 | species), data = penguins)
 
 estimate_means(model, "sex")
 estimate_means(model, "sex", re.form = NA)
@@ -114,13 +114,6 @@ estimate_means(model, "sex", backend = "emmeans")
 
 estimate_means(model, "sex", estimate = "average")
 estimate_means(model, "sex", estimate = "average", re.form = NA)
-
-estimate_means(model, "bill_depth_mm")
-estimate_means(model, "bill_depth_mm", re.form = NA)
-estimate_means(model, "bill_depth_mm", backend = "emmeans")
-
-estimate_means(model, "bill_depth_mm", estimate = "average")
-estimate_means(model, "bill_depth_mm", estimate = "average", re.form = NA)
 ```
 
 
