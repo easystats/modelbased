@@ -28,7 +28,7 @@ options(
   modelbased_join_dots = FALSE,
   modelbased_select = "minimal"
 )
-pkgs <- c("lme4", "marginaleffects", "collapse", "Formula")
+pkgs <- c("lme4", "marginaleffects", "collapse", "Formula", "palmerpenguins")
 successfully_loaded <- suppressPackageStartupMessages(vapply(pkgs, requireNamespace, FUN.VALUE = logical(1L), quietly = TRUE))
 can_evaluate <- all(successfully_loaded)
 
@@ -53,7 +53,11 @@ To use the summaries from Heiss (2022):
 > - **Conditional effect** = the effect of a variable in an *average cluster* (i.e. group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
 > - **Marginal effect** = effect of a variable *across clusters on average* (i.e. global/population-level effect, or clusters on average).
 
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ, particularly for imbalanced groups, or when models are not Gaussian.
+When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend are two popular choices, but they employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions...
+
+- ... are usually similar for linear mixed models
+- ... are usually different for generalized linear mixed models
+- ... are usually different for both linear and generalized linear models, when the data is "imbalanced" and "average" predictions are requested (i.e. `estimate = "average"`); by _imbalanced_ we mean not equally distributed levels.
 
 In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
 
@@ -69,7 +73,7 @@ This vignette shows some examples to demonstrate where results are similar and w
 
 This section demonstrates the calculation of estimated marginal means (EMMs) in a linear mixed model using balanced data. We'll use the `sleepstudy` dataset from the **lme4** package.
 
-In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced, the results are similar.
+In this example, we fit a linear mixed model predicting `Reaction` based on `Days`, with random intercepts and slopes for `Subject`. We then calculate the EMMs for `Days` using both the default `"marginaleffects"` backend and the `"emmeans"` backend. Because the data is balanced and we have a linear, the results are similar.
 
 ```{r}
 library(modelbased)
@@ -80,15 +84,15 @@ sleepstudy$x <- as.factor(sample.int(3, nrow(sleepstudy), replace = TRUE))
 
 model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = sleepstudy)
 
-# default, marginaleffects backend (marginalpredictions)
-# in this case, same as conditional predictions
+# default, marginaleffects backend (marginal predictions)
+# in this case, same result as for conditional predictions
 estimate_means(model, "Days")
 
 # emmeans backend, always conditional predictions
 estimate_means(model, "Days", backend = "emmeans")
 ```
 
-Here, we calculate the marginal predictions for the `Days` variable using the `estimate = "average"` argument. In this case, because the model is linear and the data is balanced, the marginal predictions are the same as the conditional predictions.
+Here, we calculate the marginal predictions for the `Days` variable using the `estimate = "average"` argument. In this case, because the model is linear and the data is balanced, the predictions are again the same as the previous results, i.e. averaging across all observations makes no difference here.
 
 ```{r}
 # marginal predictions, same as conditional predictions
@@ -97,19 +101,28 @@ estimate_means(model, "Days", estimate = "average")
 
 ### Imbalanced Data
 
-This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll continue using the `sleepstudy` dataset, but we'll introduce an imbalanced predictor variable `x`.
+This section explores the impact of imbalanced data on EMM calculations in linear mixed models. We'll use the `penguins` dataset, which has imbalanced groups that we use as higher unit, as well as imbalanced predictors.
 
 ```{r}
 
-model <- lme4::lmer(Reaction ~ Days + x + (1 + Days | Subject), data = sleepstudy)
+data(penguins, package = "palmerpenguins")
+model <- lme4::lmer(bill_length_mm  ~ bill_depth_mm + sex + island   + (1 | species), data = penguins)
 
-estimate_means(model, "x")
-estimate_means(model, "x", re.form = NA)
-estimate_means(model, "x", backend = "emmeans")
+estimate_means(model, "sex")
+estimate_means(model, "sex", re.form = NA)
+estimate_means(model, "sex", backend = "emmeans")
 
-estimate_means(model, "x", estimate = "average")
-estimate_means(model, "x", estimate = "average", re.form = NA)
+estimate_means(model, "sex", estimate = "average")
+estimate_means(model, "sex", estimate = "average", re.form = NA)
+
+estimate_means(model, "bill_depth_mm")
+estimate_means(model, "bill_depth_mm", re.form = NA)
+estimate_means(model, "bill_depth_mm", backend = "emmeans")
+
+estimate_means(model, "bill_depth_mm", estimate = "average")
+estimate_means(model, "bill_depth_mm", estimate = "average", re.form = NA)
 ```
+
 
 ```{r}
 data("fish", package = "insight")
