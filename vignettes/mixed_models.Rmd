@@ -1,12 +1,12 @@
 ---
-title: "Mixed models"
+title: "Mixed effects models"
 output:
   rmarkdown::html_vignette:
     toc: true
 tags: [r, programing]
 vignette: >
   \usepackage[utf8]{inputenc}
-  %\VignetteIndexEntry{Mixed models}
+  %\VignetteIndexEntry{Mixed effects models}
   %\VignetteEngine{knitr::rmarkdown}
 bibliography: bibliography.bib
 ---
@@ -40,24 +40,28 @@ if (can_evaluate) {
 }
 ```
 
-## Estimated Marginal Means in Mixed Models: Navigating Conditional and Marginal Effects
+## Estimated Marginal Means in Mixed Effects Models: Navigating Conditional and Marginal Effects
 
 Mixed models, with their ability to account for hierarchical or clustered data, offer powerful tools for understanding complex relationships. A key aspect of interpreting these models is understanding **estimated marginal means (EMMs)**, which represent the predicted outcome for specific groups or conditions, while holding other variables constant. However, calculating EMMs in mixed models is not always straightforward, and the results can vary depending on the approach taken.
 
 One crucial distinction is between **conditional** and **marginal** predictions (or effects). Conditional predictions are specific to a particular level of the random effect (e.g., the predicted outcome for a specific individual in a study). Marginal predictions, on the other hand, average over the random effects, providing an overall estimate of the effect in the population. This is a crucial difference, as the marginal effect is often the quantity of interest when we want to generalize to the population [@heiss_marginal_2022].
 
-To use the summaries from Heiss (2022):
+Based on the definitions from Heiss (2022), we can say:
 
 > This conditional vs. marginal distinction applies to any sort of hierarchical structure in multilevel models:
 >
 > - **Conditional effect** = the effect of a variable in an *average cluster* (i.e., group-specific, subject-specific or cluster-specific effect, or an average or a typical cluster)
 > - **Marginal effect** = effect of a variable *across clusters on average* (i.e., global/population-level effect, or clusters on average).
 
-When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions...
+When working with mixed models, the `modelbased` package offers flexibility in calculating EMMs through different backends. The `"marginaleffects"` backend and the `"emmeans"` backend employ different underlying methodologies. **marginaleffects** typically focuses on marginal predictions by averaging over the random effects, while **emmeans** provides conditional predictions. Consequently, the EMMs obtained using these two backends may differ. As we will see, conditional and marginal predictions for _fixed effects_ focal predictors...
 
 - ... are usually similar for linear mixed models
 - ... are usually different for generalized linear mixed models
 - ... are usually different for both linear and generalized linear models, when the data is "imbalanced" and "average" predictions are requested (i.e., `estimate = "average"`); by _imbalanced_ we mean not equally distributed levels.
+
+> **Note:**
+>
+> If you request unit-level predictions - that is, predictions specific to the individual levels of the random effects (achieved by including random effect variables in `by`) - conditional and marginal predictions will also differ in linear mixed models. We will not delve into unit-level predictions in this vignette.
 
 In essence, the choice of backend and the understanding of whether we are looking at conditional or marginal predictions are critical for correctly interpreting the results of mixed models. Carefully considering the research question and the nature of the random effects will guide the selection of the appropriate approach.
 
