@@ -17,6 +17,9 @@
   predictor, just for the trend of that predictor within a certain range of
   values.
 
+* `estimate_contrasts()` gives an informative error message when arguments
+  `by` and `contrast` have identical variables (which does not work).
+
 * Minor improvements to the documentation.
 
 ## Bug fixes

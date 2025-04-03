@@ -67,6 +67,15 @@ get_marginalcontrasts <- function(model,
     first_focal <- names(first_focal)
   }
 
+  # sanity check: `contrast` and `by` cannot be the same
+  cleaned_by <- gsub("=.*", "\\1", my_args$by)
+  cleaned_contrast <- gsub("=.*", "\\1", my_args$contrast)
+  if (all(cleaned_by %in% cleaned_contrast) || all(cleaned_contrast %in% cleaned_by)) {
+    insight::format_error(
+      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
+    )
+  }
+
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
