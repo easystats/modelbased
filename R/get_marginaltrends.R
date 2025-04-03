@@ -213,7 +213,6 @@ get_marginaltrends <- function(model,
   }
 
   list(trend = trend, range = range, by = NULL)
-
 }
 
 
