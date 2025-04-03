@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.9</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.10</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -299,7 +299,12 @@ contrasts of slopes are calculated. If the integer has more than
 
 <dt id="arg-trend">trend<a class="anchor" aria-label="anchor" href="#arg-trend"></a></dt>
 <dd><p>A character indicating the name of the variable for which to
-compute the slopes.</p></dd>
+compute the slopes. To get marginal effects at specific values, use
+<code>trend="&lt;variable&gt;"</code> along with the <code>by</code> argument, e.g.
+<code>by="&lt;variable&gt;=c(1, 3, 5)"</code>, or a combination of <code>by</code> and <code>length</code>, for
+instance, <code>by="&lt;variable&gt;", length=30</code>. To calculate average marginal
+effects over a range of values, use <code>trend="&lt;variable&gt;=seq(1, 3, 0.1)"</code> (or
+similar) and omit the variable provided in <code>trend</code> from the <code>by</code> argument.</p></dd>
 
 
 <dt id="arg-ci">ci<a class="anchor" aria-label="anchor" href="#arg-ci"></a></dt>
@@ -342,10 +347,10 @@ e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
 <dd><p>The p-values adjustment method for frequentist multiple
 comparisons. For <code><a href="estimate_slopes.html">estimate_slopes()</a></code>, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in <code>trend</code>, one in <code>by</code>). In this case, the <code>"esarey"</code>
-option is recommended, but <code>p_adjust</code> can also be one of <code>"none"</code> (default),
-<code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>,
-<code>"sidak"</code>, or <code>"holm"</code>.</p></dd>
+predictors (one specified in <code>trend</code>, one in <code>by</code>). In this case, the
+<code>"esarey"</code> option is recommended, but <code>p_adjust</code> can also be one of <code>"none"</code>
+(default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>,
+<code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
