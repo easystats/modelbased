@@ -16,14 +16,19 @@
 #' various examples, tutorials and use cases.
 #'
 #' @param trend A character indicating the name of the variable for which to
-#' compute the slopes.
+#' compute the slopes. To get marginal effects at specific values, use
+#' `trend="<variable>"` along with the `by` argument, e.g.
+#' `by="<variable>=c(1, 3, 5)"`, or a combination of `by` and `length`, for
+#' instance, `by="<variable>", length=30`. To calculate average marginal
+#' effects over a range of values, use `trend="<variable>=seq(1, 3, 0.1)"` (or
+#' similar) and omit the variable provided in `trend` from the `by` argument.
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
 #' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-#' predictors (one specified in `trend`, one in `by`). In this case, the `"esarey"`
-#' option is recommended, but `p_adjust` can also be one of `"none"` (default),
-#' `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`,
-#' `"sidak"`, or `"holm"`.
+#' predictors (one specified in `trend`, one in `by`). In this case, the
+#' `"esarey"` option is recommended, but `p_adjust` can also be one of `"none"`
+#' (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`,
+#' `"tukey"`, `"sidak"`, or `"holm"`.
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -65,6 +70,22 @@
 #' )
 #' summary(slopes)
 #' plot(slopes)
+#'
+#' # marginal effects, grouped by Species, at different values of Petal.Length
+#' estimate_slopes(model,
+#'   trend = "Petal.Length",
+#'   by = c("Petal.Length", "Species"), length = 10
+#' )
+#'
+#' # marginal effects at different values of Petal.Length
+#' estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
+#'
+#' # marginal effects at very specific values of Petal.Length
+#' estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+#'
+#' # average marginal effects of Petal.Length,
+#' # just for the trend within a certain range
+#' estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 #' }
 #' @export
 estimate_slopes <- function(model,

@@ -21,7 +21,12 @@ estimate_slopes(
 \item{model}{A statistical model.}
 
 \item{trend}{A character indicating the name of the variable for which to
-compute the slopes.}
+compute the slopes. To get marginal effects at specific values, use
+\code{trend="<variable>"} along with the \code{by} argument, e.g.
+\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+instance, \verb{by="<variable>", length=30}. To calculate average marginal
+effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
+similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -40,10 +45,10 @@ predictors of interest.}
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
-option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
-\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
-\code{"sidak"}, or \code{"holm"}.}
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
+(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
+\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -251,6 +256,22 @@ slopes <- estimate_slopes(model,
 )
 summary(slopes)
 plot(slopes)
+
+# marginal effects, grouped by Species, at different values of Petal.Length
+estimate_slopes(model,
+  trend = "Petal.Length",
+  by = c("Petal.Length", "Species"), length = 10
+)
+
+# marginal effects at different values of Petal.Length
+estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
+
+# marginal effects at very specific values of Petal.Length
+estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+
+# average marginal effects of Petal.Length,
+# just for the trend within a certain range
+estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 }
 \dontshow{\}) # examplesIf}
 }
