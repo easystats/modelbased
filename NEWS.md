@@ -13,6 +13,10 @@
   models like logistic regression, or beta regression. Formerly, name was
   `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
+* `estimate_slopes()` can now also calculate average marginal effects of a
+  predictor, just for the trend of that predictor within a certain range of
+  values.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes

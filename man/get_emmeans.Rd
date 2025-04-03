@@ -191,7 +191,12 @@ contrasts of slopes are calculated. If the integer has more than
 }}
 
 \item{trend}{A character indicating the name of the variable for which to
-compute the slopes.}
+compute the slopes. To get marginal effects at specific values, use
+\code{trend="<variable>"} along with the \code{by} argument, e.g.
+\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+instance, \verb{by="<variable>", length=30}. To calculate average marginal
+effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
+similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -232,10 +237,10 @@ e.g. \code{options(modelbased_estimate = "average")}}
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
-option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
-\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
-\code{"sidak"}, or \code{"holm"}.}
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
+(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
+\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
