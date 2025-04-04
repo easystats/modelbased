@@ -49,9 +49,10 @@ useful).}
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
 \item{indices}{A list containing the indices (i.e., which columns) to
-extract (e.g., "Coefficient").}
+extract (e.g., "Coefficient", "Median").}
 
-\item{group}{A list containing the random factors to select.}
+\item{group}{A list containing the random factor to select (e.g., "Participant") if
+the model was \code{y ~ x + (1|Participant)}.}
 }
 \description{
 Extract random parameters of each individual group in the context of mixed
