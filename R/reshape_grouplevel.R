@@ -48,8 +48,8 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = N
   # Rename level to group
   names(data_wide)[names(data_wide) == "Level"] <- group
 
-  class(data) <- c("reshape_grouplevel", class(data))
-  data
+  class(data_wide) <- c("reshape_grouplevel", class(data_wide))
+  data_wide
 }
 
 #' @export
