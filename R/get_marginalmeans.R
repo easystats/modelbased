@@ -160,7 +160,7 @@ get_marginalmeans <- function(model,
   # ---------------------------
 
   # handle distributional parameters
-  if (predict_args$predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+  if (predict_args$predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict_args$predict
   } else {
     fun_args$type <- predict_args$predict

@@ -57,7 +57,7 @@ get_emmeans <- function(model,
   )
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
   } else {
     fun_args$type <- predict

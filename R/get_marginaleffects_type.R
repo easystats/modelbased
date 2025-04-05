@@ -13,7 +13,7 @@
   }
 
   # handle distributional parameters
-  if (!is.null(predict) && predict %in% .brms_aux_elements()) {
+  if (!is.null(predict) && predict %in% .brms_aux_elements(model)) {
     return(list(predict = predict, backtransform = FALSE, link_inverse = NULL))
   }
 

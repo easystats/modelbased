@@ -37,12 +37,12 @@
     } else if (type == "mean") {
       if (insight::model_info(model)$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"
-      } else if (!is.null(predict) && predict %in% .brms_aux_elements()) {
+      } else if (!is.null(predict) && predict %in% .brms_aux_elements(model)) {
         names(means)[names(means) == vars] <- tools::toTitleCase(predict)
       } else {
         names(means)[names(means) == vars] <- "Mean"
       }
-    } else if (predict %in% .brms_aux_elements()) {
+    } else if (predict %in% .brms_aux_elements(model)) {
       names(means)[names(means) == vars] <- tools::toTitleCase(predict)
     } else {
       names(means)[names(means) == vars] <- "Coefficient"

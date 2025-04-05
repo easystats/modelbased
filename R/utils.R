@@ -1,10 +1,14 @@
 #' @keywords internal
 #' @noRd
-.brms_aux_elements <- function() {
-  c(
+.brms_aux_elements <- function(model = NULL) {
+  out <- c(
     "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
     "kappa", "bias", "bs", "zi", "alpha", "xi", "delta", "k"
   )
+  if (!is.null(model)) {
+    out <- unique(c(out, insight::find_auxiliary(model)))
+  }
+  out
 }
 
 
