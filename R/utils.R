@@ -1,21 +1,31 @@
 #' @keywords internal
 #' @noRd
-.brms_aux_elements <- function() {
-  c(
+.brms_aux_elements <- function(model = NULL) {
+  out <- c(
     "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
     "kappa", "bias", "bs", "zi", "alpha", "xi", "delta", "k"
   )
+  if (inherits(model, "brmsfit")) {
+    out <- unique(c(out, insight::find_auxiliary(model)))
+  }
+  out
 }
 
 
 #' @keywords internal
 #' @noRd
-.valid_coefficient_names <- function() {
-  c(
+.valid_coefficient_names <- function(model = NULL) {
+  out <- c(
     "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
-    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio",
-    tools::toTitleCase(.brms_aux_elements())
+    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
   )
+  if (inherits(model, "brmsfit")) {
+    dpars <- insight::find_auxiliary(model)
+    if (!is.null(dpars)) {
+      out <- unique(c(out, tools::toTitleCase(dpars)))
+    }
+  }
+  out
 }
 
 

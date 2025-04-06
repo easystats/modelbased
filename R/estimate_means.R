@@ -421,7 +421,7 @@ estimate_means <- function(model,
   attr(means, "response") <- insight::find_response(model)
   attr(means, "ci") <- ci
   attr(means, "backend") <- backend
-  attr(means, "coef_name") <- intersect(.valid_coefficient_names(), colnames(means))
+  attr(means, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(means))
 
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])
