@@ -20,7 +20,10 @@
     "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
   )
   if (inherits(model, "brmsfit")) {
-    out <- unique(c(out, tools::toTitleCase(insight::find_auxiliary(model))))
+    dpars <- insight::find_auxiliary(model)
+    if (!is.null(dpars)) {
+      out <- unique(c(out, tools::toTitleCase(dpars)))
+    }
   }
   out
 }
