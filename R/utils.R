@@ -14,12 +14,15 @@
 
 #' @keywords internal
 #' @noRd
-.valid_coefficient_names <- function() {
-  c(
+.valid_coefficient_names <- function(model = NULL) {
+  out <- c(
     "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
-    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio",
-    tools::toTitleCase(.brms_aux_elements())
+    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
   )
+  if (inherits(model, "brmsfit")) {
+    out <- unique(c(out, tools::toTitleCase(insight::find_auxiliary(model))))
+  }
+  out
 }
 
 
