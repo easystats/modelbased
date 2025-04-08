@@ -10,7 +10,7 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   x[names(data)] <- datawizard::standardize(as.data.frame(x)[names(data)], reference = data, ...)
 
   # Standardize response
-  if (include_response && insight::model_info(attributes(x)$model)$is_linear) {
+  if (include_response && insight::model_info(attributes(x)$model, response = 1)$is_linear) {
     resp <- insight::get_response(attributes(x)$model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
 
@@ -40,7 +40,7 @@ standardize.estimate_means <- standardize.estimate_predicted
 standardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
   model <- attributes(x)$model
 
-  if (insight::model_info(model)$is_linear) {
+  if (insight::model_info(model, response = 1)$is_linear) {
     # Get dispersion scaling factor
     if (robust) {
       disp <- stats::mad(insight::get_response(model), na.rm = TRUE)
@@ -79,7 +79,7 @@ unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   x[names(data)] <- datawizard::unstandardize(as.data.frame(x)[names(data)], reference = data, ...)
 
   # Standardize response
-  if (include_response == TRUE && insight::model_info(model)$is_linear) {
+  if (include_response == TRUE && insight::model_info(model, response = 1)$is_linear) {
     resp <- insight::get_response(model)
     disp <- attributes(datawizard::standardize(resp, ...))$scale
 
@@ -107,7 +107,7 @@ unstandardize.estimate_means <- unstandardize.estimate_predicted
 unstandardize.estimate_contrasts <- function(x, robust = FALSE, ...) {
   model <- attributes(x)$model
 
-  if (insight::model_info(model)$is_linear) {
+  if (insight::model_info(model, response = 1)$is_linear) {
     # Get dispersion scaling factor
     if (robust) {
       disp <- stats::mad(insight::get_response(model), na.rm = TRUE)
