@@ -134,3 +134,25 @@ test_that("column name beta regression", {
     c("gear", "Proportion", "SE", "CI_low", "CI_high", "z")
   )
 })
+
+
+test_that("error edge case", {
+  set.seed(1)
+  d <- data.frame(
+    y = rnorm(100),
+    x = rnorm(100),
+    ID = as.factor(rep(1:50, 2)),
+    time = rep(1:2, each = 50),
+    int = as.factor(sample(0:1, 100, TRUE)),
+    cluster = as.factor(rep(sample.int(8, 50, TRUE), 2))
+  )
+
+  m <- glmmTMB::glmmTMB(
+    y ~ time * int + x + (1 + time | cluster / ID) + (0 + x | cluster / ID),
+    data = d
+  )
+  expect_error(
+    estimate_means(m, "cluster"),
+    regex = "You may try using"
+  )
+})
