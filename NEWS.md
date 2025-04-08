@@ -29,6 +29,9 @@
 * Fixed issues in calculating correct confidence intervals (and possibly p-values)
   for pooling functions `pool_parameters()` and `pool_predictions()`.
 
+* Fixed issue in `estimate_means()` for multivariate response models from
+  package *brms*.
+
 * Fixed issue with wrong y-axis label for plots from `estimate_slopes()`.
 
 # modelbased 0.10.0

@@ -25,3 +25,21 @@ test_that("estimate_means - brms", {
   estim <- estimate_slopes(model, by = "Species", backend = "emmeans")
   expect_identical(dim(estim), c(3L, 5L))
 })
+
+test_that("estimate_means - brms", {
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+  skip_if_not_installed("brms")
+
+  m <- insight::download_model("brms_mv_1")
+  estim <- estimate_means(m, "wt")
+  expect_identical(dim(estim), c(30L, 10L))
+  expect_named(
+    estim,
+    c(
+      "wt", "ROPE_CI", "Response", "Median", "CI_low", "CI_high",
+      "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+    )
+  )
+})
