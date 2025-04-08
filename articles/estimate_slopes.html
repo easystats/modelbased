@@ -248,7 +248,8 @@ function of the other variable.</p>
 <p>Such plot, also referred to as <strong>Johnson-Neyman
 intervals</strong>, shows how the effect (the “slope”) of one variable
 varies depending on another variable. It is useful in the case of
-complex interactions between continuous variables.</p>
+complex interactions between continuous variables. See also <a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html">this
+vignette</a> for further details.</p>
 <p>For instance, the plot below shows that the effect of <code>hp</code>
 (the y-axis) is significantly negative only when <code>wt</code> is low
 (<code>&lt; ~4</code>).</p>
@@ -323,11 +324,13 @@ i.e., the “derivative”, using <code>estimate_slopes</code>.</p>
 <p><img src="estimate_slopes_files/figure-html/unnamed-chunk-10-1.png" width="2187.5"></p>
 <p>This plot represents the “slope” of the curve at each point of the
 curve. As you can see, there is a significant negative trend (after
-Petal.Length = 4), followed by a significant positive trend (around
+Petal.Length = 2), followed by a significant positive trend (around
 Petal.Length = 4). <strong>Marginal derivatives</strong> allow us to
-make inferences at each point of point of the relationship!</p>
+make inferences at each point of the relationship!</p>
 <p>Finally, to help reporting that in a manuscript, we can divide this
-into chunks and obtain the “average” linear trend of each chunk.</p>
+into chunks and obtain a summary for the trend of each chunk, including
+the direction of the effects and whether it is statistically significant
+or not.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">deriv</span><span class="op">)</span></span></code></pre></div>
 <pre><code>&gt; Johnson-Neymann Intervals
@@ -345,15 +348,13 @@ into chunks and obtain the “average” linear trend of each chunk.</p>
 &gt; 
 &gt; Marginal effects estimated for Petal.Length
 &gt; Type of slope was dY/dX</code></pre>
-<p>We can conclude that Petal.Length shares significantly negative
-relationship with the outcome variable between 2.01 and 3.15
-(<em>average marginal effect</em> = -0.76, 95% CI [-1.14, -0.37], p &lt;
-.01) and significantly positive between 3.74 and 4.28 (<em>average
-marginal effect</em> = 0.54, 95% CI [0.14, 0.93], p &lt; .05).</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
+<p>Johnson, P.O. &amp; Fay, L.C. (1950). The Johnson-Neyman technique,
+its theory and application. Psychometrika, 15, 349-367. doi:
+10.1007/BF02288864</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
