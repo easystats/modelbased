@@ -310,7 +310,7 @@ get_marginalmeans <- function(model,
     msg <- c(
       msg,
       paste0(
-        "\nIt seems that calculating adjusted predictions failed. You may try to use `estimate_relation(model, by = c(", # nolint
+        "\nYou may try to use `estimate_relation(model, by = c(",
         toString(paste0("\"", fun_args$by, "\"")),
         "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n" # nolint
       ),
