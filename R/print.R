@@ -82,7 +82,7 @@ print.estimate_contrasts <- function(x,
 
   # format table
   out <- format(out, select = select, include_grid = include_grid, ...)
-  attributes(out) <- utils::modifyList(attributes(out), attr)
+  attributes(out) <- suppressWarnings(utils::modifyList(attributes(out), attr))
 
   # remove redundant labels, for "by" variables
   out <- .remove_redundant_labels(x, out, full_labels)
