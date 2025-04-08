@@ -411,7 +411,7 @@ estimate_relation <- function(model,
   grid_specs <- attributes(data)
 
   # Get response for later residuals -------------
-  if (!is.null(model_response) && model_response %in% names(data)) {
+  if (!is.null(model_response) && length(model_response) == 1 && model_response %in% names(data)) { # nolint
     response <- data[[model_response]]
   } else {
     response <- NULL
@@ -448,7 +448,7 @@ estimate_relation <- function(model,
   }
 
   # remove response variable from data frame, as this variable is predicted
-  if (!is.null(model_response) && model_response %in% colnames(out)) {
+  if (!is.null(model_response) && length(model_response) == 1 && model_response %in% colnames(out)) { # nolint
     out[[model_response]] <- NULL
   }
 
