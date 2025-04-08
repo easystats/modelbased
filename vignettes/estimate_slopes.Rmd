@@ -101,7 +101,7 @@ plot(slopes)
 
 Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.
 
-Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
+Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables. See also [this vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html) for further details.
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
@@ -159,16 +159,14 @@ plot(deriv) +
   theme_minimal()
 ```
 
-This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 4), followed by a significant positive trend (around Petal.Length = 4). **Marginal derivatives** allow us to make inferences at each point of point of the relationship!
+This plot represents the "slope" of the curve at each point of the curve. As you can see, there is a significant negative trend (after Petal.Length = 2), followed by a significant positive trend (around Petal.Length = 4). **Marginal derivatives** allow us to make inferences at each point of the relationship!
 
-Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain the "average" linear trend of each chunk.
+Finally, to help reporting that in a manuscript, we can divide this into chunks and obtain a summary for the trend of each chunk, including the direction of the effects and whether it is statistically significant or not.
 
 ```{r}
 summary(deriv)
 ```
 
-
-We can conclude that Petal.Length shares significantly negative relationship with the outcome variable between 2.01 and 3.15 (*average marginal effect* = -0.76, 95\% CI [-1.14, -0.37], p < .01) and significantly positive between 3.74 and 4.28 (*average marginal effect* = 0.54, 95\% CI [0.14,  0.93], p < .05).
-
-
 ## References
+
+Johnson, P.O. & Fay, L.C. (1950). The Johnson-Neyman technique, its theory and application. Psychometrika, 15, 349-367. doi: 10.1007/BF02288864
