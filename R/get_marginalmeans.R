@@ -270,6 +270,7 @@ get_marginalmeans <- function(model,
 
 # call marginaleffects and process potential errors ---------------------------
 
+
 .call_marginaleffects <- function(fun_args, type = "means") {
   out <- tryCatch(
     suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
@@ -278,26 +279,48 @@ get_marginalmeans <- function(model,
 
   # display informative error
   if (inherits(out, "simpleError")) {
-    # what was requested?
-    if (!is.null(fun_args$hypothesis)) {
-      fun <- "marginal contrasts"
-    } else {
-      fun <- "marginal means"
-    }
-    msg <- c(
-      paste0("Sorry, calculating ", fun, " failed with following error:"),
-      insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
-    )
-    # we get this error when we should use counterfactuals - tell
-    # # user about possible solution
-    if (grepl("not found in column names", out$message, fixed = TRUE)) {
-      msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
-    }
-    # error
-    insight::format_error(msg)
+    insight::format_error(.marginaleffects_errors(out, fun_args))
   }
 
   out
+}
+
+
+.marginaleffects_errors <- function(out, fun_args) {
+  # what was requested?
+  if (!is.null(fun_args$hypothesis)) {
+    fun <- "marginal contrasts"
+  } else {
+    fun <- "marginal means"
+  }
+  # clean original error message
+  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message))
+  # setup clear error message
+  msg <- c(
+    paste0("Sorry, calculating ", fun, " failed with following error:"),
+    insight::color_text(gsub("\n", "", out$message, fixed = TRUE), "red")
+  )
+  # handle exceptions ------------------------------------------------------
+  # we get this error when we should use counterfactuals
+  if (grepl("not found in column names", out$message, fixed = TRUE)) {
+    msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
+  }
+  # we get this error for models with complex random effects structures in glmmTMB
+  if (grepl("map factor length must equal", out$message, fixed = TRUE)) {
+    msg <- c(
+      msg,
+      paste0(
+        "\nYou may try using the `emmeans` backend, e.g. `estimate_means(model, by = c(",
+        toString(paste0("\"", fun_args$by, "\"")),
+        "), backend = \"emmeans\")`, or use `estimate_relation(model, by = c(",
+        toString(paste0("\"", fun_args$by, "\"")),
+        "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n" # nolint
+      ),
+      paste0("out <- estimate_relation(model, by = c(", toString(paste0("\"", fun_args$by, "\"")), "))"),
+      paste0("estimate_contrasts(out, contrast = c(", toString(paste0("\"", fun_args$by, "\"")), "))")
+    )
+  }
+  msg
 }
 
 
