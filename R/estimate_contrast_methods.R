@@ -28,7 +28,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   # vcov matrix, for adjusting se
   vcov_matrix <- .safe(stats::vcov(model, verbose = FALSE, ...))
 
-  minfo <- insight::model_info(model)
+  minfo <- insight::model_info(model, response = 1)
 
   # model df
   dof <- insight::get_df(model, type = "wald", verbose = FALSE)

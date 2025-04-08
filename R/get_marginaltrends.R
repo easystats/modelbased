@@ -21,7 +21,7 @@ get_marginaltrends <- function(model,
   dots <- list(...)
 
   # model details
-  model_info <- insight::model_info(model, verbose = FALSE)
+  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
 
   # Guess arguments
   myargs <- .guess_marginaltrends_arguments(model, trend, by, verbose, ...)

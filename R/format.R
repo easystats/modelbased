@@ -119,7 +119,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   model_data <- insight::get_data(model, verbose = FALSE)
   info <- attributes(x)$model_info
   if (is.null(info)) {
-    info <- insight::model_info(model)
+    info <- insight::model_info(model, response = 1)
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
@@ -160,7 +160,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
   info <- attributes(x)$model_info
   if (is.null(info)) {
-    info <- insight::model_info(model)
+    info <- insight::model_info(model, response = 1)
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed

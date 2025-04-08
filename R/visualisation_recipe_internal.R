@@ -268,7 +268,7 @@
   if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
-    if (!is.null(trans_fun) && trans_fun != "identity") {
+    if (!is.null(trans_fun) && all(trans_fun != "identity")) {
       show_data <- FALSE
     }
   }
@@ -458,7 +458,7 @@
   # Default changes for binomial models
   shape <- 16
   stroke <- 0
-  if (insight::model_info(model)$is_binomial) {
+  if (insight::model_info(model, response = 1)$is_binomial) {
     shape <- "|"
     stroke <- 1
   }
