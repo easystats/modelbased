@@ -5,6 +5,7 @@
 \alias{estimate_grouplevel.default}
 \alias{estimate_grouplevel.brmsfit}
 \alias{reshape_grouplevel}
+\alias{reshape_grouplevel.estimate_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
 estimate_grouplevel(model, ...)
@@ -20,7 +21,9 @@ estimate_grouplevel(model, ...)
   ...
 )
 
-reshape_grouplevel(x, indices = "all", group = "all", ...)
+reshape_grouplevel(x, ...)
+
+\method{reshape_grouplevel}{estimate_grouplevel}(x, indices = "all", group = NULL, ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
@@ -48,11 +51,11 @@ useful).}
 
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
-\item{indices}{A list containing the indices (i.e., which columns) to
-extract (e.g., "Coefficient", "Median").}
+\item{indices}{A character vector containing the indices (i.e., which
+columns) to extract (e.g., "Coefficient", "Median").}
 
-\item{group}{A list containing the random factor to select (e.g., "Participant") if
-the model was \code{y ~ x + (1|Participant)}.}
+\item{group}{The name of the random factor to select as string value (e.g.,
+\code{"Participant"}, if the model was \code{y ~ x + (1|Participant)}.}
 }
 \description{
 Extract random parameters of each individual group in the context of mixed
