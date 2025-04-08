@@ -35,7 +35,7 @@ get_emtrends <- function(model,
   ))
 
   # for Bayesian model, keep iterations
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
     keep_iterations <- FALSE
@@ -95,7 +95,7 @@ get_emtrends <- function(model,
 
 .format_emmeans_slopes <- function(model, estimated, ci, ...) {
   # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     trends <- parameters::parameters(estimated, ci = ci, ...)
     trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
     em_grid <- as.data.frame(estimated@grid)

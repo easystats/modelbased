@@ -51,7 +51,7 @@ get_marginalmeans <- function(model,
   )
 
   # model details
-  model_info <- insight::model_info(model, verbose = FALSE)
+  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
