@@ -87,6 +87,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
+    RWiener,
     sandwich,
     see (>= 0.11.0),
     testthat (>= 3.2.1),
