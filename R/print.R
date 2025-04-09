@@ -81,7 +81,7 @@ print.estimate_contrasts <- function(x,
   attr <- attr[setdiff(names(attr), c("names", "row.names"))]
 
   # handle exceptions, e.g. drift diffusion (Wiener) models
-  if (isTRUE(attr$model_info$is_wiener) || isTRUE(attr$model_info$is_lnr)) {
+  if (isTRUE(attr$model_info$is_wiener) || isTRUE(attr$model_info$is_rtchoice)) {
     out <- .print_wiener(out, select, ...)
     align <- NULL
   } else {
