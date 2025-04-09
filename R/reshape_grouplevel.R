@@ -26,7 +26,7 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = N
   if (any(indices == "all")) {
     indices <- names(x)[!names(x) %in% c("Group", "Level", "Parameter", "CI")]
   }
-browser()
+
   # Accommodate Bayesian
   if ("Coefficient" %in% indices) {
     indices <- c(indices, "Median", "Mean", "MAP")
