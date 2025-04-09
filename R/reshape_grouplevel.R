@@ -52,7 +52,7 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = N
 
   # Create a new column for the parameter name
   x$.param <- x$Parameter
-  if("Component" %in% names(x)) {
+  if ("Component" %in% names(x)) {
     x$.param <- paste0(x$Component, "_", x$.param)
   }
   x$.param <- gsub("conditional_", "", x$.param)
