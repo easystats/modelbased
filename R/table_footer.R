@@ -22,7 +22,7 @@
 
   # name of predicted response -----------------------------------------------
 
-  table_footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+  table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
 
 
   # modulated predictors (focal terms) ---------------------------------------
