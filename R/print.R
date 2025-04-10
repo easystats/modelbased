@@ -82,7 +82,7 @@ print.estimate_contrasts <- function(x,
 
   # handle exceptions, e.g. drift diffusion (Wiener) models
   if (isTRUE(attr$model_info$is_wiener) || isTRUE(attr$model_info$is_rtchoice)) {
-    out <- .print_wiener(out, select, ...)
+    out <- .print_drift_diffusion(out, select, ...)
     align <- NULL
   } else {
     # format table
@@ -158,7 +158,7 @@ print.estimate_grouplevel <- print.estimate_contrasts
 }
 
 
-.print_wiener <- function(out, select = NULL, ...) {
+.print_drift_diffusion <- function(out, select = NULL, ...) {
   # convert to factor, so we keep order of components when using "split"
   out$Component <- factor(out$Component, levels = unique(out$Component))
   responses <- levels(out$Component)
