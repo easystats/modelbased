@@ -57,9 +57,11 @@ test_that("estimate_means - brms, Wiener", {
   skip_if(is.null(m))
   d <- insight::get_data(m)[1:5, ]
 
+  set.seed(123)
   out <- estimate_prediction(m, data = d)
   expect_snapshot(print(out))
 
+  set.seed(123)
   out <- estimate_prediction(m, data = d, keep_iterations = 3)
   expect_snapshot(print(out, table_width = Inf))
 })
