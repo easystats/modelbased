@@ -8,7 +8,7 @@
 ## Changes
 
 * In general, it is now possible to make estimate means, contrasts and slopes
-  for distributional parametrs for models from package *brms* using the
+  for distributional parameters for models from package *brms* using the
   `predict` argument.
 
 * `estimate_grouplevel()` gets arguments `test`, `dispersion` and `diagnostic`,
