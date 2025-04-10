@@ -35,6 +35,7 @@ get_emtrends(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -71,6 +72,7 @@ get_marginaltrends(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,

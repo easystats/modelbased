@@ -8,6 +8,7 @@ estimate_slopes(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,
@@ -39,6 +40,28 @@ or "data grid" with representative values for the focal predictors. In this
 case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest.}
+
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
+\code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
+\code{backend = "marginaleffects"}). Valid options for \code{predict} are:
+\itemize{
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
+\code{"inverse_link"} or any valid \code{type} option supported by model's class
+\code{predict()} method (e.g., for zero-inflation models from package
+\strong{glmmTMB}, you can choose \code{predict = "zprob"} or \code{predict = "conditional"}
+etc., see \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL},
+the most appropriate transformation is selected, which usually returns
+predictions or contrasts on the response-scale. The \code{"inverse_link"} is a
+special option, comparable to \emph{marginaleffects}' \code{invlink(link)} option. It
+will calculate predictions on the link scale and then back-transform to the
+response scale.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}). See also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+}
+
+See also section \emph{Predictions on different scales}.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
