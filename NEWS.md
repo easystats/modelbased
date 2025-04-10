@@ -1,27 +1,37 @@
 # modelbased (devel)
 
+## New functions
+
+* Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
+  imputed data.
+
 ## Changes
+
+* In general, it is now possible to make estimate means, contrasts and slopes
+  for distributional parametrs for models from package *brms* using the
+  `predict` argument.
 
 * `estimate_grouplevel()` gets arguments `test`, `dispersion` and `diagnostic`,
   that are internally passed to `parameters::model_parameters()`, but with
   different defaults.
 
-* Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
-  imputed data.
-
 * `estimate_prediction()` and `estimate_relation()` now support Wiener-models
   (Drift Diffusion Models) from package *brms*.
-
-* Column names of predicted values for `backend = "emmeans"` has changed for
-  models like logistic regression, or beta regression. Formerly, name was
-  `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
 * `estimate_slopes()` can now also calculate average marginal effects of a
   predictor, just for the trend of that predictor within a certain range of
   values.
 
+* `estimate_slopes()` gets a `predict` argument, to either select the scale
+  of the estimates slopes, or to estimate slopes (marginal effects) for
+  distributional parameters of *brms* models.
+
 * `estimate_contrasts()` gives an informative error message when arguments
   `by` and `contrast` have identical variables (which does not work).
+
+* Column names of predicted values for `backend = "emmeans"` has changed for
+  models like logistic regression, or beta regression. Formerly, name was
+  `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
 * Minor improvements to the documentation.
 

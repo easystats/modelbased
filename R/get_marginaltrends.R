@@ -10,6 +10,7 @@
 get_marginaltrends <- function(model,
                                trend = NULL,
                                by = NULL,
+                               predict = NULL,
                                ci = 0.95,
                                p_adjust = "none",
                                transform = NULL,
@@ -94,6 +95,13 @@ get_marginaltrends <- function(model,
     ),
     dots
   ))
+
+  # handle distributional parameters
+  if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
 
   # Third step: compute marginal slopes ---------------------------------------
   # ---------------------------------------------------------------------------
