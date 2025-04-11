@@ -351,7 +351,11 @@ estimate_relation <- function(model,
   # model and data properties
   if (is_model) {
     # for models, get predictors, response etc.
-    variables <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+    variables <- c(
+      insight::find_predictors(model, effects = "all", flatten = TRUE),
+      insight::find_weights(model),
+      insight::find_offset(model)
+    )
     model_response <- insight::find_response(model)
     is_nullmodel <- isTRUE(.safe(insight::is_nullmodel(model)))
     grouplevel_effects <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
