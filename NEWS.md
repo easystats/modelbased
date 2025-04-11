@@ -47,6 +47,8 @@
 
 * Fixed issue with wrong y-axis label for plots from `estimate_slopes()`.
 
+* Fixed issue with weights in `estimate_relation()`.
+
 # modelbased 0.10.0
 
 ## Breaking Changes
