@@ -33,6 +33,8 @@
   models like logistic regression, or beta regression. Formerly, name was
   `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
+* Exposed `iterations` argument in `estimate_prediction()` and `estimate_relation()`.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
@@ -48,11 +50,6 @@
 * Fixed issue with wrong y-axis label for plots from `estimate_slopes()`.
 
 * Fixed issue with weights in `estimate_relation()`.
-
-* `keep_iterations` was not passed to the `iterations` argument in
-  `get_predicted()`, but only used for controlling the number of draws
-  included in the output. To speed up computation of predictions,
-  `keep_iterations` is now also used to control the `iterations` argument.
 
 # modelbased 0.10.0
 
