@@ -49,6 +49,11 @@
 
 * Fixed issue with weights in `estimate_relation()`.
 
+* `keep_iterations` was not passed to the `iterations` argument in
+  `get_predicted()`, but only used for controlling the number of draws
+  included in the output. To speed up computation of predictions,
+  `keep_iterations` is now also used to control the `iterations` argument.
+
 # modelbased 0.10.0
 
 ## Breaking Changes
