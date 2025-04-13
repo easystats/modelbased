@@ -442,6 +442,12 @@ estimate_relation <- function(model,
     prediction_args$allow.new.levels <- TRUE
     dots$allow.new.levels <- NULL
   }
+  # add number of iterations/draws
+  if (!is.null(keep_iterations) && is.numeric(keep_iterations)) {
+    prediction_args$iterations <- keep_iterations
+    dots$iterations <- NULL
+  }
+  # get predictions
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
 
