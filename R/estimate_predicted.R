@@ -150,7 +150,6 @@
 #' various examples, tutorials and usecases.
 #'
 #' @inheritParams get_emmeans
-#' @inheritParams bayestestR::describe_posterior
 #' @param data A data frame with model's predictors to estimate the response. If
 #' `NULL`, the model's data is used. If `"grid"`, the model matrix is obtained
 #' (through [insight::get_datagrid()]).
@@ -179,6 +178,12 @@
 #' be `TRUE`, in which case `insight::get_transformation()` is called to
 #' determine the appropriate transformation-function. Note that no standard
 #' errors are returned when transformations are applied.
+#' @param iterations For Bayesian models, this corresponds to the number of
+#' posterior draws. If `NULL`, will use all the draws (one for each iteration of
+#' the model). For frequentist models, if not `NULL`, will generate bootstrapped
+#' draws, from which bootstrapped CIs will be computed. Use `keep_iterations` to
+#' control if and how many draws will be included in the returned output (data
+#' frame), which can be used, for instance, for plotting.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
 #' [insight::get_predicted()].
@@ -235,6 +240,7 @@ estimate_expectation <- function(model,
                                  predict = "expectation",
                                  ci = 0.95,
                                  transform = NULL,
+                                 iterations = NULL,
                                  keep_iterations = FALSE,
                                  ...) {
   .estimate_predicted(
@@ -242,6 +248,7 @@ estimate_expectation <- function(model,
     data = data,
     by = by,
     ci = ci,
+    iterations = iterations,
     keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
@@ -258,6 +265,7 @@ estimate_link <- function(model,
                           predict = "link",
                           ci = 0.95,
                           transform = NULL,
+                          iterations = NULL,
                           keep_iterations = FALSE,
                           ...) {
   # reset to NULL if only "by" was specified
@@ -270,6 +278,7 @@ estimate_link <- function(model,
     data = data,
     by = by,
     ci = ci,
+    iterations = iterations,
     keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
@@ -285,6 +294,7 @@ estimate_prediction <- function(model,
                                 predict = "prediction",
                                 ci = 0.95,
                                 transform = NULL,
+                                iterations = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   .estimate_predicted(
@@ -292,6 +302,7 @@ estimate_prediction <- function(model,
     data = data,
     by = by,
     ci = ci,
+    iterations = iterations,
     keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
@@ -307,6 +318,7 @@ estimate_relation <- function(model,
                               predict = "expectation",
                               ci = 0.95,
                               transform = NULL,
+                              iterations = NULL,
                               keep_iterations = FALSE,
                               ...) {
   # reset to NULL if only "by" was specified
@@ -319,6 +331,7 @@ estimate_relation <- function(model,
     data = data,
     by = by,
     ci = ci,
+    iterations = iterations,
     keep_iterations = keep_iterations,
     predict = predict,
     transform = transform,
@@ -336,11 +349,17 @@ estimate_relation <- function(model,
                                 predict = "expectation",
                                 ci = 0.95,
                                 transform = NULL,
+                                iterations = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
   # only "by" or "data", but not both
   if (!is.null(by) && !is.null(data)) {
     insight::format_error("You can only specify one of `by` or `data`, but not both.")
+  }
+
+  # keep_iterations cannot be larger than interations
+  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations)) { # nolint
+    insight::format_error("`keep_iterations` cannot be larger than `iterations`.")
   }
 
   # call "get_data()" only once...
@@ -435,13 +454,17 @@ estimate_relation <- function(model,
     model,
     data = data,
     predict = predict,
-    ci = ci
+    ci = ci,
+    iterations = iterations
   )
+
   # for predicting grouplevel random effects, add "allow.new.levels"
   if (!is.null(grouplevel_effects) && any(grouplevel_effects %in% grid_specs$at_spec$varname)) {
     prediction_args$allow.new.levels <- TRUE
     dots$allow.new.levels <- NULL
   }
+
+  # get predictions
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
 
@@ -479,6 +502,7 @@ estimate_relation <- function(model,
 
   # Store relevant information
   attr(out, "ci") <- ci
+  attr(out, "iterations") <- iterations
   attr(out, "keep_iterations") <- keep_iterations
   attr(out, "response") <- model_response
   attr(out, "transform") <- !is.null(transform)

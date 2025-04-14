@@ -212,3 +212,29 @@ test_that("estimate_expectation - predicting RE works", {
     tolerance = 1e-4
   )
 })
+
+
+test_that("estimate_relation - shape", {
+  skip_if_not_installed("boot")
+  data(mtcars)
+  m <- lm(mpg ~ cyl + hp, data = mtcars)
+  out <- estimate_prediction(m, by = "cyl")
+  expect_equal(out$Predicted, c(25.044642, 20.515255, 15.985868), tolerance = 1e-4)
+  set.seed(123)
+  out <- estimate_prediction(m, by = "cyl", iterations = 5)
+  expect_equal(out$Predicted, c(24.2618, 20.319298, 16.376796), tolerance = 1e-4)
+  expect_identical(dim(out), c(3L, 6L))
+  set.seed(123)
+  out <- estimate_prediction(m, by = "cyl", iterations = 5, keep_iterations = TRUE)
+  expect_equal(out$Predicted, c(24.2618, 20.319298, 16.376796), tolerance = 1e-4)
+  expect_identical(dim(out), c(3L, 11L))
+  set.seed(123)
+  out <- estimate_prediction(m, by = "cyl", keep_iterations = TRUE)
+  expect_equal(out$Predicted, c(25.044642, 20.515255, 15.985868), tolerance = 1e-4)
+  expect_identical(dim(out), c(3L, 6L))
+  # error
+  expect_error(
+    estimate_prediction(m, by = "cyl", iterations = 5, keep_iterations = 10),
+    regex = "cannot be larger"
+  )
+})

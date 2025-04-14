@@ -33,6 +33,8 @@
   models like logistic regression, or beta regression. Formerly, name was
   `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
+* Exposed `iterations` argument in `estimate_prediction()` and `estimate_relation()`.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
