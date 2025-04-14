@@ -15,7 +15,12 @@ test_that("verbose", {
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-3)
 
   moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
-  out1 <- estimate_means(moff, "x")
+  expect_message(
+    {
+      out1 <- estimate_means(moff, "x")
+    },
+    regex = "Model contains an offset-term"
+  )
   out2 <- estimate_means(moff, "x", estimate = "average")
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
