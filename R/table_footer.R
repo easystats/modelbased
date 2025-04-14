@@ -61,9 +61,10 @@
         }
       }
     }
-    # "predictors average" strictly does not apply to `estimate = "average"`,
-    # because we average across all predictions, we do not take an "average value"
-    # of a non-focal predictor. Thus, we skip this line in the footer
+    # The "predictors averaged" line does not strictly apply to `estimate =
+    # "average"`, because we average across all predictions, we do not take an
+    # "average value" of a non-focal predictor. Thus, we skip this line in the
+    # footer
     if (!identical(marginalization, "average")) {
       average_string <- switch(type,
         predictions = "controlled",
