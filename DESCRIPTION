@@ -50,6 +50,7 @@ Imports:
 Suggests:
     BH,
     betareg,
+    boot,
     bootES,
     brms,
     coda,
