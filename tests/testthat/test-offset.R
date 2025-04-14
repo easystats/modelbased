@@ -32,7 +32,7 @@ test_that("verbose", {
     offset_1 = rep_len(50, 15)
   )
   moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
-  out1 <- estimate_means(moff, "x")
+  out1 <- estimate_means(moff, "x", verbose = FALSE)
   out2 <- estimate_means(moff, "x", estimate = "average")
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-3)
 })
