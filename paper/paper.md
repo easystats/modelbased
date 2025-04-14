@@ -46,7 +46,7 @@ affiliations:
 - name: Independent Researcher, Tampa, FL, USA
   index: 4
 
-- name: Center for Humans and Machines, Max Planck Institute for Human Development, Berlin, Germany
+- name: Carl Zeiss AG, Germany
   index: 5
 
 - name: Department of Psychology, New York University, New York, NY, USA

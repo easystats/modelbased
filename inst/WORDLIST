@@ -12,9 +12,12 @@ Dom
 Dickerman
 DS
 EFC
+EMM
+EMMs
 EUROFAMCARE
 Fitzsimons
 GAMM
+GLMM
 GLMMs
 GLM's
 Heiss
@@ -72,6 +75,7 @@ blogpost
 bocode
 bonferroni
 bootES
+brms
 caregiving
 ception
 codecov
@@ -115,6 +119,7 @@ intersectionality
 intra
 io
 jmr
+labelled
 lifecycle
 lme
 lme4

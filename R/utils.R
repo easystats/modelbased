@@ -1,21 +1,26 @@
 #' @keywords internal
 #' @noRd
-.brms_aux_elements <- function() {
-  c(
+.brms_aux_elements <- function(model = NULL) {
+  out <- c(
     "sigma", "mu", "nu", "shape", "beta", "phi", "hu", "ndt", "zoi", "coi",
-    "kappa", "bias", "bs", "zi", "alpha", "xi"
+    "kappa", "bias", "bs", "zi", "alpha", "xi", "delta", "k"
   )
+  unique(c(out, insight::find_auxiliary(model, verbose = FALSE)))
 }
 
 
 #' @keywords internal
 #' @noRd
-.valid_coefficient_names <- function() {
-  c(
+.valid_coefficient_names <- function(model = NULL) {
+  out <- c(
     "Mean", "Probability", "Difference", "Ratio", "Rate", "ZI-Probability",
-    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio",
-    tools::toTitleCase(.brms_aux_elements())
+    "Proportion", "Median", "MAP", "Coefficient", "Odds_ratio"
   )
+  dpars <- insight::find_auxiliary(model, verbose = FALSE)
+  if (!is.null(dpars)) {
+    out <- unique(c(out, tools::toTitleCase(dpars)))
+  }
+  out
 }
 
 
@@ -49,6 +54,9 @@
 
 #' @keywords internal
 #' @noRd
-.is_likert <- function(x, n_uniques = 5) {
-  all(.is_integer(x)) && insight::n_unique(x) <= n_uniques
+.is_likert <- function(x, integer_as_numeric = 5, ...) {
+  if (is.null(integer_as_numeric) || is.na(integer_as_numeric)) {
+    return(FALSE)
+  }
+  all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
 }

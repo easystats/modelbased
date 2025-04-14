@@ -134,3 +134,28 @@ test_that("estimate_slopes, works with glmmTMB", {
     tolerance = 1e-3
   )
 })
+
+
+test_that("estimate_slopes, works with glmmTMB", {
+  skip_if_not_installed("mgcv")
+  data(iris)
+  model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
+
+  # marginal effects at different values of Petal.Length
+  out <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
+  expect_identical(dim(out), c(10L, 7L))
+  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "p"))
+
+  # marginal effects at very specific values of Petal.Length
+  out <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+  expect_identical(dim(out), c(3L, 7L))
+  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "p"))
+  expect_equal(out$Slope, c(0.26937, 0.05088, -0.0195), tolerance = 1e-3)
+
+  # average marginal effects of Petal.Length,
+  # just for the trend within a certain range
+  out <- estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+  expect_identical(dim(out), c(1L, 6L))
+  expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "p"))
+  expect_equal(out$Slope, 0.06614, tolerance = 1e-3)
+})

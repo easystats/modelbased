@@ -176,8 +176,12 @@
   # axis and legend labels
   # ------------------------------------------------------------------------
   if (!is.null(model_data) && !is.null(model_response)) {
-    # response - mapped to the y-axis
-    ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
+    if ("estimate_slopes" %in% att$class) {
+      ylab <- att$trend
+    } else {
+      # response - mapped to the y-axis if not slopes
+      ylab <- .safe(attr(model_data[[model_response]], "label", exact = TRUE))
+    }
     # fix default y-label, if necessary
     y_prefix <- aes$y
     if (y_prefix == "Predicted") {
@@ -265,7 +269,7 @@
   if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
-    if (!is.null(trans_fun) && trans_fun != "identity") {
+    if (!is.null(trans_fun) && all(trans_fun != "identity")) {
       show_data <- FALSE
     }
   }
@@ -464,7 +468,7 @@
   # Default changes for binomial models
   shape <- 16
   stroke <- 0
-  if (insight::model_info(model)$is_binomial) {
+  if (insight::model_info(model, response = 1)$is_binomial) {
     shape <- "|"
     stroke <- 1
   }

@@ -36,6 +36,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [What are, why use and how to get marginal means](https://easystats.github.io/modelbased/articles/estimate_means.html)
 * [Contrast analysis](https://easystats.github.io/modelbased/articles/estimate_contrasts.html)
 * [Marginal effects and derivatives](https://easystats.github.io/modelbased/articles/estimate_slopes.html)
+* [Mixed effects models](https://easystats.github.io/modelbased/articles/mixed_models.html)
 
 ### Interpretation
 
@@ -45,6 +46,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 
 ### Visualization
 
+* [Plotting estimated marginal means](https://easystats.github.io/modelbased/articles/plotting.html)
 * [Visualize effects and interactions](https://easystats.github.io/modelbased/articles/estimate_relation.html)
 * [The Modelisation Approach to Statistics](https://easystats.github.io/modelbased/articles/modelisation_approach.html)
 

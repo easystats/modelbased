@@ -16,6 +16,7 @@
 get_emtrends <- function(model,
                          trend = NULL,
                          by = NULL,
+                         predict = NULL,
                          keep_iterations = FALSE,
                          verbose = TRUE,
                          ...) {
@@ -25,17 +26,29 @@ get_emtrends <- function(model,
   # Guess arguments
   my_args <- .guess_emtrends_arguments(model, trend, by, verbose, ...)
 
-  # Run emtrends
-  estimated <- suppressMessages(emmeans::emtrends(
-    model,
-    specs = my_args$emmeans_specs,
-    var = my_args$trend,
-    at = my_args$emmeans_at,
-    ...
+  # setup function arguments
+  fun_args <- insight::compact_list(c(
+    list(
+      model,
+      specs = my_args$emmeans_specs,
+      var = my_args$trend,
+      at = my_args$emmeans_at
+    ),
+    list(...)
   ))
 
+  # handle distributional parameters
+  if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
+    fun_args$dpar <- predict
+  } else {
+    fun_args$type <- predict
+  }
+
+  # Run emtrends
+  estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
+
   # for Bayesian model, keep iterations
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
     keep_iterations <- FALSE
@@ -95,7 +108,7 @@ get_emtrends <- function(model,
 
 .format_emmeans_slopes <- function(model, estimated, ci, ...) {
   # Summarize and clean
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     trends <- parameters::parameters(estimated, ci = ci, ...)
     trends <- .clean_names_bayesian(trends, model, predict = "none", type = "trend")
     em_grid <- as.data.frame(estimated@grid)

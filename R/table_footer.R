@@ -16,13 +16,13 @@
   model_info <- info$model_info
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
-    model_info <- insight::model_info(model)
+    model_info <- insight::model_info(model, response = 1)
   }
 
 
   # name of predicted response -----------------------------------------------
 
-  table_footer <- paste0("\nVariable predicted: ", insight::find_response(model))
+  table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
 
 
   # modulated predictors (focal terms) ---------------------------------------
@@ -107,7 +107,7 @@
   } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))
-    if (!is.null(trans_fun) && trans_fun != "identity") {
+    if (!is.null(trans_fun) && all(trans_fun != "identity")) {
       table_footer <- paste0(
         table_footer,
         "\n",
@@ -184,7 +184,7 @@
   model_info <- info$model_info
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
-    model_info <- insight::model_info(model)
+    model_info <- insight::model_info(model, response = 1)
   }
   transform <- info$transform
 
@@ -195,7 +195,7 @@
   if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))
-    if (!is.null(trans_fun) && trans_fun != "identity") {
+    if (!is.null(trans_fun) && all(trans_fun != "identity")) {
       table_footer <- paste0(table_footer, "\nSlopes are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
     }
   }

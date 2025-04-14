@@ -119,7 +119,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   model_data <- insight::get_data(model, verbose = FALSE)
   info <- attributes(x)$model_info
   if (is.null(info)) {
-    info <- insight::model_info(model)
+    info <- insight::model_info(model, response = 1)
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
@@ -160,7 +160,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   # model information
   info <- attributes(x)$model_info
   if (is.null(info)) {
-    info <- insight::model_info(model)
+    info <- insight::model_info(model, response = 1)
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
@@ -556,7 +556,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
 
   # Rename for Categorical family
-  if (info$is_categorical || info$is_ordinal || info$is_cumulative) {
+  if (info$is_categorical || info$is_ordinal || info$is_cumulative || insight::is_multivariate(model)) {
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
   }
 

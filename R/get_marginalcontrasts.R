@@ -37,7 +37,7 @@ get_marginalcontrasts <- function(model,
   on_the_fly_factors <- attributes(model_data)$factors
 
   # model details
-  model_info <- insight::model_info(model, verbose = FALSE)
+  model_info <- insight::model_info(model, response = 1, verbose = FALSE)
 
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(
@@ -67,13 +67,22 @@ get_marginalcontrasts <- function(model,
     first_focal <- names(first_focal)
   }
 
+  # sanity check: `contrast` and `by` cannot be the same
+  cleaned_by <- gsub("=.*", "\\1", my_args$by)
+  cleaned_contrast <- gsub("=.*", "\\1", my_args$contrast)
+  if (length(cleaned_by) && length(cleaned_contrast) && (all(cleaned_by %in% cleaned_contrast) || all(cleaned_contrast %in% cleaned_by))) { # nolint
+    insight::format_error(
+      "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
+    )
+  }
+
 
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
   # if first focal term is numeric, we contrast slopes, but slopes only for
   # # numerics with many values, not for binary or likert-alike
-  if (is.numeric(model_data[[first_focal]]) && !.is_likert(model_data[[first_focal]]) && !first_focal %in% on_the_fly_factors) { # nolint
+  if (is.numeric(model_data[[first_focal]]) && !.is_likert(model_data[[first_focal]], ...) && !first_focal %in% on_the_fly_factors) { # nolint
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint

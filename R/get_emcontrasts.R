@@ -22,18 +22,11 @@ get_emcontrasts <- function(model,
                             by = NULL,
                             predict = NULL,
                             comparison = "pairwise",
-                            transform = NULL,
                             keep_iterations = FALSE,
                             verbose = TRUE,
                             ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -90,7 +83,7 @@ get_emcontrasts <- function(model,
   out <- emmeans::contrast(estimated, by = emm_by, method = comparison, ...)
 
   # for Bayesian model, keep iterations
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     attr(out, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
     keep_iterations <- FALSE
@@ -150,7 +143,7 @@ get_emcontrasts <- function(model,
 
 .format_emmeans_contrasts <- function(model, estimated, ci, p_adjust, ...) {
   predict <- attributes(estimated)$predict
-  m_info <- insight::model_info(model)
+  m_info <- insight::model_info(model, response = 1)
 
   # Summarize and clean
   if (m_info$is_bayesian) {

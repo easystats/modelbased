@@ -52,6 +52,8 @@ navbar:
           href: articles/estimate_contrasts.html
         - text: "Marginal effects and derivatives"
           href: articles/estimate_slopes.html
+        - text: "Mixed effects models"
+          href: articles/mixed_models.html
         - text: -------
         - text: "Interpretation"
         - text: "Use a model to make predictions"
@@ -62,6 +64,8 @@ navbar:
           href: articles/estimate_grouplevel.html
         - text: -------
         - text: "Visualization"
+        - text: "Plotting estimated marginal means"
+          href: articles/plotting.html
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
         - text: "The modelisation approach"

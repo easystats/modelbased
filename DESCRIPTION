@@ -1,12 +1,12 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.10.0.7
+Version: 0.10.0.22
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
              role = c("aut", "cre"),
-             email = "dom.makowski@gmail.com",
+             email = "officialeasystats@gmail.com",
              comment = c(ORCID = "0000-0001-5375-9967")),
       person(given = "Daniel",
              family = "Lüdecke",
@@ -28,7 +28,7 @@ Authors@R:
              role = "aut",
              email = "remi.theriault@mail.mcgill.ca",
              comment = c(ORCID = "0000-0003-4315-6788")))
-Maintainer: Dominique Makowski <dom.makowski@gmail.com>
+Maintainer: Dominique Makowski <officialeasystats@gmail.com>
 Description: Implements a general interface for model-based estimations
     for a wide variety of models, used in the computation of
     marginal means, contrast analysis and predictions. For a list of supported models,
@@ -39,10 +39,10 @@ BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.15.1),
-    datawizard (>= 1.0.0),
-    insight (>= 1.0.1),
-    parameters (>= 0.24.1),
+    bayestestR (>= 0.15.2),
+    datawizard (>= 1.0.2),
+    insight (>= 1.1.0),
+    parameters (>= 0.24.2),
     graphics,
     stats,
     tools,
@@ -50,6 +50,7 @@ Imports:
 Suggests:
     BH,
     betareg,
+    boot,
     bootES,
     brms,
     coda,
@@ -76,6 +77,7 @@ Suggests:
     mgcv,
     nanoparquet,
     ordinal,
+    palmerpenguins,
     performance (>= 0.13.0),
     patchwork,
     pbkrtest,
@@ -86,6 +88,7 @@ Suggests:
     rmarkdown,
     rstanarm,
     rtdists,
+    RWiener,
     sandwich,
     see (>= 0.11.0),
     testthat (>= 3.2.1),

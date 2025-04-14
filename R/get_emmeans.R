@@ -37,18 +37,11 @@
 get_emmeans <- function(model,
                         by = "auto",
                         predict = NULL,
-                        transform = NULL,
                         keep_iterations = FALSE,
                         verbose = TRUE,
                         ...) {
   # check if available
   insight::check_if_installed("emmeans")
-
-  ## TODO: remove deprecation warning later
-  if (!is.null(transform)) {
-    insight::format_warning("Argument `transform` is deprecated. Please use `predict` instead.")
-    predict <- transform
-  }
 
   # Guess arguments
   my_args <- .guess_emmeans_arguments(model, by, verbose, ...)
@@ -64,7 +57,7 @@ get_emmeans <- function(model,
   )
 
   # handle distributional parameters
-  if (predict %in% .brms_aux_elements() && inherits(model, "brmsfit")) {
+  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
     fun_args$dpar <- predict
   } else {
     fun_args$type <- predict
@@ -86,7 +79,7 @@ get_emmeans <- function(model,
   }
 
   # for Bayesian model, keep iterations
-  if (insight::model_info(model)$is_bayesian) {
+  if (insight::model_info(model, response = 1)$is_bayesian) {
     attr(estimated, "posterior_draws") <- insight::get_parameters(estimated)
   } else {
     keep_iterations <- FALSE
@@ -154,7 +147,7 @@ get_emmeans <- function(model,
 
 .format_emmeans_means <- function(x, model, ci = 0.95, verbose = TRUE, ...) {
   predict <- attributes(x)$predict
-  m_info <- insight::model_info(model)
+  m_info <- insight::model_info(model, response = 1)
 
   # Summarize and clean
   if (m_info$is_bayesian) {

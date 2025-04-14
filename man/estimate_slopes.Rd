@@ -8,6 +8,7 @@ estimate_slopes(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,
@@ -21,7 +22,12 @@ estimate_slopes(
 \item{model}{A statistical model.}
 
 \item{trend}{A character indicating the name of the variable for which to
-compute the slopes.}
+compute the slopes. To get marginal effects at specific values, use
+\code{trend="<variable>"} along with the \code{by} argument, e.g.
+\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+instance, \verb{by="<variable>", length=30}. To calculate average marginal
+effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
+similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
 \item{by}{The (focal) predictor variable(s) at which to evaluate the desired
 effect / mean / contrasts. Other predictors of the model that are not
@@ -35,15 +41,37 @@ case, \code{by} can also be list of named elements. See details in
 \code{\link[insight:get_datagrid]{insight::get_datagrid()}} to learn more about how to create data grids for
 predictors of interest.}
 
+\item{predict}{Is passed to the \code{type} argument in \code{emmeans::emmeans()} (when
+\code{backend = "emmeans"}) or in \code{marginaleffects::avg_predictions()} (when
+\code{backend = "marginaleffects"}). Valid options for \code{predict} are:
+\itemize{
+\item \code{backend = "marginaleffects"}: \code{predict} can be \code{"response"}, \code{"link"},
+\code{"inverse_link"} or any valid \code{type} option supported by model's class
+\code{predict()} method (e.g., for zero-inflation models from package
+\strong{glmmTMB}, you can choose \code{predict = "zprob"} or \code{predict = "conditional"}
+etc., see \link[glmmTMB:predict.glmmTMB]{glmmTMB::predict.glmmTMB}). By default, when \code{predict = NULL},
+the most appropriate transformation is selected, which usually returns
+predictions or contrasts on the response-scale. The \code{"inverse_link"} is a
+special option, comparable to \emph{marginaleffects}' \code{invlink(link)} option. It
+will calculate predictions on the link scale and then back-transform to the
+response scale.
+\item \code{backend = "emmeans"}: \code{predict} can be \code{"response"}, \code{"link"}, \code{"mu"},
+\code{"unlink"}, or \code{"log"}. If \code{predict = NULL} (default), the most appropriate
+transformation is selected (which usually is \code{"response"}). See also
+\href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
+}
+
+See also section \emph{Predictions on different scales}.}
+
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
-option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
-\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
-\code{"sidak"}, or \code{"holm"}.}
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
+(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
+\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -101,6 +129,14 @@ Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
+\item Especially for \code{estimate_contrasts()} with integer focal predictors, for
+which contrasts should be calculated, use argument \code{integer_as_numeric} to
+set the maximum number of unique values in an integer predictor to treat
+that predictor as "discrete integer" or as numeric. For the first case,
+contrasts are calculated between values of the predictor, for the latter,
+contrasts of slopes are calculated. If the integer has more than
+\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
+\code{5}.
 }}
 }
 \value{
@@ -243,6 +279,22 @@ slopes <- estimate_slopes(model,
 )
 summary(slopes)
 plot(slopes)
+
+# marginal effects, grouped by Species, at different values of Petal.Length
+estimate_slopes(model,
+  trend = "Petal.Length",
+  by = c("Petal.Length", "Species"), length = 10
+)
+
+# marginal effects at different values of Petal.Length
+estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
+
+# marginal effects at very specific values of Petal.Length
+estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
+
+# average marginal effects of Petal.Length,
+# just for the trend within a certain range
+estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 }
 \dontshow{\}) # examplesIf}
 }

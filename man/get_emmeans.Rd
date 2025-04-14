@@ -17,7 +17,6 @@ get_emcontrasts(
   by = NULL,
   predict = NULL,
   comparison = "pairwise",
-  transform = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -27,7 +26,6 @@ get_emmeans(
   model,
   by = "auto",
   predict = NULL,
-  transform = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -37,6 +35,7 @@ get_emtrends(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -73,6 +72,7 @@ get_marginaltrends(
   model,
   trend = NULL,
   by = NULL,
+  predict = NULL,
   ci = 0.95,
   p_adjust = "none",
   transform = NULL,
@@ -120,28 +120,7 @@ transformation is selected (which usually is \code{"response"}). See also
 \href{https://CRAN.R-project.org/package=emmeans/vignettes/transformations.html}{this vignette}.
 }
 
-\code{"link"} will leave the values on scale of the linear predictors.
-\code{"response"} (or \code{NULL}) will transform them on scale of the response
-variable. Thus for a logistic model, \code{"link"} will give estimations expressed
-in log-odds (probabilities on logit scale) and \code{"response"} in terms of
-probabilities. To predict distributional parameters (called "dpar" in other
-packages), for instance when using complex formulae in \code{brms} models, the
-\code{predict} argument can take the value of the parameter you want to estimate,
-for instance \code{"sigma"}, \code{"kappa"}, etc.
-
-\code{"response"} and \code{"inverse_link"} both return predictions on the response
-scale, however, \code{"response"} first calculates predictions on the response
-scale for each observation and \emph{then} aggregates them by groups or levels
-defined in \code{by}. \code{"inverse_link"} first calculates predictions on the link
-scale for each observation, then aggregates them by groups or levels defined
-in \code{by}, and finally back-transforms the predictions to the response scale.
-Both approaches have advantages and disadvantages. \code{"response"} usually
-produces less biased predictions, but confidence intervals might be outside
-reasonable bounds (i.e., for instance can be negative for count data). The
-\code{"inverse_link"} approach is more robust in terms of confidence intervals, but
-might produce biased predictions. In particular for mixed models, using
-\code{"response"} is recommended, because averaging across random effects groups
-is more accurate.}
+See also section \emph{Predictions on different scales}.}
 
 \item{comparison}{Specify the type of contrasts or tests that should be
 carried out.
@@ -171,15 +150,6 @@ can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( \code{|}).
 }
 }}
-
-\item{transform}{A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be \code{TRUE}, in
-which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function. Note that no standard errors are returned
-when transformations are applied.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
@@ -212,10 +182,23 @@ Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
+\item Especially for \code{estimate_contrasts()} with integer focal predictors, for
+which contrasts should be calculated, use argument \code{integer_as_numeric} to
+set the maximum number of unique values in an integer predictor to treat
+that predictor as "discrete integer" or as numeric. For the first case,
+contrasts are calculated between values of the predictor, for the latter,
+contrasts of slopes are calculated. If the integer has more than
+\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
+\code{5}.
 }}
 
 \item{trend}{A character indicating the name of the variable for which to
-compute the slopes.}
+compute the slopes. To get marginal effects at specific values, use
+\code{trend="<variable>"} along with the \code{by} argument, e.g.
+\code{by="<variable>=c(1, 3, 5)"}, or a combination of \code{by} and \code{length}, for
+instance, \verb{by="<variable>", length=30}. To calculate average marginal
+effects over a range of values, use \code{trend="<variable>=seq(1, 3, 0.1)"} (or
+similar) and omit the variable provided in \code{trend} from the \code{by} argument.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
@@ -256,10 +239,19 @@ e.g. \code{options(modelbased_estimate = "average")}}
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the \code{"esarey"}
-option is recommended, but \code{p_adjust} can also be one of \code{"none"} (default),
-\code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"},
-\code{"sidak"}, or \code{"holm"}.}
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
+(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
+\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the
