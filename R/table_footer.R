@@ -14,6 +14,8 @@
   adjusted_for <- info$adjusted_for
   transform <- info$transform
   model_info <- info$model_info
+  marginalization <- info$estimate
+
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
     model_info <- insight::model_info(model, response = 1)
@@ -59,11 +61,16 @@
         }
       }
     }
-    average_string <- switch(type,
-      predictions = "controlled",
-      "averaged"
-    )
-    table_footer <- paste0(table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for))
+    # "predictors average" strictly does not apply to `estimate = "average"`,
+    # because we average across all predictions, we do not take an "average value"
+    # of a non-focal predictor. Thus, we skip this line in the footer
+    if (!identical(marginalization, "average")) {
+      average_string <- switch(type,
+        predictions = "controlled",
+        "averaged"
+      )
+      table_footer <- paste0(table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for))
+    }
   }
 
 

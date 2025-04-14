@@ -35,6 +35,10 @@
 
 * Exposed `iterations` argument in `estimate_prediction()` and `estimate_relation()`.
 
+* Option `estimate = "average` no longer print information on averaged predictors
+  in the footer, because strictly, the *predictions* are averaged over, and not
+  the non-focal variables.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
