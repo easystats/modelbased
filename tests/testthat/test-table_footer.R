@@ -15,4 +15,6 @@ test_that("table_footer", {
     out[11],
     "Predictors averaged: c12hour (42), barthtot (65), c161sex, e42dep"
   )
+  out <- utils::capture.output(estimate_means(m, "c172code", estimate = "average", verbose = FALSE))
+  expect_length(out, 10)
 })

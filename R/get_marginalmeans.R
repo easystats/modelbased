@@ -50,6 +50,11 @@ get_marginalmeans <- function(model,
     c("typical", "population", "specific", "average")
   )
 
+  # inform user about appropriate use of offset-terms
+  if (estimate %in% c("specific", "typical") && !is.null(insight::find_offset(model)) && verbose) { # nolint
+    insight::format_alert("Model contains an offset-term, which is set to its mean value. To fully account for the individual offset-values per observation, use `estimate = \"average\"`.")
+  }
+
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
 
