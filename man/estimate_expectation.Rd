@@ -96,7 +96,7 @@ errors are returned when transformations are applied.}
 posterior draws. If \code{NULL}, will use all the draws (one for each iteration of
 the model). For frequentist models, if not \code{NULL}, will generate bootstrapped
 draws, from which bootstrapped CIs will be computed. Use \code{keep_iterations} to
-control if and how many draws will be included in the return output (data
+control if and how many draws will be included in the returned output (data
 frame), which can be used, for instance, for plotting.}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of

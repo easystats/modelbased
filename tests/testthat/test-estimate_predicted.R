@@ -232,4 +232,9 @@ test_that("estimate_relation - shape", {
   out <- estimate_prediction(m, by = "cyl", keep_iterations = TRUE)
   expect_equal(out$Predicted, c(25.044642, 20.515255, 15.985868), tolerance = 1e-4)
   expect_identical(dim(out), c(3L, 6L))
+  # error
+  expect_error(
+    estimate_prediction(m, by = "cyl", iterations = 5, keep_iterations = 10),
+    regex = "cannot be larger"
+  )
 })
