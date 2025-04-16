@@ -56,6 +56,9 @@ get_marginalmeans <- function(model,
   # Guess arguments
   my_args <- .guess_marginaleffects_arguments(model, by, verbose = verbose, ...)
 
+  # inform user about appropriate use of offset-terms
+  .check_offset(model, estimate, offset = dots$offset, verbose = verbose)
+
   # find default response-type, and get information about back transformation
   predict_args <- .get_marginaleffects_type_argument(
     model,
@@ -104,6 +107,14 @@ get_marginalmeans <- function(model,
     datagrid <- do.call(insight::get_datagrid, dg_args)
     datagrid_info <- attributes(datagrid)
 
+    # handle offsets
+    if (!is.null(dots$offset)) {
+      model_offset <- insight::find_offset(model)
+      if (!is.null(model_offset)) {
+        datagrid[[model_offset]] <- dots$offset
+      }
+    }
+
     # restore data types -  if we have defined numbers in `by`, like
     # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
     # numeric in the data grid. Fix this here, else marginal effects will fail
@@ -117,7 +128,7 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma")] <- NULL
+  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma", "offset")] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df)) {
@@ -450,4 +461,37 @@ get_marginalmeans <- function(model,
   contrast <- validate_arg(contrast, "contrast")
 
   list(by = by, contrast = contrast)
+}
+
+
+.check_offset <- function(model, estimate, offset = NULL, verbose = TRUE) {
+  # check if model has an offset at all
+  if (!is.null(insight::find_offset(model)) && verbose) {
+    msg <- NULL
+    if (is.null(offset)) {
+      # if no offset argument was specified, tell user what this means
+      msg <- switch(estimate,
+        specific = ,
+        typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`.",
+        "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
+      )
+      # if offset term is log-transformed, tell user. offset should be fixed then
+      log_offset <- insight::find_transformation(insight::find_offset(model, as_term = TRUE))
+      if (!is.null(log_offset) && startsWith(log_offset, "log")) {
+        msg <- c(
+          msg,
+          "We also found that the model has a log-transformed offset term. If you use the `offset` argument, the log-transformation will automatically be applied to the provided offset-value. I.e., consider using, for instance, `offset = 10` and not `offset = log(10)`."
+        )
+      }
+    } else {
+      # if offset was specified, and estimate averages over predictions, tell this
+      msg <- switch(estimate,
+        average = ,
+        population = paste0("For `estimate = \"", estimate, "\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`.")
+      )
+    }
+    if (!is.null(msg)) {
+      insight::format_alert(msg)
+    }
+  }
 }

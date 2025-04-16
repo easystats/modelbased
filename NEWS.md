@@ -33,6 +33,17 @@
   models like logistic regression, or beta regression. Formerly, name was
   `Mean`, now it is `Probability` or `Proportion`, depending on the model.
 
+* Exposed `iterations` argument in `estimate_prediction()` and `estimate_relation()`.
+
+* Option `estimate = "average` no longer prints information on averaged predictors
+  in the footer, because strictly, the *predictions* are averaged over, and not
+  the non-focal variables.
+
+* Better handling for models with offsets in `estimate_means()` and
+  `estimate_contrasts()`. Informative messages are given when models include
+  offset terms, and it is possible to fix the offset value using the `offset`
+  argument.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
@@ -46,6 +57,8 @@
   package *brms*.
 
 * Fixed issue with wrong y-axis label for plots from `estimate_slopes()`.
+
+* Fixed issue with weights in `estimate_relation()`.
 
 # modelbased 0.10.0
 
