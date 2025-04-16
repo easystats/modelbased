@@ -105,4 +105,4 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
-Remotes: easystats/insight, easystats/bayestestR, easystats/parameters
+Remotes: easystats/insight, easystats/bayestestR, easystats/parameters, easystats/datawizard
