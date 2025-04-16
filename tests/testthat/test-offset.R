@@ -30,6 +30,13 @@ test_that("verbose", {
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
 
+  expect_message(
+    {
+      estimate_means(moff, "x")
+    },
+    regex = "We also found"
+  )
+
   expect_silent({
     out1 <- estimate_means(moff, "x", offset = 100)
   })

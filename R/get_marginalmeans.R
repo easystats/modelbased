@@ -475,6 +475,14 @@ get_marginalmeans <- function(model,
         typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`.",
         "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
       )
+      # if offset term is log-transformed, tell user. offset should be fixed then
+      log_offset <- insight::find_transformation(insight::find_offset(model, as_term = TRUE))
+      if (!is.null(log_offset) && startsWith(log_offset, "log")) {
+        msg <- c(
+          msg,
+          "We also found that the model used a transformed offset term. Predictions may not be correct. It is recommended to fix the offset to a specific value. You could also transform the offset variable before fitting the model."
+        )
+      }
     } else {
       # if offset was specified, and estimate averages over predictions, tell this
       msg <- switch(estimate,
