@@ -16,7 +16,7 @@ estimate_contrasts.estimate_predicted <- function(model,
 
   # sanity check
   if (is.null(contrast)) {
-    insight::format_error("Argument `contrast` must be specified and cannot be `NULL`.")
+    contrast <- attributes(model)$focal_terms
   }
 
   # the "model" object is an object of class "estimate_predicted", we want
