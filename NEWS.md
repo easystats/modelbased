@@ -39,6 +39,11 @@
   in the footer, because strictly, the *predictions* are averaged over, and not
   the non-focal variables.
 
+* Better handling for models with offsets in `estimate_means()` and
+  `estimate_contrasts()`. Informative messages are given when models include
+  offset terms, and it is possible to fix the offset value using the `offset`
+  argument.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
