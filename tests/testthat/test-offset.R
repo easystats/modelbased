@@ -30,11 +30,9 @@ test_that("verbose", {
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
 
-  expect_silent(
-    {
-      out1 <- estimate_means(moff, "x", offset = 100)
-    }
-  )
+  expect_silent({
+    out1 <- estimate_means(moff, "x", offset = 100)
+  })
   expect_message(
     {
       out2 <- estimate_means(moff, "x", estimate = "average", offset = 100)
@@ -51,15 +49,11 @@ test_that("verbose", {
     offset_1 = rep_len(50, 15)
   )
   moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
-  expect_silent(
-    {
-      out1 <- estimate_means(moff, "x", verbose = FALSE)
-    }
-  )
-  expect_silent(
-    {
-      out2 <- estimate_means(moff, "x", estimate = "average", verbose = FALSE)
-    }
-  )
+  expect_silent({
+    out1 <- estimate_means(moff, "x", verbose = FALSE)
+  })
+  expect_silent({
+    out2 <- estimate_means(moff, "x", estimate = "average", verbose = FALSE)
+  })
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-3)
 })
