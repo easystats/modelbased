@@ -19,10 +19,34 @@ test_that("verbose", {
     {
       out1 <- estimate_means(moff, "x")
     },
-    regex = "Model contains an offset-term"
+    regex = "which is set to"
   )
-  out2 <- estimate_means(moff, "x", estimate = "average")
+  expect_message(
+    {
+      out2 <- estimate_means(moff, "x", estimate = "average")
+    },
+    regex = "and you average"
+  )
   expect_equal(out1$Mean, c(295.12035, 454.3339, 654.64225), tolerance = 1e-3)
+  expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
+
+  expect_message(
+    {
+      estimate_means(moff, "x")
+    },
+    regex = "We also found"
+  )
+
+  expect_silent({
+    out1 <- estimate_means(moff, "x", offset = 100)
+  })
+  expect_message(
+    {
+      out2 <- estimate_means(moff, "x", estimate = "average", offset = 100)
+    },
+    regex = "For"
+  )
+  expect_equal(out1$Mean, c(664.68547, 1023.27456, 1474.41949), tolerance = 1e-3)
   expect_equal(out2$Mean, c(256.42016, 289.02697, 707.83022), tolerance = 1e-3)
 
   set.seed(1)
@@ -32,7 +56,11 @@ test_that("verbose", {
     offset_1 = rep_len(50, 15)
   )
   moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
-  out1 <- estimate_means(moff, "x", verbose = FALSE)
-  out2 <- estimate_means(moff, "x", estimate = "average")
+  expect_silent({
+    out1 <- estimate_means(moff, "x", verbose = FALSE)
+  })
+  expect_silent({
+    out2 <- estimate_means(moff, "x", estimate = "average", verbose = FALSE)
+  })
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-3)
 })
