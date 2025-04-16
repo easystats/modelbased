@@ -480,7 +480,7 @@ get_marginalmeans <- function(model,
       if (!is.null(log_offset) && startsWith(log_offset, "log")) {
         msg <- c(
           msg,
-          "We also found that the model used a transformed offset term. Predictions may not be correct. It is recommended to fix the offset to a specific value. You could also transform the offset variable before fitting the model."
+          "We also found that the model has a log-transformed offset term. If you use the `offset` argument, the log-transformation will automatically be applied to the provided offset-value. I.e., consider using, for instance, `offset = 10` and not `offset = log(10)`."
         )
       }
     } else {
