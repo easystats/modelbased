@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.23</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.24</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -273,6 +273,9 @@ contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
 <code>integer_as_numeric</code> unique values, it is treated as numeric. Defaults to
 <code>5</code>.</p></li>
+<li><p>For count regression models that use an offset term, use <code>offset = &lt;value&gt;</code>
+to fix the offset at a specific value. Or use <code>estimate = "average"</code>, to
+average predictions over the distribution of the offset (if appropriate).</p></li>
 </ul></dd>
 
 </dl></div>
