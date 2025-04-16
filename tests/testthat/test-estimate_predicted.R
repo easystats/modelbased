@@ -237,4 +237,7 @@ test_that("estimate_relation - shape", {
     estimate_prediction(m, by = "cyl", iterations = 5, keep_iterations = 10),
     regex = "cannot be larger"
   )
+  expect_silent(
+    estimate_prediction(m, by = "cyl", iterations = 15, keep_iterations = 10)
+  )
 })

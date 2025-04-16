@@ -358,7 +358,7 @@ estimate_relation <- function(model,
   }
 
   # keep_iterations cannot be larger than interations
-  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations)) { # nolint
+  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations) && keep_iterations > iterations) { # nolint
     insight::format_error("`keep_iterations` cannot be larger than `iterations`.")
   }
 
