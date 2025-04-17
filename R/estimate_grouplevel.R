@@ -43,14 +43,11 @@
 #' # Visualize random effects
 #' plot(random)
 #'
-#' # Reshape to wide data so that it matches the original dataframe...
-#' reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+#' # Reshape to wide data...
+#' reshaped <- reshape_grouplevel(random, group = "carb", indices = c("Coefficient", "SE"))
 #'
 #' # ...and can be easily combined with the original data
-#' alldata <- cbind(mtcars, reshaped)
-#'
-#' # Use summary() to remove duplicated rows
-#' summary(reshaped)
+#' alldata <- merge(mtcars, reshaped)
 #'
 #' # overall coefficients
 #' estimate_grouplevel(model, type = "total")
