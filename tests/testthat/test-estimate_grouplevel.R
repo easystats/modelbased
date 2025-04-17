@@ -15,19 +15,20 @@ test_that("estimate_grouplevel - lme4", {
   model <- lme4::lmer(Reaction ~ Days + (1 | Subject), data = data)
   random <- estimate_grouplevel(model)
   expect_equal(nrow(random), length(unique(data$Subject)))
-  expect_equal(nrow(reshape_grouplevel(random)), nrow(data))
+  expect_equal(nrow(reshape_grouplevel(random)), length(unique(data$Subject)))
 
   # 2 random intercepts
   model <- lme4::lmer(mpg ~ wt + (1 | gear) + (1 | carb), data = mtcars)
   random <- estimate_grouplevel(model)
   expect_equal(nrow(random), length(c(unique(mtcars$gear), unique(mtcars$carb))))
-  expect_equal(nrow(reshape_grouplevel(random)), nrow(mtcars))
+  expect_equal(nrow(reshape_grouplevel(random, group = "gear")), length(unique(mtcars$gear)))
+  expect_equal(nrow(reshape_grouplevel(random, group = "carb")), length(unique(mtcars$carb)))
 
   # Random slope and intercept
   model <- lme4::lmer(Reaction ~ Days + (1 + Days | Subject), data = data)
   random <- estimate_grouplevel(model)
   expect_equal(nrow(random), 2 * length(unique(data$Subject)))
-  expect_equal(nrow(reshape_grouplevel(random)), nrow(data))
+  expect_equal(nrow(reshape_grouplevel(random)), length(unique(data$Subject)))
 
   # Nested random factors
   set.seed(33)
@@ -41,8 +42,8 @@ test_that("estimate_grouplevel - lme4", {
   random <- estimate_grouplevel(model)
   expect_equal(nrow(random), sum(sapply(coef(model), nrow)))
 
-  reshaped <- reshape_grouplevel(random)
-  expect_equal(nrow(reshaped), nrow(data))
+  reshaped <- reshape_grouplevel(random, group = "grp")
+  expect_equal(nrow(reshaped), length(unique(data$grp)))
   ref <- insight::get_data(model, verbose = FALSE)[insight::find_random(model, split_nested = TRUE, flatten = TRUE)]
   all(reshaped$Subject == ref$Subject)
   all(reshaped$grp == ref$grp)
