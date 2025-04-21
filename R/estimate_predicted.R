@@ -479,8 +479,10 @@ estimate_relation <- function(model,
     out[[model_response]] <- NULL
   }
 
-  # clean-up: remove "Row" variable (from ordinal and alike)
-  out[["Row"]] <- NULL
+  # keep row-column, but make sure it's integer
+  if ("Row" %in% colnames(out)) {
+    out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
+  }
 
   # Add residuals
   if (!is.null(response)) {
