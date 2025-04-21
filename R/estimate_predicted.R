@@ -479,10 +479,11 @@ estimate_relation <- function(model,
     out[[model_response]] <- NULL
   }
 
-  # clean-up: remove "Row" variable (from ordinal and alike)
+  # clean-up: remove "Row" variable (from ordinal and alike) for data grids
   if (is_grid || inherits(data, "datagrid")) {
     out[["Row"]] <- NULL
   } else {
+    # keep row-column for user-specific "data"
     out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
   }
 
