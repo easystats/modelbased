@@ -479,9 +479,6 @@ estimate_relation <- function(model,
     out[[model_response]] <- NULL
   }
 
-  # clean-up: remove "Row" variable (from ordinal and alike)
-  out[["Row"]] <- NULL
-
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted

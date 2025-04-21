@@ -18,6 +18,10 @@
 * `estimate_prediction()` and `estimate_relation()` now support Wiener-models
   (Drift Diffusion Models) from package *brms*.
 
+* `estimate_prediction()`, `estimate_relation()` and similar functions now
+  include the `Row` column for models with ordinal or categorical response
+  variables.
+
 * `estimate_slopes()` can now also calculate average marginal effects of a
   predictor, just for the trend of that predictor within a certain range of
   values.
