@@ -482,7 +482,7 @@ estimate_relation <- function(model,
   # clean-up: remove "Row" variable (from ordinal and alike) for data grids
   if (is_grid || inherits(data, "datagrid")) {
     out[["Row"]] <- NULL
-  } else {
+  } else if ("Row" %in% colnames(out)) {
     # keep row-column for user-specific "data"
     out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
   }
