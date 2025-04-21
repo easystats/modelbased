@@ -21,7 +21,7 @@ test_that("estimate_relation - brms", {
   # expect_equal(dim(estim), c(30, 6))
 })
 
-test_that("estimate_means - brms", {
+test_that("estimate_slopes - brms", {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
   estim <- estimate_slopes(model, by = "Species", backend = "emmeans")
   expect_identical(dim(estim), c(3L, 5L))
