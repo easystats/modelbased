@@ -17,7 +17,7 @@ test_that("multivariate response", {
 
   fm1 <- lm(cbind(mpg, wt) ~ cyl + disp, data = mtcars)
   out <- estimate_expectation(fm1)
-  expect_identical(dim(out), c(64L, 4L))
+  expect_identical(dim(out), c(64L, 5L))
 
   out <- estimate_expectation(fm1, by = "cyl")
   expect_identical(dim(out), c(6L, 4L))
