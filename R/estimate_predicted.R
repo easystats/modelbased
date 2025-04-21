@@ -479,6 +479,13 @@ estimate_relation <- function(model,
     out[[model_response]] <- NULL
   }
 
+  # clean-up: remove "Row" variable (from ordinal and alike)
+  if (is_grid || inherits(data, "datagrid")) {
+    out[["Row"]] <- NULL
+  } else {
+    out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
+  }
+
   # Add residuals
   if (!is.null(response)) {
     out$Residuals <- response - out$Predicted
