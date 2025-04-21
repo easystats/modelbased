@@ -1,9 +1,10 @@
 skip_on_cran()
-skip_on_os("windows")
+# skip_on_os("windows")
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")
 skip_if_not_installed("emmeans")
+skip_if_not_installed("marginaleffects")
 
 test_that("estimate_means - brms", {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
@@ -30,7 +31,6 @@ test_that("estimate_means - brms, multivariate", {
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
-  skip_if_not_installed("brms")
 
   m <- insight::download_model("brms_mv_1")
   skip_if(is.null(m))
@@ -50,7 +50,6 @@ test_that("estimate_means - brms, Wiener", {
   skip_if_not_installed("curl")
   skip_if_offline()
   skip_if_not_installed("httr2")
-  skip_if_not_installed("brms")
   skip_if_not_installed("RWiener")
 
   m <- insight::download_model("m_ddm_1")
