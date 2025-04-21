@@ -20,7 +20,7 @@
 
 * `estimate_prediction()`, `estimate_relation()` and similar functions now
   include the `Row` column for models with ordinal or categorical response
-  variables.
+  variables when the `data` argument was provided.
 
 * `estimate_slopes()` can now also calculate average marginal effects of a
   predictor, just for the trend of that predictor within a certain range of
