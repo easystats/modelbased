@@ -64,3 +64,19 @@ test_that("verbose", {
   })
   expect_equal(out1$Mean, out2$Mean, tolerance = 1e-3)
 })
+
+
+test_that("offset, estimate_relation", {
+  set.seed(1)
+  newdata <- data.frame(
+    y = c(602, 38, 616, 256, 21, 723, 245, 176, 89, 1614, 31, 27, 313, 251, 345),
+    x = as.factor(sample(letters[1:3], 15, replace = TRUE)),
+    offset_1 = c(72, 50, 31, 30, 16, 25, 75, 16, 78, 40, 68, 25, 71, 52, 17)
+  )
+
+  moff <- MASS::glm.nb(y ~ x + offset(log(offset_1)), data = newdata)
+  out <- estimate_relation(moff, by = "x")
+  expect_equal(attributes(out)$datagrid$offset_1, c(44.4, 44.4, 44.4), tolerance = 1e-3)
+  out <- estimate_relation(moff, by = "x", offset = 100)
+  expect_equal(attributes(out)$datagrid$offset_1, c(100, 100, 100), tolerance = 1e-3)
+})
