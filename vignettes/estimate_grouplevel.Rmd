@@ -206,7 +206,7 @@ Then, the empirical scores for accuracy and condition, corresponding to the "raw
 Finally, we can observe that there is a strong and negative correlation (which is even more salient with model-based indices) between the RT in the accuracy condition and the effect of the speed condition:
 
 ```{r}
-ggplot(data_sub, aes(x = Intercept, y = conditionspeed)) +
+ggplot(data_sub, aes(x = `(Intercept)`, y = conditionspeed)) +
   geom_point() +
   geom_smooth(method = "lm") +
   theme_minimal()
