@@ -5,6 +5,11 @@
 * Added `pool_slopes()`, to pool results from `estimate_slopes()` applied to
   imputed data.
 
+## Breaking Changes
+
+* `reshape_grouplevel()` now takes the correct number of specified random effects
+  groups into account when reshaping results.
+
 ## Changes
 
 * In general, it is now possible to make estimate means, contrasts and slopes
