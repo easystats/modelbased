@@ -69,6 +69,9 @@ reshape_grouplevel.estimate_grouplevel <- function(x, indices = "all", group = N
   # Rename level to group
   names(data_wide)[names(data_wide) == "Level"] <- group
 
+  # rename "intercept" column
+  names(data_wide) <- gsub("(Intercept)", "Intercept", names(data_wide), fixed = TRUE)
+
   class(data_wide) <- c("reshape_grouplevel", class(data_wide))
   data_wide
 }
