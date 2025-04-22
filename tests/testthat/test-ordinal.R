@@ -20,4 +20,9 @@ test_that("estimate_relation prints ordinal models correctly", {
   expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
   out <- estimate_means(m, by = "Sepal.Width")
   expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
+
+  # keep row column
+  out <- suppressWarnings(estimate_relation(m, data = iris[1:3, ], verbose = FALSE))
+  expect_named(out, c("Row", "Response", "Sepal.Width", "Predicted", "CI_low", "CI_high", "Residuals")) # nolint
+  expect_identical(dim(out), c(9L, 7L))
 })
