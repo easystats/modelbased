@@ -46,7 +46,8 @@
 * Better handling for models with offsets in `estimate_means()` and
   `estimate_contrasts()`. Informative messages are given when models include
   offset terms, and it is possible to fix the offset value using the `offset`
-  argument.
+  argument. The `offset` argument is also available for `estimate_relation()`,
+  `estimate_prediction()` and similar.
 
 * Minor improvements to the documentation.
 
