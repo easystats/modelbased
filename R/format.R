@@ -544,9 +544,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       replacement = estimate_name
     )
   }
-  if ("Statistic" %in% colnames(params)) {
-    params <- datawizard::data_rename(params, select = "Statistic", replacement = "z")
-  }
+  # marginaleffects objects always return z-statistic
+  colnames(params)[colnames(params) == "Statistic"] <- "z"
 
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint

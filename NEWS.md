@@ -74,6 +74,9 @@
 
 * Fixed issue with weights in `estimate_relation()`.
 
+* Fixed issue in printed output for the statistic column, which is always `z`
+  for the `marginaleffects` backend.
+
 # modelbased 0.10.0
 
 ## Breaking Changes
