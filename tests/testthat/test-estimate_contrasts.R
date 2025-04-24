@@ -911,7 +911,7 @@ test_that("estimate_contrast, don't calculate slopes for integers", {
     regex = "Please specify"
   )
   out <- estimate_contrasts(m, "hp", by = "gear")
-  expect_identical(dim(out), c(3L, 8L))
+  expect_identical(dim(out), c(3L, 9L))
 })
 
 
