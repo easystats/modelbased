@@ -545,11 +545,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     )
   }
   if ("Statistic" %in% colnames(params)) {
-    params <- datawizard::data_rename(
-      params,
-      select = "Statistic",
-      replacement = gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE)
-    )
+    params <- datawizard::data_rename(params, select = "Statistic", replacement = "z")
   }
 
   # remove redundant columns

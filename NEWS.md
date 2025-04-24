@@ -54,6 +54,10 @@
   argument. The `offset` argument is also available for `estimate_relation()`,
   `estimate_prediction()` and similar.
 
+* For consistency, `estimate_slopes()` now also uses the residual degrees of
+  freedom by default (like `estimate_means()`) when calculating confidence
+  intervals and p-values.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
