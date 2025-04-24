@@ -74,8 +74,8 @@
 
 * Fixed issue with weights in `estimate_relation()`.
 
-* Fixed issue in printed output for the statistic column, which is always `z`
-  for the `marginaleffects` backend.
+* Fixed issue in printed output for the statistic column, which should be `z`
+  for the `marginaleffects` backend, when argument `df = Inf`.
 
 # modelbased 0.10.0
 
