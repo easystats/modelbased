@@ -538,14 +538,16 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # rename coefficient name and statistics columns
   if (!is.null(estimate_name)) {
-    params <- datawizard::data_rename(
-      params,
-      select = coefficient_name,
-      replacement = estimate_name
-    )
+    colnames(params)[colnames(params) == coefficient_name] <- estimate_name
   }
-  # marginaleffects objects always return z-statistic
-  colnames(params)[colnames(params) == "Statistic"] <- "z"
+  # marginaleffects objects return z-statistic by default, unless we change it
+  # via the degrees-of-freedom argument
+  if (is.null(params$df) || all(is.infinite(params$df))) {
+    stat_column <- "z"
+  } else {
+    stat_column <- "t"
+  }
+  colnames(params)[colnames(params) == "Statistic"] <- stat_column
 
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
