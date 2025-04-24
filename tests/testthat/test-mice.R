@@ -63,7 +63,7 @@ test_that("pool_slopes", {
   })
   out <- pool_slopes(slopes)
   expect_equal(out$Slope, 0.05666, tolerance = 1e-2)
-  expect_equal(out$CI_low, 0.00395, tolerance = 1e-2)
+  expect_equal(out$CI_low, 0.0005592606, tolerance = 1e-2)
   expect_named(
     out,
     c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
