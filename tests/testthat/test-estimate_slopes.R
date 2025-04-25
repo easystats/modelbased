@@ -31,8 +31,14 @@ test_that("estimate_slopes", {
   # test different DF
   estim1 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "marginaleffects"))
   estim2 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", df = Inf, backend = "marginaleffects"))
-
-
+  expect_named(
+    estim1,
+    c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    estim1,
+    c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p")
+  )
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
