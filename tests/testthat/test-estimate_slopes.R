@@ -28,6 +28,12 @@ test_that("estimate_slopes", {
   expect_identical(dim(estim2), c(30L, 9L))
   expect_equal(estim1$Slope, estim2$Slope[order(estim2$Petal.Length, estim2$Species)], tolerance = 1e-3)
 
+  # test different DF
+  estim1 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", df = Inf, backend = "marginaleffects"))
+
+
+
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
   estim1 <- suppressMessages(estimate_slopes(model, by = "Sepal.Width", backend = "emmeans"))

@@ -63,18 +63,18 @@ test_that("estimate_slopes, transform", {
   mod <- lm(log(Sepal.Length) ~ Sepal.Width * Species, data = iris)
 
   out <- estimate_slopes(mod, trend = "Sepal.Width", by = "Species")
-  expect_identical(dim(out), c(3L, 7L))
+  expect_identical(dim(out), c(3L, 8L))
   expect_equal(out$Slope, c(0.13752, 0.14779, 0.13957), tolerance = 1e-3)
 
   out <- estimate_contrasts(mod, "Sepal.Width", by = "Species")
-  expect_identical(dim(out), c(3L, 8L))
+  expect_identical(dim(out), c(3L, 9L))
   expect_equal(out$Difference, c(0.01027, 0.00205, -0.00822), tolerance = 1e-3)
 
   out <- estimate_slopes(mod, trend = "Sepal.Width", by = "Species", transform = TRUE)
-  expect_identical(dim(out), c(3L, 6L))
+  expect_identical(dim(out), c(3L, 7L))
   expect_equal(out$Slope, c(1.14743, 1.15927, 1.14978), tolerance = 1e-3)
 
   out <- estimate_contrasts(mod, "Sepal.Width", by = "Species", transform = TRUE)
-  expect_identical(dim(out), c(3L, 7L))
+  expect_identical(dim(out), c(3L, 8L))
   expect_equal(out$Difference, c(1.01032, 1.00206, 0.99182), tolerance = 1e-3)
 })
