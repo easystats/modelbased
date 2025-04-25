@@ -63,10 +63,10 @@ test_that("pool_slopes", {
   })
   out <- pool_slopes(slopes)
   expect_equal(out$Slope, 0.05666, tolerance = 1e-2)
-  expect_equal(out$CI_low, 0.00395, tolerance = 1e-2)
+  expect_equal(out$CI_low, 0.0005592606, tolerance = 1e-2)
   expect_named(
     out,
-    c("Slope", "SE", "CI_low", "CI_high", "t", "p", "df")
+    c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
 
   slopes <- lapply(1:5, function(i) {
@@ -75,9 +75,9 @@ test_that("pool_slopes", {
   })
   out <- pool_slopes(slopes)
   expect_equal(out$Slope, c(-4.6464, -6.70639), tolerance = 1e-2)
-  expect_equal(out$CI_low, c(-9.36657, -14.23085), tolerance = 1e-2)
+  expect_equal(out$CI_low, c(-10.83711, -16.57506), tolerance = 1e-2)
   expect_named(
     out,
-    c("Comparison", "Slope", "SE", "CI_low", "CI_high", "t", "p", "df")
+    c("Comparison", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
 })

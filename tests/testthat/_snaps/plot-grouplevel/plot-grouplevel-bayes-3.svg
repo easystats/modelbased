@@ -218,7 +218,7 @@
 </defs>
 <g clip-path='url(#cpMjM5LjIyfDQzNS4yNHwyMDIuOTl8MjE5LjY0)'>
 <rect x='239.22' y='202.99' width='196.02' height='16.65' style='stroke-width: 1.07; stroke: #333333; fill: #D9D9D9;' />
-<text x='337.23' y='214.34' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='79.24px' lengthAdjust='spacingAndGlyphs'>ID: zg (zero inflated)</text>
+<text x='337.23' y='214.34' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='37.65px' lengthAdjust='spacingAndGlyphs'>ID: zg (zi)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 </g>
@@ -251,7 +251,7 @@
 </defs>
 <g clip-path='url(#cpMjM5LjIyfDQzNS4yNHwyMi43OHwzOS40Mw==)'>
 <rect x='239.22' y='22.78' width='196.02' height='16.65' style='stroke-width: 1.07; stroke: #333333; fill: #D9D9D9;' />
-<text x='337.23' y='34.14' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='104.18px' lengthAdjust='spacingAndGlyphs'>ID: Intercept (zero inflated)</text>
+<text x='337.23' y='34.14' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='62.60px' lengthAdjust='spacingAndGlyphs'>ID: Intercept (zi)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 </g>
@@ -262,7 +262,7 @@
 </defs>
 <g clip-path='url(#cpNDUwLjU0fDY0Ni41NnwyMi43OHwzOS40Mw==)'>
 <rect x='450.54' y='22.78' width='196.02' height='16.65' style='stroke-width: 1.07; stroke: #333333; fill: #D9D9D9;' />
-<text x='548.55' y='34.14' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='98.32px' lengthAdjust='spacingAndGlyphs'>ID: nofish1 (zero inflated)</text>
+<text x='548.55' y='34.14' text-anchor='middle' style='font-size: 8.80px; fill: #1A1A1A; font-family: sans;' textLength='56.73px' lengthAdjust='spacingAndGlyphs'>ID: nofish1 (zi)</text>
 </g>
 <g clip-path='url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)'>
 <polyline points='30.42,547.85 30.42,545.11 ' style='stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;' />

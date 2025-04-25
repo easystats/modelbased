@@ -84,6 +84,11 @@ get_marginaltrends <- function(model,
     dots$weights <- NULL
   }
 
+  # model df - can be passed via `...`
+  if (is.null(dots$df)) {
+    dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(

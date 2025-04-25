@@ -26,11 +26,11 @@ test_that("estimate_means() - ci frequentist", {
   # Estimate slopes with different CIs
   out <- estimate_slopes(mod2, trend = "Sepal.Width", by = "Species", backend = "marginaleffects", ci = 0.95)
   x <- capture.output(out)
-  expect_identical(x[5], "setosa     |  0.69 | 0.17 | [0.37, 1.02] | 4.17 | < .001")
+  expect_identical(x[5], "setosa     |  0.69 | 0.17 | [0.36, 1.02] |   4.17 | < .001")
 
   out <- estimate_slopes(mod2, trend = "Sepal.Width", by = "Species", backend = "marginaleffects", ci = 0.89)
   x <- capture.output(out)
-  expect_identical(x[5], "setosa     |  0.69 | 0.17 | [0.43, 0.96] | 4.17 | < .001")
+  expect_identical(x[5], "setosa     |  0.69 | 0.17 | [0.42, 0.96] |   4.17 | < .001")
 })
 
 

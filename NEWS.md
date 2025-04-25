@@ -54,6 +54,10 @@
   argument. The `offset` argument is also available for `estimate_relation()`,
   `estimate_prediction()` and similar.
 
+* For consistency, `estimate_slopes()` now also uses the residual degrees of
+  freedom by default (like `estimate_means()`) when calculating confidence
+  intervals and p-values.
+
 * Minor improvements to the documentation.
 
 ## Bug fixes
@@ -69,6 +73,9 @@
 * Fixed issue with wrong y-axis label for plots from `estimate_slopes()`.
 
 * Fixed issue with weights in `estimate_relation()`.
+
+* Fixed issue in printed output for the statistic column, which should be `z`
+  for the `marginaleffects` backend, when argument `df = Inf`.
 
 # modelbased 0.10.0
 
