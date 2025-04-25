@@ -132,7 +132,7 @@ For convenience, the `modelbased` package includes four related functions, which
 
 The concept of "marginal" in this context refers to how non-focal predictors (i.e., those not of direct interest, for instance "adjustment" variables added to "control" for it) are treated. While predictions, as described above, fix by default non-focal variables at their reference level, marginal means compute the empirical or theoretical averages over them. These kind of predictions are a good representation of the sample, because they are not based on very specific characteristics. For example, predictions can be made for specific combinations of predictors, such as people with _high_ income, while marginal means might calculate the expected outcome for an _average_ observation (averaged over income).
 
-The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function (with focal predictors specified using the `by` argument), which can be considered as "marginal" pendant to `estimate_relation()`.
+The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function (with focal predictors specified using the `by` argument), which can be considered as the "marginal" pendant to `estimate_relation()`.
 
 ### Contrasts
 
