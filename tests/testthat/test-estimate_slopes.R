@@ -36,7 +36,7 @@ test_that("estimate_slopes", {
     c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
   expect_named(
-    estim1,
+    estim2,
     c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p")
   )
 
