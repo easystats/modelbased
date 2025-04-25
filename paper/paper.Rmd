@@ -104,7 +104,7 @@ In line with these efforts, new tools have been created to facilitate the direct
 
 The fundamental nature of these models—a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any observed or unobserved combination of predictors. These predictions refer to expected values of the outcome for given levels of predictors of interest, making it possible to test and visualize the model's behaviour in a more meaningful and comprehensive way, and answering a broad range of research questions.
 
-The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. Their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts. The `modelbased` package, built on top of these two packages, aims to unleash this vast, untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
+The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. Their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts. The `modelbased` package, by providing a unified interface to these two packages, aims to unleash this vast, untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
 
 
 # Key concepts
@@ -219,6 +219,7 @@ The model's **parameters** can be challenging to interpret and do not offer us a
 
 ## Visualize relationship
 
+The *modelbased* provides some basic plotting capabilities, which means that most outputs can be visualized using the `plot()` function.
 We can start by easily visualizing the relationship between our response variable and our predictors (Figure 1).
 
 ```{r fig1, fig.cap = "Scatter plot of petal length by pelal width, grouped by species"}
