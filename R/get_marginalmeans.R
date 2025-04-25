@@ -131,7 +131,7 @@ get_marginalmeans <- function(model,
   dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma", "offset")] <- NULL
 
   # model df - can be passed via `...`
-  if (is.null(dots$df)) {
+  if (is.null(dots$df) && model_info$is_bayesian) {
     dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
   }
 
