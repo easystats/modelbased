@@ -225,7 +225,7 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-  # Fifth step: post-processin marginal means----------------------------------
+  # Fifth step: post-processing marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
   # filter "by" rows when we have "average" marginalization, because we don't
@@ -335,7 +335,7 @@ get_marginalmeans <- function(model,
 }
 
 
-# filter datagrid foe `estimate = "average"`---------------------------------
+# filter datagrid for `estimate = "average"`---------------------------------
 
 .filter_datagrid_average <- function(means, estimate, datagrid, datagrid_info) {
   # filter "by" rows when we have "average" marginalization, because we don't
