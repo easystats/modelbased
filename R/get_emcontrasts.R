@@ -41,6 +41,22 @@ get_emcontrasts <- function(model,
   # extract first focal term
   first_focal <- my_args$contrast[1]
 
+  # setup arguments
+  fun_args <- list(model)
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
+    dpars <- TRUE
+    fun_args$dpar <- predict
+  } else {
+    dpars <- FALSE
+    fun_args$type <- predict
+  }
+
+  # add dots
+  dots <- list(...)
+  fun_args <- insight::compact_list(c(fun_args, dots))
+
   # if first focal term is numeric, we contrast slopes
   if (is.numeric(model_data[[first_focal]]) &&
     !first_focal %in% on_the_fly_factors &&
@@ -51,23 +67,13 @@ get_emcontrasts <- function(model,
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
     }
     # Run emmeans
-    estimated <- suppressMessages(emmeans::emtrends(
-      model,
-      specs = my_args$by,
-      var = my_args$contrast,
-      type = predict,
-      ...
-    ))
+    fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
+    estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
     emm_by <- NULL
   } else {
     # Run emmeans
-    estimated <- suppressMessages(emmeans::emmeans(
-      model,
-      specs = my_args$emmeans_specs,
-      at = my_args$emmeans_at,
-      type = predict,
-      ...
-    ))
+    fun_args <- c(fun_args, list(specs = my_args$emmeans_specs, at = my_args$emmeans_at))
+    estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
     # Find by variables
     emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
     if (length(emm_by) == 0) {
@@ -76,7 +82,7 @@ get_emcontrasts <- function(model,
   }
 
   # If means are on the response scale (e.g., probabilities), need to regrid
-  if (predict == "response") {
+  if (predict == "response" || dpars) {
     estimated <- emmeans::regrid(estimated)
   }
 

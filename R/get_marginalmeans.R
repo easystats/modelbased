@@ -131,7 +131,7 @@ get_marginalmeans <- function(model,
   dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma", "offset")] <- NULL
 
   # model df - can be passed via `...`
-  if (is.null(dots$df)) {
+  if (is.null(dots$df) && !model_info$is_bayesian) {
     dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
   }
 
@@ -225,7 +225,7 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
-  # Fifth step: post-processin marginal means----------------------------------
+  # Fifth step: post-processing marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
   # filter "by" rows when we have "average" marginalization, because we don't
@@ -317,7 +317,7 @@ get_marginalmeans <- function(model,
     msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
   }
   # we get this error for models with complex random effects structures in glmmTMB
-  if (grepl("map factor length must equal", out$message, fixed = TRUE)) {
+  if (grepl("map factor length must equal", out$message, fixed = TRUE) || grepl("cannot allocate", out$message, fixed = TRUE)) { # nolint
     msg <- c(
       msg,
       paste0(
@@ -335,7 +335,7 @@ get_marginalmeans <- function(model,
 }
 
 
-# filter datagrid foe `estimate = "average"`---------------------------------
+# filter datagrid for `estimate = "average"`---------------------------------
 
 .filter_datagrid_average <- function(means, estimate, datagrid, datagrid_info) {
   # filter "by" rows when we have "average" marginalization, because we don't
