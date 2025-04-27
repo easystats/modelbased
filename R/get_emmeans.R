@@ -58,8 +58,10 @@ get_emmeans <- function(model,
 
   # handle distributional parameters
   if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
+    dpars <- TRUE
     fun_args$dpar <- predict
   } else {
+    dpars <- FALSE
     fun_args$type <- predict
   }
 
@@ -69,6 +71,11 @@ get_emmeans <- function(model,
 
   # Run emmeans
   estimated <- suppressMessages(suppressWarnings(do.call(emmeans::emmeans, fun_args)))
+
+  # backtransform to response scale for dpars
+  if (dpars) {
+    estimated <- emmeans::regrid(estimated)
+  }
 
   # Special behaviour for transformations #138 (see below)
   if ("retransform" %in% names(my_args) && length(my_args$retransform) > 0) {
