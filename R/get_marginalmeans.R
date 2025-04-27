@@ -317,7 +317,7 @@ get_marginalmeans <- function(model,
     msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
   }
   # we get this error for models with complex random effects structures in glmmTMB
-  if (grepl("map factor length must equal", out$message, fixed = TRUE)) {
+  if (grepl("map factor length must equal", out$message, fixed = TRUE) || grepl("cannot allocate", out$message, fixed = TRUE)) { # nolint
     msg <- c(
       msg,
       paste0(
