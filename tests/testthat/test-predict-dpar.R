@@ -3,7 +3,6 @@ skip_on_cran()
 test_that("estimate_means and estimate_relation - dpar", {
   skip_if_not_installed("brms")
   skip_if_not_installed("marginaleffects")
-  skip_if_not_installed("emmeans")
   skip_if_not_installed("datawizard")
   skip_if_not_installed("httr2")
   skip_if_not_installed("collapse")
