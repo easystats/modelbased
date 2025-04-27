@@ -28,13 +28,7 @@
 
   if (length(vars) == 1) {
     if (type == "contrast") {
-      if (minfo$is_logit && predict == "response") {
-        names(means)[names(means) == vars] <- "Odds_ratio"
-      } else if (minfo$is_poisson && predict == "response") {
-        names(means)[names(means) == vars] <- "Ratio"
-      } else {
-        names(means)[names(means) == vars] <- "Difference"
-      }
+      names(means)[names(means) == vars] <- "Difference"
     } else if (type == "mean") {
       if (minfo$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"

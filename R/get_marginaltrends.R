@@ -85,7 +85,7 @@ get_marginaltrends <- function(model,
   }
 
   # model df - can be passed via `...`
-  if (is.null(dots$df)) {
+  if (is.null(dots$df) && !model_info$is_bayesian) {
     dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
   }
 

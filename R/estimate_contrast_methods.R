@@ -31,7 +31,11 @@ estimate_contrasts.estimate_predicted <- function(model,
   minfo <- insight::model_info(model, response = 1)
 
   # model df
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  if (minfo$is_bayesian) {
+    dof <- Inf
+  } else {
+    dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
   crit_factor <- (1 + ci) / 2
 
   ## TODO: For Bayesian models, we always use the returned standard errors
