@@ -539,10 +539,9 @@
 </h3>
 <p>See <a href="https://easystats.github.io/modelbased/articles/estimate_response.html"><strong>this vignette</strong></a> for a walkthrough on how to do that.</p>
 </div>
-</div>
-<div class="section level2">
-<h2 id="understand-interactions-between-two-continuous-variables">Understand interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#understand-interactions-between-two-continuous-variables"></a>
-</h2>
+<div class="section level3">
+<h3 id="understand-interactions-between-two-continuous-variables">Understand interactions between two continuous variables<a class="anchor" aria-label="anchor" href="#understand-interactions-between-two-continuous-variables"></a>
+</h3>
 <p>Also referred to as <strong>Johnson-Neyman intervals</strong>, this plot shows how the effect (the “slope”) of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.</p>
 <p>For instance, the plot below shows that the effect of <code>hp</code> (the y-axis) is significantly negative only when <code>wt</code> is low (<code>&lt; ~4</code>).</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -552,6 +551,7 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">slopes</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-14-1.png" width="100%"></p>
+</div>
 <div class="section level3">
 <h3 id="visualize-predictions-with-random-effects">Visualize predictions with random effects<a class="anchor" aria-label="anchor" href="#visualize-predictions-with-random-effects"></a>
 </h3>
@@ -583,6 +583,24 @@
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fixed_pred</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Days</span>, y <span class="op">=</span> <span class="va">Predicted</span><span class="op">)</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/unnamed-chunk-17-1.png" width="100%"></p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="technical-details">Technical Details<a class="anchor" aria-label="anchor" href="#technical-details"></a>
+</h2>
+<p>The algorithmic heavy lifting is done by <a href="https://easystats.github.io/modelbased/">modelbased</a>’s two back-end packages, <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> and <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> (the default), which can be set as a global option (e.g., with <code>options(modelbased_backend = "emmeans")</code>).</p>
+<p>Of the two, <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> <a href="https://doi.org/10.32614/CRAN.package.emmeans" class="external-link">(Russell, 2024)</a> is the more senior package and was originally known as <code>{lsmeans}</code> (for “Least-Squares Means”). This term has been historically used to describe what are now more commonly referred to as “Estimated Marginal Means” or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).</p>
+<p>Within <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a>, estimates are generated as a linear function of the model’s coefficients, with standard errors produced in a similar manner by taking a linear combination of the coefficients’ variance-covariance matrix. For example if <span class="math inline">b</span> is a vector of 4 coefficients, and <span class="math inline">V</span> is a 4-by-4 matrix of the coefficients’ variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) <span class="math inline">L</span> like so:</p>
+<p><span class="math display">
+\hat{b} = L \cdot b
+</span></p>
+<p><span class="math display">
+SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
+</span></p>
+<p>These grid predictions are sometimes averaged over (averaging being a linear operation itself) to produce “marginal” predictions (in the sense of marginalized-over): means. These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects. Using linear combinations with regular grids often means that results from <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).</p>
+<p><a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> <a href="https://doi.org/10.18637/jss.v111.i09" class="external-link">(Arel-Bundock et al., 2024)</a> was more recently introduced and also relies on the Delta method, but uses numeric differentiation (and can easily switch to bootstrap or simulation-based approaches). By default, it estimates various effects by generating two counter-factual predictions of unit-level observations, then taking the difference between them - which can easily be done on the response scale, rather than the link scale. Because these effects are calculated for every observation, they can then be averaged (e.g., as an Average Treatment Effect). This approach is more iterative compared to the linear matrix multiplication used by <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a>, but is similarly efficient.</p>
+<p>While both packages employ the Delta method to obtain standard errors on transformed scales, they differ in how they construct and average predictions. <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> often produces <em>effects at the mean</em> of non-focal predictors (via linear contrasts), whereas <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> tends to compute <em>mean effects</em> by averaging over observations. Depending on the model and the type of quantity you want to estimate, results from these two approaches can be very similar—or differ in interesting ways.</p>
+<p>Note that <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> can also perform numeric differentiation or use non-regular grids, just as <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> can construct linear predictions at the mean. Because each package has evolved with slightly different philosophies regarding how to form and interpret predictions, users can select whichever approach best suits their research questions. In <a href="https://easystats.github.io/modelbased/">modelbased</a>, you can switch easily between either back end by setting the global option, for example <code>options(modelbased_backend = "marginaleffects")</code>, to access these features.</p>
+<p>Finally, <a href="https://easystats.github.io/modelbased/">modelbased</a> leverages the <code>get_datagrid()</code> function from the <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package <a href="https://doi.org/10.21105/joss.01412" class="external-link">(Lüdecke et al., 2019)</a> to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - <a href="https://easystats.github.io/modelbased/">modelbased</a> also inherits the support for such models.</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
@@ -650,7 +668,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
 </div>
 
     </footer>

@@ -1,6 +1,6 @@
 pandoc: 3.6.4
-pkgdown: 2.1.1.9000
-pkgdown_sha: 2f04495db2502e7a621ffcb38d823c30a952b84a
+pkgdown: 2.1.2.9000
+pkgdown_sha: 656069f523efadd27812bce6b9322a92c57eb8cb
 articles:
   derivatives: derivatives.html
   estimate_contrasts: estimate_contrasts.html
@@ -21,7 +21,7 @@ articles:
   practical_intersectionality: practical_intersectionality.html
   visualisation_matrix: visualisation_matrix.html
   workflow_modelbased: workflow_modelbased.html
-last_built: 2025-04-27T14:41Z
+last_built: 2025-04-28T15:41Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
