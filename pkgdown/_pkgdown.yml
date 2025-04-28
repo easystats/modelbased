@@ -70,6 +70,10 @@ navbar:
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
           href: articles/modelisation_approach.html
+        - text: -------
+        - text: "Technical Details"
+        - text: "Description of the two backends"
+          href: articles/technical_details.html
     - text: "Case Studies"
       menu:
         - text: "Workflows"
