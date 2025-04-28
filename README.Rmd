@@ -425,7 +425,7 @@ The algorithmic heavy lifting is done by `{modelbased}`'s two back-end packages,
 
 Of the two, `{emmeans}` [(Russell, 2024)](https://doi.org/10.32614/CRAN.package.emmeans) is the more senior package and was originally known as `{lsmeans}` (for "Least-Squares Means"). This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to `{emmeans}` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
 
-Within `{emmeans}`, estimates are generated as a linear function of the model's coefficients, with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
+Within `{emmeans}`, estimates are generated as a linear function of the model's coefficients, with standard errors produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
 For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
 
 $$

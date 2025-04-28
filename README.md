@@ -593,12 +593,12 @@ the mean of numerical predictors. The package was renamed in 2016 to
 its support of a wider range of models (e.g., Bayesian models).
 
 Within `{emmeans}`, estimates are generated as a linear function of the
-model’s coefficients, with standard errors (SEs) produced in a similar
-manner by taking a linear combination of the coefficients’
-variance-covariance matrix. For example if $b$ is a vector of 4
-coefficients, and $V$ is a 4-by-4 matrix of the coefficients’
-variance-covariance, we can get an estimate and SE for a linear
-combination (or set of linear combinations) $L$ like so:
+model’s coefficients, with standard errors produced in a similar manner
+by taking a linear combination of the coefficients’ variance-covariance
+matrix. For example if $b$ is a vector of 4 coefficients, and $V$ is a
+4-by-4 matrix of the coefficients’ variance-covariance, we can get an
+estimate and SE for a linear combination (or set of linear combinations)
+$L$ like so:
 
 $$
 \hat{b} = L \cdot b
