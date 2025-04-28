@@ -125,6 +125,7 @@ estimate_grouplevel.brmsfit <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
+    ## TODO: replace "all" by "full" once insight > 1.2.0 is on CRAN
     effects = ifelse(type == "random", "all", "total"),
     group_level = identical(type, "random"),
     dispersion = dispersion,
