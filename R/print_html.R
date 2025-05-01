@@ -29,7 +29,7 @@ print_html.estimate_contrasts <- function(x,
 
   insight::export_table(
     formatted_table,
-    format = "html",
+    format = .check_format_backend(...),
     align = align,
     ...
   )
@@ -53,3 +53,14 @@ print_html.visualisation_matrix <- print_html.estimate_contrasts
 
 #' @export
 print_html.estimate_grouplevel <- print_html.estimate_contrasts
+
+
+# we allow exporting HTML format based on "gt" or "tinytable"
+.check_format_backend <- function(...) {
+  dots <- list(...)
+  if (is.null(dots) || !identical(dots$backend, "tt")) {
+    "html"
+  } else {
+    "tt"
+  }
+}
