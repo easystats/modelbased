@@ -158,38 +158,6 @@ The `modelbased` package also provides the `estimate_grouplevel()` function to c
 
 Estimating these indices using mixed models can have important benefits over an empirical approach consisting of computing raw group means, of fitting individual models to all individuals separately. In particular, it is more resilient and robust to the presence of few or missing data, and naturally applies partial-pooling - *aka* "shrinkage", which combines information from the group and the overall population. This means that group estimates are "pulled" towards the population-level estimate if they are more uncertain (i.e., includes less observations), in essence giving more weight to more reliable estimates. Estimates shrinkage prevents overfitting and improves generalizability.
 
-## Technical details
-
-The algorithmic heavy lifting is done by `modelbased`'s two back-end packages, `emmeans` and `marginaleffects` (the default), which can be set as a global option (e.g., with `options(modelbased_backend = "emmeans")`).
-
-Of the two, `emmeans` [@russell2024emmeans] is the more senior package and was originally known as `lsmeans` (for "Least-Squares Means"). This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to `emmeans` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
-
-Within `emmeans`, estimates are generated as a linear function of the model's coefficients, with standard errors (SEs) produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
-For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
-
-$$
-\hat{b} = L \cdot b
-$$
-
-$$
-SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
-$$
-
-
-
-These grid predictions are sometimes averaged over (averaging being a linear operation itself) to produce "marginal" predictions (in the sense of marginalized-over): means. These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects. Using linear combinations with regular grids often means that results from `emmeans` directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).
-
-`marginaleffects` [@arel2024interpret] was more recently introduced, and uses a different approach: various effects are estimated by generating two counter-factual predictions of unit-level observations, and then taking the difference between them (with SEs computed using the delta method).
-By default, such effects are estimated for every observation in the original model frame. These unit-level effects are typically averaged to obtain average effects (e.g., an Average Treatment Effect, ATE).
-
-Using the delta method affords more flexibility in the specification of the marginal effects to be estimated. For example, while `emmeans` by default compares predictions from GLMs on the link scale and then transforms the comparison back to something closer to the response scales (e.g., the difference between two log-odds is taken, and then exponentiation to produce odds ratios), `marginaleffects` by default compares predictions on the response scale directly (e.g, taking the difference between two probabilities). The delta method implemented in `marginaleffects` uses iterative estimation, making it more computationally costly relative to the simple matrix multiplication used for estimating linear combinations (though `marginaleffects` is very efficient).
-
-This means that while `emmeans` typically produces _effects at the mean_, `marginaleffects` typically produces _mean effects_. Depending on the quantity of interest, model, use of a link function, design balance and weights, these can be nearly identical, or very different.
-
-Note that `emmeans` can also use the delta method and can use non-regular grids, and `marginaleffects` can also generate linear predictions at the mean. However, obtaining these requires some deeper knowledge of the relevant packages. This is easier to achieve and more accessible in `modelbased`, by simply modulating the `estimate` argument (see above).
-
-Finally, `modelbased` leverages the `get_datagrid()` function from the `insight` package [@ludecke2019insight] to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - `modelbased` also inherits the support for such models.
-
 # Examples
 
 The `iris` dataset contains measures in centimeters of three different species of iris flowers [setosa, versicolor, and virginica, @becker1988new]. Imagine the following linear model in which we predict those flowers' petal width (`Petal.Width`) from the interaction between their petal length (`Petal.Length`) and their `Species`.
@@ -207,16 +175,16 @@ parameters::parameters(model) |>
 ```
 #> Parameter                           | Coefficient |        95% CI |      p
 #> --------------------------------------------------------------------------
-#> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823 
-#> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170 
-#> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909 
+#> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823
+#> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170
+#> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909
 #> Species [virginica]                 |        1.18 | [ 0.52, 1.84] | < .001
-#> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405 
+#> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405
 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34, 0.26] | 0.789
 ```
 
 ```
-#> 
+#>
 #> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
 #>   using a Wald t-distribution approximation.
 ```
@@ -250,13 +218,13 @@ estimate_means(model, by = "Species")
 
 ```
 #> Estimated Marginal Means
-#> 
+#>
 #> Species    | Mean |   SE |       95% CI | t(144)
 #> ------------------------------------------------
 #> setosa     | 0.71 | 0.34 | [0.04, 1.37] |   2.11
 #> versicolor | 1.16 | 0.04 | [1.09, 1.23] |  31.44
 #> virginica  | 1.74 | 0.09 | [1.57, 1.91] |  20.20
-#> 
+#>
 #> Variable predicted: Petal.Width
 #> Predictors modulated: Species
 #> Predictors averaged: Petal.Length (3.8)
@@ -275,13 +243,13 @@ estimate_contrasts(model, contrast = "Species")
 
 ```
 #> Marginal Contrasts Analysis
-#> 
+#>
 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |      p
 #> -----------------------------------------------------------------------------
 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12] |   1.34 |  0.183
 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72] |   2.97 |  0.003
 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76] |   6.18 | < .001
-#> 
+#>
 #> Variable predicted: Petal.Width
 #> Predictors contrasted: Species
 #> Predictors averaged: Petal.Length (3.8)
@@ -301,13 +269,13 @@ estimate_slopes(model, trend = "Petal.Length", by = "Species")
 
 ```
 #> Estimated Marginal Effects
-#> 
+#>
 #> Species    | Slope |   SE |        95% CI |    t |      p
 #> ---------------------------------------------------------
 #> setosa     |  0.20 | 0.15 | [-0.08, 0.49] | 1.38 |  0.168
 #> versicolor |  0.33 | 0.05 | [ 0.23, 0.44] | 6.14 | < .001
 #> virginica  |  0.16 | 0.05 | [ 0.07, 0.25] | 3.49 | < .001
-#> 
+#>
 #> Marginal effects estimated for Petal.Length
 #> Type of slope was dY/dX
 ```
@@ -325,13 +293,13 @@ estimate_contrasts(model, contrast = "Petal.Length", by = "Species")
 
 ```
 #> Marginal Contrasts Analysis
-#> 
+#>
 #> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p
 #> ----------------------------------------------------------------------------
 #> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.43] |  0.83 | 0.404
 #> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] | -0.27 | 0.789
 #> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] | -2.41 | 0.016
-#> 
+#>
 #> Variable predicted: Petal.Width
 #> Predictors contrasted: Petal.Length
 #> Predictors averaged: Petal.Length (3.8)
