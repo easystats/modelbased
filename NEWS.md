@@ -1,4 +1,4 @@
-# modelbased (devel)
+# modelbased 0.11.0
 
 ## New functions
 
