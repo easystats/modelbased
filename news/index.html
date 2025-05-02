@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.10.0.33</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,6 +86,43 @@
       <small>Source: <a href="https://github.com/easystats/modelbased/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.11.0" id="modelbased-0110">modelbased 0.11.0<a class="anchor" aria-label="anchor" href="#modelbased-0110"></a></h2>
+<div class="section level3">
+<h3 id="new-functions-0-11-0">New functions<a class="anchor" aria-label="anchor" href="#new-functions-0-11-0"></a></h3>
+<ul><li>Added <code><a href="../reference/pool_predictions.html">pool_slopes()</a></code>, to pool results from <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> applied to imputed data.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="breaking-changes-0-11-0">Breaking Changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-11-0"></a></h3>
+<ul><li>
+<code><a href="../reference/estimate_grouplevel.html">reshape_grouplevel()</a></code> now takes the correct number of specified random effects groups into account when reshaping results.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="changes-0-11-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-11-0"></a></h3>
+<ul><li><p>In general, it is now possible to make estimate means, contrasts and slopes for distributional parameters for models from package <em>brms</em> using the <code>predict</code> argument.</p></li>
+<li><p><code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> gets arguments <code>test</code>, <code>dispersion</code> and <code>diagnostic</code>, that are internally passed to <code><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">parameters::model_parameters()</a></code>, but with different defaults.</p></li>
+<li><p><code><a href="../reference/estimate_expectation.html">estimate_prediction()</a></code> and <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> now support Wiener-models (Drift Diffusion Models) from package <em>brms</em>.</p></li>
+<li><p><code><a href="../reference/estimate_expectation.html">estimate_prediction()</a></code>, <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> and similar functions now include the <code>Row</code> column for models with ordinal or categorical response variables when the <code>data</code> argument was provided.</p></li>
+<li><p><code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> can now also calculate average marginal effects of a predictor, just for the trend of that predictor within a certain range of values.</p></li>
+<li><p><code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> gets a <code>predict</code> argument, to either select the scale of the estimates slopes, or to estimate slopes (marginal effects) for distributional parameters of <em>brms</em> models.</p></li>
+<li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> gives an informative error message when arguments <code>by</code> and <code>contrast</code> have identical variables (which does not work).</p></li>
+<li><p>Column names of predicted values for <code>backend = "emmeans"</code> has changed for models like logistic regression, or beta regression. Formerly, name was <code>Mean</code>, now it is <code>Probability</code> or <code>Proportion</code>, depending on the model.</p></li>
+<li><p>Exposed <code>iterations</code> argument in <code><a href="../reference/estimate_expectation.html">estimate_prediction()</a></code> and <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code>.</p></li>
+<li><p>Option <code>estimate = "average</code> no longer prints information on averaged predictors in the footer, because strictly, the <em>predictions</em> are averaged over, and not the non-focal variables.</p></li>
+<li><p>Better handling for models with offsets in <code><a href="../reference/estimate_means.html">estimate_means()</a></code> and <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>. Informative messages are given when models include offset terms, and it is possible to fix the offset value using the <code>offset</code> argument. The <code>offset</code> argument is also available for <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code>, <code><a href="../reference/estimate_expectation.html">estimate_prediction()</a></code> and similar.</p></li>
+<li><p>For consistency, <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> now also uses the residual degrees of freedom by default (like <code><a href="../reference/estimate_means.html">estimate_means()</a></code>) when calculating confidence intervals and p-values.</p></li>
+<li><p>Minor improvements to the documentation.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-11-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-11-0"></a></h3>
+<ul><li><p>Fixed issues in <code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> for models from package <em>rstanarm</em>.</p></li>
+<li><p>Fixed issues in calculating correct confidence intervals (and possibly p-values) for pooling functions <code><a href="https://easystats.github.io/parameters/reference/pool_parameters.html" class="external-link">pool_parameters()</a></code> and <code><a href="../reference/pool_predictions.html">pool_predictions()</a></code>.</p></li>
+<li><p>Fixed issue in <code><a href="../reference/estimate_means.html">estimate_means()</a></code> for multivariate response models from package <em>brms</em>.</p></li>
+<li><p>Fixed issue with wrong y-axis label for plots from <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code>.</p></li>
+<li><p>Fixed issue with weights in <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code>.</p></li>
+<li><p>Fixed issue in printed output for the statistic column, which should be <code>z</code> for the <code>marginaleffects</code> backend, when argument <code>df = Inf</code>.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.10.0" id="modelbased-0100">modelbased 0.10.0<a class="anchor" aria-label="anchor" href="#modelbased-0100"></a></h2><p class="text-muted">CRAN release: 2025-03-10</p>
 <div class="section level3">
