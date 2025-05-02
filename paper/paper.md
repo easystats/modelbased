@@ -56,7 +56,7 @@ affiliations:
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-03-10"
+date: "2025-05-02"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
@@ -86,15 +86,15 @@ csl: apa.csl
 
 # Statement of need
 
-Applied statistics have historically focused on statistical *tests* (e.g., *t*-tests, correlation tests, and analyses of variances, ANOVAs), seen as most apt to provide researchers with interpretable answers to the questions they seek. These tests, however, typically rely on statistical *models* — the true underlying cornerstone of modern data science. The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodological (r)evolutions [@makowski2023we] have underlined some of the issues with the traditional focus on statistical tests (e.g., the effacement of model assumptions, an emphasis on null-hypothesis testing, non-compatibility with more complex variance structures) and called for shifting the focus to the models themselves.
+Applied statistics have historically focused on statistical *tests* (e.g., *t*-tests, correlation tests, and analyses of variances, ANOVAs), seen as most apt to provide researchers with interpretable answers to the questions they seek. These tests, however, typically rely on statistical *models* — the true underlying cornerstone of modern data science. The replication crisis [@OSC2015estimating; @camerer2018evaluating] and methodological (r)evolutions [@makowski2023we] have underlined some of the issues with the traditional focus on statistical tests (e.g., the effacement of model assumptions, an emphasis on null-hypothesis testing, non-compatibility with more complex variance structures) and called for shifting the focus to the models themselves [@cumming2014new].
 
 In line with these efforts, new tools have been created to facilitate the direct usage and reporting of statistical models. For instance, the `easystats` collection of R packages [@easystatspackage] has been developed to help researchers "tame, discipline, and harness" the power of statistical models. Within this framework, specific packages are dedicated to model parameters [the `parameters` package, @ludecke2020extracting], predictive performance [the `performance` package, @ludecke2021performance] or effect importance [the `effectsize` package, @ben2020effectsize].
 
-**But the models themselves withhold even more usefulness!**
+**But the models themselves pack even more usefulness!**
 
 The fundamental nature of these models—a statistical link between an outcome $y$ and predictor variables $X$—enables the generation of predictions for any observed or unobserved combination of predictors. These predictions refer to expected values of the outcome for given levels of predictors of interest, making it possible to test and visualize the model's behaviour in a more meaningful and comprehensive way, and answering a broad range of research questions.
 
-The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. However, their power and flexibility come at a cost: ease of use—especially for users not familiar with the underlying statistical concepts. The `modelbased` package, built on top of these two packages, aims to unleash this vast, untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
+The two most popular R packages for extracting these quantities of interest from statistical models are `emmeans` [@russell2024emmeans] and `marginaleffects` [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. Their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts. The `modelbased` package, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the `easystats`' *raison d'être*, the `modelbased` package focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
 
 
 # Key concepts
@@ -122,7 +122,7 @@ For convenience, the `modelbased` package includes four related functions, which
 
 The concept of "marginal" in this context refers to how non-focal predictors (i.e., those not of direct interest, for instance "adjustment" variables added to "control" for it) are treated. While predictions, as described above, fix by default non-focal variables at their reference level, marginal means compute the empirical or theoretical averages over them. These kind of predictions are a good representation of the sample, because they are not based on very specific characteristics. For example, predictions can be made for specific combinations of predictors, such as people with _high_ income, while marginal means might calculate the expected outcome for an _average_ observation (averaged over income).
 
-The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function (with focal predictors specified using the `by` argument), which can be considered as "marginal" pendant to `estimate_relation()`.
+The `modelbased` package provides a simple and clear interface to extract marginal means via the `estimate_means()` function (with focal predictors specified using the `by` argument), which can be considered as the "marginal" pendant to `estimate_relation()`.
 
 ### Contrasts
 
@@ -156,7 +156,8 @@ The `modelbased` package also provides the `estimate_grouplevel()` function to c
 - **"random"** (default): Corresponds typically to the relative deviation of each individual group from their fixed effect. As such, a coefficient close to 0 means that the participants' effect is the same as the population-level effect
 - **"total"**: Returns the absolute individual-level effects, which typically corresponds to the sum of the relative random effect with its corresponding fixed effects.
 
-Estimating these indices using mixed models can have important benefits over an empirical approach consisting of computing raw group means, of fitting individual models to all individuals separately. In particular, it is more resilient and robust to the presence of few or missing data, and naturally applies partial-pooling - *aka* "shrinkage", which combines information from the group and the overall population. This means that group estimates are "pulled" towards the population-level estimate if they are more uncertain (i.e., includes less observations), in essence giving more weight to more reliable estimates. Estimates shrinkage prevents overfitting and improves generalizability.
+Estimating these indices using mixed models can have important benefits over an empirical approach consisting of computing raw group means, of fitting individual models to all individuals separately. In particular, it is more resilient and robust to the presence of few or missing data, and naturally applies partial-pooling - *aka* "shrinkage", which combines information from the group and the overall population. This means that group estimates are "pulled" towards the population-level estimate if they are more uncertain (i.e., includes less observations), in essence giving more weight to more reliable estimates. Estimates shrinkage prevents overfitting and improves generalizability [@pan2014random].
+
 
 # Examples
 
@@ -175,16 +176,16 @@ parameters::parameters(model) |>
 ```
 #> Parameter                           | Coefficient |        95% CI |      p
 #> --------------------------------------------------------------------------
-#> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823
-#> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170
-#> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909
+#> (Intercept)                         |       -0.05 | [-0.47, 0.38] | 0.823 
+#> Petal Length                        |        0.20 | [-0.09, 0.49] | 0.170 
+#> Species [versicolor]                |       -0.04 | [-0.66, 0.59] | 0.909 
 #> Species [virginica]                 |        1.18 | [ 0.52, 1.84] | < .001
-#> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405
+#> Petal Length × Species [versicolor] |        0.13 | [-0.18, 0.44] | 0.405 
 #> Petal Length × Species [virginica]  |       -0.04 | [-0.34, 0.26] | 0.789
 ```
 
 ```
-#>
+#> 
 #> Uncertainty intervals (equal-tailed) and p-values (two-tailed) computed
 #>   using a Wald t-distribution approximation.
 ```
@@ -193,6 +194,7 @@ The model's **parameters** can be challenging to interpret and do not offer us a
 
 ## Visualize relationship
 
+The *modelbased* provides some basic plotting capabilities, which means that most outputs can be visualized using the `plot()` function.
 We can start by easily visualizing the relationship between our response variable and our predictors (Figure 1).
 
 
@@ -218,13 +220,13 @@ estimate_means(model, by = "Species")
 
 ```
 #> Estimated Marginal Means
-#>
+#> 
 #> Species    | Mean |   SE |       95% CI | t(144)
 #> ------------------------------------------------
 #> setosa     | 0.71 | 0.34 | [0.04, 1.37] |   2.11
 #> versicolor | 1.16 | 0.04 | [1.09, 1.23] |  31.44
 #> virginica  | 1.74 | 0.09 | [1.57, 1.91] |  20.20
-#>
+#> 
 #> Variable predicted: Petal.Width
 #> Predictors modulated: Species
 #> Predictors averaged: Petal.Length (3.8)
@@ -243,13 +245,13 @@ estimate_contrasts(model, contrast = "Species")
 
 ```
 #> Marginal Contrasts Analysis
-#>
+#> 
 #> Level1     | Level2     | Difference |   SE |        95% CI | t(144) |      p
 #> -----------------------------------------------------------------------------
 #> versicolor | setosa     |       0.45 | 0.34 | [-0.22, 1.12] |   1.34 |  0.183
 #> virginica  | setosa     |       1.03 | 0.35 | [ 0.35, 1.72] |   2.97 |  0.003
 #> virginica  | versicolor |       0.58 | 0.09 | [ 0.39, 0.76] |   6.18 | < .001
-#>
+#> 
 #> Variable predicted: Petal.Width
 #> Predictors contrasted: Species
 #> Predictors averaged: Petal.Length (3.8)
@@ -269,13 +271,13 @@ estimate_slopes(model, trend = "Petal.Length", by = "Species")
 
 ```
 #> Estimated Marginal Effects
-#>
-#> Species    | Slope |   SE |        95% CI |    t |      p
-#> ---------------------------------------------------------
-#> setosa     |  0.20 | 0.15 | [-0.08, 0.49] | 1.38 |  0.168
-#> versicolor |  0.33 | 0.05 | [ 0.23, 0.44] | 6.14 | < .001
-#> virginica  |  0.16 | 0.05 | [ 0.07, 0.25] | 3.49 | < .001
-#>
+#> 
+#> Species    | Slope |   SE |        95% CI | t(144) |      p
+#> -----------------------------------------------------------
+#> setosa     |  0.20 | 0.15 | [-0.09, 0.49] |   1.38 |  0.170
+#> versicolor |  0.33 | 0.05 | [ 0.22, 0.44] |   6.14 | < .001
+#> virginica  |  0.16 | 0.05 | [ 0.07, 0.25] |   3.49 | < .001
+#> 
 #> Marginal effects estimated for Petal.Length
 #> Type of slope was dY/dX
 ```
@@ -293,13 +295,13 @@ estimate_contrasts(model, contrast = "Petal.Length", by = "Species")
 
 ```
 #> Marginal Contrasts Analysis
-#>
-#> Level1     | Level2     | Difference |   SE |         95% CI |     t |     p
-#> ----------------------------------------------------------------------------
-#> versicolor | setosa     |       0.13 | 0.16 | [-0.17,  0.43] |  0.83 | 0.404
-#> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] | -0.27 | 0.789
-#> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] | -2.41 | 0.016
-#>
+#> 
+#> Level1     | Level2     | Difference |   SE |         95% CI | t(144) |     p
+#> -----------------------------------------------------------------------------
+#> versicolor | setosa     |       0.13 | 0.16 | [-0.18,  0.44] |   0.83 | 0.405
+#> virginica  | setosa     |      -0.04 | 0.15 | [-0.34,  0.26] |  -0.27 | 0.789
+#> virginica  | versicolor |      -0.17 | 0.07 | [-0.31, -0.03] |  -2.41 | 0.017
+#> 
 #> Variable predicted: Petal.Width
 #> Predictors contrasted: Petal.Length
 #> Predictors averaged: Petal.Length (3.8)
