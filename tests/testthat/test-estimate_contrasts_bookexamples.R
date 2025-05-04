@@ -54,24 +54,30 @@ test_that("estimate_contrasts - book examples 2", {
 })
 
 
-test_that("estimate_contrasts - book examples 3", {
-  data(contrast_example, package = "modelbased")
-  cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
-  cond_tx_foo <- function(x) drop(x %*% cond_tx)
-  m1 <- lm(outcome ~ score * tx, data = contrast_example)
+skip_if_not_installed("withr")
 
-  out1 <- marginaleffects::avg_predictions(
-    m1,
-    variables = c("score", "tx"),
-    hypothesis = ~ I(cond_tx_foo(x)) | score
-  )
+withr::with_environment(
+  new.env(),
+  test_that("estimate_contrasts - book examples 3", {
+    data(contrast_example, package = "modelbased")
+    cond_tx <- cond_tx_foo <- function(x) {
+      drop(x %*% cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5)))
+    }
+    m1 <- lm(outcome ~ score * tx, data = contrast_example)
 
-  out2 <- estimate_contrasts(
-    m1,
-    c("score=c(0, 1, 2.5, 4, 7)"),
-    by = "tx",
-    comparison = ~ I(cond_tx_foo(x)) | score
-  )
+    out1 <- marginaleffects::avg_predictions(
+      m1,
+      variables = c("score", "tx"),
+      hypothesis = ~ I(cond_tx_foo(x)) | score
+    )
 
-  expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
-})
+    out2 <- estimate_contrasts(
+      m1,
+      c("score=c(0, 1, 2.5, 4, 7)"),
+      by = "tx",
+      comparison = ~ I(cond_tx_foo(x)) | score
+    )
+
+    expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  })
+)
