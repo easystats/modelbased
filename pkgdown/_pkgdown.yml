@@ -29,6 +29,7 @@ reference:
   - title: "Sample datasets"
     contents:
       - coffee_data
+      - contrast_data
       - efc
       - fish
 

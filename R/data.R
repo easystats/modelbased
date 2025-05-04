@@ -21,6 +21,15 @@ NULL
 
 
 #' @docType data
+#' @title Sample dataset
+#' @name contrast_example
+#' @keywords data
+#'
+#' @description Just for internal testing
+NULL
+
+
+#' @docType data
 #' @title Sample dataset from a course about analysis of factorial designs
 #' @name coffee_data
 #' @keywords data
