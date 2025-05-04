@@ -6,17 +6,17 @@ test_that("estimate_contrasts - book examples 1", {
   data(contrast_example, package = "modelbased")
 
   # set contrasts.
-  treat_vs_none <- c(-2/3, 1/3, 1/3)
-  short_vs_long <- c(0, -1/2, 1/2)
+  treat_vs_none <- c(-2 / 3, 1 / 3, 1 / 3)
+  short_vs_long <- c(0, -1 / 2, 1 / 2)
 
   contrast_example$tx_ori <- contrast_example$tx
   contrasts(contrast_example$tx) <- cbind(treat_vs_none, short_vs_long)
 
-  contrast_example$treat_vs_none = as.factor(
+  contrast_example$treat_vs_none <- as.factor(
     ifelse(contrast_example$tx == "no treatment", "no treatment", "Puppies")
   )
 
-  contrast_example$short_vs_long = factor(
+  contrast_example$short_vs_long <- factor(
     short_vs_long,
     levels = c("short", "long", "no treatmen")
   )
@@ -60,7 +60,7 @@ withr::with_environment(
   new.env(),
   test_that("estimate_contrasts - book examples 3", {
     data(contrast_example, package = "modelbased")
-    cond_tx <- cond_tx_foo <- function(x) {
+    cond_tx_foo <<- function(x) {
       drop(x %*% cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5)))
     }
     m1 <- lm(outcome ~ score * tx, data = contrast_example)
