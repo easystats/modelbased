@@ -73,8 +73,7 @@ estimate_grouplevel.default <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     ...
   )
 
@@ -90,7 +89,7 @@ estimate_grouplevel.default <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
@@ -125,9 +124,7 @@ estimate_grouplevel.brmsfit <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    ## TODO: replace "all" by "full" once insight > 1.2.0 is on CRAN
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     dispersion = dispersion,
     test = test,
     diagnostic = diagnostic,
@@ -136,6 +133,11 @@ estimate_grouplevel.brmsfit <- function(model,
 
   # get cleaned parameter names with additional information
   clean_parameters <- attributes(params)$clean_parameters
+
+  # match parameters
+  if (!is.null(clean_parameters)) {
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
+  }
 
   # Re-add info
   if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
@@ -146,7 +148,7 @@ estimate_grouplevel.brmsfit <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
@@ -204,8 +206,7 @@ estimate_grouplevel.stanreg <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     dispersion = dispersion,
     test = test,
     diagnostic = diagnostic,
@@ -222,7 +223,10 @@ estimate_grouplevel.stanreg <- function(model,
   if (!is.null(clean_parameters)) {
     # fix for rstanarm, which contains a sigma columns
     clean_parameters <- clean_parameters[
-      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), # nolint
+      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE # nolint
+    ]
+    clean_parameters <- clean_parameters[
+      clean_parameters$Parameter %in% params$Parameter, , drop = FALSE
     ]
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
@@ -231,7 +235,7 @@ estimate_grouplevel.stanreg <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
