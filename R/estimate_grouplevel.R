@@ -134,6 +134,11 @@ estimate_grouplevel.brmsfit <- function(model,
   # get cleaned parameter names with additional information
   clean_parameters <- attributes(params)$clean_parameters
 
+  # match parameters
+  if (!is.null(clean_parameters)) {
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
+  }
+
   # Re-add info
   if (!"Group" %in% names(params) && !is.null(clean_parameters)) {
     params$Group <- clean_parameters$Group
