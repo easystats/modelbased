@@ -73,8 +73,7 @@ estimate_grouplevel.default <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     ...
   )
 
@@ -90,7 +89,7 @@ estimate_grouplevel.default <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
@@ -125,9 +124,7 @@ estimate_grouplevel.brmsfit <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    ## TODO: replace "all" by "full" once insight > 1.2.0 is on CRAN
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     dispersion = dispersion,
     test = test,
     diagnostic = diagnostic,
@@ -146,7 +143,7 @@ estimate_grouplevel.brmsfit <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
@@ -204,8 +201,7 @@ estimate_grouplevel.stanreg <- function(model,
   # Extract params
   params <- parameters::model_parameters(
     model,
-    effects = ifelse(type == "random", "all", "total"),
-    group_level = identical(type, "random"),
+    effects = ifelse(type == "random", "grouplevel", "total"),
     dispersion = dispersion,
     test = test,
     diagnostic = diagnostic,
@@ -231,7 +227,7 @@ estimate_grouplevel.stanreg <- function(model,
   }
 
   # TODO: improve / add new printing that groups by group/level?
-  random <- as.data.frame(params[params$Effects == type, ])
+  random <- as.data.frame(params)
 
   # Remove columns with only NaNs (as these are probably those of fixed effects)
   random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
