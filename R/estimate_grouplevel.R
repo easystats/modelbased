@@ -223,7 +223,10 @@ estimate_grouplevel.stanreg <- function(model,
   if (!is.null(clean_parameters)) {
     # fix for rstanarm, which contains a sigma columns
     clean_parameters <- clean_parameters[
-      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), # nolint
+      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE # nolint
+    ]
+    clean_parameters <- clean_parameters[
+      clean_parameters$Parameter %in% params$Parameter, , drop = FALSE
     ]
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
