@@ -272,11 +272,9 @@ estimate_grouplevel.stanreg <- function(model,
 .clean_grouplevel <- function(random) {
   row.names(random) <- NULL
   random$Effects <- NULL
-  if (
-    "Component" %in%
-      names(random) &&
-      insight::has_single_value(random$Component, remove_na = TRUE) &&
-      unique(random$Component) == "conditional"
+  if ("Component" %in% names(random) &&
+    insight::has_single_value(random$Component, remove_na = TRUE) &&
+    unique(random$Component) == "conditional"
   ) {
     random$Component <- NULL
   }
