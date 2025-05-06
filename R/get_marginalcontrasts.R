@@ -270,7 +270,10 @@ get_marginalcontrasts <- function(model,
   } else if (.is_custom_comparison(comparison)) {
     # we have not set "comparison_slopes" yet - we also set it to custom hypothesis
     comparison_slopes <- comparison
-  } else {
+    # if "comparison" is a function, or a matrix (possibly with contrasts),
+    # we don't modify or check it, but just pass it to the "hypothesis" argument
+    # in marginaleffects
+  } else if (!is.function(comparison) && !is.matrix(comparison)) {
     # only proceed if we don't have custom comparisons
     # if we have a formula as comparison, we convert it into strings in order
     # to extract the information for "comparison" and "by", because we
