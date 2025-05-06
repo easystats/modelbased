@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -250,6 +250,10 @@ right-hand side determines the pairs of estimates to compare (<code>reference</c
 <code>sequential</code>, <code>meandev</code>, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( <code>|</code>).</p></li>
+<li><p>A custom function, e.g. <code>comparison = myfun</code>, or
+<code>comparison ~ I(my_fun(x)) | groups</code>.</p></li>
+<li><p>If contrasts should be calculated (or grouped by) factors, <code>custom</code> can
+also be a matrix that specifies factor contrasts (see 'Examples').</p></li>
 </ul></li>
 </ul></dd>
 
@@ -276,13 +280,14 @@ variables, <code>protect_integers</code> modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.</p></li>
 <li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
 means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments for
-instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <code>slope</code> or even <code>newdata</code> can be
-passed to those functions. A <code>weights</code> argument is passed to the <code>wts</code>
-argument in <code>avg_predictions()</code> or <code>avg_slopes()</code>, however, weights can
-only be applied when <code>estimate</code> is <code>"average"</code> or <code>"population"</code> (i.e. for
-those marginalization options that do not use data grids). Other arguments,
-such as <code>re.form</code> or <code>allow.new.levels</code>, may be passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (which
-is internally used by <em>marginaleffects</em>) if supported by that model class.</p></li>
+instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <code>slope</code>, <code>hypothesis</code> or even
+<code>newdata</code> can be passed to those functions. A <code>weights</code> argument is passed
+to the <code>wts</code> argument in <code>avg_predictions()</code> or <code>avg_slopes()</code>, however,
+weights can only be applied when <code>estimate</code> is <code>"average"</code> or
+<code>"population"</code> (i.e. for those marginalization options that do not use data
+grids). Other arguments, such as <code>re.form</code> or <code>allow.new.levels</code>, may be
+passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (which is internally used by <em>marginaleffects</em>) if
+supported by that model class.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using

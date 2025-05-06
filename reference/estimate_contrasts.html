@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -139,13 +139,14 @@ variables, <code>protect_integers</code> modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.</p></li>
 <li><p><strong>marginaleffects</strong>: Internally used functions are <code>avg_predictions()</code> for
 means and contrasts, and <code>avg_slope()</code> for slopes. Therefore, arguments for
-instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <code>slope</code> or even <code>newdata</code> can be
-passed to those functions. A <code>weights</code> argument is passed to the <code>wts</code>
-argument in <code>avg_predictions()</code> or <code>avg_slopes()</code>, however, weights can
-only be applied when <code>estimate</code> is <code>"average"</code> or <code>"population"</code> (i.e. for
-those marginalization options that do not use data grids). Other arguments,
-such as <code>re.form</code> or <code>allow.new.levels</code>, may be passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (which
-is internally used by <em>marginaleffects</em>) if supported by that model class.</p></li>
+instance like <code>vcov</code>, <code>equivalence</code>, <code>df</code>, <code>slope</code>, <code>hypothesis</code> or even
+<code>newdata</code> can be passed to those functions. A <code>weights</code> argument is passed
+to the <code>wts</code> argument in <code>avg_predictions()</code> or <code>avg_slopes()</code>, however,
+weights can only be applied when <code>estimate</code> is <code>"average"</code> or
+<code>"population"</code> (i.e. for those marginalization options that do not use data
+grids). Other arguments, such as <code>re.form</code> or <code>allow.new.levels</code>, may be
+passed to <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> (which is internally used by <em>marginaleffects</em>) if
+supported by that model class.</p></li>
 <li><p><strong>emmeans</strong>: Internally used functions are <code>emmeans()</code> and <code>emtrends()</code>.
 Additional arguments can be passed to these functions.</p></li>
 <li><p>Bayesian models: For Bayesian models, parameters are cleaned using
@@ -232,6 +233,10 @@ right-hand side determines the pairs of estimates to compare (<code>reference</c
 <code>sequential</code>, <code>meandev</code>, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( <code>|</code>).</p></li>
+<li><p>A custom function, e.g. <code>comparison = myfun</code>, or
+<code>comparison ~ I(my_fun(x)) | groups</code>.</p></li>
+<li><p>If contrasts should be calculated (or grouped by) factors, <code>custom</code> can
+also be a matrix that specifies factor contrasts (see 'Examples').</p></li>
 </ul></li>
 </ul></dd>
 
@@ -649,6 +654,21 @@ averaging across random effects groups is then more accurate.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: Species</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># custom factor contrasts - contrasts the average effects of two levels</span></span></span>
+<span class="r-in"><span><span class="co"># against the remaining third level</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">contrast_example</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">cond_tx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="st">"no treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">score</span> <span class="op">*</span> <span class="va">tx</span>, data <span class="op">=</span> <span class="va">contrast_example</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"score"</span>, by <span class="op">=</span> <span class="st">"tx"</span>, comparison <span class="op">=</span> <span class="va">cond_tx</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter    | Slope |   SE |        95% CI | t(24) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> no treatment |  0.76 | 0.27 | [ 0.21, 1.31] |  2.86 | 0.009</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> treatment    |  0.30 | 0.22 | [-0.15, 0.75] |  1.37 | 0.184</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for score</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
