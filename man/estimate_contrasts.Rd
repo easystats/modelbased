@@ -39,13 +39,14 @@ variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
-instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
-passed to those functions. A \code{weights} argument is passed to the \code{wts}
-argument in \code{avg_predictions()} or \code{avg_slopes()}, however, weights can
-only be applied when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for
-those marginalization options that do not use data grids). Other arguments,
-such as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which
-is internally used by \emph{marginaleffects}) if supported by that model class.
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope}, \code{hypothesis} or even
+\code{newdata} can be passed to those functions. A \code{weights} argument is passed
+to the \code{wts} argument in \code{avg_predictions()} or \code{avg_slopes()}, however,
+weights can only be applied when \code{estimate} is \code{"average"} or
+\code{"population"} (i.e. for those marginalization options that do not use data
+grids). Other arguments, such as \code{re.form} or \code{allow.new.levels}, may be
+passed to \code{predict()} (which is internally used by \emph{marginaleffects}) if
+supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -130,6 +131,10 @@ right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( \code{|}).
+\item A custom function, e.g. \code{comparison = myfun}, or
+\code{comparison ~ I(my_fun(x)) | groups}.
+\item If contrasts should be calculated (or grouped by) factors, \code{custom} can
+also be a matrix that specifies factor contrasts (see 'Examples').
 }
 }}
 
@@ -414,6 +419,13 @@ estimate_contrasts(model, by = "Petal.Width", length = 4)
 # Standardized differences
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 standardize(estimated)
+
+# custom factor contrasts - contrasts the average effects of two levels
+# against the remaining third level
+data(contrast_example, package = "modelbased")
+cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
+model <- lm(outcome ~ score * tx, data = contrast_example)
+estimate_slopes(model, "score", by = "tx", comparison = cond_tx)
 
 # Other models (mixed, Bayesian, ...)
 data <- iris

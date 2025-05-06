@@ -51,6 +51,10 @@ test_that("estimate_contrasts - book examples 2", {
   out1 <- marginaleffects::avg_slopes(m1, variables = "score", by = "tx", hypothesis = cond_tx)
   out2 <- estimate_slopes(m1, "score", by = "tx", hypothesis = cond_tx)
   expect_equal(out1$estimate, out2$Slope, tolerance = 1e-4)
+  # we donb't officially have this argument for slopes, but we simply pass
+  # it to the "hypothesis"
+  out3 <- estimate_slopes(m1, "score", by = "tx", comparison = cond_tx)
+  expect_equal(out3$Slope, out2$Slope, tolerance = 1e-4)
 })
 
 
@@ -78,6 +82,33 @@ withr::with_environment(
       comparison = ~ I(cond_tx_foo(x)) | score
     )
 
+    expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  })
+)
+
+
+withr::with_environment(
+  new.env(),
+  test_that("estimate_contrasts - custom function in 'comparison'", {
+    dat <- expand.grid(
+      treatment = 0:1,
+      week = 1:52
+    )
+    set.seed(123)
+    dat$y <- rpois(nrow(dat), 5)
+    mod <- glm(y ~ treatment * week, data = dat, family = poisson)
+    hyp <<- function(x) {
+      sum(x$estimate[x$treatment == 1]) - sum(x$estimate[x$treatment == 0])
+    }
+    out1 <- marginaleffects::predictions(mod, type = "response", hypothesis = hyp)
+    # we need to set `estimate = "average"`, because the function "hyp()"
+    # required all predicted values, no data grid
+    out2 <- estimate_contrasts(
+      mod,
+      c("treatment", "week"),
+      comparison = hyp,
+      estimate = "average"
+    )
     expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
   })
 )

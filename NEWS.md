@@ -1,3 +1,10 @@
+# modelbased (devel)
+
+## Changes
+
+* The `comparison` argument can now also be a custom function, or a matrix
+  (e.g., to define contrasts).
+
 # modelbased 0.11.0
 
 ## New functions
