@@ -239,9 +239,9 @@ estimate_contrasts.default <- function(model,
   # Table formatting
   suffix <- ifelse(isTRUE(info$joint_test), "Joint Test", "Contrasts Analysis")
   attr(out, "table_title") <- c(switch(estimate,
-    specific = paste("Model-based", suffix)
+    specific = paste("Model-based", suffix),
     typical = paste("Marginal", suffix),
-    average = paste("Averaged", suffix)
+    average = paste("Averaged", suffix),
     population = paste("Counterfactual", suffix, "(G-computation)")
   ), "blue")
 
