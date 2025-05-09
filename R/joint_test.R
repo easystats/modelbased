@@ -1,15 +1,3 @@
-# marginaleffects::hypotheses(means, joint = 1:2)
-# resulting data frame in "means" is:
-# facetype              Hypothesis Estimate Std. Error      t Pr(>|t|)    S
-# Unattractive (Low dose) - (Placebo)     1.375      0.585  2.350   0.0237  5.4
-# Unattractive (High dose) - (Placebo)    3.125      0.585  5.342   <0.001 18.0
-# Attractive   (Low dose) - (Placebo)     0.125      0.585  0.214   0.8319  0.3
-# Attractive   (High dose) - (Placebo)   -0.250      0.585 -0.427   0.6714  0.6
-
-# my_args$by contains both arguments `contrast` and `by`, so we must find
-# names of contrast-variables by removing colname "facetype" from my_args$by,
-# and remaining values are the names for the "Hypothesis" column
-
 .joint_test <- function(means, my_args) {
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
@@ -35,10 +23,25 @@
     )
   }
 
+  # joint test for all test rows
   out <- lapply(test_rows, function(x) {
     marginaleffects::hypotheses(means, joint = x)
   })
 
-  res <- do.call(rbind, out)
-  res
+  # bind results
+  result <- do.call(rbind, out)
+
+  # add variable names and levels
+  result <- cbind(
+    contrast_vars,
+    unique(means[by_vars]),
+    estimate = NA,
+    result
+  )
+
+  # proper column names
+  colnames(result) <- c("Contrast", by_vars, "estimate", "F", "p", "df1", "df2")
+  class(result) <- unique(class(means), "marginal_jointtest", "data.frame")
+
+  result
 }
