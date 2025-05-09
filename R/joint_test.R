@@ -44,8 +44,8 @@
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
 
   # these are special columns, not yet covered by "insight::format_table()"
-  insight::format_value(result$df1, protect_integers = TRUE)
-  insight::format_value(result$df2, protect_integers = TRUE)
+  result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
+  result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
 
   result
 }
