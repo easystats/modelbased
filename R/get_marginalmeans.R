@@ -232,20 +232,8 @@ get_marginalmeans <- function(model,
   # intermediate step: joint tests --------------------------------------------
   # ---------------------------------------------------------------------------
 
-  ## TODO: implement joint-tests here
-
   if (joint_test) {
-    # marginaleffects::hypotheses(means, joint = 1:2)
-    # resulting data frame in "means" is:
-    # facetype              Hypothesis Estimate Std. Error      t Pr(>|t|)    S
-    # Unattractive (Low dose) - (Placebo)     1.375      0.585  2.350   0.0237  5.4
-    # Unattractive (High dose) - (Placebo)    3.125      0.585  5.342   <0.001 18.0
-    # Attractive   (Low dose) - (Placebo)     0.125      0.585  0.214   0.8319  0.3
-    # Attractive   (High dose) - (Placebo)   -0.250      0.585 -0.427   0.6714  0.6
-
-    # my_args$by contains both arguments `contrast` and `by`, so we must find
-    # names of contrast-variables by removing colname "facetype" from my_args$by,
-    # and remaining values are the names for the "Hypothesis" column
+    means <- .joint_test(means, my_args)
   }
 
   # Fifth step: post-processing marginal means----------------------------------
