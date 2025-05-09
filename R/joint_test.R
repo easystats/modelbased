@@ -41,7 +41,7 @@
 
   # proper column names
   colnames(result) <- c("Contrast", by_vars, "estimate", "F", "p", "df1", "df2")
-  class(result) <- unique(class(means), "marginal_jointtest", "data.frame")
+  class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
 
   result
 }
