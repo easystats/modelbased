@@ -542,7 +542,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
   # marginaleffects objects return z-statistic by default, unless we change it
   # via the degrees-of-freedom argument
-  if (is.null(params$df) || all(is.infinite(params$df))) {
+  if (inherits(x, "marginal_jointtest")) {
+    stat_column <- "F"
+  } else if (is.null(params$df) || all(is.infinite(params$df))) {
     stat_column <- "z"
   } else {
     stat_column <- "t"

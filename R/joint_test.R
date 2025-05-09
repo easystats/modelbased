@@ -43,5 +43,9 @@
   colnames(result) <- c("Contrast", by_vars, "estimate", "F", "p", "df1", "df2")
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
 
+  # these are special columns, not yet covered by "insight::format_table()"
+  insight::format_value(result$df1, protect_integers = TRUE)
+  insight::format_value(result$df2, protect_integers = TRUE)
+
   result
 }
