@@ -292,7 +292,8 @@ get_marginalmeans <- function(model,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations
+        keep_iterations = keep_iterations,
+        joint_test = joint_test
       )
     )
   )
@@ -444,7 +445,8 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter",
+    "keep_iterations", "joint_test"
   )
 }
 
