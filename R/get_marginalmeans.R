@@ -38,6 +38,7 @@ get_marginalmeans <- function(model,
 
   dots <- list(...)
   comparison <- dots$hypothesis
+  joint_test <- dots$joint_test
 
   # set defaults
   if (is.null(estimate)) {
@@ -128,7 +129,10 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma", "offset")] <- NULL
+  dots[c(
+    "by", "conf_level", "type", "digits", "bias_correction", "sigma",
+    "offset", "joint_test"
+  )] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df) && !model_info$is_bayesian) {
@@ -224,6 +228,25 @@ get_marginalmeans <- function(model,
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
+
+  # intermediate step: joint tests --------------------------------------------
+  # ---------------------------------------------------------------------------
+
+  ## TODO: implement joint-tests here
+
+  if (joint_test) {
+    # marginaleffects::hypotheses(means, joint = 1:2)
+    # resulting data frame in "means" is:
+    # facetype              Hypothesis Estimate Std. Error      t Pr(>|t|)    S
+    # Unattractive (Low dose) - (Placebo)     1.375      0.585  2.350   0.0237  5.4
+    # Unattractive (High dose) - (Placebo)    3.125      0.585  5.342   <0.001 18.0
+    # Attractive   (Low dose) - (Placebo)     0.125      0.585  0.214   0.8319  0.3
+    # Attractive   (High dose) - (Placebo)   -0.250      0.585 -0.427   0.6714  0.6
+
+    # my_args$by contains both arguments `contrast` and `by`, so we must find
+    # names of contrast-variables by removing colname "facetype" from my_args$by,
+    # and remaining values are the names for the "Hypothesis" column
+  }
 
   # Fifth step: post-processing marginal means----------------------------------
   # ---------------------------------------------------------------------------
