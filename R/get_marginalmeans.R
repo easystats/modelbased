@@ -38,6 +38,7 @@ get_marginalmeans <- function(model,
 
   dots <- list(...)
   comparison <- dots$hypothesis
+  joint_test <- isTRUE(dots$.joint_test)
 
   # set defaults
   if (is.null(estimate)) {
@@ -128,7 +129,10 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
-  dots[c("by", "conf_level", "type", "digits", "bias_correction", "sigma", "offset")] <- NULL
+  dots[c(
+    "by", "conf_level", "type", "digits", "bias_correction", "sigma",
+    "offset", ".joint_test"
+  )] <- NULL
 
   # model df - can be passed via `...`
   if (is.null(dots$df) && !model_info$is_bayesian) {
@@ -225,6 +229,13 @@ get_marginalmeans <- function(model,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
 
+  # intermediate step: joint tests --------------------------------------------
+  # ---------------------------------------------------------------------------
+
+  if (joint_test) {
+    means <- .joint_test(means, my_args, test = c(dots$joint_test, dots$test))
+  }
+
   # Fifth step: post-processing marginal means----------------------------------
   # ---------------------------------------------------------------------------
 
@@ -269,7 +280,8 @@ get_marginalmeans <- function(model,
         estimate = estimate,
         datagrid = datagrid,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations
+        keep_iterations = keep_iterations,
+        joint_test = joint_test
       )
     )
   )
@@ -421,7 +433,8 @@ get_marginalmeans <- function(model,
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
-    "coef_name", "slope", "ci", "model_info", "contrast_filter", "keep_iterations"
+    "coef_name", "slope", "ci", "model_info", "contrast_filter",
+    "keep_iterations", "joint_test"
   )
 }
 

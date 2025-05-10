@@ -5,6 +5,9 @@
 * The `comparison` argument can now also be a custom function, or a matrix
   (e.g., to define contrasts).
 
+* The `comparison` argument can now also be `"joint"`, to jointly test
+  hypotheses (i.e. conducting a joint test) in factorial designs.
+
 # modelbased 0.11.0
 
 ## New functions
