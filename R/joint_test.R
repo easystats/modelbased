@@ -86,7 +86,15 @@
 
 .joint_test.emmGrid <- function(means, my_args, ...) {
   by_arg <- attributes(means)$misc$by.vars
-  result <- as.data.frame(emmeans::joint_tests(means, by = by_arg))
+  result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
+
+  # check if everything was ok
+  if (inherits(result, "try-error")) {
+    insight::format_error(
+      "Could not compute joint test. This error occured:",
+      attributes(result)$condition$message
+    )
+  }
 
   # these are special columns, not yet covered by "insight::format_table()"
   result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
