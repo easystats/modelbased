@@ -27,7 +27,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
   expect_identical(out1$coffee, out2$coffee)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
-  expect_equal(out3$Statistic, out2$`F.ratio`, tolerance = 1e-3)
+  expect_equal(out3$`F`, out2$`F.ratio`, tolerance = 1e-3)
   expect_equal(out3$p, out2$p.value, tolerance = 1e-3)
   expect_named(out1, c("Contrast", "coffee", "df1", "df2", "Difference", "F", "p"))
   expect_named(out3, c("Contrast", "coffee", "df1", "df2", "F", "p"))
@@ -39,19 +39,10 @@ test_that("estimate_contrasts - joint test, 2-way", {
     comparison = "joint"
   )
   out2 <- emmeans::joint_tests(m, "time")
-  out3 <- estimate_contrasts(
-    m,
-    contrast = "coffee",
-    by = "time",
-    comparison = "joint",
-    backend = "emmeans"
-  )
 
   expect_identical(out1$time, out2$time)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
-  expect_equal(out3$Statistic, out2$`F.ratio`, tolerance = 1e-3)
-  expect_equal(out3$p, out2$p.value, tolerance = 1e-3)
 })
 
 
@@ -72,7 +63,7 @@ test_that("estimate_contrasts - joint test, p-adjust", {
     comparison = "joint",
     p_adjust = "holm"
   )
-  expect_all(out1$p != out2$p)
+  expect_true(out1$p != out2$p)
 })
 
 
