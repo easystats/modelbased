@@ -118,10 +118,14 @@ test_that("estimate_contrasts - joint test, 3-way", {
     comparison = "joint",
     backend = "emmeans"
   )
+  out3 <- as.data.frame(out3[c(1, 3, 2, 4), ])
 
   expect_identical(out1$coffee, out2$coffee)
+  expect_identical(out1$coffee, out3$coffee)
   expect_identical(out1$sex, out2$sex)
+  expect_identical(out1$sex, out3$sex)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
+  expect_equal(out1$`F`, out3$`F`, tolerance = 1e-3)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
   expect_identical(dim(out1), c(4L, 8L))
 
