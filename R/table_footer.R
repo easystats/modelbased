@@ -24,12 +24,16 @@
 
   # name of predicted response -----------------------------------------------
 
-  table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
+  if (isTRUE(info$joint_test)) {
+    table_footer <- NULL
+  } else {
+    table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
+  }
 
 
   # modulated predictors (focal terms) ---------------------------------------
 
-  if (!is.null(by)) {
+  if (!is.null(by) && !isTRUE(info$joint_test)) {
     modulate_string <- switch(type,
       contrasts = "contrasted",
       "modulated"

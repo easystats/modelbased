@@ -11,11 +11,11 @@
   }
   # check out how many comparisons we have. If only one,
   # # we jointly test all rows at once
-  n_hypothesis <- insight::n_unique(means$hypothesis)
+  n_hypothesis <- insight::n_unique(means$hypothesis) * length(by_vars)
 
   # determine number of rows to test, and which rows
   if (n_hypothesis == 1) {
-    test_rows <- list(1:nrow(means))
+    test_rows <- as.list(1:nrow(means))
   } else {
     test_rows <- split(
       seq_len(nrow(means)),
