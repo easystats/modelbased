@@ -19,14 +19,14 @@
 #' carried out.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
 #'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
-#'   `"dunnett"`, `"wtcon"` and some more. See also `method` argument in
-#'   [emmeans::contrast] and the `?emmeans::emmc-functions`.
+#'   `"dunnett"`, `"wtcon"` and some more. To test multiple hypotheses jointly
+#'   (usually used for factorial designs), `comparison` can also be `"joint"`.
+#'   See also `method` argument in [emmeans::contrast] and the
+#'   `?emmeans::emmc-functions`.
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
-#'   naming the comparison method, a formula, or a function. Strings, string
-#'   equations and formula are probably the most common options and described
-#'   below. For other options and detailed descriptions of those options, see
-#'   also [marginaleffects::comparisons] and
+#'   naming the comparison method, a formula, or a function. For options not
+#'   described below, see documentation of [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
 #'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test

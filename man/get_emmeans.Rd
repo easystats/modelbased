@@ -127,14 +127,14 @@ carried out.
 \itemize{
 \item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
 \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
-\code{"dunnett"}, \code{"wtcon"} and some more. See also \code{method} argument in
-\link[emmeans:contrast]{emmeans::contrast} and the \code{?emmeans::emmc-functions}.
+\code{"dunnett"}, \code{"wtcon"} and some more. To test multiple hypotheses jointly
+(usually used for factorial designs), \code{comparison} can also be \code{"joint"}.
+See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
+\code{?emmeans::emmc-functions}.
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
-naming the comparison method, a formula, or a function. Strings, string
-equations and formula are probably the most common options and described
-below. For other options and detailed descriptions of those options, see
-also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
+naming the comparison method, a formula, or a function. For options not
+described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
