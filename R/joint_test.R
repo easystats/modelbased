@@ -84,7 +84,7 @@
 
 # emmeans
 
-.joint_test.emmGrid <- function(means, ...) {
+.joint_test.emmGrid <- function(means, my_args, ...) {
   by_arg <- attributes(means)$misc$by.vars
   result <- as.data.frame(emmeans::joint_tests(means, by = by_arg))
 
@@ -93,8 +93,9 @@
   result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
 
   # rename statistic column
-  result$`F.ratio` <- insight::format_value(result$`F.ratio`, digits = 4)
   colnames(result)[colnames(result) == "F.ratio"] <- "F"
+  colnames(result)[1] <- "Contrast"
+  result[[1]] <- my_args$contrast
 
   result
 }
