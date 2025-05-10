@@ -1,4 +1,11 @@
-.joint_test <- function(means, my_args, test = "f") {
+.joint_test <- function(means, ...) {
+  UseMethod(".joint_test")
+}
+
+
+# marginaleffects
+
+.joint_test.predictions <- function(means, my_args, test = "f", ...) {
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
   # were used as contrasts, and which for grouping
@@ -70,6 +77,24 @@
     colnames(result) <- c("Contrast", by_vars, "estimate", "Chi2", "p", "df")
   }
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
+
+  result
+}
+
+
+# emmeans
+
+.joint_test.emmGrid <- function(means, ...) {
+  by_arg <- attributes(means)$misc$by.vars
+  result <- as.data.frame(emmeans::joint_tests(means, by = by_arg))
+
+  # these are special columns, not yet covered by "insight::format_table()"
+  result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
+  result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
+
+  # rename statistic column
+  result$`F.ratio` <- insight::format_value(result$`F.ratio`, digits = 4)
+  colnames(result)[colnames(result) == "F.ratio"] <- "F"
 
   result
 }
