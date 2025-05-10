@@ -4,11 +4,19 @@
   # were used as contrasts, and which for grouping
   by_vars <- intersect(cnames, my_args$by)
   contrast_vars <- setdiff(my_args$by, by_vars)
+
+  # if we have no grouping variable, joint test simplifies to an anova-table
+  # tell user to use `anova()` then.
+  if (!length(by_vars)) {
+    insight::format_error("Joint tests using `comparison = \"joint\"` only work when `by` is specified. If this stratification is not desired, please use `anova()` on your model object instead.") # nolint
+  }
+
   # get column names. We need to have the column "hypothesis", else,
   # no test can be performed
   if (!"hypothesis" %in% cnames) {
     insight::format_error("Can't perform joint test. Data frame needs a column \"hypothesis\".")
   }
+
   # check out how many comparisons we have. If only one,
   # # we jointly test all rows at once
   n_hypothesis <- prod(insight::n_unique(means[by_vars]))

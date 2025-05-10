@@ -115,3 +115,13 @@ test_that("estimate_contrasts - joint test, 3-way", {
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
   expect_identical(dim(out1), c(6L, 8L))
 })
+
+
+test_that("estimate_contrasts - joint test, 3-way", {
+  data(coffee_data, package = "modelbased")
+  m <- lm(alertness ~ time * coffee * sex, data = coffee_data)
+  expect_error(
+    estimate_contrasts(m, contrast = "time", comparison = "joint"),
+    regex = "Joint tests using"
+  )
+})
