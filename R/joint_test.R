@@ -11,7 +11,7 @@
   }
   # check out how many comparisons we have. If only one,
   # # we jointly test all rows at once
-  n_hypothesis <- insight::n_unique(means$hypothesis) * length(by_vars)
+  n_hypothesis <- prod(insight::n_unique(means[by_vars]))
 
   # determine number of rows to test, and which rows
   if (n_hypothesis == 1) {
