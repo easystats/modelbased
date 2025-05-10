@@ -92,7 +92,8 @@
   if (inherits(result, "try-error")) {
     insight::format_error(
       "Could not compute joint test. This error occured:",
-      attributes(result)$condition$message
+      attributes(result)$condition$message,
+      "\nYou may try to set `backend = \"marginaleffects\" in your call to `estimate_contrasts()`."
     )
   }
 
