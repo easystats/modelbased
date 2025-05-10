@@ -29,7 +29,10 @@
 #'   also [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`.
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
+#'     multiple hypotheses jointly (usually used for factorial designs),
+#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
+#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -41,8 +44,8 @@
 #'     after a vertical bar ( `|`).
 #'   * A custom function, e.g. `comparison = myfun`, or
 #'     `comparison ~ I(my_fun(x)) | groups`.
-#'   * If contrasts should be calculated (or grouped by) factors, `custom` can
-#'     also be a matrix that specifies factor contrasts (see 'Examples').
+#'   * If contrasts should be calculated (or grouped by) factors, `comparison`
+#'     can also be a matrix that specifies factor contrasts (see 'Examples').
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.

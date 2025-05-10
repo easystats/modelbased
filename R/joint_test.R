@@ -1,4 +1,4 @@
-.joint_test <- function(means, my_args) {
+.joint_test <- function(means, my_args, test = "f") {
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
   # were used as contrasts, and which for grouping
@@ -23,9 +23,22 @@
     )
   }
 
+  # sanity check
+  if (is.null(test)) {
+    test <- "f"
+  } else {
+    test <- tolower(insight::compact_character(test)[1])
+  }
+
+  # handle aliases
+  test <- switch(tolower(test),
+    chi2 = "chisq",
+    test
+  )
+
   # joint test for all test rows
   out <- lapply(test_rows, function(x) {
-    marginaleffects::hypotheses(means, joint = x)
+    marginaleffects::hypotheses(means, joint = x, joint_test = test)
   })
 
   # bind results
@@ -40,12 +53,15 @@
   )
 
   # proper column names
-  colnames(result) <- c("Contrast", by_vars, "estimate", "F", "p", "df1", "df2")
+  if (test == "f") {
+    colnames(result) <- c("Contrast", by_vars, "estimate", "F", "p", "df1", "df2")
+    # these are special columns, not yet covered by "insight::format_table()"
+    result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
+    result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
+  } else {
+    colnames(result) <- c("Contrast", by_vars, "estimate", "Chi2", "p", "df")
+  }
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
-
-  # these are special columns, not yet covered by "insight::format_table()"
-  result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
-  result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
 
   result
 }

@@ -121,7 +121,10 @@ also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
+multiple hypotheses jointly (usually used for factorial designs),
+\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
+to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -133,8 +136,8 @@ can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( \code{|}).
 \item A custom function, e.g. \code{comparison = myfun}, or
 \code{comparison ~ I(my_fun(x)) | groups}.
-\item If contrasts should be calculated (or grouped by) factors, \code{custom} can
-also be a matrix that specifies factor contrasts (see 'Examples').
+\item If contrasts should be calculated (or grouped by) factors, \code{comparison}
+can also be a matrix that specifies factor contrasts (see 'Examples').
 }
 }}
 

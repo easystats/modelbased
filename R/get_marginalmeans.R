@@ -38,7 +38,7 @@ get_marginalmeans <- function(model,
 
   dots <- list(...)
   comparison <- dots$hypothesis
-  joint_test <- dots$joint_test
+  joint_test <- dots$.joint_test
 
   # set defaults
   if (is.null(estimate)) {
@@ -131,7 +131,7 @@ get_marginalmeans <- function(model,
   # remove user-arguments from "..." that will be used when calling marginaleffects
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", "joint_test"
+    "offset", ".joint_test"
   )] <- NULL
 
   # model df - can be passed via `...`
@@ -233,7 +233,7 @@ get_marginalmeans <- function(model,
   # ---------------------------------------------------------------------------
 
   if (joint_test) {
-    means <- .joint_test(means, my_args)
+    means <- .joint_test(means, my_args, test = c(dots$joint_test, dots$test))
   }
 
   # Fifth step: post-processing marginal means----------------------------------
