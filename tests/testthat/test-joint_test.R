@@ -63,7 +63,7 @@ test_that("estimate_contrasts - joint test, p-adjust", {
     comparison = "joint",
     p_adjust = "holm"
   )
-  expect_true(out1$p != out2$p)
+  expect_true(any(out1$p != out2$p))
 })
 
 
