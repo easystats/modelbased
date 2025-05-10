@@ -214,14 +214,14 @@ transformation is selected (which usually is <code>"response"</code>). See also
 <dd><p>Specify the type of contrasts or tests that should be
 carried out.</p><ul><li><p>When <code>backend = "emmeans"</code>, can be one of <code>"pairwise"</code>, <code>"poly"</code>,
 <code>"consec"</code>, <code>"eff"</code>, <code>"del.eff"</code>, <code>"mean_chg"</code>, <code>"trt.vs.ctrl"</code>,
-<code>"dunnett"</code>, <code>"wtcon"</code> and some more. See also <code>method</code> argument in
-<a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a> and the <code>?emmeans::emmc-functions</code>.</p></li>
+<code>"dunnett"</code>, <code>"wtcon"</code> and some more. To test multiple hypotheses jointly
+(usually used for factorial designs), <code>comparison</code> can also be <code>"joint"</code>.
+See also <code>method</code> argument in <a href="https://rvlenth.github.io/emmeans/reference/contrast.html" class="external-link">emmeans::contrast</a> and the
+<code>?emmeans::emmc-functions</code>.</p></li>
 <li><p>For <code>backend = "marginaleffects"</code>, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
-naming the comparison method, a formula, or a function. Strings, string
-equations and formula are probably the most common options and described
-below. For other options and detailed descriptions of those options, see
-also <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
+naming the comparison method, a formula, or a function. For options not
+described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
 <code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
 multiple hypotheses jointly (usually used for factorial designs),
