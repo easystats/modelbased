@@ -9,7 +9,7 @@
   insight::validate_argument(effectsize, c("none", "emmeans", "marginal", "boot"))
 
   if (effectsize == "emmeans" && backend != "emmeans") {
-    insight::format_error("`effectsize = \"emmeans\"` only possible with `backend = emmeans`")
+    insight::format_error("`effectsize = \"emmeans\"` only possible with `backend = \"emmeans\"`")
   }
 
   # Check if the model includes any random effects. Effect size calculations in

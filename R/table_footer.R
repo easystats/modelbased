@@ -24,17 +24,25 @@
 
   # name of predicted response -----------------------------------------------
 
-  table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
+  if (isTRUE(info$joint_test)) {
+    table_footer <- NULL
+  } else {
+    table_footer <- paste0(
+      "\nVariable predicted: ", toString(insight::find_response(model))
+    )
+  }
 
 
   # modulated predictors (focal terms) ---------------------------------------
 
-  if (!is.null(by)) {
+  if (!is.null(by) && !isTRUE(info$joint_test)) {
     modulate_string <- switch(type,
       contrasts = "contrasted",
       "modulated"
     )
-    table_footer <- paste0(table_footer, "\nPredictors ", modulate_string, ": ", toString(by))
+    table_footer <- paste0(
+      table_footer, "\nPredictors ", modulate_string, ": ", toString(by)
+    )
   }
 
 
@@ -70,7 +78,9 @@
         predictions = "controlled",
         "averaged"
       )
-      table_footer <- paste0(table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for))
+      table_footer <- paste0(
+        table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for)
+      )
     }
   }
 
@@ -81,7 +91,11 @@
     if (p_adjust == "none") {
       table_footer <- paste0(table_footer, "\np-values are uncorrected.")
     } else {
-      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(p_adjust))
+      table_footer <- paste0(
+        table_footer,
+        "\np-value adjustment method: ",
+        parameters::format_p_adjust(p_adjust)
+      )
     }
   }
 

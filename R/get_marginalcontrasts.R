@@ -113,6 +113,7 @@ get_marginalcontrasts <- function(model,
       transform = transform,
       keep_iterations = keep_iterations,
       verbose = verbose,
+      .joint_test = my_args$joint_test,
       ...
     )
   }
@@ -200,6 +201,7 @@ get_marginalcontrasts <- function(model,
                                                      ...) {
   # init
   comparison_slopes <- by_filter <- contrast_filter <- by_token <- NULL
+  joint_test <- FALSE
   # save original `by`
   original_by <- my_args$by
 
@@ -298,6 +300,12 @@ get_marginalcontrasts <- function(model,
     } else {
       # if comparison is a string, do sanity check for "comparison" argument
       insight::validate_argument(comparison, .valid_hypothesis_strings())
+      # exception: we have an option "joint" to avoid more arguments. we
+      # must recode this into proper syntax
+      if (comparison == "joint") {
+        comparison <- "reference"
+        joint_test <- TRUE
+      }
       formula_lhs <- "difference"
       formula_rhs <- comparison
     }
@@ -342,7 +350,9 @@ get_marginalcontrasts <- function(model,
       comparison_slopes = comparison_slopes,
       # the filter-value, in case `by` or contrast indicated any filtering
       by_filter = insight::compact_list(by_filter),
-      contrast_filter = insight::compact_list(contrast_filter)
+      contrast_filter = insight::compact_list(contrast_filter),
+      # in case we have a joint/omnibus test
+      joint_test = joint_test
     )
   )
 }
@@ -352,7 +362,7 @@ get_marginalcontrasts <- function(model,
   c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl"
+    "trt_vs_ctrl", "joint"
   )
 }
 
