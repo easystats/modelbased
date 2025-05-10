@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -223,7 +223,10 @@ equations and formula are probably the most common options and described
 below. For other options and detailed descriptions of those options, see
 also <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
 <a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
-<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>.</p></li>
+<code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
+multiple hypotheses jointly (usually used for factorial designs),
+<code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
+to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
@@ -235,8 +238,8 @@ can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( <code>|</code>).</p></li>
 <li><p>A custom function, e.g. <code>comparison = myfun</code>, or
 <code>comparison ~ I(my_fun(x)) | groups</code>.</p></li>
-<li><p>If contrasts should be calculated (or grouped by) factors, <code>custom</code> can
-also be a matrix that specifies factor contrasts (see 'Examples').</p></li>
+<li><p>If contrasts should be calculated (or grouped by) factors, <code>comparison</code>
+can also be a matrix that specifies factor contrasts (see 'Examples').</p></li>
 </ul></li>
 </ul></dd>
 
