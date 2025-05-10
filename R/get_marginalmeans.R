@@ -38,7 +38,7 @@ get_marginalmeans <- function(model,
 
   dots <- list(...)
   comparison <- dots$hypothesis
-  joint_test <- dots$.joint_test
+  joint_test <- isTRUE(dots$.joint_test)
 
   # set defaults
   if (is.null(estimate)) {
