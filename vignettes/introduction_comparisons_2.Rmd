@@ -46,7 +46,7 @@ The first example demonstrates how to define and apply user-defined contrasts to
 
 First, we define two specific contrasts: `treat_vs_none` (comparing the average of two treatment levels to a control level) and `short_vs_long` (comparing two treatment levels against each other).
 
-To illustrate the effect of these custom contrasts, the code creates a copy of the original treatment factor (`tx_ori`) before applying the new contrasts to the tx factor. It also centers a continuous predictor, `score`, to better interpret the main effects of the interaction term.
+To illustrate the effect of these custom contrasts, the code creates a copy of the original treatment factor (`tx_ori`) before applying the new contrasts to the `tx` factor. It also centers a continuous predictor, `score`, to better interpret the main effects of the interaction term.
 
 Two linear models are then fitted: `m1` uses the `tx` factor with the user-defined contrasts, while `m2` uses the original `tx_ori` factor. The `compare_parameters()` function is used to show that `m1` directly estimates coefficients corresponding to `treat_vs_none` and `short_vs_long`, which are not directly available in `m2`.
 
@@ -99,7 +99,7 @@ estimate_contrasts(m2, "tx_ori", comparison = "b3 = b2")
 
 # Using a matrix for contrasts
 
-Comparisons are extremly flexible. For instance, it is possible to calculate the marginal effects for the predictor `score`, or the marginal effects for `score` at each level of the treatment, `tx_ori`. We can do this by using `estimate_slopes()`.
+Comparisons are extremely flexible. For instance, it is possible to calculate the marginal effects for the predictor `score`, or the marginal effects for `score` at each level of the treatment, `tx_ori`. We can do this by using `estimate_slopes()`.
 
 ```{r}
 # marginal effect for "score"
@@ -142,7 +142,7 @@ estimate_contrasts(m, contrast = "time", by = "coffee")
 estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
 ```
 
-The above example can be easily expaned to three-way interactions.
+The above example can be easily expanded to three-way interactions.
 
 ```{r}
 # 3 way interaction
