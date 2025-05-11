@@ -45,8 +45,9 @@ This vignette is the second in a 5-part series:
 
 5. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
 
+# User defined contrasts
 
-This vignette demonstrates how to define and apply user-defined contrasts to a factor variable within a linear model.
+The first example demonstrates how to define and apply user-defined contrasts to a factor variable within a linear model, respectively how to avoid defining specific contrasts and instead directly formulate the desired contrast as custom hypothesis in `estimate_contrasts()`.
 
 First, we define two specific contrasts: `treat_vs_none` (comparing the average of two treatment levels to a control level) and `short_vs_long` (comparing two treatment levels against each other).
 
@@ -101,8 +102,74 @@ estimate_contrasts(m2, "tx_ori", comparison = "((b2+b3)/2) = b1")
 estimate_contrasts(m2, "tx_ori", comparison = "b3 = b2")
 ```
 
+# Using a matrix for contrasts
+
+Comparisons are extremly flexible. For instance, it is possible to calculate the marginal effects for the predictor `score`, or the marginal effects for `score` at each level of the treatment, `tx_ori`. We can do this by using `estimate_slopes()`.
+
+```{r}
+# marginal effect for "score"
+estimate_slopes(m2, "score")
+
+# marginal effect for "score" at levels of "tx_ori"
+estimate_slopes(m2, "score", by = "tx_ori")
+```
+
+Again, it it possible to combine levels, by using a matrix that defines the contrasts of interest, and pass this matrix as value for the `comparison` argument.
+
+In essence, in the next example, the marginal effect (slope) of `score` within each level of `tx_ori` is calculated, and then two specific weighted combinations of these slopes as defined by the `cond_tx` matrix are computed. The first combination isolates and scales the slope from the first level of `tx_ori`, while the second creates a weighted sum of the slopes from the second and third levels.
+
+```{r}
+# we want the marginal effects of slopes for treatment vs. no treatment
+# this is represented by the following contrast matrix
+cond_tx <- cbind("no treatment" = c(-2/3, 0, 0), "treatment" = c(0, 1/3, 1/3))
+
+# marginal effect for "score" at average effect of "treatment" (short + long)
+# and "no treatment"
+estimate_slopes(m2, "score", by = "tx_ori", comparison = cond_tx)
+```
+
+# Jointly test multiple hypotheses
+
+The next example fits a linear model to predict `alertness` based on an interaction between `time` and `coffee`. It then calculates standard pairwise comparisons for the levels of `time` separately within each level of `coffee`. The final and key step performs a joint test: for each level of `coffee`, it tests the overall hypothesis that there is _any_ significant difference among the levels of `time`, rather than looking at individual pairwise differences. This provides an omnibus test for the effect of `time` within each `coffee` group. To conduct joint tests, set `comparison = "joint"`.
+
+```{r}
+data(coffee_data, package = "modelbased")
+
+# 2 way interaction
+m <- lm(alertness ~ time * coffee, data = coffee_data)
+
+# contrasts of pairwise comparisons of levels of "time" within the
+# different levels of "coffee"
+estimate_contrasts(m, contrast = "time", by = "coffee")
+
+# jointly test whether the contrasts of all levels of time have an
+# effect within each level of "coffee"
+estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
+```
+
+The above example can be easily expaned to three-way interactions.
+
+```{r}
+# 3 way interaction
+m <- lm(alertness ~ time * coffee * sex, data = coffee_data)
+
+# joint test of "time" levels within each group of coffee and sex
+estimate_contrasts(
+  m,
+  contrast = "time",
+  by = c("coffee", "sex"),
+  comparison = "joint"
+)
+```
+
 # Conclusion
 
-While the current implementation in `estimate_contrasts()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, we recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/chapters/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/chapters/hypothesis.html).
+This vignette showed advanced techniques for hypothesis testing in R using the **modelbased** package.
+
+Some key takeaways:
+
+- **Flexible Custom Comparisons:** You can move beyond default contrasts by either directly defining contrast vectors for your factors or, more flexibly, by specifying custom hypotheses as strings (e.g., `"((b2+b3)/2) = b1"`) or using matrices within functions like `estimate_contrasts()` and `estimate_slopes()`. This allows for highly specific and theoretically driven comparisons, such as comparing an average of multiple treatment levels to a control, or creating weighted combinations of slopes.
+
+- **Powerful Joint Hypothesis Testing:** The `comparison = "joint"` argument in `estimate_contrasts()` enables omnibus tests. This is particularly useful for interactions, as it allows you to test whether a factor (e.g., `time`) has any significant effect within each level of another factor (e.g., `coffee`), providing a global assessment before (or instead of) diving into all individual pairwise comparisons.
 
 [Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
