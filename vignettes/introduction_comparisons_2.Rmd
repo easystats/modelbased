@@ -116,7 +116,7 @@ In essence, in the next example, the marginal effect (slope) of `score` within e
 ```{r}
 # we want the marginal effects of slopes for treatment vs. no treatment
 # this is represented by the following contrast matrix
-cond_tx <- cbind("no treatment" = c(-2/3, 0, 0), "treatment" = c(0, 1/3, 1/3))
+cond_tx <- cbind("no treatment" = c(-2 / 3, 0, 0), "treatment" = c(0, 1 / 3, 1 / 3))
 
 # marginal effect for "score" at average effect of "treatment" (short + long)
 # and "no treatment"
