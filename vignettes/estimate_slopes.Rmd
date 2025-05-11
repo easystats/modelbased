@@ -101,7 +101,7 @@ plot(slopes)
 
 Interactions between two continuous variables are often not straightforward to visualize and interpret. Thanks to the model-based approach, one can represent the effect of one of the variables as a function of the other variable.
 
-Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables. See also [this vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html) for further details.
+Such plot, also referred to as **Johnson-Neyman intervals**, shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables. See also [this vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html) for further details.
 
 For instance, the plot below shows that the effect of `hp` (the y-axis) is significantly negative only when `wt` is low (`< ~4`).
 
