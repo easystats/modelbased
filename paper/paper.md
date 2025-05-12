@@ -56,7 +56,7 @@ affiliations:
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-05-02"
+date: "2025-05-12"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
@@ -161,7 +161,7 @@ Estimating these indices using mixed models can have important benefits over an 
 
 # Examples
 
-The `iris` dataset contains measures in centimeters of three different species of iris flowers [setosa, versicolor, and virginica, @becker1988new]. Imagine the following linear model in which we predict those flowers' petal width (`Petal.Width`) from the interaction between their petal length (`Petal.Length`) and their `Species`.
+The `iris` dataset contains measures in centimeters of three different species of iris flowers [setosa, versicolor, and virginica, @anderson_species_1936]. Imagine the following linear model in which we predict those flowers' petal width (`Petal.Width`) from the interaction between their petal length (`Petal.Length`) and their `Species`.
 
 
 ``` r
