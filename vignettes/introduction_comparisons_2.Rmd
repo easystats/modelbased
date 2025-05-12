@@ -1,8 +1,8 @@
 ---
-title: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
+title: "User Defined Contrasts and Joint Tests"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)}
+  %\VignetteIndexEntry{User Defined Contrasts and Joint Tests}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -19,12 +19,8 @@ knitr::opts_chunk$set(
   package.startup.message = FALSE
 )
 options(width = 800)
-options(modelbased_join_dots = FALSE)
-ht6 <- m <- NULL
 
-arrow_color <- "#FF00cc"
-
-pkgs <- c("ggplot2", "see", "marginaleffects", "parameters")
+pkgs <- c("marginaleffects", "parameters")
 
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -32,243 +28,143 @@ if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
 ```
 
 
-This vignette is the second in a 4-part series:
+This vignette is the second in a 5-part series:
 
 1. [**Contrasts and Pairwise Comparisons**](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
 
-2. **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**
+2. **User Defined Contrasts and Joint Tests**
 
-3. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+3. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 
-4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+4. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 
-# Contrasts and comparisons for slopes of numeric predictors
+5. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
 
-For numeric focal terms, it is possible to calculate contrasts for slopes, or the _linear trend_ of these focal terms. Let's start with a simple example again.
+# User defined contrasts
+
+The first example demonstrates how to define and apply user-defined contrasts to a factor variable within a linear model, respectively how to avoid defining specific contrasts and instead directly formulate the desired contrast as custom hypothesis in `estimate_contrasts()`.
+
+First, we define two specific contrasts: `treat_vs_none` (comparing the average of two treatment levels to a control level) and `short_vs_long` (comparing two treatment levels against each other).
+
+To illustrate the effect of these custom contrasts, the code creates a copy of the original treatment factor (`tx_ori`) before applying the new contrasts to the `tx` factor. It also centers a continuous predictor, `score`, to better interpret the main effects of the interaction term.
+
+Two linear models are then fitted: `m1` uses the `tx` factor with the user-defined contrasts, while `m2` uses the original `tx_ori` factor. The `compare_parameters()` function is used to show that `m1` directly estimates coefficients corresponding to `treat_vs_none` and `short_vs_long`, which are not directly available in `m2`.
+
+Finally, the code uses `estimate_means()` on `m2` to get the marginal means for the original factor levels, to identify which estimated means refer to which factor level. This is required for the next step, where we use `estimate_contrasts()` to perform hypothesis tests equivalent to the user-defined contrasts, `((b2+b3)/2) = b1` (*the average of two treatment levels - `b2 + b3 / 2` - to a control level*) and `b3 = b2` (*comparing two treatment levels against each other*), showing how such comparisons can be made even without pre-defining contrasts on the factor itself.
 
 ```{r}
 library(modelbased)
 library(parameters)
-data(iris)
-m <- lm(Sepal.Width ~ Sepal.Length + Species, data = iris)
-model_parameters(m)
+
+data(contrast_example, package = "modelbased")
+
+# the levels for our treatment variable
+levels(contrast_example$tx)
+
+# set contrasts
+treat_vs_none <- c(-2 / 3, 1 / 3, 1 / 3)
+short_vs_long <- c(0, -1 / 2, 1 / 2)
+
+# we copy this variable to compare original factor contrasts with
+# user-defined factor contrasts
+contrast_example$tx_ori <- contrast_example$tx
+contrasts(contrast_example$tx) <- cbind(treat_vs_none, short_vs_long)
+
+# center variable
+contrast_example$score <- contrast_example$score - mean(contrast_example$score)
+
+# fit model, with user defined contrasts
+m1 <- lm(outcome ~ score * tx, data = contrast_example)
+# fit model without user defined contrasts
+m2 <- lm(outcome ~ score * tx_ori, data = contrast_example)
+
+# we're interested in the effect (i.e. coefficient) of "treat_vs_none"
+# and "short_vs_long". These are 1.94 and 0.13 in model 1. In model 2,
+# we don't have these coefficient, because we didn't define related contrasts
+compare_parameters(m1, m2)
+
+# we first use `estimate_means()` to find which estimate relates
+# to which factor level of interest. we want to average the two
+# treatment level and compare it to the control level
+estimate_means(m2, "tx_ori")
+
+# treat_vs_none (i.e. average of short and long vs. none)
+# this contrasts corresponds to the estimate of the model m1, 1.94
+estimate_contrasts(m2, "tx_ori", comparison = "((b2+b3)/2) = b1")
+
+# short_vs_long
+# this contrasts corresponds to the estimate of the model m1, 0.13
+estimate_contrasts(m2, "tx_ori", comparison = "b3 = b2")
 ```
 
-We can already see from the coefficient table that the slope for `Sepal.Length` is 0.35. We will thus find the same increase for the predicted values in our outcome when our focal variable, `Sepal.Length` increases by one unit.
+# Using a matrix for contrasts
+
+Comparisons are extremely flexible. For instance, it is possible to calculate the marginal effects for the predictor `score`, or the marginal effects for `score` at each level of the treatment, `tx_ori`. We can do this by using `estimate_slopes()`.
 
 ```{r}
-estimate_means(m, "Sepal.Length=c(4,5,6,7)")
+# marginal effect for "score"
+estimate_slopes(m2, "score")
+
+# marginal effect for "score" at levels of "tx_ori"
+estimate_slopes(m2, "score", by = "tx_ori")
 ```
 
-Consequently, in this case of a simple slope, we see the same result for the estimated linear trend of `Sepal.Length`:
+Again, it it possible to combine levels, by using a matrix that defines the contrasts of interest, and pass this matrix as value for the `comparison` argument.
+
+In essence, in the next example, the marginal effect (slope) of `score` within each level of `tx_ori` is calculated, and then two specific weighted combinations of these slopes as defined by the `cond_tx` matrix are computed. The first combination isolates and scales the slope from the first level of `tx_ori`, while the second creates a weighted sum of the slopes from the second and third levels.
 
 ```{r}
-estimate_slopes(m, "Sepal.Length")
+# we want the marginal effects of slopes for treatment vs. no treatment
+# this is represented by the following contrast matrix
+cond_tx <- cbind("no treatment" = c(-2 / 3, 0, 0), "treatment" = c(0, 1 / 3, 1 / 3))
+
+# marginal effect for "score" at average effect of "treatment" (short + long)
+# and "no treatment"
+estimate_slopes(m2, "score", by = "tx_ori", comparison = cond_tx)
 ```
 
-## Is the linear trend of `Sepal.Length` significant for the different levels of `Species`?
+# Jointly test multiple hypotheses
 
-Let's move on to a more complex example with an interaction between a numeric and categorical variable.
-
-### Predictions
+The next example fits a linear model to predict `alertness` based on an interaction between `time` and `coffee`. It then calculates standard pairwise comparisons for the levels of `time` separately within each level of `coffee`. The final and key step performs a joint test: for each level of `coffee`, it tests the overall hypothesis that there is _any_ significant difference among the levels of `time`, rather than looking at individual pairwise differences. This provides an omnibus test for the effect of `time` within each `coffee` group. To conduct joint tests, set `comparison = "joint"`.
 
 ```{r}
-m <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
-pred <- estimate_means(m, c("Sepal.Length", "Species"))
-plot(pred)
+data(coffee_data, package = "modelbased")
+
+# 2 way interaction
+m <- lm(alertness ~ time * coffee, data = coffee_data)
+
+# contrasts of pairwise comparisons of levels of "time" within the
+# different levels of "coffee"
+estimate_contrasts(m, contrast = "time", by = "coffee")
+
+# jointly test whether the contrasts of all levels of time have an
+# effect within each level of "coffee"
+estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint")
 ```
 
-### Slopes by group
-
-We can see that the slope of `Sepal.Length` is different within each group of `Species`.
-
-```{r echo=FALSE}
-library(ggplot2)
-p <- plot(pred)
-dat <- as.data.frame(pred)
-dat1 <- data.frame(
-  x = dat$Sepal.Length[c(7, 19)],
-  y = dat$Mean[c(7, 19)],
-  group_col = "setosa",
-  stringsAsFactors = FALSE
-)
-dat2 <- data.frame(
-  x = dat$Sepal.Length[c(8, 20)],
-  y = dat$Mean[c(8, 23)],
-  group_col = "versicolor",
-  stringsAsFactors = FALSE
-)
-dat3 <- data.frame(
-  x = dat$Sepal.Length[c(15, 27)],
-  y = dat$Mean[c(15, 27)],
-  group_col = "virginica",
-  stringsAsFactors = FALSE
-)
-p + annotate(
-  "segment",
-  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[1],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat1$x[2], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat1$x[1], xend = dat1$x[2], y = dat1$y[1], yend = dat1$y[2],
-  color = "orange", linewidth = 1
-) + annotate(
-  "segment",
-  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[1],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat2$x[2], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat2$x[1], xend = dat2$x[2], y = dat2$y[1], yend = dat2$y[2],
-  color = "orange", linewidth = 1
-) + annotate(
-  "segment",
-  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[1],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat3$x[2], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
-  color = "orange", linewidth = 1, linetype = "dashed"
-) + annotate(
-  "segment",
-  x = dat3$x[1], xend = dat3$x[2], y = dat3$y[1], yend = dat3$y[2],
-  color = "orange", linewidth = 1
-) +
-  ggtitle("Linear trend of `Sepal.Length` by `Species`")
-```
-
-Since we don't want to do pairwise comparisons, we still use `estimate_slopes()` to test whether the linear trend (by groups) is significant or not. In this case, when interaction terms are included, the linear trend (_slope_) for our numeric focal predictor, `Sepal.Length`, is tested for each level of `Species`.
+The above example can be easily expanded to three-way interactions.
 
 ```{r}
-estimate_slopes(m, "Sepal.Length", by = "Species")
-```
+# 3 way interaction
+m <- lm(alertness ~ time * coffee * sex, data = coffee_data)
 
-As we can see, each of the three slopes is significant, i.e. we have "significant" linear trends.
-
-### Pairwise comparisons
-
-Next question could be whether or not linear trends differ significantly between each other, i.e. we test differences in slopes, which is a pairwise comparison between slopes. To do this, we use `estimate_contrasts()`.
-
-```{r}
-estimate_contrasts(m, "Sepal.Length", by = "Species")
-```
-
-The linear trend of `Sepal.Length` within `setosa` is significantly different from the linear trend of `versicolor` and also from `virginica`. The difference of slopes between `virginica` and `versicolor` is not statistically significant (p = 0.366).
-
-## Is the difference linear trends of `Sepal.Length` in between two groups of `Species` significantly different from the difference of two linear trends between two other groups?
-
-Similar to the example for categorical predictors, we can also test a difference-in-differences for this example. For instance, is the difference of the slopes from `Sepal.Length` between `setosa` and `versicolor` different from the slope-difference for the groups `setosa` and `vigninica`?
-
-Let's first look at the different slopes separately again, i.e. the slopes of `Sepal.Length` by levels of `Species`:
-
-```{r}
-estimate_slopes(m, "Sepal.Length", by = "Species")
-```
-
-The first difference of slopes we're interested in is the one between `setosa` (0.80) and `versicolor` (0.32), i.e. `b1 - b2` (=0.48). The second difference is between levels `setosa` (0.80) and `virginica` (0.23), which is `b1 - b3` (=0.57). We test the null hypothesis that `(b1 - b2) = (b1 - b3)`.
-
-```{r}
+# joint test of "time" levels within each group of coffee and sex
 estimate_contrasts(
   m,
-  "Sepal.Length",
-  by = "Species",
-  comparison = "(b1 - b2) = (b1 - b3)"
+  contrast = "time",
+  by = c("coffee", "sex"),
+  comparison = "joint"
 )
 ```
 
-The difference between the two differences is -0.09 and not statistically significant (p = 0.366).
+# Conclusion
 
-## Is the linear trend of `Sepal.Length` significant at different values of another numeric predictor?
+This vignette showed advanced techniques for hypothesis testing in R using the **modelbased** package.
 
-When we have two numeric terms in an interaction, the comparison becomes more difficult, because we have to find *meaningful* (or *representative*) values for the moderator, at which the associations between the predictor and outcome are tested. We no longer have distinct categories for the moderator variable.
+Some key takeaways:
 
-### Spotlight analysis, floodlight analysis and Johnson-Neyman intervals
+- **Flexible Custom Comparisons:** You can move beyond default contrasts by either directly defining contrast vectors for your factors or, more flexibly, by specifying custom hypotheses as strings (e.g., `"((b2+b3)/2) = b1"`) or using matrices within functions like `estimate_contrasts()` and `estimate_slopes()`. This allows for highly specific and theoretically driven comparisons, such as comparing an average of multiple treatment levels to a control, or creating weighted combinations of slopes.
 
-The following examples show interactions between two numeric predictors. In case of numeric interaction terms, it makes sense to calculate adjusted predictions for _representative values_, e.g. mean +/- SD. This is sometimes also called "spotlight analysis" (_Spiller et al. 2013_).
+- **Powerful Joint Hypothesis Testing:** The `comparison = "joint"` argument in `estimate_contrasts()` enables omnibus tests. This is particularly useful for interactions, as it allows you to test whether a factor (e.g., `time`) has any significant effect within each level of another factor (e.g., `coffee`), providing a global assessment before (or instead of) diving into all individual pairwise comparisons.
 
-In the next example, we have `Petal.Width` as second interaction term, thus we see the predicted values of `Sepal.Width` (our outcome) for `Petal.Length` at three different, representative values of `Petal.Width`: Mean (`r round(mean(iris$Petal.Width), 2)`), 1 SD above the mean (`r round(mean(iris$Petal.Width) + sd(iris$Petal.Width), 2)`) and 1 SD below the mean (`r round(mean(iris$Petal.Width) - sd(iris$Petal.Width), 2)`).
-
-### Predictions
-
-```{r}
-m <- lm(Sepal.Width ~ Petal.Length * Petal.Width, data = iris)
-pred <- estimate_means(m, c("Petal.Length", "Petal.Width=[sd]"))
-plot(pred)
-```
-
-First, we want to see at which value of `Petal.Width` the slopes of `Petal.Length` are significant. We do no pairwise comparison for now, hence we use `estimate_slopes()`.
-
-```{r}
-estimate_slopes(m, "Petal.Length", by = "Petal.Width=[sd]")
-```
-
-### Pairwise comparisons
-
-The results of the pairwise comparison are shown below. These tell us that all linear trends (slopes) are significantly different from each other, i.e. the slope of the green line is significantly different from the slope of the red line, and so on.
-
-```{r}
-estimate_contrasts(m, "Petal.Length", by = "Petal.Width=[sd]", digits = 1)
-```
-
-### Floodlight analysis and Johnson-Neyman intervals
-
-Another way to handle models with two numeric variables in an interaction is to use so-called floodlight analysis, a spotlight analysis for all values of the moderator variable. These intervals indicate the values of the moderator at which the slope of the predictor is significant (cf. _Johnson et al. 1950, McCabe et al. 2018_).
-
-Let's look at an example. We first plot the predicted values of `Income` for `Murder` at different values of `Illiteracy`.
-
-```{r}
-states <- as.data.frame(state.x77)
-states$HSGrad <- states$`HS Grad`
-m_mod <- lm(Income ~ HSGrad + Murder * Illiteracy, data = states)
-
-pr <- estimate_means(m_mod, c("Murder", "Illiteracy"))
-plot(pr)
-```
-
-It's difficult to say at which values from `Illiteracy`, the association between `Murder` and `Income` might be statistically significant. We still can use `estimate_slopes()`:
-
-```{r}
-estimate_slopes(m_mod, "Murder", by = "Illiteracy")
-```
-
-As can be seen, the results might indicate that at the lower and upper tails of `Illiteracy`, i.e. when `Illiteracy` is roughly smaller than `0.8` or larger than `2.6`, the association between `Murder` and `Income` is statistically significant.
-
-However, this test can be simplified using the `summary()` function. This will show us in detail at which values for `Illiteracy` the interaction term is statistically significant, and whether the association between `Murder` and the outcome is positive or negative.
-
-```{r}
-# we will force to calculate slopes at 200 values for "Illiteracy" using `length`
-slopes <- estimate_slopes(m_mod, "Murder", by = "Illiteracy", length = 200)
-summary(slopes)
-```
-
-Furthermore, it is possible to create a spotlight-plot.
-
-```{r message=FALSE}
-plot(slopes)
-```
-
-The results of the spotlight analysis suggest that values below `0.82` and above `2.57` are significantly different from zero, while values in between are not. We can plot predictions at these values to see the differences. The red and the green line represent values of `Illiteracy` at which we find clear positive resp. negative associations between `Murder` and `Income`, while we find no clear (positive or negative) association for the red line.
-
-Here an example, using values from the three "ranges" of the Johnson-Neyman-Interval: the red and blue lines are significantly positive and negative associated with the outcome, while the green line is not significant.
-
-```{r}
-pr <- estimate_means(m_mod, c("Murder", "Illiteracy=c(0.7,1.5,2.8)"))
-plot(pr) + ggplot2::facet_wrap(~Illiteracy)
-```
-
-[Go to next vignette: **Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
-
-# References
-
-Johnson, P.O. & Fay, L.C. (1950). The Johnson-Neyman technique, its theory and application. Psychometrika, 15, 349-367. doi: 10.1007/BF02288864
-
-McCabe CJ, Kim DS, King KM. (2018). Improving Present Practices in the Visual Display of Interactions. Advances in Methods and Practices in Psychological Science, 1(2):147-165. doi:10.1177/2515245917746792
-
-Spiller, S. A., Fitzsimons, G. J., Lynch, J. G., & McClelland, G. H. (2013). Spotlights, Floodlights, and the Magic Number Zero: Simple Effects Tests in Moderated Regression. Journal of Marketing Research, 50(2), 277–288. doi:10.1509/jmr.12.0420
+[Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)

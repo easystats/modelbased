@@ -6,6 +6,11 @@ format.estimate_contrasts <- function(x,
                                       select = getOption("modelbased_select", NULL),
                                       include_grid = getOption("modelbased_include_grid", FALSE),
                                       ...) {
+  # for joint test, no select and include_grid options
+  if (isTRUE(attributes(x)$joint_test)) {
+    select <- NULL
+    include_grid <- FALSE
+  }
   # don't print columns of adjusted_for variables
   adjusted_for <- attr(x, "adjusted_for", exact = TRUE)
   if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {

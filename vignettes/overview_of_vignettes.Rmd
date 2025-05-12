@@ -62,6 +62,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 ### Contrasts
 
 * [Contrasts and pairwise comparisons](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html)
-* [Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
-* [Contrasts and comparisons for generalized linear models](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
-* [Contrasts and comparisons for zero-inflation models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+* [User Defined Contrasts and Joint Tests](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+* [Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+* [Contrasts and comparisons for generalized linear models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+* [Contrasts and comparisons for zero-inflation models](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)

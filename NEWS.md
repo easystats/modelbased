@@ -8,6 +8,9 @@
 * The `comparison` argument can now also be `"joint"`, to jointly test
   hypotheses (i.e. conducting a joint test) in factorial designs.
 
+* New vignette about user-defined contrasts and joint tests in
+  `estimate_contrasts()`.
+
 # modelbased 0.11.0
 
 ## New functions
