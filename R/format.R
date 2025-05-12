@@ -7,7 +7,7 @@ format.estimate_contrasts <- function(x,
                                       include_grid = getOption("modelbased_include_grid", FALSE),
                                       ...) {
   # for joint test, no select and include_grid options
-  if (inherits(x, "marginal_jointtest")) {
+  if (isTRUE(attributes(x)$joint_test)) {
     select <- NULL
     include_grid <- FALSE
   }
