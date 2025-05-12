@@ -171,7 +171,7 @@ Estimating these indices using mixed models can have important benefits over an 
 
 # Examples
 
-The `iris` dataset contains measures in centimeters of three different species of iris flowers [setosa, versicolor, and virginica, @becker1988new]. Imagine the following linear model in which we predict those flowers' petal width (`Petal.Width`) from the interaction between their petal length (`Petal.Length`) and their `Species`.
+The `iris` dataset contains measures in centimeters of three different species of iris flowers [setosa, versicolor, and virginica, @anderson_species_1936]. Imagine the following linear model in which we predict those flowers' petal width (`Petal.Width`) from the interaction between their petal length (`Petal.Length`) and their `Species`.
 
 ```{r}
 library(easystats)
