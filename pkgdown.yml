@@ -13,6 +13,7 @@ articles:
   introduction_comparisons_2: introduction_comparisons_2.html
   introduction_comparisons_3: introduction_comparisons_3.html
   introduction_comparisons_4: introduction_comparisons_4.html
+  introduction_comparisons_5: introduction_comparisons_5.html
   mixed_models: mixed_models.html
   modelisation_approach: modelisation_approach.html
   overview_of_vignettes: overview_of_vignettes.html
@@ -21,7 +22,7 @@ articles:
   practical_intersectionality: practical_intersectionality.html
   visualisation_matrix: visualisation_matrix.html
   workflow_modelbased: workflow_modelbased.html
-last_built: 2025-05-10T19:46Z
+last_built: 2025-05-12T06:17Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles

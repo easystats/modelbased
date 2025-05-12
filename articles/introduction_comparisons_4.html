@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>Contrasts and comparisons for zero-inflation models • modelbased</title>
+<title>Contrasts and comparisons for generalized linear models • modelbased</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="../favicon-96x96.png">
 <link rel="icon" type="”image/svg+xml”" href="../favicon.svg">
 <link rel="apple-touch-icon" sizes="180x180" href="../apple-touch-icon.png">
@@ -19,7 +19,7 @@
 <link href="../deps/Roboto_Slab-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Contrasts and comparisons for zero-inflation models">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Contrasts and comparisons for generalized linear models">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -72,9 +72,10 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Contrasts</h6></li>
     <li><a class="dropdown-item" href="../articles/introduction_comparisons_1.html">Contrasts and comparisons</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_2.html">Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_3.html">Contrasts and comparisons for generalized linear models</a></li>
-    <li><a class="dropdown-item" href="../articles/introduction_comparisons_4.html">Contrasts and comparisons for zero-inflation models</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_2.html">User Defined Contrasts and Joint Tests</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_3.html">Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_4.html">Contrasts and comparisons for generalized linear models</a></li>
+    <li><a class="dropdown-item" href="../articles/introduction_comparisons_5.html">Contrasts and comparisons for zero-inflation models</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html"><span class="fa fa-newspaper"></span> News</a></li>
@@ -121,7 +122,7 @@
 
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
-      <img src="../logo.png" class="logo" alt=""><h1>Contrasts and comparisons for zero-inflation models</h1>
+      <img src="../logo.png" class="logo" alt=""><h1>Contrasts and comparisons for generalized linear models</h1>
             
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/introduction_comparisons_4.Rmd" class="external-link"><code>vignettes/introduction_comparisons_4.Rmd</code></a></small>
@@ -130,211 +131,119 @@
 
     
     
-<p>This vignette is the last in a 4-part series:</p>
+<p>This vignette is the fourth in a 5-part series:</p>
 <ol style="list-style-type: decimal">
 <li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html"><strong>Contrasts
 and Pairwise Comparisons</strong></a></p></li>
-<li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html"><strong>Comparisons
+<li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html"><strong>User
+Defined Contrasts and Joint Tests</strong></a></p></li>
+<li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html"><strong>Comparisons
 of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman
 Intervals)</strong></a></p></li>
-<li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html"><strong>Contrasts
-and Comparisons for Generalized Linear Models</strong></a></p></li>
-<li><p><strong>Contrasts and Comparisons for Zero-Inflation
+<li><p><strong>Contrasts and Comparisons for Generalized Linear
 Models</strong></p></li>
+<li><p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html"><strong>Contrasts
+and Comparisons for Zero-Inflation Models</strong></a></p></li>
 </ol>
 <div class="section level2">
-<h2 id="contrasts-and-comparisons-for-zero-inflation-models">Contrasts and comparisons for Zero-Inflation Models<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-zero-inflation-models"></a>
+<h2 id="contrasts-and-comparisons-for-glm---logistic-regression-example">Contrasts and comparisons for GLM - logistic regression example<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-glm---logistic-regression-example"></a>
 </h2>
-<p>Lastly, we show an example for models with zero-inflation
-component.</p>
-<div class="section level3">
-<h3 id="what-is-a-zero-inflated-model">What is a zero-inflated model?<a class="anchor" aria-label="anchor" href="#what-is-a-zero-inflated-model"></a>
-</h3>
-<p>A zero-inflated model is a statistical approach used when dealing
-with count data that has an excessive number of zero values. Imagine
-counting something that can be zero, like the number of customers a
-store gets in a day, and it happens that there are a lot more zeros in
-the data than a typical count model (e.g., Poisson regression) would
-expect. That’s where we need zero-inflated regression models. These
-models consider two ways zeros can happen:</p>
-<ul>
-<li><p>True Zeros: These are days the store is naturally closed, or
-maybe there’s just no demand for the product.</p></li>
-<li><p>Counting Zeros: These are days the store is open but just happens
-to get no customers. Maybe it’s bad luck, or a random
-fluctuation.</p></li>
-</ul>
-<p>The model treats these differently. It uses one part (the
-<em>zero-inflation</em> component, a logistic regression) to predict the
-probability of a true zero, based on things that make the store less
-likely to be open at all. Then it uses another part (the
-<em>conditional</em>, or <em>count</em> component, a count regression)
-to predict the number of customers on days the store is actually open,
-considering other factors like weather or discounts.</p>
-<p>Consequently, such regression models usually have two parts in their
-formula, or (depending on the package) separate formulas for the count
-and the zero-inflation components. Adjusted predictions can be
-calculated for both parts, and contrasts or comparisons can be
-calculated for both parts, too.</p>
-</div>
-<div class="section level3">
-<h3 id="how-to-choose-predictors-for-zero-inflation-models">How to choose predictors for zero-inflation models?<a class="anchor" aria-label="anchor" href="#how-to-choose-predictors-for-zero-inflation-models"></a>
-</h3>
-<p>The two model parts do not necessarily need to use the same
-predictors. Therefore, it is not always straightforward to find
-predictors that can be used in the zero-inflation model. Think about why
-you have excess zeros in your data. Are they true zeros (inherently no
-counts) or due to limitations (measurement limitations, biological
-process, …)? Choose variables that explain why some data points have
-zero counts even when conditions might allow for some count. For
-instance, if modeling customer complaints, store location in a remote
-area might predict zero complaints due to fewer customers.</p>
-</div>
-</div>
-<div class="section level2">
-<h2 id="zero-inflation-models-using-the-glmmtmb-package">Zero-inflation models using the <em>glmmTMB</em> package<a class="anchor" aria-label="anchor" href="#zero-inflation-models-using-the-glmmtmb-package"></a>
-</h2>
-<p>In the following example, we use the <code>Salamanders</code> dataset
-from the <code>glmmTMB</code> package.We fit a zero-inflated Poisson
-regression model to the data, with <code>mined</code> as the predictor
-variable.</p>
-<p>Adjusted predictions using <code><a href="../reference/estimate_means.html">estimate_means()</a></code> can be made
-for the different model components:</p>
-<ul>
-<li><p>The <strong>conditional, or count component</strong>, which
-predicts the average count of salamanders. Depending on the model-class
-(i.e. which package was used to fit the model), use
-<code>predict = "conditional"</code> (e.g., package <em>glmmTMB</em>) or
-<code>predict = "count"</code> (e.g., package <em>pscl</em>). This would
-return the predicted mean from the count component only, which is the
-conditional mean (average counts) of the response only for “counting
-zeros”. It does not take into account the probability of “true
-zeros”.</p></li>
-<li><p>The <strong>full model</strong>, which predicts the average count
-of the response, including the zero-inflation component. This would
-return the expected value of the response for an average observation,
-which <em>can</em> be a “true zero” or a “count zero”. This is the
-default, which uses <code>predict = "response"</code>. For the above
-example, use this option if you want to predict the average number of
-customers per week, including days the store is closed.</p></li>
-<li><p>The <strong>zero-inflation probabilities</strong>, which predicts
-the probabilities whether an observation is a “true zero” or not. Again,
-this option depends on the model-class. Use option like
-<code>predict = "zprob"</code> or <code>predict = "zero"</code>. These
-predictions only related to the zero-inflation component of the
-model.</p></li>
-</ul>
+<p>We will now show an example for non-Gaussian models. For GLM’s
+(generalized linear models) with (non-Gaussian) link-functions,
+<code><a href="../reference/estimate_means.html">estimate_means()</a></code> by default returns predicted values on the
+<em>response</em> scale. For example, predicted values for logistic
+regression models are shown as <em>probabilities</em>.</p>
+<p>Let’s look at a simple example.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/modelbased/">modelbased</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/glmmTMB/glmmTMB" class="external-link">glmmTMB</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  outcome <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fl">0.35</span><span class="op">)</span>,</span>
+<span>  x1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, size <span class="op">=</span> <span class="fl">100</span>, <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  x2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">100</span>, mean <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
+<span>  x3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">4</span>, size <span class="op">=</span> <span class="fl">100</span>, <span class="cn">TRUE</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.1</span>, <span class="fl">0.4</span>, <span class="fl">0.2</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">Salamanders</span><span class="op">)</span></span>
-<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">count</span> <span class="op">~</span> <span class="va">mined</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">site</span><span class="op">)</span>,</span>
-<span>  ziformula <span class="op">=</span> <span class="op">~</span><span class="va">mined</span>,</span>
-<span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">poisson</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  data <span class="op">=</span> <span class="va">Salamanders</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">x1</span> <span class="op">+</span> <span class="va">x2</span> <span class="op">+</span> <span class="va">x3</span>, data <span class="op">=</span> <span class="va">dat</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; x1 | Probability |       95% CI</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; 1  |        0.21 | [0.11, 0.36]</span></span>
+<span><span class="co">#&gt; 2  |        0.14 | [0.05, 0.34]</span></span>
+<span><span class="co">#&gt; 3  |        0.31 | [0.16, 0.51]</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: outcome</span></span>
+<span><span class="co">#&gt; Predictors modulated: x1</span></span>
+<span><span class="co">#&gt; Predictors averaged: x2 (10), x3</span></span>
+<span><span class="co">#&gt; Predictions are on the response-scale.</span></span></code></pre></div>
 <div class="section level3">
-<h3 id="contrasts-and-comparisons-for-the-conditional-model">Contrasts and comparisons for the conditional model<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-the-conditional-model"></a>
+<h3 id="contrasts-and-comparisons-for-categorical-focal-terms">Contrasts and comparisons for categorical focal terms<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-categorical-focal-terms"></a>
 </h3>
-<p>We will start with the conditional mean. For zero-inflated models,
-the conditional mean is predicted using
-<code>predict = "conditional"</code>. This is the average count of the
-response, excluding the zero-inflation component.</p>
+<p>Contrasts or comparisons - like predictions (see above) - are by
+default on the <em>response</em> scale, i.e. they’re represented as
+difference between probabilities (in percentage points).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># predicting the conditional mean</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
-<span><span class="co">#&gt; ------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   | 1.12 | 0.26 | [0.61, 1.63] |  4.29</span></span>
-<span><span class="co">#&gt; no    | 3.51 | 0.32 | [2.89, 4.14] | 11.00</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
-<span><span class="co">#&gt; Predictions are on the conditional-scale.</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |       2.39 | 0.40 | [1.60, 3.18] | 5.93 | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |      -0.07 | 0.09 | [-0.25, 0.10] | -0.81 | 0.417</span></span>
+<span><span class="co">#&gt; 3      | 1      |       0.09 | 0.10 | [-0.11, 0.30] |  0.92 | 0.357</span></span>
+<span><span class="co">#&gt; 3      | 2      |       0.17 | 0.11 | [-0.05, 0.38] |  1.51 | 0.130</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Variable predicted: outcome</span></span>
+<span><span class="co">#&gt; Predictors contrasted: x1</span></span>
+<span><span class="co">#&gt; Predictors averaged: x2 (10), x3</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
-<span><span class="co">#&gt; Contrasts are on the conditional-scale.</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="contrasts-and-comparisons-for-the-full-model">Contrasts and comparisons for the full model<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-the-full-model"></a>
-</h3>
-<p>By default, adjusted predictions are returned for the full model,
-i.e. the average expected count of the <em>response</em>, including the
-zero-inflation component.</p>
+<span><span class="co">#&gt; Contrasts are on the response-scale (in %-points).</span></span></code></pre></div>
+<p>The difference between the predicted probability of
+<code>x1 = 1</code> (21.2%) and <code>x1 = 2</code> (13.9%) is roughly
+7.3 percentage points. This difference is not statistically significant
+(p = 0.417).</p>
+<p>Contrasts or comparisons can also be represented on the link-scale,
+in this case as <em>log-odds</em>. To do so, use
+<code>predict = "link"</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># predicting the expected value of the response</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
-<span><span class="co">#&gt; ------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   | 0.27 | 0.05 | [0.17, 0.37] |  5.47</span></span>
-<span><span class="co">#&gt; no    | 2.27 | 0.22 | [1.83, 2.70] | 10.19</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
-<span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |       1.99 | 0.23 | [1.55, 2.44] | 8.78 | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |      -0.51 | 0.66 | [-1.80, 0.79] | -0.77 | 0.443</span></span>
+<span><span class="co">#&gt; 3      | 1      |       0.50 | 0.53 | [-0.54, 1.55] |  0.94 | 0.345</span></span>
+<span><span class="co">#&gt; 3      | 2      |       1.01 | 0.70 | [-0.36, 2.38] |  1.45 | 0.147</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Variable predicted: outcome</span></span>
+<span><span class="co">#&gt; Predictors contrasted: x1</span></span>
+<span><span class="co">#&gt; Predictors averaged: x2 (10), x3</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
-<span><span class="co">#&gt; Contrasts are on the response-scale.</span></span></code></pre></div>
-</div>
-<div class="section level3">
-<h3 id="contrasts-and-comparisons-for-the-zero-inflation-probabilities">Contrasts and comparisons for the zero-inflation probabilities<a class="anchor" aria-label="anchor" href="#contrasts-and-comparisons-for-the-zero-inflation-probabilities"></a>
-</h3>
-<p>If you’re interested in the probabilities of being a “true zero” or
-not, use <code>predict = "zprob"</code>.</p>
+<span><span class="co">#&gt; Contrasts are on the link-scale.</span></span></code></pre></div>
+<p>The <code>transform</code> argument in
+<code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> can be used transform comparisons. For
+example, to transform contrasts to <em>odds ratios</em>, we can use
+<code>transform = exp</code> in combination with
+<code>predict = "link"</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># predicting the zero-inflation probabilities</span></span>
-<span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Probability |   SE |       95% CI |     z</span></span>
-<span><span class="co">#&gt; -------------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   |        0.76 | 0.04 | [0.67, 0.84] | 17.54</span></span>
-<span><span class="co">#&gt; no    |        0.36 | 0.03 | [0.30, 0.41] | 12.75</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors modulated: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
-<span><span class="co">#&gt; Predictions are on the zprob-scale.</span></span>
-<span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span>, predict <span class="op">=</span> <span class="st">"link"</span>, transform <span class="op">=</span> <span class="va">exp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     z |      p</span></span>
-<span><span class="co">#&gt; ---------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |      -0.40 | 0.05 | [-0.50, -0.30] | -7.92 | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |        95% CI |     p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |       0.60 | [0.16,  2.20] | 0.443</span></span>
+<span><span class="co">#&gt; 3      | 1      |       1.65 | [0.58,  4.71] | 0.345</span></span>
+<span><span class="co">#&gt; 3      | 2      |       2.75 | [0.70, 10.78] | 0.147</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: count</span></span>
-<span><span class="co">#&gt; Predictors contrasted: mined</span></span>
-<span><span class="co">#&gt; Predictors averaged: site</span></span>
+<span><span class="co">#&gt; Variable predicted: outcome</span></span>
+<span><span class="co">#&gt; Predictors contrasted: x1</span></span>
+<span><span class="co">#&gt; Predictors averaged: x2 (10), x3</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
-<span><span class="co">#&gt; Contrasts are on the zprob-scale (in %-points).</span></span></code></pre></div>
+<span><span class="co">#&gt; Contrasts are on the link-scale.</span></span></code></pre></div>
+<p><a href="https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html">Go
+to next vignette: <strong>Contrasts and Comparisons for Zero-Inflation
+Models</strong></a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
