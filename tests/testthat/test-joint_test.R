@@ -145,3 +145,15 @@ test_that("estimate_contrasts - joint test, 3-way", {
     regex = "Joint tests using"
   )
 })
+
+
+skip_if_not_installed("withr")
+
+withr::with_options(
+  list(modelbased_select = "minimal"),
+  test_that("estimate_contrasts - joint test, works with select printing", {
+    data(coffee_data, package = "modelbased")
+    m <- lm(alertness ~ time * coffee, data = coffee_data)
+    expect_snapshot(estimate_contrasts(m, contrast = "time", by = "coffee", comparison = "joint"))
+  })
+)
