@@ -106,5 +106,7 @@
   colnames(result)[1] <- "Contrast"
   result[[1]] <- my_args$contrast
 
+  class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
+
   result
 }
