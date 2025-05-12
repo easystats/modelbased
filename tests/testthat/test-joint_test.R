@@ -137,7 +137,7 @@ test_that("estimate_contrasts - joint test, 3-way", {
 })
 
 
-test_that("estimate_contrasts - joint test, 3-way", {
+test_that("estimate_contrasts - joint test, 3-way, error", {
   data(coffee_data, package = "modelbased")
   m <- lm(alertness ~ time * coffee * sex, data = coffee_data)
   expect_error(
