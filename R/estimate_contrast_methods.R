@@ -229,17 +229,12 @@ estimate_contrasts.estimate_predicted <- function(model,
     pos1 <- predictions[[focal_terms[1]]] == pairs_data[[1]][i, 1]
     pos2 <- predictions[[focal_terms[1]]] == pairs_data[[2]][i, 1]
 
+    # for all focal terms, make sure we only keep the matching pairs
     if (length(focal_terms) > 1) {
-      pos1 <- pos1 & predictions[[focal_terms[2]]] == pairs_data[[1]][i, 2]
-      pos2 <- pos2 & predictions[[focal_terms[2]]] == pairs_data[[2]][i, 2]
-    }
-    if (length(focal_terms) > 2) {
-      pos1 <- pos1 & predictions[[focal_terms[3]]] == pairs_data[[1]][i, 3]
-      pos2 <- pos2 & predictions[[focal_terms[3]]] == pairs_data[[2]][i, 3]
-    }
-    if (length(focal_terms) > 3) {
-      pos1 <- pos1 & predictions[[focal_terms[4]]] == pairs_data[[1]][i, 4]
-      pos2 <- pos2 & predictions[[focal_terms[4]]] == pairs_data[[2]][i, 4]
+      for (j in 2:length(focal_terms)) {
+        pos1 <- pos1 & predictions[[focal_terms[j]]] == pairs_data[[1]][i, j]
+        pos2 <- pos2 & predictions[[focal_terms[j]]] == pairs_data[[2]][i, j]
+      }
     }
     # once we have found the correct rows for the pairs, we can calculate
     # the contrast. We need the predicted values first
