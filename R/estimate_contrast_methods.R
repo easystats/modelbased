@@ -151,7 +151,19 @@ estimate_contrasts.estimate_predicted <- function(model,
 # pairwise comparisons ----------------------------------------------------
 .compute_comparisons <- function(predictions, dof, vcov_matrix, datagrid, contrast, by, crit_factor) {
   # we need the focal terms and all unique values from the datagrid
-  focal_terms <- c(contrast, by)
+  focal_terms <- unique(c(contrast, by))
+
+  # sanity check - user-defined by-variables may not be in the data
+  if (!all(focal_terms %in% colnames(predictions))) {
+    not_found <- setdiff(focal_terms, colnames(predictions))
+    insight::format_error(paste0(
+      "Following variables were not found in the data: ",
+      paste0("`", toString(not_found), "`"),
+      ". Please check the spelling."
+    ))
+  }
+
+  # create at-list, i.e. all representative values for the focal terms
   at_list <- lapply(datagrid[focal_terms], unique)
 
   # pairwise comparisons are a bit more complicated, as we need to create
@@ -186,8 +198,32 @@ estimate_contrasts.estimate_predicted <- function(model,
     # since we replaced "." with "#_#" in original levels,
     # we need to replace it back here
     pair <- lapply(pair, gsub, pattern = "#_#", replacement = ".", fixed = TRUE)
-    datawizard::data_rotate(as.data.frame(pair))
+    pdata <- datawizard::data_rotate(as.data.frame(pair))
+    rownames(pdata) <- NULL
+    pdata
   })
+
+  # if we want to group by, we reduce the data frames. we can remove all
+  # those rows where the by-terms in pairs_data 1 and 2 don't have identical
+  # values
+  if (!is.null(by)) {
+    # check which variables are the by-variables. column names for pairs_data
+    # are numbers, not the variable names
+    by_pos <- match(by, focal_terms)
+    # iterate all rows, check for identical pairs in by, and only keep those
+    keep_rows <- vapply(
+      seq_len(nrow(pairs_data[[1]])),
+      function(i) {
+        identical(pairs_data[[1]][i, by_pos], pairs_data[[2]][i, by_pos])
+      },
+      logical(1),
+      USE.NAMES = FALSE
+    )
+    pairs_data[[1]] <- pairs_data[[1]][keep_rows, ]
+    pairs_data[[2]] <- pairs_data[[2]][keep_rows, ]
+  }
+
+
   # now we iterate over all pairs and try to find the corresponding predictions
   out <- do.call(rbind, lapply(seq_len(nrow(pairs_data[[1]])), function(i) {
     pos1 <- predictions[[focal_terms[1]]] == pairs_data[[1]][i, 1]
@@ -200,6 +236,10 @@ estimate_contrasts.estimate_predicted <- function(model,
     if (length(focal_terms) > 2) {
       pos1 <- pos1 & predictions[[focal_terms[3]]] == pairs_data[[1]][i, 3]
       pos2 <- pos2 & predictions[[focal_terms[3]]] == pairs_data[[2]][i, 3]
+    }
+    if (length(focal_terms) > 3) {
+      pos1 <- pos1 & predictions[[focal_terms[4]]] == pairs_data[[1]][i, 4]
+      pos2 <- pos2 & predictions[[focal_terms[4]]] == pairs_data[[2]][i, 4]
     }
     # once we have found the correct rows for the pairs, we can calculate
     # the contrast. We need the predicted values first
