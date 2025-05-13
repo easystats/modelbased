@@ -4,14 +4,14 @@ plot.estimate_contrasts <- function(x, ...) {
   NextMethod()
 }
 
-
+#' @rdname visualisation_recipe.estimate_predicted
 #' @export
 plot.estimate_predicted <- function(x, ...) {
   layers <- visualisation_recipe(x, ...)
   graphics::plot(layers)
 }
 
-
+#' @rdname visualisation_recipe.estimate_predicted
 #' @export
 plot.estimate_means <- plot.estimate_predicted
 
