@@ -76,7 +76,8 @@ e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 }
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
-used to create a plot based on \verb{\{ggplot2\}. The related }plot()\verb{method is in the}{see}` package.
+used to create a plot based on \code{{ggplot2}}. The related \code{plot()} method is in
+the \code{{see}} package.
 }
 \description{
 Most \strong{modelbased} objects can be visualized using the \code{plot()} function,

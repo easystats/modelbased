@@ -47,7 +47,7 @@
 #' confidence bands from line geoms, use `ribbon = "none"`.
 #'
 #' @return An object of class `visualisation_recipe` that describes the layers
-#' used to create a plot based on `{ggplot2}. The related `plot()` method is in
+#' used to create a plot based on `{ggplot2}`. The related `plot()` method is in
 #' the `{see}` package.
 #'
 #' @section Global Options to Customize Plots:
