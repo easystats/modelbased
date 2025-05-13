@@ -93,3 +93,25 @@ test_that("estimate_contrasts - Random Effects Levels, interaction", {
   estim <- estimate_relation(m_null, by = c("age", "employed"))
   expect_snapshot(print(estimate_contrasts(estim, contrast = c("age", "employed"), comparison = "interaction"), zap_small = TRUE, table_width = Inf))
 })
+
+
+test_that("estimate_contrasts - interaction", {
+  data(efc, package = "modelbased")
+  efc$c172code <- as.factor(efc$c172code)
+  efc$c161sex <- as.factor(efc$c161sex)
+  efc$e15relat <- as.factor(efc$e15relat)
+  efc$e42dep <- as.factor(efc$e42dep)
+  levels(efc$c161sex) <- c("male", "female")
+
+  # multiple focal terms, interaction
+  m <- lm(barthtot ~ c12hour + neg_c_7 + c161sex * c172code, data = efc)
+
+  # difference-in-difference
+  estim <- estimate_relation(m, by = c("c172code", "c161sex"))
+  out <- estimate_contrasts(estim, comparison = "interaction")
+
+  expect_identical(dim(out), c(3L, 8L))
+  expect_identical(out$c172code, c("1-2", "1-3", "2-3"))
+  expect_identical(out$c161sex, c("male and female", "male and female", "male and female"))
+  expect_equal(out$Difference, c(-1.28159, 3.02394, 4.30553), tolerance = 1e-4)
+})
