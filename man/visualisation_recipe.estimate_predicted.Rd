@@ -52,7 +52,7 @@
 \item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}.}
 
 \item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
-to the model-based estimation. This argumenmt will be ignored for plotting
+to the model-based estimation. This argument will be ignored for plotting
 objects returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional

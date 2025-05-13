@@ -21,7 +21,7 @@
 #'
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
-#' to the model-based estimation. This argumenmt will be ignored for plotting
+#' to the model-based estimation. This argument will be ignored for plotting
 #' objects returned by `estimate_slopes()` or `estimate_grouplevel()`.
 #' @param join_dots Logical, if `TRUE` (default) and for categorical focal terms
 #' in `by`, dots (estimates) are connected by lines, i.e. plots will be a
