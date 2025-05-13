@@ -56,7 +56,7 @@ affiliations:
   index: 7
 correspondence: D.Makowski@sussex.ac.uk.
 type: article
-date: "2025-05-12"
+date: "2025-05-13"
 bibliography: paper.bib
 # abstract: |
 #   The `modelbased` package provides a straightforward approach to computing and visualizing model-based estimates in R, including marginal means, contrasts, slopes, and predictions. Designed as part of the easystats ecosystem, it streamlines post-hoc analysis and model interpretation across a wide range of statistical models. While tools like `emmeans` and `marginaleffects` offer similar functionality, `modelbased` prioritizes ease of use, making it more accessible to researchers without extensive statistical programming expertise. By integrating modern workflows for effect estimation and visualization, modelbased enhances the interpretability and reproducibility of statistical analyses in psychological and social sciences.
