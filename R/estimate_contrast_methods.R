@@ -14,16 +14,42 @@ estimate_contrasts.estimate_predicted <- function(model,
   }
   comparison <- insight::validate_argument(comparison, c("pairwise", "interaction"))
 
-  # sanity check
-  if (is.null(contrast)) {
-    contrast <- attributes(model)$focal_terms
-  }
+  # focal terms
+  focal_terms <- attributes(model)$focal_terms
 
   # the "model" object is an object of class "estimate_predicted", we want
   # to copy that into a separate object, for clearer names
   predictions <- object <- model
   model <- attributes(object)$model
   datagrid <- attributes(object)$datagrid
+
+  # sanity check - user-defined by-variables may not be in the data
+  if (!is.null(by) && !all(by %in% colnames(predictions))) {
+    not_found <- setdiff(by, colnames(predictions))
+    insight::format_error(paste0(
+      "Following variables specified in `by` were not found in the data: ",
+      paste0("`", toString(not_found), "`"),
+      ". Please check the spelling."
+    ))
+  }
+
+  # sanity check
+  if (is.null(contrast)) {
+    contrast <- focal_terms
+    if (!is.null(by)) {
+      contrast <- setdiff(contrast, by)
+    }
+  }
+
+  # sanity check - user-defined by-variables may not be in the data
+  if (!is.null(contrast) && !all(contrast %in% colnames(predictions))) {
+    not_found <- setdiff(contrast, colnames(predictions))
+    insight::format_error(paste0(
+      "Following variables specified in `contrast` were not found in the data: ",
+      paste0("`", toString(not_found), "`"),
+      ". Please check the spelling."
+    ))
+  }
 
   # vcov matrix, for adjusting se
   vcov_matrix <- .safe(stats::vcov(model, verbose = FALSE, ...))
@@ -97,7 +123,7 @@ estimate_contrasts.estimate_predicted <- function(model,
 
   # overwrite some of the attributes
   attr(out, "contrast") <- contrast
-  attr(out, "focal_terms") <- c(contrast, by)
+  attr(out, "focal_terms") <- unique(c(contrast, by))
   attr(out, "by") <- by
 
   # format output
@@ -153,16 +179,6 @@ estimate_contrasts.estimate_predicted <- function(model,
   # we need the focal terms and all unique values from the datagrid
   focal_terms <- unique(c(contrast, by))
 
-  # sanity check - user-defined by-variables may not be in the data
-  if (!all(focal_terms %in% colnames(predictions))) {
-    not_found <- setdiff(focal_terms, colnames(predictions))
-    insight::format_error(paste0(
-      "Following variables were not found in the data: ",
-      paste0("`", toString(not_found), "`"),
-      ". Please check the spelling."
-    ))
-  }
-
   # create at-list, i.e. all representative values for the focal terms
   at_list <- lapply(datagrid[focal_terms], unique)
 
@@ -210,6 +226,8 @@ estimate_contrasts.estimate_predicted <- function(model,
     # check which variables are the by-variables. column names for pairs_data
     # are numbers, not the variable names
     by_pos <- match(by, focal_terms)
+    # also remember those variables that are *not* by terms, but contrasts
+    contrast_pos <- which(is.na(match(focal_terms, by)))
     # iterate all rows, check for identical pairs in by, and only keep those
     keep_rows <- vapply(
       seq_len(nrow(pairs_data[[1]])),
@@ -221,8 +239,9 @@ estimate_contrasts.estimate_predicted <- function(model,
     )
     pairs_data[[1]] <- pairs_data[[1]][keep_rows, ]
     pairs_data[[2]] <- pairs_data[[2]][keep_rows, ]
+  } else {
+    contrast_pos <- seq_along(focal_terms)
   }
-
 
   # now we iterate over all pairs and try to find the corresponding predictions
   out <- do.call(rbind, lapply(seq_len(nrow(pairs_data[[1]])), function(i) {
@@ -245,8 +264,8 @@ estimate_contrasts.estimate_predicted <- function(model,
     # the labels (of the pairwise contrasts) as columns.
     result <- data.frame(
       Parameter = paste(
-        paste0("(", paste(pairs_data[[1]][i, ], collapse = " "), ")"),
-        paste0("(", paste(pairs_data[[2]][i, ], collapse = " "), ")"),
+        paste0("(", paste(pairs_data[[1]][i, contrast_pos], collapse = " "), ")"),
+        paste0("(", paste(pairs_data[[2]][i, contrast_pos], collapse = " "), ")"),
         sep = "-"
       ),
       stringsAsFactors = FALSE
