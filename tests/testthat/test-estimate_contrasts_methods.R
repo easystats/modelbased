@@ -32,6 +32,8 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
 
   # test errors
   expect_error(estimate_contrasts(estim, "employed", comparison = ~reference), regex = "Invalid option for argument")
+  expect_error(estimate_contrasts(estim, by = "agea"), regex = "Following variables specified")
+  expect_error(estimate_contrasts(estim, contrast = "gndr", by = "age"), regex = "Following variables specified")
 
   # extract contrast from attribute
   out <- estimate_contrasts(estim)
