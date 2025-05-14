@@ -301,7 +301,7 @@ estimate_contrasts.default <- function(model,
     code_snippet <- paste0(code_snippet, "\n)")
     message(
       insight::format_message(
-        "Could not calculcate standard errors for contrasts. This can happen when random effects are involved. You may try following:"
+        "Could not calculate standard errors for contrasts. This can happen when random effects are involved. You may try following:"
       ),
       insight::color_text(code_snippet, "green"),
       insight::color_text("\nestimate_contrasts(estim)", "green"),
