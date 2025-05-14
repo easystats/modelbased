@@ -236,6 +236,9 @@ estimate_contrasts.default <- function(model,
     )
   }
 
+  # sanity check - did method return standard errors?
+  .check_contrast_se(out, by, contrast, model_name = deparse(substitute(model)), verbose)
+
   # restore attributes later
   info <- attributes(estimated)
 
@@ -269,4 +272,40 @@ estimate_contrasts.default <- function(model,
   # Output
   class(out) <- c("estimate_contrasts", "see_estimate_contrasts", class(out))
   out
+}
+
+
+# helper ---------------------------------------------------
+
+.check_contrast_se <- function(out, by, contrast, model_name = "model", verbose) {
+  if (verbose && !is.null(out$SE) && all(is.na(out$SE))) {
+    code_snippet <- paste0("\n\nestim <- estimate_relation(\n  ", model_name)
+    if (!is.null(by)) {
+      code_snippet <- paste0(
+        code_snippet,
+        ",\n  by = ",
+        ifelse(length(by) > 1, "c(", ""),
+        paste0("\"", by, "\"", collapse = ", "),
+        ifelse(length(by) > 1, ")", "")
+      )
+    }
+    if (!is.null(contrast)) {
+      code_snippet <- paste0(
+        code_snippet,
+        ",\n  contrast = ",
+        ifelse(length(contrast) > 1, "c(", ""),
+        paste0("\"", contrast, "\"", collapse = ", "),
+        ifelse(length(contrast) > 1, ")", "")
+      )
+    }
+    code_snippet <- paste0(code_snippet, "\n)")
+    message(
+      insight::format_message(
+        "Could not calculcate standard errors for contrasts. This can happen when random effects are involved. You may try following:"
+      ),
+      insight::color_text(code_snippet, "green"),
+      insight::color_text("\nestimate_contrasts(estim)", "green"),
+      "\n"
+    )
+  }
 }

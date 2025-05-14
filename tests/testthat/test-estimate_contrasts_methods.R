@@ -63,6 +63,15 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
       "CI_high", "Statistic", "p"
     )
   )
+
+  # message
+  expect_message(
+    estimate_contrasts(m_null, contrast = "employed", by = c("age", "gender")),
+    regex = "Could not calculate"
+  )
+  expect_silent(
+    estimate_contrasts(m_null, contrast = "employed", by = c("age", "gender"), verbose = FALSE)
+  )
 })
 
 
@@ -114,4 +123,24 @@ test_that("estimate_contrasts - interaction", {
   expect_identical(out$c172code, c("1-2", "1-3", "2-3"))
   expect_identical(out$c161sex, c("male and female", "male and female", "male and female"))
   expect_equal(out$Difference, c(-1.28159, 3.02394, 4.30553), tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrasts - glm", {
+  set.seed(5)
+  data <- data.frame(
+    outcome = rbinom(100, 1, 0.5),
+    var1 = as.factor(rbinom(100, 1, 0.1)),
+    var2 = rnorm(100, 10, 7)
+  )
+  m <- glm(
+    outcome ~ var1 + var2,
+    data = data,
+    family = binomial(link = "logit")
+  )
+  estim <- estimate_relation(m, by = "var1")
+  out1 <- estimate_contrasts(estim, contrast = "var1")
+  out2 <- estimate_contrasts(m, contrast = "var1")
+  expect_equal(out1$Difference, out2$Difference * -1, tolerance = 1e-4)
+  expect_lt(abs(out1$SE - out2$SE), 0.01)
 })
