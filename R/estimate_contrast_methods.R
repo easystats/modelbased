@@ -245,6 +245,10 @@ estimate_contrasts.estimate_predicted <- function(model,
     pairs_data[[1]] <- pairs_data[[1]][keep_rows, ]
     pairs_data[[2]] <- pairs_data[[2]][keep_rows, ]
   } else {
+    # we need to remember which variables of all combinations in "pairs_data"
+    # are contrasts. This is easy if `by` is `NULL` (all terms are contrasts),
+    # but else, we need to keep only the column position of contrast terms, not
+    # by terms. this is used below to create value labels for the output
     contrast_pos <- seq_along(focal_terms)
   }
 
