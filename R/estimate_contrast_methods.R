@@ -44,6 +44,9 @@ estimate_contrasts.estimate_predicted <- function(model,
     # else, if contrasts are specified, but not `by`, we set by to the
     # remaining focal terms
     by <- setdiff(focal_terms, contrast)
+    if (!length(by)) {
+      by <- NULL
+    }
   }
 
   # sanity check - user-defined by-variables may not be in the data

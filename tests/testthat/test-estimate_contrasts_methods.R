@@ -162,3 +162,31 @@ test_that("estimate_contrasts - glm", {
   expect_equal(out1$Difference, out2$Difference * -1, tolerance = 1e-4)
   expect_lt(abs(out1$SE - out2$SE), 0.01)
 })
+
+
+test_that("estimate_contrasts - random effects, single by/contrast", {
+  skip_if_not_installed("lme4")
+
+  data(mtcars)
+  model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+  expect_message(
+    estimate_contrasts(model, contrast = "gear"),
+    regex = "Could not calculate"
+  )
+  estim <- estimate_relation(model, by = "gear")
+  out <- estimate_contrasts(estim, contrast = "gear")
+  expect_identical(dim(out), c(3L, 8L))
+  expect_named(
+    out,
+    c(
+      "Level1", "Level2", "Difference", "SE", "CI_low", "CI_high",
+      "Statistic", "p"
+    )
+  )
+  expect_equal(out$SE, c(1.29442, 1.29442, 1.29442), tolerance = 1e-4)
+
+  model <- glmmTMB::glmmTMB(mpg ~ wt + (1 | gear), data = mtcars)
+  estim <- estimate_relation(model, by = "gear")
+  out <- estimate_contrasts(estim, contrast = "gear")
+  expect_equal(out$SE, c(1.47572, 1.46898, 1.73763), tolerance = 1e-4)
+})
