@@ -280,15 +280,17 @@ estimate_contrasts.default <- function(model,
 .check_contrast_se <- function(out, by, contrast, model_name = "model", verbose) {
   if (verbose && !is.null(out$SE) && all(is.na(out$SE))) {
     code_snippet <- paste0("\n\nestim <- estimate_relation(\n  ", model_name)
-    if (!is.null(by)) {
+    by_vars <- c(by, contrast)
+    if (!is.null(by_vars)) {
       code_snippet <- paste0(
         code_snippet,
         ",\n  by = ",
-        ifelse(length(by) > 1, "c(", ""),
-        paste0("\"", by, "\"", collapse = ", "),
-        ifelse(length(by) > 1, ")", "")
+        ifelse(length(by_vars) > 1, "c(", ""),
+        paste0("\"", by_vars, "\"", collapse = ", "),
+        ifelse(length(by_vars) > 1, ")", "")
       )
     }
+    code_snippet <- paste0(code_snippet, "\n)\nestimate_contrasts(\n  estim")
     if (!is.null(contrast)) {
       code_snippet <- paste0(
         code_snippet,
@@ -304,7 +306,6 @@ estimate_contrasts.default <- function(model,
         "Could not calculate standard errors for contrasts. This can happen when random effects are involved. You may try following:"
       ),
       insight::color_text(code_snippet, "green"),
-      insight::color_text("\nestimate_contrasts(estim)", "green"),
       "\n"
     )
   }

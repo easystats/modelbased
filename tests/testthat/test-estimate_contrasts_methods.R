@@ -53,6 +53,15 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
       "Statistic", "p"
     )
   )
+  out <- estimate_contrasts(estim, contrast = c("gender", "employed"))
+  expect_identical(dim(out), c(18L, 9L))
+  expect_named(
+    out,
+    c(
+      "Level1", "Level2", "age", "Difference", "SE", "CI_low", "CI_high",
+      "Statistic", "p"
+    )
+  )
 
   out <- estimate_contrasts(estim, by = c("age", "employed"))
   expect_identical(dim(out), c(6L, 10L))
@@ -60,6 +69,15 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
     out,
     c(
       "Level1", "Level2", "age", "employed", "Difference", "SE", "CI_low",
+      "CI_high", "Statistic", "p"
+    )
+  )
+  out <- estimate_contrasts(estim, contrast = "gender")
+  expect_identical(dim(out), c(6L, 10L))
+  expect_named(
+    out,
+    c(
+      "Level1", "Level2", "employed", "age", "Difference", "SE", "CI_low",
       "CI_high", "Statistic", "p"
     )
   )
