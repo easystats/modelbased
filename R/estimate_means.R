@@ -401,6 +401,13 @@ estimate_means <- function(model,
     means <- format(estimated, model, ci = ci, ...)
   }
 
+  # sanity check - did method return standard errors?
+  if (verbose && !is.null(means$SE) && isTRUE(all(means$SE == means$SE[1]))) {
+    insight::format_alert(
+      "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
+    )
+  }
+
   # restore attributes later
   info <- attributes(estimated)
 
