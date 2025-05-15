@@ -173,7 +173,12 @@ test_that("estimate_contrasts - random effects, single by/contrast", {
     estimate_contrasts(model, contrast = "gear"),
     regex = "Could not calculate"
   )
-  estim <- estimate_relation(model, by = "gear")
+  expect_message(
+    {
+      estim <- estimate_relation(model, by = "gear")
+    },
+    regex = "Standard errors are probably not reliable"
+  )
   out <- estimate_contrasts(estim, contrast = "gear")
   expect_identical(dim(out), c(3L, 8L))
   expect_named(
@@ -184,6 +189,7 @@ test_that("estimate_contrasts - random effects, single by/contrast", {
     )
   )
   expect_equal(out$SE, c(1.29442, 1.29442, 1.29442), tolerance = 1e-4)
+  expect_silent(estimate_relation(model, by = "gear", verbose = FALSE))
 
   model <- glmmTMB::glmmTMB(mpg ~ wt + (1 | gear), data = mtcars)
   estim <- estimate_relation(model, by = "gear")

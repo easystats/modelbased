@@ -484,6 +484,9 @@ estimate_relation <- function(model,
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
 
+  # sanity check - did method return standard errors?
+  .check_standard_errors(out = out, model = model, ...)
+
   # select columns to copy - we don't want duplicates from the data grid
   columns_to_copy <- setdiff(colnames(data), colnames(out))
   if (length(columns_to_copy)) {
