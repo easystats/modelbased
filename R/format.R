@@ -72,7 +72,7 @@ format.estimate_contrasts <- function(x,
   # remove df column if it's only "Inf" (new since version ‘0.25.1.8’)
   all_inf_values <- vapply(x, function(i) all(is.infinite(i)), logical(1))
   if (any(all_inf_values)) {
-    x <- x[!all_inf_values]
+    x[all_inf_values] <- NULL
   }
 
   # add back adjusted_for variables when we have custom column layouts
@@ -572,7 +572,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # remove df column if it's only "Inf" (new since version ‘0.25.1.8’)
   all_inf_values <- vapply(params, function(i) all(is.infinite(i)), logical(1))
   if (any(all_inf_values)) {
-    params <- params[!all_inf_values]
+    params[all_inf_values] <- NULL
   }
 
   # Rename for Categorical family
