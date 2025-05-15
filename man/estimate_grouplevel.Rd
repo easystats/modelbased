@@ -5,6 +5,7 @@
 \alias{estimate_grouplevel.default}
 \alias{estimate_grouplevel.brmsfit}
 \alias{reshape_grouplevel}
+\alias{reshape_grouplevel.estimate_grouplevel}
 \title{Group-specific parameters of mixed models random effects}
 \usage{
 estimate_grouplevel(model, ...)
@@ -20,7 +21,9 @@ estimate_grouplevel(model, ...)
   ...
 )
 
-reshape_grouplevel(x, indices = "all", group = "all", ...)
+reshape_grouplevel(x, ...)
+
+\method{reshape_grouplevel}{estimate_grouplevel}(x, indices = "all", group = NULL, ...)
 }
 \arguments{
 \item{model}{A mixed model with random effects.}
@@ -48,10 +51,11 @@ useful).}
 
 \item{x}{The output of \code{estimate_grouplevel()}.}
 
-\item{indices}{A list containing the indices (i.e., which columns) to
-extract (e.g., "Coefficient").}
+\item{indices}{A character vector containing the indices (i.e., which
+columns) to extract (e.g., "Coefficient", "Median").}
 
-\item{group}{A list containing the random factors to select.}
+\item{group}{The name of the random factor to select as string value (e.g.,
+\code{"Participant"}, if the model was \code{y ~ x + (1|Participant)}.}
 }
 \description{
 Extract random parameters of each individual group in the context of mixed
@@ -77,14 +81,11 @@ random
 # Visualize random effects
 plot(random)
 
-# Reshape to wide data so that it matches the original dataframe...
-reshaped <- reshape_grouplevel(random, indices = c("Coefficient", "SE"))
+# Reshape to wide data...
+reshaped <- reshape_grouplevel(random, group = "carb", indices = c("Coefficient", "SE"))
 
 # ...and can be easily combined with the original data
-alldata <- cbind(mtcars, reshaped)
-
-# Use summary() to remove duplicated rows
-summary(reshaped)
+alldata <- merge(mtcars, reshaped)
 
 # overall coefficients
 estimate_grouplevel(model, type = "total")

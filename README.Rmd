@@ -369,7 +369,7 @@ describe_nonlinear(vizdata, x = "Petal.Length")
 See [**this vignette**](https://easystats.github.io/modelbased/articles/estimate_response.html) for a walkthrough on how to do that.
 
 
-## Understand interactions between two continuous variables
+### Understand interactions between two continuous variables
 
 Also referred to as **Johnson-Neyman intervals**, this plot shows how the effect (the "slope") of one variable varies depending on another variable. It is useful in the case of complex interactions between continuous variables.
 
@@ -418,6 +418,41 @@ plot(preds, ribbon = list(alpha = 0)) + # Previous plot
   geom_ribbon(data = fixed_pred, aes(x = Days, ymin = CI_low, ymax = CI_high), alpha = 0.4) +
   geom_line(data = fixed_pred, aes(x = Days, y = Predicted), linewidth = 2)
 ```
+
+## Technical Details
+
+The algorithmic heavy lifting is done by `{modelbased}`'s two back-end packages, `{emmeans}` and `{marginaleffects}` (the default), which can be set as a global option (e.g., with `options(modelbased_backend = "emmeans")`).
+
+Of the two, `{emmeans}` [(Russell, 2024)](https://doi.org/10.32614/CRAN.package.emmeans) is the more senior package and was originally known as `{lsmeans}` (for "Least-Squares Means"). This term has been historically used to describe what are now more commonly referred to as "Estimated Marginal Means" or EMMs: predictions made over a regular grid—a grid typically constructed from all possible combinations of the categorical predictors in the model and the mean of numerical predictors. The package was renamed in 2016 to `{emmeans}` to clarify its extension beyond least-squares estimation and its support of a wider range of models (e.g., Bayesian models).
+
+Within `{emmeans}`, estimates are generated as a linear function of the model's coefficients, with standard errors produced in a similar manner by taking a linear combination of the coefficients' variance-covariance matrix.
+For example if $b$ is a vector of 4 coefficients, and $V$ is a 4-by-4 matrix of the coefficients' variance-covariance, we can get an estimate and SE for a linear combination (or set of linear combinations) $L$ like so:
+
+$$
+\hat{b} = L \cdot b
+$$
+
+$$
+SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
+$$
+
+```{r, echo=FALSE, eval=FALSE}
+# original formula, please check OK:
+L %*% b
+sqrt(diag(L %*% V %*% t(L)))
+```
+
+These grid predictions are sometimes averaged over (averaging being a linear operation itself) to produce "marginal" predictions (in the sense of marginalized-over): means. These predictions can then be contrasted using various built-in or custom contrasts weights to obtain meaningful estimates of various effects. Using linear combinations with regular grids often means that results from `{emmeans}` directly correspond to a models coefficients (which is a benefit for those who are used to understanding models by examining coefficient tables).
+
+`{marginaleffects}` [(Arel-Bundock et al., 2024)](https://doi.org/10.18637/jss.v111.i09) was more recently introduced and also relies on the Delta method, but uses numeric differentiation (and can easily switch to bootstrap or simulation-based approaches). By default, it estimates various effects by generating two counter-factual predictions of unit-level observations, then taking the difference between them - which can easily be done on the response scale, rather than the link scale. Because these effects are calculated for every observation, they can then be averaged (e.g., as an Average Treatment Effect). This approach is more iterative compared to the linear matrix multiplication used by `{emmeans}`, but is similarly efficient.
+
+While both packages employ the Delta method to obtain standard errors on transformed scales, they differ in how they construct and average predictions. `{emmeans}` often produces *effects at the mean* of non-focal predictors (via linear contrasts), whereas `{marginaleffects}` tends to compute *mean effects* by averaging over observations. Depending on the model and the type of quantity you want to estimate, results from these two approaches can be very similar—or differ in interesting ways.
+
+Note that `{emmeans}` can also perform numeric differentiation or use non-regular grids, just as `{marginaleffects}` can construct linear predictions at the mean. Because each package has evolved with slightly different philosophies regarding how to form and interpret predictions, users can select whichever approach best suits their research questions. In `{modelbased}`, you can switch easily between either back end by setting the global option, for example `options(modelbased_backend = "marginaleffects")`, to access these features.
+
+
+Finally, `{modelbased}` leverages the `get_datagrid()` function from the `{insight}` package [(Lüdecke et al., 2019)](https://doi.org/10.21105/joss.01412) to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - `{modelbased}` also inherits the support for such models.
+
 
 ## Code of Conduct
 

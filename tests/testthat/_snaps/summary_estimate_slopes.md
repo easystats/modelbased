@@ -12,7 +12,8 @@
       -------------------------------------------------------
       setosa     |  1.00 | 1.62 | positive  | Not Significant
       versicolor |  3.17 | 5.04 | positive  | Significant    
-      virginica  |  4.73 | 5.66 | positive  | Significant    
+      virginica  |  4.73 | 4.73 | positive  | Not Significant
+      virginica  |  5.04 | 5.66 | positive  | Significant    
       virginica  |  5.97 | 6.90 | positive  | Not Significant
       
       Marginal effects estimated for Petal.Length

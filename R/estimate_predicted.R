@@ -186,7 +186,8 @@
 #' frame), which can be used, for instance, for plotting.
 #' @param ... You can add all the additional control arguments from
 #' [insight::get_datagrid()] (used when `data = "grid"`) and
-#' [insight::get_predicted()].
+#' [insight::get_predicted()]. Furthermore, for count regression models that use
+#' an offset term, use `offset = <value>` to fix the offset at a specific value.
 #'
 #' @return A data frame of predicted values and uncertainty intervals, with
 #' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
@@ -358,7 +359,7 @@ estimate_relation <- function(model,
   }
 
   # keep_iterations cannot be larger than interations
-  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations)) { # nolint
+  if (!is.null(keep_iterations) && !is.null(iterations) && is.numeric(keep_iterations) && is.numeric(iterations) && keep_iterations > iterations) { # nolint
     insight::format_error("`keep_iterations` cannot be larger than `iterations`.")
   }
 
@@ -376,12 +377,14 @@ estimate_relation <- function(model,
       insight::find_offset(model)
     )
     model_response <- insight::find_response(model)
+    model_offset <- insight::find_offset(model)
     is_nullmodel <- isTRUE(.safe(insight::is_nullmodel(model)))
     grouplevel_effects <- insight::find_random(model, flatten = TRUE, split_nested = TRUE)
   } else {
     # for stuff like data frame, no response and no null model
     variables <- colnames(model_data)
     model_response <- NULL
+    model_offset <- NULL
     is_nullmodel <- FALSE
     grouplevel_effects <- NULL
   }
@@ -440,6 +443,11 @@ estimate_relation <- function(model,
     response <- NULL
   }
 
+  # handle offsets
+  if (!is.null(dots$offset) && !is.null(model_offset)) {
+    data[[model_offset]] <- dots$offset
+  }
+
   # Keep only predictors (and response) --------
   if (!is_grid || is_nullmodel) {
     variables <- c(model_response, variables)
@@ -479,8 +487,10 @@ estimate_relation <- function(model,
     out[[model_response]] <- NULL
   }
 
-  # clean-up: remove "Row" variable (from ordinal and alike)
-  out[["Row"]] <- NULL
+  # keep row-column, but make sure it's integer
+  if ("Row" %in% colnames(out)) {
+    out[["Row"]] <- insight::format_value(out[["Row"]], protect_integers = TRUE)
+  }
 
   # Add residuals
   if (!is.null(response)) {

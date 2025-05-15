@@ -127,18 +127,21 @@ carried out.
 \itemize{
 \item When \code{backend = "emmeans"}, can be one of \code{"pairwise"}, \code{"poly"},
 \code{"consec"}, \code{"eff"}, \code{"del.eff"}, \code{"mean_chg"}, \code{"trt.vs.ctrl"},
-\code{"dunnett"}, \code{"wtcon"} and some more. See also \code{method} argument in
-\link[emmeans:contrast]{emmeans::contrast} and the \code{?emmeans::emmc-functions}.
+\code{"dunnett"}, \code{"wtcon"} and some more. To test multiple hypotheses jointly
+(usually used for factorial designs), \code{comparison} can also be \code{"joint"}.
+See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} and the
+\code{?emmeans::emmc-functions}.
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
-naming the comparison method, a formula, or a function. Strings, string
-equations and formula are probably the most common options and described
-below. For other options and detailed descriptions of those options, see
-also \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
+naming the comparison method, a formula, or a function. For options not
+described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
 \href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
-\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}.
+\code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
+multiple hypotheses jointly (usually used for factorial designs),
+\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
+to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -148,6 +151,10 @@ right-hand side determines the pairs of estimates to compare (\code{reference},
 \code{sequential}, \code{meandev}, etc., see string-options). Optionally, comparisons
 can be carried out within subsets by indicating the grouping variable
 after a vertical bar ( \code{|}).
+\item A custom function, e.g. \code{comparison = myfun}, or
+\code{comparison ~ I(my_fun(x)) | groups}.
+\item If contrasts should be calculated (or grouped by) factors, \code{comparison}
+can also be a matrix that specifies factor contrasts (see 'Examples').
 }
 }}
 
@@ -170,13 +177,14 @@ variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
-instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
-passed to those functions. A \code{weights} argument is passed to the \code{wts}
-argument in \code{avg_predictions()} or \code{avg_slopes()}, however, weights can
-only be applied when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for
-those marginalization options that do not use data grids). Other arguments,
-such as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which
-is internally used by \emph{marginaleffects}) if supported by that model class.
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope}, \code{hypothesis} or even
+\code{newdata} can be passed to those functions. A \code{weights} argument is passed
+to the \code{wts} argument in \code{avg_predictions()} or \code{avg_slopes()}, however,
+weights can only be applied when \code{estimate} is \code{"average"} or
+\code{"population"} (i.e. for those marginalization options that do not use data
+grids). Other arguments, such as \code{re.form} or \code{allow.new.levels}, may be
+passed to \code{predict()} (which is internally used by \emph{marginaleffects}) if
+supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -190,6 +198,9 @@ contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
 \code{5}.
+\item For count regression models that use an offset term, use \verb{offset = <value>}
+to fix the offset at a specific value. Or use \code{estimate = "average"}, to
+average predictions over the distribution of the offset (if appropriate).
 }}
 
 \item{trend}{A character indicating the name of the variable for which to

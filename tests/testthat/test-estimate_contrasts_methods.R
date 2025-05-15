@@ -31,8 +31,11 @@ test_that("estimate_contrasts - Random Effects Levels, pairwise", {
   estim <- estimate_relation(m_null, by = c("gender", "employed", "age"))
 
   # test errors
-  expect_error(estimate_contrasts(estim), regex = "must be specified")
   expect_error(estimate_contrasts(estim, "employed", comparison = ~reference), regex = "Invalid option for argument")
+
+  # extract contrast from attribute
+  out <- estimate_contrasts(estim)
+  expect_identical(dim(out), c(66L, 8L))
 
   # test output
   expect_snapshot(print(estimate_contrasts(estim, contrast = c("gender", "employed", "age")), zap_small = TRUE, table_width = Inf))

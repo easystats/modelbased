@@ -19,17 +19,20 @@
 #' carried out.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
 #'   `"consec"`, `"eff"`, `"del.eff"`, `"mean_chg"`, `"trt.vs.ctrl"`,
-#'   `"dunnett"`, `"wtcon"` and some more. See also `method` argument in
-#'   [emmeans::contrast] and the `?emmeans::emmc-functions`.
+#'   `"dunnett"`, `"wtcon"` and some more. To test multiple hypotheses jointly
+#'   (usually used for factorial designs), `comparison` can also be `"joint"`.
+#'   See also `method` argument in [emmeans::contrast] and the
+#'   `?emmeans::emmc-functions`.
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
-#'   naming the comparison method, a formula, or a function. Strings, string
-#'   equations and formula are probably the most common options and described
-#'   below. For other options and detailed descriptions of those options, see
-#'   also [marginaleffects::comparisons] and
+#'   naming the comparison method, a formula, or a function. For options not
+#'   described below, see documentation of [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`.
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
+#'     multiple hypotheses jointly (usually used for factorial designs),
+#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
+#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -39,6 +42,10 @@
 #'     `sequential`, `meandev`, etc., see string-options). Optionally, comparisons
 #'     can be carried out within subsets by indicating the grouping variable
 #'     after a vertical bar ( `|`).
+#'   * A custom function, e.g. `comparison = myfun`, or
+#'     `comparison ~ I(my_fun(x)) | groups`.
+#'   * If contrasts should be calculated (or grouped by) factors, `comparison`
+#'     can also be a matrix that specifies factor contrasts (see 'Examples').
 #' @param effectsize Desired measure of standardized effect size, one of
 #' `"emmeans"`, `"marginal"`, or `"boot"`. Default is `NULL`, i.e. no effect
 #' size will be computed.
@@ -116,6 +123,13 @@
 #' # Standardized differences
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #' standardize(estimated)
+#'
+#' # custom factor contrasts - contrasts the average effects of two levels
+#' # against the remaining third level
+#' data(contrast_example, package = "modelbased")
+#' cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
+#' model <- lm(outcome ~ score * tx, data = contrast_example)
+#' estimate_slopes(model, "score", by = "tx", comparison = cond_tx)
 #'
 #' # Other models (mixed, Bayesian, ...)
 #' data <- iris
@@ -226,11 +240,12 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
+  suffix <- ifelse(isTRUE(info$joint_test), "Joint Test", "Contrasts Analysis")
   attr(out, "table_title") <- c(switch(estimate,
-    specific = "Model-based Contrasts Analysis",
-    typical = "Marginal Contrasts Analysis",
-    average = "Averaged Contrasts Analysis",
-    population = "Counterfactual Contrasts Analysis (G-computation)"
+    specific = paste("Model-based", suffix),
+    typical = paste("Marginal", suffix),
+    average = paste("Averaged", suffix),
+    population = paste("Counterfactual", suffix, "(G-computation)")
   ), "blue")
 
   attr(out, "table_footer") <- .table_footer(

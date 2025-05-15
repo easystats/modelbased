@@ -1,7 +1,7 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
-#' Estimate average value of response variable at each factor level or
-#' representative value, respectively at values defined in a "data grid" or
+#' Estimate average values of the response variable at each factor level or
+#' at representative value, respectively at values defined in a "data grid" or
 #' "reference grid". For plotting, check the examples in
 #' [visualisation_recipe()]. See also other related functions such as
 #' [estimate_contrasts()] and [estimate_slopes()].
@@ -109,13 +109,14 @@
 #'   treated as numerics, i.e. values can have fractions or not.
 #' - **marginaleffects**: Internally used functions are `avg_predictions()` for
 #'   means and contrasts, and `avg_slope()` for slopes. Therefore, arguments for
-#'   instance like `vcov`, `equivalence`, `df`, `slope` or even `newdata` can be
-#'   passed to those functions. A `weights` argument is passed to the `wts`
-#'   argument in `avg_predictions()` or `avg_slopes()`, however, weights can
-#'   only be applied when `estimate` is `"average"` or `"population"` (i.e. for
-#'   those marginalization options that do not use data grids). Other arguments,
-#'   such as `re.form` or `allow.new.levels`, may be passed to `predict()` (which
-#'   is internally used by *marginaleffects*) if supported by that model class.
+#'   instance like `vcov`, `equivalence`, `df`, `slope`, `hypothesis` or even
+#'   `newdata` can be passed to those functions. A `weights` argument is passed
+#'   to the `wts` argument in `avg_predictions()` or `avg_slopes()`, however,
+#'   weights can only be applied when `estimate` is `"average"` or
+#'   `"population"` (i.e. for those marginalization options that do not use data
+#'   grids). Other arguments, such as `re.form` or `allow.new.levels`, may be
+#'   passed to `predict()` (which is internally used by *marginaleffects*) if
+#'   supported by that model class.
 #' - **emmeans**: Internally used functions are `emmeans()` and `emtrends()`.
 #'   Additional arguments can be passed to these functions.
 #' - Bayesian models: For Bayesian models, parameters are cleaned using
@@ -129,6 +130,9 @@
 #'   contrasts of slopes are calculated. If the integer has more than
 #'   `integer_as_numeric` unique values, it is treated as numeric. Defaults to
 #'   `5`.
+#' - For count regression models that use an offset term, use `offset = <value>`
+#'   to fix the offset at a specific value. Or use `estimate = "average"`, to
+#'   average predictions over the distribution of the offset (if appropriate).
 #'
 #' @inheritParams parameters::model_parameters.default
 #' @inheritParams estimate_expectation

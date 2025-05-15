@@ -20,8 +20,8 @@ test_that("attributes_means", {
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
-      "model_info", "keep_iterations", "table_title", "table_footer", "model",
-      "response", "ci", "backend", "coef_name"
+      "model_info", "keep_iterations", "joint_test", "table_title",
+      "table_footer", "model", "response", "ci", "backend", "coef_name"
     )
   )
 })
@@ -37,7 +37,7 @@ test_that("attributes_means, contrasts", {
     c(
       "names", "class", "row.names", "table_title", "table_footer",
       "model", "response", "ci", "p_adjust", "backend", "predict",
-      "comparison", "contrast", "transform", "keep_iterations"
+      "comparison", "contrast", "transform", "keep_iterations", "joint_test"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species", backend = "marginaleffects"))
@@ -48,7 +48,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations"
+      "keep_iterations", "joint_test"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects"))
@@ -59,7 +59,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "keep_iterations"
+      "keep_iterations", "joint_test"
     )
   )
   estim <- suppressMessages(estimate_contrasts(model, "Species=c('setosa','virginica')", backend = "marginaleffects", estimate = "average"))
@@ -70,7 +70,7 @@ test_that("attributes_means, contrasts", {
       "model", "response", "ci", "p_adjust", "backend", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
-      "contrast_filter", "keep_iterations"
+      "contrast_filter", "keep_iterations", "joint_test"
     )
   )
 })
@@ -112,7 +112,7 @@ test_that("attributes_means", {
   expect_named(
     attributes(estim),
     c(
-      "names", "row.names", "class", "ci", "keep_iterations", "response",
+      "names", "class", "row.names", "ci", "keep_iterations", "response",
       "transform", "model", "datagrid", "focal_terms", "preserve_range",
       "table_title", "coef_name", "model_info", "table_footer", "adjusted_for",
       "at_specs", "at", "by", "reference", "data"

@@ -230,6 +230,10 @@ pool_slopes <- pool_predictions
   if (is.null(dfcom) || all(is.na(dfcom)) || all(is.infinite(dfcom))) {
     return(Inf)
   }
+  # fix for 1-row data - we have no variance of the estimates
+  if (is.na(b)) {
+    return(dfcom)
+  }
   lambda <- (1 + 1 / m) * b / t
   lambda[lambda < 1e-04] <- 1e-04
   dfold <- (m - 1) / lambda^2

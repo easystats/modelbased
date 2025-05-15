@@ -33,15 +33,17 @@ if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
 ```
 
 
-This vignette is the first in a 4-part series:
+This vignette is the first in a 5-part series:
 
 1. **Contrasts and Pairwise Comparisons**
 
-2. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+2. [**User Defined Contrasts and Joint Tests**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
 
-3. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+3. [**Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 
-4. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+4. [**Contrasts and Comparisons for Generalized Linear Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
+
+5. [**Contrasts and Comparisons for Zero-Inflation Models**](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
 
 
 # Hypothesis testing for categorical predictors
@@ -316,4 +318,4 @@ Let's replicate this step-by-step:
 
 While the current implementation in `estimate_contrasts()` already covers many common use cases for testing contrasts and pairwise comparison, there still might be the need for more sophisticated comparisons. In this case, we recommend using the [*marginaleffects*](https://marginaleffects.com/) package directly. Some further related recommended readings are the vignettes about [Comparisons](https://marginaleffects.com/chapters/comparisons.html) or [Hypothesis Tests](https://marginaleffects.com/chapters/hypothesis.html).
 
-[Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)
+[Go to next vignette: **User Defined Contrasts and Joint Tests**](https://easystats.github.io/modelbased/articles/introduction_comparisons_2.html)

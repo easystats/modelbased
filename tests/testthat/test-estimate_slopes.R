@@ -25,8 +25,20 @@ test_that("estimate_slopes", {
   expect_identical(dim(estim1), c(30L, 10L))
 
   estim2 <- suppressMessages(estimate_slopes(model, by = c("Species", "Petal.Length"), preserve_range = FALSE, backend = "marginaleffects"))
-  expect_identical(dim(estim2), c(30L, 8L))
+  expect_identical(dim(estim2), c(30L, 9L))
   expect_equal(estim1$Slope, estim2$Slope[order(estim2$Petal.Length, estim2$Species)], tolerance = 1e-3)
+
+  # test different DF
+  estim1 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", backend = "marginaleffects"))
+  estim2 <- suppressMessages(estimate_slopes(model, by = "Petal.Length", df = Inf, backend = "marginaleffects"))
+  expect_named(
+    estim1,
+    c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_named(
+    estim2,
+    c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "z", "p")
+  )
 
   model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 
@@ -90,7 +102,7 @@ test_that("estimate_slopes, custom comparison", {
   data(iris)
   m <- lm(Sepal.Width ~ Sepal.Length * Species, data = iris)
   out <- estimate_contrasts(m, "Sepal.Length", by = "Species", comparison = "(b1 - b2) = (b1 - b3)")
-  expect_identical(dim(out), c(1L, 7L))
+  expect_identical(dim(out), c(1L, 8L))
   expect_equal(out$Difference, -0.08782885, tolerance = 1e-4)
 })
 
@@ -104,7 +116,7 @@ test_that("estimate_slopes, works with lme4", {
     data = CO2
   ))
   out <- estimate_slopes(model_lme4, trend = "conc", by = "Plant")
-  expect_identical(dim(out), c(12L, 7L))
+  expect_identical(dim(out), c(12L, 8L))
   expect_equal(
     out$Slope,
     c(
@@ -143,19 +155,19 @@ test_that("estimate_slopes, works with glmmTMB", {
 
   # marginal effects at different values of Petal.Length
   out <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length", length = 10)
-  expect_identical(dim(out), c(10L, 7L))
-  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "p"))
+  expect_identical(dim(out), c(10L, 8L))
+  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
 
   # marginal effects at very specific values of Petal.Length
   out <- estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
-  expect_identical(dim(out), c(3L, 7L))
-  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "p"))
+  expect_identical(dim(out), c(3L, 8L))
+  expect_named(out, c("Petal.Length", "Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(out$Slope, c(0.26937, 0.05088, -0.0195), tolerance = 1e-3)
 
   # average marginal effects of Petal.Length,
   # just for the trend within a certain range
   out <- estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
-  expect_identical(dim(out), c(1L, 6L))
-  expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "p"))
+  expect_identical(dim(out), c(1L, 7L))
+  expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(out$Slope, 0.06614, tolerance = 1e-3)
 })

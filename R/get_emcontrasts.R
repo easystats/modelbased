@@ -41,6 +41,22 @@ get_emcontrasts <- function(model,
   # extract first focal term
   first_focal <- my_args$contrast[1]
 
+  # setup arguments
+  fun_args <- list(model)
+
+  # handle distributional parameters
+  if (predict %in% .brms_aux_elements(model) && inherits(model, "brmsfit")) {
+    dpars <- TRUE
+    fun_args$dpar <- predict
+  } else {
+    dpars <- FALSE
+    fun_args$type <- predict
+  }
+
+  # add dots
+  dots <- list(...)
+  fun_args <- insight::compact_list(c(fun_args, dots))
+
   # if first focal term is numeric, we contrast slopes
   if (is.numeric(model_data[[first_focal]]) &&
     !first_focal %in% on_the_fly_factors &&
@@ -51,23 +67,13 @@ get_emcontrasts <- function(model,
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
     }
     # Run emmeans
-    estimated <- suppressMessages(emmeans::emtrends(
-      model,
-      specs = my_args$by,
-      var = my_args$contrast,
-      type = predict,
-      ...
-    ))
+    fun_args <- c(fun_args, list(specs = my_args$by, var = my_args$contrast))
+    estimated <- suppressMessages(do.call(emmeans::emtrends, fun_args))
     emm_by <- NULL
   } else {
     # Run emmeans
-    estimated <- suppressMessages(emmeans::emmeans(
-      model,
-      specs = my_args$emmeans_specs,
-      at = my_args$emmeans_at,
-      type = predict,
-      ...
-    ))
+    fun_args <- c(fun_args, list(specs = my_args$emmeans_specs, at = my_args$emmeans_at))
+    estimated <- suppressMessages(do.call(emmeans::emmeans, fun_args))
     # Find by variables
     emm_by <- my_args$emmeans_specs[!my_args$emmeans_specs %in% my_args$contrast]
     if (length(emm_by) == 0) {
@@ -76,11 +82,24 @@ get_emcontrasts <- function(model,
   }
 
   # If means are on the response scale (e.g., probabilities), need to regrid
-  if (predict == "response") {
+  if (predict == "response" || dpars) {
     estimated <- emmeans::regrid(estimated)
   }
 
+  # joint test?
+  if (identical(comparison, "joint")) {
+    comparison <- "pairwise"
+    joint_test <- TRUE
+  } else {
+    joint_test <- FALSE
+  }
+
   out <- emmeans::contrast(estimated, by = emm_by, method = comparison, ...)
+
+  # intermediate step: joint tests
+  if (joint_test) {
+    out <- .joint_test(out, my_args)
+  }
 
   # for Bayesian model, keep iterations
   if (insight::model_info(model, response = 1)$is_bayesian) {
@@ -96,6 +115,7 @@ get_emcontrasts <- function(model,
   attr(out, "focal_terms") <- emm_by
   attr(out, "p_adjust") <- list(...)$adjust
   attr(out, "comparison") <- comparison
+  attr(out, "joint_test") <- joint_test
   attr(out, "transform") <- TRUE
   attr(out, "keep_iterations") <- keep_iterations
 
@@ -150,18 +170,26 @@ get_emcontrasts <- function(model,
     out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
-    out <- as.data.frame(merge(
-      as.data.frame(estimated),
-      stats::confint(estimated, level = ci, adjust = p_adjust)
-    ))
+    if (isTRUE(attributes(estimated)$joint_test)) {
+      out <- as.data.frame(estimated)
+    } else {
+      out <- as.data.frame(merge(
+        as.data.frame(estimated),
+        stats::confint(estimated, level = ci, adjust = p_adjust)
+      ))
+    }
     out <- .clean_names_frequentist(out, predict, m_info)
   }
   out$null <- NULL # introduced in emmeans 1.6.1 (#115)
-  out <- datawizard::data_relocate(
-    out,
-    c("CI_low", "CI_high"),
-    after = c("Difference", "Odds_ratio", "Ratio")
-  )
+
+  # relicate CI columns
+  if (all(c("CI_low", "CI_high") %in% colnames(out))) {
+    out <- datawizard::data_relocate(
+      out,
+      c("CI_low", "CI_high"),
+      after = c("Difference", "Odds_ratio", "Ratio")
+    )
+  }
 
 
   # Format contrasts names
@@ -174,13 +202,16 @@ get_emcontrasts <- function(model,
     colnames(level_cols) <- c("Level1", "Level2")
     level_cols$Level1 <- gsub(",", " - ", level_cols$Level1, fixed = TRUE)
     level_cols$Level2 <- gsub(",", " - ", level_cols$Level2, fixed = TRUE)
-  } else {
+  } else if (ncol(level_cols) > 0) {
     colnames(level_cols)[1] <- "Level"
   }
 
   # Merge levels and rest
   out$contrast <- NULL
-  out <- cbind(level_cols, out)
+  # for joint tests, we have no levels, and ncol is 0
+  if (ncol(level_cols) > 0) {
+    out <- cbind(level_cols, out)
+  }
 
   # add posterior draws?
   .add_posterior_draws_emmeans(attributes(estimated), out)

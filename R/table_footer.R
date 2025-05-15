@@ -14,6 +14,8 @@
   adjusted_for <- info$adjusted_for
   transform <- info$transform
   model_info <- info$model_info
+  marginalization <- info$estimate
+
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
     model_info <- insight::model_info(model, response = 1)
@@ -22,17 +24,25 @@
 
   # name of predicted response -----------------------------------------------
 
-  table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
+  if (isTRUE(info$joint_test)) {
+    table_footer <- NULL
+  } else {
+    table_footer <- paste0(
+      "\nVariable predicted: ", toString(insight::find_response(model))
+    )
+  }
 
 
   # modulated predictors (focal terms) ---------------------------------------
 
-  if (!is.null(by)) {
+  if (!is.null(by) && !isTRUE(info$joint_test)) {
     modulate_string <- switch(type,
       contrasts = "contrasted",
       "modulated"
     )
-    table_footer <- paste0(table_footer, "\nPredictors ", modulate_string, ": ", toString(by))
+    table_footer <- paste0(
+      table_footer, "\nPredictors ", modulate_string, ": ", toString(by)
+    )
   }
 
 
@@ -59,11 +69,19 @@
         }
       }
     }
-    average_string <- switch(type,
-      predictions = "controlled",
-      "averaged"
-    )
-    table_footer <- paste0(table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for))
+    # The "predictors averaged" line does not strictly apply to `estimate =
+    # "average"`, because we average across all predictions, we do not take an
+    # "average value" of a non-focal predictor. Thus, we skip this line in the
+    # footer
+    if (!identical(marginalization, "average")) {
+      average_string <- switch(type,
+        predictions = "controlled",
+        "averaged"
+      )
+      table_footer <- paste0(
+        table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for)
+      )
+    }
   }
 
 
@@ -73,7 +91,11 @@
     if (p_adjust == "none") {
       table_footer <- paste0(table_footer, "\np-values are uncorrected.")
     } else {
-      table_footer <- paste0(table_footer, "\np-value adjustment method: ", parameters::format_p_adjust(p_adjust))
+      table_footer <- paste0(
+        table_footer,
+        "\np-value adjustment method: ",
+        parameters::format_p_adjust(p_adjust)
+      )
     }
   }
 

@@ -6,6 +6,11 @@ format.estimate_contrasts <- function(x,
                                       select = getOption("modelbased_select", NULL),
                                       include_grid = getOption("modelbased_include_grid", FALSE),
                                       ...) {
+  # for joint test, no select and include_grid options
+  if (isTRUE(attributes(x)$joint_test)) {
+    select <- NULL
+    include_grid <- FALSE
+  }
   # don't print columns of adjusted_for variables
   adjusted_for <- attr(x, "adjusted_for", exact = TRUE)
   if (!is.null(adjusted_for) && all(adjusted_for %in% colnames(x)) && !isTRUE(include_grid)) {
@@ -538,19 +543,22 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # rename coefficient name and statistics columns
   if (!is.null(estimate_name)) {
-    params <- datawizard::data_rename(
-      params,
-      select = coefficient_name,
-      replacement = estimate_name
-    )
+    colnames(params)[colnames(params) == coefficient_name] <- estimate_name
   }
-  if ("Statistic" %in% colnames(params)) {
-    params <- datawizard::data_rename(
-      params,
-      select = "Statistic",
-      replacement = gsub("-statistic", "", insight::find_statistic(model), fixed = TRUE)
-    )
+  # marginaleffects objects return z-statistic by default, unless we change it
+  # via the degrees-of-freedom argument
+  if (inherits(x, "marginal_jointtest")) {
+    if (all(c("df1", "df2") %in% colnames(params))) {
+      stat_column <- "F"
+    } else {
+      stat_column <- "Chi2"
+    }
+  } else if (is.null(params$df) || all(is.infinite(params$df))) {
+    stat_column <- "z"
+  } else {
+    stat_column <- "t"
   }
+  colnames(params)[colnames(params) == "Statistic"] <- stat_column
 
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint

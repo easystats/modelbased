@@ -134,13 +134,14 @@ variables, \code{protect_integers} modulates whether these should also be
 treated as numerics, i.e. values can have fractions or not.
 \item \strong{marginaleffects}: Internally used functions are \code{avg_predictions()} for
 means and contrasts, and \code{avg_slope()} for slopes. Therefore, arguments for
-instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope} or even \code{newdata} can be
-passed to those functions. A \code{weights} argument is passed to the \code{wts}
-argument in \code{avg_predictions()} or \code{avg_slopes()}, however, weights can
-only be applied when \code{estimate} is \code{"average"} or \code{"population"} (i.e. for
-those marginalization options that do not use data grids). Other arguments,
-such as \code{re.form} or \code{allow.new.levels}, may be passed to \code{predict()} (which
-is internally used by \emph{marginaleffects}) if supported by that model class.
+instance like \code{vcov}, \code{equivalence}, \code{df}, \code{slope}, \code{hypothesis} or even
+\code{newdata} can be passed to those functions. A \code{weights} argument is passed
+to the \code{wts} argument in \code{avg_predictions()} or \code{avg_slopes()}, however,
+weights can only be applied when \code{estimate} is \code{"average"} or
+\code{"population"} (i.e. for those marginalization options that do not use data
+grids). Other arguments, such as \code{re.form} or \code{allow.new.levels}, may be
+passed to \code{predict()} (which is internally used by \emph{marginaleffects}) if
+supported by that model class.
 \item \strong{emmeans}: Internally used functions are \code{emmeans()} and \code{emtrends()}.
 Additional arguments can be passed to these functions.
 \item Bayesian models: For Bayesian models, parameters are cleaned using
@@ -154,14 +155,17 @@ contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
 \code{5}.
+\item For count regression models that use an offset term, use \verb{offset = <value>}
+to fix the offset at a specific value. Or use \code{estimate = "average"}, to
+average predictions over the distribution of the offset (if appropriate).
 }}
 }
 \value{
 A data frame of estimated marginal means.
 }
 \description{
-Estimate average value of response variable at each factor level or
-representative value, respectively at values defined in a "data grid" or
+Estimate average values of the response variable at each factor level or
+at representative value, respectively at values defined in a "data grid" or
 "reference grid". For plotting, check the examples in
 \code{\link[=visualisation_recipe]{visualisation_recipe()}}. See also other related functions such as
 \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_slopes]{estimate_slopes()}}.

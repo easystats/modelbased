@@ -29,6 +29,7 @@ reference:
   - title: "Sample datasets"
     contents:
       - coffee_data
+      - contrast_example
       - efc
       - fish
 
@@ -83,12 +84,14 @@ navbar:
         - text: "Contrasts"
         - text: "Contrasts and comparisons"
           href: articles/introduction_comparisons_1.html
-        - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
+        - text: "User Defined Contrasts and Joint Tests"
           href: articles/introduction_comparisons_2.html
-        - text: "Contrasts and comparisons for generalized linear models"
+        - text: "Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)"
           href: articles/introduction_comparisons_3.html
-        - text: "Contrasts and comparisons for zero-inflation models"
+        - text: "Contrasts and comparisons for generalized linear models"
           href: articles/introduction_comparisons_4.html
+        - text: "Contrasts and comparisons for zero-inflation models"
+          href: articles/introduction_comparisons_5.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html

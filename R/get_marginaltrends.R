@@ -84,6 +84,21 @@ get_marginaltrends <- function(model,
     dots$weights <- NULL
   }
 
+  # handle custom hypothesis - officially, "estimate_slopes()" has no
+  # comparison argument and contrasts of slopes is supported in
+  # "estimate_contrasts()". But sometimes, it is useful to pass a custom
+  # hypothesis to "avg_slopes()", so we just copy the "comparison" argument
+  # to the "hypothesis" argument here.
+  if (!is.null(dots$comparison)) {
+    dots$hypothesis <- dots$comparison
+    dots$comparison <- NULL
+  }
+
+  # model df - can be passed via `...`
+  if (is.null(dots$df) && !model_info$is_bayesian) {
+    dots$df <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
+
   # setup arguments again
   fun_args <- insight::compact_list(c(
     list(

@@ -305,7 +305,7 @@
     Output
       Estimated Marginal Effects
       
-      Slope |   SE |         95% CI |      t |      p
+      Slope |   SE |         95% CI | t(810) |      p
       -----------------------------------------------
       -0.05 | 0.00 | [-0.06, -0.05] | -12.77 | < .001
       
@@ -320,11 +320,11 @@
     Output
       Estimated Marginal Effects
       
-      c172code | Slope |   SE |         95% CI |     t |      p
-      ---------------------------------------------------------
-      low      | -0.06 | 0.01 | [-0.08, -0.05] | -7.08 | < .001
-      mid      | -0.05 | 0.01 | [-0.06, -0.04] | -9.82 | < .001
-      high     | -0.05 | 0.01 | [-0.07, -0.03] | -4.51 | < .001
+      c172code | Slope |   SE |         95% CI | t(808) |      p
+      ----------------------------------------------------------
+      low      | -0.06 | 0.01 | [-0.08, -0.05] |  -7.08 | < .001
+      mid      | -0.05 | 0.01 | [-0.06, -0.04] |  -9.82 | < .001
+      high     | -0.05 | 0.01 | [-0.07, -0.03] |  -4.51 | < .001
       
       Marginal effects estimated for barthtot
       Type of slope was dY/dX
@@ -337,11 +337,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1 | Level2 | Difference |   SE |        95% CI |    t |     p
-      ------------------------------------------------------------------
-      mid    | low    |       0.01 | 0.01 | [-0.01, 0.03] | 1.17 | 0.243
-      high   | low    |       0.02 | 0.01 | [-0.01, 0.04] | 1.10 | 0.271
-      high   | mid    |       0.00 | 0.01 | [-0.02, 0.03] | 0.27 | 0.786
+      Level1 | Level2 | Difference |   SE |        95% CI | t(808) |     p
+      --------------------------------------------------------------------
+      mid    | low    |       0.01 | 0.01 | [-0.01, 0.03] |   1.17 | 0.243
+      high   | low    |       0.02 | 0.01 | [-0.01, 0.04] |   1.10 | 0.271
+      high   | mid    |       0.00 | 0.01 | [-0.02, 0.03] |   0.27 | 0.786
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
@@ -356,23 +356,23 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1       | Level2      | Difference |   SE |        95% CI |     t |     p
-      ------------------------------------------------------------------------------
-      low, female  | low, male   |      -0.01 | 0.02 | [-0.04, 0.03] | -0.35 | 0.729
-      mid, male    | low, male   |      -0.01 | 0.02 | [-0.04, 0.02] | -0.46 | 0.648
-      mid, female  | low, male   |       0.02 | 0.01 | [-0.01, 0.05] |  1.24 | 0.216
-      high, male   | low, male   |       0.00 | 0.02 | [-0.05, 0.04] | -0.16 | 0.876
-      high, female | low, male   |       0.02 | 0.02 | [-0.01, 0.06] |  1.19 | 0.236
-      mid, male    | low, female |       0.00 | 0.02 | [-0.03, 0.03] | -0.08 | 0.940
-      mid, female  | low, female |       0.02 | 0.01 | [ 0.00, 0.05] |  1.76 | 0.079
-      high, male   | low, female |       0.00 | 0.02 | [-0.04, 0.05] |  0.12 | 0.908
-      high, female | low, female |       0.03 | 0.02 | [-0.01, 0.06] |  1.58 | 0.115
-      mid, female  | mid, male   |       0.03 | 0.01 | [ 0.00, 0.05] |  2.24 | 0.025
-      high, male   | mid, male   |       0.00 | 0.02 | [-0.04, 0.05] |  0.18 | 0.859
-      high, female | mid, male   |       0.03 | 0.02 | [ 0.00, 0.06] |  1.83 | 0.067
-      high, male   | mid, female |      -0.02 | 0.02 | [-0.06, 0.02] | -1.08 | 0.280
-      high, female | mid, female |       0.00 | 0.01 | [-0.02, 0.03] |  0.26 | 0.792
-      high, female | high, male  |       0.03 | 0.02 | [-0.02, 0.07] |  1.11 | 0.268
+      Level1       | Level2      | Difference |   SE |        95% CI | t(803) |     p
+      -------------------------------------------------------------------------------
+      low, female  | low, male   |      -0.01 | 0.02 | [-0.04, 0.03] |  -0.35 | 0.729
+      mid, male    | low, male   |      -0.01 | 0.02 | [-0.04, 0.02] |  -0.46 | 0.648
+      mid, female  | low, male   |       0.02 | 0.01 | [-0.01, 0.05] |   1.24 | 0.217
+      high, male   | low, male   |       0.00 | 0.02 | [-0.05, 0.04] |  -0.16 | 0.876
+      high, female | low, male   |       0.02 | 0.02 | [-0.01, 0.06] |   1.19 | 0.236
+      mid, male    | low, female |       0.00 | 0.02 | [-0.03, 0.03] |  -0.08 | 0.940
+      mid, female  | low, female |       0.02 | 0.01 | [ 0.00, 0.05] |   1.76 | 0.079
+      high, male   | low, female |       0.00 | 0.02 | [-0.04, 0.05] |   0.12 | 0.908
+      high, female | low, female |       0.03 | 0.02 | [-0.01, 0.06] |   1.58 | 0.115
+      mid, female  | mid, male   |       0.03 | 0.01 | [ 0.00, 0.05] |   2.24 | 0.026
+      high, male   | mid, male   |       0.00 | 0.02 | [-0.04, 0.05] |   0.18 | 0.859
+      high, female | mid, male   |       0.03 | 0.02 | [ 0.00, 0.06] |   1.83 | 0.068
+      high, male   | mid, female |      -0.02 | 0.02 | [-0.06, 0.02] |  -1.08 | 0.280
+      high, female | mid, female |       0.00 | 0.01 | [-0.02, 0.03] |   0.26 | 0.792
+      high, female | high, male  |       0.03 | 0.02 | [-0.02, 0.07] |   1.11 | 0.269
       
       Variable predicted: neg_c_7
       Predictors contrasted: barthtot
@@ -591,11 +591,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | Difference |   SE |        95% CI |     t |     p
-      ---------------------------------------------------------------------------
-      versicolor | setosa     |       0.22 | 0.46 | [-0.69, 1.12] |  0.47 | 0.639
-      virginica  | setosa     |      -0.21 | 0.44 | [-1.06, 0.65] | -0.47 | 0.637
-      virginica  | versicolor |      -0.42 | 0.27 | [-0.95, 0.10] | -1.58 | 0.114
+      Level1     | Level2     | Difference |   SE |        95% CI | t(144) |     p
+      ----------------------------------------------------------------------------
+      versicolor | setosa     |       0.22 | 0.46 | [-0.70, 1.13] |   0.47 | 0.640
+      virginica  | setosa     |      -0.21 | 0.44 | [-1.07, 0.66] |  -0.47 | 0.638
+      virginica  | versicolor |      -0.42 | 0.27 | [-0.95, 0.11] |  -1.58 | 0.116
       
       Variable predicted: Sepal.Width
       Predictors contrasted: Petal.Width
