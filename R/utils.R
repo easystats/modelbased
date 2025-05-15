@@ -72,7 +72,7 @@
       msg <- c(msg, insight::color_text(code_snippet, "green"), "\n")
     }
     message(msg)
-  } else if (isTRUE(all(out$SE == out$SE[1]))) {
+  } else if (isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
     msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
     if (!inherits(model, "glmmTMB")) {
       msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
