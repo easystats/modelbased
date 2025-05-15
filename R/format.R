@@ -69,6 +69,12 @@ format.estimate_contrasts <- function(x,
   # remove all-NA columns
   x <- datawizard::remove_empty_columns(x)
 
+  # remove df column if it's only "Inf" (new since version ‘0.25.1.8’)
+  all_inf_values <- vapply(params, function(i) all(is.infinite(i)), logical(1))
+  if (any(all_inf_values)) {
+    x <- x[!all_inf_values]
+  }
+
   # add back adjusted_for variables when we have custom column layouts
   if (!is.null(select)) {
     attr(x, "focal_terms") <- unique(c(attr(x, "focal_terms"), adjusted_for))
@@ -562,6 +568,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # remove redundant columns
   params <- datawizard::data_remove(params, remove_columns, verbose = FALSE) # nolint
+
+  # remove df column if it's only "Inf" (new since version ‘0.25.1.8’)
+  all_inf_values <- vapply(params, function(i) all(is.infinite(i)), logical(1))
+  if (any(all_inf_values)) {
+    params <- params[!all_inf_values]
+  }
 
   # Rename for Categorical family
   if (info$is_categorical || info$is_ordinal || info$is_cumulative || insight::is_multivariate(model)) {
