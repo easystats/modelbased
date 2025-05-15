@@ -70,7 +70,7 @@ format.estimate_contrasts <- function(x,
   x <- datawizard::remove_empty_columns(x)
 
   # remove df column if it's only "Inf" (new since version ‘0.25.1.8’)
-  all_inf_values <- vapply(params, function(i) all(is.infinite(i)), logical(1))
+  all_inf_values <- vapply(x, function(i) all(is.infinite(i)), logical(1))
   if (any(all_inf_values)) {
     x <- x[!all_inf_values]
   }
