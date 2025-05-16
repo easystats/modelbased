@@ -71,12 +71,12 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1    | Level2  | coffee  | Ratio |   SE |       95% CI | t(113) |      p
-      -----------------------------------------------------------------------------
-      noon      | morning | coffee  |  0.89 | 0.11 | [0.67, 1.11] |   8.08 | < .001
-      afternoon | morning | coffee  |  1.11 | 0.12 | [0.87, 1.36] |   9.05 | < .001
-      noon      | morning | control |  1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
-      afternoon | morning | control |  1.51 | 0.22 | [1.06, 1.95] |   6.73 | < .001
+      Level1    | Level2  | coffee  | Ratio |   SE |       95% CI | t(113) |     p
+      ----------------------------------------------------------------------------
+      noon      | morning | coffee  |  0.89 | 0.11 | [0.67, 1.11] |  -1.02 | 0.309
+      afternoon | morning | coffee  |  1.11 | 0.12 | [0.87, 1.36] |   0.91 | 0.363
+      noon      | morning | control |  1.51 | 0.22 | [1.06, 1.95] |   2.27 | 0.025
+      afternoon | morning | control |  1.51 | 0.22 | [1.06, 1.95] |   2.27 | 0.025
       
       Variable predicted: alertness
       Predictors contrasted: time
@@ -156,11 +156,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | Difference |         95% CI |   SE |  df |     z |      p
-      -----------------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.82, -0.54] | 0.07 | Inf | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.67, -0.33] | 0.08 | Inf | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [ 0.01,  0.35] | 0.08 | Inf |  2.12 |  0.034
+      Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
+      -----------------------------------------------------------------------------
+      setosa     | versicolor |      -0.68 | [-0.82, -0.54] | 0.07 | -9.27 | < .001
+      setosa     | virginica  |      -0.50 | [-0.67, -0.33] | 0.08 | -5.90 | < .001
+      versicolor | virginica  |       0.18 | [ 0.01,  0.35] | 0.08 |  2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species
@@ -197,11 +197,11 @@
     Output
       Marginal Contrasts Analysis
       
-      Level1     | Level2     | Difference |         95% CI |   SE |  df |     z |      p
-      -----------------------------------------------------------------------------------
-      setosa     | versicolor |      -0.68 | [-0.86, -0.50] | 0.07 | Inf | -9.27 | < .001
-      setosa     | virginica  |      -0.50 | [-0.70, -0.30] | 0.08 | Inf | -5.90 | < .001
-      versicolor | virginica  |       0.18 | [-0.02,  0.38] | 0.08 | Inf |  2.12 |  0.034
+      Level1     | Level2     | Difference |         95% CI |   SE |     z |      p
+      -----------------------------------------------------------------------------
+      setosa     | versicolor |      -0.68 | [-0.86, -0.50] | 0.07 | -9.27 | < .001
+      setosa     | virginica  |      -0.50 | [-0.70, -0.30] | 0.08 | -5.90 | < .001
+      versicolor | virginica  |       0.18 | [-0.02,  0.38] | 0.08 |  2.12 |  0.034
       
       Variable predicted: y
       Predictors contrasted: Species

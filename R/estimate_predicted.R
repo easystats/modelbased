@@ -193,7 +193,7 @@
 #' class `"estimate_predicted"`. Methods for [`visualisation_recipe()`][visualisation_recipe.estimate_predicted]
 #' and [`plot()`][visualisation_recipe.estimate_predicted] are available.
 #'
-#' @examplesIf all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("see", "glmmTMB", "rstanarm"), quietly = TRUE))
 #' library(modelbased)
 #'
 #' # Linear Models
@@ -221,9 +221,17 @@
 #' estimate_relation(model)
 #'
 #' # Mixed models
-#' model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+#' data(mtcars)
+#' mtcars$gear <- as.factor(mtcars$gear)
+#' model <- glmmTMB::glmmTMB(mpg ~ wt + (1 | gear), data = mtcars)
 #' estimate_expectation(model)
 #' estimate_relation(model)
+#'
+#' # Predict random effects and calculate contrasts
+#' estim <- estimate_relation(model, by = "gear")
+#' estim
+#'
+#' estimate_contrasts(estim)
 #'
 #' # Bayesian models
 #' \donttest{
@@ -475,6 +483,9 @@ estimate_relation <- function(model,
   # get predictions
   predictions <- do.call(insight::get_predicted, c(prediction_args, dots))
   out <- as.data.frame(predictions, keep_iterations = keep_iterations)
+
+  # sanity check - did method return standard errors?
+  .check_standard_errors(out = out, model = model, ...)
 
   # select columns to copy - we don't want duplicates from the data grid
   columns_to_copy <- setdiff(colnames(data), colnames(out))

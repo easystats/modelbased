@@ -401,6 +401,9 @@ estimate_means <- function(model,
     means <- format(estimated, model, ci = ci, ...)
   }
 
+  # sanity check - did method return standard errors?
+  .check_standard_errors(out = means, model = model, verbose = verbose)
+
   # restore attributes later
   info <- attributes(estimated)
 
