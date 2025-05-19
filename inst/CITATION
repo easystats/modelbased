@@ -1,11 +1,13 @@
 bibentry(
-    bibtype="Article",
-	title="Estimation of Model-Based Predictions, Contrasts and Means.",
-	author=c(person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Indrajeet", "Patil"), person("Daniel", "Lüdecke")),
-    journal="CRAN",
-    doi="",
-	year="2020",
-	url="https://github.com/easystats/modelbased",
-	textVersion = "Makowski, D., Ben-Shachar, M. S., Patil, I., & Lüdecke, D. (2020). Estimation of Model-Based Predictions, Contrasts and Means. CRAN.",
-	mheader = "To cite 'modelbased' in publications use:"
+  bibtype = "article",
+  key = "modelbasedPackage",
+  title = "{modelbased}: An {R} package to make the most out of your statistical models through marginal means, marginal effects, and model predictions.",
+	volume = "",
+	doi = "10.21105/joss.",
+	number = "",
+	journal = "Journal of Open Source Software",
+	author = c(person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Brenton M.", "Wiernik"), person("Indrajeet", "Patil"), person("Rémi", "Thériault"), person("Daniel", "Lüdecke")),
+	year = "2025",
+	pages = "",
+  url="https://joss.theoj.org/papers/10.21105/joss.02306"
 )
