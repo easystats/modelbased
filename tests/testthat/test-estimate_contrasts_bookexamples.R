@@ -18,23 +18,23 @@ test_that("estimate_contrasts - book examples 1", {
 
   puppy_love$short_vs_long <- factor(
     short_vs_long,
-    levels = c("short", "long", "no treatmen")
+    levels = c("short", "long", "no treatment")
   )
 
   puppy_love$puppy_love <- puppy_love$puppy_love - mean(puppy_love$puppy_love)
 
   # fit model
-  m1 <- lm(happiness ~ puppy_love + dose + dose:puppy_love, data = puppy_love)
+  m1 <- lm(happiness ~ puppy_love * dose, data = puppy_love)
   m2 <- lm(happiness ~ puppy_love * dose_original, data = puppy_love)
 
   expect_equal(
-    coef(m1)["txtreat_vs_none"],
+    coef(m1)["dosetreat_vs_none"],
     estimate_contrasts(m2, "dose_original", comparison = "((b2+b3)/2) = b1")$Difference,
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
   expect_equal(
-    coef(m1)["txshort_vs_long"],
+    coef(m1)["doseshort_vs_long"],
     estimate_contrasts(m2, "dose_original", comparison = "b3 = b2")$Difference,
     tolerance = 1e-4,
     ignore_attr = TRUE
