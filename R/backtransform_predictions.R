@@ -43,7 +43,7 @@
     if (!is.null(dots$sigma) && !is.na(dots$sigma)) {
       residual_variance <- dots$sigma^2
     }
-    l <- .bias_correction(model, residual_variance, verbose)$linkinv
+    l <- .bias_correction(model, residual_variance, verbose, ...)$linkinv
     if (is.null(l)) {
       l <- insight::link_inverse(model)
     }
@@ -56,14 +56,14 @@
 
 # apply bias-correction for back-transformation of predictions on the link-scale
 # we want sigma^2 (residual_variance) here to calculate the correction
-.bias_correction <- function(model = NULL, residual_variance = NULL, verbose = TRUE) {
+.bias_correction <- function(model = NULL, residual_variance = NULL, verbose = TRUE, ...) {
   # we need a model object
   if (is.null(model)) {
     return(NULL)
   }
   # extract residual variance, if not provided
   if (is.null(residual_variance)) {
-    residual_variance <- .get_residual_variance(model) # returns sigma^2
+    residual_variance <- .get_residual_variance(model, ...) # returns sigma^2
   }
   # we need residual variance
   if (is.null(residual_variance)) {
@@ -100,9 +100,9 @@
 }
 
 
-.get_residual_variance <- function(x) {
+.get_residual_variance <- function(x, tolerance = 1e-10, ...) {
   if (insight::is_mixed_model(x)) {
-    out <- .safe(insight::get_variance_residual(x))
+    out <- .safe(insight::get_variance_residual(x, tolerance = tolerance))
   } else {
     out <- .safe(insight::get_sigma(x, ci = NULL, no_recursion = TRUE, verbose = FALSE)^2, 0)
     if (!length(out)) {

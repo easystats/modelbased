@@ -126,10 +126,10 @@
 #'
 #' # custom factor contrasts - contrasts the average effects of two levels
 #' # against the remaining third level
-#' data(contrast_example, package = "modelbased")
+#' data(puppy_love, package = "modelbased")
 #' cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
-#' model <- lm(outcome ~ score * tx, data = contrast_example)
-#' estimate_slopes(model, "score", by = "tx", comparison = cond_tx)
+#' model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
+#' estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 #'
 #' # Other models (mixed, Bayesian, ...)
 #' data <- iris
@@ -235,6 +235,16 @@ estimate_contrasts.default <- function(model,
       backend = backend
     )
   }
+
+  # sanity check - did method return standard errors?
+  .check_standard_errors(
+    out,
+    by = by,
+    contrast = contrast,
+    model = model,
+    model_name = deparse(substitute(model)),
+    verbose = verbose
+  )
 
   # restore attributes later
   info <- attributes(estimated)

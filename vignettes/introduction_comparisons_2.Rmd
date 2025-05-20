@@ -46,20 +46,22 @@ The first example demonstrates how to define and apply user-defined contrasts to
 
 First, we define two specific contrasts: `treat_vs_none` (comparing the average of two treatment levels to a control level) and `short_vs_long` (comparing two treatment levels against each other).
 
-To illustrate the effect of these custom contrasts, the code creates a copy of the original treatment factor (`tx_ori`) before applying the new contrasts to the `tx` factor. It also centers a continuous predictor, `score`, to better interpret the main effects of the interaction term.
+To illustrate the effect of these custom contrasts, the code creates a copy of the original treatment factor (`dose_original`) before applying the new contrasts to the `dose` factor. It also centers a continuous predictor, `puppy_love`, to better interpret the main effects of the interaction term.
 
-Two linear models are then fitted: `m1` uses the `tx` factor with the user-defined contrasts, while `m2` uses the original `tx_ori` factor. The `compare_parameters()` function is used to show that `m1` directly estimates coefficients corresponding to `treat_vs_none` and `short_vs_long`, which are not directly available in `m2`.
+Two linear models are then fitted: `m1` uses the `dose` factor with the user-defined contrasts, while `m2` uses the original `dose_original` factor. The `compare_parameters()` function is used to show that `m1` directly estimates coefficients corresponding to `treat_vs_none` and `short_vs_long`, which are not directly available in `m2`.
 
 Finally, the code uses `estimate_means()` on `m2` to get the marginal means for the original factor levels, to identify which estimated means refer to which factor level. This is required for the next step, where we use `estimate_contrasts()` to perform hypothesis tests equivalent to the user-defined contrasts, `((b2+b3)/2) = b1` (*the average of two treatment levels - `b2 + b3 / 2` - to a control level*) and `b3 = b2` (*comparing two treatment levels against each other*), showing how such comparisons can be made even without pre-defining contrasts on the factor itself.
+
+Data stems from the `{discovr}` package (Field 2025).
 
 ```{r}
 library(modelbased)
 library(parameters)
 
-data(contrast_example, package = "modelbased")
+data(puppy_love, package = "modelbased")
 
 # the levels for our treatment variable
-levels(contrast_example$tx)
+levels(puppy_love$dose)
 
 # set contrasts
 treat_vs_none <- c(-2 / 3, 1 / 3, 1 / 3)
@@ -67,16 +69,16 @@ short_vs_long <- c(0, -1 / 2, 1 / 2)
 
 # we copy this variable to compare original factor contrasts with
 # user-defined factor contrasts
-contrast_example$tx_ori <- contrast_example$tx
-contrasts(contrast_example$tx) <- cbind(treat_vs_none, short_vs_long)
+puppy_love$dose_original <- puppy_love$dose
+contrasts(puppy_love$dose) <- cbind(treat_vs_none, short_vs_long)
 
 # center variable
-contrast_example$score <- contrast_example$score - mean(contrast_example$score)
+puppy_love$puppy_love <- puppy_love$puppy_love - mean(puppy_love$puppy_love)
 
 # fit model, with user defined contrasts
-m1 <- lm(outcome ~ score * tx, data = contrast_example)
+m1 <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 # fit model without user defined contrasts
-m2 <- lm(outcome ~ score * tx_ori, data = contrast_example)
+m2 <- lm(happiness ~ puppy_love * dose_original, data = puppy_love)
 
 # we're interested in the effect (i.e. coefficient) of "treat_vs_none"
 # and "short_vs_long". These are 1.94 and 0.13 in model 1. In model 2,
@@ -86,41 +88,41 @@ compare_parameters(m1, m2)
 # we first use `estimate_means()` to find which estimate relates
 # to which factor level of interest. we want to average the two
 # treatment level and compare it to the control level
-estimate_means(m2, "tx_ori")
+estimate_means(m2, "dose_original")
 
 # treat_vs_none (i.e. average of short and long vs. none)
 # this contrasts corresponds to the estimate of the model m1, 1.94
-estimate_contrasts(m2, "tx_ori", comparison = "((b2+b3)/2) = b1")
+estimate_contrasts(m2, "dose_original", comparison = "((b2+b3)/2) = b1")
 
 # short_vs_long
 # this contrasts corresponds to the estimate of the model m1, 0.13
-estimate_contrasts(m2, "tx_ori", comparison = "b3 = b2")
+estimate_contrasts(m2, "dose_original", comparison = "b3 = b2")
 ```
 
 # Using a matrix for contrasts
 
-Comparisons are extremely flexible. For instance, it is possible to calculate the marginal effects for the predictor `score`, or the marginal effects for `score` at each level of the treatment, `tx_ori`. We can do this by using `estimate_slopes()`.
+Comparisons are extremely flexible. For instance, it is possible to calculate the marginal effects for the predictor `puppy_love`, or the marginal effects for `puppy_love` at each level of the treatment, `dose_original`. We can do this by using `estimate_slopes()`.
 
 ```{r}
-# marginal effect for "score"
-estimate_slopes(m2, "score")
+# marginal effect for "puppy_love"
+estimate_slopes(m2, "puppy_love")
 
-# marginal effect for "score" at levels of "tx_ori"
-estimate_slopes(m2, "score", by = "tx_ori")
+# marginal effect for "puppy_love" at levels of "dose_original"
+estimate_slopes(m2, "puppy_love", by = "dose_original")
 ```
 
 Again, it it possible to combine levels, by using a matrix that defines the contrasts of interest, and pass this matrix as value for the `comparison` argument.
 
-In essence, in the next example, the marginal effect (slope) of `score` within each level of `tx_ori` is calculated, and then two specific weighted combinations of these slopes as defined by the `cond_tx` matrix are computed. The first combination isolates and scales the slope from the first level of `tx_ori`, while the second creates a weighted sum of the slopes from the second and third levels.
+In essence, in the next example, the marginal effect (slope) of `puppy_love` within each level of `dose_original` is calculated, and then two specific weighted combinations of these slopes as defined by the `cond_tx` matrix are computed. The first combination isolates and scales the slope from the first level of `dose_original`, while the second creates a weighted sum of the slopes from the second and third levels.
 
 ```{r}
 # we want the marginal effects of slopes for treatment vs. no treatment
 # this is represented by the following contrast matrix
 cond_tx <- cbind("no treatment" = c(-2 / 3, 0, 0), "treatment" = c(0, 1 / 3, 1 / 3))
 
-# marginal effect for "score" at average effect of "treatment" (short + long)
+# marginal effect for "puppy_love" at average effect of "treatment" (short + long)
 # and "no treatment"
-estimate_slopes(m2, "score", by = "tx_ori", comparison = cond_tx)
+estimate_slopes(m2, "puppy_love", by = "dose_original", comparison = cond_tx)
 ```
 
 # Jointly test multiple hypotheses
@@ -168,3 +170,7 @@ Some key takeaways:
 - **Powerful Joint Hypothesis Testing:** The `comparison = "joint"` argument in `estimate_contrasts()` enables omnibus tests. This is particularly useful for interactions, as it allows you to test whether a factor (e.g., `time`) has any significant effect within each level of another factor (e.g., `coffee`), providing a global assessment before (or instead of) diving into all individual pairwise comparisons.
 
 [Go to next vignette: **Comparisons of Slopes, Floodlight and Spotlight Analysis (Johnson-Neyman Intervals)**](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
+
+# References
+
+Field, A. P. (2025). Discovering statistics using R and RStudio (2nd ed.). London: Sage.

@@ -1,3 +1,15 @@
+# modelbased (devel)
+
+## Changes
+
+* `estimate_contrasts()` for results from `estimate_relation()` and alike is
+  now more efficient for larger number of contrasts.
+
+## Bug fixes
+
+* Fixed issue with formatted labels in `estimate_contrasts()` for results from
+  `estimate_relation()`.
+
 # modelbased 0.11.1
 
 ## Changes

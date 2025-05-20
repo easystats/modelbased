@@ -3,7 +3,6 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects")
 
 test_that("estimate_means() - mixed models", {
-  skip_if_not_installed("emmeans")
   skip_if_not_installed("lme4")
   skip_if_not_installed("glmmTMB")
 
@@ -79,4 +78,43 @@ test_that("estimate_means() - mixed models", {
   expect_identical(dim(estim3), c(4L, 6L))
   expect_equal(estim3$Probability, c(0.21521, 0.0954, 0.08453, 0.05599), tolerance = 1e-3)
   expect_equal(estim3$CI_low, c(0.14233, 0.04475, 0.03608, 0.01266), tolerance = 1e-3)
+})
+
+
+test_that("estimate_contrasts - Random Effects Levels, pairwise", {
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("datawizard")
+
+  # sample data set
+  data(efc, package = "modelbased")
+
+  # numeric to factors, set labels as levels
+  d <- datawizard::to_factor(efc, select = c("c161sex", "c172code", "c175empl"))
+  # recode age into three groups
+  d <- datawizard::recode_values(
+    d,
+    select = "c160age",
+    recode = list(`1` = "min:40", `2` = 41:64, `3` = "65:max")
+  )
+  # rename variables
+  d <- datawizard::data_rename(
+    d,
+    select = c("c161sex", "c160age", "quol_5", "c175empl"),
+    replacement = c("gender", "age", "qol", "employed")
+  )
+  # age into factor, set levels, and change labels for education
+  d <- datawizard::data_modify(d, age = factor(age, labels = c("-40", "41-64", "65+")))
+  dat <<- d
+
+  # Quality of Life score ranges from 0 to 25
+  m_null <- glmmTMB::glmmTMB(qol ~ 1 + (1 | gender:employed:age), data = dat)
+  expect_message(
+    estimate_means(m_null, by = c("gender", "employed", "age")),
+    regex = "Standard errors are probably not reliable"
+  )
+  expect_silent(
+    estimate_means(m_null, by = c("gender", "employed", "age"), verbose = FALSE)
+  )
+  out <- estimate_relation(m_null, by = c("gender", "employed", "age"))
+  expect_true(any(out$SE != out$SE[1]))
 })
