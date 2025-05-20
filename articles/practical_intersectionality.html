@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -438,26 +438,26 @@ within the levels of the remaining predictors.</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">predictions</span>, contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gender"</span>, <span class="st">"employed"</span><span class="op">)</span>, by <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Model-based Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter             | age   |      Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; Male no -Female no    | -40   |  0.07 (-2.11,  2.25) | 0.951</span></span>
-<span><span class="co">#&gt; Male no -Male yes     | -40   | -0.88 (-3.18,  1.43) | 0.455</span></span>
-<span><span class="co">#&gt; Female no -Male yes   | -40   | -0.95 (-2.99,  1.10) | 0.364</span></span>
-<span><span class="co">#&gt; Male no -Female yes   | -40   | -0.79 (-2.89,  1.30) | 0.457</span></span>
-<span><span class="co">#&gt; Female no -Female yes | -40   | -0.86 (-2.67,  0.94) | 0.348</span></span>
-<span><span class="co">#&gt; Male yes -Female yes  | -40   |  0.08 (-1.86,  2.03) | 0.932</span></span>
-<span><span class="co">#&gt; Male no -Female no    | 41-64 |  1.18 (-0.26,  2.63) | 0.109</span></span>
-<span><span class="co">#&gt; Male no -Male yes     | 41-64 | -0.53 (-2.22,  1.16) | 0.538</span></span>
-<span><span class="co">#&gt; Female no -Male yes   | 41-64 | -1.71 (-2.98, -0.44) | 0.008</span></span>
-<span><span class="co">#&gt; Male no -Female yes   | 41-64 |  0.84 (-0.62,  2.30) | 0.258</span></span>
-<span><span class="co">#&gt; Female no -Female yes | 41-64 | -0.34 (-1.28,  0.60) | 0.476</span></span>
-<span><span class="co">#&gt; Male yes -Female yes  | 41-64 |  1.37 ( 0.09,  2.66) | 0.036</span></span>
-<span><span class="co">#&gt; Male no -Female no    | 65+   |  0.88 (-0.62,  2.38) | 0.250</span></span>
-<span><span class="co">#&gt; Male no -Male yes     | 65+   | -0.93 (-3.39,  1.53) | 0.459</span></span>
-<span><span class="co">#&gt; Female no -Male yes   | 65+   | -1.81 (-4.10,  0.48) | 0.122</span></span>
-<span><span class="co">#&gt; Male no -Female yes   | 65+   | -0.44 (-2.82,  1.94) | 0.717</span></span>
-<span><span class="co">#&gt; Female no -Female yes | 65+   | -1.32 (-3.53,  0.89) | 0.241</span></span>
-<span><span class="co">#&gt; Male yes -Female yes  | 65+   |  0.49 (-2.45,  3.43) | 0.745</span></span>
+<span><span class="co">#&gt; Level1     | Level2      | age   |      Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Male, no   | Female, no  | -40   |  0.07 (-2.11,  2.25) | 0.951</span></span>
+<span><span class="co">#&gt; Male, no   | Male, yes   | -40   | -0.88 (-3.18,  1.43) | 0.455</span></span>
+<span><span class="co">#&gt; Female, no | Male, yes   | -40   | -0.95 (-2.99,  1.10) | 0.364</span></span>
+<span><span class="co">#&gt; Male, no   | Female, yes | -40   | -0.79 (-2.89,  1.30) | 0.457</span></span>
+<span><span class="co">#&gt; Female, no | Female, yes | -40   | -0.86 (-2.67,  0.94) | 0.348</span></span>
+<span><span class="co">#&gt; Male, yes  | Female, yes | -40   |  0.08 (-1.86,  2.03) | 0.932</span></span>
+<span><span class="co">#&gt; Male, no   | Female, no  | 41-64 |  1.18 (-0.26,  2.63) | 0.109</span></span>
+<span><span class="co">#&gt; Male, no   | Male, yes   | 41-64 | -0.53 (-2.22,  1.16) | 0.538</span></span>
+<span><span class="co">#&gt; Female, no | Male, yes   | 41-64 | -1.71 (-2.98, -0.44) | 0.008</span></span>
+<span><span class="co">#&gt; Male, no   | Female, yes | 41-64 |  0.84 (-0.62,  2.30) | 0.258</span></span>
+<span><span class="co">#&gt; Female, no | Female, yes | 41-64 | -0.34 (-1.28,  0.60) | 0.476</span></span>
+<span><span class="co">#&gt; Male, yes  | Female, yes | 41-64 |  1.37 ( 0.09,  2.66) | 0.036</span></span>
+<span><span class="co">#&gt; Male, no   | Female, no  | 65+   |  0.88 (-0.62,  2.38) | 0.250</span></span>
+<span><span class="co">#&gt; Male, no   | Male, yes   | 65+   | -0.93 (-3.39,  1.53) | 0.459</span></span>
+<span><span class="co">#&gt; Female, no | Male, yes   | 65+   | -1.81 (-4.10,  0.48) | 0.122</span></span>
+<span><span class="co">#&gt; Male, no   | Female, yes | 65+   | -0.44 (-2.82,  1.94) | 0.717</span></span>
+<span><span class="co">#&gt; Female, no | Female, yes | 65+   | -1.32 (-3.53,  0.89) | 0.241</span></span>
+<span><span class="co">#&gt; Male, yes  | Female, yes | 65+   |  0.49 (-2.45,  3.43) | 0.745</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: qol</span></span>
 <span><span class="co">#&gt; Predictors contrasted: gender, employed</span></span></code></pre></div>

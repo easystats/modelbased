@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -249,10 +249,10 @@ response, excluding the zero-inflation component.</p>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z |  df</span></span>
-<span><span class="co">#&gt; ------------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   | 1.12 | 0.26 | [0.61, 1.63] |  4.29 | Inf</span></span>
-<span><span class="co">#&gt; no    | 3.51 | 0.32 | [2.89, 4.14] | 11.00 | Inf</span></span>
+<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
+<span><span class="co">#&gt; ------------------------------------------</span></span>
+<span><span class="co">#&gt; yes   | 1.12 | 0.26 | [0.61, 1.63] |  4.29</span></span>
+<span><span class="co">#&gt; no    | 3.51 | 0.32 | [2.89, 4.14] | 11.00</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
@@ -260,11 +260,13 @@ response, excluding the zero-inflation component.</p>
 <span><span class="co">#&gt; Predictions are on the conditional-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"conditional"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |  df |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |       2.39 | 0.40 | [1.60, 3.18] | 5.93 | Inf | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; no     | yes    |       2.39 | 0.40 | [1.60, 3.18] | 5.93 | &lt; .001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>
@@ -283,10 +285,10 @@ zero-inflation component.</p>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z |  df</span></span>
-<span><span class="co">#&gt; ------------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   | 0.27 | 0.05 | [0.17, 0.37] |  5.47 | Inf</span></span>
-<span><span class="co">#&gt; no    | 2.27 | 0.22 | [1.83, 2.70] | 10.19 | Inf</span></span>
+<span><span class="co">#&gt; mined | Mean |   SE |       95% CI |     z</span></span>
+<span><span class="co">#&gt; ------------------------------------------</span></span>
+<span><span class="co">#&gt; yes   | 0.27 | 0.05 | [0.17, 0.37] |  5.47</span></span>
+<span><span class="co">#&gt; no    | 2.27 | 0.22 | [1.83, 2.70] | 10.19</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
@@ -294,11 +296,13 @@ zero-inflation component.</p>
 <span><span class="co">#&gt; Predictions are on the response-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |  df |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |       1.99 | 0.23 | [1.55, 2.44] | 8.78 | Inf | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |       95% CI |    z |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; no     | yes    |       1.99 | 0.23 | [1.55, 2.44] | 8.78 | &lt; .001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>
@@ -316,10 +320,10 @@ not, use <code>predict = "zprob"</code>.</p>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; mined | Probability |   SE |       95% CI |     z |  df</span></span>
-<span><span class="co">#&gt; -------------------------------------------------------</span></span>
-<span><span class="co">#&gt; yes   |        0.76 | 0.04 | [0.67, 0.84] | 17.54 | Inf</span></span>
-<span><span class="co">#&gt; no    |        0.36 | 0.03 | [0.30, 0.41] | 12.75 | Inf</span></span>
+<span><span class="co">#&gt; mined | Probability |   SE |       95% CI |     z</span></span>
+<span><span class="co">#&gt; -------------------------------------------------</span></span>
+<span><span class="co">#&gt; yes   |        0.76 | 0.04 | [0.67, 0.84] | 17.54</span></span>
+<span><span class="co">#&gt; no    |        0.36 | 0.03 | [0.30, 0.41] | 12.75</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors modulated: mined</span></span>
@@ -327,11 +331,13 @@ not, use <code>predict = "zprob"</code>.</p>
 <span><span class="co">#&gt; Predictions are on the zprob-scale.</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"mined"</span>, predict <span class="op">=</span> <span class="st">"zprob"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
+<span><span class="co">#&gt; Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead.</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     z |  df |      p</span></span>
-<span><span class="co">#&gt; ---------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; no     | yes    |      -0.40 | 0.05 | [-0.50, -0.30] | -7.92 | Inf | &lt; .001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |         95% CI |     z |      p</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; no     | yes    |      -0.40 | 0.05 | [-0.50, -0.30] | -7.92 | &lt; .001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: count</span></span>
 <span><span class="co">#&gt; Predictors contrasted: mined</span></span>

@@ -61,7 +61,7 @@ See the details section below for details about the different possibilities.'><m
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -615,65 +615,97 @@ to generate model predictions for specific combinations of predictor values.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Mixed models</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">lme4</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html" class="external-link">lmer</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">gear</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">gear</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_expectation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> wt   | gear | Predicted |   SE |         95% CI | Residuals</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.62 | 4.00 |     24.04 | 0.97 | [22.07, 26.02] |     -3.04</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.88 | 4.00 |     22.76 | 0.93 | [20.86, 24.65] |     -1.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.32 | 4.00 |     25.56 | 1.04 | [23.42, 27.70] |     -2.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.21 | 3.00 |     19.64 | 0.92 | [17.77, 21.52] |      1.76</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 3.00 |     18.51 | 0.94 | [16.59, 20.42] |      0.19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.46 | 3.00 |     18.41 | 0.94 | [16.48, 20.33] |     -0.31</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.57 | 3.00 |     17.85 | 0.96 | [15.89, 19.81] |     -3.55</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.19 | 4.00 |     21.17 | 0.91 | [19.30, 23.04] |      3.23</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.15 | 4.00 |     21.37 | 0.91 | [19.50, 23.24] |      1.43</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 4.00 |     19.91 | 0.94 | [17.99, 21.83] |     -0.71</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 4.00 |     19.91 | 0.94 | [17.99, 21.83] |     -2.11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.07 | 3.00 |     15.33 | 1.10 | [13.08, 17.58] |      1.07</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.73 | 3.00 |     17.04 | 0.99 | [15.01, 19.08] |      0.26</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.78 | 3.00 |     16.79 | 1.01 | [14.73, 18.86] |     -1.59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.25 | 3.00 |      9.37 | 1.64 | [ 6.01, 12.74] |      1.03</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 | 3.00 |      8.50 | 1.74 | [ 4.94, 12.06] |      1.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.34 | 3.00 |      8.90 | 1.70 | [ 5.42, 12.37] |      5.80</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.20 | 4.00 |     26.16 | 1.08 | [23.94, 28.38] |      6.24</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.61 | 4.00 |     29.11 | 1.32 | [26.40, 31.82] |      1.29</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.83 | 4.00 |     28.00 | 1.23 | [25.49, 30.51] |      5.90</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.46 | 3.00 |     23.42 | 1.00 | [21.37, 25.48] |     -1.92</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.52 | 3.00 |     18.10 | 0.95 | [16.16, 20.05] |     -2.60</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 3.00 |     18.53 | 0.94 | [16.61, 20.45] |     -3.33</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.84 | 3.00 |     16.49 | 1.02 | [14.39, 18.59] |     -3.19</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.85 | 3.00 |     16.46 | 1.03 | [14.36, 18.56] |      2.74</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.94 | 4.00 |     27.50 | 1.18 | [25.08, 29.92] |     -0.20</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.14 | 5.00 |     24.65 | 1.10 | [22.39, 26.91] |      1.35</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 | 5.00 |     27.81 | 1.37 | [25.01, 30.62] |      2.59</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.17 | 5.00 |     19.45 | 0.91 | [17.58, 21.33] |     -3.65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.77 | 5.00 |     21.47 | 0.94 | [19.55, 23.40] |     -1.77</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.57 | 5.00 |     17.44 | 0.96 | [15.47, 19.40] |     -2.44</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.78 | 4.00 |     23.24 | 0.94 | [21.32, 25.16] |     -1.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.62 | 4    |     23.64 | 1.08 | [21.53, 25.76] |     -2.64</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.88 | 4    |     22.32 | 1.13 | [20.11, 24.53] |     -1.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.32 | 4    |     25.20 | 1.05 | [23.14, 27.26] |     -2.40</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.21 | 3    |     19.87 | 0.81 | [18.28, 21.46] |      1.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 3    |     18.70 | 0.75 | [17.23, 20.18] | -1.00e-03</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.46 | 3    |     18.60 | 0.75 | [17.13, 20.06] |     -0.50</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.57 | 3    |     18.03 | 0.73 | [16.60, 19.46] |     -3.73</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.19 | 4    |     20.68 | 1.22 | [18.29, 23.08] |      3.72</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.15 | 4    |     20.89 | 1.21 | [18.52, 23.26] |      1.91</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 4    |     19.39 | 1.32 | [16.80, 21.97] |     -0.19</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 4    |     19.39 | 1.32 | [16.80, 21.97] |     -1.59</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.07 | 3    |     15.43 | 0.74 | [13.98, 16.88] |      0.97</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.73 | 3    |     17.19 | 0.72 | [15.79, 18.60] |      0.11</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.78 | 3    |     16.94 | 0.71 | [15.54, 18.34] |     -1.74</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.25 | 3    |      9.30 | 1.21 | [ 6.93, 11.67] |      1.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 | 3    |      8.40 | 1.30 | [ 5.84, 10.95] |      2.00</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.34 | 3    |      8.81 | 1.26 | [ 6.34, 11.28] |      5.89</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.20 | 4    |     25.83 | 1.05 | [23.77, 27.88] |      6.57</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.61 | 4    |     28.86 | 1.13 | [26.64, 31.08] |      1.54</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.83 | 4    |     27.72 | 1.09 | [25.59, 29.85] |      6.18</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.46 | 3    |     23.76 | 1.14 | [21.53, 26.00] |     -2.26</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.52 | 3    |     18.29 | 0.74 | [16.84, 19.73] |     -2.79</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.44 | 3    |     18.73 | 0.75 | [17.25, 20.20] |     -3.53</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.84 | 3    |     16.62 | 0.71 | [15.22, 18.02] |     -3.32</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.85 | 3    |     16.60 | 0.72 | [15.20, 18.00] |      2.60</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.94 | 4    |     27.20 | 1.07 | [25.10, 29.30] |      0.10</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.14 | 5    |     25.30 | 1.61 | [22.15, 28.45] |      0.70</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 | 5    |     28.56 | 1.92 | [24.78, 32.33] |      1.84</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.17 | 5    |     19.95 | 1.24 | [17.53, 22.37] |     -4.15</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.77 | 5    |     22.03 | 1.35 | [19.38, 24.68] |     -2.33</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.57 | 5    |     17.87 | 1.17 | [15.58, 20.17] |     -2.87</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.78 | 4    |     22.81 | 1.11 | [20.64, 24.98] |     -1.41</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Predictions</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> wt   | gear | Predicted |   SE |         95% CI</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 | 0.00 |     28.56 | 1.37 | [25.75, 31.37]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 | 0.00 |     26.36 | 1.18 | [23.95, 28.78]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 | 0.00 |     24.17 | 1.03 | [22.07, 26.27]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 | 0.00 |     21.98 | 0.93 | [20.07, 23.89]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 | 0.00 |     19.79 | 0.92 | [17.91, 21.67]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 | 0.00 |     17.59 | 0.98 | [15.58, 19.61]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 | 0.00 |     15.40 | 1.12 | [13.12, 17.69]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 | 0.00 |     13.21 | 1.30 | [10.55, 15.87]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 | 0.00 |     11.02 | 1.51 | [ 7.93, 14.11]</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 | 0.00 |      8.83 | 1.74 | [ 5.27, 12.39]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> wt   | Predicted |   SE |             CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.51 |     28.89 | 1.35 | [26.23, 31.54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1.95 |     26.63 | 1.11 | [24.45, 28.80]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.38 |     24.37 | 0.89 | [22.63, 26.12]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2.82 |     22.11 | 0.73 | [20.69, 23.54]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.25 |     19.86 | 0.66 | [18.57, 21.15]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3.69 |     17.60 | 0.71 | [16.21, 18.99]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.12 |     15.35 | 0.86 | [13.66, 17.04]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.55 |     13.09 | 1.07 | [10.98, 15.19]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4.99 |     10.83 | 1.32 | [ 8.26, 13.41]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5.42 |      8.57 | 1.57 | [ 5.49, 11.66]</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: wt</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Predict random effects and calculate contrasts</span></span></span>
+<span class="r-in"><span><span class="va">estim</span> <span class="op">&lt;-</span> <span class="fu">estimate_relation</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"gear"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">estim</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Predictions</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> gear | Predicted |   SE |         95% CI</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3    |     19.86 | 0.81 | [18.27, 21.45]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4    |     20.54 | 1.23 | [18.13, 22.96]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5    |     19.71 | 1.22 | [17.30, 22.11]</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: gear</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors controlled: wt (3.2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">estim</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Model-based Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |        95% CI | Statistic |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -----------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 4      |      -0.68 | 1.48 | [-3.58, 2.21] |     -0.46 | 0.643</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 5      |       0.15 | 1.47 | [-2.73, 3.03] |      0.10 | 0.917</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      | 5      |       0.84 | 1.74 | [-2.57, 4.24] |      0.48 | 0.630</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: mpg</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: gear</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: wt (3.2)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Bayesian models</span></span></span>

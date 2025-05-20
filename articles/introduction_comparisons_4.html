@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -168,11 +168,11 @@ regression models are shown as <em>probabilities</em>.</p>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; x1 | Probability |       95% CI |  df</span></span>
-<span><span class="co">#&gt; -------------------------------------</span></span>
-<span><span class="co">#&gt; 1  |        0.21 | [0.11, 0.36] | Inf</span></span>
-<span><span class="co">#&gt; 2  |        0.14 | [0.05, 0.34] | Inf</span></span>
-<span><span class="co">#&gt; 3  |        0.31 | [0.16, 0.51] | Inf</span></span>
+<span><span class="co">#&gt; x1 | Probability |       95% CI</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; 1  |        0.21 | [0.11, 0.36]</span></span>
+<span><span class="co">#&gt; 2  |        0.14 | [0.05, 0.34]</span></span>
+<span><span class="co">#&gt; 3  |        0.31 | [0.16, 0.51]</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors modulated: x1</span></span>
@@ -188,11 +188,11 @@ difference between probabilities (in percentage points).</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |  df |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 2      | 1      |      -0.07 | 0.09 | [-0.25, 0.10] | -0.81 | Inf | 0.417</span></span>
-<span><span class="co">#&gt; 3      | 1      |       0.09 | 0.10 | [-0.11, 0.30] |  0.92 | Inf | 0.357</span></span>
-<span><span class="co">#&gt; 3      | 2      |       0.17 | 0.11 | [-0.05, 0.38] |  1.51 | Inf | 0.130</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |      -0.07 | 0.09 | [-0.25, 0.10] | -0.81 | 0.417</span></span>
+<span><span class="co">#&gt; 3      | 1      |       0.09 | 0.10 | [-0.11, 0.30] |  0.92 | 0.357</span></span>
+<span><span class="co">#&gt; 3      | 2      |       0.17 | 0.11 | [-0.05, 0.38] |  1.51 | 0.130</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: x1</span></span>
@@ -210,11 +210,11 @@ in this case as <em>log-odds</em>. To do so, use
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |  df |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 2      | 1      |      -0.51 | 0.66 | [-1.80, 0.79] | -0.77 | Inf | 0.443</span></span>
-<span><span class="co">#&gt; 3      | 1      |       0.50 | 0.53 | [-0.54, 1.55] |  0.94 | Inf | 0.345</span></span>
-<span><span class="co">#&gt; 3      | 2      |       1.01 | 0.70 | [-0.36, 2.38] |  1.45 | Inf | 0.147</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |   SE |        95% CI |     z |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |      -0.51 | 0.66 | [-1.80, 0.79] | -0.77 | 0.443</span></span>
+<span><span class="co">#&gt; 3      | 1      |       0.50 | 0.53 | [-0.54, 1.55] |  0.94 | 0.345</span></span>
+<span><span class="co">#&gt; 3      | 2      |       1.01 | 0.70 | [-0.36, 2.38] |  1.45 | 0.147</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: x1</span></span>
@@ -230,11 +230,11 @@ example, to transform contrasts to <em>odds ratios</em>, we can use
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"x1"</span>, predict <span class="op">=</span> <span class="st">"link"</span>, transform <span class="op">=</span> <span class="va">exp</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | Difference |        95% CI |  df |     p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 2      | 1      |       0.60 | [0.16,  2.20] | Inf | 0.443</span></span>
-<span><span class="co">#&gt; 3      | 1      |       1.65 | [0.58,  4.71] | Inf | 0.345</span></span>
-<span><span class="co">#&gt; 3      | 2      |       2.75 | [0.70, 10.78] | Inf | 0.147</span></span>
+<span><span class="co">#&gt; Level1 | Level2 | Difference |        95% CI |     p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------</span></span>
+<span><span class="co">#&gt; 2      | 1      |       0.60 | [0.16,  2.20] | 0.443</span></span>
+<span><span class="co">#&gt; 3      | 1      |       1.65 | [0.58,  4.71] | 0.345</span></span>
+<span><span class="co">#&gt; 3      | 2      |       2.75 | [0.70, 10.78] | 0.147</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: x1</span></span>
