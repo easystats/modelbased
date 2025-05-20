@@ -1,22 +1,28 @@
-#' Automated plotting for 'modelbased' objects
+#' @title Automated plotting for 'modelbased' objects
+#' @name visualisation_recipe.estimate_predicted
 #'
-#' Most 'modelbased' objects can be visualized using the `plot()` function, which
-#' internally calls the `visualisation_recipe()` function. See the **examples**
-#' below for more information and examples on how to create and customize plots.
+#' @description
+#' Most **modelbased** objects can be visualized using the `plot()` function,
+#' which internally calls the `visualisation_recipe()` function. See the
+#' examples below for more information and examples on how to create and
+#' customize plots.
 #'
-#' The plotting works by mapping any predictors from the `by` argument to the x-axis,
-#' colors, alpha (transparency) and facets. Thus, the appearance of the plot depends
-#' on the order of the variables that you specify in the `by` argument. For instance,
-#' the plots corresponding to `estimate_relation(model, by=c("Species", "Sepal.Length"))`
-#' and `estimate_relation(model, by=c("Sepal.Length", "Species"))` will look different.
+#' The plotting works by mapping any predictors from the `by` argument to the
+#' x-axis, colors, alpha (transparency) and facets. Thus, the appearance of the
+#' plot depends on the order of the variables that you specify in the `by`
+#' argument. For instance, the plots corresponding to
+#' `estimate_relation(model, by=c("Species", "Sepal.Length"))` and
+#' `estimate_relation(model, by=c("Sepal.Length", "Species"))` will look
+#' different.
 #'
 #' The automated plotting is primarily meant for convenient visual checks, but
 #' for publication-ready figures, we recommend re-creating the figures using the
-#' `ggplot2` package directly.
+#' `{ggplot2}` package directly.
 #'
 #' @param x A modelbased object.
 #' @param show_data Logical, if `TRUE`, display the "raw" data as a background
-#'   to the model-based estimation.
+#' to the model-based estimation. This argument will be ignored for plotting
+#' objects returned by `estimate_slopes()` or `estimate_grouplevel()`.
 #' @param join_dots Logical, if `TRUE` (default) and for categorical focal terms
 #' in `by`, dots (estimates) are connected by lines, i.e. plots will be a
 #' combination of dots with error bars and connecting lines. If `FALSE`, only
@@ -33,12 +39,16 @@
 #' e.g. `options(modelbased_numeric_as_discrete = 10)`.
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
-#' @param ... Not used.
+#' @param ... Arguments passed from `plot()` to `visualisation_recipe()`.
 #'
 #' @details There are two options to remove the confidence bands or errors bars
 #' from the plot. To remove error bars, simply set the `pointrange` geom to
 #' `point`, e.g. `plot(..., pointrange = list(geom = "point"))`. To remove the
 #' confidence bands from line geoms, use `ribbon = "none"`.
+#'
+#' @return An object of class `visualisation_recipe` that describes the layers
+#' used to create a plot based on `{ggplot2}`. The related `plot()` method is in
+#' the `{see}` package.
 #'
 #' @section Global Options to Customize Plots:
 #' Some arguments for `plot()` can get global defaults using `options()`:
