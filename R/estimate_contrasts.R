@@ -236,6 +236,16 @@ estimate_contrasts.default <- function(model,
     )
   }
 
+  # sanity check - did method return standard errors?
+  .check_standard_errors(
+    out,
+    by = by,
+    contrast = contrast,
+    model = model,
+    model_name = deparse(substitute(model)),
+    verbose = verbose
+  )
+
   # restore attributes later
   info <- attributes(estimated)
 

@@ -277,7 +277,7 @@ to generate model predictions for specific combinations of predictor values.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("see", "lme4", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("see", "glmmTMB", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)
 
 # Linear Models
@@ -305,9 +305,17 @@ estimate_expectation(model)
 estimate_relation(model)
 
 # Mixed models
-model <- lme4::lmer(mpg ~ wt + (1 | gear), data = mtcars)
+data(mtcars)
+mtcars$gear <- as.factor(mtcars$gear)
+model <- glmmTMB::glmmTMB(mpg ~ wt + (1 | gear), data = mtcars)
 estimate_expectation(model)
 estimate_relation(model)
+
+# Predict random effects and calculate contrasts
+estim <- estimate_relation(model, by = "gear")
+estim
+
+estimate_contrasts(estim)
 
 # Bayesian models
 \donttest{
