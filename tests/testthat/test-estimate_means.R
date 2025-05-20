@@ -464,3 +464,40 @@ test_that("estimate_means, error on invalid type", {
     regex = "The option provided"
   )
 })
+
+
+test_that("estimate_means, coxph-survival", {
+  skip_if_not_installed("survival")
+  model <- survival::coxph(
+    survival::Surv(dtime, death) ~ hormon + age + I(age^2),
+    data = survival::rotterdam
+  )
+  emm <- estimate_means(
+    model,
+    c("dtime=c(1000, 2000, 3000, 4000)", "hormon"),
+    predict = "survival"
+  )
+  expect_named(
+    emm,
+    c("dtime", "hormon", "Probability", "SE", "CI_low", "CI_high", "z")
+  )
+  expect_equal(
+    emm$Probability,
+    c(0.8982, 0.86121, 0.7775, 0.70451, 0.68016, 0.58485, 0.58174, 0.47051),
+    tolerance = 1e-4
+  )
+  emm <- estimate_means(
+    model,
+    "hormon",
+    predict = "risk"
+  )
+  expect_named(
+    emm,
+    c("hormon", "Mean", "SE", "CI_low", "CI_high", "z")
+  )
+  expect_equal(
+    emm$Mean,
+    c(0.82661, 1.15039),
+    tolerance = 1e-4
+  )
+})
