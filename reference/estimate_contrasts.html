@@ -661,10 +661,10 @@ averaging across random effects groups is then more accurate.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># custom factor contrasts - contrasts the average effects of two levels</span></span></span>
 <span class="r-in"><span><span class="co"># against the remaining third level</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">contrast_example</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">puppy_love</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cond_tx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="st">"no treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">score</span> <span class="op">*</span> <span class="va">tx</span>, data <span class="op">=</span> <span class="va">contrast_example</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"score"</span>, by <span class="op">=</span> <span class="st">"tx"</span>, comparison <span class="op">=</span> <span class="va">cond_tx</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">happiness</span> <span class="op">~</span> <span class="va">puppy_love</span> <span class="op">*</span> <span class="va">dose</span>, data <span class="op">=</span> <span class="va">puppy_love</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">"puppy_love"</span>, by <span class="op">=</span> <span class="st">"dose"</span>, comparison <span class="op">=</span> <span class="va">cond_tx</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Parameter    | Slope |   SE |        95% CI | t(24) |     p</span>
@@ -672,7 +672,7 @@ averaging across random effects groups is then more accurate.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> no treatment |  0.76 | 0.27 | [ 0.21, 1.31] |  2.86 | 0.009</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> treatment    |  0.30 | 0.22 | [-0.15, 0.75] |  1.37 | 0.184</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for score</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for puppy_love</span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...)</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
@@ -774,7 +774,7 @@ averaging across random effects groups is then more accurate.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.9000.</p>
 </div>
 
     </footer></div>
