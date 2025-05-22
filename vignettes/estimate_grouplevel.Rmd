@@ -160,8 +160,6 @@ As you can see, the first row is repeated as it corresponds to the same particip
 data_rt <- data_join(data_rt, reshaped, join = "full", by = "id")
 ```
 
-Wow! As we can see, there is a lot of between-participants variability. But what do these random parameters correspond to?
-
 ### Correlation with empirical scores
 
 We said above that the random effects are the group-level (the group unit is, in this model, the participants) version of the population-level effects (the fixed effects). One important thing to note is that they represent the **deviation from the fixed effect**, so a coefficient close to 0 means that the participants' effect is the same as the population-level effect. In other words, it's **"in the norm"** (note that we can also obtain the group-specific effect corresponding to the sum of the fixed and random by changing the `type` argument).
