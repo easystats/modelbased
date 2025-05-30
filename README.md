@@ -1,7 +1,7 @@
 
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07969/status.svg)](https://doi.org/10.21105/joss.07969)
 [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
@@ -656,6 +656,16 @@ appropriate grid of data points for which predictions or effects or
 slopes will be estimated. Since these packages support a wider range of
 models - including generalized linear models, mixed models, and Bayesian
 models - `{modelbased}` also inherits the support for such models.
+
+## Citation
+
+If this package helped you, please consider citing as follows:
+
+Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault,
+R., & Lüdecke, D. (2025). modelbased: An R package to make the most out
+of your statistical models through marginal means, marginal effects, and
+model predictions. Journal of Open Source Software, 10(109), 7969. doi:
+10.21105/joss.07969
 
 ## Code of Conduct
 
