@@ -661,6 +661,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     estimate_name <- tools::toTitleCase(predict_type)
   } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
     estimate_name <- "Probability"
+  } else if (predict_type == "survival" && info$is_survival) {
+    estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
     estimate_name <- "Probability"
   } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
