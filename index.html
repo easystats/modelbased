@@ -128,7 +128,7 @@
 <img src="logo.png" class="logo" alt=""><h1 id="modelbased-">modelbased <a class="anchor" aria-label="anchor" href="#modelbased-"></a>
 </h1>
 </div>
-<p><a href="https://github.com/easystats/modelbased/blob/master/inst/CITATION" class="external-link"><img src="https://img.shields.io/badge/Cite-Unpublished-yellow" alt="publication"></a> <a href="https://cran.r-project.org/package=modelbased" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/modelbased" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/modelbased" alt="total"></a></p>
+<p><a href="https://doi.org/10.21105/joss.07969" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.07969/status.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=modelbased" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/modelbased" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/modelbased" alt="total"></a></p>
 <p><strong><em>Make the most out of your models</em></strong></p>
 <hr>
 <p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
@@ -602,6 +602,12 @@ SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
 <p>While both packages employ the Delta method to obtain standard errors on transformed scales, they differ in how they construct and average predictions. <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> often produces <em>effects at the mean</em> of non-focal predictors (via linear contrasts), whereas <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> tends to compute <em>mean effects</em> by averaging over observations. Depending on the model and the type of quantity you want to estimate, results from these two approaches can be very similar—or differ in interesting ways.</p>
 <p>Note that <a href="https://rvlenth.github.io/emmeans/" class="external-link">emmeans</a> can also perform numeric differentiation or use non-regular grids, just as <a href="https://marginaleffects.com/" class="external-link">marginaleffects</a> can construct linear predictions at the mean. Because each package has evolved with slightly different philosophies regarding how to form and interpret predictions, users can select whichever approach best suits their research questions. In <a href="https://easystats.github.io/modelbased/">modelbased</a>, you can switch easily between either back end by setting the global option, for example <code>options(modelbased_backend = "marginaleffects")</code>, to access these features.</p>
 <p>Finally, <a href="https://easystats.github.io/modelbased/">modelbased</a> leverages the <code>get_datagrid()</code> function from the <a href="https://easystats.github.io/insight/" class="external-link">insight</a> package <a href="https://doi.org/10.21105/joss.01412" class="external-link">(Lüdecke et al., 2019)</a> to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - <a href="https://easystats.github.io/modelbased/">modelbased</a> also inherits the support for such models.</p>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>If this package helped you, please consider citing as follows:</p>
+<p>Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault, R., &amp; Lüdecke, D. (2025). modelbased: An R package to make the most out of your statistical models through marginal means, marginal effects, and model predictions. Journal of Open Source Software, 10(109), 7969. doi: 10.21105/joss.07969</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
