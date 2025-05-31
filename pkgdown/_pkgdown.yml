@@ -92,6 +92,10 @@ navbar:
           href: articles/introduction_comparisons_4.html
         - text: "Contrasts and comparisons for zero-inflation models"
           href: articles/introduction_comparisons_5.html
+        - text: -------
+        - text: "Comparison to other R packages"
+        - text: "Packages related to predictions, marginal means and effects"
+          href: articles/practical_comparison.html
     - icon: fa fa-newspaper
       text: News
       href: news/index.html

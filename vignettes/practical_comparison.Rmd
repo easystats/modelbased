@@ -1,0 +1,140 @@
+---
+title: "Case Study: Comparison of R packages related to predictions, marginal means and effects"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study: Comparison of R packages related to predictions, marginal means and effects}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
+)
+
+pkgs <- c("emmeans", "marginaleffects", "ggeffects")
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+This vignette compares the **modelbased** package to other common packages that can be used to compute adjusted predictions, marginal means, marginal effects, or contrasts and pairwise comparisons.
+
+**modelbased** is built on top of the two probably most popular R packages for extracting marginal means and effects, namely **emmeans** [@russell2024emmeans] and **marginaleffects** [@arel2024interpret]. Thus, you obtain the same results either from **modelbased** or one of the other two packages. This vignette shows how to replicate results using the different packages.
+
+```{r}
+# to create data grids, we use `insight::get_datagrid()`
+library(insight)
+
+# the four packages, which we compare
+library(modelbased)
+library(emmeans)
+library(marginaleffects)
+library(ggeffects)
+```
+
+## Categorical predictors
+
+```{r}
+# a very simple model
+data(iris)
+model <- lm(Petal.Length ~ Species, data = iris)
+
+# modelbased
+estimate_means(model, by = "Species")
+
+# emmeans
+emmeans(model, "Species")
+
+# marginaleffects
+avg_predictions(model, by = "Species")
+
+# ggeffects
+predict_response(model, "Species")
+```
+
+## Continuous predictors
+
+```{r}
+# a very simple model
+data(iris)
+model <- lm(Petal.Length ~ Sepal.Length, data = iris)
+
+# create a range of representative values
+grid <- get_datagrid(model, by = "Sepal.Length")
+grid
+
+# modelbased - defaults to create a range of 10 values from
+# minimum to maximum for numeric focal predictors
+estimate_means(model, by = "Sepal.Length")
+
+# emmeans
+emmeans(
+  model,
+  "Sepal.Length",
+  at = list(Sepal.Length = grid$Sepal.Length)
+)
+
+# marginaleffects
+avg_predictions(
+  model,
+  by = "Sepal.Length",
+  newdata = data.frame(Sepal.Length = grid$Sepal.Length)
+)
+
+# ggeffects
+predict_response(model, "Sepal.Length [4.3:7.9 by=0.4]")
+```
+
+## Interaction between continuous and categorical
+
+```{r}
+# a very simple model
+data(iris)
+model <- lm(Petal.Length ~ Sepal.Length * Species, data = iris)
+
+# create a range of representative values
+grid <- get_datagrid(
+  model,
+  by = c("Species", "Sepal.Length"),
+  range = "grid",
+  preserve_range = FALSE
+)
+grid
+
+# modelbased
+estimate_means(model, by = c("Species", "Sepal.Length"), range = "grid")
+
+# alternative notation - for "Sepal.Length", we want mean and +/- SD
+estimate_means(model, by = c("Species", "Sepal.Length = [meansd]"))
+
+# emmeans
+emmeans(
+  model,
+  c("Species", "Sepal.Length"),
+  at = lapply(grid, unique)
+)
+
+# marginaleffects
+avg_predictions(
+  model,
+  by = c("Species", "Sepal.Length"),
+  newdata = grid
+)
+
+# ggeffects
+predict_response(model, c("Species", "Sepal.Length"))
+```
+
+# References
