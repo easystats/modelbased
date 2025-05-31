@@ -66,3 +66,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [Slopes, floodlight and spotlight analysis (Johnson-Neyman intervals)](https://easystats.github.io/modelbased/articles/introduction_comparisons_3.html)
 * [Contrasts and comparisons for generalized linear models](https://easystats.github.io/modelbased/articles/introduction_comparisons_4.html)
 * [Contrasts and comparisons for zero-inflation models](https://easystats.github.io/modelbased/articles/introduction_comparisons_5.html)
+
+### Comparison to other R packages
+
+* [Comparison of R packages related to predictions, marginal means and effects](https://easystats.github.io/modelbased/articles/practical_comparison.html)
