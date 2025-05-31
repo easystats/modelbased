@@ -1,9 +1,13 @@
-# modelbased (devel)
+# modelbased 0.11.2
 
 ## Changes
 
 * `estimate_contrasts()` for results from `estimate_relation()` and alike is
   now more efficient for larger number of contrasts.
+
+* Updated information of `citation()`. If you want to cite the `modelbased`
+  package, please use the JOSS publication as reference
+  (https://joss.theoj.org/papers/10.21105/joss.07969).
 
 ## Bug fixes
 
