@@ -131,7 +131,9 @@
 <p><a href="https://doi.org/10.21105/joss.07969" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.07969/status.svg" alt="DOI"></a> <a href="https://cran.r-project.org/package=modelbased" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/modelbased" alt="downloads"></a> <a href="https://cranlogs.r-pkg.org/" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/modelbased" alt="total"></a></p>
 <p><strong><em>Make the most out of your models</em></strong></p>
 <hr>
-<p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.</p>
+<p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute marginal means, contrast analysis and model predictions.</p>
+<p>The two probably most popular R packages for extracting these quantities of interest are <strong>emmeans</strong> (Lenth, 2024) and <strong>marginaleffects</strong> (Arel-Bundock et al., 2024). These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. But their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts.</p>
+<p><strong>modelbased</strong>, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the <strong>easystats</strong>’ <em>raison d’être</em>, <strong>modelbased</strong> focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -613,6 +615,14 @@ SE_{\hat{b}} = \sqrt{\text{diag}(L \cdot V \cdot L^T)}
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
 <p>Please note that the modelbased project is released with a <a href="https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0" line-spacing="2">
+<div id="ref-arel2024interpret" class="csl-entry">
+Arel-Bundock, V., Greifer, N., &amp; Heiss, A. (2024). How to interpret statistical models using marginaleffects for R and Python. <em>Journal of Statistical Software</em>, <em>111</em>, 1–32. <a href="https://doi.org/10.18637/jss.v111.i09" class="external-link uri">https://doi.org/10.18637/jss.v111.i09</a>
+</div>
+<div id="ref-russell2024emmeans" class="csl-entry">
+Lenth, R. V. (2024). <em><span class="nocase">emmeans</span>: Estimated marginal means, aka least-squares means</em>. <a href="https://doi.org/10.32614/CRAN.package.emmeans" class="external-link uri">https://doi.org/10.32614/CRAN.package.emmeans</a>
+</div>
+</div>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
