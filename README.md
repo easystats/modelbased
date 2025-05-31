@@ -10,8 +10,23 @@
 ------------------------------------------------------------------------
 
 **modelbased** is a package helping with model-based estimations, to
-easily compute of marginal means, contrast analysis and model
-predictions.
+easily compute marginal means, contrast analysis and model predictions.
+
+The two probably most popular R packages for extracting these quantities
+of interest are **emmeans** (Lenth, 2024) and **marginaleffects**
+(Arel-Bundock et al., 2024). These packages pack an enormously rich set
+of features and cover (almost) all imaginable needs for post-hoc
+analysis of statistical models. But their power and flexibility can be
+intimidating for users not familiar with the underlying statistical
+concepts.
+
+**modelbased**, built on top of these two packages, aims to unleash this
+untapped potential by providing a unified interface to extract marginal
+means, marginal effects, contrasts, comparisons, and model predictions
+from a wide range of statistical models. In line with the **easystats**’
+*raison d’être*, **modelbased** focuses on simplicity, flexibility, and
+user-friendliness to help researchers harness the full power of their
+models.
 
 ## Installation
 
@@ -673,3 +688,25 @@ Please note that the modelbased project is released with a [Contributor
 Code of
 Conduct](https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-arel2024interpret" class="csl-entry">
+
+Arel-Bundock, V., Greifer, N., & Heiss, A. (2024). How to interpret
+statistical models using marginaleffects for R and Python. *Journal of
+Statistical Software*, *111*, 1–32.
+<https://doi.org/10.18637/jss.v111.i09>
+
+</div>
+
+<div id="ref-russell2024emmeans" class="csl-entry">
+
+Lenth, R. V. (2024). *<span class="nocase">emmeans</span>: Estimated
+marginal means, aka least-squares means*.
+<https://doi.org/10.32614/CRAN.package.emmeans>
+
+</div>
+
+</div>

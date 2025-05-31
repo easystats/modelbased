@@ -1,7 +1,7 @@
 #' Estimate Marginal Means (Model-based average at each factor level)
 #'
 #' Estimate average values of the response variable at each factor level or
-#' at representative value, respectively at values defined in a "data grid" or
+#' at representative values, respectively at values defined in a "data grid" or
 #' "reference grid". For plotting, check the examples in
 #' [visualisation_recipe()]. See also other related functions such as
 #' [estimate_contrasts()] and [estimate_slopes()].

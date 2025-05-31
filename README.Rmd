@@ -4,13 +4,11 @@ output:
     toc: false
     fig_width: 10.08
     fig_height: 6
-tags: [r, prediction, estimation, marginal]
-vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
+bibliography: paper/paper.bib
+csl: paper/apa.csl
 editor_options:
   chunk_output_type: console
+tags: [r, prediction, estimation, marginal]
 ---
 
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
@@ -37,8 +35,11 @@ options(marginaleffects_safe = FALSE)
 
 ---
 
-**modelbased** is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.
+**modelbased** is a package helping with model-based estimations, to easily compute marginal means, contrast analysis and model predictions.
 
+The two probably most popular R packages for extracting these quantities of interest are **emmeans** [@russell2024emmeans] and **marginaleffects** [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. But their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts.
+
+**modelbased**, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the **easystats**' *raison d'être*, **modelbased** focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
 
 ## Installation
 

@@ -165,7 +165,7 @@ A data frame of estimated marginal means.
 }
 \description{
 Estimate average values of the response variable at each factor level or
-at representative value, respectively at values defined in a "data grid" or
+at representative values, respectively at values defined in a "data grid" or
 "reference grid". For plotting, check the examples in
 \code{\link[=visualisation_recipe]{visualisation_recipe()}}. See also other related functions such as
 \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_slopes]{estimate_slopes()}}.
