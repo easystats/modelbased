@@ -9,6 +9,6 @@ bibentry(
 	author = c(person("Dominique", "Makowski"), person("Mattan S.", "Ben-Shachar"), person("Brenton M.", "Wiernik"), person("Indrajeet", "Patil"), person("Rémi", "Thériault"), person("Daniel", "Lüdecke")),
 	year = "2025",
 	pages = "7969",
-  url="https://joss.theoj.org/papers/10.21105/joss.02306",
+  url="https://joss.theoj.org/papers/10.21105/joss.07969",
   textVersion = "Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault, R., & Lüdecke, D. (2025). modelbased: An R package to make the most out of your statistical models through marginal means, marginal effects, and model predictions. Journal of Open Source Software, 10(109), 7969. https://doi.org/10.21105/joss.07969"
 )
