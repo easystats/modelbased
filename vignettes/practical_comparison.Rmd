@@ -119,6 +119,9 @@ estimate_means(model, by = c("Species", "Sepal.Length"), range = "grid")
 # alternative notation - for "Sepal.Length", we want mean and +/- SD
 estimate_means(model, by = c("Species", "Sepal.Length = [meansd]"))
 
+# we could also pass a data grid to the `newdata` argument...
+estimate_means(model, by = c("Species", "Sepal.Length"), newdata = grid)
+
 # emmeans
 emmeans(
   model,
