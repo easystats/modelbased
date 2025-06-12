@@ -100,9 +100,9 @@
   # these are special columns, not yet covered by "insight::format_table()"
   result$df1 <- insight::format_value(result$df1, protect_integers = TRUE)
   result$df2 <- insight::format_value(result$df2, protect_integers = TRUE)
+  result$`F.ratio` <- insight::format_value(result$`F.ratio`, protect_integers = TRUE)
 
   # rename statistic column
-  colnames(result)[colnames(result) == "F.ratio"] <- "F"
   colnames(result)[1] <- "Contrast"
   result[[1]] <- my_args$contrast
 

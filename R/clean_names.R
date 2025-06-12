@@ -12,6 +12,7 @@
   names(means)[names(means) == "rate"] <- "Rate"
   names(means)[names(means) == "t.ratio"] <- "t"
   names(means)[names(means) == "z.ratio"] <- "z"
+  names(means)[names(means) == "F.ratio"] <- "F"
   names(means)[names(means) == "p.value"] <- "p"
   names(means)[names(means) == "lower.CL"] <- "CI_low"
   names(means)[names(means) == "upper.CL"] <- "CI_high"
