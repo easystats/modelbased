@@ -27,7 +27,7 @@ test_that("estimate_contrasts - joint test, 2-way", {
   expect_identical(out1$coffee, out2$coffee)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
-  expect_equal(out3$`F`, out2$`F.ratio`, tolerance = 1e-3)
+  expect_identical(out3$`F`, as.character(round(out2$`F.ratio`, 2)))
   expect_equal(out3$p, out2$p.value, tolerance = 1e-3)
   expect_named(out1, c("Contrast", "coffee", "df1", "df2", "Difference", "F", "p"))
   expect_named(out3, c("Contrast", "coffee", "df1", "df2", "F", "p"))
@@ -116,7 +116,7 @@ test_that("estimate_contrasts - joint test, 3-way", {
   expect_identical(out1$sex, out2$sex)
   expect_identical(out1$sex, out3$sex)
   expect_equal(out1$`F`, out2$`F.ratio`, tolerance = 1e-3)
-  expect_equal(out1$`F`, out3$`F`, tolerance = 1e-3)
+  expect_identical(as.character(round(out1$`F`, 2)), out3$`F`)
   expect_equal(out1$p, out2$p.value, tolerance = 1e-3)
   expect_identical(dim(out1), c(4L, 8L))
 
@@ -146,6 +146,23 @@ test_that("estimate_contrasts - joint test, 3-way, error", {
   )
 })
 
+
+test_that("estimate_contrasts - joint test, correct df for anova", {
+  skip_if_not_installed("afex")
+  skip_if_not_installed("discovr")
+
+  date_tib <- discovr::speed_date
+  date_afx1 <- suppressWarnings(
+    afex::aov_4(date ~ strategy * looks + (looks | id), data = date_tib)
+  )
+  out <- estimate_contrasts(
+    date_afx1,
+    contrast = "looks",
+    by = "strategy",
+    comparison = "joint"
+  )
+  expect_identical(out$df2, c("18", "18"))
+})
 
 skip_if_not_installed("withr")
 
