@@ -48,6 +48,7 @@ Imports:
     tools,
     utils
 Suggests:
+    afex,
     BH,
     betareg,
     boot,
@@ -57,6 +58,7 @@ Suggests:
     collapse,
     correlation,
     curl,
+    discovr,
     easystats,
     effectsize (>= 1.0.0),
     emmeans (>= 1.10.2),
@@ -106,3 +108,4 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
+Remotes: easystats/insight, easystats/bayestestR, easystats/parameters
