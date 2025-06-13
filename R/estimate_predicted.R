@@ -130,6 +130,18 @@
 #' names matching the model frame (see [insight::get_data()]). This can be used
 #' to generate model predictions for specific combinations of predictor values.
 #'
+#' @section Finite mixture models:
+#'
+#' For finite mixture models (currently, only the [`brms::mixture()`] family
+#' from package *brms* is supported), use `predict = "classification"` with
+#' `data = NULL` to predict the class membership for each observation (e.g.,
+#' `estimate_prediction(model, predict = "classification")`). To return
+#' predicted values stratified by class membership, use `predict = "link"`
+#' (possibly in combination with `data` or `by`, e.g.
+#' `estimate_link(model, by = "predictor")`). Other `predict` options will
+#' return predicted values of the outcome for the full data, not stratified by
+#' class membership.
+#'
 #' @note
 #'
 #' These functions are built on top of [insight::get_predicted()] and correspond
