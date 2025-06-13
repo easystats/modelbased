@@ -43,3 +43,33 @@ test_that("plots package ordinal", {
     plot(out, show_data = FALSE)
   )
 })
+
+
+test_that("plots packages bracl and nnet", {
+  skip_if_not_installed("brglm2")
+  skip_if_not_installed("nnet")
+
+  data("stemcell", package = "brglm2")
+  m_bracl <- brglm2::bracl(research ~ as.numeric(religion) + gender,
+    weights = frequency,
+    data = stemcell, type = "ML"
+  )
+  m_nnet <- nnet::multinom(research ~ as.numeric(religion) + gender,
+    weights = frequency,
+    data = stemcell
+  )
+
+  out <- estimate_means(m_bracl, "gender")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-ordinal-bracl",
+    plot(out, show_data = FALSE)
+  )
+
+  out <- estimate_means(m_nnet, "gender")
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-ordinal-nnet",
+    plot(out, show_data = FALSE)
+  )
+})

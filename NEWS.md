@@ -10,6 +10,10 @@
 
 * Improved printing for joint-tests with `backend = "emmeans"`.
 
+## Bug fixes
+
+* Fixed printing and plotting for models from packages *nnet* and *brglm2*.
+
 # modelbased 0.11.2
 
 ## Changes

@@ -21,7 +21,15 @@
   by <- att$focal_terms
 
   # multivariate response models? if so, we need one more stratification in "by"
-  if (isTRUE(model_info$is_ordinal | model_info$is_multinomial) && "Response" %in% colnames(data)) {
+  if (
+    isTRUE(
+      model_info$is_ordinal |
+        model_info$is_multinomial |
+        model_info$is_categorical |
+        model_info$is_cumulative
+    ) &&
+      "Response" %in% colnames(data)
+  ) {
     by <- c(by, "Response")
     data$Response <- factor(data$Response, levels = unique(data$Response))
   }
@@ -420,8 +428,19 @@
 
 
   # probability scale? ----------------------------------
-  if (!is.null(response_scale) && response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
-    isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta | model_info$is_ordinal)) { # nolint
+  if (
+    !is.null(response_scale) &&
+      response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
+      isTRUE(
+        model_info$is_logit |
+          model_info$is_binomial |
+          model_info$is_orderedbeta |
+          model_info$is_beta |
+          model_info$is_ordinal |
+          model_info$is_multinomial
+      )
+  ) {
+    # nolint
     layers[[paste0("l", l)]] <- list(
       geom = "scale_y_continuous",
       labels = insight::format_value(
