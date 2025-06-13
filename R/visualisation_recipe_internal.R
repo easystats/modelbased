@@ -27,7 +27,7 @@
   }
 
   # mixture models? if so, we need one more stratification in "by"
-  if (isTRUE(model_info$is_mixture && "Class" %in% colnames(data))) {
+  if (isTRUE(model_info$is_mixture) && "Class" %in% colnames(data)) {
     by <- c(by, "Class")
     data$Class <- factor(data$Class, levels = unique(data$Class))
   }
