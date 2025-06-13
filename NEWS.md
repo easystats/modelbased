@@ -5,6 +5,9 @@
 * Added docs to show how to use *modelbased* with finite mixture models from
   package *brms*.
 
+* Improved support for finite mixture models (currently only the `mixture()`
+  family for model from package *brms* are supported).
+
 * Improved printing for joint-tests with `backend = "emmeans"`.
 
 # modelbased 0.11.2

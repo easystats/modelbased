@@ -253,6 +253,13 @@
 #' In particular for mixed models, using `"response"` is recommended, because
 #' averaging across random effects groups is then more accurate.
 #'
+#' @section Finite mixture models:
+#'
+#' For finite mixture models (currently, only the [`brms::mixture()`] family
+#' from package *brms* is supported), use `predict = "link"` to return predicted
+#' values stratified by class membership. To predict the class membership, use
+#' [`estimate_link()`].
+#'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
 #' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a

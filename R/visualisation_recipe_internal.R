@@ -26,6 +26,12 @@
     data$Response <- factor(data$Response, levels = unique(data$Response))
   }
 
+  # mixture models? if so, we need one more stratification in "by"
+  if (isTRUE(model_info$is_mixture && "Class" %in% colnames(data))) {
+    by <- c(by, "Class")
+    data$Class <- factor(data$Class, levels = unique(data$Class))
+  }
+
   # if we have only few numeric values, we don't want a continuous color scale.
   # check whether we can treat numeric as discrete
   if (!isFALSE(numeric_as_discrete) && is.numeric(numeric_as_discrete)) {

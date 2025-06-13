@@ -292,6 +292,15 @@ In particular for mixed models, using \code{"response"} is recommended, because
 averaging across random effects groups is then more accurate.
 }
 
+\section{Finite mixture models}{
+
+
+For finite mixture models (currently, only the \code{\link[brms:mixture]{brms::mixture()}} family
+from package \emph{brms} is supported), use \code{predict = "link"} to return predicted
+values stratified by class membership. To predict the class membership, use
+\code{\link[=estimate_link]{estimate_link()}}.
+}
+
 \section{Global Options to Customize Estimation of Marginal Means}{
 
 \itemize{

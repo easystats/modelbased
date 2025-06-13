@@ -578,6 +578,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # Rename for Categorical family
   if (info$is_categorical || info$is_ordinal || info$is_cumulative || insight::is_multivariate(model)) {
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
+  } else if (info$is_mixture) {
+    params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
   # finally, make sure we have original data types
