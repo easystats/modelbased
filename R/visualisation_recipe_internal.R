@@ -1,6 +1,5 @@
 # Find aes ----------------------------------------------------------------
 
-
 #' @keywords internal
 .find_aes <- function(x, model_info = NULL, numeric_as_discrete = 8) {
   # init basic aes
@@ -8,10 +7,7 @@
   data$.group <- 1
 
   att <- attributes(x)
-  aes <- list(
-    y = "Predicted",
-    group = ".group"
-  )
+  aes <- list(y = "Predicted", group = ".group")
 
   # extract information for labels
   model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
@@ -20,16 +16,16 @@
   # Find predictors
   by <- att$focal_terms
 
+  # flag for ordinal and alike models
+  has_response_levels <- isTRUE(
+    model_info$is_ordinal |
+      model_info$is_multinomial |
+      model_info$is_categorical |
+      model_info$is_cumulative
+  )
+
   # multivariate response models? if so, we need one more stratification in "by"
-  if (
-    isTRUE(
-      model_info$is_ordinal |
-        model_info$is_multinomial |
-        model_info$is_categorical |
-        model_info$is_cumulative
-    ) &&
-      "Response" %in% colnames(data)
-  ) {
+  if (has_response_levels && "Response" %in% colnames(data)) {
     by <- c(by, "Response")
     data$Response <- factor(data$Response, levels = unique(data$Response))
   }
@@ -62,7 +58,9 @@
     aes$y <- "Slope"
     if ("Comparison" %in% names(data)) {
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
-      if (length(by) > 1) by[3:(length(by) + 1)] <- by[2:length(by)]
+      if (length(by) > 1) {
+        by[3:(length(by) + 1)] <- by[2:length(by)]
+      }
       by[2] <- "Comparison"
     } else if ("p" %in% colnames(data) && length(by) == 1 && is.numeric(data[[by]])) {
       # this is for slopes of two numeric interaction terms (johnson-neymann plots)
@@ -110,7 +108,6 @@
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
   }
-
 
   # Assign predictors to aes
   if (is.null(by)) {
@@ -181,11 +178,9 @@
     ))
   }
 
-
   # CI
   # ------------------------------------------------------------------------
   aes <- .find_aes_ci(aes, data)
-
 
   # axis and legend labels
   # ------------------------------------------------------------------------
