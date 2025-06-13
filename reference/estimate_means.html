@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -387,6 +387,16 @@ but might produce biased predictions. However, you can try to set
 <code>bias_correction = TRUE</code>, to adjust for this bias.</p>
 <p>In particular for mixed models, using <code>"response"</code> is recommended, because
 averaging across random effects groups is then more accurate.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="finite-mixture-models">Finite mixture models<a class="anchor" aria-label="anchor" href="#finite-mixture-models"></a></h2>
+
+
+
+<p>For finite mixture models (currently, only the <code><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">brms::mixture()</a></code> family
+from package <em>brms</em> is supported), use <code>predict = "link"</code> to return predicted
+values stratified by class membership. To predict the class membership, use
+<code><a href="estimate_expectation.html">estimate_link()</a></code>.</p>
     </div>
     <div class="section level2">
     <h2 id="global-options-to-customize-estimation-of-marginal-means">Global Options to Customize Estimation of Marginal Means<a class="anchor" aria-label="anchor" href="#global-options-to-customize-estimation-of-marginal-means"></a></h2>
