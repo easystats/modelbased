@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.11.2.3
+Version: 0.11.2.5
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -53,6 +53,7 @@ Suggests:
     betareg,
     boot,
     bootES,
+    brglm2,
     brms,
     coda,
     collapse,
@@ -78,6 +79,7 @@ Suggests:
     mice,
     mgcv,
     nanoparquet,
+    nnet,
     ordinal,
     palmerpenguins,
     performance (>= 0.13.0),
