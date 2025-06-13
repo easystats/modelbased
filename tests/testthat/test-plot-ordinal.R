@@ -72,4 +72,15 @@ test_that("plots packages bracl and nnet", {
     "plot-ordinal-nnet",
     plot(out, show_data = FALSE)
   )
+
+  m_nnet <- nnet::multinom(research ~ as.numeric(religion) * gender,
+    weights = frequency,
+    data = stemcell
+  )
+  out <- estimate_means(m_nnet, c("religion", "gender"))
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-ordinal-nnet-2",
+    plot(out, show_data = FALSE)
+  )
 })
