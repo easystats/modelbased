@@ -509,7 +509,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # coefficient column is named, because we replace that column name with an
   # appropriate name of the predictions (e.g. "Difference", "Probability" or
   # "Mean")
-  params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE, ...))
+  params <- suppressWarnings(parameters::model_parameters(
+    x,
+    ci = ci,
+    diagnostic = NULL,
+    verbose = FALSE,
+    ...
+  ))
   # the different functions and models (Bayesian, frequentist) have different
   # column names for their "coefficient". We now extract the relevant one.
   possible_colnames <- c(
