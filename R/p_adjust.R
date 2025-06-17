@@ -15,8 +15,19 @@
   # harmonize argument
   p_adjust <- tolower(p_adjust)
 
-  all_methods <- c(tolower(stats::p.adjust.methods), "tukey", "sidak", "esarey")
+  # we need to check for options provided by emmeans. We check them here, but
+  # we have to print a different error message.
+  emmeans_options <- c("scheffe", "mvt", "dunnettx")
+
+  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey")
   insight::validate_argument(p_adjust, all_methods)
+
+  # emmeans methods? Then tell user
+  if (p_adjust %in% emmeans_options) {
+    insight::format_error(paste0(
+      "`p_adjust = \"", p_adjust, "\"` is only available when `backend = \"emmeans\"."
+    ))
+  }
 
   # esarey is specifically for johnson-neyman intervals
   if (p_adjust == "esarey") {
