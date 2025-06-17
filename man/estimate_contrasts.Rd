@@ -182,7 +182,8 @@ comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"ho
 intervals, i.e. when calling \code{estimate_slopes()} with two numeric predictors
 in an interaction term. Details for the other options can be found in the
 p-value adjustment section of the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
+\code{?stats::p.adjust}. Note that certain options provided by the \strong{emmeans}
+package are only available if you set \code{backend = "emmeans"}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

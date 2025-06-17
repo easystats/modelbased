@@ -14,7 +14,8 @@
 #' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
 #' in an interaction term. Details for the other options can be found in the
 #' p-value adjustment section of the `emmeans::test` documentation or
-#' `?stats::p.adjust`.
+#' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
+#' package are only available if you set `backend = "emmeans"`.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,

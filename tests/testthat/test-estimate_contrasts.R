@@ -352,6 +352,18 @@ test_that("estimate_contrasts - p.adjust", {
   p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "marginaleffects"))
   p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "marginaleffects"))
   expect_true(any(p_none$p != p_tuk$p))
+
+  model <- lm(Petal.Width ~ Species, data = iris)
+  expect_error(
+    estimate_contrasts(model, p_adjust = "scheffe"),
+    regex = "is only available when"
+  )
+  expect_silent(estimate_contrasts(
+    model,
+    contrast = "Species",
+    p_adjust = "scheffe",
+    backend = "emmeans"
+  ))
 })
 
 
