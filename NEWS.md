@@ -10,6 +10,9 @@
 
 * Improved printing for joint-tests with `backend = "emmeans"`.
 
+* Improved handling when p-adjustment methods that are only available in the
+  *emmeans* package were used for the *marginaleffects* backend.
+
 ## Bug fixes
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.
