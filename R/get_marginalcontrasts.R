@@ -166,7 +166,7 @@ get_marginalcontrasts <- function(model,
 # special contrasts: inequality---------------- -------------------------------
 
 .calculate_inequality_effect <- function(model, model_data, my_args, comparison, ci, ...) {
-  # to calcualte marginal effects inequalities, all contrast predictors
+  # to calculate marginal effects inequalities, all contrast predictors
   # must be factors
   check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
   if (is.null(check_factors) || !all(check_factors)) {
