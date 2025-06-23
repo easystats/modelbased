@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -222,23 +222,21 @@ See also <code>method</code> argument in <a href="https://rvlenth.github.io/emme
 <li><p>For <code>backend = "marginaleffects"</code>, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
-<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
+described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
+<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> and
+section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
 <code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
 multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
-<li><p>String: Two special string options are <code>"inequality"</code> and <code>"total"</code>,
-which compute the marginal effect inequality or total summary of
-categorical predictors' overall effects, respectively, the comprehensive
-effect of an independent variable across all outcome categories of a
-nominal or ordinal dependent variable (see <em>Mize and Han, 2025</em>).</p><ul><li><p><code>"inequality"</code>: this measure focuses on the heterogeneity of the
-effects of a categorical <em>independent</em> variable. It helps understand how
-the effect of the variable differs across its categories or levels.</p></li>
-<li><p><code>"total"</code>: This measure provides a holistic view of how an independent
-variable affects a nominal or ordinal <em>dependent</em> variable. It summarizes
-the overall impact across all possible outcome categories.</p></li>
-</ul></li>
+<li><p>String: Two special string options are <code>"inequality"</code> and
+<code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
+marginal effect inequality summary of categorical predictors' overall
+effects, respectively, the comprehensive effect of an independent
+variable across all outcome categories of a nominal or ordinal dependent
+variable (total marginal effect, see <em>Mize and Han, 2025</em>).
+<code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
+comparisons) between marginal effects inequality measures.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
@@ -409,6 +407,54 @@ these levels (using <code>estimate_contrasts()</code>). Finally, one could also 
 the effect of x averaged over all conditions, or instead within each
 condition (<code>using [estimate_slopes]</code>).</p>
     </div>
+    <div class="section level2">
+    <h2 id="comparison-options">Comparison options<a class="anchor" aria-label="anchor" href="#comparison-options"></a></h2>
+
+
+<ul><li><p><code>comparison = "pairwise"</code>: This method computes all possible unique
+differences between pairs of levels of the focal predictor. For example, if
+a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.</p></li>
+<li><p><code>comparison = "reference"</code>: This compares each level of the focal predictor
+to a specified reference level (by default, the first level). For example,
+if levels are A, B, C, and A is the reference, it computes B-A and C-A.</p></li>
+<li><p><code>comparison = "sequential"</code>: This compares each level to the one
+immediately following it in the factor's order. For levels A, B, C, it
+would compute B-A and C-B.</p></li>
+<li><p><code>comparison = "meandev"</code>: This contrasts each level's estimate against the
+grand mean of all estimates for the focal predictor.</p></li>
+<li><p><code>comparison = "meanotherdev"</code>: Similar to <code>meandev</code>, but each level's
+estimate is compared against the mean of all <em>other</em> levels, excluding
+itself.</p></li>
+<li><p><code>comparison = "poly"</code>: These are used for ordered categorical variables to
+test for linear, quadratic, cubic, etc., trends across the levels. They
+assume equal spacing between levels.</p></li>
+<li><p><code>comparison = "helmert"</code>: Contrast 2nd level to the first, 3rd to the
+average of the first two, and so on. Each level (except the first) is
+compared to the mean of the preceding levels. For levels A, B, C, it would
+compute B-A and C-(A+B)/2.</p></li>
+<li><p><code>comparison = "trt_vs_ctrl"</code>: This compares all levels (excluding the
+first, which is typically the control) against the first level. It's often
+used when comparing multiple treatment groups to a single control group.</p></li>
+<li><p>To test multiple hypotheses jointly (usually used for factorial designs),
+<code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
+to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
+<li><p><code>comparison = "inequality"</code> computes the marginal effect inequality summary
+of categorical predictors' overall effects, respectively, the comprehensive
+effect of an independent variable across all outcome categories of a
+nominal or ordinal dependent variable (total marginal effect, see <em>Mize and
+Han, 2025</em>). The marginal effect inequality focuses on the heterogeneity of
+the effects of a categorical <em>independent</em> variable. It helps understand
+how the effect of the variable differs across its categories or levels.
+When the <em>dependent</em> variable is categorical (e.g., logistic, ordinal or
+multinomial regression), marginal effect inequality provides a holistic
+view of how an independent variable affects a nominal or ordinal
+<em>dependent</em> variable. It summarizes the overall impact (total marginal
+effects) across all possible outcome categories.</p></li>
+<li><p><code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
+comparisons) between marginal effects inequality measures. Depending on the
+sign, this measure indicates which of the predictors has a stronger impact
+on the dependent variable in terms of inequalities.</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="effect-size">Effect Size<a class="anchor" aria-label="anchor" href="#effect-size"></a></h2>
 

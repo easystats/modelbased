@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -239,23 +239,21 @@ See also <code>method</code> argument in <a href="https://rvlenth.github.io/emme
 <li><p>For <code>backend = "marginaleffects"</code>, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a> and
-<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a>.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
+described below, see documentation of <a href="https://marginaleffects.com/man/r/comparisons.html" class="external-link">marginaleffects::comparisons</a>,
+<a href="https://marginaleffects.com/bonus/hypothesis.html" class="external-link">this website</a> and
+section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"pairwise"</code>, <code>"reference"</code>, <code>"sequential"</code>, <code>"meandev"</code>
 <code>"meanotherdev"</code>, <code>"poly"</code>, <code>"helmert"</code>, or <code>"trt_vs_ctrl"</code>. To test
 multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
-<li><p>String: Two special string options are <code>"inequality"</code> and <code>"total"</code>,
-which compute the marginal effect inequality or total summary of
-categorical predictors' overall effects, respectively, the comprehensive
-effect of an independent variable across all outcome categories of a
-nominal or ordinal dependent variable (see <em>Mize and Han, 2025</em>).</p><ul><li><p><code>"inequality"</code>: this measure focuses on the heterogeneity of the
-effects of a categorical <em>independent</em> variable. It helps understand how
-the effect of the variable differs across its categories or levels.</p></li>
-<li><p><code>"total"</code>: This measure provides a holistic view of how an independent
-variable affects a nominal or ordinal <em>dependent</em> variable. It summarizes
-the overall impact across all possible outcome categories.</p></li>
-</ul></li>
+<li><p>String: Two special string options are <code>"inequality"</code> and
+<code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
+marginal effect inequality summary of categorical predictors' overall
+effects, respectively, the comprehensive effect of an independent
+variable across all outcome categories of a nominal or ordinal dependent
+variable (total marginal effect, see <em>Mize and Han, 2025</em>).
+<code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
+comparisons) between marginal effects inequality measures.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
