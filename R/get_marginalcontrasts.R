@@ -100,6 +100,27 @@ get_marginalcontrasts <- function(model,
       verbose = verbose,
       ...
     )
+  } else if (identical(comparison, "inequality")) {
+    # inequality effect summary, see Trenton D. Mize, Bing Han 2025
+    # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
+    # Sociological Science February 5, 10.15195/v12.a7
+    # this requires a special handling, because we can only use it with avg_comparisons
+    check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
+    if (is.null(check_factors) || !all(check_factors)) {
+      insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
+    }
+    out <- marginaleffects::avg_comparisons(
+      model = model,
+      variables = as.list(stats::setNames(
+        rep_len("pairwise", length(my_args$contrast)),
+        my_args$contrast
+      )),
+      by = ifelse(is.null(my_args$by), TRUE, my_args$by),
+      hypothesis = ~I(mean(abs(x))) | term,
+      ...
+    )
+    class(out) <- unique(c("marginaleffects_means", class(out)))
+    out <- format(out, model, ci, hypothesis = "inequality", ...)
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
@@ -362,7 +383,7 @@ get_marginalcontrasts <- function(model,
   c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint"
+    "trt_vs_ctrl", "joint", "inequality"
   )
 }
 

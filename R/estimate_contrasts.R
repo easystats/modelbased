@@ -30,10 +30,13 @@
 #'   described below, see documentation of [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
-#'     multiple hypotheses jointly (usually used for factorial designs),
-#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
-#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, `"inequality"` or
+#'     `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used for
+#'     factorial designs), `comparison` can also be `"joint"`. In this case, use
+#'     the `test` argument to specify which test should be conducted: `"F"`
+#'     (default) or `"Chi2"`. `comparison = "inequality"` can be used to compute
+#'     the marginal effect inquality summary of categorical predictors' holistic
+#'     effects (see _Mize and Han, 2025_).
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -96,6 +99,10 @@
 #'
 #' `effectsize = "boot"` uses bootstrapping (defaults to a low value of
 #' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
+#'
+#' @references
+#' Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+#' Nominal and Ordinal Variables. Sociological Science, 12, 115–157. \doi{10.15195/v12.a7}
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
@@ -251,7 +258,11 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  suffix <- ifelse(isTRUE(info$joint_test), "Joint Test", "Contrasts Analysis")
+  suffix <- ifelse(
+    isTRUE(info$joint_test),
+    "Joint Test",
+    ifelse(identical(comparison, "inequality"), "Inequality Analysis", "Contrasts Analysis")
+  )
   attr(out, "table_title") <- c(switch(estimate,
     specific = paste("Model-based", suffix),
     typical = paste("Marginal", suffix),

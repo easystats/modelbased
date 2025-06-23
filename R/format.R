@@ -134,13 +134,16 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
+  is_inequality_analysis <- is_contrast_analysis && identical(list(...)$hypothesis, "inequality")
   predict_type <- attributes(x)$predict
 
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
 
   # do we have contrasts? For contrasts, we want to keep p-values
-  if (is_contrast_analysis) {
+  if (is_inequality_analysis) {
+    estimate_name <- "Mean_Difference"
+  } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {
     # for simple means, we don't want p-values
@@ -220,6 +223,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # extract it from the attributes
   if (is.null(comparison)) {
     comparison <- attributes(x)$comparison
+  }
+
+  # exit early for special cases
+  if (identical(comparison, "inequality")) {
+    return(x)
   }
 
   # clean "by" and contrast variable names, for the special cases. for example,
@@ -597,6 +605,9 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # finally, make sure we have original data types
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
+  # fix for inequality-comparisons
+  colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
+
   # add posterior draws?
   if (!is.null(attributes(x)$posterior_draws)) {
     # how many?
@@ -668,7 +679,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 #' @keywords internal
 .guess_estimate_name <- function(predict_type, info) {
   # estimate name
-  if (is.null(predict_type) && is.null(info)) {
+  if (is.null(predict_type)) {
     estimate_name <- "Mean"
   } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
