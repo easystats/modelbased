@@ -190,7 +190,7 @@
 #' visualize them. Another possibility is to evaluate the difference between
 #' these levels (using [estimate_contrasts()]). Finally, one could also estimate
 #' the effect of x averaged over all conditions, or instead within each
-#' condition (`using [estimate_slopes]`).
+#' condition (using [estimate_slopes()]).
 #'
 #' @section Predictions and contrasts at meaningful values (data grids):
 #'
