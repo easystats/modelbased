@@ -982,9 +982,18 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out[["Mean Difference"]], 0.6381, tolerance = 1e-4)
   expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
 
+  expect_error(
+    estimate_contrasts(m, "species", comparison = "total"),
+    regex = "Total marginal effects"
+  )
+
   out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
   expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
   expect_identical(out$Parameter, c("island", "species"))
+
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "total")
+  expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_identical(out$Parameter, "island - species")
 
   expect_error(
     estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),

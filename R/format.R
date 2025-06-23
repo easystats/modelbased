@@ -225,11 +225,6 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     comparison <- attributes(x)$comparison
   }
 
-  # exit early for special cases
-  if (identical(comparison, "inequality")) {
-    return(x)
-  }
-
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
   for (i in focal_terms) {
@@ -256,9 +251,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
-  # we prettify labels now
+  # we prettify labels now. For special inequality contrasts, we also need no
+  # cleaning, so we skip here, too
 
-  if (!is.null(comparison)) {
+  if (!is.null(comparison) && !identical(comparison, "inequality") && !identical(comparison, "total")) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in

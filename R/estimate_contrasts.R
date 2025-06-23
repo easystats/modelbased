@@ -30,13 +30,21 @@
 #'   described below, see documentation of [marginaleffects::comparisons] and
 #'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
-#'     `"meanotherdev"`, `"poly"`, `"helmert"`, `"inequality"` or
-#'     `"trt_vs_ctrl"`. To test multiple hypotheses jointly (usually used for
-#'     factorial designs), `comparison` can also be `"joint"`. In this case, use
-#'     the `test` argument to specify which test should be conducted: `"F"`
-#'     (default) or `"Chi2"`. `comparison = "inequality"` can be used to compute
-#'     the marginal effect inequality summary of categorical predictors' holistic
-#'     effects (see _Mize and Han, 2025_).
+#'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
+#'     multiple hypotheses jointly (usually used for factorial designs),
+#'     `comparison` can also be `"joint"`. In this case, use the `test` argument
+#'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'   * String: Two special string options are `"inequality"` and `"total"`,
+#'     which compute the marginal effect inequality or total summary of
+#'     categorical predictors' overall effects, resp. he comprehensive effect of
+#'     an independent variable across all outcome categories of a nominal or
+#'     ordinal dependent variable (see _Mize and Han, 2025_).
+#'     - `"inequality"`: this measure focuses on the heterogeneity of the
+#'       effects of a categorical *independent* variable. It helps understand how
+#'       the effect of the variable differs across its categories or levels.
+#'     - `"total"`: This measure provides a holistic view of how an independent
+#'       variable affects a nominal or ordinal *dependent* variable. It summarizes
+#'       the overall impact across all possible outcome categories.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -258,11 +266,13 @@ estimate_contrasts.default <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  suffix <- ifelse(
-    isTRUE(info$joint_test),
-    "Joint Test",
-    ifelse(identical(comparison, "inequality"), "Inequality Analysis", "Contrasts Analysis")
-  )
+  if (isTRUE(info$joint_test)) {
+    suffix <- "Joint Test"
+  } else if (identical(comparison, "inequality") || identical(comparison, "total")) {
+    suffix <- "Inequality Analysis"
+  } else {
+    suffix <- "Contrasts Analysis"
+  }
   attr(out, "table_title") <- c(switch(estimate,
     specific = paste("Model-based", suffix),
     typical = paste("Marginal", suffix),
