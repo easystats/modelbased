@@ -970,7 +970,7 @@ test_that("estimate_contrast, works with aov (when no statistic is extracted)", 
 })
 
 
-test_that("estimate_contrast, works with aov (when no statistic is extracted)", {
+test_that("estimate_contrast, marginal effects inequalities", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
   data(penguins)
