@@ -9,6 +9,7 @@
   # extract information
   datagrid <- attributes(params)$datagrid
   focal <- attributes(params)$contrast
+  # Use .safe to handle cases where no statistic is extracted
   statistic <- .safe(insight::get_statistic(model)$Statistic)
   dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
