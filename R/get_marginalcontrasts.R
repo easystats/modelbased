@@ -188,7 +188,7 @@ get_marginalcontrasts <- function(model,
   # time with ~revpairwise option
   if (comparison == "total") {
     if (nrow(out) < 2) {
-      insight::format_error("Total marginal effects can only be calculated for more than one marginal effect inequalty.")
+      insight::format_error("Total marginal effects can only be calculated for more than one marginal effect inequality.")
     }
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
