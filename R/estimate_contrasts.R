@@ -36,7 +36,7 @@
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
 #'   * String: Two special string options are `"inequality"` and `"total"`,
 #'     which compute the marginal effect inequality or total summary of
-#'     categorical predictors' overall effects, "respectively, the comprehensive
+#'     categorical predictors' overall effects, respectively, the comprehensive
 #'     effect of an independent variable across all outcome categories of a
 #'     nominal or ordinal dependent variable (see _Mize and Han, 2025_).
 #'     - `"inequality"`: this measure focuses on the heterogeneity of the

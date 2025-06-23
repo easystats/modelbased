@@ -127,7 +127,7 @@ multiple hypotheses jointly (usually used for factorial designs),
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
 \item String: Two special string options are \code{"inequality"} and \code{"total"},
 which compute the marginal effect inequality or total summary of
-categorical predictors' overall effects, "respectively, the comprehensive
+categorical predictors' overall effects, respectively, the comprehensive
 effect of an independent variable across all outcome categories of a
 nominal or ordinal dependent variable (see \emph{Mize and Han, 2025}).
 \itemize{
