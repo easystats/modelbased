@@ -1,16 +1,17 @@
 # p-value adjustment --------------------------------------
 
 .p_adjust <- function(model, params, p_adjust, verbose = TRUE, ...) {
-  # extract information
-  datagrid <- attributes(params)$datagrid
-  focal <- attributes(params)$contrast
-  statistic <- insight::get_statistic(model)$Statistic
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
-
   # exit on NULL, or if no p-adjustment requested
   if (is.null(p_adjust) || identical(p_adjust, "none")) {
     return(params)
   }
+
+  # extract information
+  datagrid <- attributes(params)$datagrid
+  focal <- attributes(params)$contrast
+  # Use .safe to handle cases where no statistic is extracted
+  statistic <- .safe(insight::get_statistic(model)$Statistic)
+  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
 
   # harmonize argument
   p_adjust <- tolower(p_adjust)

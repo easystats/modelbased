@@ -935,3 +935,36 @@ test_that("estimate_contrast, informative error when `by` and `contrast` are the
     regex = "You cannot"
   )
 })
+
+
+test_that("estimate_contrast, works with aov (when no statistic is extracted)", {
+  skip_if(getRversion() < "4.5.0")
+  data(penguins)
+  fit <- aov(
+    formula = body_mass ~ species,
+    data = penguins
+  )
+
+  out1 <- marginaleffects::avg_predictions(
+    fit,
+    by = "species",
+    hypothesis = ~pairwise
+  )
+
+  out2 <- estimate_contrasts(
+    model = fit,
+    contrast = "species",
+    backend = "marginaleffects"
+  )
+
+  expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  expect_identical(out2$df, c(339L, 339L, 339L))
+
+  out3 <- estimate_contrasts(
+    model = fit,
+    contrast = "species",
+    df = Inf,
+    backend = "marginaleffects"
+  )
+  expect_equal(out1$p.value, out3$p, tolerance = 1e-4)
+})
