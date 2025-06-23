@@ -35,7 +35,7 @@
 #'     factorial designs), `comparison` can also be `"joint"`. In this case, use
 #'     the `test` argument to specify which test should be conducted: `"F"`
 #'     (default) or `"Chi2"`. `comparison = "inequality"` can be used to compute
-#'     the marginal effect inquality summary of categorical predictors' holistic
+#'     the marginal effect inequality summary of categorical predictors' holistic
 #'     effects (see _Mize and Han, 2025_).
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,

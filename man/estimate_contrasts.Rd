@@ -126,7 +126,7 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 factorial designs), \code{comparison} can also be \code{"joint"}. In this case, use
 the \code{test} argument to specify which test should be conducted: \code{"F"}
 (default) or \code{"Chi2"}. \code{comparison = "inequality"} can be used to compute
-the marginal effect inquality summary of categorical predictors' holistic
+the marginal effect inequality summary of categorical predictors' holistic
 effects (see \emph{Mize and Han, 2025}).
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
