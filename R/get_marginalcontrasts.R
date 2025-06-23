@@ -105,22 +105,7 @@ get_marginalcontrasts <- function(model,
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
-    check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
-    if (is.null(check_factors) || !all(check_factors)) {
-      insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
-    }
-    out <- marginaleffects::avg_comparisons(
-      model = model,
-      variables = as.list(stats::setNames(
-        rep_len("pairwise", length(my_args$contrast)),
-        my_args$contrast
-      )),
-      by = ifelse(is.null(my_args$by), TRUE, my_args$by),
-      hypothesis = ~I(mean(abs(x))) | term,
-      ...
-    )
-    class(out) <- unique(c("marginaleffects_means", class(out)))
-    out <- format(out, model, ci, hypothesis = "inequality", ...)
+    out <- .calculate_inequality_effect(model, model_data, my_args, ci, ...)
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
@@ -175,6 +160,32 @@ get_marginalcontrasts <- function(model,
     "estimate_means"
   )
   out
+}
+
+
+# special contrasts: inequality---------------- -------------------------------
+
+.calculate_inequality_effect <- function(model, model_data, my_args, ci, ...) {
+  # to calcualte marginal effects inequalities, all contrast predictors
+  # must be factors
+  check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
+  if (is.null(check_factors) || !all(check_factors)) {
+    insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
+  }
+  # for this special case, we need "avg_comparisons()", else we cannot specify
+  # the "variables" argument as named list
+  out <- marginaleffects::avg_comparisons(
+    model = model,
+    variables = as.list(stats::setNames(
+      rep_len("pairwise", length(my_args$contrast)),
+      my_args$contrast
+    )),
+    by = ifelse(is.null(my_args$by), TRUE, my_args$by),
+    hypothesis = ~I(mean(abs(x))) | term,
+    ...
+  )
+  class(out) <- unique(c("marginaleffects_means", class(out)))
+  format(out, model, ci, hypothesis = "inequality", ...)
 }
 
 
