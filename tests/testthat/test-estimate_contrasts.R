@@ -988,6 +988,6 @@ test_that("estimate_contrast, marginal effects inequalities", {
 
   expect_error(
     estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
-    regex = "Variables specified"
+    regex = "All variables specified"
   )
 })
