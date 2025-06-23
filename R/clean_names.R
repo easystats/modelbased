@@ -30,7 +30,7 @@
   if (length(vars) == 1) {
     if (type == "contrast") {
       names(means)[names(means) == vars] <- "Difference"
-    } else if (type == "inequality") {
+    } else if (type %in% c("inequality", "inequality_pairwise")) {
       names(means)[names(means) == vars] <- "Mean Difference"
     } else if (type == "mean") {
       if (minfo$is_logit && predict == "response") {

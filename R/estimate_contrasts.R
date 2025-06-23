@@ -34,17 +34,25 @@
 #'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
-#'   * String: Two special string options are `"inequality"` and `"total"`,
-#'     which compute the marginal effect inequality or total summary of
-#'     categorical predictors' overall effects, respectively, the comprehensive
-#'     effect of an independent variable across all outcome categories of a
-#'     nominal or ordinal dependent variable (see _Mize and Han, 2025_).
-#'     - `"inequality"`: this measure focuses on the heterogeneity of the
-#'       effects of a categorical *independent* variable. It helps understand how
-#'       the effect of the variable differs across its categories or levels.
-#'     - `"total"`: This measure provides a holistic view of how an independent
-#'       variable affects a nominal or ordinal *dependent* variable. It summarizes
-#'       the overall impact across all possible outcome categories.
+#'   * String: Two special string options are `"inequality"` and
+#'     `"inequality_pairwise"`.
+#'     - `comparison = "inequality"` computes the marginal effect inequality
+#'       summary of categorical predictors' overall effects, respectively, the
+#'       comprehensive effect of an independent variable across all outcome
+#'       categories of a nominal or ordinal dependent variable (total marginal
+#'       effect, see _Mize and Han, 2025_). The marginal effect inequality focuses
+#'       on the heterogeneity of the effects of a categorical *independent*
+#'       variable. It helps understand how the effect of the variable differs
+#'       across its categories or levels. When the *dependent* variable is
+#'       categorical (e.g., logistic, ordinal or multinomial regression), marginal
+#'       effect inequality provides a holistic view of how an independent variable
+#'       affects a nominal or ordinal *dependent* variable. It summarizes the
+#'       overall impact (total marginal effects) across all possible outcome
+#'       categories.
+#'     - `comparison = "inequality_pairwise"` computes the difference (pairwise
+#'       comparisons) between marginal effects inequality measures. Depending on
+#'       the sign, this measure indicates which of the predictors has a stronger
+#'       impact on the dependent variable in terms of inequalities.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -179,22 +187,24 @@ estimate_contrasts <- function(model, ...) {
 
 #' @rdname estimate_contrasts
 #' @export
-estimate_contrasts.default <- function(model,
-                                       contrast = NULL,
-                                       by = NULL,
-                                       predict = NULL,
-                                       ci = 0.95,
-                                       comparison = "pairwise",
-                                       estimate = NULL,
-                                       p_adjust = "none",
-                                       transform = NULL,
-                                       keep_iterations = FALSE,
-                                       effectsize = NULL,
-                                       iterations = 200,
-                                       es_type = "cohens.d",
-                                       backend = NULL,
-                                       verbose = TRUE,
-                                       ...) {
+estimate_contrasts.default <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  comparison = "pairwise",
+  estimate = NULL,
+  p_adjust = "none",
+  transform = NULL,
+  keep_iterations = FALSE,
+  effectsize = NULL,
+  iterations = 200,
+  es_type = "cohens.d",
+  backend = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -269,18 +279,22 @@ estimate_contrasts.default <- function(model,
   # Table formatting
   if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
-  } else if (identical(comparison, "inequality") || identical(comparison, "total")) {
+  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
     suffix <- "Inequality Analysis"
     type <- "inequality"
   } else {
     suffix <- "Contrasts Analysis"
   }
-  attr(out, "table_title") <- c(switch(estimate,
-    specific = paste("Model-based", suffix),
-    typical = paste("Marginal", suffix),
-    average = paste("Averaged", suffix),
-    population = paste("Counterfactual", suffix, "(G-computation)")
-  ), "blue")
+  attr(out, "table_title") <- c(
+    switch(
+      estimate,
+      specific = paste("Model-based", suffix),
+      typical = paste("Marginal", suffix),
+      average = paste("Averaged", suffix),
+      population = paste("Counterfactual", suffix, "(G-computation)")
+    ),
+    "blue"
+  )
 
   attr(out, "table_footer") <- .table_footer(
     out,
