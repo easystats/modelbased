@@ -17,6 +17,8 @@
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.
 
+* Fixed issues with object of class `aov`.
+
 # modelbased 0.11.2
 
 ## Changes

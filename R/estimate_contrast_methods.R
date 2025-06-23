@@ -153,9 +153,7 @@ estimate_contrasts.estimate_predicted <- function(model,
   }
 
   # p-value adjustment?
-  if (!is.null(p_adjust)) {
-    out <- .p_adjust(model, out, p_adjust, verbose, ...)
-  }
+  out <- .p_adjust(model, out, p_adjust, verbose, ...)
 
   # Table formatting
   attr(out, "table_title") <- c("Model-based Contrasts Analysis", "blue")
