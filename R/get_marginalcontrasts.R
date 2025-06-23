@@ -106,6 +106,7 @@ get_marginalcontrasts <- function(model,
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
     out <- .calculate_inequality_effect(model, model_data, my_args, comparison, ci, ...)
+    predict <- "response"
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(

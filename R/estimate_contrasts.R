@@ -264,12 +264,14 @@ estimate_contrasts.default <- function(model,
 
   # restore attributes later
   info <- attributes(estimated)
+  type <- "contrasts"
 
   # Table formatting
   if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
   } else if (identical(comparison, "inequality") || identical(comparison, "total")) {
     suffix <- "Inequality Analysis"
+    type <- "inequality"
   } else {
     suffix <- "Contrasts Analysis"
   }
@@ -283,7 +285,7 @@ estimate_contrasts.default <- function(model,
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,
-    type = "contrasts",
+    type = type,
     model = model,
     info = info
   )
