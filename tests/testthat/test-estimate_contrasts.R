@@ -984,7 +984,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
 
   expect_error(
     estimate_contrasts(m, "species", comparison = "inequality_pairwise"),
-    regex = "Total marginal effects"
+    regex = "Pairwise comparisons require"
   )
 
   out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")

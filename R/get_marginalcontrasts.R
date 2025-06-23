@@ -192,9 +192,9 @@ get_marginalcontrasts <- function(model,
   )
   # for the total marginal effects, we need to call "hypothesis()" again, this
   # time with ~revpairwise option
-  if (comparison == "total") {
+  if (comparison == "inequality_pairwise") {
     if (nrow(out) < 2) {
-      insight::format_error("Total marginal effects can only be calculated for more than one marginal effect inequality.")
+      insight::format_error("Pairwise comparisons require at least two marginal effects inequalities measures.")
     }
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
