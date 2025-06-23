@@ -968,3 +968,35 @@ test_that("estimate_contrast, works with aov (when no statistic is extracted)", 
   )
   expect_equal(out1$p.value, out3$p, tolerance = 1e-4)
 })
+
+
+test_that("estimate_contrast, marginal effects inequalities", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+
+  m <- glm(long_bill ~ species + island + bill_dep, data = penguins, family = "binomial")
+
+  out <- estimate_contrasts(m, "species", comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], 0.6381, tolerance = 1e-4)
+  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+
+  expect_error(
+    estimate_contrasts(m, "species", comparison = "total"),
+    regex = "Total marginal effects"
+  )
+
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
+  expect_identical(out$Parameter, c("island", "species"))
+
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "total")
+  expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_identical(out$Parameter, "island - species")
+
+  expect_error(
+    estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
+    regex = "All variables specified"
+  )
+})

@@ -68,7 +68,7 @@ get_marginalmeans <- function(model,
     model_info,
     verbose,
     ...
-  ) # nolint
+  )
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------

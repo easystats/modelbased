@@ -2,6 +2,12 @@
 
 ## Changes
 
+* The `comparison` argument gets two new option, `"inequality"` and `"total"`,
+  to compute the marginal effects inequality measure, which summarizes the the
+  overall effect of categorical predictors or the comprehensive effect of a
+  predictor across all outcome categories of a nominal or ordinal dependent
+  variable.
+
 * Added docs to show how to use *modelbased* with finite mixture models from
   package *brms*.
 

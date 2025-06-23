@@ -125,6 +125,19 @@ described below, see documentation of \link[marginaleffects:comparisons]{margina
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item String: Two special string options are \code{"inequality"} and \code{"total"},
+which compute the marginal effect inequality or total summary of
+categorical predictors' overall effects, "respectively, the comprehensive
+effect of an independent variable across all outcome categories of a
+nominal or ordinal dependent variable (see \emph{Mize and Han, 2025}).
+\itemize{
+\item \code{"inequality"}: this measure focuses on the heterogeneity of the
+effects of a categorical \emph{independent} variable. It helps understand how
+the effect of the variable differs across its categories or levels.
+\item \code{"total"}: This measure provides a holistic view of how an independent
+variable affects a nominal or ordinal \emph{dependent} variable. It summarizes
+the overall impact across all possible outcome categories.
+}
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -454,4 +467,8 @@ model <- rstanarm::stan_glm(
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+Nominal and Ordinal Variables. Sociological Science, 12, 115–157. \doi{10.15195/v12.a7}
 }
