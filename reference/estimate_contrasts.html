@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.8</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -228,6 +228,17 @@ described below, see documentation of <a href="https://marginaleffects.com/man/r
 multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
+<li><p>String: Two special string options are <code>"inequality"</code> and <code>"total"</code>,
+which compute the marginal effect inequality or total summary of
+categorical predictors' overall effects, "respectively, the comprehensive
+effect of an independent variable across all outcome categories of a
+nominal or ordinal dependent variable (see <em>Mize and Han, 2025</em>).</p><ul><li><p><code>"inequality"</code>: this measure focuses on the heterogeneity of the
+effects of a categorical <em>independent</em> variable. It helps understand how
+the effect of the variable differs across its categories or levels.</p></li>
+<li><p><code>"total"</code>: This measure provides a holistic view of how an independent
+variable affects a nominal or ordinal <em>dependent</em> variable. It summarizes
+the overall impact across all possible outcome categories.</p></li>
+</ul></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
@@ -491,6 +502,11 @@ but might produce biased predictions. However, you can try to set
 <code>bias_correction = TRUE</code>, to adjust for this bias.</p>
 <p>In particular for mixed models, using <code>"response"</code> is recommended, because
 averaging across random effects groups is then more accurate.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Mize, T., &amp; Han, B. (2025). Inequality and Total Effect Summary Measures for
+Nominal and Ordinal Variables. Sociological Science, 12, 115–157. <a href="https://doi.org/10.15195/v12.a7" class="external-link">doi:10.15195/v12.a7</a></p>
     </div>
 
     <div class="section level2">
