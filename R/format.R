@@ -254,7 +254,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # we prettify labels now. For special inequality contrasts, we also need no
   # cleaning, so we skip here, too
 
-  if (!is.null(comparison) && !identical(comparison, "inequality") && !identical(comparison, "total")) {
+  if (
+    !is.null(comparison) &&
+      !identical(comparison, "inequality") &&
+      !identical(comparison, "inequality_pairwise")
+  ) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
@@ -285,11 +289,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
     # value in the data grid, anyway. so we need to keep them
-    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
+      vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
     contrast <- contrast[keep_contrasts]
 
     # set to NULL, if all by-values have been removed here
-    if (!length(by)) by <- NULL
+    if (!length(by)) {
+      by <- NULL
+    }
 
     # if we have no contrasts left, e.g. due to `contrast = "time = factor(2)"`,
     # we error here - we have no contrasts to show
@@ -313,17 +320,17 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       numeric_focals <- vapply(dgrid[contrast], is.numeric, logical(1))
       # extract levels of non-numerics
       if (!all(numeric_focals)) {
-        all_levels <- unlist(lapply(
-          dgrid[contrast[!numeric_focals]],
-          function(i) as.character(unique(i))
-        ), use.names = FALSE)
+        all_levels <- unlist(
+          lapply(dgrid[contrast[!numeric_focals]], function(i) as.character(unique(i))),
+          use.names = FALSE
+        )
       }
       # extract levels of non-numerics
       if (any(numeric_focals)) {
-        all_num_levels <- unlist(lapply(
-          dgrid[contrast[numeric_focals]],
-          function(i) as.character(unique(i))
-        ), use.names = FALSE)
+        all_num_levels <- unlist(
+          lapply(dgrid[contrast[numeric_focals]], function(i) as.character(unique(i))),
+          use.names = FALSE
+        )
       }
       # create replacement vector
       replace_levels <- replace_num_levels <- NULL
@@ -335,7 +342,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
       }
       for (i in seq_along(all_num_levels)) {
-        replace_num_levels <- c(replace_num_levels, paste0("#", paste(rep_len("@", i), collapse = ""), "#"))
+        replace_num_levels <- c(
+          replace_num_levels,
+          paste0("#", paste(rep_len("@", i), collapse = ""), "#")
+        )
       }
 
       # replace all comparison levels with tokens
@@ -344,7 +354,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           comparison_pair <- sub(all_num_levels[j], replace_num_levels[j], comparison_pair)
         }
         for (j in seq_along(all_levels)) {
-          comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
+          comparison_pair <- sub(
+            paste0("\\<", all_levels[j], "\\>"),
+            replace_levels[j],
+            comparison_pair
+          )
         }
         # remove multiple spaces
         gsub("[[:space:]]{2,}", " ", comparison_pair)
@@ -359,10 +373,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         guess_columns = "max",
         verbose = FALSE
       )
-      new_colnames <- paste0(
-        rep.int(contrast, 2),
-        rep(1:2, each = length(contrast))
-      )
+      new_colnames <- paste0(rep.int(contrast, 2), rep(1:2, each = length(contrast)))
 
       # finally, replace all tokens with original comparison levels again
       params[] <- lapply(params, function(comparison_pair) {
@@ -370,7 +381,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
         }
         for (j in seq_along(all_num_levels)) {
-          comparison_pair <- sub(replace_num_levels[j], all_num_levels[j], comparison_pair, fixed = TRUE)
+          comparison_pair <- sub(
+            replace_num_levels[j],
+            all_num_levels[j],
+            comparison_pair,
+            fixed = TRUE
+          )
         }
         comparison_pair
       })

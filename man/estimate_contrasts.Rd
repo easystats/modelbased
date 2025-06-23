@@ -117,27 +117,23 @@ See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} an
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons},
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
+section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
 \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
-\item String: Two special string options are \code{"inequality"} and \code{"total"},
-which compute the marginal effect inequality or total summary of
-categorical predictors' overall effects, respectively, the comprehensive
-effect of an independent variable across all outcome categories of a
-nominal or ordinal dependent variable (see \emph{Mize and Han, 2025}).
-\itemize{
-\item \code{"inequality"}: this measure focuses on the heterogeneity of the
-effects of a categorical \emph{independent} variable. It helps understand how
-the effect of the variable differs across its categories or levels.
-\item \code{"total"}: This measure provides a holistic view of how an independent
-variable affects a nominal or ordinal \emph{dependent} variable. It summarizes
-the overall impact across all possible outcome categories.
-}
+\item String: Two special string options are \code{"inequality"} and
+\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+marginal effect inequality summary of categorical predictors' overall
+effects, respectively, the comprehensive effect of an independent
+variable across all outcome categories of a nominal or ordinal dependent
+variable (total marginal effect, see \emph{Mize and Han, 2025}).
+\code{comparison = "inequality_pairwise"} computes the difference (pairwise
+comparisons) between marginal effects inequality measures.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -302,6 +298,55 @@ these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Fi
 the effect of x averaged over all conditions, or instead within each
 condition (\code{using [estimate_slopes]}).
 }
+\section{Comparison options}{
+
+\itemize{
+\item \code{comparison = "pairwise"}: This method computes all possible unique
+differences between pairs of levels of the focal predictor. For example, if
+a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+\item \code{comparison = "reference"}: This compares each level of the focal predictor
+to a specified reference level (by default, the first level). For example,
+if levels are A, B, C, and A is the reference, it computes B-A and C-A.
+\item \code{comparison = "sequential"}: This compares each level to the one
+immediately following it in the factor's order. For levels A, B, C, it
+would compute B-A and C-B.
+\item \code{comparison = "meandev"}: This contrasts each level's estimate against the
+grand mean of all estimates for the focal predictor.
+\item \code{comparison = "meanotherdev"}: Similar to \code{meandev}, but each level's
+estimate is compared against the mean of all \emph{other} levels, excluding
+itself.
+\item \code{comparison = "poly"}: These are used for ordered categorical variables to
+test for linear, quadratic, cubic, etc., trends across the levels. They
+assume equal spacing between levels.
+\item \code{comparison = "helmert"}: Contrast 2nd level to the first, 3rd to the
+average of the first two, and so on. Each level (except the first) is
+compared to the mean of the preceding levels. For levels A, B, C, it would
+compute B-A and C-(A+B)/2.
+\item \code{comparison = "trt_vs_ctrl"}: This compares all levels (excluding the
+first, which is typically the control) against the first level. It's often
+used when comparing multiple treatment groups to a single control group.
+\item To test multiple hypotheses jointly (usually used for factorial designs),
+\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
+to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item \code{comparison = "inequality"} computes the marginal effect inequality summary
+of categorical predictors' overall effects, respectively, the comprehensive
+effect of an independent variable across all outcome categories of a
+nominal or ordinal dependent variable (total marginal effect, see \emph{Mize and
+Han, 2025}). The marginal effect inequality focuses on the heterogeneity of
+the effects of a categorical \emph{independent} variable. It helps understand
+how the effect of the variable differs across its categories or levels.
+When the \emph{dependent} variable is categorical (e.g., logistic, ordinal or
+multinomial regression), marginal effect inequality provides a holistic
+view of how an independent variable affects a nominal or ordinal
+\emph{dependent} variable. It summarizes the overall impact (total marginal
+effects) across all possible outcome categories.
+\item \code{comparison = "inequality_pairwise"} computes the difference (pairwise
+comparisons) between marginal effects inequality measures. Depending on the
+sign, this measure indicates which of the predictors has a stronger impact
+on the dependent variable in terms of inequalities.
+}
+}
+
 \section{Effect Size}{
 
 
