@@ -425,7 +425,7 @@
   # probability scale? ----------------------------------
   if (
     !is.null(response_scale) &&
-      response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
+      response_scale %in% c("response", "expectation", "invlink(link)", "prob", "probs") &&
       isTRUE(
         model_info$is_logit |
           model_info$is_binomial |

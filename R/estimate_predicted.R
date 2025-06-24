@@ -546,6 +546,7 @@ estimate_relation <- function(model,
   attr(out, "table_title") <- c("Model-based Predictions", "blue")
   attr(out, "coef_name") <- "Predicted"
   attr(out, "model_info") <- insight::model_info(model, response = 1)
+  attr(out, "predict") <- predict
   attr(out, "table_footer") <- .table_footer(
     out,
     by = grid_specs$at,
