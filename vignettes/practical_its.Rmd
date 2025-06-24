@@ -106,13 +106,13 @@ With our model fitted, we can now use `modelbased` to quantify and test the inte
 First, let's examine what the model estimates for the outcome right before and right after the intervention at `time = 200`. We can use `estimate_means()` to get the predicted values at `time = 199` and `time = 200` for both the factual (`event = 1`) and counterfactual (`event = 0`) scenarios.
 
 ```{r}
-estimate_means(mod, at = c("time=c(199,200)", "event"))
+estimate_means(mod, by = c("time=c(199,200)", "event"))
 ```
 
 To directly test if the immediate "jump" or "level change" at the moment of the intervention is statistically significant, we can use `estimate_contrasts()`. We ask for the difference between `event = 1` and `event = 0` specifically at `time = 200`.
 
 ```{r}
-estimate_contrasts(mod, contrast = "event", at = "time=200")
+estimate_contrasts(mod, contrast = "event", by = "time=200")
 ```
 
 The output shows a large, statistically significant difference of about 1020. This is our estimated **level change**. It represents the immediate impact of the intervention.
@@ -122,13 +122,13 @@ The output shows a large, statistically significant difference of about 1020. Th
 Next, we want to know if the intervention changed the long-term trend of the outcome. We can use `estimate_slopes()` to compute the slope of `time` for the pre-intervention period (`event = 0`) and the post-intervention period (`event = 1`).
 
 ```{r}
-estimate_slopes(mod, trend = "time", at = "event")
+estimate_slopes(mod, trend = "time", by = "event")
 ```
 
 The results show the pre-intervention slope was around 15, while the post-intervention slope was around 20. But is this difference statistically significant? We can again use `estimate_contrasts()`, this time contrasting the slopes of `time` across the levels of `event`.
 
 ```{r}
-estimate_contrasts(mod, contrast = "time", at = "event")
+estimate_contrasts(mod, contrast = "time", by = "event")
 ```
 
 The result is a significant difference of approximately 5. This is our estimated **slope change**. It tells us that after the intervention, the outcome not only jumped to a new level but also started increasing at a significantly faster rate.
