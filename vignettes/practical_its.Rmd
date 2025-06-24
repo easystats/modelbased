@@ -1,8 +1,8 @@
 ---
-title: "Interrupted Time Series Analysis with `modelbased`"
+title: "Interrupted Time Series Analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Interrupted Time Series Analysis with modelbased}
+  %\VignetteIndexEntry{Interrupted Time Series Analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
