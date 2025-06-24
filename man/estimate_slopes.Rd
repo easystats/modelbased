@@ -211,7 +211,7 @@ the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), 
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate
 the effect of x averaged over all conditions, or instead within each
-condition (\code{using [estimate_slopes]}).
+condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 }
 \section{Predictions and contrasts at meaningful values (data grids)}{
 
