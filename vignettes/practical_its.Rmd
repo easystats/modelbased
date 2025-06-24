@@ -16,7 +16,6 @@ knitr::opts_chunk$set(
   dpi = 300,
   message = FALSE,
   warning = FALSE,
-  fig.align = "center"
   package.startup.message = FALSE
 )
 
