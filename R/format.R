@@ -697,14 +697,22 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
   } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli || info$is_multinomial)) {
+    # here we add all models that model the probability of an outcome, such as
+    # binomial, multinomial, or Bernoulli models
     estimate_name <- "Probability"
   } else if (predict_type == "survival" && info$is_survival) {
+    # this is for survival models, where we want to predict the survival probability
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
+    # this is for zero-inflated models, where we want to predict the probability
+    # of a zero-inflated outcome
     estimate_name <- "Probability"
   } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
+    # this is for beta regression models, where we want to predict the mean
+    # value of the outcome, which is a proportion
     estimate_name <- "Proportion"
   } else {
+    # for all other models, we simply use "Mean"
     estimate_name <- "Mean"
   }
   estimate_name
