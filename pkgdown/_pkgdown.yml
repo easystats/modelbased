@@ -80,6 +80,8 @@ navbar:
           href: articles/practical_causality.html
         - text: "Intersectionality analysis using the MAIHDA framework"
           href: articles/practical_intersectionality.html
+        - text: "Interrupted Time Series Analysis"
+          href: articles/practical_its.html
         - text: -------
         - text: "Contrasts"
         - text: "Contrasts and comparisons"
