@@ -19,6 +19,10 @@
 * Improved handling when p-adjustment methods that are only available in the
   *emmeans* package were used for the *marginaleffects* backend.
 
+* The column header for the predicted values in `estimate_means()` for
+  multinomial models from packages *nnet* and *brglm2* has been changed to
+  `Probability`, to better reflect the scale of the predictions.
+
 ## Bug fixes
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.

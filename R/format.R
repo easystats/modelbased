@@ -696,7 +696,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
-  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
+  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli || info$is_multinomial)) {
     estimate_name <- "Probability"
   } else if (predict_type == "survival" && info$is_survival) {
     estimate_name <- "Probability"
