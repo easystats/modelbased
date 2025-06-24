@@ -26,3 +26,20 @@ test_that("estimate_relation prints ordinal models correctly", {
   expect_named(out, c("Row", "Response", "Sepal.Width", "Predicted", "CI_low", "CI_high", "Residuals")) # nolint
   expect_identical(dim(out), c(9L, 7L))
 })
+
+
+test_that("estimate_means, print bracl", {
+  skip_if_not_installed("brglm2")
+  # required for the penguins dataset, which was added in R 4.5.0
+  skip_if(getRversion() < "4.5.0")
+
+  data(penguins)
+
+  m <- brglm2::bracl(species ~ island + sex, data = penguins)
+  out <- estimate_means(m, by = "island")
+  expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
+
+  m <- nnet::multinom(species ~ island + sex, data = penguins)
+  out <- estimate_means(m, by = "island")
+  expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
+})

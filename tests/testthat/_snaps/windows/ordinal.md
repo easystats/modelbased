@@ -174,3 +174,51 @@
       Predictors modulated: Sepal.Width
       Predictions are on the probs-scale.
 
+# estimate_means, print bracl
+
+    Code
+      print(out, zap_small = TRUE)
+    Output
+      Estimated Marginal Means
+      
+      island    | Response  | Probability |   SE |        95% CI |     z
+      ------------------------------------------------------------------
+      Biscoe    | Adelie    |        0.27 | 0.02 | [ 0.24, 0.30] | 17.09
+      Biscoe    | Chinstrap |        0.00 | 0.00 | [ 0.00, 0.00] | 22.91
+      Biscoe    | Gentoo    |        0.72 | 0.02 | [ 0.69, 0.76] | 45.96
+      Dream     | Adelie    |        0.45 | 0.01 | [ 0.43, 0.46] | 52.85
+      Dream     | Chinstrap |        0.55 | 0.02 | [ 0.51, 0.59] | 29.50
+      Dream     | Gentoo    |        0.00 | 0.01 | [-0.02, 0.02] |  0.40
+      Torgersen | Adelie    |        0.98 | 0.05 | [ 0.89, 1.07] | 21.13
+      Torgersen | Chinstrap |        0.01 | 0.03 | [-0.05, 0.08] |  0.32
+      Torgersen | Gentoo    |        0.01 | 0.01 | [-0.02, 0.04] |  0.72
+      
+      Variable predicted: species
+      Predictors modulated: island
+      Predictors averaged: sex
+      Predictions are on the probs-scale.
+
+---
+
+    Code
+      print(out, zap_small = TRUE)
+    Output
+      Estimated Marginal Means
+      
+      island    | Response  | Probability |   SE |        95% CI |  t(325)
+      --------------------------------------------------------------------
+      Biscoe    | Adelie    |        0.27 | 0.03 | [ 0.20, 0.34] |    7.76
+      Biscoe    | Chinstrap |        0.00 | 0.00 | [ 0.00, 0.00] |    0.00
+      Biscoe    | Gentoo    |        0.73 | 0.03 | [ 0.66, 0.80] |   20.99
+      Dream     | Adelie    |        0.45 | 0.04 | [ 0.36, 0.54] |    9.97
+      Dream     | Chinstrap |        0.55 | 0.04 | [ 0.46, 0.64] |   12.33
+      Dream     | Gentoo    |        0.00 | 0.00 | [ 0.00, 0.00] |    0.00
+      Torgersen | Adelie    |        1.00 | 0.00 | [ 1.00, 1.00] | 4448.49
+      Torgersen | Chinstrap |        0.00 | 0.00 | [ 0.00, 0.00] |    0.00
+      Torgersen | Gentoo    |        0.00 | 0.00 | [ 0.00, 0.00] |    0.01
+      
+      Variable predicted: species
+      Predictors modulated: island
+      Predictors averaged: sex
+      Predictions are on the probs-scale.
+
