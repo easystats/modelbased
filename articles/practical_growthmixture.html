@@ -265,14 +265,23 @@ belongs to at each time point. We can use the
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Model-based Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Predicted (CI)    | time | hospital | education | age   | ID | Residuals</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 1.00 (0.00, 1.00) | 3    | 1        |       mid | -3.60 |  1 |     40.67</span></span>
-<span><span class="co">#&gt; 2.00 (0.00, 1.00) | 1    | 1        |       mid | -3.60 |  1 |     39.67</span></span>
-<span><span class="co">#&gt; 1.00 (0.00, 1.00) | 2    | 1        |       mid | -3.60 |  1 |     32.33</span></span>
-<span><span class="co">#&gt; 2.00 (0.86, 1.00) | 1    | 1        |       mid | 1.40  | 10 |     81.33</span></span>
-<span><span class="co">#&gt; 2.00 (0.85, 1.00) | 2    | 1        |       mid | 1.40  | 10 |     81.33</span></span>
-<span><span class="co">#&gt; 2.00 (0.89, 1.00) | 3    | 1        |       mid | 1.40  | 10 |     81.33</span></span>
+<span><span class="co">#&gt; time | hospital | education |   age | ID | Predicted | Probability</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; 3    | 1        | mid       | -3.60 | 1  |      1.00 |        0.72</span></span>
+<span><span class="co">#&gt; 1    | 1        | mid       | -3.60 | 1  |      2.00 |        0.51</span></span>
+<span><span class="co">#&gt; 2    | 1        | mid       | -3.60 | 1  |      1.00 |        0.50</span></span>
+<span><span class="co">#&gt; 1    | 1        | mid       |  1.40 | 10 |      2.00 |        0.97</span></span>
+<span><span class="co">#&gt; 2    | 1        | mid       |  1.40 | 10 |      2.00 |        0.97</span></span>
+<span><span class="co">#&gt; 3    | 1        | mid       |  1.40 | 10 |      2.00 |        0.97</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; time |       95% CI | Residuals</span></span>
+<span><span class="co">#&gt; -------------------------------</span></span>
+<span><span class="co">#&gt; 3    | [0.00, 1.00] |     40.67</span></span>
+<span><span class="co">#&gt; 1    | [0.00, 1.00] |     39.67</span></span>
+<span><span class="co">#&gt; 2    | [0.00, 1.00] |     32.33</span></span>
+<span><span class="co">#&gt; 1    | [0.86, 1.00] |     81.33</span></span>
+<span><span class="co">#&gt; 2    | [0.85, 1.00] |     81.33</span></span>
+<span><span class="co">#&gt; 3    | [0.89, 1.00] |     81.33</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictions are on the classification-scale.</span></span></code></pre></div>
@@ -303,7 +312,7 @@ GMM.</p>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span>show.ticks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_material.html" class="external-link">scale_color_material</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_material.html" class="external-link">scale_fill_material</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_growthmixture_files/figure-html/unnamed-chunk-7-1.png" width="100%" style="display: block; margin: auto;"></p>
+<p><img src="practical_growthmixture_files/figure-html/unnamed-chunk-8-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>The plot clearly reveals two distinct groups:</p>
 <ul>
 <li>
