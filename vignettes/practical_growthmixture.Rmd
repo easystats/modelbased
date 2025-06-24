@@ -22,7 +22,6 @@ knitr::opts_chunk$set(
 )
 
 options(modelbased_join_dots = FALSE)
-options(modelbased_select = "minimal")
 
 pkgs <- c("datawizard", "marginaleffects", "ggplot2", "brms", "httr2", "curl")
 
@@ -122,6 +121,9 @@ Our first step is to determine which latent class each patient belongs to at eac
 ```{r, message=FALSE, warning=FALSE}
 out <- estimate_prediction(brms_mixture_2, predict = "classification")
 head(out)
+```
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+options(modelbased_select = "minimal")
 ```
 
 The output table shows the `Predicted` class for each observation, along with the `Probability` of that classification. Now, let's join these predicted classes back to our original dataset for visualization.
