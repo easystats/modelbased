@@ -1,0 +1,219 @@
+---
+title: "An Introduction to Growth Mixture Models with brms and easystats"
+author: "The easystats team"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Growth Mixture Models with brms and easystats}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
+)
+
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
+pkgs <- c("datawizard", "marginaleffects", "ggplot2", "brms", "httr2", "curl")
+
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+## Introduction
+
+Growth Mixture Models (GMMs) are a powerful statistical technique used to identify unobserved subgroups (latent classes) within a population that exhibit different developmental trajectories over time. They are a subclass of latent class analysis and are particularly useful in longitudinal research to understand heterogeneity in how individuals change.
+
+This vignette demonstrates how to conduct a Growth Mixture Model using the `brms` package for Bayesian modeling and the `easystats` ecosystem (particularly `modelbased`, `parameters`, and `see`) for easy interpretation and visualization.
+
+## Loading Packages and Data
+
+First, we load the necessary packages. `brms` is for model fitting, and `easystats` is a suite of packages that simplifies the entire process of statistical analysis and visualization.
+
+```{r, message=FALSE, warning=FALSE}
+library(easystats)
+library(brms)
+library(ggplot2)
+```
+
+### The Dataset
+
+We will use the `qol_cancer` dataset, which is included in the `datawizard` package. This dataset contains longitudinal data on the health-related quality of life (QoL) of cancer patients, measured at three time points: pre-surgery, and 6 and 12 months post-surgery.
+
+The dataset includes the following variables:
+
+  - `ID`: A unique identifier for each patient.
+  - `QoL`: The outcome variable, a Quality of Life score.
+  - `time`: The measurement time point (1 = pre-surgery, 2 = 6 months, 3 = 12 months).
+  - `hospital`: The hospital where the operation was performed.
+  - `education`: The patient's education level (low, mid, high).
+  - `age`: The patient's age (standardized).
+
+Let's prepare the data by converting the `time` and `hospital` variables to factors.
+
+```{r}
+data(qol_cancer)
+
+qol_cancer$time <- as.factor(qol_cancer$time)
+qol_cancer$hospital <- as.factor(qol_cancer$hospital)
+```
+
+## Fitting the Growth Mixture Model
+
+The core of a GMM in `brms` is the `mixture()` family, which allows us to model the outcome variable as a mixture of distributions. In our case, we hypothesize that there are distinct subgroups of patients with different QoL trajectories. We will fit a model with two latent classes (`nmix = 2`).
+
+The model formula `QoL ~ time + hospital + education + age + (1 + time | ID)` specifies that `QoL` is predicted by several fixed effects (`time`, `hospital`, etc.) and a random effects structure `(1 + time | ID)`. This random effects part is crucial for growth models, as it allows each patient (`ID`) to have their own baseline QoL (random intercept `1`) and their own rate of change over time (random slope `time`).
+
+### Running the Model
+
+Fitting a Bayesian mixture model can be computationally intensive. For the purposes of this vignette, we will download a pre-fitted model from the `easystats` repository.
+
+```{r}
+# Download the pre-fitted model
+brms_mixture_2 <- download_model("brms_mixture_2")
+```
+
+If you wish to fit the model yourself, you can use the following code. Be aware that it may take several minutes to run.
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+# In case of convergence issues, specifying priors can help. The priors are
+# set for the population-level intercept of each mixture component (mu1, mu2).
+# prior <- c(
+#   prior(normal(0, 10), class = Intercept, dpar = mu1),
+#   prior(normal(0, 10), class = Intercept, dpar = mu2)
+# )
+
+set.seed(1234)
+brms_mixture_2 <- brms::brm(
+  formula = QoL ~ time + hospital + education + age + (1 + time | ID),
+  data = qol_cancer,
+  family = mixture(gaussian, nmix = 2), # Gaussian mixture with 2 classes
+  chains = 4,      # Number of MCMC chains
+  iter = 2000,     # Total iterations per chain
+  cores = 4,       # Use 4 CPU cores
+  seed = 1234,     # For reproducibility
+  silent = 2,      # Suppress Stan progress
+  refresh = 0
+)
+```
+
+## Interpreting the Model
+
+With our model fitted, we can now use the `easystats` functions to understand the results.
+
+### Predicted Class Membership
+
+Our first step is to determine which latent class each patient belongs to at each time point. We can use the `estimate_prediction()` function from the `modelbased` package with `predict = "classification"`.
+
+```{r, message=FALSE, warning=FALSE}
+out <- estimate_prediction(brms_mixture_2, predict = "classification")
+head(out)
+```
+
+The output table shows the `Predicted` class for each observation, along with the `Probability` of that classification. Now, let's join these predicted classes back to our original dataset for visualization.
+
+```{r}
+# we also keep ID and time for joining, to match observations in the original dataset
+d <- data_join(qol_cancer, out[c("time", "ID", "Predicted")], by = c("ID", "time"))
+d$class <- as.factor(d$Predicted)
+```
+
+### Visualizing Latent Class Trajectories
+
+Now we can visualize the average QoL trajectories for each latent class. This is the most intuitive way to understand the results of a GMM.
+
+```{r, fig.align='center', message=FALSE, warning=FALSE}
+ggplot(d, aes(x = as.numeric(time), y = QoL, color = class, fill = class)) +
+  geom_smooth(method = "lm") +
+  geom_point(alpha = 0.3, position = position_jitter(width = 0.1)) +
+  labs(
+    title = "Average Latent Class Trajectories of Quality of Life",
+    x = "Time (1=pre-op, 2=6m, 3=12m)",
+    y = "Quality of Life (QoL)"
+  ) +
+  theme_modern(show.ticks = TRUE) +
+  scale_color_material() +
+  scale_fill_material()
+```
+
+The plot clearly reveals two distinct groups:
+
+  - **Class 1 (blue):** This group starts with a lower Quality of Life, but shows a steady improvement over the 12-month period.
+  - **Class 2 (red):** This group starts with a much higher Quality of Life and maintains this high level throughout the observation period.
+
+### Inspecting Model Parameters
+
+To understand what predicts the outcome within each class, we can inspect the model parameters using `model_parameters()` from the `parameters` package.
+
+```{r}
+model_parameters(brms_mixture_2, diagnostic = NULL, drop = "time")
+```
+
+The output is neatly separated by class. We can see, for example, that higher education (`educationmid`, `educationhigh`) is associated with a higher QoL in both classes, but the magnitude of the effect differs.
+
+### Estimated Marginal Means
+
+We can dive deeper by estimating the marginal means of `QoL` for different predictor levels within each class. Let's look at the effect of `education`. The `predict = "link"` argument is essential for mixture models, as it computes the means for each class separately.
+
+```{r, message=FALSE, warning=FALSE}
+estimate_means(brms_mixture_2, by = "education", predict = "link")
+```
+
+This table gives us the expected mean `QoL` for each education level, conditional on class membership. For instance, a patient with "low" education in Class 2 has an estimated mean QoL of `74.43`, whereas a similar patient in Class 1 has an estimated mean QoL of `53.92`.
+
+### Comparing Levels with Contrasts
+
+We can also compute contrasts between predictor levels to understand the magnitude of differences.
+
+If we compute contrasts without `predict = "link"`, `estimate_contrasts()` averages the effects across both classes, giving a general sense of inequality.
+
+```{r, message=FALSE, warning=FALSE}
+estimate_contrasts(
+  brms_mixture_2,
+  contrast = "education"
+)
+```
+
+More interestingly, we can set `predict = "link"` to get contrasts both *within* and *between* classes. This provides a very detailed picture.
+
+```{r, message=FALSE, warning=FALSE, R.options=list(width = 100)}
+estimate_contrasts(
+  brms_mixture_2,
+  contrast = "education",
+  predict = "link"
+)
+```
+
+The output is rich with information. For example, `2 high | 2 low` shows the contrast between high and low education *within Class 2* (an increase of `11.53` in QoL), while `2 low | 1 low` compares a patient with low education in Class 2 to a patient with low education in Class 1 (a difference of `19.34`).
+
+### Quantifying Inequality
+
+Finally, `estimate_contrasts()` has a powerful `comparison = "inequality"` argument. This calculates the average absolute difference between all levels of a predictor, providing a single number that quantifies the overall disparity associated with that variable. Let's compare the inequality associated with `education` versus `hospital`.
+
+```{r, message=FALSE, warning=FALSE}
+estimate_contrasts(
+  brms_mixture_2,
+  contrast = c("education", "hospital"),
+  comparison = "inequality"
+)
+```
+
+The results are striking. The inequality median for `education` is `8.46`, while for `hospital` it is only `1.40`. This suggests that a patient's education level is associated with far greater disparities in their quality of life trajectory than the hospital where they received treatment.
+
+## Conclusion
+
+Growth Mixture Models are an excellent tool for uncovering hidden heterogeneity in longitudinal data. By using `brms` to fit these complex models and the `easystats` ecosystem to process and interpret them, researchers can move from complex output to actionable insights with ease. This vignette has shown how to identify latent classes, visualize their trajectories, and quantify the effects of covariates in a straightforward and intuitive workflow.
