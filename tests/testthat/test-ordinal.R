@@ -30,6 +30,7 @@ test_that("estimate_relation prints ordinal models correctly", {
 
 test_that("estimate_means, print bracl", {
   skip_if_not_installed("brglm2")
+  # required for the penguins dataset, which was added in R 4.5.0
   skip_if(getRversion() < "4.5.0")
 
   data(penguins)
