@@ -19,11 +19,12 @@ articles:
   overview_of_vignettes: overview_of_vignettes.html
   plotting: plotting.html
   practical_causality: practical_causality.html
+  practical_growthmixture: practical_growthmixture.html
   practical_intersectionality: practical_intersectionality.html
   practical_its: practical_its.html
   visualisation_matrix: visualisation_matrix.html
   workflow_modelbased: workflow_modelbased.html
-last_built: 2025-06-24T10:38Z
+last_built: 2025-06-24T15:56Z
 urls:
   reference: https://easystats.github.io/modelbased/reference
   article: https://easystats.github.io/modelbased/articles
