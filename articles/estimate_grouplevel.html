@@ -341,10 +341,7 @@ re-use</strong>.</p>
 &gt; 4  4    -0.127         0.0784
 &gt; 5  5    -0.052         0.0067
 &gt; 6  6    -0.077         0.0372</code></pre>
-<p>As you can see, the first row is repeated as it corresponds to the
-same participant (so the random effects are the same). Note that we can
-use <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> to remove all the duplicate rows. Let’s add
-it to the original data.</p>
+<p>Let’s merge it with the original data.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data_rt</span> <span class="op">&lt;-</span> <span class="fu">data_join</span><span class="op">(</span><span class="va">data_rt</span>, <span class="va">reshaped</span>, join <span class="op">=</span> <span class="st">"full"</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></code></pre></div>
 </div>
