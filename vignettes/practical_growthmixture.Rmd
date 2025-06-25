@@ -110,6 +110,8 @@ brms_mixture_2 <- brms::brm(
 )
 ```
 
+> You can use different factors to predict the outcome for each group in your data. To do this, simply create a separate prediction formula for each part of your model. For instance, you could use one set of factors to predict the quality of life for "Group 1" and a different set for "Group 2". You can even use factors to predict which group someone is likely to belong to. While this guide won't cover the details, a code example at the end shows you how.
+
 ## Interpreting the Model
 
 With our model fitted, we can now use the `easystats` functions to understand the results.
@@ -219,3 +221,64 @@ The results are striking. The inequality median for `education` is `8.46`, while
 ## Conclusion
 
 Growth Mixture Models are an excellent tool for uncovering hidden heterogeneity in longitudinal data. By using `brms` to fit these complex models and the `easystats` ecosystem to process and interpret them, researchers can move from complex output to actionable insights with ease. This vignette has shown how to identify latent classes, visualize their trajectories, and quantify the effects of covariates in a straightforward and intuitive workflow.
+
+## Supplement
+
+The estimation of latent class membership in finite mixture models within the R package `brms` is not governed by a single, fixed mechanism. Instead, `brms` provides a flexible and powerful framework that allows the researcher to explicitly define the data-generating process, including the factors that determine class membership. The central question of whether class membership is determined by the outcome's trajectory, by predictors, or if predictors are only relevant after classification, can be addressed directly: all of these scenarios represent valid modeling choices that can be implemented within `brms`. In a mixture model, the probabilities of belonging to each latent class - the mixing proportions, denoted as $\theta$ - are themselves parameters of the model. Consequently, they can be modeled as a function of predictors.
+
+Here's a summary of how to specify these different scenarios in `brms`:
+
+Table: Example `brms` Formula Syntax for Common Mixture Model Scenarios
+
+| Scenario | Research Question | Example `brms` Formula |
+| :--- | :--- | :--- |
+| **Simple Mixture** | "Are there two or more distinct latent groups in my outcome data, ignoring all predictors?" | `bf(y ~ 1, family = mixture(gaussian, nmix = 2))` |
+| **Predicting Component Means** | "Does a treatment (`x`) affect the outcome differently for the two latent groups?" | `bf(y ~ 1, mu1 ~ x, mu2 ~ x, family = mix)` or simply `bf(y ~ x, family = mix)`|
+| **Predicting Mixing Proportion** | "Does a demographic variable (`z`) predict which latent group an individual is likely to belong to?" | `bf(y ~ 1, theta2 ~ z, family = mix)` |
+| **Full Distributional Model** | "How do treatment (`x`) and demographics (`z`) jointly influence both the outcome within each group and the probability of group membership?" | `bf(y ~ 1, mu1 ~ x, mu2 ~ x, theta2 ~ z, sigma ~ group, family = mix)` |
+
+### Example Codes
+
+```{r, eval=FALSE, message=FALSE, warning=FALSE}
+# this model is actually equivalent to the one we used in the vignette
+# but it allows for different predictors for each class
+brms::brm(
+  bf(
+    # formula for individual trajectories
+    QoL ~ 1 + (1 + time | ID),
+    # predictors for class 1
+    mu1 ~ time + hospital + education + age + (1 + time | ID),
+    # predictors for class 2
+    mu2 ~ time + hospital + education + age + (1 + time | ID),
+    family = mixture(gaussian, nmix = 2)
+  ),
+  data = qol_cancer,
+  chains = 4,      # Number of MCMC chains
+  iter = 1000,     # Total iterations per chain
+  cores = 4,       # Use 4 CPU cores
+  seed = 1234,     # For reproducibility
+  refresh = 0
+)
+
+# in this example, we also model the class membership probabilities
+brms::brm(
+  bf(
+    # formula for individual trajectories
+    QoL ~ 1 + (1 + time | ID),
+    # predictors for class 1
+    mu1 ~ time + hospital + education + age + (1 + time | ID),
+    # predictors for class 2
+    mu2 ~ time + hospital + education + age + (1 + time | ID),
+    # predictors for class membership probabilities
+    theta1 ~ hospital + education,
+    theta2 ~ hospital + education + age,
+    family = mixture(gaussian, nmix = 2)
+  ),
+  data = qol_cancer,
+  chains = 4,      # Number of MCMC chains
+  iter = 1000,     # Total iterations per chain
+  cores = 4,       # Use 4 CPU cores
+  seed = 1234,     # For reproducibility
+  refresh = 0
+)
+```
