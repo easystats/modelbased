@@ -110,7 +110,7 @@ brms_mixture_2 <- brms::brm(
 )
 ```
 
-> It is also possible to define different sets of predictors for each class. Simply specify a formula for each parameter of the mixture model. For example, if we want to predict the mean QoL for each class differently, we can use `mu1` and `mu2` as separate formulas. We could also model the probability of class membership (`theta`) as a function of predictors. We will not cover this in detail here, but there an example code that illustrates how to do this and a summary table of common scenarios are provided at the end of this vignette.
+> You can use different factors to predict the outcome for each group in your data. To do this, simply create a separate prediction formula for each part of your model. For instance, you could use one set of factors to predict the quality of life for "Group 1" and a different set for "Group 2". You can even use factors to predict which group someone is likely to belong to. While this guide won't cover the details, a code example at the end shows you how.
 
 ## Interpreting the Model
 
