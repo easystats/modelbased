@@ -245,6 +245,17 @@ code. Be aware that it may take several minutes to run.</p>
 <span>  silent <span class="op">=</span> <span class="fl">2</span>,      <span class="co"># Suppress Stan progress</span></span>
 <span>  refresh <span class="op">=</span> <span class="fl">0</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p>It is also possible to define different sets of predictors for each
+class. Simply specify a formula for each parameter of the mixture model.
+For example, if we want to predict the mean QoL for each class
+differently, we can use <code>mu1</code> and <code>mu2</code> as
+separate formulas. We could also model the probability of class
+membership (<code>theta</code>) as a function of predictors. We will not
+cover this in detail here, but there an example code that illustrates
+how to do this and a summary table of common scenarios are provided at
+the end of this vignette.</p>
+</blockquote>
 </div>
 </div>
 <div class="section level2">
@@ -560,6 +571,52 @@ and the probability of group membership?”</td>
 </tr>
 </tbody>
 </table>
+<div class="section level3">
+<h3 id="example-codes">Example Codes<a class="anchor" aria-label="anchor" href="#example-codes"></a>
+</h3>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># this model is actually equivalent to the one we used in the vignette</span></span>
+<span><span class="co"># but it allows for different predictors for each class</span></span>
+<span><span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://paulbuerkner.com/brms/reference/brmsformula.html" class="external-link">bf</a></span><span class="op">(</span></span>
+<span>    <span class="co"># formula for individual trajectories</span></span>
+<span>    <span class="va">QoL</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    <span class="co"># predictors for class 1</span></span>
+<span>    <span class="va">mu1</span> <span class="op">~</span> <span class="va">time</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    <span class="co"># predictors for class 2</span></span>
+<span>    <span class="va">mu2</span> <span class="op">~</span> <span class="va">time</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu"><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">mixture</a></span><span class="op">(</span><span class="va">gaussian</span>, nmix <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">qol_cancer</span>,</span>
+<span>  chains <span class="op">=</span> <span class="fl">4</span>,      <span class="co"># Number of MCMC chains</span></span>
+<span>  iter <span class="op">=</span> <span class="fl">1000</span>,     <span class="co"># Total iterations per chain</span></span>
+<span>  cores <span class="op">=</span> <span class="fl">4</span>,       <span class="co"># Use 4 CPU cores</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">1234</span>,     <span class="co"># For reproducibility</span></span>
+<span>  refresh <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># in this example, we also model the class membership probabilities</span></span>
+<span><span class="fu">brms</span><span class="fu">::</span><span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://paulbuerkner.com/brms/reference/brmsformula.html" class="external-link">bf</a></span><span class="op">(</span></span>
+<span>    <span class="co"># formula for individual trajectories</span></span>
+<span>    <span class="va">QoL</span> <span class="op">~</span> <span class="fl">1</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    <span class="co"># predictors for class 1</span></span>
+<span>    <span class="va">mu1</span> <span class="op">~</span> <span class="va">time</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    <span class="co"># predictors for class 2</span></span>
+<span>    <span class="va">mu2</span> <span class="op">~</span> <span class="va">time</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">time</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
+<span>    <span class="co"># predictors for class membership probabilities</span></span>
+<span>    <span class="va">theta1</span> <span class="op">~</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span>,</span>
+<span>    <span class="va">theta2</span> <span class="op">~</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">age</span>,</span>
+<span>    family <span class="op">=</span> <span class="fu"><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">mixture</a></span><span class="op">(</span><span class="va">gaussian</span>, nmix <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">qol_cancer</span>,</span>
+<span>  chains <span class="op">=</span> <span class="fl">4</span>,      <span class="co"># Number of MCMC chains</span></span>
+<span>  iter <span class="op">=</span> <span class="fl">1000</span>,     <span class="co"># Total iterations per chain</span></span>
+<span>  cores <span class="op">=</span> <span class="fl">4</span>,       <span class="co"># Use 4 CPU cores</span></span>
+<span>  seed <span class="op">=</span> <span class="fl">1234</span>,     <span class="co"># For reproducibility</span></span>
+<span>  refresh <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
