@@ -219,3 +219,18 @@ The results are striking. The inequality median for `education` is `8.46`, while
 ## Conclusion
 
 Growth Mixture Models are an excellent tool for uncovering hidden heterogeneity in longitudinal data. By using `brms` to fit these complex models and the `easystats` ecosystem to process and interpret them, researchers can move from complex output to actionable insights with ease. This vignette has shown how to identify latent classes, visualize their trajectories, and quantify the effects of covariates in a straightforward and intuitive workflow.
+
+## Supplement
+
+The estimation of latent class membership in finite mixture models within the R package `brms` is not governed by a single, fixed mechanism. Instead, `brms` provides a flexible and powerful framework that allows the researcher to explicitly define the data-generating process, including the factors that determine class membership. The central question of whether class membership is determined by the outcome's trajectory, by predictors, or if predictors are only relevant after classification, can be addressed directly: all of these scenarios represent valid modeling choices that can be implemented within `brms`. In a mixture model, the probabilities of belonging to each latent class - the mixing proportions, denoted as $\theta$ - are themselves parameters of the model. Consequently, they can be modeled as a function of predictors.
+
+Here's a summary of how to specify these different scenarios in `brms`:
+
+Table: Example `brms` Formula Syntax for Common Mixture Model Scenarios
+
+| Scenario | Research Question | Example `brms` Formula |
+| :--- | :--- | :--- |
+| **Simple Mixture** | "Are there two or more distinct latent groups in my outcome data, ignoring all predictors?" | `bf(y ~ 1, family = mixture(gaussian, nmix = 2))` |
+| **Predicting Component Means** | "Does a treatment (`x`) affect the outcome differently for the two latent groups?" | `bf(y ~ 1, mu1 ~ x, mu2 ~ x, family = mix)` or simply `bf(y ~ x, family = mix)`|
+| **Predicting Mixing Proportion** | "Does a demographic variable (`z`) predict which latent group an individual is likely to belong to?" | `bf(y ~ 1, theta2 ~ z, family = mix)` |
+| **Full Distributional Model** | "How do treatment (`x`) and demographics (`z`) jointly influence both the outcome within each group and the probability of group membership?" | `bf(y ~ 1, mu1 ~ x, mu2 ~ x, theta2 ~ z, sigma ~ group, family = mix)` |
