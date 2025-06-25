@@ -128,7 +128,7 @@
                         <h4 data-toc-skip class="author">The easystats
 team</h4>
             
-            <h4 data-toc-skip class="date">2025-06-24</h4>
+            <h4 data-toc-skip class="date">2025-06-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_growthmixture.Rmd" class="external-link"><code>vignettes/practical_growthmixture.Rmd</code></a></small>
       <div class="d-none name"><code>practical_growthmixture.Rmd</code></div>
@@ -496,6 +496,70 @@ and interpret them, researchers can move from complex output to
 actionable insights with ease. This vignette has shown how to identify
 latent classes, visualize their trajectories, and quantify the effects
 of covariates in a straightforward and intuitive workflow.</p>
+</div>
+<div class="section level2">
+<h2 id="supplement">Supplement<a class="anchor" aria-label="anchor" href="#supplement"></a>
+</h2>
+<p>The estimation of latent class membership in finite mixture models
+within the R package <code>brms</code> is not governed by a single,
+fixed mechanism. Instead, <code>brms</code> provides a flexible and
+powerful framework that allows the researcher to explicitly define the
+data-generating process, including the factors that determine class
+membership. The central question of whether class membership is
+determined by the outcome’s trajectory, by predictors, or if predictors
+are only relevant after classification, can be addressed directly: all
+of these scenarios represent valid modeling choices that can be
+implemented within <code>brms</code>. In a mixture model, the
+probabilities of belonging to each latent class - the mixing
+proportions, denoted as <span class="math inline">\theta</span> - are
+themselves parameters of the model. Consequently, they can be modeled as
+a function of predictors.</p>
+<p>Here’s a summary of how to specify these different scenarios in
+<code>brms</code>:</p>
+<table class="table">
+<caption>Example <code>brms</code> Formula Syntax for Common Mixture
+Model Scenarios</caption>
+<colgroup>
+<col width="33%">
+<col width="33%">
+<col width="33%">
+</colgroup>
+<thead><tr class="header">
+<th align="left">Scenario</th>
+<th align="left">Research Question</th>
+<th align="left">Example <code>brms</code> Formula</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><strong>Simple Mixture</strong></td>
+<td align="left">“Are there two or more distinct latent groups in my
+outcome data, ignoring all predictors?”</td>
+<td align="left"><code>bf(y ~ 1, family = mixture(gaussian, nmix = 2))</code></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Predicting Component Means</strong></td>
+<td align="left">“Does a treatment (<code>x</code>) affect the outcome
+differently for the two latent groups?”</td>
+<td align="left">
+<code>bf(y ~ 1, mu1 ~ x, mu2 ~ x, family = mix)</code>
+or simply <code>bf(y ~ x, family = mix)</code>
+</td>
+</tr>
+<tr class="odd">
+<td align="left"><strong>Predicting Mixing Proportion</strong></td>
+<td align="left">“Does a demographic variable (<code>z</code>) predict
+which latent group an individual is likely to belong to?”</td>
+<td align="left"><code>bf(y ~ 1, theta2 ~ z, family = mix)</code></td>
+</tr>
+<tr class="even">
+<td align="left"><strong>Full Distributional Model</strong></td>
+<td align="left">“How do treatment (<code>x</code>) and demographics
+(<code>z</code>) jointly influence both the outcome within each group
+and the probability of group membership?”</td>
+<td align="left"><code>bf(y ~ 1, mu1 ~ x, mu2 ~ x, theta2 ~ z, sigma ~ group, family = mix)</code></td>
+</tr>
+</tbody>
+</table>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
