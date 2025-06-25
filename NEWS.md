@@ -23,6 +23,9 @@
   multinomial models from packages *nnet* and *brglm2* has been changed to
   `Probability`, to better reflect the scale of the predictions.
 
+* New vignettes (Case Studies) about using *modelbased* with finite mixture models
+  and interrupted time series analysis.
+
 ## Bug fixes
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.

@@ -257,8 +257,8 @@ test_that("estimate_slopes() - posterior draws, get_predicted", {
     c(
       "names", "class", "row.names", "ci", "keep_iterations", "response",
       "transform", "model", "datagrid", "focal_terms", "preserve_range",
-      "table_title", "coef_name", "model_info", "table_footer", "adjusted_for",
-      "at_specs", "at", "by", "reference", "data"
+      "table_title", "coef_name", "model_info", "predict", "table_footer",
+      "adjusted_for", "at_specs", "at", "by", "reference", "data"
     )
   )
   expect_named(
