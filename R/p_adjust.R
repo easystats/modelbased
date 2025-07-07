@@ -94,11 +94,6 @@
   # `estimate_slopes()` was called, or a modelbased object, when processing /
   # formatting was already done. So we check for both, and extract the required
   # columns.
-  df_column <- intersect(c("df", "df_error"), colnames(params))[1]
-  if (is.na(df_column)) {
-    df_column <- ".sup_df"
-    params[[df_column]] <- Inf
-  }
   coef_column <- intersect(c(.valid_coefficient_names(), "estimate"), colnames(params))[1]
   if (is.na(coef_column)) {
     insight::format_alert("Could not find coefficient column to apply `sup-t` adjustment.")
@@ -119,6 +114,11 @@
   if (is.na(ci_low_column) || is.na(ci_high_column)) {
     insight::format_alert("Could not extract confidence intervals to apply `sup-t` adjustment.")
     return(params)
+  }
+  df_column <- intersect(c("df", "df_error"), colnames(params))[1]
+  if (is.na(df_column)) {
+    df_column <- ".sup_df"
+    params[[df_column]] <- Inf
   }
   # calculate updated confidence interval level, based on simultaenous
   # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
