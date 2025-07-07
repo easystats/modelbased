@@ -95,6 +95,26 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
     ),
     tolerance = 1e-2
   )
+
+  skip_if_not_installed("mvnorm")
+  set.seed(123)
+  out <- estimate_slopes(model, "Petal.Width", by = "Petal.Length", p_adjust = "sup-t")
+  expect_equal(
+    out$CI_low,
+    c(
+      -0.90003, -0.72665, -0.55721, -0.39196, -0.23229, -0.07873,
+      0.06797, 0.20793, 0.34088, 0.468
+    ),
+    tolerance = 1e-2
+  )
+  expect_equal(
+    out$p,
+    c(
+      0.01765, 0.08691, 0.36222, 0.9097, 0.76792, 0.17275, 0.01369,
+      5e-04, 1e-05, 0
+    ),
+    tolerance = 1e-2
+  )
 })
 
 

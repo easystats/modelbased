@@ -82,7 +82,7 @@
   # get correlation matrix, based on the covariance matrix
   vc <- .safe(stats::cov2cor(attributes(params)$vcov))
   if (is.null(vc)) {
-    insight::format_warning("Could not calculate covariance matrix for `sup-t` adjustment.")
+    insight::format_alert("Could not calculate covariance matrix for `sup-t` adjustment.")
     return(params)
   }
   # get confidence interval level, or set default
@@ -90,27 +90,47 @@
   if (is.null(ci_level)) {
     ci_level <- 0.95
   }
-  # find degrees of freedom column, if available
-  df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))][1]
+  # several sanity checks - we can either have a marginaleffects object, when
+  # `estimate_slopes()` was called, or a modelbased object, when processing /
+  # formatting was already done. So we check for both, and extract the required
+  # columns.
+  df_column <- intersect(c("df", "df_error"), colnames(params))[1]
   if (is.na(df_column)) {
     df_column <- ".sup_df"
     params[[df_column]] <- Inf
   }
-  coef_column <- intersect(.valid_coefficient_names(), colnames(params))[1]
+  coef_column <- intersect(c(.valid_coefficient_names(), "estimate"), colnames(params))[1]
   if (is.na(coef_column)) {
+    insight::format_alert("Could not find coefficient column to apply `sup-t` adjustment.")
+    return(params)
+  }
+  se_column <- intersect(c("SE", "std.error"), colnames(params))[1]
+  if (is.na(se_column)) {
+    insight::format_alert("Could not extract standard errors to apply `sup-t` adjustment.")
+    return(params)
+  }
+  p_column <- intersect(c("p", "p.value"), colnames(params))[1]
+  if (is.na(p_column)) {
+    insight::format_alert("Could not extract p-values to apply `sup-t` adjustment.")
+    return(params)
+  }
+  ci_low_column <- intersect(c("CI_low", "conf.low"), colnames(params))[1]
+  ci_high_column <- intersect(c("CI_high", "conf.high"), colnames(params))[1]
+  if (is.na(ci_low_column) || is.na(ci_high_column)) {
+    insight::format_alert("Could not extract confidence intervals to apply `sup-t` adjustment.")
     return(params)
   }
   # calculate updated confidence interval level, based on simultaenous
   # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
   crit <- mvtnorm::qmvt(ci_level, df = params[[df_column]][1], tail = "both.tails", corr = vc)$quantile
   # update confidence intervals
-  params$CI_low <- params[[coef_column]] - crit * params$SE
-  params$CI_high <- params[[coef_column]] + crit * params$SE
+  params[[ci_low_column]] <- params[[coef_column]] - crit * params[[se_column]]
+  params[[ci_high_column]] <- params[[coef_column]] + crit * params[[se_column]]
   # update p-values
   for (i in 1:nrow(params)) {
-    params$p[i] <- 1 - mvtnorm::pmvt(
-      lower = rep(-abs(stats::qt(params$p[i] / 2, df = params[[df_column]][i])), nrow(vc)),
-      upper = rep(abs(stats::qt(params$p[i] / 2, df = params[[df_column]][i])), nrow(vc)),
+    params[[p_column]][i] <- 1 - mvtnorm::pmvt(
+      lower = rep(-abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
+      upper = rep(abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
       corr = vc,
       df = params[[df_column]][i]
     )
