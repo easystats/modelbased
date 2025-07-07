@@ -262,7 +262,9 @@ Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 predictors (one specified in \code{trend}, one in \code{by}). In this case, the
 \code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
 (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
-\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
+\code{"tukey"}, \code{"sidak"},\code{"sup-t"}, or \code{"holm"}. \code{"sup-t"} computes simultaneous
+confidence bands, also called sup-t confidence band (Montiel Olea &
+Plagborg-Møller, 2019).}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

@@ -123,6 +123,7 @@ get_marginaltrends <- function(model,
 
   # Compute stuff
   estimated <- suppressWarnings(do.call(marginaleffects::avg_slopes, fun_args))
+  vcov_slopes <- .safe(stats::vcov(estimated))
 
   # Fourth step: back-transform response --------------------------------------
   # ---------------------------------------------------------------------------
@@ -157,7 +158,8 @@ get_marginaltrends <- function(model,
         p_adjust = p_adjust,
         ci = ci,
         transform = !is.null(transform),
-        keep_iterations = keep_iterations
+        keep_iterations = keep_iterations,
+        vcov = vcov_slopes
       )
     )
   )

@@ -9,10 +9,12 @@
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
-#' `"holm"`. The `"esarey"` option is specifically for the case of Johnson-Neyman
-#' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
-#' in an interaction term. Details for the other options can be found in the
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
+#' `"esarey"` or `"holm"`. The `"esarey"` option is specifically for the case of
+#' Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with two
+#' numeric predictors in an interaction term. `"sup-t"` computes simultaneous
+#' confidence bands, also called sup-t confidence band (Montiel Olea &
+#' Plagborg-Møller, 2019). Details for the other options can be found in the
 #' p-value adjustment section of the `emmeans::test` documentation or
 #' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
 #' package are only available if you set `backend = "emmeans"`.
@@ -153,8 +155,13 @@
 #' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
 #'
 #' @references
-#' Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
-#' Nominal and Ordinal Variables. Sociological Science, 12, 115–157. \doi{10.15195/v12.a7}
+#' - Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+#'   Nominal and Ordinal Variables. Sociological Science, 12, 115–157.
+#'   \doi{10.15195/v12.a7}
+#'
+#' - Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+#'   confidence bands: Theory, implementation, and an application to SVARs.
+#'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{

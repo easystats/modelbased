@@ -11,7 +11,11 @@
   focal <- attributes(params)$contrast
   # Use .safe to handle cases where no statistic is extracted
   statistic <- .safe(insight::get_statistic(model)$Statistic)
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  # extract degrees of freedom
+  dof <- .safe(params$df[1])
+  if (is.null(dof)) {
+    dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
 
   # harmonize argument
   p_adjust <- tolower(p_adjust)
@@ -20,7 +24,7 @@
   # we have to print a different error message.
   emmeans_options <- c("scheffe", "mvt", "dunnettx")
 
-  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey")
+  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey", "sup-t")
   insight::validate_argument(p_adjust, all_methods)
 
   # emmeans methods? Then tell user
@@ -33,6 +37,11 @@
   # esarey is specifically for johnson-neyman intervals
   if (p_adjust == "esarey") {
     return(.p_adjust_esarey(params))
+  }
+
+  # sup-t is a longer subroutine, so we handle it separately
+  if (p_adjust == "sup-t") {
+    return(.p_adjust_supt(params, model))
   }
 
   # needed for rank adjustment
@@ -64,6 +73,48 @@
     params[["p"]] <- 1 - (1 - params[["p"]])^rank_adjust
   }
 
+  params
+}
+
+
+.p_adjust_supt <- function(params, model) {
+  insight::check_if_installed("mvtnorm")
+  # get correlation matrix, based on the covariance matrix
+  vc <- .safe(stats::cov2cor(attributes(params)$vcov))
+  if (is.null(vc)) {
+    insight::format_warning("Could not calculate covariance matrix for `sup-t` adjustment.")
+    return(params)
+  }
+  # get confidence interval level, or set default
+  ci_level <- attributes(params)$ci
+  if (is.null(ci_level)) {
+    ci_level <- 0.95
+  }
+  # find degrees of freedom column, if available
+  df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))]
+  if (length(df_column) == 0) {
+    return(params)
+  }
+  coef_column <- intersect(.valid_coefficient_names(), colnames(params))[1]
+  if (length(coef_column) == 0) {
+    return(params)
+  }
+  # calculate updated confidence interval level, based on simultaenous
+  # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
+  crit <- mvtnorm::qmvt(ci_level, df = params[[df_column]][1], tail = "both.tails", corr = vc)$quantile
+  ci_level <- 1 - 2 * stats::pt(-abs(crit), df = params[[df_column]][1])
+  # update confidence intervals
+  params$CI_low <- params[[coef_column]] - crit * params$SE
+  params$CI_high <- params[[coef_column]] + crit * params$SE
+  # udpate p-values
+  for (i in 1:nrow(params)) {
+    params$p[i] <- 1 - mvtnorm::pmvt(
+      lower = rep(-abs(stats::qt(params$p[i] / 2, df = params[[df_column]][i])), nrow(vc)),
+      upper = rep(abs(stats::qt(params$p[i] / 2, df = params[[df_column]][i])), nrow(vc)),
+      corr = vc,
+      df = params[[df_column]][i]
+    )
+  }
   params
 }
 
