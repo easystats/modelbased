@@ -11,7 +11,11 @@
   focal <- attributes(params)$contrast
   # Use .safe to handle cases where no statistic is extracted
   statistic <- .safe(insight::get_statistic(model)$Statistic)
-  dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  # extract degrees of freedom
+  dof <- .safe(params$df[1])
+  if (is.null(dof)) {
+    dof <- insight::get_df(model, type = "wald", verbose = FALSE)
+  }
 
   # harmonize argument
   p_adjust <- tolower(p_adjust)
@@ -20,7 +24,7 @@
   # we have to print a different error message.
   emmeans_options <- c("scheffe", "mvt", "dunnettx")
 
-  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey")
+  all_methods <- c(tolower(stats::p.adjust.methods), emmeans_options, "tukey", "sidak", "esarey", "sup-t")
   insight::validate_argument(p_adjust, all_methods)
 
   # emmeans methods? Then tell user
@@ -33,6 +37,11 @@
   # esarey is specifically for johnson-neyman intervals
   if (p_adjust == "esarey") {
     return(.p_adjust_esarey(params))
+  }
+
+  # sup-t is a longer subroutine, so we handle it separately
+  if (p_adjust == "sup-t") {
+    return(.p_adjust_supt(params, model))
   }
 
   # needed for rank adjustment
@@ -63,6 +72,71 @@
     # sidak adjustment
     params[["p"]] <- 1 - (1 - params[["p"]])^rank_adjust
   }
+
+  params
+}
+
+
+.p_adjust_supt <- function(params, model) {
+  insight::check_if_installed("mvtnorm")
+  # get correlation matrix, based on the covariance matrix
+  vc <- .safe(stats::cov2cor(attributes(params)$vcov))
+  if (is.null(vc)) {
+    insight::format_alert("Could not calculate covariance matrix for `sup-t` adjustment.")
+    return(params)
+  }
+  # get confidence interval level, or set default
+  ci_level <- attributes(params)$ci
+  if (is.null(ci_level)) {
+    ci_level <- 0.95
+  }
+  # several sanity checks - we can either have a marginaleffects object, when
+  # `estimate_slopes()` was called, or a modelbased object, when processing /
+  # formatting was already done. So we check for both, and extract the required
+  # columns.
+  df_column <- intersect(c("df", "df_error"), colnames(params))[1]
+  if (is.na(df_column)) {
+    df_column <- ".sup_df"
+    params[[df_column]] <- Inf
+  }
+  coef_column <- intersect(c(.valid_coefficient_names(), "estimate"), colnames(params))[1]
+  if (is.na(coef_column)) {
+    insight::format_alert("Could not find coefficient column to apply `sup-t` adjustment.")
+    return(params)
+  }
+  se_column <- intersect(c("SE", "std.error"), colnames(params))[1]
+  if (is.na(se_column)) {
+    insight::format_alert("Could not extract standard errors to apply `sup-t` adjustment.")
+    return(params)
+  }
+  p_column <- intersect(c("p", "p.value"), colnames(params))[1]
+  if (is.na(p_column)) {
+    insight::format_alert("Could not extract p-values to apply `sup-t` adjustment.")
+    return(params)
+  }
+  ci_low_column <- intersect(c("CI_low", "conf.low"), colnames(params))[1]
+  ci_high_column <- intersect(c("CI_high", "conf.high"), colnames(params))[1]
+  if (is.na(ci_low_column) || is.na(ci_high_column)) {
+    insight::format_alert("Could not extract confidence intervals to apply `sup-t` adjustment.")
+    return(params)
+  }
+  # calculate updated confidence interval level, based on simultaenous
+  # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
+  crit <- mvtnorm::qmvt(ci_level, df = params[[df_column]][1], tail = "both.tails", corr = vc)$quantile
+  # update confidence intervals
+  params[[ci_low_column]] <- params[[coef_column]] - crit * params[[se_column]]
+  params[[ci_high_column]] <- params[[coef_column]] + crit * params[[se_column]]
+  # update p-values
+  for (i in 1:nrow(params)) {
+    params[[p_column]][i] <- 1 - mvtnorm::pmvt(
+      lower = rep(-abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
+      upper = rep(abs(stats::qt(params[[p_column]][i] / 2, df = params[[df_column]][i])), nrow(vc)),
+      corr = vc,
+      df = params[[df_column]][i]
+    )
+  }
+  # clean up - remove temporary column
+  params[[".sup_df"]] <- NULL
 
   params
 }

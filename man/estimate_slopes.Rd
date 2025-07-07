@@ -69,9 +69,11 @@ See also section \emph{Predictions on different scales}.}
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 predictors (one specified in \code{trend}, one in \code{by}). In this case, the
-\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
-(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
-\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
+\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
+one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea & Plagborg-Møller, 2019).}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -301,4 +303,9 @@ estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 }

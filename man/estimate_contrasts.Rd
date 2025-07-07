@@ -186,10 +186,12 @@ e.g. \code{options(modelbased_estimate = "average")}}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"esarey"} or
-\code{"holm"}. The \code{"esarey"} option is specifically for the case of Johnson-Neyman
-intervals, i.e. when calling \code{estimate_slopes()} with two numeric predictors
-in an interaction term. Details for the other options can be found in the
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"sup-t"},
+\code{"esarey"} or \code{"holm"}. The \code{"esarey"} option is specifically for the case of
+Johnson-Neyman intervals, i.e. when calling \code{estimate_slopes()} with two
+numeric predictors in an interaction term. \code{"sup-t"} computes simultaneous
+confidence bands, also called sup-t confidence band (Montiel Olea &
+Plagborg-Møller, 2019). Details for the other options can be found in the
 p-value adjustment section of the \code{emmeans::test} documentation or
 \code{?stats::p.adjust}. Note that certain options provided by the \strong{emmeans}
 package are only available if you set \code{backend = "emmeans"}.}
@@ -514,6 +516,12 @@ estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 \dontshow{\}) # examplesIf}
 }
 \references{
-Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
-Nominal and Ordinal Variables. Sociological Science, 12, 115–157. \doi{10.15195/v12.a7}
+\itemize{
+\item Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+Nominal and Ordinal Variables. Sociological Science, 12, 115–157.
+\doi{10.15195/v12.a7}
+\item Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
+}
 }

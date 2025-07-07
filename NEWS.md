@@ -26,6 +26,9 @@
 * New vignettes (Case Studies) about using *modelbased* with finite mixture models
   and interrupted time series analysis.
 
+* The `p_adjust` argument gets a new option, `"sup-t"`, to calculate
+  simultaneous confidence intervals.
+
 ## Bug fixes
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.
