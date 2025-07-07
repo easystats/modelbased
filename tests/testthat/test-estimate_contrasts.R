@@ -387,6 +387,27 @@ test_that("estimate_contrasts - p.adjust", {
     ),
     tolerance = 1e-3
   )
+
+  skip_if_not_installed("glmmTMB")
+  d <- glmmTMB::Salamanders
+  model <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~mined,
+    family = poisson,
+    data = d
+  ))
+
+  out <- head(estimate_contrasts(model, "spp", by = "mined", p_adjust = "sup-t"))
+  expect_equal(
+    out$p,
+    c(0.00253, 0.5969, 0.18171, 0.00479, 0.00697, 0.99461),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$p,
+    c(-0.29058, -0.04607, -0.21531, 0.04065, 0.0327, -0.08185),
+    tolerance = 1e-3
+  )
 })
 
 

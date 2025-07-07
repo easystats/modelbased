@@ -93,7 +93,8 @@
   # find degrees of freedom column, if available
   df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))]
   if (length(df_column) == 0) {
-    return(params)
+    df_column <- ".sup_df"
+    params[[df_column]] <- Inf
   }
   coef_column <- intersect(.valid_coefficient_names(), colnames(params))[1]
   if (length(coef_column) == 0) {
@@ -114,6 +115,9 @@
       df = params[[df_column]][i]
     )
   }
+  # clean up - remove temporary column
+  params[[".sup_df"]] <- NULL
+
   params
 }
 
