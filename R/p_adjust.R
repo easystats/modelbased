@@ -102,11 +102,10 @@
   # calculate updated confidence interval level, based on simultaenous
   # confidence intervals (https://onlinelibrary.wiley.com/doi/10.1002/jae.2656)
   crit <- mvtnorm::qmvt(ci_level, df = params[[df_column]][1], tail = "both.tails", corr = vc)$quantile
-  ci_level <- 1 - 2 * stats::pt(-abs(crit), df = params[[df_column]][1])
   # update confidence intervals
   params$CI_low <- params[[coef_column]] - crit * params$SE
   params$CI_high <- params[[coef_column]] + crit * params$SE
-  # udpate p-values
+  # update p-values
   for (i in 1:nrow(params)) {
     params$p[i] <- 1 - mvtnorm::pmvt(
       lower = rep(-abs(stats::qt(params$p[i] / 2, df = params[[df_column]][i])), nrow(vc)),

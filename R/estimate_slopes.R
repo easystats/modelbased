@@ -28,7 +28,7 @@
 #' predictors (one specified in `trend`, one in `by`). In this case, the
 #' `"esarey"` option is recommended, but `p_adjust` can also be one of `"none"`
 #' (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`,
-#' `"tukey"`, `"sidak"`,`"sup-t"`, or `"holm"`. `"sup-t"` computes simultaneous
+#' `"tukey"`, `"sidak"`, `"sup-t"`, or `"holm"`. `"sup-t"` computes simultaneous
 #' confidence bands, also called sup-t confidence band (Montiel Olea &
 #' Plagborg-Møller, 2019).
 #' @inheritParams estimate_means
