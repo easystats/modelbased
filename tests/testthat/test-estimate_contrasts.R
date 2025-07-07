@@ -364,6 +364,29 @@ test_that("estimate_contrasts - p.adjust", {
     p_adjust = "scheffe",
     backend = "emmeans"
   ))
+
+  skip_if_not_installed("mvtnorm")
+  dat <- iris
+  dat$fac <- ifelse(dat$Sepal.Length < 5.8, "A", "B")
+  model <- lm(Sepal.Width ~ Species * fac, data = dat)
+  out <- estimate_contrasts(model, c("Species", "fac"), p_adjust = "sup-t")
+  expect_equal(
+    out$p,
+    c(
+      0.44701, 0, 0, 5e-04, 0, 0.001, 0.00888, 0.00301, 0.02711,
+      0.10628, 0.99998, 0.00048, 0.71949, 0.51098, 0.28544
+    ),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$p,
+    c(
+      -0.34435, -1.02261, -0.7626, -1.36273, -0.60602, -2.30698,
+      -2.06543, -2.46081, -1.93054, -0.0276, -0.60036, 0.1234, -0.82613,
+      -0.08803, -0.1492
+    ),
+    tolerance = 1e-3
+  )
 })
 
 

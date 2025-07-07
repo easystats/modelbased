@@ -78,6 +78,7 @@ Suggests:
     marginaleffects (>= 0.26.0),
     mice,
     mgcv,
+    mvtnorm,
     nanoparquet,
     nnet,
     ordinal,
