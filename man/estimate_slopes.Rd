@@ -69,11 +69,11 @@ See also section \emph{Predictions on different scales}.}
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 predictors (one specified in \code{trend}, one in \code{by}). In this case, the
-\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
-(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
-\code{"tukey"}, \code{"sidak"}, \code{"sup-t"}, or \code{"holm"}. \code{"sup-t"} computes simultaneous
-confidence bands, also called sup-t confidence band (Montiel Olea &
-Plagborg-Møller, 2019).}
+\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
+one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea & Plagborg-Møller, 2019).}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
