@@ -92,12 +92,12 @@
   }
   # find degrees of freedom column, if available
   df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))][1]
-  if (length(df_column) == 0) {
+  if (is.na(df_column)) {
     df_column <- ".sup_df"
     params[[df_column]] <- Inf
   }
   coef_column <- intersect(.valid_coefficient_names(), colnames(params))[1]
-  if (length(coef_column) == 0) {
+  if (is.na(coef_column)) {
     return(params)
   }
   # calculate updated confidence interval level, based on simultaenous
