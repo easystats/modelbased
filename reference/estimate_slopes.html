@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.13</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.11.2.14</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -202,9 +202,11 @@ transformation is selected (which usually is <code>"response"</code>). See also
 comparisons. For <code>estimate_slopes()</code>, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 predictors (one specified in <code>trend</code>, one in <code>by</code>). In this case, the
-<code>"esarey"</code> option is recommended, but <code>p_adjust</code> can also be one of <code>"none"</code>
-(default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>, <code>"BY"</code>, <code>"fdr"</code>,
-<code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>.</p></dd>
+<code>"esarey"</code> or <code>"sup-t"</code> options are recommended, but <code>p_adjust</code> can also be
+one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>,
+<code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea &amp; Plagborg-Møller, 2019).</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
@@ -365,6 +367,12 @@ can be changed by setting <code>protect_integers = FALSE</code>, which will then
 integer variables as numerics (and possibly produce fractions).</p></li>
 </ul><p>See also <a href="https://easystats.github.io/modelbased/articles/visualisation_matrix.html">this vignette</a>
 for some examples.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002/jae.2656" class="external-link">doi:10.1002/jae.2656</a></p>
     </div>
 
     <div class="section level2">
