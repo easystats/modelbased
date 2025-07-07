@@ -369,21 +369,22 @@ test_that("estimate_contrasts - p.adjust", {
   dat <- iris
   dat$fac <- ifelse(dat$Sepal.Length < 5.8, "A", "B")
   model <- lm(Sepal.Width ~ Species * fac, data = dat)
+  set.seed(123)
   out <- estimate_contrasts(model, c("Species", "fac"), p_adjust = "sup-t")
   expect_equal(
     out$p,
     c(
-      0.44701, 0, 0, 5e-04, 0, 0.001, 0.00888, 0.00301, 0.02711,
-      0.10628, 0.99998, 0.00048, 0.71949, 0.51098, 0.28544
+      0.44686, 0, 0, 0.00048, 0, 0.00086, 0.0086, 0.00328, 0.02718,
+      0.10619, 0.99998, 0.00037, 0.71917, 0.51122, 0.28497
     ),
     tolerance = 1e-3
   )
   expect_equal(
     out$CI_low,
     c(
-      -0.34435, -1.02261, -0.7626, -1.36273, -0.60602, -2.30698,
-      -2.06543, -2.46081, -1.93054, -0.0276, -0.60036, 0.1234, -0.82613,
-      -0.08803, -0.1492
+      -0.3461, -1.02306, -0.76301, -1.36376, -0.60638, -2.30875,
+      -2.06719, -2.46281, -1.93229, -0.0281, -0.60143, 0.12295, -0.82718,
+      -0.08844, -0.15023
     ),
     tolerance = 1e-3
   )
@@ -396,16 +397,16 @@ test_that("estimate_contrasts - p.adjust", {
     family = poisson,
     data = d
   ))
-
+  set.seed(123)
   out <- head(estimate_contrasts(model, "spp", by = "mined", p_adjust = "sup-t"))
   expect_equal(
     out$p,
-    c(0.00253, 0.5969, 0.18171, 0.00479, 0.00697, 0.99461),
+    c(0.00259, 0.59628, 0.18012, 0.00475, 0.00674, 0.99467),
     tolerance = 1e-3
   )
   expect_equal(
     out$CI_low,
-    c(-0.29058, -0.04607, -0.21531, 0.04065, 0.0327, -0.08185),
+    c(-0.29028, -0.04581, -0.21504, 0.04106, 0.03308, -0.0816),
     tolerance = 1e-3
   )
 })
