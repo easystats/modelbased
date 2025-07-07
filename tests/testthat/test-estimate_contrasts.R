@@ -379,7 +379,7 @@ test_that("estimate_contrasts - p.adjust", {
     tolerance = 1e-3
   )
   expect_equal(
-    out$p,
+    out$CI_low,
     c(
       -0.34435, -1.02261, -0.7626, -1.36273, -0.60602, -2.30698,
       -2.06543, -2.46081, -1.93054, -0.0276, -0.60036, 0.1234, -0.82613,
@@ -404,7 +404,7 @@ test_that("estimate_contrasts - p.adjust", {
     tolerance = 1e-3
   )
   expect_equal(
-    out$p,
+    out$CI_low,
     c(-0.29058, -0.04607, -0.21531, 0.04065, 0.0327, -0.08185),
     tolerance = 1e-3
   )
