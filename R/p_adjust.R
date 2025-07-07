@@ -91,7 +91,7 @@
     ci_level <- 0.95
   }
   # find degrees of freedom column, if available
-  df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))]
+  df_column <- colnames(params)[stats::na.omit(match(c("df", "df_error"), colnames(params)))][1]
   if (length(df_column) == 0) {
     df_column <- ".sup_df"
     params[[df_column]] <- Inf
