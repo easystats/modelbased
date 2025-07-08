@@ -29,6 +29,8 @@
 * The `p_adjust` argument gets a new option, `"sup-t"`, to calculate
   simultaneous confidence intervals.
 
+* Added a `display()` method for *modelbased* objects.
+
 ## Bug fixes
 
 * Fixed printing and plotting for models from packages *nnet* and *brglm2*.

@@ -8,6 +8,7 @@
 \alias{unstandardize}
 \alias{print_md}
 \alias{print_html}
+\alias{display}
 \title{Objects exported from other packages}
 \keyword{internal}
 \description{
@@ -17,6 +18,6 @@ below to see their documentation.
 \describe{
   \item{datawizard}{\code{\link[datawizard]{standardize}}, \code{\link[datawizard:standardize]{unstandardize}}, \code{\link[datawizard]{visualisation_recipe}}}
 
-  \item{insight}{\code{\link[insight:display]{print_html}}, \code{\link[insight:display]{print_md}}}
+  \item{insight}{\code{\link[insight]{display}}, \code{\link[insight:display]{print_html}}, \code{\link[insight:display]{print_md}}}
 }}
 
