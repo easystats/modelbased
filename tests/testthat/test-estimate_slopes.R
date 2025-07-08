@@ -168,7 +168,7 @@ test_that("estimate_slopes, works with glmmTMB", {
 })
 
 
-test_that("estimate_slopes, works with glmmTMB", {
+test_that("estimate_slopes, works with glmmTMB and splines", {
   skip_if_not_installed("mgcv")
   data(iris)
   model <- mgcv::gam(Sepal.Width ~ s(Petal.Length, by = Species), data = iris)
