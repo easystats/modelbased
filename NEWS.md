@@ -37,6 +37,9 @@
 
 * Fixed issues with object of class `aov`.
 
+* Fixed issue with the `plot()` method for `estimate_slopes()` for Bayesian
+  models.
+
 # modelbased 0.11.2
 
 ## Changes
