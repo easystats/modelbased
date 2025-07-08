@@ -263,7 +263,7 @@ estimate_grouplevel.stanreg <- function(model,
   attr(random, "type") <- type
   attr(random, "model") <- model
   attr(random, "parameters") <- params
-  attr(random, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(random))[1]
+  attr(random, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(random))
   attr(random, "data") <- .safe(model_data[model_random])
 
   class(random) <- c("estimate_grouplevel", class(random))

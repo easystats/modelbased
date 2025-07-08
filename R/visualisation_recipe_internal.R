@@ -55,7 +55,15 @@
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
-    aes$y <- intersect(c("Slope", "Median", "Mean", "MAP"), colnames(data))[1]
+    # for frequentist models, we have "Slope" as column name, for Bayesian models
+    # we have "Median", "Mean" or "MAP"
+    valid_y_vars <- intersect(c("Slope", "Median", "Mean", "MAP"), colnames(data))
+    # we wouldn't expect that there is more than one of these columns, but we
+    # check for that anyway...
+    if (length(valid_y_vars) == 0) {
+      insight::format_error("Could not find a suitable column for the y-axis. Expected one of: 'Slope', 'Median', 'Mean', 'MAP'.")
+    }
+    aes$y <- valid_y_vars[1]
     if ("Comparison" %in% names(data)) {
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
       if (length(by) > 1) {
