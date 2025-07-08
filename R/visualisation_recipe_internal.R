@@ -55,7 +55,7 @@
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
-    aes$y <- "Slope"
+    aes$y <- intersect(c("Slope", "Median", "Mean", "MAP"), colnames(data))[1]
     if ("Comparison" %in% names(data)) {
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
       if (length(by) > 1) {
