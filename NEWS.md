@@ -1,4 +1,4 @@
-# modelbased (devel)
+# modelbased 0.12.0
 
 ## Changes
 
