@@ -254,7 +254,12 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}}
+e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
+\code{"average"}, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a \emph{complete} grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for

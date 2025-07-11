@@ -69,7 +69,12 @@
 #'   (_Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
-#' e.g. `options(modelbased_estimate = "average")`
+#' e.g. `options(modelbased_estimate = "average")`. When you set `estimate` to
+#' `"average"`, it calculates the average based only on the data points that
+#' actually exist. This is in particular important for two or more focal
+#' predictors, because it doesn't generate a *complete* grid of all theoretical
+#' combinations of predictor values. Consequently, the output may not include
+#' all the values.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
 #' found for mixed models, where `backend = "marginaleffects"` will also average
@@ -146,40 +151,42 @@
 #' [emmeans::emtrends()] or this [website](https://marginaleffects.com/)) is
 #' recommended to understand the idea behind these types of procedures.
 #'
-#' - Model-based **predictions** is the basis for all that follows. Indeed,
-#' the first thing to understand is how models can be used to make predictions
-#' (see [estimate_link()]). This corresponds to the predicted response (or
-#' "outcome variable") given specific predictor values of the predictors (i.e.,
-#' given a specific data configuration). This is why the concept of [`reference
-#' grid()`][insight::get_datagrid()] is so important for direct predictions.
+#' - Model-based **predictions** is the basis for all that follows. Indeed, the
+#'   first thing to understand is how models can be used to make predictions
+#'   (see [estimate_link()]). This corresponds to the predicted response (or
+#'   "outcome variable") given specific predictor values of the predictors
+#'   (i.e., given a specific data configuration). This is why the concept of
+#'   [`reference grid()`][insight::get_datagrid()] is so important for direct
+#'   predictions.
 #'
-#' - **Marginal "means"**, obtained via [estimate_means()], are an extension
-#' of such predictions, allowing to "average" (collapse) some of the predictors,
-#' to obtain the average response value at a specific predictors configuration.
-#' This is typically used when some of the predictors of interest are factors.
-#' Indeed, the parameters of the model will usually give you the intercept value
-#' and then the "effect" of each factor level (how different it is from the
-#' intercept). Marginal means can be used to directly give you the mean value of
-#' the response variable at all the levels of a factor. Moreover, it can also be
-#' used to control, or average over predictors, which is useful in the case of
-#' multiple predictors with or without interactions.
+#' - **Marginal "means"**, obtained via [estimate_means()], are an extension of
+#'   such predictions, allowing to "average" (collapse) some of the predictors,
+#'   to obtain the average response value at a specific predictors
+#'   configuration. This is typically used when some of the predictors of
+#'   interest are factors. Indeed, the parameters of the model will usually give
+#'   you the intercept value and then the "effect" of each factor level (how
+#'   different it is from the intercept). Marginal means can be used to directly
+#'   give you the mean value of the response variable at all the levels of a
+#'   factor. Moreover, it can also be used to control, or average over
+#'   predictors, which is useful in the case of multiple predictors with or
+#'   without interactions.
 #'
-#' - **Marginal contrasts**, obtained via [estimate_contrasts()], are
-#' themselves at extension of marginal means, in that they allow to investigate
-#' the difference (i.e., the contrast) between the marginal means. This is,
-#' again, often used to get all pairwise differences between all levels of a
-#' factor. It works also for continuous predictors, for instance one could also
-#' be interested in whether the difference at two extremes of a continuous
-#' predictor is significant.
+#' - **Marginal contrasts**, obtained via [estimate_contrasts()], are themselves
+#'   at extension of marginal means, in that they allow to investigate the
+#'   difference (i.e., the contrast) between the marginal means. This is, again,
+#'   often used to get all pairwise differences between all levels of a factor.
+#'   It works also for continuous predictors, for instance one could also be
+#'   interested in whether the difference at two extremes of a continuous
+#'   predictor is significant.
 #'
 #' - Finally, **marginal effects**, obtained via [estimate_slopes()], are
-#' different in that their focus is not values on the response variable, but the
-#' model's parameters. The idea is to assess the effect of a predictor at a
-#' specific configuration of the other predictors. This is relevant in the case
-#' of interactions or non-linear relationships, when the effect of a predictor
-#' variable changes depending on the other predictors. Moreover, these effects
-#' can also be "averaged" over other predictors, to get for instance the
-#' "general trend" of a predictor over different factor levels.
+#'   different in that their focus is not values on the response variable, but
+#'   the model's parameters. The idea is to assess the effect of a predictor at
+#'   a specific configuration of the other predictors. This is relevant in the
+#'   case of interactions or non-linear relationships, when the effect of a
+#'   predictor variable changes depending on the other predictors. Moreover,
+#'   these effects can also be "averaged" over other predictors, to get for
+#'   instance the "general trend" of a predictor over different factor levels.
 #'
 #' **Example:** Let's imagine the following model `lm(y ~ condition * x)` where
 #' `condition` is a factor with 3 levels A, B and C and `x` a continuous
