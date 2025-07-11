@@ -365,7 +365,12 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (<em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate = "average")</code></p></dd>
+e.g. <code>options(modelbased_estimate = "average")</code>. When you set <code>estimate</code> to
+<code>"average"</code>, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a <em>complete</em> grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values.</p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
