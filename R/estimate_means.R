@@ -207,13 +207,15 @@
 #'     or `by = list(Species = c('setosa', 'virginica'))`
 #' * You can use "shortcuts" within square brackets, such as `by = "Sepal.Width = [sd]"`
 #'   or `by = "Sepal.Width = [fivenum]"`
-#' * For numeric focal predictors, if no representative values are specified,
-#'   `length` and `range` control the number and type of representative values:
+#' * For numeric focal predictors, if no representative values are specified
+#'   (i.e., `by = "gear"` and *not* `by = "gear = c(4, 8)"`), `length` and
+#'   `range` control the number and type of representative values for the focal
+#'   predictors:
 #'   * `length` determines how many equally spaced values are generated.
 #'   * `range` specifies the type of values, like `"range"` or `"sd"`.
 #'   * `length` and `range` apply to all numeric focal predictors.
 #'   * If you have multiple numeric predictors, `length` and `range` can accept
-#'     multiple elements, one for each predictor.
+#'     multiple elements, one for each predictor (see 'Examples').
 #' * For integer variables, only values that appear in the data will be included
 #'   in the data grid, independent from the `length` argument. This behaviour
 #'   can be changed by setting `protect_integers = FALSE`, which will then treat

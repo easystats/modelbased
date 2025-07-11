@@ -233,14 +233,16 @@ or \code{by = list(Species = c('setosa', 'virginica'))}
 }
 \item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width = [sd]"}
 or \code{by = "Sepal.Width = [fivenum]"}
-\item For numeric focal predictors, if no representative values are specified,
-\code{length} and \code{range} control the number and type of representative values:
+\item For numeric focal predictors, if no representative values are specified
+(i.e., \code{by = "gear"} and \emph{not} \code{by = "gear = c(4, 8)"}), \code{length} and
+\code{range} control the number and type of representative values for the focal
+predictors:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
 \item \code{length} and \code{range} apply to all numeric focal predictors.
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
-multiple elements, one for each predictor.
+multiple elements, one for each predictor (see 'Examples').
 }
 \item For integer variables, only values that appear in the data will be included
 in the data grid, independent from the \code{length} argument. This behaviour
