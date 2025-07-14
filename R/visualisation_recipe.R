@@ -2,8 +2,10 @@
 #' @name visualisation_recipe.estimate_predicted
 #'
 #' @description
-#' Most **modelbased** objects can be visualized using the `plot()` function,
-#' which internally calls the `visualisation_recipe()` function. See the
+#' Most **modelbased** objects can be visualized using either the `plot()`
+#' function, which internally calls the `visualisation_recipe()` function and
+#' relies on `{ggplot2}`. There is also a `tinyplot()` method, which uses the
+#' `{tinyplot}` package and relies on the core R graphic system. See the
 #' examples below for more information and examples on how to create and
 #' customize plots.
 #'

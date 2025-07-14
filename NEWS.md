@@ -1,3 +1,9 @@
+# modelbased (devel)
+
+## Changes
+
+* Methods for the *tinyplot* packsage were added.
+
 # modelbased 0.12.0
 
 ## Changes
