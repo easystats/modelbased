@@ -7,7 +7,6 @@
 #' \dontrun{
 #' # todo...
 #' }
-#' @export
 tinyplot.estimate_means <- function(x, ...) {
   insight::check_if_installed("tinyplot")
 
@@ -67,6 +66,8 @@ tinyplot.estimate_means <- function(x, ...) {
     facet_description <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
 
+browser()
+
   p <- tinyplot::tinyplot(
     plot_description,
     data = data,
@@ -81,3 +82,6 @@ tinyplot.estimate_means <- function(x, ...) {
   attr(p, "data") <- data
   p
 }
+
+#' @rawNamespace
+#' S3method(tinyplot::tinyplot, estimate_means)
