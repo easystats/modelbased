@@ -59,13 +59,8 @@ tinyplot.estimate_means <- function(x,
   }
 
 
-  # add raw data as first layer ----------------------------------
-  if (show_data) {
-    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
-    # Update with additional args
-    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
-    l <- l + 1
-  }
+  ## TODO: add raw data as first layer ----------------------------------
+
 
   # formula for tinyplot ----------------------------------
   if (is.null(aes$color)) {
