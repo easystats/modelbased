@@ -93,6 +93,3 @@ tinyplot.estimate_means <- function(x,
   attr(p, "data") <- data
   p
 }
-
-#' @rawNamespace
-#' S3method(tinyplot::tinyplot, estimate_means)
