@@ -8,7 +8,11 @@
 #' # todo...
 #' }
 #' @exportS3Method tinyplot::tinyplot
-tinyplot.estimate_means <- function(x, join_dots = NULL, numeric_as_discrete = NULL, ...) {
+tinyplot.estimate_means <- function(x,
+                                    show_data = FALSE,
+                                    join_dots = NULL,
+                                    numeric_as_discrete = NULL,
+                                    ...) {
   insight::check_if_installed("tinyplot")
 
   # init
