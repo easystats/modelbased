@@ -79,17 +79,19 @@ tinyplot.estimate_means <- function(x,
     facet_description <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
 
-  p <- tinyplot::tinyplot(
-    plot_description,
-    data = data,
-    xmin = aes$xmin,
-    xmax = aes$xmax,
-    ymin = aes$ymin,
-    ymax = aes$ymax,
-    facet = facet_description,
-    type = aes$type
-  )
+  fun_args <- list(plot_description, data = data, facet = facet_description, type = aes$type)
+  if (!is.null(aes$xmin)) {
+    fun_args$xmin <- stats::as.formula(paste("~", aes$xmin))
+  }
+  if (!is.null(aes$xmax)) {
+    fun_args$xmax <- stats::as.formula(paste("~", aes$xmax))
+  }
+  if (!is.null(aes$ymin)) {
+    fun_args$ymin <- stats::as.formula(paste("~", aes$ymin))
+  }
+  if (!is.null(aes$xmin)) {
+    fun_args$ymax <- stats::as.formula(paste("~", aes$ymax))
+  }
 
-  attr(p, "data") <- data
-  p
+  do.call(tinyplot::tinyplot, insight::compact_list(c(fun_args, list(...))))
 }
