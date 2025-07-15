@@ -71,7 +71,9 @@ tinyplot.estimate_means <- function(x,
   }
 
   fun_args <- list(
-    plot_description,
+    # plot_description,
+    x = aes$x,
+    y = aes$y,
     data = data,
     facet = facet_description,
     by = aes$color,
