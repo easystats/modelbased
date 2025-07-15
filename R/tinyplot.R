@@ -89,7 +89,7 @@ tinyplot.estimate_means <- function(x,
   if (!is.null(aes$ymin)) {
     fun_args$ymin <- stats::as.formula(paste("~", aes$ymin))
   }
-  if (!is.null(aes$xmin)) {
+  if (!is.null(aes$ymax)) {
     fun_args$ymax <- stats::as.formula(paste("~", aes$ymax))
   }
 
