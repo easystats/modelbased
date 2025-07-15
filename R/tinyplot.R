@@ -15,6 +15,14 @@ tinyplot.estimate_means <- function(x, join_dots = NULL, numeric_as_discrete = N
   response_scale <- attributes(x)$predict
   model_info <- attributes(x)$model_info
 
+  # set defaults
+  if (is.null(join_dots)) {
+    join_dots <- getOption("modelbased_join_dots", TRUE)
+  }
+  if (is.null(numeric_as_discrete)) {
+    numeric_as_discrete <- getOption("modelbased_numeric_as_discrete", 8)
+  }
+
   # we re-use the ggplot function here to retrieve the aesthetics and data. we
   # now need to extract the aesthetics and data and use it to create a tinyplot
   # object
