@@ -13,7 +13,7 @@
 
 \method{plot}{estimate_means}(x, ...)
 
-\method{tinyplot}{estimate_means}(x, ...)
+\method{tinyplot}{estimate_means}(x, join_dots = NULL, numeric_as_discrete = NULL, ...)
 
 \method{visualisation_recipe}{estimate_predicted}(
   x,
@@ -54,13 +54,6 @@
 
 \item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}.}
 
-\item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
-to the model-based estimation. This argument will be ignored for plotting
-objects returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
-
-\item{point, line, pointrange, ribbon, facet, grid}{Additional
-aesthetics and parameters for the geoms (see customization example).}
-
 \item{join_dots}{Logical, if \code{TRUE} (default) and for categorical focal terms
 in \code{by}, dots (estimates) are connected by lines, i.e. plots will be a
 combination of dots with error bars and connecting lines. If \code{FALSE}, only
@@ -76,6 +69,13 @@ deviation around the mean are chosen as representative values for that
 predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
+
+\item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
+to the model-based estimation. This argument will be ignored for plotting
+objects returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
+
+\item{point, line, pointrange, ribbon, facet, grid}{Additional
+aesthetics and parameters for the geoms (see customization example).}
 }
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
