@@ -373,6 +373,11 @@ estimate_relation <- function(model,
                                 iterations = NULL,
                                 keep_iterations = FALSE,
                                 ...) {
+  # return early for htest
+  if (inherits(model, "htest")) {
+    return(insight::get_predicted(model, ...))
+  }
+
   # only "by" or "data", but not both
   if (!is.null(by) && !is.null(data)) {
     insight::format_error("You can only specify one of `by` or `data`, but not both.")

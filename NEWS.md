@@ -4,6 +4,9 @@
 
 * Methods for the *tinyplot* package were added.
 
+* `estimate_expectation()` and `estimate_relation()` now support objects of
+  class `htest`.
+
 # modelbased 0.12.0
 
 ## Changes
