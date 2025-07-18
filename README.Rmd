@@ -4,13 +4,11 @@ output:
     toc: false
     fig_width: 10.08
     fig_height: 6
-tags: [r, prediction, estimation, marginal]
-vignette: >
-  %\VignetteIndexEntry{README}
-  \usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
+bibliography: paper/paper.bib
+csl: paper/apa.csl
 editor_options:
   chunk_output_type: console
+tags: [r, prediction, estimation, marginal]
 ---
 
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
@@ -30,15 +28,18 @@ options(marginaleffects_safe = FALSE)
 ```
 
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION) [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07969/status.svg)](https://doi.org/10.21105/joss.07969) [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
 ***Make the most out of your models***
 
 ---
 
-**modelbased** is a package helping with model-based estimations, to easily compute of marginal means, contrast analysis and model predictions.
+**modelbased** is a package helping with model-based estimations, to easily compute marginal means, contrast analysis and model predictions.
 
+The two probably most popular R packages for extracting these quantities of interest are **emmeans** [@russell2024emmeans] and **marginaleffects** [@arel2024interpret]. These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. But their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts.
+
+**modelbased**, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the **easystats**' *raison d'être*, **modelbased** focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.
 
 ## Installation
 
@@ -453,6 +454,11 @@ Note that `{emmeans}` can also perform numeric differentiation or use non-regula
 
 Finally, `{modelbased}` leverages the `get_datagrid()` function from the `{insight}` package [(Lüdecke et al., 2019)](https://doi.org/10.21105/joss.01412) to intuitively generate an appropriate grid of data points for which predictions or effects or slopes will be estimated. Since these packages support a wider range of models - including generalized linear models, mixed models, and Bayesian models - `{modelbased}` also inherits the support for such models.
 
+## Citation
+
+If this package helped you, please consider citing as follows:
+
+Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault, R., & Lüdecke, D. (2025). modelbased: An R package to make the most out of your statistical models through marginal means, marginal effects, and model predictions. Journal of Open Source Software, 10(109), 7969. doi: 10.21105/joss.07969
 
 ## Code of Conduct
 

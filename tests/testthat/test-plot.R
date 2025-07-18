@@ -180,6 +180,25 @@ test_that("plots, relation show_data", {
 })
 
 
+test_that("plots, relation, percentage for logistic", {
+  # required for penguins data, which was added in 4.5.0
+  skip_if(getRversion() < "4.5.0")
+  data(penguins)
+
+  out <- suppressWarnings(estimate_relation(glm(
+    sex ~ body_mass,
+    data = penguins,
+    family = "binomial"
+  )))
+
+  set.seed(123)
+  vdiffr::expect_doppelganger(
+    "plot-relation-logistic-percentage-1",
+    plot(modelbased::visualisation_recipe(out))
+  )
+})
+
+
 test_that("plots, grouplevel lme4", {
   skip_if_not_installed("lme4")
   d <- rbind(lme4::sleepstudy, lme4::sleepstudy)

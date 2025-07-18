@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.11.1
+Version: 0.12.0.1
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -39,24 +39,27 @@ BugReports: https://github.com/easystats/modelbased/issues
 Depends:
     R (>= 3.6)
 Imports:
-    bayestestR (>= 0.15.3),
-    datawizard (>= 1.0.2),
-    insight (>= 1.2.0),
-    parameters (>= 0.25.0),
+    bayestestR (>= 0.16.1),
+    datawizard (>= 1.1.0),
+    insight (>= 1.3.1),
+    parameters (>= 0.27.0),
     graphics,
     stats,
     tools,
     utils
 Suggests:
+    afex,
     BH,
     betareg,
     boot,
     bootES,
+    brglm2,
     brms,
     coda,
     collapse,
     correlation,
     curl,
+    discovr,
     easystats,
     effectsize (>= 1.0.0),
     emmeans (>= 1.10.2),
@@ -72,13 +75,15 @@ Suggests:
     logspline,
     MASS,
     Matrix,
-    marginaleffects (>= 0.25.0),
+    marginaleffects (>= 0.26.0),
     mice,
     mgcv,
+    mvtnorm,
     nanoparquet,
+    nnet,
     ordinal,
     palmerpenguins,
-    performance (>= 0.13.0),
+    performance (>= 0.14.0),
     patchwork,
     pbkrtest,
     poorman,
@@ -91,6 +96,7 @@ Suggests:
     RWiener,
     sandwich,
     see (>= 0.11.0),
+    survival,
     testthat (>= 3.2.1),
     vdiffr,
     withr
@@ -105,4 +111,3 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
-Remotes: easystats/insight, easystats/bayestestR, easystats/parameters, vincentarelbundock/marginaleffects

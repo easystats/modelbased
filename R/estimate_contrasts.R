@@ -9,12 +9,15 @@
 #' levels at which contrasts are evaluated (e.g., `contrast="x=c('a','b')"`).
 #' @param p_adjust The p-values adjustment method for frequentist multiple
 #' comparisons. Can be one of `"none"` (default), `"hochberg"`, `"hommel"`,
-#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"esarey"` or
-#' `"holm"`. The `"esarey"` option is specifically for the case of Johnson-Neyman
-#' intervals, i.e. when calling `estimate_slopes()` with two numeric predictors
-#' in an interaction term. Details for the other options can be found in the
+#' `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, `"sup-t"`,
+#' `"esarey"` or `"holm"`. The `"esarey"` option is specifically for the case of
+#' Johnson-Neyman intervals, i.e. when calling `estimate_slopes()` with two
+#' numeric predictors in an interaction term. `"sup-t"` computes simultaneous
+#' confidence bands, also called sup-t confidence band (Montiel Olea &
+#' Plagborg-Møller, 2019). Details for the other options can be found in the
 #' p-value adjustment section of the `emmeans::test` documentation or
-#' `?stats::p.adjust`.
+#' `?stats::p.adjust`. Note that certain options provided by the **emmeans**
+#' package are only available if you set `backend = "emmeans"`.
 #' @param comparison Specify the type of contrasts or tests that should be
 #' carried out.
 #' * When `backend = "emmeans"`, can be one of `"pairwise"`, `"poly"`,
@@ -26,13 +29,22 @@
 #' * For `backend = "marginaleffects"`, can be a numeric value, vector, or
 #'   matrix, a string equation specifying the hypothesis to test, a string
 #'   naming the comparison method, a formula, or a function. For options not
-#'   described below, see documentation of [marginaleffects::comparisons] and
-#'   [this website](https://marginaleffects.com/bonus/hypothesis.html).
+#'   described below, see documentation of [marginaleffects::comparisons],
+#'   [this website](https://marginaleffects.com/bonus/hypothesis.html) and
+#'   section _Comparison options_ below.
 #'   * String: One of `"pairwise"`, `"reference"`, `"sequential"`, `"meandev"`
 #'     `"meanotherdev"`, `"poly"`, `"helmert"`, or `"trt_vs_ctrl"`. To test
 #'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#'   * String: Two special string options are `"inequality"` and
+#'     `"inequality_pairwise"`. `comparison = "inequality"` computes the
+#'     marginal effect inequality summary of categorical predictors' overall
+#'     effects, respectively, the comprehensive effect of an independent
+#'     variable across all outcome categories of a nominal or ordinal dependent
+#'     variable (total marginal effect, see _Mize and Han, 2025_).
+#'     `comparison = "inequality_pairwise"` computes the difference (pairwise
+#'     comparisons) between marginal effects inequality measures.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -61,6 +73,52 @@
 #' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
 #'
 #' @inheritSection estimate_means Predictions on different scales
+#'
+#' @section Comparison options:
+#'
+#' - `comparison = "pairwise"`: This method computes all possible unique
+#'   differences between pairs of levels of the focal predictor. For example, if
+#'   a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+#' - `comparison = "reference"`: This compares each level of the focal predictor
+#'   to a specified reference level (by default, the first level). For example,
+#'   if levels are A, B, C, and A is the reference, it computes B-A and C-A.
+#' - `comparison = "sequential"`: This compares each level to the one
+#'   immediately following it in the factor's order. For levels A, B, C, it
+#'   would compute B-A and C-B.
+#' - `comparison = "meandev"`: This contrasts each level's estimate against the
+#'   grand mean of all estimates for the focal predictor.
+#' - `comparison = "meanotherdev"`: Similar to `meandev`, but each level's
+#'   estimate is compared against the mean of all *other* levels, excluding
+#'   itself.
+#' - `comparison = "poly"`: These are used for ordered categorical variables to
+#'   test for linear, quadratic, cubic, etc., trends across the levels. They
+#'   assume equal spacing between levels.
+#' - `comparison = "helmert"`: Contrast 2nd level to the first, 3rd to the
+#'   average of the first two, and so on. Each level (except the first) is
+#'   compared to the mean of the preceding levels. For levels A, B, C, it would
+#'   compute B-A and C-(A+B)/2.
+#' - `comparison = "trt_vs_ctrl"`: This compares all levels (excluding the
+#'   first, which is typically the control) against the first level. It's often
+#'   used when comparing multiple treatment groups to a single control group.
+#' - To test multiple hypotheses jointly (usually used for factorial designs),
+#'   `comparison` can also be `"joint"`. In this case, use the `test` argument
+#'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
+#' - `comparison = "inequality"` computes the marginal effect inequality summary
+#'   of categorical predictors' overall effects, respectively, the comprehensive
+#'   effect of an independent variable across all outcome categories of a
+#'   nominal or ordinal dependent variable (total marginal effect, see _Mize and
+#'   Han, 2025_). The marginal effect inequality focuses on the heterogeneity of
+#'   the effects of a categorical *independent* variable. It helps understand
+#'   how the effect of the variable differs across its categories or levels.
+#'   When the *dependent* variable is categorical (e.g., logistic, ordinal or
+#'   multinomial regression), marginal effect inequality provides a holistic
+#'   view of how an independent variable affects a nominal or ordinal
+#'   *dependent* variable. It summarizes the overall impact (total marginal
+#'   effects) across all possible outcome categories.
+#' - `comparison = "inequality_pairwise"` computes the difference (pairwise
+#'   comparisons) between marginal effects inequality measures. Depending on the
+#'   sign, this measure indicates which of the predictors has a stronger impact
+#'   on the dependent variable in terms of inequalities.
 #'
 #' @section Effect Size:
 #'
@@ -96,6 +154,15 @@
 #' `effectsize = "boot"` uses bootstrapping (defaults to a low value of
 #' 200) through [bootES::bootES]. Adjusts for contrasts, but not for covariates.
 #'
+#' @references
+#' - Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+#'   Nominal and Ordinal Variables. Sociological Science, 12, 115–157.
+#'   \doi{10.15195/v12.a7}
+#'
+#' - Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+#'   confidence bands: Theory, implementation, and an application to SVARs.
+#'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
+#'
 #' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
 #' \dontrun{
 #' # Basic usage
@@ -126,10 +193,10 @@
 #'
 #' # custom factor contrasts - contrasts the average effects of two levels
 #' # against the remaining third level
-#' data(contrast_example, package = "modelbased")
+#' data(puppy_love, package = "modelbased")
 #' cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
-#' model <- lm(outcome ~ score * tx, data = contrast_example)
-#' estimate_slopes(model, "score", by = "tx", comparison = cond_tx)
+#' model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
+#' estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 #'
 #' # Other models (mixed, Bayesian, ...)
 #' data <- iris
@@ -163,22 +230,24 @@ estimate_contrasts <- function(model, ...) {
 
 #' @rdname estimate_contrasts
 #' @export
-estimate_contrasts.default <- function(model,
-                                       contrast = NULL,
-                                       by = NULL,
-                                       predict = NULL,
-                                       ci = 0.95,
-                                       comparison = "pairwise",
-                                       estimate = NULL,
-                                       p_adjust = "none",
-                                       transform = NULL,
-                                       keep_iterations = FALSE,
-                                       effectsize = NULL,
-                                       iterations = 200,
-                                       es_type = "cohens.d",
-                                       backend = NULL,
-                                       verbose = TRUE,
-                                       ...) {
+estimate_contrasts.default <- function(
+  model,
+  contrast = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  comparison = "pairwise",
+  estimate = NULL,
+  p_adjust = "none",
+  transform = NULL,
+  keep_iterations = FALSE,
+  effectsize = NULL,
+  iterations = 200,
+  es_type = "cohens.d",
+  backend = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -236,22 +305,44 @@ estimate_contrasts.default <- function(model,
     )
   }
 
+  # sanity check - did method return standard errors?
+  .check_standard_errors(
+    out,
+    by = by,
+    contrast = contrast,
+    model = model,
+    model_name = deparse(substitute(model)),
+    verbose = verbose
+  )
+
   # restore attributes later
   info <- attributes(estimated)
+  type <- "contrasts"
 
   # Table formatting
-  suffix <- ifelse(isTRUE(info$joint_test), "Joint Test", "Contrasts Analysis")
-  attr(out, "table_title") <- c(switch(estimate,
-    specific = paste("Model-based", suffix),
-    typical = paste("Marginal", suffix),
-    average = paste("Averaged", suffix),
-    population = paste("Counterfactual", suffix, "(G-computation)")
-  ), "blue")
+  if (isTRUE(info$joint_test)) {
+    suffix <- "Joint Test"
+  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+    suffix <- "Inequality Analysis"
+    type <- "inequality"
+  } else {
+    suffix <- "Contrasts Analysis"
+  }
+  attr(out, "table_title") <- c(
+    switch(
+      estimate,
+      specific = paste("Model-based", suffix),
+      typical = paste("Marginal", suffix),
+      average = paste("Averaged", suffix),
+      population = paste("Counterfactual", suffix, "(G-computation)")
+    ),
+    "blue"
+  )
 
   attr(out, "table_footer") <- .table_footer(
     out,
     by = info$contrast,
-    type = "contrasts",
+    type = type,
     model = model,
     info = info
   )

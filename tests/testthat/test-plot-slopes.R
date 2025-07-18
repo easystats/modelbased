@@ -24,3 +24,23 @@ test_that("plot slopes, correct y axis labels", {
     plot(slopes)
   )
 })
+
+
+test_that("estimate_slopes, plotting works with brms", {
+  skip_if_not_installed("brms")
+  skip_if_not_installed("BH")
+  skip_if_not_installed("RcppEigen")
+  skip_if_not_installed("curl")
+  skip_if_offline()
+  skip_if_not_installed("httr2")
+
+  m <- insight::download_model("brms_slopes_1")
+  skip_if(is.null(m))
+
+  set.seed(123)
+  out <- estimate_slopes(m, "Murder", by = "Illiteracy", length = 4)
+  vdiffr::expect_doppelganger(
+    "plot-slopes-brms-1",
+    plot(out)
+  )
+})

@@ -43,13 +43,13 @@ test_that("estimate_means - glmmTMB", {
   expect_equal(estim1$Probability, estim2$Probability, tolerance = 1e-3)
   # validated against ggeffects
   expect_equal(estim1$Probability, c(0.75755, 0.35508), tolerance = 1e-3)
-  estim_me <- marginaleffects::avg_predictions(
+  estim_me <- suppressWarnings(marginaleffects::avg_predictions(
     model,
     newdata = insight::get_datagrid(model, by = "mined", factors = "all", include_random = TRUE),
     by = "mined",
     re.form = NULL,
     type = "zprob"
-  )
+  ))
   expect_equal(estim2$Probability, estim_me$estimate, tolerance = 1e-3)
 })
 
@@ -65,13 +65,13 @@ test_that("estimate_contrasts - glmmTMB", {
   ## contrasts marginaleffects for zero-inflated model, count component
   estim3 <- suppressMessages(estimate_contrasts(model, contrast = "mined", backend = "marginaleffects"))
   expect_equal(estim3$Difference, 1.99344, tolerance = 1e-3)
-  estim_me <- marginaleffects::avg_predictions(
+  estim_me <- suppressWarnings(marginaleffects::avg_predictions(
     model,
     newdata = insight::get_datagrid(model, by = "mined", factors = "all", include_random = TRUE),
     by = "mined",
     hypothesis = ~pairwise,
     re.form = NULL
-  )
+  ))
   expect_equal(estim3$Difference, estim_me$estimate, tolerance = 1e-3)
 
   # select default for contrast automatically works

@@ -1,3 +1,68 @@
+# modelbased (devel)
+
+## Changes
+
+* `estimate_expectation()` and `estimate_relation()` now support objects of
+  class `htest`.
+
+# modelbased 0.12.0
+
+## Changes
+
+* The `comparison` argument gets two new option, `"inequality"` and
+  `"inequality_pairwise"`, to compute the marginal effects inequality measure,
+  which summarizes the the overall effect of categorical predictors or the
+  comprehensive effect of a predictor across all outcome categories of a nominal
+  or ordinal dependent variable.
+
+* Added docs to show how to use *modelbased* with finite mixture models from
+  package *brms*.
+
+* Improved support for finite mixture models (currently only the `mixture()`
+  family for model from package *brms* are supported).
+
+* Improved printing for joint-tests with `backend = "emmeans"`.
+
+* Improved handling when p-adjustment methods that are only available in the
+  *emmeans* package were used for the *marginaleffects* backend.
+
+* The column header for the predicted values in `estimate_means()` for
+  multinomial models from packages *nnet* and *brglm2* has been changed to
+  `Probability`, to better reflect the scale of the predictions.
+
+* New vignettes (Case Studies) about using *modelbased* with finite mixture models
+  and interrupted time series analysis.
+
+* The `p_adjust` argument gets a new option, `"sup-t"`, to calculate
+  simultaneous confidence intervals.
+
+* Added a `display()` method for *modelbased* objects.
+
+## Bug fixes
+
+* Fixed printing and plotting for models from packages *nnet* and *brglm2*.
+
+* Fixed issues with object of class `aov`.
+
+* Fixed issue with the `plot()` method for `estimate_slopes()` for Bayesian
+  models.
+
+# modelbased 0.11.2
+
+## Changes
+
+* `estimate_contrasts()` for results from `estimate_relation()` and alike is
+  now more efficient for larger number of contrasts.
+
+* Updated information of `citation()`. If you want to cite the `modelbased`
+  package, please use the JOSS publication as reference
+  (https://joss.theoj.org/papers/10.21105/joss.07969).
+
+## Bug fixes
+
+* Fixed issue with formatted labels in `estimate_contrasts()` for results from
+  `estimate_relation()`.
+
 # modelbased 0.11.1
 
 ## Changes

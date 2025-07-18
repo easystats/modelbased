@@ -1,7 +1,7 @@
 
 # modelbased <img src='man/figures/logo.png' align="right" height="139" />
 
-[![publication](https://img.shields.io/badge/Cite-Unpublished-yellow)](https://github.com/easystats/modelbased/blob/master/inst/CITATION)
+[![DOI](https://joss.theoj.org/papers/10.21105/joss.07969/status.svg)](https://doi.org/10.21105/joss.07969)
 [![downloads](https://cranlogs.r-pkg.org/badges/modelbased)](https://cran.r-project.org/package=modelbased)
 [![total](https://cranlogs.r-pkg.org/badges/grand-total/modelbased)](https://cranlogs.r-pkg.org/)
 
@@ -10,8 +10,23 @@
 ------------------------------------------------------------------------
 
 **modelbased** is a package helping with model-based estimations, to
-easily compute of marginal means, contrast analysis and model
-predictions.
+easily compute marginal means, contrast analysis and model predictions.
+
+The two probably most popular R packages for extracting these quantities
+of interest are **emmeans** (Lenth, 2024) and **marginaleffects**
+(Arel-Bundock et al., 2024). These packages pack an enormously rich set
+of features and cover (almost) all imaginable needs for post-hoc
+analysis of statistical models. But their power and flexibility can be
+intimidating for users not familiar with the underlying statistical
+concepts.
+
+**modelbased**, built on top of these two packages, aims to unleash this
+untapped potential by providing a unified interface to extract marginal
+means, marginal effects, contrasts, comparisons, and model predictions
+from a wide range of statistical models. In line with the **easystats**’
+*raison d’être*, **modelbased** focuses on simplicity, flexibility, and
+user-friendliness to help researchers harness the full power of their
+models.
 
 ## Installation
 
@@ -657,9 +672,41 @@ slopes will be estimated. Since these packages support a wider range of
 models - including generalized linear models, mixed models, and Bayesian
 models - `{modelbased}` also inherits the support for such models.
 
+## Citation
+
+If this package helped you, please consider citing as follows:
+
+Makowski, D., Ben-Shachar, M. S., Wiernik, B. M., Patil, I., Thériault,
+R., & Lüdecke, D. (2025). modelbased: An R package to make the most out
+of your statistical models through marginal means, marginal effects, and
+model predictions. Journal of Open Source Software, 10(109), 7969. doi:
+10.21105/joss.07969
+
 ## Code of Conduct
 
 Please note that the modelbased project is released with a [Contributor
 Code of
 Conduct](https://easystats.github.io/modelbased/CODE_OF_CONDUCT.html).
 By contributing to this project, you agree to abide by its terms.
+
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0" line-spacing="2">
+
+<div id="ref-arel2024interpret" class="csl-entry">
+
+Arel-Bundock, V., Greifer, N., & Heiss, A. (2024). How to interpret
+statistical models using marginaleffects for R and Python. *Journal of
+Statistical Software*, *111*, 1–32.
+<https://doi.org/10.18637/jss.v111.i09>
+
+</div>
+
+<div id="ref-russell2024emmeans" class="csl-entry">
+
+Lenth, R. V. (2024). *<span class="nocase">emmeans</span>: Estimated
+marginal means, aka least-squares means*.
+<https://doi.org/10.32614/CRAN.package.emmeans>
+
+</div>
+
+</div>

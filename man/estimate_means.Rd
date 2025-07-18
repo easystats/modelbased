@@ -88,7 +88,12 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}}
+e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
+\code{"average"}, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a \emph{complete} grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -165,7 +170,7 @@ A data frame of estimated marginal means.
 }
 \description{
 Estimate average values of the response variable at each factor level or
-at representative value, respectively at values defined in a "data grid" or
+at representative values, respectively at values defined in a "data grid" or
 "reference grid". For plotting, check the examples in
 \code{\link[=visualisation_recipe]{visualisation_recipe()}}. See also other related functions such as
 \code{\link[=estimate_contrasts]{estimate_contrasts()}} and \code{\link[=estimate_slopes]{estimate_slopes()}}.
@@ -179,36 +184,39 @@ argument), so reading its documentation (for instance \code{\link[emmeans:emmean
 \code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
-\item Model-based \strong{predictions} is the basis for all that follows. Indeed,
-the first thing to understand is how models can be used to make predictions
+\item Model-based \strong{predictions} is the basis for all that follows. Indeed, the
+first thing to understand is how models can be used to make predictions
 (see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
-"outcome variable") given specific predictor values of the predictors (i.e.,
-given a specific data configuration). This is why the concept of \code{\link[insight:get_datagrid]{reference grid()}} is so important for direct predictions.
-\item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension
-of such predictions, allowing to "average" (collapse) some of the predictors,
-to obtain the average response value at a specific predictors configuration.
-This is typically used when some of the predictors of interest are factors.
-Indeed, the parameters of the model will usually give you the intercept value
-and then the "effect" of each factor level (how different it is from the
-intercept). Marginal means can be used to directly give you the mean value of
-the response variable at all the levels of a factor. Moreover, it can also be
-used to control, or average over predictors, which is useful in the case of
-multiple predictors with or without interactions.
-\item \strong{Marginal contrasts}, obtained via \code{\link[=estimate_contrasts]{estimate_contrasts()}}, are
-themselves at extension of marginal means, in that they allow to investigate
-the difference (i.e., the contrast) between the marginal means. This is,
-again, often used to get all pairwise differences between all levels of a
-factor. It works also for continuous predictors, for instance one could also
-be interested in whether the difference at two extremes of a continuous
+"outcome variable") given specific predictor values of the predictors
+(i.e., given a specific data configuration). This is why the concept of
+\code{\link[insight:get_datagrid]{reference grid()}} is so important for direct
+predictions.
+\item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension of
+such predictions, allowing to "average" (collapse) some of the predictors,
+to obtain the average response value at a specific predictors
+configuration. This is typically used when some of the predictors of
+interest are factors. Indeed, the parameters of the model will usually give
+you the intercept value and then the "effect" of each factor level (how
+different it is from the intercept). Marginal means can be used to directly
+give you the mean value of the response variable at all the levels of a
+factor. Moreover, it can also be used to control, or average over
+predictors, which is useful in the case of multiple predictors with or
+without interactions.
+\item \strong{Marginal contrasts}, obtained via \code{\link[=estimate_contrasts]{estimate_contrasts()}}, are themselves
+at extension of marginal means, in that they allow to investigate the
+difference (i.e., the contrast) between the marginal means. This is, again,
+often used to get all pairwise differences between all levels of a factor.
+It works also for continuous predictors, for instance one could also be
+interested in whether the difference at two extremes of a continuous
 predictor is significant.
 \item Finally, \strong{marginal effects}, obtained via \code{\link[=estimate_slopes]{estimate_slopes()}}, are
-different in that their focus is not values on the response variable, but the
-model's parameters. The idea is to assess the effect of a predictor at a
-specific configuration of the other predictors. This is relevant in the case
-of interactions or non-linear relationships, when the effect of a predictor
-variable changes depending on the other predictors. Moreover, these effects
-can also be "averaged" over other predictors, to get for instance the
-"general trend" of a predictor over different factor levels.
+different in that their focus is not values on the response variable, but
+the model's parameters. The idea is to assess the effect of a predictor at
+a specific configuration of the other predictors. This is relevant in the
+case of interactions or non-linear relationships, when the effect of a
+predictor variable changes depending on the other predictors. Moreover,
+these effects can also be "averaged" over other predictors, to get for
+instance the "general trend" of a predictor over different factor levels.
 }
 
 \strong{Example:} Let's imagine the following model \code{lm(y ~ condition * x)} where
@@ -220,7 +228,7 @@ the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), 
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate
 the effect of x averaged over all conditions, or instead within each
-condition (\code{using [estimate_slopes]}).
+condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 }
 \section{Predictions and contrasts at meaningful values (data grids)}{
 
@@ -240,14 +248,16 @@ or \code{by = list(Species = c('setosa', 'virginica'))}
 }
 \item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width = [sd]"}
 or \code{by = "Sepal.Width = [fivenum]"}
-\item For numeric focal predictors, if no representative values are specified,
-\code{length} and \code{range} control the number and type of representative values:
+\item For numeric focal predictors, if no representative values are specified
+(i.e., \code{by = "gear"} and \emph{not} \code{by = "gear = c(4, 8)"}), \code{length} and
+\code{range} control the number and type of representative values for the focal
+predictors:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
 \item \code{length} and \code{range} apply to all numeric focal predictors.
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
-multiple elements, one for each predictor.
+multiple elements, one for each predictor (see 'Examples').
 }
 \item For integer variables, only values that appear in the data will be included
 in the data grid, independent from the \code{length} argument. This behaviour
@@ -290,6 +300,15 @@ but might produce biased predictions. However, you can try to set
 
 In particular for mixed models, using \code{"response"} is recommended, because
 averaging across random effects groups is then more accurate.
+}
+
+\section{Finite mixture models}{
+
+
+For finite mixture models (currently, only the \code{\link[brms:mixture]{brms::mixture()}} family
+from package \emph{brms} is supported), use \code{predict = "link"} to return predicted
+values stratified by class membership. To predict the class membership, use
+\code{\link[=estimate_link]{estimate_link()}}.
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{

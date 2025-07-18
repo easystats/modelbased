@@ -8,10 +8,33 @@ skip_if_not_installed("marginaleffects")
 skip_if_not_installed("httr2")
 skip_if_not_installed("withr")
 
-## FIXME: tests fail, but not interactively, and not for Vincent - not sure
-## what's going on here
 
-skip_if(TRUE)
+withr::with_options(
+  list(modelbased_backend = "marginaleffects"),
+  test_that("estimate_means - brms, categorical family", {
+    data(mtcars)
+    m <- insight::download_model("brms_categorical_1_num")
+    skip_if(is.null(m))
+    out <- estimate_means(m, "mpg = [fivenum]", backend = "marginaleffects")
+    expect_named(
+      out,
+      c(
+        "mpg", "ROPE_CI", "Response", "Median", "CI_low", "CI_high",
+        "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
+      )
+    )
+    expect_equal(
+      out$Median,
+      c(
+        0.97802, 0.83323, 0.45822, 0.12396, 0.00039, 0.00522, 0.06985,
+        0.32089, 0.62049, 0.92419, 0.01218, 0.07694, 0.201, 0.23148,
+        0.07274
+      ),
+      tolerance = 1e-4
+    )
+  })
+)
+
 
 withr::with_environment(
   new.env(),
@@ -19,6 +42,7 @@ withr::with_environment(
     data(efc, package = "modelbased")
     efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
     levels(efc$c172code) <- c("low", "mid", "high")
+    efc <<- efc
 
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
@@ -110,6 +134,7 @@ withr::with_environment(
     data(efc, package = "modelbased")
     efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
     levels(efc$c172code) <- c("low", "mid", "high")
+    efc <<- efc
 
     m <- suppressWarnings(insight::download_model("brms_linear_1"))
     skip_if(is.null(m))
@@ -121,13 +146,13 @@ withr::with_environment(
     expect_named(
       out,
       c(
-        "contrast", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
+        "Comparison", "ROPE_CI", "Median", "CI_low", "CI_high", "pd", "ROPE_low",
         "ROPE_high", "ROPE_Percentage"
       )
     )
     expect_equal(out$Median, c(-19.37705, -56.85365, -7.76557), tolerance = 1e-4)
     expect_identical(
-      out$contrast,
+      out$Comparison,
       c(
         "moderately dependent - independent", "severely dependent - independent",
         "slightly dependent - independent"
@@ -135,7 +160,7 @@ withr::with_environment(
     )
 
     out <- estimate_slopes(m, "e42dep", test = "ps", centrality = "MAP")
-    expect_named(out, c("contrast", "MAP", "CI_low", "CI_high", "ps"))
+    expect_named(out, c("Comparison", "MAP", "CI_low", "CI_high", "ps"))
     expect_equal(out$MAP, c(-19.21678, -56.74753, -7.69892), tolerance = 1e-4)
 
 
@@ -145,7 +170,7 @@ withr::with_environment(
     expect_named(
       out,
       c(
-        "e16sex", "contrast", "ROPE_CI", "Median", "CI_low", "CI_high",
+        "e16sex", "Comparison", "ROPE_CI", "Median", "CI_low", "CI_high",
         "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
       )
     )
@@ -191,6 +216,7 @@ withr::with_environment(
     data(efc, package = "modelbased")
     efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
     levels(efc$c172code) <- c("low", "mid", "high")
+    efc <<- efc
 
     m <- insight::download_model("brms_logistic_1")
     skip_if(is.null(m))
@@ -207,32 +233,5 @@ withr::with_environment(
       )
     )
     expect_equal(out$Median, c(0.11468, 0.26105, 0.42753, 0.62302), tolerance = 1e-4)
-  })
-)
-
-
-withr::with_options(
-  list(modelbased_backend = "marginaleffects"),
-  test_that("estimate_means - brms, categorical family", {
-    data(mtcars)
-    m <- insight::download_model("brms_categorical_1_num")
-    skip_if(is.null(m))
-    out <- estimate_means(m, "mpg = [fivenum]", backend = "marginaleffects")
-    expect_named(
-      out,
-      c(
-        "mpg", "ROPE_CI", "Response", "Median", "CI_low", "CI_high",
-        "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
-      )
-    )
-    expect_equal(
-      out$Median,
-      c(
-        0.97802, 0.83323, 0.45822, 0.12396, 0.00039, 0.00522, 0.06985,
-        0.32089, 0.62049, 0.92419, 0.01218, 0.07694, 0.201, 0.23148,
-        0.07274
-      ),
-      tolerance = 1e-4
-    )
   })
 )

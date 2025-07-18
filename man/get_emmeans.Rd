@@ -134,14 +134,23 @@ See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} an
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons},
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
+section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
 \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item String: Two special string options are \code{"inequality"} and
+\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+marginal effect inequality summary of categorical predictors' overall
+effects, respectively, the comprehensive effect of an independent
+variable across all outcome categories of a nominal or ordinal dependent
+variable (total marginal effect, see \emph{Mize and Han, 2025}).
+\code{comparison = "inequality_pairwise"} computes the difference (pairwise
+comparisons) between marginal effects inequality measures.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -245,15 +254,22 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}}
+e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
+\code{"average"}, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a \emph{complete} grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 predictors (one specified in \code{trend}, one in \code{by}). In this case, the
-\code{"esarey"} option is recommended, but \code{p_adjust} can also be one of \code{"none"}
-(default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"},
-\code{"tukey"}, \code{"sidak"}, or \code{"holm"}.}
+\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
+one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea & Plagborg-Møller, 2019).}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
