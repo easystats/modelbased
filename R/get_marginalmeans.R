@@ -68,7 +68,7 @@ get_marginalmeans <- function(model,
     model_info,
     verbose,
     ...
-  ) # nolint
+  )
 
   # Second step: create a data grid -------------------------------------------
   # ---------------------------------------------------------------------------
@@ -228,6 +228,7 @@ get_marginalmeans <- function(model,
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(fun_args)
+  vcov_means <- .safe(stats::vcov(means))
 
   # intermediate step: joint tests --------------------------------------------
   # ---------------------------------------------------------------------------
@@ -281,7 +282,8 @@ get_marginalmeans <- function(model,
         datagrid = datagrid,
         transform = !is.null(transform),
         keep_iterations = keep_iterations,
-        joint_test = joint_test
+        joint_test = joint_test,
+        vcov = vcov_means
       )
     )
   )
@@ -434,7 +436,7 @@ get_marginalmeans <- function(model,
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter",
-    "keep_iterations", "joint_test"
+    "keep_iterations", "joint_test", "vcov"
   )
 }
 

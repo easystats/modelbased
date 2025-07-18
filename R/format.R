@@ -134,13 +134,16 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
+  is_inequality_analysis <- is_contrast_analysis && identical(list(...)$hypothesis, "inequality")
   predict_type <- attributes(x)$predict
 
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
 
   # do we have contrasts? For contrasts, we want to keep p-values
-  if (is_contrast_analysis) {
+  if (is_inequality_analysis) {
+    estimate_name <- "Mean_Difference"
+  } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {
     # for simple means, we don't want p-values
@@ -248,9 +251,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # for contrasting slopes, we do nothing more here. for other contrasts,
-  # we prettify labels now
+  # we prettify labels now. For special inequality contrasts, we also need no
+  # cleaning, so we skip here, too
 
-  if (!is.null(comparison)) {
+  if (
+    !is.null(comparison) &&
+      !identical(comparison, "inequality") &&
+      !identical(comparison, "inequality_pairwise")
+  ) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
@@ -281,11 +289,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
     # value in the data grid, anyway. so we need to keep them
-    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 | vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
+      vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
     contrast <- contrast[keep_contrasts]
 
     # set to NULL, if all by-values have been removed here
-    if (!length(by)) by <- NULL
+    if (!length(by)) {
+      by <- NULL
+    }
 
     # if we have no contrasts left, e.g. due to `contrast = "time = factor(2)"`,
     # we error here - we have no contrasts to show
@@ -309,17 +320,17 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       numeric_focals <- vapply(dgrid[contrast], is.numeric, logical(1))
       # extract levels of non-numerics
       if (!all(numeric_focals)) {
-        all_levels <- unlist(lapply(
-          dgrid[contrast[!numeric_focals]],
-          function(i) as.character(unique(i))
-        ), use.names = FALSE)
+        all_levels <- unlist(
+          lapply(dgrid[contrast[!numeric_focals]], function(i) as.character(unique(i))),
+          use.names = FALSE
+        )
       }
       # extract levels of non-numerics
       if (any(numeric_focals)) {
-        all_num_levels <- unlist(lapply(
-          dgrid[contrast[numeric_focals]],
-          function(i) as.character(unique(i))
-        ), use.names = FALSE)
+        all_num_levels <- unlist(
+          lapply(dgrid[contrast[numeric_focals]], function(i) as.character(unique(i))),
+          use.names = FALSE
+        )
       }
       # create replacement vector
       replace_levels <- replace_num_levels <- NULL
@@ -331,7 +342,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
       }
       for (i in seq_along(all_num_levels)) {
-        replace_num_levels <- c(replace_num_levels, paste0("#", paste(rep_len("@", i), collapse = ""), "#"))
+        replace_num_levels <- c(
+          replace_num_levels,
+          paste0("#", paste(rep_len("@", i), collapse = ""), "#")
+        )
       }
 
       # replace all comparison levels with tokens
@@ -340,7 +354,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           comparison_pair <- sub(all_num_levels[j], replace_num_levels[j], comparison_pair)
         }
         for (j in seq_along(all_levels)) {
-          comparison_pair <- sub(paste0("\\<", all_levels[j], "\\>"), replace_levels[j], comparison_pair)
+          comparison_pair <- sub(
+            paste0("\\<", all_levels[j], "\\>"),
+            replace_levels[j],
+            comparison_pair
+          )
         }
         # remove multiple spaces
         gsub("[[:space:]]{2,}", " ", comparison_pair)
@@ -355,10 +373,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
         guess_columns = "max",
         verbose = FALSE
       )
-      new_colnames <- paste0(
-        rep.int(contrast, 2),
-        rep(1:2, each = length(contrast))
-      )
+      new_colnames <- paste0(rep.int(contrast, 2), rep(1:2, each = length(contrast)))
 
       # finally, replace all tokens with original comparison levels again
       params[] <- lapply(params, function(comparison_pair) {
@@ -366,7 +381,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
           comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
         }
         for (j in seq_along(all_num_levels)) {
-          comparison_pair <- sub(replace_num_levels[j], all_num_levels[j], comparison_pair, fixed = TRUE)
+          comparison_pair <- sub(
+            replace_num_levels[j],
+            all_num_levels[j],
+            comparison_pair,
+            fixed = TRUE
+          )
         }
         comparison_pair
       })
@@ -509,7 +529,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # coefficient column is named, because we replace that column name with an
   # appropriate name of the predictions (e.g. "Difference", "Probability" or
   # "Mean")
-  params <- suppressWarnings(parameters::model_parameters(x, ci = ci, verbose = FALSE, ...))
+  params <- suppressWarnings(parameters::model_parameters(
+    x,
+    ci = ci,
+    diagnostic = NULL,
+    verbose = FALSE,
+    ...
+  ))
   # the different functions and models (Bayesian, frequentist) have different
   # column names for their "coefficient". We now extract the relevant one.
   possible_colnames <- c(
@@ -576,12 +602,23 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # Rename for Categorical family
-  if (info$is_categorical || info$is_ordinal || info$is_cumulative || insight::is_multivariate(model)) {
+  if (
+    info$is_multinomial ||
+      info$is_categorical ||
+      info$is_ordinal ||
+      info$is_cumulative ||
+      insight::is_multivariate(model)
+  ) {
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
+  } else if (info$is_mixture) {
+    params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
   # finally, make sure we have original data types
   params <- data.frame(datawizard::data_restoretype(params, model_data))
+
+  # fix for inequality-comparisons
+  colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
 
   # add posterior draws?
   if (!is.null(attributes(x)$posterior_draws)) {
@@ -654,20 +691,28 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 #' @keywords internal
 .guess_estimate_name <- function(predict_type, info) {
   # estimate name
-  if (is.null(predict_type) && is.null(info)) {
+  if (is.null(predict_type)) {
     estimate_name <- "Mean"
   } else if (!is.null(predict_type) && tolower(predict_type) %in% .brms_aux_elements()) {
     # for Bayesian models with distributional parameter
     estimate_name <- tools::toTitleCase(predict_type)
-  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) {
+  } else if (!predict_type %in% c("none", "link") && (info$is_binomial || info$is_bernoulli || info$is_multinomial)) {
+    # here we add all models that model the probability of an outcome, such as
+    # binomial, multinomial, or Bernoulli models
     estimate_name <- "Probability"
   } else if (predict_type == "survival" && info$is_survival) {
+    # this is for survival models, where we want to predict the survival probability
     estimate_name <- "Probability"
   } else if (predict_type %in% c("zprob", "zero")) {
+    # this is for zero-inflated models, where we want to predict the probability
+    # of a zero-inflated outcome
     estimate_name <- "Probability"
   } else if (predict_type %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta)) {
+    # this is for beta regression models, where we want to predict the mean
+    # value of the outcome, which is a proportion
     estimate_name <- "Proportion"
   } else {
+    # for all other models, we simply use "Mean"
     estimate_name <- "Mean"
   }
   estimate_name

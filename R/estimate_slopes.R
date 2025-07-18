@@ -26,9 +26,11 @@
 #' comparisons. For `estimate_slopes()`, multiple comparison only occurs for
 #' Johnson-Neyman intervals, i.e. in case of interactions with two numeric
 #' predictors (one specified in `trend`, one in `by`). In this case, the
-#' `"esarey"` option is recommended, but `p_adjust` can also be one of `"none"`
-#' (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`, `"BY"`, `"fdr"`,
-#' `"tukey"`, `"sidak"`, or `"holm"`.
+#' `"esarey"` or `"sup-t"` options are recommended, but `p_adjust` can also be
+#' one of `"none"` (default), `"hochberg"`, `"hommel"`, `"bonferroni"`, `"BH"`,
+#' `"BY"`, `"fdr"`, `"tukey"`, `"sidak"`, or `"holm"`. `"sup-t"` computes
+#' simultaneous confidence bands, also called sup-t confidence band (Montiel
+#' Olea & Plagborg-Møller, 2019).
 #' @inheritParams estimate_means
 #' @inheritParams parameters::model_parameters.default
 #'
@@ -37,6 +39,11 @@
 #' @inheritSection estimate_means Predictions and contrasts at meaningful values (data grids)
 #'
 #' @return A data.frame of class `estimate_slopes`.
+#'
+#' @references
+#' Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+#' confidence bands: Theory, implementation, and an application to SVARs.
+#' Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))
 #' library(ggplot2)

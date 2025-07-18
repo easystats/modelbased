@@ -82,7 +82,12 @@ get_marginalcontrasts <- function(model,
 
   # if first focal term is numeric, we contrast slopes, but slopes only for
   # # numerics with many values, not for binary or likert-alike
-  if (is.numeric(model_data[[first_focal]]) && !.is_likert(model_data[[first_focal]], ...) && !first_focal %in% on_the_fly_factors) { # nolint
+  if (
+    is.numeric(model_data[[first_focal]]) &&
+      !.is_likert(model_data[[first_focal]], ...) &&
+      !first_focal %in% on_the_fly_factors
+  ) {
+    # nolint
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
       insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
@@ -100,6 +105,13 @@ get_marginalcontrasts <- function(model,
       verbose = verbose,
       ...
     )
+  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+    # inequality effect summary, see Trenton D. Mize, Bing Han 2025
+    # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
+    # Sociological Science February 5, 10.15195/v12.a7
+    # this requires a special handling, because we can only use it with avg_comparisons
+    out <- .calculate_inequality_effect(model, model_data, my_args, comparison, ci, ...)
+    predict <- "response"
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
@@ -154,6 +166,41 @@ get_marginalcontrasts <- function(model,
     "estimate_means"
   )
   out
+}
+
+
+# special contrasts: inequality---------------- -------------------------------
+
+.calculate_inequality_effect <- function(model, model_data, my_args, comparison, ci, ...) {
+  # to calculate marginal effects inequalities, all contrast predictors
+  # must be factors
+  check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
+  if (is.null(check_factors) || !all(check_factors)) {
+    insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
+  }
+  # for this special case, we need "avg_comparisons()", else we cannot specify
+  # the "variables" argument as named list
+  out <- marginaleffects::avg_comparisons(
+    model = model,
+    variables = as.list(stats::setNames(
+      rep_len("pairwise", length(my_args$contrast)),
+      my_args$contrast
+    )),
+    by = ifelse(is.null(my_args$by), TRUE, my_args$by),
+    hypothesis = ~I(mean(abs(x))) | term,
+    ...
+  )
+  # for the total marginal effects, we need to call "hypothesis()" again, this
+  # time with ~revpairwise option
+  if (comparison == "inequality_pairwise") {
+    if (nrow(out) < 2) {
+      insight::format_error("Pairwise comparisons require at least two marginal effects inequalities measures.")
+    }
+    out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+  }
+
+  class(out) <- unique(c("marginaleffects_means", class(out)))
+  format(out, model, ci, hypothesis = "inequality", ...)
 }
 
 
@@ -362,7 +409,7 @@ get_marginalcontrasts <- function(model,
   c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint"
+    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise"
   )
 }
 

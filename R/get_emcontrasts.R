@@ -167,7 +167,10 @@ get_emcontrasts <- function(model,
 
   # Summarize and clean
   if (m_info$is_bayesian) {
-    out <- cbind(estimated@grid, bayestestR::describe_posterior(estimated, ci = ci, verbose = FALSE, ...))
+    out <- cbind(
+      estimated@grid,
+      bayestestR::describe_posterior(estimated, ci = ci, diagnostic = NULL, verbose = FALSE, ...)
+    )
     out <- .clean_names_bayesian(out, model, predict, type = "contrast")
   } else {
     if (isTRUE(attributes(estimated)$joint_test)) {

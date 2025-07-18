@@ -276,6 +276,20 @@ names matching the model frame (see \code{\link[insight:get_data]{insight::get_d
 to generate model predictions for specific combinations of predictor values.
 }
 
+\section{Finite mixture models}{
+
+
+For finite mixture models (currently, only the \code{\link[brms:mixture]{brms::mixture()}} family
+from package \emph{brms} is supported), use \code{predict = "classification"} with
+\code{data = NULL} to predict the class membership for each observation (e.g.,
+\code{estimate_prediction(model, predict = "classification")}). To return
+predicted values stratified by class membership, use \code{predict = "link"}
+(possibly in combination with \code{data} or \code{by}, e.g.
+\code{estimate_link(model, by = "predictor")}). Other \code{predict} options will
+return predicted values of the outcome for the full data, not stratified by
+class membership.
+}
+
 \examples{
 \dontshow{if (all(insight::check_if_installed(c("see", "glmmTMB", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(modelbased)

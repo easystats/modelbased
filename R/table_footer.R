@@ -1,11 +1,6 @@
 # Table footer ===============================================================
 
-
-.table_footer <- function(x,
-                          by = NULL,
-                          type = "means",
-                          model = NULL,
-                          info = NULL) {
+.table_footer <- function(x, by = NULL, type = "means", model = NULL, info = NULL) {
   # extract necessary information from attributes
   predict <- info$predict
   comparison <- info$comparison
@@ -21,30 +16,20 @@
     model_info <- insight::model_info(model, response = 1)
   }
 
-
   # name of predicted response -----------------------------------------------
 
   if (isTRUE(info$joint_test)) {
     table_footer <- NULL
   } else {
-    table_footer <- paste0(
-      "\nVariable predicted: ", toString(insight::find_response(model))
-    )
+    table_footer <- paste0("\nVariable predicted: ", toString(insight::find_response(model)))
   }
-
 
   # modulated predictors (focal terms) ---------------------------------------
 
   if (!is.null(by) && !isTRUE(info$joint_test)) {
-    modulate_string <- switch(type,
-      contrasts = "contrasted",
-      "modulated"
-    )
-    table_footer <- paste0(
-      table_footer, "\nPredictors ", modulate_string, ": ", toString(by)
-    )
+    modulate_string <- switch(type, inequality = , contrasts = "contrasted", "modulated")
+    table_footer <- paste0(table_footer, "\nPredictors ", modulate_string, ": ", toString(by))
   }
-
 
   # predictors controlled (non-focal terms) ----------------------------------
   if (!is.null(adjusted_for) && length(adjusted_for) >= 1 && !all(is.na(adjusted_for))) {
@@ -74,16 +59,16 @@
     # "average value" of a non-focal predictor. Thus, we skip this line in the
     # footer
     if (!identical(marginalization, "average")) {
-      average_string <- switch(type,
-        predictions = "controlled",
-        "averaged"
-      )
+      average_string <- switch(type, predictions = "controlled", "averaged")
       table_footer <- paste0(
-        table_footer, "\nPredictors ", average_string, ": ", toString(adjusted_for)
+        table_footer,
+        "\nPredictors ",
+        average_string,
+        ": ",
+        toString(adjusted_for)
       )
     }
   }
-
 
   # P-value adjustment footer ------------------------------------------------
 
@@ -99,17 +84,14 @@
     }
   }
 
-
   # tell user about scale of predictions / contrasts -------------------------
 
-  result_type <- switch(type,
-    contrasts = "Contrasts",
-    "Predictions"
-  )
+  result_type <- switch(type, inequality = "Differences", contrasts = "Contrasts", "Predictions")
 
   if (!is.null(predict) && isFALSE(model_info$is_linear)) {
     # exceptions
-    predict <- switch(predict,
+    predict <- switch(
+      predict,
       none = "link",
       prediction = ,
       expectation = ,
@@ -141,7 +123,6 @@
     }
   }
 
-
   # Parameter labels for special hypothesis testing --------------------------
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
@@ -154,16 +135,17 @@
     # and combine column names with row values
     if (!is.null(datagrid)) {
       # extract unique values
-      custom_grid <- data.frame(expand.grid(
-        lapply(datagrid[info$focal_terms], unique)
-      ))
+      custom_grid <- data.frame(expand.grid(lapply(datagrid[info$focal_terms], unique)))
       # transpose, so we can easier extract information
       transposed_dg <- t(custom_grid[info$focal_terms])
       # interate over all parameters and create labels with proper names
-      hypothesis_labels <- unlist(lapply(parameter_names, function(i) {
-        rows <- as.numeric(sub(".", "", i))
-        paste0(i, " = ", toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]")))
-      }), use.names = FALSE)
+      hypothesis_labels <- unlist(
+        lapply(parameter_names, function(i) {
+          rows <- as.numeric(sub(".", "", i))
+          paste0(i, " = ", toString(paste0(info$focal_terms, " [", transposed_dg[, rows], "]")))
+        }),
+        use.names = FALSE
+      )
       # add all names to the footer
       table_footer <- paste0(
         table_footer,
@@ -173,7 +155,7 @@
     }
   }
 
-  if (all(table_footer == "")) { # nolint
+  if (all(table_footer == "")) {
     return(NULL)
   }
 
@@ -183,7 +165,7 @@
 
 .contrast_units <- function(type, predict, info) {
   # estimate name
-  if (is.null(predict) || is.null(info) || type != "contrasts") {
+  if (is.null(predict) || is.null(info) || !type %in% c("contrasts", "inequality")) {
     return(NULL)
   }
 

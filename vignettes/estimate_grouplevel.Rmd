@@ -154,7 +154,7 @@ reshaped <- reshape_grouplevel(random, indices = "Coefficient")
 head(reshaped)
 ```
 
-As you can see, the first row is repeated as it corresponds to the same participant (so the random effects are the same). Note that we can use `summary()` to remove all the duplicate rows. Let's add it to the original data.
+Let's merge it with the original data.
 
 ```{r}
 data_rt <- data_join(data_rt, reshaped, join = "full", by = "id")

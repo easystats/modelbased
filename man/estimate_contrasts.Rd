@@ -117,14 +117,23 @@ See also \code{method} argument in \link[emmeans:contrast]{emmeans::contrast} an
 \item For \code{backend = "marginaleffects"}, can be a numeric value, vector, or
 matrix, a string equation specifying the hypothesis to test, a string
 naming the comparison method, a formula, or a function. For options not
-described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons} and
-\href{https://marginaleffects.com/bonus/hypothesis.html}{this website}.
+described below, see documentation of \link[marginaleffects:comparisons]{marginaleffects::comparisons},
+\href{https://marginaleffects.com/bonus/hypothesis.html}{this website} and
+section \emph{Comparison options} below.
 \itemize{
 \item String: One of \code{"pairwise"}, \code{"reference"}, \code{"sequential"}, \code{"meandev"}
 \code{"meanotherdev"}, \code{"poly"}, \code{"helmert"}, or \code{"trt_vs_ctrl"}. To test
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item String: Two special string options are \code{"inequality"} and
+\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+marginal effect inequality summary of categorical predictors' overall
+effects, respectively, the comprehensive effect of an independent
+variable across all outcome categories of a nominal or ordinal dependent
+variable (total marginal effect, see \emph{Mize and Han, 2025}).
+\code{comparison = "inequality_pairwise"} computes the difference (pairwise
+comparisons) between marginal effects inequality measures.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -173,16 +182,24 @@ This is also the option that should be used for \strong{G-computation}
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}}
+e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
+\code{"average"}, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a \emph{complete} grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. Can be one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"},
-\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"esarey"} or
-\code{"holm"}. The \code{"esarey"} option is specifically for the case of Johnson-Neyman
-intervals, i.e. when calling \code{estimate_slopes()} with two numeric predictors
-in an interaction term. Details for the other options can be found in the
+\code{"bonferroni"}, \code{"BH"}, \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, \code{"sup-t"},
+\code{"esarey"} or \code{"holm"}. The \code{"esarey"} option is specifically for the case of
+Johnson-Neyman intervals, i.e. when calling \code{estimate_slopes()} with two
+numeric predictors in an interaction term. \code{"sup-t"} computes simultaneous
+confidence bands, also called sup-t confidence band (Montiel Olea &
+Plagborg-Møller, 2019). Details for the other options can be found in the
 p-value adjustment section of the \code{emmeans::test} documentation or
-\code{?stats::p.adjust}.}
+\code{?stats::p.adjust}. Note that certain options provided by the \strong{emmeans}
+package are only available if you set \code{backend = "emmeans"}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -245,36 +262,39 @@ argument), so reading its documentation (for instance \code{\link[emmeans:emmean
 \code{\link[emmeans:emtrends]{emmeans::emtrends()}} or this \href{https://marginaleffects.com/}{website}) is
 recommended to understand the idea behind these types of procedures.
 \itemize{
-\item Model-based \strong{predictions} is the basis for all that follows. Indeed,
-the first thing to understand is how models can be used to make predictions
+\item Model-based \strong{predictions} is the basis for all that follows. Indeed, the
+first thing to understand is how models can be used to make predictions
 (see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
-"outcome variable") given specific predictor values of the predictors (i.e.,
-given a specific data configuration). This is why the concept of \code{\link[insight:get_datagrid]{reference grid()}} is so important for direct predictions.
-\item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension
-of such predictions, allowing to "average" (collapse) some of the predictors,
-to obtain the average response value at a specific predictors configuration.
-This is typically used when some of the predictors of interest are factors.
-Indeed, the parameters of the model will usually give you the intercept value
-and then the "effect" of each factor level (how different it is from the
-intercept). Marginal means can be used to directly give you the mean value of
-the response variable at all the levels of a factor. Moreover, it can also be
-used to control, or average over predictors, which is useful in the case of
-multiple predictors with or without interactions.
-\item \strong{Marginal contrasts}, obtained via \code{\link[=estimate_contrasts]{estimate_contrasts()}}, are
-themselves at extension of marginal means, in that they allow to investigate
-the difference (i.e., the contrast) between the marginal means. This is,
-again, often used to get all pairwise differences between all levels of a
-factor. It works also for continuous predictors, for instance one could also
-be interested in whether the difference at two extremes of a continuous
+"outcome variable") given specific predictor values of the predictors
+(i.e., given a specific data configuration). This is why the concept of
+\code{\link[insight:get_datagrid]{reference grid()}} is so important for direct
+predictions.
+\item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension of
+such predictions, allowing to "average" (collapse) some of the predictors,
+to obtain the average response value at a specific predictors
+configuration. This is typically used when some of the predictors of
+interest are factors. Indeed, the parameters of the model will usually give
+you the intercept value and then the "effect" of each factor level (how
+different it is from the intercept). Marginal means can be used to directly
+give you the mean value of the response variable at all the levels of a
+factor. Moreover, it can also be used to control, or average over
+predictors, which is useful in the case of multiple predictors with or
+without interactions.
+\item \strong{Marginal contrasts}, obtained via \code{\link[=estimate_contrasts]{estimate_contrasts()}}, are themselves
+at extension of marginal means, in that they allow to investigate the
+difference (i.e., the contrast) between the marginal means. This is, again,
+often used to get all pairwise differences between all levels of a factor.
+It works also for continuous predictors, for instance one could also be
+interested in whether the difference at two extremes of a continuous
 predictor is significant.
 \item Finally, \strong{marginal effects}, obtained via \code{\link[=estimate_slopes]{estimate_slopes()}}, are
-different in that their focus is not values on the response variable, but the
-model's parameters. The idea is to assess the effect of a predictor at a
-specific configuration of the other predictors. This is relevant in the case
-of interactions or non-linear relationships, when the effect of a predictor
-variable changes depending on the other predictors. Moreover, these effects
-can also be "averaged" over other predictors, to get for instance the
-"general trend" of a predictor over different factor levels.
+different in that their focus is not values on the response variable, but
+the model's parameters. The idea is to assess the effect of a predictor at
+a specific configuration of the other predictors. This is relevant in the
+case of interactions or non-linear relationships, when the effect of a
+predictor variable changes depending on the other predictors. Moreover,
+these effects can also be "averaged" over other predictors, to get for
+instance the "general trend" of a predictor over different factor levels.
 }
 
 \strong{Example:} Let's imagine the following model \code{lm(y ~ condition * x)} where
@@ -286,8 +306,57 @@ the condition's levels (using \code{\link[=estimate_means]{estimate_means()}}), 
 visualize them. Another possibility is to evaluate the difference between
 these levels (using \code{\link[=estimate_contrasts]{estimate_contrasts()}}). Finally, one could also estimate
 the effect of x averaged over all conditions, or instead within each
-condition (\code{using [estimate_slopes]}).
+condition (using \code{\link[=estimate_slopes]{estimate_slopes()}}).
 }
+\section{Comparison options}{
+
+\itemize{
+\item \code{comparison = "pairwise"}: This method computes all possible unique
+differences between pairs of levels of the focal predictor. For example, if
+a factor has levels A, B, and C, it would compute A-B, A-C, and B-C.
+\item \code{comparison = "reference"}: This compares each level of the focal predictor
+to a specified reference level (by default, the first level). For example,
+if levels are A, B, C, and A is the reference, it computes B-A and C-A.
+\item \code{comparison = "sequential"}: This compares each level to the one
+immediately following it in the factor's order. For levels A, B, C, it
+would compute B-A and C-B.
+\item \code{comparison = "meandev"}: This contrasts each level's estimate against the
+grand mean of all estimates for the focal predictor.
+\item \code{comparison = "meanotherdev"}: Similar to \code{meandev}, but each level's
+estimate is compared against the mean of all \emph{other} levels, excluding
+itself.
+\item \code{comparison = "poly"}: These are used for ordered categorical variables to
+test for linear, quadratic, cubic, etc., trends across the levels. They
+assume equal spacing between levels.
+\item \code{comparison = "helmert"}: Contrast 2nd level to the first, 3rd to the
+average of the first two, and so on. Each level (except the first) is
+compared to the mean of the preceding levels. For levels A, B, C, it would
+compute B-A and C-(A+B)/2.
+\item \code{comparison = "trt_vs_ctrl"}: This compares all levels (excluding the
+first, which is typically the control) against the first level. It's often
+used when comparing multiple treatment groups to a single control group.
+\item To test multiple hypotheses jointly (usually used for factorial designs),
+\code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
+to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
+\item \code{comparison = "inequality"} computes the marginal effect inequality summary
+of categorical predictors' overall effects, respectively, the comprehensive
+effect of an independent variable across all outcome categories of a
+nominal or ordinal dependent variable (total marginal effect, see \emph{Mize and
+Han, 2025}). The marginal effect inequality focuses on the heterogeneity of
+the effects of a categorical \emph{independent} variable. It helps understand
+how the effect of the variable differs across its categories or levels.
+When the \emph{dependent} variable is categorical (e.g., logistic, ordinal or
+multinomial regression), marginal effect inequality provides a holistic
+view of how an independent variable affects a nominal or ordinal
+\emph{dependent} variable. It summarizes the overall impact (total marginal
+effects) across all possible outcome categories.
+\item \code{comparison = "inequality_pairwise"} computes the difference (pairwise
+comparisons) between marginal effects inequality measures. Depending on the
+sign, this measure indicates which of the predictors has a stronger impact
+on the dependent variable in terms of inequalities.
+}
+}
+
 \section{Effect Size}{
 
 
@@ -342,14 +411,16 @@ or \code{by = list(Species = c('setosa', 'virginica'))}
 }
 \item You can use "shortcuts" within square brackets, such as \code{by = "Sepal.Width = [sd]"}
 or \code{by = "Sepal.Width = [fivenum]"}
-\item For numeric focal predictors, if no representative values are specified,
-\code{length} and \code{range} control the number and type of representative values:
+\item For numeric focal predictors, if no representative values are specified
+(i.e., \code{by = "gear"} and \emph{not} \code{by = "gear = c(4, 8)"}), \code{length} and
+\code{range} control the number and type of representative values for the focal
+predictors:
 \itemize{
 \item \code{length} determines how many equally spaced values are generated.
 \item \code{range} specifies the type of values, like \code{"range"} or \code{"sd"}.
 \item \code{length} and \code{range} apply to all numeric focal predictors.
 \item If you have multiple numeric predictors, \code{length} and \code{range} can accept
-multiple elements, one for each predictor.
+multiple elements, one for each predictor (see 'Examples').
 }
 \item For integer variables, only values that appear in the data will be included
 in the data grid, independent from the \code{length} argument. This behaviour
@@ -453,4 +524,14 @@ model <- rstanarm::stan_glm(
 estimate_contrasts(model, by = "Petal.Length = [sd]", test = "bf")
 }
 \dontshow{\}) # examplesIf}
+}
+\references{
+\itemize{
+\item Mize, T., & Han, B. (2025). Inequality and Total Effect Summary Measures for
+Nominal and Ordinal Variables. Sociological Science, 12, 115–157.
+\doi{10.15195/v12.a7}
+\item Montiel Olea, J. L., and Plagborg-Møller, M. (2019). Simultaneous
+confidence bands: Theory, implementation, and an application to SVARs.
+Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
+}
 }

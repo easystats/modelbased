@@ -12,6 +12,7 @@
   names(means)[names(means) == "rate"] <- "Rate"
   names(means)[names(means) == "t.ratio"] <- "t"
   names(means)[names(means) == "z.ratio"] <- "z"
+  names(means)[names(means) == "F.ratio"] <- "F"
   names(means)[names(means) == "p.value"] <- "p"
   names(means)[names(means) == "lower.CL"] <- "CI_low"
   names(means)[names(means) == "upper.CL"] <- "CI_high"
@@ -29,6 +30,8 @@
   if (length(vars) == 1) {
     if (type == "contrast") {
       names(means)[names(means) == vars] <- "Difference"
+    } else if (type %in% c("inequality", "inequality_pairwise")) {
+      names(means)[names(means) == vars] <- "Mean Difference"
     } else if (type == "mean") {
       if (minfo$is_logit && predict == "response") {
         names(means)[names(means) == vars] <- "Probability"

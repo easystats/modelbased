@@ -352,6 +352,63 @@ test_that("estimate_contrasts - p.adjust", {
   p_none <- suppressMessages(estimate_contrasts(model, p_adjust = "none", backend = "marginaleffects"))
   p_tuk <- suppressMessages(estimate_contrasts(model, p_adjust = "tukey", backend = "marginaleffects"))
   expect_true(any(p_none$p != p_tuk$p))
+
+  model <- lm(Petal.Width ~ Species, data = iris)
+  expect_error(
+    estimate_contrasts(model, p_adjust = "scheffe"),
+    regex = "is only available when"
+  )
+  expect_silent(estimate_contrasts(
+    model,
+    contrast = "Species",
+    p_adjust = "scheffe",
+    backend = "emmeans"
+  ))
+
+  skip_if_not_installed("mvtnorm")
+  dat <- iris
+  dat$fac <- ifelse(dat$Sepal.Length < 5.8, "A", "B")
+  model <- lm(Sepal.Width ~ Species * fac, data = dat)
+  set.seed(123)
+  out <- estimate_contrasts(model, c("Species", "fac"), p_adjust = "sup-t")
+  expect_equal(
+    out$p,
+    c(
+      0.44686, 0, 0, 0.00048, 0, 0.00086, 0.0086, 0.00328, 0.02718,
+      0.10619, 0.99998, 0.00037, 0.71917, 0.51122, 0.28497
+    ),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$CI_low,
+    c(
+      -0.3461, -1.02306, -0.76301, -1.36376, -0.60638, -2.30875,
+      -2.06719, -2.46281, -1.93229, -0.0281, -0.60143, 0.12295, -0.82718,
+      -0.08844, -0.15023
+    ),
+    tolerance = 1e-3
+  )
+
+  skip_if_not_installed("glmmTMB")
+  d <- glmmTMB::Salamanders
+  model <- suppressWarnings(glmmTMB::glmmTMB(
+    count ~ mined + spp + (1 | site),
+    ziformula = ~mined,
+    family = poisson,
+    data = d
+  ))
+  set.seed(123)
+  out <- head(estimate_contrasts(model, "spp", by = "mined", p_adjust = "sup-t"))
+  expect_equal(
+    out$p,
+    c(0.00259, 0.59628, 0.18012, 0.00475, 0.00674, 0.99467),
+    tolerance = 1e-3
+  )
+  expect_equal(
+    out$CI_low,
+    c(-0.29028, -0.04581, -0.21504, 0.04106, 0.03308, -0.0816),
+    tolerance = 1e-3
+  )
 })
 
 
@@ -921,5 +978,70 @@ test_that("estimate_contrast, informative error when `by` and `contrast` are the
   expect_error(
     estimate_contrasts(m, "Species = 'versicolor'", by = "Species = 'setosa'"),
     regex = "You cannot"
+  )
+})
+
+
+test_that("estimate_contrast, works with aov (when no statistic is extracted)", {
+  skip_if(getRversion() < "4.5.0")
+  data(penguins)
+  fit <- aov(
+    formula = body_mass ~ species,
+    data = penguins
+  )
+
+  out1 <- marginaleffects::avg_predictions(
+    fit,
+    by = "species",
+    hypothesis = ~pairwise
+  )
+
+  out2 <- estimate_contrasts(
+    model = fit,
+    contrast = "species",
+    backend = "marginaleffects"
+  )
+
+  expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  expect_identical(out2$df, c(339L, 339L, 339L))
+
+  out3 <- estimate_contrasts(
+    model = fit,
+    contrast = "species",
+    df = Inf,
+    backend = "marginaleffects"
+  )
+  expect_equal(out1$p.value, out3$p, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, marginal effects inequalities", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+
+  m <- glm(long_bill ~ species + island + bill_dep, data = penguins, family = "binomial")
+
+  out <- estimate_contrasts(m, "species", comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], 0.6381, tolerance = 1e-4)
+  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+
+  expect_error(
+    estimate_contrasts(m, "species", comparison = "inequality_pairwise"),
+    regex = "Pairwise comparisons require"
+  )
+
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
+  expect_identical(out$Parameter, c("island", "species"))
+
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise")
+  expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_identical(out$Parameter, "island - species")
+
+  expect_error(
+    estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
+    regex = "All variables specified"
   )
 })

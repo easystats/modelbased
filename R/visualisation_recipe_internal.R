@@ -1,6 +1,5 @@
 # Find aes ----------------------------------------------------------------
 
-
 #' @keywords internal
 .find_aes <- function(x, model_info = NULL, numeric_as_discrete = 8) {
   # init basic aes
@@ -8,10 +7,7 @@
   data$.group <- 1
 
   att <- attributes(x)
-  aes <- list(
-    y = "Predicted",
-    group = ".group"
-  )
+  aes <- list(y = "Predicted", group = ".group")
 
   # extract information for labels
   model_data <- .safe(insight::get_data(attributes(x)$model, verbose = FALSE))
@@ -20,10 +16,24 @@
   # Find predictors
   by <- att$focal_terms
 
+  # flag for ordinal and alike models
+  has_response_levels <- isTRUE(
+    model_info$is_ordinal |
+      model_info$is_multinomial |
+      model_info$is_categorical |
+      model_info$is_cumulative
+  )
+
   # multivariate response models? if so, we need one more stratification in "by"
-  if (isTRUE(model_info$is_ordinal | model_info$is_multinomial) && "Response" %in% colnames(data)) {
+  if (has_response_levels && "Response" %in% colnames(data)) {
     by <- c(by, "Response")
     data$Response <- factor(data$Response, levels = unique(data$Response))
+  }
+
+  # mixture models? if so, we need one more stratification in "by"
+  if (isTRUE(model_info$is_mixture) && "Class" %in% colnames(data)) {
+    by <- c(by, "Class")
+    data$Class <- factor(data$Class, levels = unique(data$Class))
   }
 
   # if we have only few numeric values, we don't want a continuous color scale.
@@ -45,10 +55,20 @@
   } else if ("estimate_means" %in% att$class) {
     aes$y <- att$coef_name
   } else if ("estimate_slopes" %in% att$class) {
-    aes$y <- "Slope"
+    # for frequentist models, we have "Slope" as column name, for Bayesian models
+    # we have "Median", "Mean" or "MAP"
+    valid_y_vars <- intersect(c("Slope", "Median", "Mean", "MAP"), colnames(data))
+    # we wouldn't expect that there is more than one of these columns, but we
+    # check for that anyway...
+    if (length(valid_y_vars) == 0) {
+      insight::format_error("Could not find a suitable column for the y-axis. Expected one of: 'Slope', 'Median', 'Mean', 'MAP'.")
+    }
+    aes$y <- valid_y_vars[1]
     if ("Comparison" %in% names(data)) {
       # Insert "Comparison" column as the 2nd by so that it gets plotted as color
-      if (length(by) > 1) by[3:(length(by) + 1)] <- by[2:length(by)]
+      if (length(by) > 1) {
+        by[3:(length(by) + 1)] <- by[2:length(by)]
+      }
       by[2] <- "Comparison"
     } else if ("p" %in% colnames(data) && length(by) == 1 && is.numeric(data[[by]])) {
       # this is for slopes of two numeric interaction terms (johnson-neymann plots)
@@ -96,7 +116,6 @@
     aes <- .find_aes_ci(aes, data)
     return(list(aes = aes, data = data))
   }
-
 
   # Assign predictors to aes
   if (is.null(by)) {
@@ -167,11 +186,9 @@
     ))
   }
 
-
   # CI
   # ------------------------------------------------------------------------
   aes <- .find_aes_ci(aes, data)
-
 
   # axis and legend labels
   # ------------------------------------------------------------------------
@@ -414,8 +431,19 @@
 
 
   # probability scale? ----------------------------------
-  if (!is.null(response_scale) && response_scale %in% c("response", "invlink(link)", "prob", "probs") &&
-    isTRUE(model_info$is_logit | model_info$is_binomial | model_info$is_orderedbeta | model_info$is_beta | model_info$is_ordinal)) { # nolint
+  if (
+    !is.null(response_scale) &&
+      response_scale %in% c("response", "expectation", "invlink(link)", "prob", "probs") &&
+      isTRUE(
+        model_info$is_logit |
+          model_info$is_binomial |
+          model_info$is_orderedbeta |
+          model_info$is_beta |
+          model_info$is_ordinal |
+          model_info$is_multinomial
+      )
+  ) {
+    # nolint
     layers[[paste0("l", l)]] <- list(
       geom = "scale_y_continuous",
       labels = insight::format_value(
