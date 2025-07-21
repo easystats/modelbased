@@ -41,7 +41,8 @@ test_that("estimate_means - print multiple by's", {
 })
 
 
-test_that("estimate_means - print multiple by's", {
+test_that("estimate_means - using display() to print multiple by's", {
+  skip_if_not_installed("tinytable")
   data(efc, package = "modelbased")
 
   # make categorical

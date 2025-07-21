@@ -13,7 +13,7 @@
 #' Default is `NULL`, which will set the value based on
 #' `options(modelbased_full_labels)`, and use `TRUE` is no option is set.
 #' @param format String, indicating the output format. Can be `"markdown"`
-#' `"html"`, or `"tt"`. `format = "htnl"` create a HTML table using the *gt*
+#' `"html"`, or `"tt"`. `format = "html"` create a HTML table using the *gt*
 #' package. `format = "tt"` creates a `tinytable` object, which is either
 #' printed as markdown or HTML table, depending on the environment. See
 #' [`insight::export_table()`] for details.
