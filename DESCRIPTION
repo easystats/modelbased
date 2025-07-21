@@ -111,3 +111,4 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
+Remotes: easystats/insight

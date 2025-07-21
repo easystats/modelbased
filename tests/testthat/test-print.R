@@ -41,6 +41,16 @@ test_that("estimate_means - print multiple by's", {
 })
 
 
+test_that("estimate_means - print multiple by's", {
+  data(efc, package = "modelbased")
+
+  # make categorical
+  efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex"))
+  fit <- lm(neg_c_7 ~ c12hour * barthtot * c161sex * c172code, data = efc)
+  expect_snapshot(display(estimate_means(fit, c("c12hour = c(50, 100)", "c172code", "c161sex")), format = "tt"))
+})
+
+
 test_that("estimate_means - full labels", {
   data(efc, package = "modelbased")
   # make categorical
