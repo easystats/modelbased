@@ -132,7 +132,18 @@ Can also be \code{FALSE}.
 # tinyplot
 # ==============================================
 \dontrun{
-# todo...
+data(efc, package = "modelbased")
+efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
+m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
+
+em <- estimate_means(m, "c172code")
+tinyplot::plt(em)
+
+em <- estimate_means(m, "barthtot")
+tinyplot::plt(em)
+m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
+em <- estimate_means(m, c("e16sex", "c172code")) |>
+tinyplot::plt(em)
 }
 \dontshow{\}) # examplesIf}
 \dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
