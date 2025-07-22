@@ -20,13 +20,7 @@
 #' tinyplot::plt(em)
 #' }
 #' @exportS3Method tinyplot::tinyplot
-tinyplot.estimate_means <- function(
-  x,
-  show_data = FALSE,
-  join_dots = NULL,
-  numeric_as_discrete = NULL,
-  ...
-) {
+tinyplot.estimate_means <- function(x, show_data = FALSE, numeric_as_discrete = NULL, ...) {
   insight::check_if_installed("tinyplot")
 
   # init --------------------------------------------------
@@ -34,9 +28,6 @@ tinyplot.estimate_means <- function(
   model_info <- attributes(x)$model_info
 
   # set defaults
-  if (is.null(join_dots)) {
-    join_dots <- getOption("modelbased_join_dots", TRUE)
-  }
   if (is.null(numeric_as_discrete)) {
     numeric_as_discrete <- getOption("modelbased_numeric_as_discrete", 8)
   }
@@ -50,12 +41,6 @@ tinyplot.estimate_means <- function(
   dots <- list(...)
 
   # preparation of settings / arguments ----------------------------------
-
-  # check whether point-geoms should be connected by lines
-  do_not_join <- "grouplevel"
-  if (!join_dots) {
-    do_not_join <- c(do_not_join, "pointrange", "point")
-  }
 
   # Don't plot raw data if `predict` is not on the response scale
   if (

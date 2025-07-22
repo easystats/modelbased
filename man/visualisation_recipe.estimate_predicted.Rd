@@ -13,13 +13,7 @@
 
 \method{plot}{estimate_means}(x, ...)
 
-\method{tinyplot}{estimate_means}(
-  x,
-  show_data = FALSE,
-  join_dots = NULL,
-  numeric_as_discrete = NULL,
-  ...
-)
+\method{tinyplot}{estimate_means}(x, show_data = FALSE, numeric_as_discrete = NULL, ...)
 
 \method{visualisation_recipe}{estimate_predicted}(
   x,
@@ -64,12 +58,6 @@
 to the model-based estimation. This argument will be ignored for plotting
 objects returned by \code{estimate_slopes()} or \code{estimate_grouplevel()}.}
 
-\item{join_dots}{Logical, if \code{TRUE} (default) and for categorical focal terms
-in \code{by}, dots (estimates) are connected by lines, i.e. plots will be a
-combination of dots with error bars and connecting lines. If \code{FALSE}, only
-dots and error bars are shown. It is possible to set a global default value
-using \code{options()}, e.g. \code{options(modelbased_join_dots = FALSE)}.}
-
 \item{numeric_as_discrete}{Maximum number of unique values in a numeric
 predictor to treat that predictor as discrete. Defaults to \code{8}. Numeric
 predictors are usually mapped to a continuous color scale, unless they have
@@ -82,6 +70,12 @@ e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
+
+\item{join_dots}{Logical, if \code{TRUE} (default) and for categorical focal terms
+in \code{by}, dots (estimates) are connected by lines, i.e. plots will be a
+combination of dots with error bars and connecting lines. If \code{FALSE}, only
+dots and error bars are shown. It is possible to set a global default value
+using \code{options()}, e.g. \code{options(modelbased_join_dots = FALSE)}.}
 }
 \value{
 An object of class \code{visualisation_recipe} that describes the layers
