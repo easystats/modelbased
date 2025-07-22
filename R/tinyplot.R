@@ -95,7 +95,7 @@ tinyplot.estimate_means <- function(
   plot_description <- stats::as.formula(plot_formula)
 
   # facets, also as formula
-  if (is.null(dots$facet)) {
+  if (is.null(dots$facet) && !is.null(aes$facet)) {
     dots$facet <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
 
