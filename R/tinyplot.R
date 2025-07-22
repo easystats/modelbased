@@ -73,8 +73,6 @@ tinyplot.estimate_means <- function(
     }
   }
 
-  ## TODO: add raw data as first layer ----------------------------------
-
   # handle non-standard plot types -------------------------------
 
   if (aes$type == "grouplevel") {
@@ -124,6 +122,36 @@ tinyplot.estimate_means <- function(
   if (!is.null(theme)) {
     theme_dots[c(elements, "facet", "xlab", "ylab", "flip")] <- NULL
     do.call(tinyplot::tinytheme, c(list(theme = theme), theme_dots))
+  }
+
+  # add data points if requested --------------------------------
+
+  if (show_data) {
+    # extract raw data from the model
+    model <- attributes(x)$model
+    rawdata <- as.data.frame(insight::get_data(model, verbose = FALSE))
+
+    # set alpha
+    if (is.null(dots$alpha)) {
+      dots$alpha <- 0.3
+    }
+
+    # add layer
+    plot_args$draw <- {
+      tinyplot::tinyplot(
+        # we need the original response name for the data points
+        # so we update the formula for the plot description
+        stats::reformulate(
+          attr(stats::terms(plot_description), "term.labels"),
+          response = insight::find_response(model)
+        ),
+        data = rawdata,
+        facet = dots$facet,
+        type = "jitter",
+        add = TRUE,
+        alpha = dots$alpha
+      )
+    }
   }
 
   # plot it!
