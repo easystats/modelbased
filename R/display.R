@@ -1,10 +1,39 @@
+#' @rdname print.estimate_contrasts
 #' @export
-display.estimate_contrasts <- function(object, format = "markdown", ...) {
-  insight::validate_argument(format, c("md", "markdown", "html"))
-  if (format == "html") {
-    print_html(object, ...)
+display.estimate_contrasts <- function(object,
+                                       select = NULL,
+                                       include_grid = NULL,
+                                       full_labels = NULL,
+                                       format = "markdown",
+                                       ...) {
+  # Process argument ---------------------------------------------------------
+  # --------------------------------------------------------------------------
+
+  format <- insight::validate_argument(format, c("md", "markdown", "html", "tt"))
+
+  # set defaults
+  if (is.null(select)) {
+    select <- getOption("modelbased_select", NULL)
+  }
+  if (is.null(include_grid)) {
+    include_grid <- getOption("modelbased_include_grid", FALSE)
+  }
+  if (is.null(full_labels)) {
+    full_labels <- getOption("modelbased_full_labels", TRUE)
+  }
+
+  fun_args <- list(
+    x = object,
+    select = select,
+    include_grid = include_grid,
+    full_labels = full_labels
+  )
+
+  if (format %in% c("html", "tt")) {
+    fun_args$backend <- format
+    do.call(print_html, c(fun_args, list(...)))
   } else {
-    print_md(object, ...)
+    do.call(print_md, c(fun_args, list(...)))
   }
 }
 

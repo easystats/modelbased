@@ -7,6 +7,9 @@
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
+* Documentation of the `display()` method for *modelbased* objects has been
+  added.
+
 # modelbased 0.12.0
 
 ## Changes
