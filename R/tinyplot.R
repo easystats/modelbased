@@ -28,7 +28,7 @@ tinyplot.estimate_means <- function(
 ) {
   insight::check_if_installed("tinyplot")
 
-  # init
+  # init --------------------------------------------------
   response_scale <- attributes(x)$predict
   model_info <- attributes(x)$model_info
 
@@ -77,6 +77,13 @@ tinyplot.estimate_means <- function(
 
   ## TODO: add raw data as first layer ----------------------------------
 
+  # handle non-standard plot types -------------------------------
+
+  if (aes$type == "grouplevel") {
+    aes$type <- "pointrange"
+    dots$flip <- TRUE
+  }
+
   # base elements as formula for tinyplot -------------------------------
 
   # plot formula
@@ -89,14 +96,7 @@ tinyplot.estimate_means <- function(
 
   # facets, also as formula
   if (is.null(dots$facet)) {
-    if (is.null(aes$facet)) {
-      facet <- NULL
-    } else {
-      facet <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
-    }
-  } else {
-    facet <- dots$facet
-    dots$facet <- NULL
+    dots$facet <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
 
   # add remaining aesthetics to the plot description as symbols
@@ -109,14 +109,21 @@ tinyplot.estimate_means <- function(
   })
   names(plot_args) <- elements
 
+  ## TODO: legend labels?
+
+  # x/y labels --------------------------------
+  dots$xlab <- aes$labs$x
+  dots$ylab <- aes$labs$y
+
   # add aesthetics to the plot description
-  plot_args <- c(
-    list(plot_description, facet = facet, data = data, type = aes$type),
-    plot_args
-  )
+  plot_args <- insight::compact_list(c(
+    list(plot_description, data = data, type = aes$type),
+    plot_args,
+    dots
+  ))
 
   # plot it!
-  do.call(tinyplot::tinyplot, insight::compact_list(c(plot_args, dots)))
+  do.call(tinyplot::tinyplot, plot_args)
 }
 
 #' @exportS3Method tinyplot::tinyplot
