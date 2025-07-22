@@ -8,11 +8,13 @@
 #' # todo...
 #' }
 #' @exportS3Method tinyplot::tinyplot
-tinyplot.estimate_means <- function(x,
-                                    show_data = FALSE,
-                                    join_dots = NULL,
-                                    numeric_as_discrete = NULL,
-                                    ...) {
+tinyplot.estimate_means <- function(
+  x,
+  show_data = FALSE,
+  join_dots = NULL,
+  numeric_as_discrete = NULL,
+  ...
+) {
   insight::check_if_installed("tinyplot")
 
   # init
@@ -43,7 +45,10 @@ tinyplot.estimate_means <- function(x,
   }
 
   # Don't plot raw data if `predict` is not on the response scale
-  if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
+  if (
+    !is.null(response_scale) &&
+      !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")
+  ) {
     show_data <- FALSE
   }
 
@@ -58,31 +63,22 @@ tinyplot.estimate_means <- function(x,
     }
   }
 
-
   ## TODO: add raw data as first layer ----------------------------------
 
-
   # formula for tinyplot ----------------------------------
+
+  aes$by <- aes$color
+  elements <- c("facet", "xmin", "xmax", "ymin", "ymax", "by")
+
   plot_description <- stats::as.formula(paste(aes$y, "~", aes$x))
-  if (is.null(aes$facet)) {
-    facet_description <- NULL
-  } else {
-    facet_description <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
-  }
+  plot_args <- lapply(elements, function(el) {
+    if (is.null(aes[[el]])) {
+      return(NULL)
+    }
+    stats::as.formula(paste("~", aes[[el]], collapse = " + "))
+  })
+  names(plot_args) <- elements
+  plot_args <- c(list(plot_description, data = data, type = aes$type), plot_args)
 
-  fun_args <- list(
-    # plot_description,
-    x = aes$x,
-    y = aes$y,
-    data = data,
-    facet = facet_description,
-    by = aes$color,
-    type = aes$type,
-    xmin = aes$xmin,
-    xmax = aes$xmax,
-    ymin = aes$ymin,
-    ymax = aes$ymax
-  )
-
-  do.call(tinyplot::tinyplot, insight::compact_list(c(fun_args, list(...))))
+  do.call(tinyplot::tinyplot, insight::compact_list(c(plot_args, list(...))))
 }
