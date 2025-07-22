@@ -13,7 +13,13 @@
 
 \method{plot}{estimate_means}(x, ...)
 
-\method{tinyplot}{estimate_means}(x, show_data = FALSE, numeric_as_discrete = NULL, ...)
+\method{tinyplot}{estimate_means}(
+  x,
+  show_data = FALSE,
+  numeric_as_discrete = NULL,
+  theme = "tufte",
+  ...
+)
 
 \method{visualisation_recipe}{estimate_predicted}(
   x,
@@ -52,7 +58,8 @@
 \arguments{
 \item{x}{A modelbased object.}
 
-\item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}.}
+\item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}, or
+to \code{tinyplot()} and \code{tinytheme()} if you use that method.}
 
 \item{show_data}{Logical, if \code{TRUE}, display the "raw" data as a background
 to the model-based estimation. This argument will be ignored for plotting
@@ -67,6 +74,10 @@ deviation around the mean are chosen as representative values for that
 predictor. Use \code{FALSE} to always use continuous color scales for numeric
 predictors. It is possible to set a global default value using \code{options()},
 e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
+
+\item{theme}{A character string specifying the theme to use for the plot.
+Defaults to \code{"tufte"}. For other options please see \code{\link[tinyplot:tinytheme]{tinyplot::tinytheme()}}.
+Use \code{NULL} if no theme should be applied.}
 
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}

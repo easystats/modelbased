@@ -1,4 +1,7 @@
 #' @rdname visualisation_recipe.estimate_predicted
+#' @param theme A character string specifying the theme to use for the plot.
+#' Defaults to `"tufte"`. For other options please see [`tinyplot::tinytheme()`].
+#' Use `NULL` if no theme should be applied.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
 #' # ==============================================
@@ -20,7 +23,13 @@
 #' tinyplot::plt(em)
 #' }
 #' @exportS3Method tinyplot::tinyplot
-tinyplot.estimate_means <- function(x, show_data = FALSE, numeric_as_discrete = NULL, ...) {
+tinyplot.estimate_means <- function(
+  x,
+  show_data = FALSE,
+  numeric_as_discrete = NULL,
+  theme = "tufte",
+  ...
+) {
   insight::check_if_installed("tinyplot")
 
   # init --------------------------------------------------
@@ -38,7 +47,10 @@ tinyplot.estimate_means <- function(x, show_data = FALSE, numeric_as_discrete = 
   aes <- .find_aes(x, model_info, numeric_as_discrete)
   data <- aes$data
   aes <- aes$aes
+
+  # save additional arguments, once for theming and once for the plot
   dots <- list(...)
+  theme_dots <- dots
 
   # preparation of settings / arguments ----------------------------------
 
@@ -107,6 +119,12 @@ tinyplot.estimate_means <- function(x, show_data = FALSE, numeric_as_discrete = 
     plot_args,
     dots
   ))
+
+  # default theme
+  if (!is.null(theme)) {
+    theme_dots[c(elements, "facet", "xlab", "ylab", "flip")] <- NULL
+    do.call(tinyplot::tinytheme, c(list(theme = theme), theme_dots))
+  }
 
   # plot it!
   do.call(tinyplot::tinyplot, plot_args)
