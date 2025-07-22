@@ -67,20 +67,22 @@ tinyplot.estimate_means <- function(
 
   # base elements as formula for tinyplot -------------------------------
 
+  # plot formula
   if (is.null(aes$color)) {
     plot_formula <- paste(aes$y, "~", aes$x)
   } else {
     plot_formula <- paste(aes$y, "~", aes$x, "|", aes$color)
   }
   plot_description <- stats::as.formula(plot_formula)
+
+  # facets, also as formula
   if (is.null(aes$facet)) {
     facets <- NULL
   } else {
     facets <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
   }
 
-  # add remaining aesthetics to the plot description as symbols ---------
-
+  # add remaining aesthetics to the plot description as symbols
   elements <- c("xmin", "xmax", "ymin", "ymax")
   plot_args <- lapply(elements, function(el) {
     if (is.null(aes[[el]])) {
@@ -90,6 +92,12 @@ tinyplot.estimate_means <- function(
   })
   names(plot_args) <- elements
 
-  plot_args <- c(list(plot_description, facets = facets, data = data, type = aes$type), plot_args)
+  # add aesthetics to the plot description
+  plot_args <- c(
+    list(plot_description, facets = facets, data = data, type = aes$type),
+    plot_args
+  )
+
+  # plot it!
   do.call(tinyplot::tinyplot, insight::compact_list(c(plot_args, list(...))))
 }
