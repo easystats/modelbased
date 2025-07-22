@@ -65,20 +65,31 @@ tinyplot.estimate_means <- function(
 
   ## TODO: add raw data as first layer ----------------------------------
 
-  # formula for tinyplot ----------------------------------
+  # base elements as formula for tinyplot -------------------------------
 
-  aes$by <- aes$color
-  elements <- c("facet", "xmin", "xmax", "ymin", "ymax", "by")
+  if (is.null(aes$color)) {
+    plot_formula <- paste(aes$y, "~", aes$x)
+  } else {
+    plot_formula <- paste(aes$y, "~", aes$x, "|", aes$color)
+  }
+  plot_description <- stats::as.formula(plot_formula)
+  if (is.null(aes$facet)) {
+    facets <- NULL
+  } else {
+    facets <- stats::as.formula(paste("~", aes$facet, collapse = " + "))
+  }
 
-  plot_description <- stats::as.formula(paste(aes$y, "~", aes$x))
+  # add remaining aesthetics to the plot description as symbols ---------
+
+  elements <- c("xmin", "xmax", "ymin", "ymax")
   plot_args <- lapply(elements, function(el) {
     if (is.null(aes[[el]])) {
       return(NULL)
     }
-    stats::as.formula(paste("~", aes[[el]], collapse = " + "))
+    as.symbol(aes[[el]])
   })
   names(plot_args) <- elements
-  plot_args <- c(list(plot_description, data = data, type = aes$type), plot_args)
 
+  plot_args <- c(list(plot_description, facets = facets, data = data, type = aes$type), plot_args)
   do.call(tinyplot::tinyplot, insight::compact_list(c(plot_args, list(...))))
 }
