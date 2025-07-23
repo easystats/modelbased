@@ -98,6 +98,7 @@ Suggests:
     see (>= 0.11.0),
     survival,
     testthat (>= 3.2.1),
+    tinyplot,
     tinytable,
     vdiffr,
     withr
