@@ -134,7 +134,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
-  is_inequality_analysis <- is_contrast_analysis && identical(list(...)$hypothesis, "inequality")
+  is_inequality_analysis <- identical(list(...)$hypothesis, "inequality") ||
+    identical(list(...)$hypothesis, "inequality_pairwise")
   predict_type <- attributes(x)$predict
 
   # define all columns that should be removed
@@ -143,6 +144,8 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   # do we have contrasts? For contrasts, we want to keep p-values
   if (is_inequality_analysis) {
     estimate_name <- "Mean_Difference"
+    # for inequality analysis, we want to keep the stratification variable
+    remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {
@@ -612,6 +615,30 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     params <- .safe(datawizard::data_rename(params, "group", "Response"), params)
   } else if (info$is_mixture) {
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
+  }
+
+  # fix labels for inequality pairwise analysis
+  if (identical(list(...)$hypothesis, "inequality_pairwise")) {
+    # clean parameter names
+    parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
+    # extract data for by-variable
+    by_var <- model_data[[attributes(x)$hypothesis_by]]
+    # make sure we have a factor
+    if (is.character(by_var)) {
+      by_var <- factor(by_var, levels = unique(by_var))
+    }
+    # extract levels
+    by_levels <- levels(by_var)
+    # iterate over all parameter names and replace b1 to bx with the by-levels
+    parameter_names <- vapply(parameter_names, function(i) {
+      # replace b1 with first by-level, b2 with second by-level, etc.
+      for (j in seq_along(by_levels)) {
+        i <- sub(paste0("b", j), by_levels[j], i, fixed = TRUE)
+      }
+      i
+    }, character(1))
+    # finally, assign back to the Parameter column
+    params$Parameter <- parameter_names
   }
 
   # finally, make sure we have original data types

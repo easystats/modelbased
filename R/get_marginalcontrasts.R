@@ -178,6 +178,18 @@ get_marginalcontrasts <- function(model,
   if (is.null(check_factors) || !all(check_factors)) {
     insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
   }
+  # setup formula for hypothesis argument. use "term" as grouping variable
+  # when we don't have a "by" argument, else use the "by" argument as grouping
+  # variable
+  if (is.null(my_args$by) || !length(my_args$by)) {
+    f <- ~I(mean(abs(x))) | term
+  } else {
+    # sanity check - by can only be one variable
+    if (length(my_args$by) > 1) {
+      insight::format_error("`by` can only contain one variable for `comparison = \"inequality\"`.")
+    }
+    f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
+  }
   # for this special case, we need "avg_comparisons()", else we cannot specify
   # the "variables" argument as named list
   out <- marginaleffects::avg_comparisons(
@@ -187,7 +199,7 @@ get_marginalcontrasts <- function(model,
       my_args$contrast
     )),
     by = ifelse(is.null(my_args$by), TRUE, my_args$by),
-    hypothesis = ~I(mean(abs(x))) | term,
+    hypothesis = f,
     ...
   )
   # for the total marginal effects, we need to call "hypothesis()" again, this
@@ -197,10 +209,13 @@ get_marginalcontrasts <- function(model,
       insight::format_error("Pairwise comparisons require at least two marginal effects inequalities measures.")
     }
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+    attr(out, "hypothesis_by") <- my_args$by
+    hypothesis <- "inequality_pairwise"
+  } else {
+    hypothesis <- "inequality"
   }
-
   class(out) <- unique(c("marginaleffects_means", class(out)))
-  format(out, model, ci, hypothesis = "inequality", ...)
+  format(out, model, ci, hypothesis = hypothesis, ...)
 }
 
 

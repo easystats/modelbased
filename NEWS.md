@@ -10,6 +10,11 @@
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
 
+## Bug fixes
+
+* Fixed issue with `by` in `estimate_contrasts()` when `comparison` was
+  `"inequality"`.
+
 # modelbased 0.12.0
 
 ## Changes

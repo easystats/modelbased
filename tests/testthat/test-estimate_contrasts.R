@@ -1036,12 +1036,28 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
   expect_identical(out$Parameter, c("island", "species"))
 
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], c(0.66259, 0.60411, 0.64052), tolerance = 1e-4)
+  expect_named(out, c("island", "Mean Difference", "SE", "CI_low", "CI_high", "z", "p"))
+
   out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise")
   expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "island - species")
 
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise")
+  expect_equal(out[["Mean Difference"]], c(0.05848, 0.02207, -0.03641), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_named(out, c("Parameter", "Mean Difference", "SE", "CI_low", "CI_high", "z", "p"))
+  expect_identical(out$Parameter, c("Biscoe - Dream", "Biscoe - Torgersen", "Dream - Torgersen"))
+
   expect_error(
     estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
     regex = "All variables specified"
+  )
+
+  m <- glm(long_bill ~ species + island + sex + bill_dep, data = penguins, family = "binomial")
+  out <- estimate_contrasts(m, "species", by = c("island", "sex"), comparison = "inequality")
+  expect_error(
+    estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
+    regex = "can only contain one variable"
   )
 })
