@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,8 +132,9 @@ various examples, tutorials and use cases.</p>
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  backend <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -197,16 +198,42 @@ transformation is selected (which usually is <code>"response"</code>). See also
 <dd><p>Confidence Interval (CI) level. Default to <code>0.95</code> (<code>95%</code>).</p></dd>
 
 
-<dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
-<dd><p>The p-values adjustment method for frequentist multiple
-comparisons. For <code>estimate_slopes()</code>, multiple comparison only occurs for
-Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in <code>trend</code>, one in <code>by</code>). In this case, the
-<code>"esarey"</code> or <code>"sup-t"</code> options are recommended, but <code>p_adjust</code> can also be
-one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>,
-<code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
-simultaneous confidence bands, also called sup-t confidence band (Montiel
-Olea &amp; Plagborg-Møller, 2019).</p></dd>
+<dt id="arg-estimate">estimate<a class="anchor" aria-label="anchor" href="#arg-estimate"></a></dt>
+<dd><p>The <code>estimate</code> argument determines how predictions are
+averaged ("marginalized") over variables not specified in <code>by</code> or <code>contrast</code>
+(non-focal predictors). It controls whether predictions represent a "typical"
+individual, an "average" individual from the sample, or an "average"
+individual from a broader population.</p><ul><li><p><code>"typical"</code> (Default): Calculates predictions for a balanced data grid
+representing all combinations of focal predictor levels (specified in <code>by</code>).
+For non-focal numeric predictors, it uses the mean; for non-focal
+categorical predictors, it marginalizes (averages) over the levels. This
+represents a "typical" observation based on the data grid and is useful for
+comparing groups. It answers: "What would the average outcome be for a
+'typical' observation?". This is the default approach when estimating
+marginal means using the <em>emmeans</em> package.</p></li>
+<li><p><code>"average"</code>: Calculates predictions for each observation in the sample and
+then averages these predictions within each group defined by the focal
+predictors. This reflects the sample's actual distribution of non-focal
+predictors, not a balanced grid. It answers: "What is the predicted value
+for an average observation in my data?"</p></li>
+<li><p><code>"population"</code>: "Clones" each observation, creating copies with all
+possible combinations of focal predictor levels. It then averages the
+predictions across these "counterfactual" observations (non-observed
+permutations) within each group. This extrapolates to a hypothetical
+broader population, considering "what if" scenarios. It answers: "What is
+the predicted response for the 'average' observation in a broader possible
+target population?" This approach entails more assumptions about the
+likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for <strong>G-computation</strong>
+(causal inference, see <em>Chatton and Rohrer 2024</em>).</p></li>
+</ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
+e.g. <code>options(modelbased_estimate = "average")</code>. When you set <code>estimate</code> to
+<code>"average"</code>, it calculates the average based only on the data points that
+actually exist. This is in particular important for two or more focal
+predictors, because it doesn't generate a <em>complete</em> grid of all theoretical
+combinations of predictor values. Consequently, the output may not include
+all the values. <code>estimate = "population"</code> is not available for
+<code>estimate_slopes()</code>.</p></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
@@ -218,6 +245,18 @@ posterior distribution, before computing summaries. Can also be <code>TRUE</code
 which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.</p></dd>
+
+
+<dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
+<dd><p>The p-values adjustment method for frequentist multiple
+comparisons. For <code>estimate_slopes()</code>, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in <code>trend</code>, one in <code>by</code>). In this case, the
+<code>"esarey"</code> or <code>"sup-t"</code> options are recommended, but <code>p_adjust</code> can also be
+one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</code>, <code>"bonferroni"</code>, <code>"BH"</code>,
+<code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea &amp; Plagborg-Møller, 2019).</p></dd>
 
 
 <dt id="arg-keep-iterations">keep_iterations<a class="anchor" aria-label="anchor" href="#arg-keep-iterations"></a></dt>
@@ -538,6 +577,57 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
+<span class="r-in"><span><span class="co"># marginal effects with different `estimate` options</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">penguins</span><span class="op">$</span><span class="va">long_bill</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="fu">datawizard</span><span class="fu">::</span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/categorize.html" class="external-link">categorize</a></span><span class="op">(</span><span class="va">penguins</span><span class="op">$</span><span class="va">bill_len</span><span class="op">)</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"short"</span>, <span class="st">"long"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">long_bill</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">species</span> <span class="op">+</span> <span class="va">island</span> <span class="op">*</span> <span class="va">bill_dep</span>, data <span class="op">=</span> <span class="va">penguins</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the emmeans default</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">m</span>, <span class="st">"bill_dep"</span>, by <span class="op">=</span> <span class="st">"island"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> island    |    Slope |       SE |        95% CI |    z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Biscoe    | 6.07e-03 | 4.45e-03 | [ 0.00, 0.01] | 1.36 | 0.173</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dream     |     0.04 |     0.03 | [-0.01, 0.10] | 1.47 | 0.141</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Torgersen | 5.29e-03 |     0.01 | [-0.02, 0.03] | 0.41 | 0.679</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for bill_dep</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="fu">emmeans</span><span class="fu">::</span><span class="fu"><a href="https://rvlenth.github.io/emmeans/reference/emtrends.html" class="external-link">emtrends</a></span><span class="op">(</span><span class="va">m</span>, <span class="st">"island"</span>, var <span class="op">=</span> <span class="st">"bill_dep"</span>, regrid <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  island    bill_dep.trend      SE  df asymp.LCL asymp.UCL</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Biscoe           0.00606 0.00445 Inf  -0.00267    0.0148</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Dream            0.04180 0.02830 Inf  -0.01372    0.0973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Torgersen        0.00528 0.01270 Inf  -0.01958    0.0301</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Results are averaged over the levels of: sex, species </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Confidence level used: 0.95 </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># the marginaleffects default</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_slopes</span><span class="op">(</span><span class="va">m</span>, <span class="st">"bill_dep"</span>, by <span class="op">=</span> <span class="st">"island"</span>, estimate <span class="op">=</span> <span class="st">"average"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Effects</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> island    | Slope |   SE |        95% CI |    z |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Biscoe    |  0.06 | 0.04 | [-0.01, 0.14] | 1.75 | 0.079</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Dream     |  0.05 | 0.02 | [ 0.00, 0.10] | 1.93 | 0.053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Torgersen |  0.03 | 0.03 | [-0.02, 0.08] | 1.08 | 0.279</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for bill_dep</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Type of slope was dY/dX</span></span>
+<span class="r-in"><span><span class="fu">marginaleffects</span><span class="fu">::</span><span class="fu"><a href="https://marginaleffects.com/man/r/slopes.html" class="external-link">avg_slopes</a></span><span class="op">(</span><span class="va">m</span>, variables <span class="op">=</span> <span class="st">"bill_dep"</span>, by <span class="op">=</span> <span class="st">"island"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     island Estimate Std. Error    z Pr(&gt;|z|)   S     2.5 % 97.5 %</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Biscoe      0.0640     0.0365 1.75   0.0794 3.7 -0.007509 0.1356</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Dream       0.0473     0.0245 1.93   0.0534 4.2 -0.000698 0.0952</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Torgersen   0.0297     0.0274 1.08   0.2785 1.8 -0.023995 0.0833</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Term: bill_dep</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Type: response</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Comparison: dY/dX</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>

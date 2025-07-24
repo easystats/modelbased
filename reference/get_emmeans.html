@@ -17,7 +17,7 @@ wrappers around emmeans::emmeans() and emmeans::emtrends()."><meta property="og:
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.5</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -149,8 +149,8 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"pairwise"</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -174,8 +174,9 @@ wrappers around <code><a href="https://rvlenth.github.io/emmeans/reference/emmea
 <span>  by <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  predict <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ci <span class="op">=</span> <span class="fl">0.95</span>,</span>
-<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  p_adjust <span class="op">=</span> <span class="st">"none"</span>,</span>
 <span>  keep_iterations <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
@@ -363,14 +364,26 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
-(<em>Chatton and Rohrer 2024</em>).</p></li>
+(causal inference, see <em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_estimate = "average")</code>. When you set <code>estimate</code> to
 <code>"average"</code>, it calculates the average based only on the data points that
 actually exist. This is in particular important for two or more focal
 predictors, because it doesn't generate a <em>complete</em> grid of all theoretical
 combinations of predictor values. Consequently, the output may not include
-all the values.</p></dd>
+all the values. <code>estimate = "population"</code> is not available for
+<code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p></dd>
+
+
+<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
+<dd><p>A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be <code>TRUE</code>, in
+which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.</p></dd>
 
 
 <dt id="arg-p-adjust">p_adjust<a class="anchor" aria-label="anchor" href="#arg-p-adjust"></a></dt>
@@ -383,17 +396,6 @@ one of <code>"none"</code> (default), <code>"hochberg"</code>, <code>"hommel"</c
 <code>"BY"</code>, <code>"fdr"</code>, <code>"tukey"</code>, <code>"sidak"</code>, or <code>"holm"</code>. <code>"sup-t"</code> computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea &amp; Plagborg-Møller, 2019).</p></dd>
-
-
-<dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
-<dd><p>A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., <code>lm(log(y) ~ x)</code>). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be <code>TRUE</code>, in
-which case <code><a href="https://easystats.github.io/insight/reference/get_transformation.html" class="external-link">insight::get_transformation()</a></code> is called to determine the
-appropriate transformation-function. Note that no standard errors are returned
-when transformations are applied.</p></dd>
 
 </dl></div>
 
