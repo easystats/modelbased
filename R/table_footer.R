@@ -104,9 +104,7 @@
       result_type,
       " are on the ",
       predict,
-      "-scale",
-      .contrast_units(type, predict, model_info),
-      "."
+      "-scale."
     )
   } else if (isTRUE(model_info$is_linear) && !isTRUE(transform)) {
     # add information about response transformation
@@ -160,24 +158,6 @@
   }
 
   c(paste0(table_footer, "\n"), "yellow")
-}
-
-
-.contrast_units <- function(type, predict, info) {
-  # estimate name
-  if (is.null(predict) || is.null(info) || !type %in% c("contrasts", "inequality")) {
-    return(NULL)
-  }
-
-  if (
-    (!predict %in% c("none", "link") && (info$is_binomial || info$is_bernoulli)) ||
-      predict %in% c("zprob", "zero") ||
-      (predict %in% c("response", "invlink(link)") && (info$is_beta || info$is_orderedbeta))
-  ) {
-    " (in %-points)"
-  } else {
-    NULL
-  }
 }
 
 

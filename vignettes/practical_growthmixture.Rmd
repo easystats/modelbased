@@ -4,7 +4,7 @@ author: "The easystats team"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Growth Mixture Models with brms and easystats}
+  %\VignetteIndexEntry{An Introduction to Growth Mixture Models with brms and easystats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -173,6 +173,10 @@ The output is neatly separated by class. We can see, for example, that higher ed
 
 We can dive deeper by estimating the marginal means of `QoL` for different predictor levels within each class. Let's look at the effect of `education`. The `predict = "link"` argument is essential for mixture models, as it computes the means for each class separately.
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+# need this fake, so vignettes pass CI checks
+qol_cancer <<- qol_cancer
+```
 ```{r, message=FALSE, warning=FALSE}
 estimate_means(brms_mixture_2, by = "education", predict = "link")
 ```

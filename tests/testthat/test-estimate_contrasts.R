@@ -1019,7 +1019,10 @@ test_that("estimate_contrast, marginal effects inequalities", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
   data(penguins)
-  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+  penguins$long_bill <- factor(
+    datawizard::categorize(penguins$bill_len),
+    labels = c("short", "long")
+  )
 
   m <- glm(long_bill ~ species + island + bill_dep, data = penguins, family = "binomial")
 
@@ -1045,7 +1048,12 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_identical(out$Parameter, "island - species")
 
   out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise")
-  expect_equal(out[["Mean Difference"]], c(0.05848, 0.02207, -0.03641), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(
+    out[["Mean Difference"]],
+    c(0.05848, 0.02207, -0.03641),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
   expect_named(out, c("Parameter", "Mean Difference", "SE", "CI_low", "CI_high", "z", "p"))
   expect_identical(out$Parameter, c("Biscoe - Dream", "Biscoe - Torgersen", "Dream - Torgersen"))
 
@@ -1059,4 +1067,30 @@ test_that("estimate_contrast, marginal effects inequalities", {
     estimate_contrasts(m, "species", by = c("island", "sex"), comparison = "inequality"),
     regex = "can only contain one variable"
   )
+
+  m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+  out <- estimate_contrasts(
+    m,
+    "bill_dep",
+    by = "island",
+    estimate = "average",
+    comparison = "inequality"
+  )
+  expect_equal(out$`Mean Difference`, 0.02291537, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, slopes with different estimate options", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+
+  m <- glm(long_bill ~ species + island * bill_dep, data = penguins, family = "binomial")
+
+  out <- estimate_contrasts(m, "bill_dep", by = "island")
+  expect_equal(out$Difference, c(0.08507, -0.00071, -0.08578), tolerance = 1e-4)
+
+  out <- estimate_contrasts(m, "bill_dep", by = "island", estimate = "average")
+  expect_equal(out$Difference, c(-0.05295, -0.07655, -0.0236), tolerance = 1e-4)
 })

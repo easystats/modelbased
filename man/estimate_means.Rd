@@ -84,7 +84,7 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(\emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
@@ -93,7 +93,8 @@ e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimat
 actually exist. This is in particular important for two or more focal
 predictors, because it doesn't generate a \emph{complete} grid of all theoretical
 combinations of predictor values. Consequently, the output may not include
-all the values.}
+all the values. \code{estimate = "population"} is not available for
+\code{estimate_slopes()}.}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression

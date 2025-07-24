@@ -4,11 +4,21 @@
 
 * Methods for the *tinyplot* package were added.
 
+* `estimate_slopes()` now also gets the `estimate` argument, to specify how
+  to estimate over non-focal terms.
+
+* `comparison = "inequality"` now also works when contrasting slopes
+  for a numeric predictor.
+
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
+
+* For contrasts, the message about the units of contrasts ("in %-points") has
+  been removed, because this was slightly misleading. The units were in %-points
+  if multiplied by 100, but this multiplication was not done in the output.
 
 ## Bug fixes
 

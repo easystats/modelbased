@@ -12,14 +12,20 @@ get_marginaltrends <- function(model,
                                by = NULL,
                                predict = NULL,
                                ci = 0.95,
-                               p_adjust = "none",
+                               estimate = NULL,
                                transform = NULL,
+                               p_adjust = "none",
                                keep_iterations = FALSE,
                                verbose = TRUE,
                                ...) {
   # check if available
   insight::check_if_installed("marginaleffects")
   dots <- list(...)
+
+  # set defaults
+  if (is.null(estimate)) {
+    estimate <- "typical"
+  }
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
@@ -34,10 +40,15 @@ get_marginaltrends <- function(model,
   if (is.null(by) && is.null(myargs$range)) {
     datagrid <- datagrid_info <- NULL
   } else {
+    # setup arguments to create the data grid
+    dg_factors <- switch(estimate,
+      specific = "reference",
+      "all"
+    )
     dg_args <- list(
       model,
       by = c(by, myargs$range),
-      factors = "all",
+      factors = dg_factors,
       include_random = TRUE,
       verbose = FALSE
     )
@@ -105,11 +116,18 @@ get_marginaltrends <- function(model,
       model,
       variables = myargs$trend,
       by = myargs$by,
-      newdata = datagrid,
       conf_level = ci
     ),
     dots
   ))
+
+  # all other "marginalizations"
+  # we don't want a datagrid for "average" option
+  if (is.null(dots$newdata) && estimate != "average") {
+    # we allow individual "newdata" options, so do not
+    # # overwrite if explicitly set
+    fun_args$newdata <- datagrid
+  }
 
   # handle distributional parameters
   if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
@@ -142,6 +160,14 @@ get_marginaltrends <- function(model,
     estimated$conf.high <- trans_fun(estimated$conf.high)
     estimated$std.error <- NULL
   }
+
+  # Fifth step: post-processing marginal means----------------------------------
+  # ---------------------------------------------------------------------------
+
+  # filter "by" rows when we have "average" marginalization, because we don't
+  # pass data grid in such situations - but we still created the data grid based
+  # on the `by` variables, for internal use, for example filtering at this point
+  estimated <- .filter_datagrid_average(estimated, estimate, datagrid, datagrid_info)
 
   # Last step: Save information in attributes  --------------------------------
   # ---------------------------------------------------------------------------

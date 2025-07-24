@@ -45,7 +45,7 @@
 #' confidence bands: Theory, implementation, and an application to SVARs.
 #' Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
-#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))
 #' library(ggplot2)
 #' # Get an idea of the data
 #' ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -94,14 +94,31 @@
 #' # just for the trend within a certain range
 #' estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 #' }
+#'
+#' @examplesIf all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0"
+#' \dontrun{
+#' # marginal effects with different `estimate` options
+#' data(penguins)
+#' penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+#' m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+#'
+#' # the emmeans default
+#' estimate_slopes(m, "bill_dep", by = "island")
+#' emmeans::emtrends(m, "island", var = "bill_dep", regrid = "response")
+#'
+#' # the marginaleffects default
+#' estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
+#' marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
+#' }
 #' @export
 estimate_slopes <- function(model,
                             trend = NULL,
                             by = NULL,
                             predict = NULL,
                             ci = 0.95,
-                            p_adjust = "none",
+                            estimate = NULL,
                             transform = NULL,
+                            p_adjust = "none",
                             keep_iterations = FALSE,
                             backend = NULL,
                             verbose = TRUE,
@@ -110,6 +127,12 @@ estimate_slopes <- function(model,
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+
+  # validate input
+  estimate <- insight::validate_argument(
+    estimate,
+    c("typical", "specific", "average")
+  )
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -130,6 +153,7 @@ estimate_slopes <- function(model,
       trend = trend,
       by = by,
       predict = predict,
+      estimate = estimate,
       ci = ci,
       p_adjust = p_adjust,
       transform = transform,

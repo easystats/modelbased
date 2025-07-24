@@ -646,6 +646,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     params$Parameter <- parameter_names
   }
 
+  # fix labels for inequality analysis for slopes
+  if (identical(list(...)$hypothesis, "inequality") && isTRUE(attributes(x)$compute_slopes)) {
+    params$Parameter <- attributes(x)$trend
+  }
+
   # finally, make sure we have original data types
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
