@@ -100,8 +100,9 @@ estimate_slopes <- function(model,
                             by = NULL,
                             predict = NULL,
                             ci = 0.95,
-                            p_adjust = "none",
+                            estimate = NULL,
                             transform = NULL,
+                            p_adjust = "none",
                             keep_iterations = FALSE,
                             backend = NULL,
                             verbose = TRUE,
@@ -110,6 +111,12 @@ estimate_slopes <- function(model,
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+
+  # validate input
+  estimate <- insight::validate_argument(
+    estimate,
+    c("typical", "population", "specific", "average")
+  )
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -130,6 +137,7 @@ estimate_slopes <- function(model,
       trend = trend,
       by = by,
       predict = predict,
+      estimate = estimate,
       ci = ci,
       p_adjust = p_adjust,
       transform = transform,

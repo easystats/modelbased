@@ -191,3 +191,23 @@ test_that("estimate_slopes, works with glmmTMB and splines", {
   expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_equal(out$Slope, 0.06614, tolerance = 1e-3)
 })
+
+
+test_that("estimate_slopes, estimate-argument works", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+  m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+
+  out <- estimate_slopes(m, "bill_dep", by = "island")
+  ecxpect_equal(out$Slope, c(0.00607, 0.04194, 0.00529), tolerance = 1e-4)
+
+  out1 <- estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
+  out2 <- marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
+  expect_equal(out1$Slope, out2$estimate, tolerance = 1e-4)
+
+  out <- estimate_slopes(m, "bill_dep", by = "island = 'Dream'", estimate = "average")
+  expect_equal(out$Slope, out2$estimate[2], tolerance = 1e-4)
+  expect_identical(dim(out), c(1L, 7L))
+})

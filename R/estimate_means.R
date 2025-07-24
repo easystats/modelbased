@@ -66,7 +66,7 @@
 #'   target population?" This approach entails more assumptions about the
 #'   likelihood of different combinations, but can be more apt to generalize.
 #'   This is also the option that should be used for **G-computation**
-#'   (_Chatton and Rohrer 2024_).
+#'   (causal inference, see _Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`. When you set `estimate` to
@@ -74,7 +74,8 @@
 #' actually exist. This is in particular important for two or more focal
 #' predictors, because it doesn't generate a *complete* grid of all theoretical
 #' combinations of predictor values. Consequently, the output may not include
-#' all the values.
+#' all the values. `estimate = "population"` is not available for
+#' `estimate_slopes()`.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
 #' found for mixed models, where `backend = "marginaleffects"` will also average
