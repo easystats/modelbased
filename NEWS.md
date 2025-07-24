@@ -4,6 +4,9 @@
 
 * Methods for the *tinyplot* package were added.
 
+* `estimate_slopes()` now also gets the `estimate` argument, to specify how
+  to estimate over non-focal terms.
+
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
