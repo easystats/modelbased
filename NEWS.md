@@ -16,6 +16,10 @@
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
 
+* For contrasts, the message about the units of contrasts ("in %-points") has
+  been removed, because this was slightly misleading. The units were in %-points
+  if multiplied by 100, but this multiplication was not done in the output.
+
 ## Bug fixes
 
 * Fixed issue with `by` in `estimate_contrasts()` when `comparison` was

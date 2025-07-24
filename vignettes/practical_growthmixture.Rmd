@@ -4,7 +4,7 @@ author: "The easystats team"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Growth Mixture Models with brms and easystats}
+  %\VignetteIndexEntry{An Introduction to Growth Mixture Models with brms and easystats}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
