@@ -7,6 +7,9 @@
 * `estimate_slopes()` now also gets the `estimate` argument, to specify how
   to estimate over non-focal terms.
 
+* `comparison = "inequality"` now also works when contrasting slopes
+  for a numeric predictor.
+
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 

@@ -8,8 +8,8 @@ get_marginalcontrasts <- function(
   ci = 0.95,
   comparison = "pairwise",
   estimate = NULL,
-  p_adjust = "none",
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...

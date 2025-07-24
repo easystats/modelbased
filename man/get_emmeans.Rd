@@ -49,8 +49,8 @@ get_marginalcontrasts(
   ci = 0.95,
   comparison = "pairwise",
   estimate = NULL,
-  p_adjust = "none",
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -263,6 +263,15 @@ combinations of predictor values. Consequently, the output may not include
 all the values. \code{estimate = "population"} is not available for
 \code{estimate_slopes()}.}
 
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
+
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
 Johnson-Neyman intervals, i.e. in case of interactions with two numeric
@@ -272,15 +281,6 @@ one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonfe
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019).}
-
-\item{transform}{A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be \code{TRUE}, in
-which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function. Note that no standard errors are returned
-when transformations are applied.}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the
