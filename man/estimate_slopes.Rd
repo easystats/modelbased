@@ -299,7 +299,7 @@ for some examples.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -347,6 +347,22 @@ estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 # average marginal effects of Petal.Length,
 # just for the trend within a certain range
 estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+# marginal effects with different `estimate` options
+data(penguins)
+penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+
+# the emmeans default
+estimate_slopes(m, "bill_dep", by = "island")
+emmeans::emtrends(m, "island", var = "bill_dep", regrid = "response")
+
+# the marginaleffects default
+estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
+marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
 }
 \dontshow{\}) # examplesIf}
 }
