@@ -201,7 +201,7 @@ test_that("estimate_slopes, estimate-argument works", {
   m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
 
   out <- estimate_slopes(m, "bill_dep", by = "island")
-  ecxpect_equal(out$Slope, c(0.00607, 0.04194, 0.00529), tolerance = 1e-4)
+  expect_equal(out$Slope, c(0.00607, 0.04194, 0.00529), tolerance = 1e-4)
 
   out1 <- estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
   out2 <- marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")

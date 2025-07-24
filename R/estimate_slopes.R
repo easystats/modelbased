@@ -131,7 +131,7 @@ estimate_slopes <- function(model,
   # validate input
   estimate <- insight::validate_argument(
     estimate,
-    c("typical", "population", "specific", "average")
+    c("typical", "specific", "average")
   )
 
   if (backend == "emmeans") {
