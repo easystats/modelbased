@@ -286,3 +286,12 @@ brms::brm(
   refresh = 0
 )
 ```
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```

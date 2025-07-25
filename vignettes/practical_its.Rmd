@@ -19,8 +19,11 @@ knitr::opts_chunk$set(
   package.startup.message = FALSE
 )
 
-options(modelbased_join_dots = FALSE)
-options(modelbased_select = "minimal")
+options(
+  modelbased_join_dots = FALSE,
+  modelbased_estimate = "average",
+  modelbased_select = "minimal"
+)
 
 pkgs <- c("datawizard", "marginaleffects")
 
@@ -136,3 +139,12 @@ The result is a significant difference of approximately 5. This is our estimated
 # Conclusion
 
 This vignette demonstrates how the `modelbased` package can be used to conduct a comprehensive Interrupted Time Series analysis. By combining a simple linear model with the `estimate_means()`, `estimate_slopes()`, and `estimate_contrasts()` functions, we can easily estimate and test for both immediate (level) and sustained (slope) changes following an intervention. This workflow provides a clear, powerful, and interpretable approach to evaluating the impact of real-world events.
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```

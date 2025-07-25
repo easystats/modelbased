@@ -274,3 +274,12 @@ This vignette explored the estimation of average treatment effects (ATEs) from o
 Combining IPW and g-computation doesn't introduce any additional bias and hence has no negative effects. While IPW alone can sometimes be less accurate than g-computation, particularly when g-computation is feasible, the most reliable estimates are achieved by using both methods together. Therefore, we recommend their combined use.
 
 # References
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```
