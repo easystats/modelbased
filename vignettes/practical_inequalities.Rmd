@@ -1,0 +1,230 @@
+---
+title: "Case Study: Measuring and comparing absolute and relative inequalities in R"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Case Study: Measuring and comparing absolute and relative inequalities in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+bibliography: bibliography.bib
+---
+
+```{r set-options, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  dev = "png",
+  out.width = "100%",
+  dpi = 300,
+  message = FALSE,
+  warning = FALSE,
+  package.startup.message = FALSE
+)
+
+options(modelbased_join_dots = FALSE)
+options(modelbased_select = "minimal")
+
+pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
+if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+if (getRversion() < "4.1.0") {
+  knitr::opts_chunk$set(eval = FALSE)
+}
+```
+
+
+## 1. Introduction: Why Summarize Effects?
+
+In the social sciences, many key variables are categorical, representing nominal groups (like race, religion, or political affiliation) or ordinal rankings (like educational attainment or social class). When we use these variables as predictors in a statistical model, we often get a series of coefficients representing differences between each category and a chosen reference category.
+
+While this is informative, it has limitations:
+
+* **Reference Group Dependence**: The interpretation is tied to the reference group, and it's not immediately clear how non-reference groups compare to each other.
+* **Difficulty in Summarizing**: It's hard to answer the holistic question: "What is the *overall* effect of this variable?" For example, how can we quantify the total impact of 'education' on an outcome, rather than just the effect of 'high school vs. college'?
+* **Challenges in Comparison**: It is difficult to compare the effect size of a multi-category variable (e.g., race) with another (e.g., gender) or to track how the overall effect of a variable changes across different models (e.g., before and after adding control variables).
+
+To address this, researchers have developed summary measures. As Mize and Han (2025) propose, we can think of the overall effect of a categorical variable in terms of the **inequality** it produces in the outcome. A variable has a large effect if the outcomes for its different groups are far apart, and a small effect if the outcomes are similar.
+
+This vignette demonstrates how to compute two such summary measures - **absolute inequality** and **relative inequality** - using the `modelbased` package in R, which is part of the `easystats` ecosystem.
+
+## 2. The `modelbased` Package and the Example
+
+The `modelbased` package provides a consistent and easy-to-use framework for obtaining model-based predictions, means, contrasts, and slopes. We will use its functions to calculate inequality measures.
+
+### Required Packages
+
+First, let's load the necessary libraries.
+
+```{r, message=FALSE, warning=FALSE}
+library(easystats)
+library(patchwork)
+```
+
+### Example Data: Quality of Life for Cancer Patients
+
+We will use the `qol_cancer` dataset, which is included in the `parameters` package. This dataset contains information on the Quality of Life (QoL) for patients with prostate cancer, measured at three different time points. It also includes the patients' education level, a key socioeconomic variable.
+
+Our goal is to compute absolute and relative inequality measures for the `education` variable to understand its overall impact on patients' QoL.
+
+```{r}
+# Load the data
+data(qol_cancer)
+
+# The 'ID' variable should be a factor for the model, but we'll make it numeric
+# for a later example of splitting the data.
+qol_cancer$ID <- as.numeric(qol_cancer$ID)
+
+head(qol_cancer)
+```
+
+## 3. Modeling and Visualizing the Data
+
+We begin by fitting a linear model to predict Quality of Life (`QoL`) based on `time`, `education`, and their interaction. This allows the effect of education to vary over time.
+
+```{r}
+# Fit a linear model
+m <- lm(QoL ~ time * education, data = qol_cancer)
+```
+
+Before calculating inequality, let's visualize the estimated marginal means from our model. This plot shows how the average QoL changes over time for each education level. We can see clear gaps between the groups.
+
+```{r}
+# Get estimated marginal means for each combination of time and education
+p <- estimate_means(m, by = c("time", "education"))
+
+# Plot the means
+plot(p)
+```
+
+The plot shows that individuals with higher education report a higher QoL, and these gaps appear to widen over time. Our inequality measures will quantify this "average gap."
+
+## 4. Absolute Inequality
+
+**Absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups. It answers the question: "On average, how many units does the outcome differ between any two education groups?"
+
+### Pairwise Contrasts
+
+First, let's look at the simple pairwise differences, averaged across the three time points.
+
+```{r}
+# Estimate the average difference between each pair of education levels
+estimate_contrasts(m, contrast = "education")
+```
+
+This table shows three specific comparisons. To get a single summary measure, we can compute the mean of these differences.
+
+### Calculating Absolute Inequality
+
+The `estimate_contrasts()` function can directly compute the absolute inequality by setting `comparison = "inequality"`. This calculates the mean of the absolute values of all pairwise differences.
+
+```{r}
+# Compute the absolute inequality for the 'education' variable
+abs_inequality <- estimate_contrasts(m, contrast = "education", comparison = "inequality")
+abs_inequality
+```
+
+**Interpretation**: The mean difference (absolute inequality) is **9.64**. This means that, on average, the Quality of Life score differs by 9.64 points between any two randomly chosen education levels, after accounting for time. The small p-value (`p < .001`) indicates that this overall inequality is statistically significant.
+
+## 5. Relative Inequality
+
+**Relative inequality** (or the inequality ratio) is the average of the ratios of predicted outcomes between all pairs of groups. It answers the question: "On average, by what factor does the outcome differ between any two education groups?" This is particularly useful when the scale of the outcome is not intrinsically meaningful or when comparing effects across different outcomes.
+
+### Pairwise Ratios
+
+First, let's look at the pairwise ratios.
+
+```{r}
+# Estimate the ratio of means for each pair of education levels
+estimate_contrasts(m, contrast = "education", ratio = TRUE)
+```
+
+### Calculating the Inequality Ratio
+
+We set `comparison = "inequality_ratio"` to get the summary measure.
+
+```{r}
+# Compute the relative inequality (inequality ratio)
+rel_inequality <- estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
+rel_inequality
+```
+
+**Interpretation**: The mean ratio (relative inequality) is **1.14**. This means that, on average, the QoL score is 1.14 times higher (or 14% higher) when comparing a higher education group to a lower one.
+
+## 6. Comparing Inequalities Across Groups and Time
+
+A powerful application of these measures is to compare how inequality differs across different subgroups or conditions.
+
+### Comparing Inequality Across Subgroups
+
+Let's randomly split our data into two groups based on patient `ID` to simulate comparing inequality between, for example, two different treatment centers or demographic groups.
+
+```{r}
+# Split data and fit separate models
+m1 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID < 100))
+m2 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID >= 100))
+
+# Visualize the patterns in each group
+p1 <- plot(estimate_means(m1, at = c("time", "education"))) +
+  ggplot2::theme(legend.position = "none") +
+  ggplot2::labs(title = "Group 1 (ID < 100)")
+
+p2 <- plot(estimate_means(m2, at = c("time", "education"))) +
+  ggplot2::labs(title = "Group 2 (ID >= 100)")
+
+# Show plots side-by-side
+p1 + p2
+```
+
+The visual gap between education levels appears larger in Group 1. Let's confirm this by calculating the absolute inequality for each group.
+
+```{r}
+# Absolute inequality in Group 1
+estimate_contrasts(m1, contrast = "education", comparison = "inequality")
+
+# Absolute inequality in Group 2
+estimate_contrasts(m2, contrast = "education", comparison = "inequality")
+```
+
+As suspected, the absolute inequality in QoL due to education is larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean Difference = 7.27). This demonstrates how these measures can be used to formally test for differences in inequality across populations.
+
+### Tracking Inequality Over Time
+
+Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups.
+
+```{r}
+# Estimate the slope of 'time' for each education level in the first group
+estimate_slopes(m1, trend = "time", by = "education")
+```
+
+In Group 1, the QoL for the 'low' education group is decreasing over time (Slope = -6.71), while it is stable for the 'mid' and 'high' groups. This suggests the gap is widening. We can quantify this change in inequality directly.
+
+```{r}
+# Calculate the inequality in the *slopes* of time
+# This tells us if the rate of change in QoL is unequal across groups
+estimate_contrasts(m1, trend = "time", by = "education", comparison = "inequality")
+```
+
+The mean difference in slopes is 4.74. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between education groups. This provides a dynamic view, showing that the inequality is not static but is actively increasing in this subgroup.
+
+## 7. Conclusion
+
+The `modelbased` package offers a powerful and intuitive way to move beyond simple pairwise comparisons and summarize the holistic effect of categorical variables. By quantifying **absolute and relative inequalities**, researchers can:
+
+* Obtain a single, interpretable effect size for a nominal or ordinal predictor.
+* Formally test whether this overall effect is statistically significant.
+* Compare the magnitude of inequality across different groups, models, or over time.
+
+This approach aligns statistical practice with the theoretical concept of group-based disparities, providing a clearer and more comprehensive understanding of how social categories shape outcomes.
+
+### References
+
+Mize, T. D., & Han, B. (2025). Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables. *Sociological Science, 12*, 115-157.
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```
