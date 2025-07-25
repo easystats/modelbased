@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -231,12 +231,17 @@ section <em>Comparison options</em> below.</p><ul><li><p>String: One of <code>"p
 multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
-<li><p>String: Two special string options are <code>"inequality"</code> and
-<code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
+<li><p>String: Special string options are <code>"inequality"</code>, <code>"inequality_ratio"</code>,
+and <code>"inequality_pairwise"</code>. <code>comparison = "inequality"</code> computes the
 marginal effect inequality summary of categorical predictors' overall
 effects, respectively, the comprehensive effect of an independent
 variable across all outcome categories of a nominal or ordinal dependent
-variable (total marginal effect, see <em>Mize and Han, 2025</em>).
+variable (also called <em>absolute inequality</em>, or total marginal effect,
+see <em>Mize and Han, 2025</em>). <code>"inequality_ratio"</code> computes the ratio of
+marginal effect inequality measures, also known as <em>relative inequality</em>.
+This is useful to compare the relative effects of different predictors on
+the dependent variable. It provides a measure of how much more or less
+inequality one predictor has compared to another.
 <code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
 comparisons) between marginal effects inequality measures.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
@@ -451,18 +456,26 @@ used when comparing multiple treatment groups to a single control group.</p></li
 <li><p>To test multiple hypotheses jointly (usually used for factorial designs),
 <code>comparison</code> can also be <code>"joint"</code>. In this case, use the <code>test</code> argument
 to specify which test should be conducted: <code>"F"</code> (default) or <code>"Chi2"</code>.</p></li>
-<li><p><code>comparison = "inequality"</code> computes the marginal effect inequality summary
-of categorical predictors' overall effects, respectively, the comprehensive
-effect of an independent variable across all outcome categories of a
-nominal or ordinal dependent variable (total marginal effect, see <em>Mize and
-Han, 2025</em>). The marginal effect inequality focuses on the heterogeneity of
-the effects of a categorical <em>independent</em> variable. It helps understand
-how the effect of the variable differs across its categories or levels.
-When the <em>dependent</em> variable is categorical (e.g., logistic, ordinal or
-multinomial regression), marginal effect inequality provides a holistic
-view of how an independent variable affects a nominal or ordinal
-<em>dependent</em> variable. It summarizes the overall impact (total marginal
+<li><p><code>comparison = "inequality"</code> computes the <em>absolute inequality</em> of groups,
+or in other words, the marginal effect inequality summary of categorical
+predictors' overall effects, respectively, the comprehensive effect of an
+independent variable across all outcome categories of a nominal or ordinal
+dependent variable (total marginal effect, see <em>Mize and Han, 2025</em>). The
+marginal effect inequality focuses on the heterogeneity of the effects of a
+categorical <em>independent</em> variable. It helps understand how the effect of
+the variable differs across its categories or levels. When the <em>dependent</em>
+variable is categorical (e.g., logistic, ordinal or multinomial
+regression), marginal effect inequality provides a holistic view of how an
+independent variable affects a nominal or ordinal <em>dependent</em> variable. It
+summarizes the overall impact (absolute inequality, or total marginal
 effects) across all possible outcome categories.</p></li>
+<li><p><code>comparison = "inequality_ratio"</code> is comparable to
+<code>comparison = "inequality"</code>, but instead of calculating the absolute
+inequality, it computes the <em>relative inequality</em> of groups. This is useful
+to compare the relative effects of different predictors on the dependent
+variable. It provides a measure of how much more or less inequality one
+predictor has
+compared to another.</p></li>
 <li><p><code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
 comparisons) between marginal effects inequality measures. Depending on the
 sign, this measure indicates which of the predictors has a stronger impact

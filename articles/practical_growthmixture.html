@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -128,7 +128,7 @@
                         <h4 data-toc-skip class="author">The easystats
 team</h4>
             
-            <h4 data-toc-skip class="date">2025-07-24</h4>
+            <h4 data-toc-skip class="date">2025-07-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/vignettes/practical_growthmixture.Rmd" class="external-link"><code>vignettes/practical_growthmixture.Rmd</code></a></small>
       <div class="d-none name"><code>practical_growthmixture.Rmd</code></div>
@@ -376,20 +376,19 @@ look at the effect of <code>education</code>. The
 as it computes the means for each class separately.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">brms_mixture_2</span>, by <span class="op">=</span> <span class="st">"education"</span>, predict <span class="op">=</span> <span class="st">"link"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Estimated Marginal Means</span></span>
+<span><span class="co">#&gt; Average Predictions</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; education |          Median (CI) | pd   | Class</span></span>
 <span><span class="co">#&gt; -----------------------------------------------</span></span>
-<span><span class="co">#&gt; low       | 53.92 (33.41, 63.72) | 100% |     1</span></span>
-<span><span class="co">#&gt; low       | 74.43 (67.38, 78.20) | 100% |     2</span></span>
-<span><span class="co">#&gt; mid       | 64.11 (49.39, 72.54) | 100% |     1</span></span>
-<span><span class="co">#&gt; mid       | 79.19 (73.50, 82.46) | 100% |     2</span></span>
-<span><span class="co">#&gt; high      | 63.10 (44.67, 76.24) | 100% |     1</span></span>
-<span><span class="co">#&gt; high      | 86.32 (79.66, 93.25) | 100% |     2</span></span>
+<span><span class="co">#&gt; low       | 57.06 (38.01, 59.73) | 100% |     1</span></span>
+<span><span class="co">#&gt; low       | 73.48 (70.12, 78.09) | 100% |     2</span></span>
+<span><span class="co">#&gt; mid       | 67.48 (52.25, 69.19) | 100% |     1</span></span>
+<span><span class="co">#&gt; mid       | 79.19 (75.50, 81.05) | 100% |     2</span></span>
+<span><span class="co">#&gt; high      | 68.89 (46.29, 74.84) | 100% |     1</span></span>
+<span><span class="co">#&gt; high      | 85.52 (82.70, 86.94) | 100% |     2</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors modulated: education</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, hospital, age (0.22), ID</span></span>
 <span><span class="co">#&gt; Predictions are on the link-scale.</span></span></code></pre></div>
 <p>This table gives us the expected mean <code>QoL</code> for each
 education level, conditional on class membership. For instance, a
@@ -410,17 +409,16 @@ classes, giving a general sense of inequality.</p>
 <span>  <span class="va">brms_mixture_2</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |         Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; mid    | low    |  7.95 (2.60, 11.32) | 99.65%</span></span>
-<span><span class="co">#&gt; high   | low    | 12.69 (7.17, 17.13) |   100%</span></span>
-<span><span class="co">#&gt; high   | mid    |  5.67 (1.02,  8.57) | 98.95%</span></span>
+<span><span class="co">#&gt; mid    | low    |  7.26 (4.85, 10.05) |   100%</span></span>
+<span><span class="co">#&gt; high   | low    | 12.73 (9.31, 14.99) |   100%</span></span>
+<span><span class="co">#&gt; high   | mid    |  5.01 (2.22,  7.02) | 99.95%</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, hospital, age (0.22), ID</span></span>
 <span><span class="co">#&gt; Contrasts are on the response-scale.</span></span></code></pre></div>
 <p>More interestingly, we can set <code>predict = "link"</code> to get
 contrasts both <em>within</em> and <em>between</em> classes. This
@@ -431,29 +429,28 @@ provides a very detailed picture.</p>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
 <span>  predict <span class="op">=</span> <span class="st">"link"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
+<span><span class="co">#&gt; Averaged Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Level1 | Level2 |           Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; ------------------------------------------------</span></span>
-<span><span class="co">#&gt; 1 mid  | 1 low  |  9.32 (  3.04, 24.36) | 98.65%</span></span>
-<span><span class="co">#&gt; 1 high | 1 low  | 13.04 ( -3.75, 24.99) | 94.10%</span></span>
-<span><span class="co">#&gt; 2 low  | 1 low  | 19.34 (  7.55, 40.32) | 99.95%</span></span>
-<span><span class="co">#&gt; 2 mid  | 1 low  | 27.05 ( 15.71, 44.71) |   100%</span></span>
-<span><span class="co">#&gt; 2 high | 1 low  | 37.41 ( 23.25, 52.04) |   100%</span></span>
-<span><span class="co">#&gt; 1 high | 1 mid  |  0.19 (-14.77,  9.54) | 51.20%</span></span>
-<span><span class="co">#&gt; 2 low  | 1 mid  | 10.00 ( -0.73, 24.01) | 96.80%</span></span>
-<span><span class="co">#&gt; 2 mid  | 1 mid  | 16.88 (  7.02, 29.15) | 99.45%</span></span>
-<span><span class="co">#&gt; 2 high | 1 mid  | 24.44 ( 13.22, 35.72) |   100%</span></span>
-<span><span class="co">#&gt; 2 low  | 1 high | 11.78 ( -1.48, 27.71) | 73.90%</span></span>
-<span><span class="co">#&gt; 2 mid  | 1 high | 17.61 (  2.51, 32.07) | 99.85%</span></span>
-<span><span class="co">#&gt; 2 high | 1 high | 24.59 ( 10.05, 39.85) |   100%</span></span>
-<span><span class="co">#&gt; 2 mid  | 2 low  |  3.98 (  0.14, 10.17) | 97.65%</span></span>
-<span><span class="co">#&gt; 2 high | 2 low  | 11.53 (  5.79, 19.47) |   100%</span></span>
-<span><span class="co">#&gt; 2 high | 2 mid  |  7.55 (  3.15, 11.33) | 99.90%</span></span>
+<span><span class="co">#&gt; 1 mid  | 1 low  | 11.53 (  3.15, 23.66) | 98.75%</span></span>
+<span><span class="co">#&gt; 1 high | 1 low  | 15.02 (  0.73, 23.60) | 98.00%</span></span>
+<span><span class="co">#&gt; 2 low  | 1 low  | 20.95 ( 12.17, 34.64) |   100%</span></span>
+<span><span class="co">#&gt; 2 mid  | 1 low  | 23.95 ( 18.32, 39.03) |   100%</span></span>
+<span><span class="co">#&gt; 2 high | 1 low  | 29.84 ( 25.77, 45.80) |   100%</span></span>
+<span><span class="co">#&gt; 1 high | 1 mid  |  2.62 (-12.90,  8.16) | 69.80%</span></span>
+<span><span class="co">#&gt; 2 low  | 1 mid  |  9.38 (  2.59, 19.67) | 99.95%</span></span>
+<span><span class="co">#&gt; 2 mid  | 1 mid  | 12.39 (  8.73, 25.17) |   100%</span></span>
+<span><span class="co">#&gt; 2 high | 1 mid  | 18.27 ( 16.16, 31.48) |   100%</span></span>
+<span><span class="co">#&gt; 2 low  | 1 high |  4.00 (  1.23, 24.70) | 99.55%</span></span>
+<span><span class="co">#&gt; 2 mid  | 1 high | 10.21 (  6.19, 30.21) |   100%</span></span>
+<span><span class="co">#&gt; 2 high | 1 high | 16.68 ( 12.08, 37.17) |   100%</span></span>
+<span><span class="co">#&gt; 2 mid  | 2 low  |  5.78 (  2.78,  7.47) | 99.90%</span></span>
+<span><span class="co">#&gt; 2 high | 2 low  | 11.73 (  8.50, 14.03) |   100%</span></span>
+<span><span class="co">#&gt; 2 high | 2 mid  |  5.90 (  4.29,  8.18) |   100%</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
-<span><span class="co">#&gt; Predictors averaged: time, hospital, age (0.22), ID</span></span>
 <span><span class="co">#&gt; Contrasts are on the link-scale.</span></span></code></pre></div>
 <p>The output is rich with information. For example,
 <code>2 high | 2 low</code> shows the contrast between high and low
@@ -477,7 +474,7 @@ that variable. Let’s compare the inequality associated with
 <span>  contrast <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"hospital"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"inequality"</span></span>
 <span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
+<span><span class="co">#&gt; Averaged Inequality Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Parameter |        Median (CI) |   pd</span></span>
 <span><span class="co">#&gt; -------------------------------------</span></span>
