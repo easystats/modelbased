@@ -32,6 +32,7 @@ get_marginalcontrasts <- function(
   if (is.null(estimate)) {
     estimate <- getOption("modelbased_estimate", "typical")
   }
+  comparison <- .check_for_inequality_comparison(comparison)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -85,7 +86,7 @@ get_marginalcontrasts <- function(
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
-  if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+  if (.is_inequality_comparison(comparison)) {
     # inequality effect summary, see Trenton D. Mize, Bing Han 2025
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
@@ -172,7 +173,8 @@ get_marginalcontrasts <- function(
 }
 
 
-# special contrasts: inequality---------------- -------------------------------
+# special contrasts: inequality ---------------------------------------------
+# ---------------------------------------------------------------------------
 
 .calculate_inequality_effect <- function(model,
                                          model_data,
@@ -288,6 +290,7 @@ get_marginalcontrasts <- function(
 
 
 # make "comparison" argument compatible -----------------------------------
+# -------------------------------------------------------------------------
 
 # this function has two major tasks: format the "comparison" argument for use
 # in the marginaleffects package, and extract the potential filter values used
@@ -457,16 +460,48 @@ get_marginalcontrasts <- function(
 }
 
 
+# supported comparison strings  --------------------------------------
+# --------------------------------------------------------------------
+
 .valid_hypothesis_strings <- function() {
   c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise"
+    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise",
+    "inequality_ratio"
   )
 }
 
 
+# handle inequality hypothesis  --------------------------------------
+# --------------------------------------------------------------------
+
+# check whether we have a formula definition of inequality comparisons,
+# and convert it to a string
+.check_for_inequality_comparison <- function(comparison) {
+  if (is.formula(comparison)) {
+    out <- paste(all.vars(comparison), collapse = "_")
+    if (out == "ratio_inequality") {
+      out <- "inequality_ratio"
+    }
+    if (.is_inequality_comparison(out)) {
+      return(out)
+    }
+  }
+  out
+}
+
+# check whether we have a valid inequality comparison
+.is_inequality_comparison <- function(comparison) {
+  !is.null(comparison) &&
+    length(comparison) == 1 &&
+    is.character(comparison) &&
+    comparison %in% c("inequality", "inequality_pairwise", "inequality_ratio")
+}
+
+
 # check for custom hypothesis  --------------------------------------
+# -------------------------------------------------------------------
 
 .is_custom_comparison <- function(comparison) {
   !is.null(comparison) &&

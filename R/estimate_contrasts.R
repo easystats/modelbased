@@ -258,6 +258,7 @@ estimate_contrasts.default <- function(
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+  comparison <- .check_for_inequality_comparison(comparison)
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -322,7 +323,7 @@ estimate_contrasts.default <- function(
   # Table formatting
   if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
-  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+  } else if (.is_inequality_comparison(comparison)) {
     suffix <- "Inequality Analysis"
     type <- "inequality"
   } else {

@@ -134,8 +134,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
   is_contrast_analysis <- !is.null(list(...)$hypothesis)
-  is_inequality_analysis <- identical(list(...)$hypothesis, "inequality") ||
-    identical(list(...)$hypothesis, "inequality_pairwise")
+  is_inequality_analysis <- .is_inequality_comparison(list(...)$hypothesis)
   predict_type <- attributes(x)$predict
 
   # define all columns that should be removed
