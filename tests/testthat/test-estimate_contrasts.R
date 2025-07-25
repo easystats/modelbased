@@ -1092,6 +1092,14 @@ test_that("estimate_contrast, marginal effects inequalities", {
     comparison = "inequality"
   )
   expect_equal(out$`Mean Difference`, 0.02291537, tolerance = 1e-4)
+
+  out <- estimate_contrasts(
+    m,
+    "bill_dep",
+    by = "island",
+    comparison = "inequality"
+  )
+  expect_equal(out$`Mean Difference`, 0.02443619, tolerance = 1e-4)
 })
 
 
