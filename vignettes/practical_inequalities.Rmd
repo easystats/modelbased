@@ -119,8 +119,7 @@ The `estimate_contrasts()` function can directly compute the absolute inequality
 
 ```{r}
 # Compute the absolute inequality for the 'education' variable
-abs_inequality <- estimate_contrasts(m, contrast = "education", comparison = "inequality")
-abs_inequality
+estimate_contrasts(m, contrast = "education", comparison = "inequality")
 ```
 
 **Interpretation**: The mean difference (absolute inequality) is **9.64**. This means that, on average, the Quality of Life score differs by 9.64 points between any two randomly chosen education levels, after accounting for time. The small p-value (`p < .001`) indicates that this overall inequality is statistically significant.
@@ -144,8 +143,7 @@ We set `comparison = "inequality_ratio"` to get the summary measure.
 
 ```{r}
 # Compute the relative inequality (inequality ratio)
-rel_inequality <- estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
-rel_inequality
+estimate_contrasts(m, contrast = "education", comparison = "inequality_ratio")
 ```
 
 **Interpretation**: The mean ratio (relative inequality) is **1.14**. This means that, on average, the QoL score is 1.14 times higher (or 14% higher) when comparing a higher education group to a lower one.
@@ -164,11 +162,11 @@ m1 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID < 100))
 m2 <- lm(QoL ~ time * education, data = data_filter(qol_cancer, ID >= 100))
 
 # Visualize the patterns in each group
-p1 <- plot(estimate_means(m1, at = c("time", "education"))) +
+p1 <- plot(estimate_means(m1, by = c("time", "education"))) +
   ggplot2::theme(legend.position = "none") +
   ggplot2::labs(title = "Group 1 (ID < 100)")
 
-p2 <- plot(estimate_means(m2, at = c("time", "education"))) +
+p2 <- plot(estimate_means(m2, by = c("time", "education"))) +
   ggplot2::labs(title = "Group 2 (ID >= 100)")
 
 # Show plots side-by-side
@@ -194,6 +192,9 @@ Our model includes an interaction between `time` and `education`, suggesting the
 ```{r}
 # Estimate the slope of 'time' for each education level in the first group
 estimate_slopes(m1, trend = "time", by = "education")
+
+# And for the second group
+estimate_slopes(m2, trend = "time", by = "education")
 ```
 
 In Group 1, the QoL for the 'low' education group is decreasing over time (Slope = -6.71), while it is stable for the 'mid' and 'high' groups. This suggests the gap is widening. We can quantify this change in inequality directly.
@@ -201,10 +202,25 @@ In Group 1, the QoL for the 'low' education group is decreasing over time (Slope
 ```{r}
 # Calculate the inequality in the *slopes* of time
 # This tells us if the rate of change in QoL is unequal across groups
-estimate_contrasts(m1, trend = "time", by = "education", comparison = "inequality")
+estimate_contrasts(
+  m1,
+  contrast = "time",
+  by = "education",
+  comparison = "inequality",
+  integer_as_numeric = 1
+)
+
+# How does it compare to Group 2?
+estimate_contrasts(
+  m2,
+  contrast = "time",
+  by = "education",
+  comparison = "inequality",
+  integer_as_numeric = 1
+)
 ```
 
-The mean difference in slopes is 4.74. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between education groups. This provides a dynamic view, showing that the inequality is not static but is actively increasing in this subgroup.
+The mean difference in slopes is 4.74. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
 
 ## 7. Conclusion
 
