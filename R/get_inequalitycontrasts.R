@@ -18,6 +18,13 @@ get_inequaliycontrasts <- function(
     datagrid <- NULL
   }
 
+  # warn user for very large datagrid
+  if (!is.null(datagrid) && nrow(datagrid) > 1000) {
+    insight::format_warning(
+      "The datagrid contains more than 1000 rows. This may take a while to compute. To avoid this, consider using `estimate = \"average\"`."
+    )
+  }
+
   # -----------------------------------------------------------
   # inequality comparisons for slopes -------------------------
   # -----------------------------------------------------------
