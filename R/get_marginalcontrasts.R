@@ -479,7 +479,7 @@ get_marginalcontrasts <- function(
 # check whether we have a formula definition of inequality comparisons,
 # and convert it to a string
 .check_for_inequality_comparison <- function(comparison) {
-  if (is.formula(comparison)) {
+  if (inherits(comparison, "formula")) {
     out <- paste(all.vars(comparison), collapse = "_")
     if (out == "ratio_inequality") {
       out <- "inequality_ratio"
