@@ -34,15 +34,9 @@ if (getRversion() < "4.1.0") {
 
 ## 1. Introduction: Why Summarize Effects?
 
-In the social sciences, many key variables are categorical, representing nominal groups (like race, religion, or political affiliation) or ordinal rankings (like educational attainment or social class). When we use these variables as predictors in a statistical model, we often get a series of coefficients representing differences between each category and a chosen reference category.
+In the social sciences, many key variables are nominal (like race or gender) or ordinal (such as education level or social class). Understanding the total impact of these variables can be tricky because they consist of multiple categories. For instance, to determine if educational attainment affects quality of life, we must consider several comparisons, such as low vs. mid, low vs. high, and mid vs. high education levels
 
-While this is informative, it has limitations:
-
-* **Reference Group Dependence**: The interpretation is tied to the reference group, and it's not immediately clear how non-reference groups compare to each other.
-* **Difficulty in Summarizing**: It's hard to answer the holistic question: "What is the *overall* effect of this variable?" For example, how can we quantify the total impact of 'education' on an outcome, rather than just the effect of 'high school vs. college'?
-* **Challenges in Comparison**: It is difficult to compare the effect size of a multi-category variable (e.g., race) with another (e.g., gender) or to track how the overall effect of a variable changes across different models (e.g., before and after adding control variables).
-
-To address this, researchers have developed summary measures. As Mize and Han (2025) propose, we can think of the overall effect of a categorical variable in terms of the **inequality** it produces in the outcome. A variable has a large effect if the outcomes for its different groups are far apart, and a small effect if the outcomes are similar.
+This is where *inequality measures* come in handy. They are summary statistics that encapsulate the overall effect of a nominal or ordinal variable. The fundamental concept is that a variable's effect size is proportional to the outcome disparities it generates. As Mize and Han (2025) propose, we can think of the overall effect of a categorical variable in terms of the **inequality** it produces in the outcome. A variable has a large effect if the outcomes for its different groups are far apart, and a small effect if the outcomes are similar.
 
 This vignette demonstrates how to compute two such summary measures - **absolute inequality** and **relative inequality** - using the `modelbased` package in R, which is part of the `easystats` ecosystem.
 
