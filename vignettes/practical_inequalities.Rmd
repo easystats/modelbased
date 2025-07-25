@@ -5,7 +5,6 @@ vignette: >
   %\VignetteIndexEntry{Case Study: Measuring and comparing absolute and relative inequalities in R}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-bibliography: bibliography.bib
 ---
 
 ```{r set-options, echo = FALSE}
