@@ -1026,28 +1026,36 @@ test_that("estimate_contrast, marginal effects inequalities", {
 
   m <- glm(long_bill ~ species + island + bill_dep, data = penguins, family = "binomial")
 
-  out <- estimate_contrasts(m, "species", comparison = "inequality")
-  expect_equal(out[["Mean Difference"]], 0.6381, tolerance = 1e-4)
+  out <- estimate_contrasts(m, "species", comparison = "inequality", estimate = "average")
+  expect_equal(out[["Mean Difference"]], 0.6380998, tolerance = 1e-4)
   expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+  out <- estimate_contrasts(m, "species", comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], 0.5580707, tolerance = 1e-4)
 
   expect_error(
     estimate_contrasts(m, "species", comparison = "inequality_pairwise"),
     regex = "Pairwise comparisons require"
   )
 
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality", estimate = "average")
   expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
   expect_identical(out$Parameter, c("island", "species"))
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], c(0.299254, 0.558071), tolerance = 1e-4)
 
-  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality")
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality", estimate = "average")
   expect_equal(out[["Mean Difference"]], c(0.66259, 0.60411, 0.64052), tolerance = 1e-4)
   expect_named(out, c("island", "Mean Difference", "SE", "CI_low", "CI_high", "z", "p"))
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality")
+  expect_equal(out[["Mean Difference"]], c(0.665814, 0.538415, 0.665679), tolerance = 1e-4)
 
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise")
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise", estimate = "average")
   expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "island - species")
+  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise")
+  expect_equal(out[["Mean Difference"]], -0.2588168, tolerance = 1e-4, ignore_attr = TRUE)
 
-  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise")
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise", estimate = "average")
   expect_equal(
     out[["Mean Difference"]],
     c(0.05848, 0.02207, -0.03641),
@@ -1056,6 +1064,13 @@ test_that("estimate_contrast, marginal effects inequalities", {
   )
   expect_named(out, c("Parameter", "Mean Difference", "SE", "CI_low", "CI_high", "z", "p"))
   expect_identical(out$Parameter, c("Biscoe - Dream", "Biscoe - Torgersen", "Dream - Torgersen"))
+  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise")
+  expect_equal(
+    out[["Mean Difference"]],
+    c(0.127399, 0.000135, -0.127264),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   expect_error(
     estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),

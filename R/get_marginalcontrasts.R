@@ -98,6 +98,7 @@ get_marginalcontrasts <- function(
       comparison,
       ci,
       compute_slopes,
+      estimate,
       ...
     )
     predict <- "response"

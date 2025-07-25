@@ -256,16 +256,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # we prettify labels now. For special inequality contrasts, we also need no
   # cleaning, so we skip here, too
 
-  if (
-    !is.null(comparison) &&
-      !identical(comparison, "inequality") &&
-      !identical(comparison, "inequality_pairwise")
-  ) {
+  if (!is.null(comparison) && !.is_inequality_comparison(comparison)) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
-
     params <- as.data.frame(do.call(
       rbind,
       lapply(x$Parameter, .split_at_minus_outside_parentheses, separator = separator)

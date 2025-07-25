@@ -126,12 +126,17 @@ section \emph{Comparison options} below.
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
-\item String: Two special string options are \code{"inequality"} and
-\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+\item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
+and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
 effects, respectively, the comprehensive effect of an independent
 variable across all outcome categories of a nominal or ordinal dependent
-variable (total marginal effect, see \emph{Mize and Han, 2025}).
+variable (also called \emph{absolute inequality}, or total marginal effect,
+see \emph{Mize and Han, 2025}). \code{"inequality_ratio"} computes the ratio of
+marginal effect inequality measures, also known as \emph{relative inequality}.
+This is useful to compare the relative effects of different predictors on
+the dependent variable. It provides a measure of how much more or less
+inequality one predictor has compared to another.
 \code{comparison = "inequality_pairwise"} computes the difference (pairwise
 comparisons) between marginal effects inequality measures.
 \item String equation: To identify parameters from the output, either specify
@@ -339,18 +344,26 @@ used when comparing multiple treatment groups to a single control group.
 \item To test multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
-\item \code{comparison = "inequality"} computes the marginal effect inequality summary
-of categorical predictors' overall effects, respectively, the comprehensive
-effect of an independent variable across all outcome categories of a
-nominal or ordinal dependent variable (total marginal effect, see \emph{Mize and
-Han, 2025}). The marginal effect inequality focuses on the heterogeneity of
-the effects of a categorical \emph{independent} variable. It helps understand
-how the effect of the variable differs across its categories or levels.
-When the \emph{dependent} variable is categorical (e.g., logistic, ordinal or
-multinomial regression), marginal effect inequality provides a holistic
-view of how an independent variable affects a nominal or ordinal
-\emph{dependent} variable. It summarizes the overall impact (total marginal
+\item \code{comparison = "inequality"} computes the \emph{absolute inequality} of groups,
+or in other words, the marginal effect inequality summary of categorical
+predictors' overall effects, respectively, the comprehensive effect of an
+independent variable across all outcome categories of a nominal or ordinal
+dependent variable (total marginal effect, see \emph{Mize and Han, 2025}). The
+marginal effect inequality focuses on the heterogeneity of the effects of a
+categorical \emph{independent} variable. It helps understand how the effect of
+the variable differs across its categories or levels. When the \emph{dependent}
+variable is categorical (e.g., logistic, ordinal or multinomial
+regression), marginal effect inequality provides a holistic view of how an
+independent variable affects a nominal or ordinal \emph{dependent} variable. It
+summarizes the overall impact (absolute inequality, or total marginal
 effects) across all possible outcome categories.
+\item \code{comparison = "inequality_ratio"} is comparable to
+\code{comparison = "inequality"}, but instead of calculating the absolute
+inequality, it computes the \emph{relative inequality} of groups. This is useful
+to compare the relative effects of different predictors on the dependent
+variable. It provides a measure of how much more or less inequality one
+predictor has
+compared to another.
 \item \code{comparison = "inequality_pairwise"} computes the difference (pairwise
 comparisons) between marginal effects inequality measures. Depending on the
 sign, this measure indicates which of the predictors has a stronger impact
