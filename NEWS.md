@@ -10,6 +10,9 @@
 * `comparison = "inequality"` now also works when contrasting slopes
   for a numeric predictor.
 
+* New option `comparison = "inequality_ratio"` for `estimate_contrast()`, which
+  computes the ratio of marginal effects inequality measures across groups.
+
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
