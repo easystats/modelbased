@@ -1,11 +1,11 @@
-.joint_test <- function(means, ...) {
-  UseMethod(".joint_test")
+get_jointtest <- function(means, ...) {
+  UseMethod("get_jointtest")
 }
 
 
 # marginaleffects
 
-.joint_test.predictions <- function(means, my_args, test = "f", ...) {
+get_jointtest.predictions <- function(means, my_args, test = "f", ...) {
   cnames <- colnames(means)
   # we need to separate the "by" argument, to find out which variables
   # were used as contrasts, and which for grouping
@@ -84,7 +84,7 @@
 
 # emmeans
 
-.joint_test.emmGrid <- function(means, my_args, ...) {
+get_jointtest.emmGrid <- function(means, my_args, ...) {
   by_arg <- attributes(means)$misc$by.vars
   result <- try(as.data.frame(emmeans::joint_tests(means, by = by_arg)), silent = TRUE)
 

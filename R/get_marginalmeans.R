@@ -234,7 +234,7 @@ get_marginalmeans <- function(model,
   # ---------------------------------------------------------------------------
 
   if (joint_test) {
-    means <- .joint_test(means, my_args, test = c(dots$joint_test, dots$test))
+    means <- get_jointtest(means, my_args, test = c(dots$joint_test, dots$test))
   }
 
   # Fifth step: post-processing marginal means----------------------------------
