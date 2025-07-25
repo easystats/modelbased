@@ -58,7 +58,7 @@ All package vignettes are available at [https://easystats.github.io/modelbased/]
 * [Understanding your models](https://easystats.github.io/modelbased/articles/workflow_modelbased.html)
 * [Causal inference for observational data](https://easystats.github.io/modelbased/articles/practical_causality.html)
 * [Intersectionality analysis using the MAIHDA framework](https://easystats.github.io/modelbased/articles/practical_intersectionality.html)
-* [Measuring and comparing absolute and relative inequalities](https://easystats.github.io/modelbased/articles/practical_inequality.html)
+* [Measuring and comparing absolute and relative inequalities](https://easystats.github.io/modelbased/articles/practical_inequalities.html)
 * [Interrupted Time Series Analysis with `modelbased`](https://easystats.github.io/modelbased/articles/practical_its.html)
 * [An Introduction to Growth Mixture Models](https://easystats.github.io/modelbased/articles/practical_growthmixture.html)
 
