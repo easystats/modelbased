@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 
 options(
   modelbased_join_dots = FALSE,
-  modelbased_estimate = "average",
+  modelbased_estimate = "typical",
   modelbased_select = "minimal"
 )
 
