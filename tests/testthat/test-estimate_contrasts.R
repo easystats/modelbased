@@ -1124,3 +1124,23 @@ test_that("estimate_contrast, slopes with different estimate options", {
   out <- estimate_contrasts(m, "bill_dep", by = "island", estimate = "average")
   expect_equal(out$Difference, c(-0.05295, -0.07655, -0.0236), tolerance = 1e-4)
 })
+
+
+test_that("estimate_contrast, inequality ratios", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  data(penguins)
+  m <- lm(bill_len ~ species * bill_dep + island, data = penguins)
+
+  out <- estimate_contrasts(m, "bill_dep", by = "species", comparison = ratio ~ pairwise)
+  expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4)
+
+  out <- estimate_contrasts(m, "bill_dep", by = "species", comparison = ratio ~ inequality)
+  expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4)
+
+  m <- lm(bill_len ~ island * sex + bill_dep + species, data = penguins)
+  estimate_contrasts(m, "island", by = "sex", comparison = ~inequality)
+  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ pairwise)
+  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality)
+  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality, estimate = "average")
+})
