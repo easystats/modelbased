@@ -65,3 +65,25 @@ test_that("special filtering for by and contrast works", {
   #   )
   # )
 })
+
+
+test_that("special filtering for by and contrast works", {
+  set.seed(1234)
+  n <- 365
+  event_start <- 200
+  time <- seq_len(n)
+  event <- c(rep_len(0, event_start), rep_len(1, n - event_start))
+  outcome <- 10 + # 1. Pre-intervention intercept
+    15 * time + # 2. Pre-intervention slope (trend)
+    20 * event + # 3. Level change (a jump of +20)
+    5 * event * time + # 4. Slope change (slope becomes 15 + 5 = 20)
+    rnorm(n, mean = 0, sd = 100) # Add some random noise
+
+  dat <- data.frame(outcome, time, event)
+  mod <- lm(outcome ~ time * event, data = dat)
+  expect_error(
+    estimate_contrasts(mod, contrast = "event", by = "time=200", estimate = "average"),
+    regex = "No rows returned from marginal means"
+  )
+  expect_silent(estimate_contrasts(mod, contrast = "event", by = "time=200"))
+})
