@@ -98,7 +98,7 @@ get_emcontrasts <- function(model,
 
   # intermediate step: joint tests
   if (joint_test) {
-    out <- get_jointtest(out, my_args)
+    out <- .get_jointtest(out, my_args)
   }
 
   # for Bayesian model, keep iterations
