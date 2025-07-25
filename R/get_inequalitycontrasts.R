@@ -30,6 +30,13 @@ get_inequaliycontrasts <- function(
         "`comparison = \"inequality_pairwise\"` is not supported for contrasts of slopes."
       )
     }
+    # we need a `by` argument, otherwise, pairwise comparisons of slopes for all
+    # combinations of values of the `trend` variable would be calculated.
+    if (is.null(my_args$by) || !length(my_args$by)) {
+      insight::format_error(
+        "`by` argument must be specified for `comparison = \"inequality\"`."
+      )
+    }
     # specify the pairwise contrasts for the hypothesis argument
     hypothesis_formula <- switch(
       comparison,

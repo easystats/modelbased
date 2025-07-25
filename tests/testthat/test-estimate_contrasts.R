@@ -1100,6 +1100,12 @@ test_that("estimate_contrast, marginal effects inequalities", {
     comparison = "inequality"
   )
   expect_equal(out$`Mean Difference`, 0.02443619, tolerance = 1e-4)
+
+  expect_error(
+    estimate_contrasts(m, "bill_dep", comparison = "inequality"),
+    regex = "`by` argument must be specified",
+    fixed = TRUE
+  )
 })
 
 
