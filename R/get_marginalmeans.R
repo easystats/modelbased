@@ -457,7 +457,7 @@ get_marginalmeans <- function(model,
   insight::format_error(
     prefix,
     "Please check your `by` and `contrast` arguments, or try one of the following options:",
-    "1. Use a different option for the `estimate` argument, e.g. `estimate = \"typical\".",
+    "1. Use a different option for the `estimate` argument, e.g. `estimate = \"typical\"`.",
     "2. Use the `newdata` argument to provide a data grid of predictor values at which to evaluate predictions."
   )
 }

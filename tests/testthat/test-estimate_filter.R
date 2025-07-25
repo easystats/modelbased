@@ -67,7 +67,7 @@ test_that("special filtering for by and contrast works", {
 })
 
 
-test_that("special filtering for by and contrast works", {
+test_that("filtering throws informative error when zero rows are returned", {
   set.seed(1234)
   n <- 365
   event_start <- 200
