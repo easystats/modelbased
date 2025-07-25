@@ -82,7 +82,7 @@
 #'   returning an empty data frame because of what was described above. In such
 #'   case, you can use `estimate = "typical"` or use the `newdata` argument to
 #'   provide a data grid of predictor values at which to evaluate predictions.
-#' -  `estimate = "population"` is not available for `estimate_slopes()`.
+#' - `estimate = "population"` is not available for `estimate_slopes()`.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
 #' found for mixed models, where `backend = "marginaleffects"` will also average
