@@ -266,6 +266,11 @@ get_marginalmeans <- function(model,
     insight::format_error(.marginaleffects_errors(out, fun_args))
   }
 
+  # check number of rows - for estimate = "average", no rows might be returned
+  if (nrow(out) == 0) {
+    .filter_error("No rows returned from marginal means.")
+  }
+
   out
 }
 
@@ -438,8 +443,23 @@ get_marginalmeans <- function(model,
     }
     # else, filter values
     means <- datawizard::data_match(means, datagrid[datagrid_info$at_specs$varname])
+    # sanity check - do we have any rows left?
+    if (nrow(means) == 0) {
+      .filter_error("No rows left after filtering.")
+    }
   }
   means
+}
+
+
+# small helper, because we have the same error message in several places
+.filter_error <- function(prefix = "") {
+  insight::format_error(
+    prefix,
+    "Please check your `by` and `contrast` arguments, or try one of the following options:",
+    "1. Use a different option for the `estimate` argument, e.g. `estimate = \"typical\"`.",
+    "2. Use the `newdata` argument to provide a data grid of predictor values at which to evaluate predictions."
+  )
 }
 
 
