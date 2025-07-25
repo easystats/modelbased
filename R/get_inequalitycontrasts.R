@@ -92,7 +92,7 @@ get_inequalitycontrasts <- function(
       # ----------------------------------------------
 
       if (is.null(my_args$by) || !length(my_args$by)) {
-        f1 <- ratio | pairwise
+        f1 <- ratio ~ pairwise
         f2 <- ~I(mean(abs(x)))
       } else {
         f1 <- stats::as.formula(paste("ratio ~ pairwise |", my_args$by))
