@@ -91,7 +91,7 @@ get_marginalcontrasts <- function(
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
-    out <- get_inequaliycontrasts(
+    out <- get_inequalitycontrasts(
       model,
       model_data,
       my_args,

@@ -1,7 +1,7 @@
 # special contrasts: inequality ---------------------------------------------
 # ---------------------------------------------------------------------------
 
-get_inequaliycontrasts <- function(
+get_inequalitycontrasts <- function(
   model,
   model_data,
   my_args,
@@ -19,9 +19,9 @@ get_inequaliycontrasts <- function(
   }
 
   # warn user for very large datagrid
-  if (!is.null(datagrid) && nrow(datagrid) > 1000) {
+  if (!is.null(datagrid) && nrow(datagrid) > 200) {
     insight::format_warning(
-      "The datagrid contains more than 1000 rows. This may take a while to compute. To avoid this, consider using `estimate = \"average\"`."
+      "The datagrid contains more than 200 rows. This may take a while to compute. To avoid this, consider using `estimate = \"average\"`."
     )
   }
 
