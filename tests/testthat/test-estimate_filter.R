@@ -86,4 +86,23 @@ test_that("special filtering for by and contrast works", {
     regex = "No rows returned from marginal means"
   )
   expect_silent(estimate_contrasts(mod, contrast = "event", by = "time=200"))
+
+  d <- data.frame(event = c(0, 1), time = 200)
+  expect_silent(estimate_contrasts(
+    mod,
+    contrast = "event",
+    by = "time",
+    newdata = d,
+    estimate = "average"
+  ))
+
+  out1 <- estimate_contrasts(mod, contrast = "event", by = "time=200")
+  out2 <- estimate_contrasts(
+    mod,
+    contrast = "event",
+    by = "time",
+    newdata = d,
+    estimate = "average"
+  )
+  expect_equal(out1$Difference, out2$Difference, tolerance = 1e-4)
 })
