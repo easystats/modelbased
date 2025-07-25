@@ -1028,9 +1028,10 @@ test_that("estimate_contrast, marginal effects inequalities", {
 
   out <- estimate_contrasts(m, "species", comparison = "inequality", estimate = "average")
   expect_equal(out[["Mean Difference"]], 0.6380998, tolerance = 1e-4)
-  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+  expect_identical(attributes(out)$table_title, c("Averaged Inequality Analysis", "blue"))
   out <- estimate_contrasts(m, "species", comparison = "inequality")
   expect_equal(out[["Mean Difference"]], 0.5580707, tolerance = 1e-4)
+  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
 
   expect_error(
     estimate_contrasts(m, "species", comparison = "inequality_pairwise"),
