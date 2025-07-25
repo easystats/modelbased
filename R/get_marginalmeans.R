@@ -78,51 +78,11 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    dg_factors <- switch(estimate,
-      specific = "reference",
-      "all"
-    )
-    dg_args <- list(
-      model,
-      by = my_args$by,
-      factors = dg_factors,
-      include_random = TRUE,
-      verbose = FALSE
-    )
-    # did user request weights? These are not supported for data-grid
-    # marginalization types
-    if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
-      insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
-      dots[c("weights", "wts")] <- NULL
-    }
-
-    # always show all theoretical values by default
-    if (is.null(dots$preserve_range)) {
-      dg_args$preserve_range <- FALSE
-    }
-    # add user-arguments from "...", but remove those arguments that are already set
-    dots[c("by", "factors", "include_random", "verbose")] <- NULL
-    dg_args <- insight::compact_list(c(dg_args, dots))
-
-    # Get corresponding datagrid (and deal with particular ats)
-    datagrid <- do.call(insight::get_datagrid, dg_args)
-    datagrid_info <- attributes(datagrid)
-
-    # handle offsets
-    if (!is.null(dots$offset)) {
-      model_offset <- insight::find_offset(model)
-      if (!is.null(model_offset)) {
-        datagrid[[model_offset]] <- dots$offset
-      }
-    }
-
-    # restore data types -  if we have defined numbers in `by`, like
-    # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
-    # numeric in the data grid. Fix this here, else marginal effects will fail
-    datagrid <- datawizard::data_restoretype(
-      datagrid,
-      insight::get_data(model, verbose = FALSE)
-    )
+    out <- .get_datagrid_means(model, my_args, estimate, dots)
+    # update objects
+    datagrid <- out$datagrid
+    datagrid_info <- out$datagrid_info
+    dots <- out$dots
   }
 
   # Third step: prepare arguments for marginaleffects ------------------------
@@ -234,7 +194,7 @@ get_marginalmeans <- function(model,
   # ---------------------------------------------------------------------------
 
   if (joint_test) {
-    means <- .joint_test(means, my_args, test = c(dots$joint_test, dots$test))
+    means <- .get_jointtest(means, my_args, test = c(dots$joint_test, dots$test))
   }
 
   # Fifth step: post-processing marginal means----------------------------------
@@ -295,7 +255,6 @@ get_marginalmeans <- function(model,
 
 # call marginaleffects and process potential errors ---------------------------
 
-
 .call_marginaleffects <- function(fun_args, type = "means") {
   out <- tryCatch(
     suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
@@ -311,6 +270,78 @@ get_marginalmeans <- function(model,
 }
 
 
+# create data grid for marginal means ----------------------------------------
+#
+# This helper function prepares and creates the data grid (or "reference grid")
+# that is used to calculate marginal means. It sets up arguments for and calls
+# `insight::get_datagrid()`. It also handles some special cases, like removing
+# weights for certain marginalization types, handling offsets, and ensuring
+# data types in the grid are consistent with the original model data.
+#
+# returns: A list containing:
+#   - `datagrid`: The created data grid.
+#   - `datagrid_info`: The attributes of the data grid.
+#   - `dots`: The `...` arguments, with arguments consumed by this function removed.
+.get_datagrid_means <- function(model, my_args, estimate, dots) {
+  dg_factors <- switch(estimate, specific = "reference", "all")
+  dg_args <- list(
+    model,
+    by = my_args$by,
+    factors = dg_factors,
+    include_random = TRUE,
+    verbose = FALSE
+  )
+  # did user request weights? These are not supported for data-grid
+  # marginalization types
+  if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
+    insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
+    dots[c("weights", "wts")] <- NULL
+  }
+
+  # always show all theoretical values by default
+  if (is.null(dots$preserve_range)) {
+    dg_args$preserve_range <- FALSE
+  }
+  # add user-arguments from "...", but remove those arguments that are already set
+  dots[c("by", "factors", "include_random", "verbose")] <- NULL
+  dg_args <- insight::compact_list(c(dg_args, dots))
+
+  # Get corresponding datagrid (and deal with particular ats)
+  datagrid <- do.call(insight::get_datagrid, dg_args)
+  datagrid_info <- attributes(datagrid)
+
+  # handle offsets
+  if (!is.null(dots$offset)) {
+    model_offset <- insight::find_offset(model)
+    if (!is.null(model_offset)) {
+      datagrid[[model_offset]] <- dots$offset
+    }
+  }
+
+  # restore data types -  if we have defined numbers in `by`, like
+  # `by = "predictor = 5"`, and `predictor` was a factor, it is returned as
+  # numeric in the data grid. Fix this here, else marginal effects will fail
+  datagrid <- datawizard::data_restoretype(datagrid, insight::get_data(model, verbose = FALSE))
+
+  list(datagrid = datagrid, datagrid_info = datagrid_info, dots = dots)
+}
+
+
+# handle errors from marginaleffects -----------------------------------------
+#
+# This helper function processes errors that occur during calls to the
+# {marginaleffects} package. It creates more informative and user-friendly
+# error messages by inspecting the original error and suggesting potential
+# solutions for common problems, such as using a different `estimate` option
+# or switching to the `emmeans` backend.
+#
+# Arguments:
+# - out: The error object returned from the `tryCatch` block.
+# - fun_args: A list of arguments that were passed to the failing
+#   {marginaleffects} function.
+#
+# returns: A character vector containing the formatted, user-friendly error
+#   message, which is then passed to `insight::format_error()`.
 .marginaleffects_errors <- function(out, fun_args) {
   # what was requested?
   if (!is.null(fun_args$hypothesis)) {
@@ -330,8 +361,9 @@ get_marginalmeans <- function(model,
   if (grepl("not found in column names", out$message, fixed = TRUE)) {
     msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
   }
-  # we get this error for models with complex random effects structures in glmmTMB
-  if (grepl("map factor length must equal", out$message, fixed = TRUE) || grepl("cannot allocate", out$message, fixed = TRUE)) { # nolint
+  # we get this error for models with complex random effects structures in glmmTMB,
+  # or when the data grid is too large
+  if (grepl("map factor length must equal", out$message, fixed = TRUE) || grepl("cannot allocate", out$message, fixed = TRUE)) {
     msg <- c(
       msg,
       paste0(
@@ -350,7 +382,24 @@ get_marginalmeans <- function(model,
 
 
 # filter datagrid for `estimate = "average"`---------------------------------
-
+#
+# This helper function filters the results of marginal means/predictions when
+# `estimate = "average"`. For this estimation type, predictions are based on
+# the original data, not a theoretical data grid. However, a data grid is
+# still created internally to capture user-specified values in the `by`
+# argument (e.g., `by = "x = c(1, 2)"`).
+#
+# This function applies that filtering post-computation. It also performs a
+# sanity check to ensure that the values specified for filtering actually
+# exist in the data, throwing an informative error if they don't.
+#
+# Arguments:
+# - means: The data frame of marginal means/predictions from {marginaleffects}.
+# - estimate: The estimation method string (e.g., "average").
+# - datagrid: The data grid created based on the `by` argument.
+# - datagrid_info: Attributes of the data grid, containing focal term info.
+#
+# returns: The filtered `means` data frame.
 .filter_datagrid_average <- function(means, estimate, datagrid, datagrid_info) {
   # filter "by" rows when we have "average" marginalization, because we don't
   # pass data grid in such situations - but we still created the data grid based

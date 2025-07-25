@@ -175,4 +175,13 @@ Furthermore, the default approach of calculating predictions for a balanced data
 
 **Therefore, we recommend combining marginal predictions (using the default `backend = "marginaleffects"`) with averaging across all observations (by setting `estimate = "average"`) when working with mixed models.** This approach effectively incorporates the variation inherent in the random effects (higher-level units) and provides EMMs that more accurately reflect the overall patterns observed within the actual sample data. By averaging over the observed data, we obtain a more robust and representative estimate of the population-level effects, making it a preferred strategy for interpreting mixed model results.
 
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```
+
 # References

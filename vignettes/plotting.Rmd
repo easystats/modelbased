@@ -176,3 +176,12 @@ In this case, simply increase the number of representative values by setting `le
 ```{r}
 estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plot()
 ```
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
+)
+```

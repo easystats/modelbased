@@ -37,12 +37,17 @@
 #'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
-#'   * String: Two special string options are `"inequality"` and
-#'     `"inequality_pairwise"`. `comparison = "inequality"` computes the
+#'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
+#'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
 #'     effects, respectively, the comprehensive effect of an independent
 #'     variable across all outcome categories of a nominal or ordinal dependent
-#'     variable (total marginal effect, see _Mize and Han, 2025_).
+#'     variable (also called *absolute inequality*, or total marginal effect,
+#'     see _Mize and Han, 2025_). `"inequality_ratio"` computes the ratio of
+#'     marginal effect inequality measures, also known as *relative inequality*.
+#'     This is useful to compare the relative effects of different predictors on
+#'     the dependent variable. It provides a measure of how much more or less
+#'     inequality one predictor has compared to another.
 #'     `comparison = "inequality_pairwise"` computes the difference (pairwise
 #'     comparisons) between marginal effects inequality measures.
 #'   * String equation: To identify parameters from the output, either specify
@@ -103,18 +108,26 @@
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
 #'   `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
-#' - `comparison = "inequality"` computes the marginal effect inequality summary
-#'   of categorical predictors' overall effects, respectively, the comprehensive
-#'   effect of an independent variable across all outcome categories of a
-#'   nominal or ordinal dependent variable (total marginal effect, see _Mize and
-#'   Han, 2025_). The marginal effect inequality focuses on the heterogeneity of
-#'   the effects of a categorical *independent* variable. It helps understand
-#'   how the effect of the variable differs across its categories or levels.
-#'   When the *dependent* variable is categorical (e.g., logistic, ordinal or
-#'   multinomial regression), marginal effect inequality provides a holistic
-#'   view of how an independent variable affects a nominal or ordinal
-#'   *dependent* variable. It summarizes the overall impact (total marginal
+#' - `comparison = "inequality"` computes the *absolute inequality* of groups,
+#'   or in other words, the marginal effect inequality summary of categorical
+#'   predictors' overall effects, respectively, the comprehensive effect of an
+#'   independent variable across all outcome categories of a nominal or ordinal
+#'   dependent variable (total marginal effect, see _Mize and Han, 2025_). The
+#'   marginal effect inequality focuses on the heterogeneity of the effects of a
+#'   categorical *independent* variable. It helps understand how the effect of
+#'   the variable differs across its categories or levels. When the *dependent*
+#'   variable is categorical (e.g., logistic, ordinal or multinomial
+#'   regression), marginal effect inequality provides a holistic view of how an
+#'   independent variable affects a nominal or ordinal *dependent* variable. It
+#'   summarizes the overall impact (absolute inequality, or total marginal
 #'   effects) across all possible outcome categories.
+#' - `comparison = "inequality_ratio"` is comparable to
+#'   `comparison = "inequality"`, but instead of calculating the absolute
+#'   inequality, it computes the *relative inequality* of groups. This is useful
+#'   to compare the relative effects of different predictors on the dependent
+#'   variable. It provides a measure of how much more or less inequality one
+#'   predictor has
+#'   compared to another.
 #' - `comparison = "inequality_pairwise"` computes the difference (pairwise
 #'   comparisons) between marginal effects inequality measures. Depending on the
 #'   sign, this measure indicates which of the predictors has a stronger impact
@@ -258,6 +271,7 @@ estimate_contrasts.default <- function(
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+  comparison <- .check_for_inequality_comparison(comparison)
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -322,7 +336,7 @@ estimate_contrasts.default <- function(
   # Table formatting
   if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
-  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+  } else if (.is_inequality_comparison(comparison)) {
     suffix <- "Inequality Analysis"
     type <- "inequality"
   } else {

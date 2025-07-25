@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
   package.startup.message = FALSE
 )
 
-options(modelbased_join_dots = FALSE)
+options(modelbased_join_dots = FALSE, modelbased_estimate = "average")
 
 pkgs <- c("datawizard", "marginaleffects", "ggplot2", "brms", "httr2", "curl")
 
@@ -284,5 +284,14 @@ brms::brm(
   cores = 4,       # Use 4 CPU cores
   seed = 1234,     # For reproducibility
   refresh = 0
+)
+```
+
+```{r echo=FALSE}
+# reset options
+options(
+  modelbased_join_dots = NULL,
+  modelbased_estimate = NULL,
+  modelbased_select = NULL
 )
 ```

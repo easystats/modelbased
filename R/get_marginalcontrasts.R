@@ -32,6 +32,7 @@ get_marginalcontrasts <- function(
   if (is.null(estimate)) {
     estimate <- getOption("modelbased_estimate", "typical")
   }
+  comparison <- .check_for_inequality_comparison(comparison)
 
   # check whether contrasts should be made for numerics or categorical
   model_data <- insight::get_data(model, source = "mf", verbose = FALSE)
@@ -85,18 +86,19 @@ get_marginalcontrasts <- function(
   # Second step: compute contrasts, for slopes or categorical -----------------
   # ---------------------------------------------------------------------------
 
-  if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+  if (.is_inequality_comparison(comparison)) {
     # inequality effect summary, see Trenton D. Mize, Bing Han 2025
     # Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables
     # Sociological Science February 5, 10.15195/v12.a7
     # this requires a special handling, because we can only use it with avg_comparisons
-    out <- .calculate_inequality_effect(
+    out <- get_inequalitycontrasts(
       model,
       model_data,
       my_args,
       comparison,
       ci,
       compute_slopes,
+      estimate,
       ...
     )
     predict <- "response"
@@ -172,90 +174,6 @@ get_marginalcontrasts <- function(
 }
 
 
-# special contrasts: inequality---------------- -------------------------------
-
-.calculate_inequality_effect <- function(model,
-                                         model_data,
-                                         my_args,
-                                         comparison,
-                                         ci,
-                                         compute_slopes = FALSE,
-                                         ...) {
-  if (compute_slopes) {
-    # marginal effects inequalities for slopes. This does not yet support the
-    # "inequality_pairwise" option
-    if (comparison == "inequality_pairwise") {
-      insight::format_error(
-        "`comparison = \"inequality_pairwise\"` is not supported for contrasts of slopes."
-      )
-    }
-    # unlike for categorical predictors, we have to use avg_slopes() here, because
-    # `avg_comparisons()` does not support defining the `variables` argument as
-    # named list, which we need to specify the pairwise-contrasts. However, we
-    # can use the hypothesis argument to specify the pairwise contrasts first, and
-    # then calculate the marginal effects inequalities in the second step.
-    out <- marginaleffects::avg_slopes(
-      model = model,
-      variables = my_args$contrast,
-      by = my_args$by,
-      hypothesis = ~pairwise
-    )
-    out <- marginaleffects::hypotheses(out, hypothesis = ~I(mean(abs(x))))
-    # save some labels for printing
-    attr(out, "hypothesis_by") <- my_args$by
-    attr(out, "trend") <- my_args$contrast
-    attr(out, "compute_slopes") <- TRUE
-    hypothesis <- "inequality"
-  } else {
-    # to calculate marginal effects inequalities, all contrast predictors
-    # must be factors
-    check_factors <- .safe(vapply(model_data[my_args$contrast], is.factor, logical(1)), NULL)
-    if (is.null(check_factors) || !all(check_factors)) {
-      insight::format_error("All variables specified in `contrast` must be factors for `comparison = \"inequality\"`.")
-    }
-    # setup formula for hypothesis argument. use "term" as grouping variable
-    # when we don't have a "by" argument, else use the "by" argument as grouping
-    # variable
-    if (is.null(my_args$by) || !length(my_args$by)) {
-      f <- ~I(mean(abs(x))) | term
-    } else {
-      # sanity check - by can only be one variable
-      if (length(my_args$by) > 1) {
-        insight::format_error("`by` can only contain one variable for `comparison = \"inequality\"`.")
-      }
-      f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
-    }
-    # for this special case, we need "avg_comparisons()", else we cannot specify
-    # the "variables" argument as named list
-    out <- marginaleffects::avg_comparisons(
-      model = model,
-      variables = as.list(stats::setNames(
-        rep_len("pairwise", length(my_args$contrast)),
-        my_args$contrast
-      )),
-      by = ifelse(is.null(my_args$by), TRUE, my_args$by),
-      hypothesis = f,
-      ...
-    )
-    # for the total marginal effects, we need to call "hypothesis()" again, this
-    # time with ~revpairwise option
-    if (comparison == "inequality_pairwise") {
-      if (nrow(out) < 2) {
-        insight::format_error("Pairwise comparisons require at least two marginal effects inequalities measures.")
-      }
-      out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
-      attr(out, "hypothesis_by") <- my_args$by
-      hypothesis <- "inequality_pairwise"
-    } else {
-      hypothesis <- "inequality"
-    }
-  }
-
-  class(out) <- unique(c("marginaleffects_means", class(out)))
-  format(out, model, ci, hypothesis = hypothesis, ...)
-}
-
-
 # filter "contrasts" for `estimate = "average"` -------------------------------
 
 .filter_contrasts_average <- function(out, my_args) {
@@ -282,12 +200,19 @@ get_marginalcontrasts <- function(
       }
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
+    # sanity check - do we have any rows left?
+    if (nrow(out) == 0) {
+      insight::format_error(
+        "No rows left after filtering. Please check your `by` and `contrast` arguments, or use a different option for the `estimate` argument, e.g. `estimate = \"typical\"."
+      )
+    }
   }
   out
 }
 
 
 # make "comparison" argument compatible -----------------------------------
+# -------------------------------------------------------------------------
 
 # this function has two major tasks: format the "comparison" argument for use
 # in the marginaleffects package, and extract the potential filter values used
@@ -457,16 +382,21 @@ get_marginalcontrasts <- function(
 }
 
 
+# supported comparison strings  --------------------------------------
+# --------------------------------------------------------------------
+
 .valid_hypothesis_strings <- function() {
   c(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
-    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise"
+    "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise",
+    "inequality_ratio"
   )
 }
 
 
 # check for custom hypothesis  --------------------------------------
+# -------------------------------------------------------------------
 
 .is_custom_comparison <- function(comparison) {
   !is.null(comparison) &&
