@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.7</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -197,13 +197,19 @@ likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
 (causal inference, see <em>Chatton and Rohrer 2024</em>).</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
-e.g. <code>options(modelbased_estimate = "average")</code>. When you set <code>estimate</code> to
-<code>"average"</code>, it calculates the average based only on the data points that
-actually exist. This is in particular important for two or more focal
-predictors, because it doesn't generate a <em>complete</em> grid of all theoretical
-combinations of predictor values. Consequently, the output may not include
-all the values. <code>estimate = "population"</code> is not available for
-<code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p></dd>
+e.g. <code>options(modelbased_estimate = "average")</code>.</p>
+<p>Note following limitations:</p><ul><li><p>When you set <code>estimate</code> to <code>"average"</code>, it calculates the average based
+only on the data points that actually exist. This is in particular
+important for two or more focal predictors, because it doesn't generate a
+<em>complete</em> grid of all theoretical combinations of predictor values.
+Consequently, the output may not include all the values.</p></li>
+<li><p>Filtering the output at values of continuous predictors, e.g.
+<code>by = "x=1:5"</code>, in combination with <code>estimate = "average"</code> may result in
+returning an empty data frame because of what was described above. In such
+case, you can use <code>estimate = "typical"</code> or use the <code>newdata</code> argument to
+provide a data grid of predictor values at which to evaluate predictions.</p></li>
+<li><p><code>estimate = "population"</code> is not available for <code><a href="estimate_slopes.html">estimate_slopes()</a></code>.</p></li>
+</ul></dd>
 
 
 <dt id="arg-transform">transform<a class="anchor" aria-label="anchor" href="#arg-transform"></a></dt>
