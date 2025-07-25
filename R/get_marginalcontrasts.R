@@ -488,7 +488,7 @@ get_marginalcontrasts <- function(
       return(out)
     }
   }
-  out
+  comparison
 }
 
 # check whether we have a valid inequality comparison
