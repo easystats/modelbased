@@ -1133,14 +1133,26 @@ test_that("estimate_contrast, inequality ratios", {
   m <- lm(bill_len ~ species * bill_dep + island, data = penguins)
 
   out <- estimate_contrasts(m, "bill_dep", by = "species", comparison = ratio ~ pairwise)
-  expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4)
+  expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(m, "bill_dep", by = "species", comparison = ratio ~ inequality)
-  expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4)
+  expect_equal(out$`Mean Ratio`, 1.897469, tolerance = 1e-4, ignore_attr = TRUE)
 
   m <- lm(bill_len ~ island * sex + bill_dep + species, data = penguins)
-  estimate_contrasts(m, "island", by = "sex", comparison = ~inequality)
-  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ pairwise)
-  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality)
-  estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality, estimate = "average")
+
+  out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ pairwise)
+  expect_equal(
+    out$Ratio,
+    c(0.988576, 1.011352, 1.023039, 0.992977, 0.991165, 0.998175),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
+  out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality)
+  expect_equal(
+    out$`Mean Ratio`,
+    c(1.007656, 0.994106),
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 })

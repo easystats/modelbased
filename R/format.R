@@ -133,16 +133,18 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     info <- insight::model_info(model, response = 1)
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
-  is_contrast_analysis <- !is.null(list(...)$hypothesis)
-  is_inequality_analysis <- .is_inequality_comparison(list(...)$hypothesis)
   predict_type <- attributes(x)$predict
+
+  # special attributes we get from "get_marginalcontrasts()"
+  comparison <- list(...)$hypothesis
+  is_contrast_analysis <- !is.null(comparison)
 
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
 
   # do we have contrasts? For contrasts, we want to keep p-values
-  if (is_inequality_analysis) {
-    estimate_name <- "Mean_Difference"
+  if (.is_inequality_comparison(comparison)) {
+    estimate_name <- switch(comparison, inequality_ratio = "Mean_Ratio", "Mean_Difference")
     # for inequality analysis, we want to keep the stratification variable
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
@@ -650,6 +652,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # fix for inequality-comparisons
   colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
+  colnames(params)[colnames(params) == "Mean_Ratio"] <- "Mean Ratio"
 
   # add posterior draws?
   if (!is.null(attributes(x)$posterior_draws)) {

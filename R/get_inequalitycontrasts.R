@@ -57,10 +57,8 @@ get_inequaliycontrasts <- function(
     )
     out <- marginaleffects::hypotheses(out, hypothesis = ~ I(mean(abs(x))))
     # save some labels for printing
-    attr(out, "hypothesis_by") <- my_args$by
     attr(out, "trend") <- my_args$contrast
     attr(out, "compute_slopes") <- TRUE
-    hypothesis <- "inequality"
   } else {
     # -----------------------------------------------------------
     # inequality comparisons for categorical predictors ---------
@@ -100,8 +98,6 @@ get_inequaliycontrasts <- function(
         hypothesis = f1
       )
       out <- marginaleffects::hypotheses(out, hypothesis = f2)
-      attr(out, "hypothesis_by") <- my_args$by
-      hypothesis <- "inequality_ratio"
     } else {
       # ----------------------------------------------
       # absolute inequality measures -----------------
@@ -139,16 +135,13 @@ get_inequaliycontrasts <- function(
           )
         }
         out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
-        attr(out, "hypothesis_by") <- my_args$by
-        hypothesis <- "inequality_pairwise"
-      } else {
-        hypothesis <- "inequality"
       }
     }
   }
 
+  attr(out, "hypothesis_by") <- my_args$by
   class(out) <- unique(c("marginaleffects_means", class(out)))
-  format(out, model, ci, hypothesis = hypothesis, ...)
+  format(out, model, ci, hypothesis = comparison, ...)
 }
 
 
@@ -176,4 +169,13 @@ get_inequaliycontrasts <- function(
     length(comparison) == 1 &&
     is.character(comparison) &&
     comparison %in% c("inequality", "inequality_pairwise", "inequality_ratio")
+}
+
+
+# return the valid inequality comparison value
+.inequality_type <- function(comparison) {
+  if (!.is_inequality_comparison(comparison)){
+    return(NULL)
+  }
+  comparison
 }
