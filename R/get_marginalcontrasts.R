@@ -200,6 +200,12 @@ get_marginalcontrasts <- function(
       }
       out <- out[out[[i]] %in% my_args$by_filter[[i]], ]
     }
+    # sanity check - do we have any rows left?
+    if (nrow(out) == 0) {
+      insight::format_error(
+        "No rows left after filtering. Please check your `by` and `contrast` arguments, or use a different option for the `estimate` argument, e.g. `estimate = \"typical\"."
+      )
+    }
   }
   out
 }
