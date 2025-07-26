@@ -34,7 +34,7 @@ if (getRversion() < "4.1.0") {
 
 ## 1. Introduction: Why Summarize Effects?
 
-In the social sciences, many key variables are nominal (like race or gender) or ordinal (such as education level or social class). Understanding the total impact of these variables can be tricky because they consist of multiple categories. For instance, to determine if educational attainment affects quality of life, we must consider several comparisons, such as low vs. mid, low vs. high, and mid vs. high education levels
+In the social sciences, many key variables are nominal (like race or gender) or ordinal (such as education level or social class). Understanding the total impact of these variables can be tricky because they consist of multiple categories. For instance, to determine if educational attainment affects quality of life, we must consider several comparisons, such as low vs. mid, low vs. high, and mid vs. high education levels.
 
 This is where *inequality measures* come in handy. They are summary statistics that encapsulate the overall effect of a nominal or ordinal variable. The fundamental concept is that a variable's effect size is proportional to the outcome disparities it generates. As Mize and Han (2025) propose, we can think of the overall effect of a categorical variable in terms of the **inequality** it produces in the outcome. A variable has a large effect if the outcomes for its different groups are far apart, and a small effect if the outcomes are similar.
 
@@ -93,7 +93,9 @@ The plot shows that individuals with higher education report a higher QoL, and t
 
 ## 4. Absolute Inequality
 
-**Absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups. It answers the question: "On average, how many units does the outcome differ between any two education groups?"
+For categorical predictors with only two levels, like low vs. high income groups or male vs. female sex, the absolute inequality is straightforward to compute: it's the difference between the estimated predictions for the two levels (simple pairwise comparison). However, for nominal or ordinal variables with multiple levels, we need to consider all pairwise differences.
+
+The advantages of the `modelbased` package become most apparent when working with predictors that have *more than two levels*. In this case, the **absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups. It answers the question: "On average, how many units does the outcome differ between any two education groups?"
 
 ### Pairwise Contrasts
 
@@ -178,7 +180,7 @@ estimate_contrasts(m2, contrast = "education", comparison = "inequality")
 
 As suspected, the absolute inequality in QoL due to education is larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean Difference = 7.27). This demonstrates how these measures can be used to formally test for differences in inequality across populations.
 
-We can even test if the difference in absolute inequality between the two groups is statistically significant.
+We can even test if the difference in absolute inequality between the two groups is statistically significant. To do so, we perform a *pairwise comparison* of the absolute inequalities across groups.
 
 ```{r}
 # create a new variable to distinguish groups
@@ -230,6 +232,8 @@ estimate_contrasts(
   integer_as_numeric = 1
 )
 ```
+
+> In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integerish values are treated as "categorical", or integer variables, which would not calculate the slope of the continuous `time` variable.
 
 The mean difference in slopes is 4.74. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
 
