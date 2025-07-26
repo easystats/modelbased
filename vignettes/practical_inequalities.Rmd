@@ -178,6 +178,24 @@ estimate_contrasts(m2, contrast = "education", comparison = "inequality")
 
 As suspected, the absolute inequality in QoL due to education is larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean Difference = 7.27). This demonstrates how these measures can be used to formally test for differences in inequality across populations.
 
+We can even test if the difference in absolute inequality between the two groups is statistically significant.
+
+```{r}
+# create a new variable to distinguish groups
+qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
+# fit a model with the group variable
+m <- lm(QoL ~ time * education * grp, data = qol_cancer)
+# Estimate the absolute inequality for each group, and compare them
+estimate_contrasts(
+  m,
+  contrast = "education",
+  by = "grp",
+  comparison = "inequality_pairwise"
+)
+```
+
+As can be seen, the mean difference in absolute inequality between the two groups is 3.77, however, th p-value indicate that this difference is not statistically significant - the absolute inequalities in education are not significantly different between the two groups.
+
 ### Tracking Inequality Over Time
 
 Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups.
