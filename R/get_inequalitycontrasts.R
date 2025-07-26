@@ -86,7 +86,7 @@ get_inequalitycontrasts <- function(
       )
     }
 
-    if (comparison == "inequality_ratio") {
+    if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
       # ----------------------------------------------
@@ -105,6 +105,10 @@ get_inequalitycontrasts <- function(
         hypothesis = f1
       )
       out <- marginaleffects::hypotheses(out, hypothesis = f2)
+      # add a hypothesis for pairwise comparisons
+      if (comparison == "inequality_ratio_pairwise") {
+        out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+      }
     } else {
       # ----------------------------------------------
       # absolute inequality measures -----------------
@@ -159,10 +163,12 @@ get_inequalitycontrasts <- function(
 # and convert it to a string
 .check_for_inequality_comparison <- function(comparison) {
   if (inherits(comparison, "formula")) {
-    out <- paste(all.vars(comparison), collapse = "_")
-    if (out == "ratio_inequality") {
-      out <- "inequality_ratio"
-    }
+    out <- switch(
+      paste(all.vars(comparison), collapse = "_"),
+      ratio_inequality = "inequality_ratio",
+      ratio_inequality_pairwise = "inequality_ratio_pairwise",
+      out
+    )
     if (.is_inequality_comparison(out)) {
       return(out)
     }
@@ -175,7 +181,10 @@ get_inequalitycontrasts <- function(
   !is.null(comparison) &&
     length(comparison) == 1 &&
     is.character(comparison) &&
-    comparison %in% c("inequality", "inequality_pairwise", "inequality_ratio")
+    comparison %in% c(
+      "inequality", "inequality_pairwise",
+      "inequality_ratio", "inequality_ratio_pairwise"
+    )
 }
 
 

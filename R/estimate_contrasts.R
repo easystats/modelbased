@@ -48,8 +48,9 @@
 #'     This is useful to compare the relative effects of different predictors on
 #'     the dependent variable. It provides a measure of how much more or less
 #'     inequality one predictor has compared to another.
-#'     `comparison = "inequality_pairwise"` computes the difference (pairwise
-#'     comparisons) between marginal effects inequality measures.
+#'     `comparison = "inequality_pairwise"` and `"inequality_pairwise_ratio"`
+#'     compute the difference (pairwise comparisons) between marginal effects
+#'     inequality measures.
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -128,10 +129,11 @@
 #'   variable. It provides a measure of how much more or less inequality one
 #'   predictor has
 #'   compared to another.
-#' - `comparison = "inequality_pairwise"` computes the difference (pairwise
-#'   comparisons) between marginal effects inequality measures. Depending on the
-#'   sign, this measure indicates which of the predictors has a stronger impact
-#'   on the dependent variable in terms of inequalities.
+#' - `comparison = "inequality_pairwise"` and `"inequality_pairwise_ratio"`
+#'   compute the difference (pairwise comparisons) between marginal effects
+#'   inequality measures. Depending on the sign, this measure indicates which of
+#'   the predictors has a stronger impact on the dependent variable in terms of
+#'   inequalities.
 #'
 #' @section Effect Size:
 #'
