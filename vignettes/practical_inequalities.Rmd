@@ -19,7 +19,7 @@ knitr::opts_chunk$set(
   package.startup.message = FALSE
 )
 
-options(modelbased_join_dots = FALSE)
+options(modelbased_join_dots = TRUE)
 options(modelbased_select = "minimal")
 
 pkgs <- c("glmmTMB", "marginaleffects", "ggplot2", "see", "brms")
