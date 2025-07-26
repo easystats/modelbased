@@ -132,18 +132,18 @@ get_inequalitycontrasts <- function(
         ...
       )
     }
-    # -----------------------------------------------------------------
-    # difference between absolute / relative inequality measures ------
-    # -----------------------------------------------------------------
+  }
 
-    if (comparison %in% c("inequality_pairwise", "inequality_ratio_pairwise")) {
-      if (nrow(out) < 2) {
-        insight::format_error(
-          "Pairwise comparisons require at least two marginal effects inequalities measures."
-        )
-      }
-      out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+  # -----------------------------------------------------------------
+  # difference between absolute / relative inequality measures ------
+  # -----------------------------------------------------------------
+  if (comparison %in% c("inequality_pairwise", "inequality_ratio_pairwise")) {
+    if (nrow(out) < 2) {
+      insight::format_error(
+        "Pairwise comparisons require at least two marginal effects inequalities measures."
+      )
     }
+    out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
 
   attr(out, "hypothesis_by") <- my_args$by
