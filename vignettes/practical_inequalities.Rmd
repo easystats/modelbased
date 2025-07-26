@@ -247,7 +247,18 @@ The `modelbased` package offers a powerful and intuitive way to move beyond simp
 
 This approach aligns statistical practice with the theoretical concept of group-based disparities, providing a clearer and more comprehensive understanding of how social categories shape outcomes.
 
-### References
+## Formula interface
+
+The `modelbased` package also allows you to compute these inequalities using a formula interface for the `comparison` argument. The following table summarizes the available options for computing inequalities using the `estimate_contrasts()` function with a formula interface:
+
+| String option | Formula |
+| :--- | :--- |
+| `"inequality"` | `~inequality` |
+| `"inequality_pairwise"` | `inequality ~ pairwise` |
+| `"inequality_ratio"` | `ratio ~ inequality` |
+| `"inequality_ratio_pairwise"` | `ratio ~ inequality + pairwise` |
+
+## References
 
 Mize, T. D., & Han, B. (2025). Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables. *Sociological Science, 12*, 115-157.
 
