@@ -127,7 +127,7 @@ First, let's look at the pairwise ratios.
 
 ```{r}
 # Estimate the ratio of means for each pair of education levels
-estimate_contrasts(m, contrast = "education", ratio = TRUE)
+estimate_contrasts(m, contrast = "education", comparison = ratio ~ pairwise)
 ```
 
 ### Calculating the Inequality Ratio
