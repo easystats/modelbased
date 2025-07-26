@@ -143,7 +143,7 @@ Understanding the total impact of these variables can be tricky because
 they consist of multiple categories. For instance, to determine if
 educational attainment affects quality of life, we must consider several
 comparisons, such as low vs. mid, low vs. high, and mid vs. high
-education levels</p>
+education levels.</p>
 <p>This is where <em>inequality measures</em> come in handy. They are
 summary statistics that encapsulate the overall effect of a nominal or
 ordinal variable. The fundamental concept is that a variable’s effect
@@ -230,10 +230,18 @@ will quantify this “average gap.”</p>
 <div class="section level2">
 <h2 id="absolute-inequality">4. Absolute Inequality<a class="anchor" aria-label="anchor" href="#absolute-inequality"></a>
 </h2>
-<p><strong>Absolute inequality</strong> is the average of all absolute
-differences between the predicted outcomes for each pair of groups. It
-answers the question: “On average, how many units does the outcome
-differ between any two education groups?”</p>
+<p>For categorical predictors with only two levels, like low vs. high
+income groups or male vs. female sex, the absolute inequality is
+straightforward to compute: it’s the difference between the estimated
+predictions for the two levels (simple pairwise comparison). However,
+for nominal or ordinal variables with multiple levels, we need to
+consider all pairwise differences.</p>
+<p>The advantages of the <code>modelbased</code> package become most
+apparent when working with predictors that have <em>more than two
+levels</em>. In this case, the <strong>absolute inequality</strong> is
+the average of all absolute differences between the predicted outcomes
+for each pair of groups. It answers the question: “On average, how many
+units does the outcome differ between any two education groups?”</p>
 <div class="section level3">
 <h3 id="pairwise-contrasts">Pairwise Contrasts<a class="anchor" aria-label="anchor" href="#pairwise-contrasts"></a>
 </h3>
@@ -395,7 +403,9 @@ larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean
 Difference = 7.27). This demonstrates how these measures can be used to
 formally test for differences in inequality across populations.</p>
 <p>We can even test if the difference in absolute inequality between the
-two groups is statistically significant.</p>
+two groups is statistically significant. To do so, we perform a
+<em>pairwise comparison</em> of the absolute inequalities across
+groups.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a new variable to distinguish groups</span></span>
 <span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span><span class="op">)</span></span>
@@ -497,6 +507,14 @@ in inequality directly.</p>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: time</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<blockquote>
+<p>In the above example, we set <code>integer_as_numeric = 1</code> to
+ensure that the time variable is treated as numeric, allowing us to
+calculate the slope differences correctly. By default, numeric variables
+with only a few integerish values are treated as “categorical”, or
+integer variables, which would not calculate the slope of the continuous
+<code>time</code> variable.</p>
+</blockquote>
 <p>The mean difference in slopes is 4.74. This indicates that the rate
 of change in QoL differs, on average, by 4.74 points per unit of time
 between any two categories of the education groups. Inequalities are
