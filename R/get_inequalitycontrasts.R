@@ -105,10 +105,6 @@ get_inequalitycontrasts <- function(
         hypothesis = f1
       )
       out <- marginaleffects::hypotheses(out, hypothesis = f2)
-      # add a hypothesis for pairwise comparisons
-      if (comparison == "inequality_ratio_pairwise") {
-        out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
-      }
     } else {
       # ----------------------------------------------
       # absolute inequality measures -----------------
@@ -135,18 +131,18 @@ get_inequalitycontrasts <- function(
         hypothesis = f,
         ...
       )
-      # ------------------------------------------------------
-      # difference between absolute inequality measures ------
-      # ------------------------------------------------------
+    }
+    # -----------------------------------------------------------------
+    # difference between absolute / relative inequality measures ------
+    # -----------------------------------------------------------------
 
-      if (comparison == "inequality_pairwise") {
-        if (nrow(out) < 2) {
-          insight::format_error(
-            "Pairwise comparisons require at least two marginal effects inequalities measures."
-          )
-        }
-        out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+    if (comparison %in% c("inequality_pairwise", "inequality_ratio_pairwise")) {
+      if (nrow(out) < 2) {
+        insight::format_error(
+          "Pairwise comparisons require at least two marginal effects inequalities measures."
+        )
       }
+      out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
     }
   }
 
@@ -163,8 +159,11 @@ get_inequalitycontrasts <- function(
 # and convert it to a string
 .check_for_inequality_comparison <- function(comparison) {
   if (inherits(comparison, "formula")) {
+    # parse variables into a string
+    out <- paste(all.vars(comparison), collapse = "_")
+    # handle special cases
     out <- switch(
-      paste(all.vars(comparison), collapse = "_"),
+      out,
       ratio_inequality = "inequality_ratio",
       ratio_inequality_pairwise = "inequality_ratio_pairwise",
       out
