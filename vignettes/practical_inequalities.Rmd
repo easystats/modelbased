@@ -198,6 +198,20 @@ estimate_contrasts(
 
 As can be seen, the mean difference in absolute inequality between the two groups is 3.77, however, the p-value indicates that this difference is not statistically significant - the absolute inequalities in education are not significantly different between the two groups.
 
+The same can be done for relative inequality:
+
+```{r}
+# Estimate the relative inequality for each group
+estimate_contrasts(
+  m,
+  contrast = "education",
+  by = "grp",
+  comparison = "inequality_ratio_pairwise"
+)
+```
+
+The mean difference in the relative inequality is 0.05, indicating that the QoL in Group 1 is, on average, 5% higher than in Group 2 when comparing education levels. The p-value suggests this difference is not statistically significant.
+
 ### Tracking Inequality Over Time
 
 Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups.

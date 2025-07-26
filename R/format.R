@@ -146,7 +146,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   if (.is_inequality_comparison(comparison)) {
     estimate_name <- switch(
       comparison,
-      inequality_ratio_pairwise = ,
+      inequality_ratio_pairwise = "Mean_Ratio_Difference",
       inequality_ratio = "Mean_Ratio",
       "Mean_Difference"
     )
@@ -661,6 +661,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # fix for inequality-comparisons
+  colnames(params)[colnames(params) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
   colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
   colnames(params)[colnames(params) == "Mean_Ratio"] <- "Mean Ratio"
 
