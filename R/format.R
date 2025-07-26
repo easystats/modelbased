@@ -144,7 +144,12 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
 
   # do we have contrasts? For contrasts, we want to keep p-values
   if (.is_inequality_comparison(comparison)) {
-    estimate_name <- switch(comparison, inequality_ratio = "Mean_Ratio", "Mean_Difference")
+    estimate_name <- switch(
+      comparison,
+      inequality_ratio_pairwise = "Mean_Ratio_Difference",
+      inequality_ratio = "Mean_Ratio",
+      "Mean_Difference"
+    )
     # for inequality analysis, we want to keep the stratification variable
     remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
@@ -614,8 +619,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   by_terms <- attributes(x)$hypothesis_by
+  comparison_hypothesis <- list(...)$hypothesis
   # fix labels for inequality pairwise analysis
-  if (identical(list(...)$hypothesis, "inequality_pairwise") && !is.null(by_terms)) {
+  if (
+    (.is_inequality_comparison(comparison_hypothesis)) &&
+      comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") &&
+      !is.null(by_terms)
+  ) {
     # clean parameter names
     parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
     # extract data for by-variable
@@ -651,6 +661,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # fix for inequality-comparisons
+  colnames(params)[colnames(params) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
   colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
   colnames(params)[colnames(params) == "Mean_Ratio"] <- "Mean Ratio"
 
