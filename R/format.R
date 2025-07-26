@@ -622,7 +622,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   comparison_hypothesis <- list(...)$hypothesis
   # fix labels for inequality pairwise analysis
   if (
-    !is.null(comparison_hypothesis) &&
+    (.is_inequality_comparison(comparison_hypothesis)) &&
       comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") &&
       !is.null(by_terms)
   ) {
