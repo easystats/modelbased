@@ -299,14 +299,14 @@ comparing effects across different outcomes.</p>
 <p>First, let’s look at the pairwise ratios.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the ratio of means for each pair of education levels</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, ratio <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="va">ratio</span> <span class="op">~</span> <span class="va">pairwise</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; mid    | low    |  8.82 (4.58, 13.06) | &lt;0.001</span></span>
-<span><span class="co">#&gt; high   | low    | 14.46 (9.65, 19.27) | &lt;0.001</span></span>
-<span><span class="co">#&gt; high   | mid    |  5.64 (1.83,  9.44) |  0.004</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |        Ratio (CI) |      p</span></span>
+<span><span class="co">#&gt; --------------------------------------------</span></span>
+<span><span class="co">#&gt; mid    | low    | 1.13 (1.06, 1.21) | &lt;0.001</span></span>
+<span><span class="co">#&gt; high   | low    | 1.22 (1.14, 1.30) | &lt;0.001</span></span>
+<span><span class="co">#&gt; high   | mid    | 1.08 (1.02, 1.13) |  0.005</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: education</span></span>
