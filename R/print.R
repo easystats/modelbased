@@ -79,6 +79,11 @@ print.estimate_contrasts <- function(x,
     full_labels <- getOption("modelbased_full_labels", TRUE)
   }
 
+  # fix for inequality-comparisons
+  colnames(x)[colnames(x) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
+  colnames(x)[colnames(x) == "Mean_Difference"] <- "Mean Difference"
+  colnames(x)[colnames(x) == "Mean_Ratio"] <- "Mean Ratio"
+
   # copy original
   out <- x
   # get attributes, but remove some of them - else, matching attribute fails

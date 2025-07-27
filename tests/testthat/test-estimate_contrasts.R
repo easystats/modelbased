@@ -1092,7 +1092,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
     estimate = "average",
     comparison = "inequality"
   )
-  expect_equal(out$`Mean Difference`, 0.02291537, tolerance = 1e-4)
+  expect_equal(out$Mean_Difference, 0.02291537, tolerance = 1e-4)
 
   out <- estimate_contrasts(
     m,
@@ -1100,7 +1100,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
     by = "island",
     comparison = "inequality"
   )
-  expect_equal(out$`Mean Difference`, 0.02443619, tolerance = 1e-4)
+  expect_equal(out$Mean_Difference, 0.02443619, tolerance = 1e-4)
 
   expect_error(
     estimate_contrasts(m, "bill_dep", comparison = "inequality"),
@@ -1136,7 +1136,7 @@ test_that("estimate_contrast, inequality ratios", {
   expect_equal(out$Ratio, c(2.262453, 2.378612, 1.051342), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(m, "bill_dep", by = "species", comparison = ratio ~ inequality)
-  expect_equal(out$`Mean Ratio`, 1.897469, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Ratio, 1.897469, tolerance = 1e-4, ignore_attr = TRUE)
 
   m <- lm(bill_len ~ island * sex + bill_dep + species, data = penguins)
 
@@ -1150,14 +1150,14 @@ test_that("estimate_contrast, inequality ratios", {
 
   out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality)
   expect_equal(
-    out$`Mean Ratio`,
+    out$Mean_Ratio,
     c(1.007656, 0.994106),
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
 
   out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality + pairwise)
-  expect_equal(out$`Mean Ratio Difference`, 0.01355006, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Ratio_Difference, 0.01355006, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 
@@ -1179,7 +1179,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = ~inequality,
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Difference`, 3.171296, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Difference, 3.171296, tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(
     m,
@@ -1188,7 +1188,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = ~inequality,
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Difference`, c(4.742403, 2.883987), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Difference, c(4.742403, 2.883987), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(
     m,
@@ -1197,7 +1197,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = "inequality_pairwise",
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Difference`, 1.858416, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Difference, 1.858416, tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(
     m,
@@ -1206,7 +1206,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = ratio ~ inequality,
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Ratio`, 1.734764, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Ratio, 1.734764, tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(
     m,
@@ -1215,7 +1215,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = ratio ~ inequality,
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Ratio`, c(0.0198939, 1.9717087), tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Ratio, c(0.0198939, 1.9717087), tolerance = 1e-4, ignore_attr = TRUE)
 
   out <- estimate_contrasts(
     m,
@@ -1224,5 +1224,5 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     comparison = "inequality_ratio_pairwise",
     integer_as_numeric = 1
   )
-  expect_equal(out$`Mean Ratio Difference`, -1.951815, tolerance = 1e-4, ignore_attr = TRUE)
+  expect_equal(out$Mean_Ratio_Difference, -1.951815, tolerance = 1e-4, ignore_attr = TRUE)
 })

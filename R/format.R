@@ -660,11 +660,6 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # finally, make sure we have original data types
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
-  # fix for inequality-comparisons
-  colnames(params)[colnames(params) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
-  colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
-  colnames(params)[colnames(params) == "Mean_Ratio"] <- "Mean Ratio"
-
   # add posterior draws?
   if (!is.null(attributes(x)$posterior_draws)) {
     # how many?
