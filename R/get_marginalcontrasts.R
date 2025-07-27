@@ -226,6 +226,7 @@ get_marginalcontrasts <- function(
   joint_test <- FALSE
   # save original `by`
   original_by <- my_args$by
+  original_comparison <- comparison
 
   # make sure "by" is a valid column name, and no filter-directive, like
   # "Species='setosa'". If `by` is also used for filtering, split and extract
@@ -345,6 +346,18 @@ get_marginalcontrasts <- function(
       my_args$by <- formula_group
     }
     comparison <- stats::as.formula(f)
+    # if user specified group in "by" *and* in formula, we keep the group
+    # for contrasts of slopes - thus,we need to update comparison_slopes
+    by_formula <- trimws(unlist(
+      strsplit(deparse(original_comparison), "|", fixed = TRUE),
+      use.names = FALSE
+    ))[2]
+    if (!is.na(by_formula) && identical(by_formula, formula_group)) {
+      # we have a group variable in the formula, which is the same as in `by`
+      # so we keep it for the slopes comparison - this is required to add
+      # grouping in (pairwise) slopes
+      comparison_slopes <- comparison
+    }
   }
   # remove "by" from "contrast"
   my_args$contrast <- setdiff(my_args$contrast, my_args$by)
@@ -388,7 +401,7 @@ get_marginalcontrasts <- function(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
     "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise",
-    "inequality_ratio"
+    "inequality_ratio", "inequality_ratio_pairwise"
   )
 }
 

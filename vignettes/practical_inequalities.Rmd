@@ -198,6 +198,20 @@ estimate_contrasts(
 
 As can be seen, the mean difference in absolute inequality between the two groups is 3.77, however, the p-value indicates that this difference is not statistically significant - the absolute inequalities in education are not significantly different between the two groups.
 
+The same can be done for relative inequality:
+
+```{r}
+# Estimate the relative inequality for each group
+estimate_contrasts(
+  m,
+  contrast = "education",
+  by = "grp",
+  comparison = "inequality_ratio_pairwise"
+)
+```
+
+The mean difference in the relative inequality is 0.05, indicating that the QoL in Group 1 is, on average, 5% higher than in Group 2 when comparing education levels. The p-value suggests this difference is not statistically significant.
+
 ### Tracking Inequality Over Time
 
 Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups.
@@ -208,6 +222,9 @@ estimate_slopes(m1, trend = "time", by = "education")
 
 # And for the second group
 estimate_slopes(m2, trend = "time", by = "education")
+
+# or integrated in the same call
+estimate_slopes(m, trend = "time", by = c("education", "grp"))
 ```
 
 In Group 1, the QoL for the 'low' education group is decreasing over time (Slope = -6.71), while it is stable for the 'mid' and 'high' groups. This suggests the gap is widening. We can quantify this change in inequality directly.
@@ -216,26 +233,32 @@ In Group 1, the QoL for the 'low' education group is decreasing over time (Slope
 # Calculate the inequality in the *slopes* of time
 # This tells us if the rate of change in QoL is unequal across groups
 estimate_contrasts(
-  m1,
+  m,
   contrast = "time",
-  by = "education",
-  comparison = "inequality",
-  integer_as_numeric = 1
-)
-
-# How does it compare to Group 2?
-estimate_contrasts(
-  m2,
-  contrast = "time",
-  by = "education",
+  by = c("education", "grp"),
   comparison = "inequality",
   integer_as_numeric = 1
 )
 ```
 
-> In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integerish values are treated as "categorical", or integer variables, which would not calculate the slope of the continuous `time` variable.
+> In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "categorical", or integer variables, which would not calculate the slope of the continuous `time` variable.
 
-The mean difference in slopes is 4.74. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
+The mean difference in slopes is 4.74 in Group 1. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
+
+To test if the difference in slopes is statistically significant, we can perform a pairwise comparison of the slopes across groups:
+
+```{r}
+# Calculate the pairwise inequality in the *slopes* of time
+estimate_contrasts(
+  m,
+  contrast = "time",
+  by = c("education", "grp"),
+  comparison = "inequality_pairwise",
+  integer_as_numeric = 1
+)
+```
+
+As we see, the difference in slopes is not statistically significant.
 
 ## 7. Conclusion
 
@@ -247,7 +270,18 @@ The `modelbased` package offers a powerful and intuitive way to move beyond simp
 
 This approach aligns statistical practice with the theoretical concept of group-based disparities, providing a clearer and more comprehensive understanding of how social categories shape outcomes.
 
-### References
+## Formula interface
+
+The `modelbased` package also allows you to compute these inequalities using a formula interface for the `comparison` argument. The following table summarizes the available options for computing inequalities using the `estimate_contrasts()` function with a formula interface:
+
+| String option | Formula |
+| :--- | :--- |
+| `"inequality"` | `~inequality` |
+| `"inequality_pairwise"` | `inequality ~ pairwise` |
+| `"inequality_ratio"` | `ratio ~ inequality` |
+| `"inequality_ratio_pairwise"` | `ratio ~ inequality + pairwise` |
+
+## References
 
 Mize, T. D., & Han, B. (2025). Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables. *Sociological Science, 12*, 115-157.
 

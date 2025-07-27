@@ -137,8 +137,11 @@ marginal effect inequality measures, also known as \emph{relative inequality}.
 This is useful to compare the relative effects of different predictors on
 the dependent variable. It provides a measure of how much more or less
 inequality one predictor has compared to another.
-\code{comparison = "inequality_pairwise"} computes the difference (pairwise
-comparisons) between marginal effects inequality measures.
+\code{comparison = "inequality_pairwise"} computes pairwise differences of
+absolute inequality measures, while \code{"inequality_ratio_pairwise"}
+computes pairwise differences of relative inequality measures (ratios).
+See an overview of applications in the related case study in the
+\href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -373,11 +376,15 @@ to compare the relative effects of different predictors on the dependent
 variable. It provides a measure of how much more or less inequality one
 predictor has
 compared to another.
-\item \code{comparison = "inequality_pairwise"} computes the difference (pairwise
-comparisons) between marginal effects inequality measures. Depending on the
-sign, this measure indicates which of the predictors has a stronger impact
-on the dependent variable in terms of inequalities.
+\item \code{comparison = "inequality_pairwise"} computes pairwise differences of
+absolute inequality measures, while \code{"inequality_ratio_pairwise"} computes
+pairwise differences of relative inequality measures (ratios). Depending on
+the sign, this measure indicates which of the predictors has a stronger
+impact on the dependent variable in terms of inequalities.
 }
+
+Examples for analysing inequalities are shown in the related
+\href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignette}.
 }
 
 \section{Effect Size}{
@@ -489,9 +496,11 @@ averaging across random effects groups is then more accurate.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 \dontrun{
-# Basic usage
+# Basic usage --------------------------------
+# --------------------------------------------
+
 model <- lm(Sepal.Width ~ Species, data = iris)
 estimate_contrasts(model)
 
@@ -517,14 +526,50 @@ estimate_contrasts(model, by = "Petal.Width", length = 4)
 estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 standardize(estimated)
 
+# contrasts of slopes ------------------------
+# --------------------------------------------
+
+data(qol_cancer, package = "parameters")
+qol_cancer$ID <- as.numeric(qol_cancer$ID)
+qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
+model <- lm(QoL ~ time * education * grp, data = qol_cancer)
+
+# "time" only has integer values and few values, so it's treated like a factor
+estimate_contrasts(model, "time", by = "education")
+
+# we set `integer_as_numeric = 1` to treat integer predictors as numeric
+estimate_contrasts(model, "time", by = "education", integer_as_numeric = 1)
+
+# pairwise comparisons for multiple groups
+estimate_contrasts(
+  model,
+  "time",
+  by = c("education", "grp"),
+  integer_as_numeric = 1
+)
+
+# if we want pairwise comparisons only for one factor, but group by another,
+# we need the formula specification and define the grouping variable after
+# the vertical bar
+estimate_contrasts(
+  model,
+  "time",
+  by = c("education", "grp"),
+  comparison = ~pairwise | grp,
+  integer_as_numeric = 1
+)
+
 # custom factor contrasts - contrasts the average effects of two levels
 # against the remaining third level
+# ---------------------------------------------------------------------
+
 data(puppy_love, package = "modelbased")
 cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
 model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 
-# Other models (mixed, Bayesian, ...)
+# Other models (mixed, Bayesian, ...) --------
+# --------------------------------------------
 data <- iris
 data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 

@@ -155,8 +155,11 @@ marginal effect inequality measures, also known as \emph{relative inequality}.
 This is useful to compare the relative effects of different predictors on
 the dependent variable. It provides a measure of how much more or less
 inequality one predictor has compared to another.
-\code{comparison = "inequality_pairwise"} computes the difference (pairwise
-comparisons) between marginal effects inequality measures.
+\code{comparison = "inequality_pairwise"} computes pairwise differences of
+absolute inequality measures, while \code{"inequality_ratio_pairwise"}
+computes pairwise differences of relative inequality measures (ratios).
+See an overview of applications in the related case study in the
+\href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.

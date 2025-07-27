@@ -11,9 +11,12 @@ get_inequalitycontrasts <- function(
   estimate = NULL,
   ...
 ) {
+  dots <- list(...)
   # extract datagrid?
-  if (identical(estimate, "typical")) {
-    datagrid <- .get_datagrid_means(model, my_args, estimate, dots = list(...))$datagrid
+  if (!is.null(dots$newdata)) {
+    datagrid <- dots$newdata
+  } else if (identical(estimate, "typical")) {
+    datagrid <- .get_datagrid_means(model, my_args, estimate, dots = dots)$datagrid
   } else {
     datagrid <- NULL
   }
@@ -30,13 +33,7 @@ get_inequalitycontrasts <- function(
   # -----------------------------------------------------------
 
   if (compute_slopes) {
-    # marginal effects inequalities for slopes. This does not yet support the
-    # "inequality_pairwise" option
-    if (comparison == "inequality_pairwise") {
-      insight::format_error(
-        "`comparison = \"inequality_pairwise\"` is not supported for contrasts of slopes."
-      )
-    }
+    # marginal effects inequalities for slopes.
     # we need a `by` argument, otherwise, pairwise comparisons of slopes for all
     # combinations of values of the `trend` variable would be calculated.
     if (is.null(my_args$by) || !length(my_args$by)) {
@@ -44,12 +41,20 @@ get_inequalitycontrasts <- function(
         "`by` argument must be specified for `comparison = \"inequality\"`."
       )
     }
-    # specify the pairwise contrasts for the hypothesis argument
-    hypothesis_formula <- switch(
-      comparison,
-      inequality = ~ pairwise,
-      inequality_ratio = ratio ~ pairwise
-    )
+    # currently, we only support one grouping variable
+    if (length(my_args$by) > 2) {
+      insight::format_error(
+        "`by` can only contain one or two variables for `comparison = \"inequality\"`."
+      )
+    }
+    # setup hypothesis formulas
+    if (length(my_args$by) > 1) {
+      group <- my_args$by[2]
+    } else {
+      group <- NULL
+    }
+    formulas <- .inequality_formula(comparison, group)
+
     # unlike for categorical predictors, we have to use avg_slopes() here, because
     # `avg_comparisons()` does not support defining the `variables` argument as
     # named list, which we need to specify the pairwise-contrasts. However, we
@@ -60,10 +65,11 @@ get_inequalitycontrasts <- function(
       variables = my_args$contrast,
       by = my_args$by,
       newdata = datagrid,
-      hypothesis = hypothesis_formula
+      hypothesis = formulas$f1
     )
-    out <- marginaleffects::hypotheses(out, hypothesis = ~ I(mean(abs(x))))
+    out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     # save some labels for printing
+    attr(out, "by") <- my_args$by
     attr(out, "trend") <- my_args$contrast
     attr(out, "compute_slopes") <- TRUE
   } else {
@@ -86,25 +92,20 @@ get_inequalitycontrasts <- function(
       )
     }
 
-    if (comparison == "inequality_ratio") {
+    if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      if (is.null(my_args$by) || !length(my_args$by)) {
-        f1 <- ratio ~ pairwise
-        f2 <- ~I(mean(abs(x)))
-      } else {
-        f1 <- stats::as.formula(paste("ratio ~ pairwise |", my_args$by))
-        f2 <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
-      }
+      formulas <- .inequality_formula(comparison, my_args$by)
+
       out <- marginaleffects::avg_predictions(
         model = model,
         variables = c(my_args$contrast, my_args$by),
         newdata = datagrid,
-        hypothesis = f1
+        hypothesis = formulas$f1
       )
-      out <- marginaleffects::hypotheses(out, hypothesis = f2)
+      out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     } else {
       # ----------------------------------------------
       # absolute inequality measures -----------------
@@ -131,24 +132,42 @@ get_inequalitycontrasts <- function(
         hypothesis = f,
         ...
       )
-      # ------------------------------------------------------
-      # difference between absolute inequality measures ------
-      # ------------------------------------------------------
-
-      if (comparison == "inequality_pairwise") {
-        if (nrow(out) < 2) {
-          insight::format_error(
-            "Pairwise comparisons require at least two marginal effects inequalities measures."
-          )
-        }
-        out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
-      }
     }
+    group <- my_args$by
   }
 
-  attr(out, "hypothesis_by") <- my_args$by
+  # -----------------------------------------------------------------
+  # difference between absolute / relative inequality measures ------
+  # -----------------------------------------------------------------
+  if (comparison %in% c("inequality_pairwise", "inequality_ratio_pairwise")) {
+    if (nrow(out) < 2) {
+      insight::format_error(
+        "Pairwise comparisons require at least two marginal effects inequalities measures."
+      )
+    }
+    out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
+  }
+
+  attr(out, "hypothesis_by") <- group
   class(out) <- unique(c("marginaleffects_means", class(out)))
   format(out, model, ci, hypothesis = comparison, ...)
+}
+
+
+# setup hypothesis formula  ------------------------------------------
+# --------------------------------------------------------------------
+
+.inequality_formula <- function(comparison, group = NULL) {
+  # specify the pairwise contrasts for the hypothesis argument
+  f1 <- switch(
+    comparison,
+    inequality_pairwise = ,
+    inequality = stats::as.formula(paste(c("~ pairwise", group), collapse = " | ")),
+    inequality_ratio_pairwise = ,
+    inequality_ratio = stats::as.formula(paste(c("ratio ~ pairwise", group), collapse = " | ")),
+  )
+  f2 <- stats::as.formula(paste(c("~ I(mean(abs(x)))", group), collapse = " | "))
+  list(f1 = f1, f2 = f2)
 }
 
 
@@ -159,10 +178,15 @@ get_inequalitycontrasts <- function(
 # and convert it to a string
 .check_for_inequality_comparison <- function(comparison) {
   if (inherits(comparison, "formula")) {
+    # parse variables into a string
     out <- paste(all.vars(comparison), collapse = "_")
-    if (out == "ratio_inequality") {
-      out <- "inequality_ratio"
-    }
+    # handle special cases
+    out <- switch(
+      out,
+      ratio_inequality = "inequality_ratio",
+      ratio_inequality_pairwise = "inequality_ratio_pairwise",
+      out
+    )
     if (.is_inequality_comparison(out)) {
       return(out)
     }
@@ -175,7 +199,10 @@ get_inequalitycontrasts <- function(
   !is.null(comparison) &&
     length(comparison) == 1 &&
     is.character(comparison) &&
-    comparison %in% c("inequality", "inequality_pairwise", "inequality_ratio")
+    comparison %in% c(
+      "inequality", "inequality_pairwise",
+      "inequality_ratio", "inequality_ratio_pairwise"
+    )
 }
 
 
