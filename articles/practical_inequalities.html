@@ -502,9 +502,11 @@ statistically significant.</p>
 <code>education</code>, suggesting the inequality might be changing. We
 can examine the <em>trend</em> in inequality by contrasting the slopes
 of the <code>time</code> variable across the different
-<code>education</code> groups.</p>
+<code>education</code> groups. The results below are essentially shown
+in the two plots above.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the slope of 'time' for each education level in the first group</span></span>
+<span><span class="co"># see also left panel of the plot above</span></span>
 <span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m1</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Effects</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -518,6 +520,7 @@ of the <code>time</code> variable across the different
 <span><span class="co">#&gt; Type of slope was dY/dX</span></span>
 <span></span>
 <span><span class="co"># And for the second group</span></span>
+<span><span class="co"># see also right panel of the plot above</span></span>
 <span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m2</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Effects</span></span>
 <span><span class="co">#&gt; </span></span>
