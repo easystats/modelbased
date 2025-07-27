@@ -69,6 +69,7 @@ get_inequalitycontrasts <- function(
     )
     out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     # save some labels for printing
+    attr(out, "by") <- my_args$by
     attr(out, "trend") <- my_args$contrast
     attr(out, "compute_slopes") <- TRUE
   } else {

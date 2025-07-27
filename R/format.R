@@ -618,43 +618,53 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
+  # extract information for potential inequality analysis
   by_terms <- attributes(x)$hypothesis_by
   comparison_hypothesis <- list(...)$hypothesis
-  # fix labels for inequality pairwise analysis
-  if (
-    (.is_inequality_comparison(comparison_hypothesis)) &&
-      comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") &&
-      !is.null(by_terms)
-  ) {
-    # clean parameter names
-    parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
-    # extract data for by-variable
-    by_var <- model_data[[by_terms]]
-    # make sure we have a factor
-    if (is.character(by_var)) {
-      by_var <- factor(by_var, levels = unique(by_var))
-    }
-    # extract levels
-    by_levels <- levels(by_var)
-    # iterate over all parameter names and replace b1 to bx with the by-levels
-    parameter_names <- vapply(
-      parameter_names,
-      function(i) {
-        # replace b1 with first by-level, b2 with second by-level, etc.
-        for (j in seq_along(by_levels)) {
-          i <- sub(paste0("b", j), by_levels[j], i, fixed = TRUE)
-        }
-        i
-      },
-      character(1)
-    )
-    # finally, assign back to the Parameter column
-    params$Parameter <- parameter_names
-  }
 
-  # fix labels for inequality analysis for slopes
-  if (identical(list(...)$hypothesis, "inequality") && isTRUE(attributes(x)$compute_slopes)) {
-    params$Parameter <- attributes(x)$trend
+  # fix labels for inequality pairwise analysis
+  if (.is_inequality_comparison(comparison_hypothesis)) {
+    # fix for pairwise inequality labels - these are named like "(b1) - (b2)" etc.
+    # but we want the original labels instead of b1, b2 etc.
+    if(comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") && !is.null(by_terms)) {
+      # clean parameter names
+      parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
+      # extract data for by-variable
+      by_var <- model_data[[by_terms]]
+      # make sure we have a factor
+      if (is.character(by_var)) {
+        by_var <- factor(by_var, levels = unique(by_var))
+      }
+      # extract levels
+      by_levels <- levels(by_var)
+      # iterate over all parameter names and replace b1 to bx with the by-levels
+      parameter_names <- vapply(
+        parameter_names,
+        function(i) {
+          # replace b1 with first by-level, b2 with second by-level, etc.
+          for (j in seq_along(by_levels)) {
+            i <- sub(paste0("b", j), by_levels[j], i, fixed = TRUE)
+          }
+          i
+        },
+        character(1)
+      )
+      # finally, assign back to the Parameter column
+      params$Parameter <- parameter_names
+    }
+
+    # fix labels for inequality analysis for slopes
+    if (comparison_hypothesis %in% c("inequality", "inequality_ratio") && isTRUE(attributes(x)$compute_slopes)) {
+      # for slopes, we either have the trend variable, or only the grouping,
+      # but not the "inequality" variabe (the first in "by"). Update labels,
+      # so users know by which variables slopes are averaged and grouped
+      if (is.null(by_terms)) {
+        params$Parameter <- attributes(x)$by
+      } else {
+        colnames(params)[colnames(params) == by_terms] <- "Parameter"
+        params$Parameter <- paste0(attributes(x)$by[1], ": ", params$Parameter)
+      }
+    }
   }
 
   # finally, make sure we have original data types
