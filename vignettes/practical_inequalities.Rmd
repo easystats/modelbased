@@ -241,7 +241,7 @@ estimate_contrasts(
 )
 ```
 
-> In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integerish values are treated as "categorical", or integer variables, which would not calculate the slope of the continuous `time` variable.
+> In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "categorical", or integer variables, which would not calculate the slope of the continuous `time` variable.
 
 The mean difference in slopes is 4.74 in Group 1. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
 
