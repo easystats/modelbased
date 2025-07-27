@@ -1276,4 +1276,17 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     integer_as_numeric = 1
   )
   expect_equal(out$Mean_Ratio_Difference, -1.951815, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = ~pairwise | grp,
+    integer_as_numeric = 1
+  )
+  expect_identical(dim(out), c(6L, 9L))
+  expect_named(
+    out,
+    c("Parameter", "grp", "Difference", "SE", "CI_low", "CI_high",  "t", "df", "p")
+  )
 })

@@ -227,6 +227,15 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
 
+  # for slopes, sanity check - we may have duplicated "by" columns, e.g. when
+  # user requests grouping for by-terms by combining "by" and "comparison" with
+  # group-formula:
+  # estimate_contrasts(m, "time", by = c("education", "grp"), comparison = ~pairwise | grp)
+  # in this example, we would have "grp" and "grp.1"
+  if (inherits(x, "estimate_slopes")) {
+    x[paste0(by, ".1")] <- NULL
+  }
+
   # sanity check - method "get_marginalmeans()" calls "format.estimate_means()"
   # for printing, and that method doesn't pass "comparison" - thus, we have to
   # extract it from the attributes
