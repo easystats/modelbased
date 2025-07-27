@@ -166,7 +166,7 @@ get_inequalitycontrasts <- function(
     inequality_ratio = stats::as.formula(paste(c("ratio ~ pairwise", group), collapse = " | ")),
   )
   f2 <- stats::as.formula(paste(c("~ I(mean(abs(x)))", group), collapse = " | "))
-  list(f1, f2)
+  list(f1 = f1, f2 = f2)
 }
 
 
