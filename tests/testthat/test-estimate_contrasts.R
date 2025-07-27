@@ -1093,7 +1093,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
     comparison = "inequality"
   )
   expect_equal(out$Mean_Difference, 0.02291537, tolerance = 1e-4)
-  expect_idential(out$Parameter, "island")
+  expect_identical(out$Parameter, "island")
 
   # same as:
   # out <- avg_slopes(m, variables = "bill_dep", by = "island", hypothesis = ~pairwise)
@@ -1106,7 +1106,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
     comparison = "inequality"
   )
   expect_equal(out$Mean_Difference, 0.02443619, tolerance = 1e-4)
-  expect_idential(out$Parameter, "island")
+  expect_identical(out$Parameter, "island")
 
   expect_error(
     estimate_contrasts(m, "bill_dep", comparison = "inequality"),
