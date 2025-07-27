@@ -1094,6 +1094,10 @@ test_that("estimate_contrast, marginal effects inequalities", {
   )
   expect_equal(out$Mean_Difference, 0.02291537, tolerance = 1e-4)
 
+  # same as:
+  # out <- avg_slopes(m, variables = "bill_dep", by = "island", hypothesis = ~pairwise)
+  # hypotheses(out, hypothesis = ~I(mean(abs(x))))
+
   out <- estimate_contrasts(
     m,
     "bill_dep",
@@ -1181,6 +1185,25 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
   )
   expect_equal(out$Mean_Difference, 3.171296, tolerance = 1e-4, ignore_attr = TRUE)
 
+  out1 <- estimate_contrasts(
+    m,
+    "time",
+    by = "education",
+    comparison = ~inequality,
+    integer_as_numeric = 1,
+    estimate = "average"
+  )
+  out2 <- marginaleffects::hypotheses(
+    marginaleffects::avg_slopes(m, variables = "time", by = "education", hypothesis = ~pairwise),
+    hypothesis = ~I(mean(abs(x)))
+  )
+  expect_equal(
+    out1$Mean_Difference,
+    out2$estimate,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
+
   out <- estimate_contrasts(
     m,
     "time",
@@ -1189,6 +1212,25 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     integer_as_numeric = 1
   )
   expect_equal(out$Mean_Difference, c(4.742403, 2.883987), tolerance = 1e-4, ignore_attr = TRUE)
+
+  out1 <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = ~inequality,
+    estimate = "average",
+    integer_as_numeric = 1
+  )
+  out2 <- marginaleffects::hypotheses(
+    marginaleffects::avg_slopes(m, variables = "time", by = c("education", "grp"), hypothesis = ~pairwise | grp),
+    hypothesis = ~I(mean(abs(x))) | grp
+  )
+  expect_equal(
+    out1$Mean_Difference,
+    out2$estimate,
+    tolerance = 1e-4,
+    ignore_attr = TRUE
+  )
 
   out <- estimate_contrasts(
     m,
