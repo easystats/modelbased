@@ -304,7 +304,13 @@ comparing effects across different outcomes.</p>
 <div class="section level3">
 <h3 id="pairwise-ratios">Pairwise Ratios<a class="anchor" aria-label="anchor" href="#pairwise-ratios"></a>
 </h3>
-<p>First, let’s look at the pairwise ratios.</p>
+<p>First, let’s look at the pairwise ratios. The interpretation is as
+follows: people with a middle educational level have a QoL score that
+is, on average, 1.13 times higher than those with a low education level.
+High educated individuals have a QoL score that is even 1.22 times
+higher compared to those with low education, while the difference
+between middle and high education is 1.08 times. All differences are
+statistically significant.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the ratio of means for each pair of education levels</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="va">ratio</span> <span class="op">~</span> <span class="va">pairwise</span><span class="op">)</span></span>
@@ -324,8 +330,8 @@ comparing effects across different outcomes.</p>
 <div class="section level3">
 <h3 id="calculating-the-inequality-ratio">Calculating the Inequality Ratio<a class="anchor" aria-label="anchor" href="#calculating-the-inequality-ratio"></a>
 </h3>
-<p>We set <code>comparison = "inequality_ratio"</code> to get the
-summary measure.</p>
+<p>To summarize these information and to calculate the relative
+inequality, we set <code>comparison = "inequality_ratio"</code>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Compute the relative inequality (inequality ratio)</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m</span>, contrast <span class="op">=</span> <span class="st">"education"</span>, comparison <span class="op">=</span> <span class="st">"inequality_ratio"</span><span class="op">)</span></span>
