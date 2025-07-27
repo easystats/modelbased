@@ -125,7 +125,7 @@ estimate_contrasts(m, contrast = "education", comparison = "inequality")
 
 ### Pairwise Ratios
 
-First, let's look at the pairwise ratios.
+First, let's look at the pairwise ratios. The interpretation is as follows: people with a middle educational level have a QoL score that is, on average, 1.13 times higher than those with a low education level. High educated individuals have a QoL score that is even 1.22 times higher compared to those with low education, while the difference between middle and high education is 1.08 times. All differences are statistically significant.
 
 ```{r}
 # Estimate the ratio of means for each pair of education levels
@@ -134,7 +134,7 @@ estimate_contrasts(m, contrast = "education", comparison = ratio ~ pairwise)
 
 ### Calculating the Inequality Ratio
 
-We set `comparison = "inequality_ratio"` to get the summary measure.
+To summarize these information and to calculate the relative inequality, we set `comparison = "inequality_ratio"`.
 
 ```{r}
 # Compute the relative inequality (inequality ratio)
