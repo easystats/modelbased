@@ -235,13 +235,15 @@ The mean difference in the relative inequality is 0.05, indicating that the QoL 
 
 ### Tracking Inequality Over Time
 
-Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups.
+Our model includes an interaction between `time` and `education`, suggesting the inequality might be changing. We can examine the *trend* in inequality by contrasting the slopes of the `time` variable across the different `education` groups. The results below are essentially shown in the two plots above.
 
 ```{r}
 # Estimate the slope of 'time' for each education level in the first group
+# see also left panel of the plot above
 estimate_slopes(m1, trend = "time", by = "education")
 
 # And for the second group
+# see also right panel of the plot above
 estimate_slopes(m2, trend = "time", by = "education")
 
 # or integrated in the same call
