@@ -281,7 +281,7 @@ estimate_contrasts(
 )
 ```
 
-As we see, the difference in slopes is not statistically significant.
+As we see, the difference in average slopes (i.e. we have a pairwise comparison of absolute inequalities of *trends* or *slopes*) is not statistically significant.
 
 ## 7. Conclusion
 
