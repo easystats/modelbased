@@ -1159,3 +1159,70 @@ test_that("estimate_contrast, inequality ratios", {
   out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality + pairwise)
   expect_equal(out$`Mean Ratio Difference`, 0.01355006, tolerance = 1e-4, ignore_attr = TRUE)
 })
+
+
+test_that("estimate_contrast, slopes, inequality pairwise", {
+  skip_if(getRversion() < "4.5.0")
+  skip_if_not_installed("datawizard")
+  skip_if_not_installed("parameters")
+
+  data(qol_cancer, package = "parameters")
+  qol_cancer$ID <- as.numeric(qol_cancer$ID)
+  qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
+
+  m <- lm(QoL ~ time * education * grp, data = qol_cancer)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = "education",
+    comparison = ~inequality,
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Difference`, 3.171296, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = ~inequality,
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Difference`, c(4.742403, 2.883987), tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = "inequality_pairwise",
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Difference`, 1.858416, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = "education",
+    comparison = ratio ~ inequality,
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Ratio`, 1.734764, tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = ratio ~ inequality,
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Ratio`, c(0.0198939, 1.9717087), tolerance = 1e-4, ignore_attr = TRUE)
+
+  out <- estimate_contrasts(
+    m,
+    "time",
+    by = c("education", "grp"),
+    comparison = "inequality_ratio_pairwise",
+    integer_as_numeric = 1
+  )
+  expect_equal(out$`Mean Ratio Difference`, -1.951815, tolerance = 1e-4, ignore_attr = TRUE)
+})

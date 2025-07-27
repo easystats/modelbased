@@ -132,6 +132,7 @@ get_inequalitycontrasts <- function(
         ...
       )
     }
+    group <- my_args$by
   }
 
   # -----------------------------------------------------------------
@@ -146,7 +147,7 @@ get_inequalitycontrasts <- function(
     out <- marginaleffects::hypotheses(out, hypothesis = ~revpairwise)
   }
 
-  attr(out, "hypothesis_by") <- my_args$by
+  attr(out, "hypothesis_by") <- group
   class(out) <- unique(c("marginaleffects_means", class(out)))
   format(out, model, ci, hypothesis = comparison, ...)
 }
