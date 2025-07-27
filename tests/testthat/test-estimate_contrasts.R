@@ -1162,7 +1162,7 @@ test_that("estimate_contrast, inequality ratios", {
     tolerance = 1e-4,
     ignore_attr = TRUE
   )
-  expect(as.character(out$sex), c("female", "male"))
+  expect_identical(as.character(out$sex), c("female", "male"))
 
   out <- estimate_contrasts(m, "island", by = "sex", comparison = ratio ~ inequality + pairwise)
   expect_equal(out$Mean_Ratio_Difference, 0.01355006, tolerance = 1e-4, ignore_attr = TRUE)
