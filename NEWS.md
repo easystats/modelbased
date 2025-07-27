@@ -4,24 +4,33 @@
 
 * Methods for the *tinyplot* package were added.
 
-* `estimate_slopes()` now also gets the `estimate` argument, to specify how
-  to estimate over non-focal terms.
+* `estimate_slopes()` now also gets the `estimate` argument, to specify how to
+  estimate over non-focal terms.
 
-* `comparison = "inequality"` now also works when contrasting slopes
-  for a numeric predictor.
+* Improvements to `estimate_contrasts()`:
 
-* New option `comparison = "inequality_ratio"` for `estimate_contrast()`, which
-  computes the ratio of marginal effects inequality measures across groups.
+  * `comparison = "inequality"` now also works when contrasting slopes for a
+    numeric predictor.
+
+  * New option `comparison = "inequality_ratio"` for `estimate_contrast()`,
+    which computes the ratio of marginal effects inequality measures across
+    groups.
+
+  * For contrasts, the message about the units of contrasts ("in %-points") has
+    been removed, because this was slightly misleading. The units were in
+    %-points if multiplied by 100, but this multiplication was not done in the
+    output.
+
+  * `estimate_contrasts()` for slopes now allows additional grouping of contrasts
+    using the `by` argument together with the `comparison` argument by specifying
+    the grouping variable in the formula, e.g. `contrast = c("x", "group")` and
+    `~ pairwise | group`.
 
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
-
-* For contrasts, the message about the units of contrasts ("in %-points") has
-  been removed, because this was slightly misleading. The units were in %-points
-  if multiplied by 100, but this multiplication was not done in the output.
 
 * Improved documentation and improved informative messages.
 
