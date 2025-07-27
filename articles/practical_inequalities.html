@@ -402,16 +402,39 @@ group.</p>
 larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean
 Difference = 7.27). This demonstrates how these measures can be used to
 formally test for differences in inequality across populations.</p>
-<p>We can even test if the difference in absolute inequality between the
-two groups is statistically significant. To do so, we perform a
-<em>pairwise comparison</em> of the absolute inequalities across
-groups.</p>
+<p>It is also possible to compare the absolute inequalities across
+groups directly:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># create a new variable to distinguish groups</span></span>
 <span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co"># fit a model with the group variable</span></span>
 <span><span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">*</span> <span class="va">grp</span>, data <span class="op">=</span> <span class="va">qol_cancer</span><span class="op">)</span></span>
-<span><span class="co"># Estimate the absolute inequality for each group, and compare them</span></span>
+<span></span>
+<span><span class="co"># Estimate the absolute inequality for each group</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"grp"</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"inequality"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mean Difference (CI) |      p |     grp</span></span>
+<span><span class="co">#&gt; ---------------------------------------</span></span>
+<span><span class="co">#&gt; 11.05 (6.75, 15.34)  | &lt;0.001 | Group 1</span></span>
+<span><span class="co">#&gt; 7.27 (2.62, 11.93)   |  0.002 | Group 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: education</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>We can even test if the difference in absolute inequality between the
+two groups is statistically significant. To do so, we perform a
+<em>pairwise comparison</em> of the absolute inequalities across groups,
+i.e. we simply replace <code>comparison = "inequality"</code> with
+<code>comparison = "inequality_pairwise"</code> in the
+<code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> function:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Estimate the absolute inequality for each group, and compare them</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
@@ -432,8 +455,26 @@ the two groups is 3.77, however, the p-value indicates that this
 difference is not statistically significant - the absolute inequalities
 in education are not significantly different between the two groups.</p>
 <p>The same can be done for relative inequality:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the relative inequality for each group</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"grp"</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"inequality_ratio"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Mean Ratio (CI)   |      p |     grp</span></span>
+<span><span class="co">#&gt; ------------------------------------</span></span>
+<span><span class="co">#&gt; 1.16 (1.09, 1.23) | &lt;0.001 | Group 1</span></span>
+<span><span class="co">#&gt; 1.11 (1.03, 1.19) | &lt;0.001 | Group 2</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: education</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span>
+<span></span>
+<span><span class="co"># and compare if the difference in relative inequality is statistically significant</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
@@ -462,7 +503,7 @@ statistically significant.</p>
 can examine the <em>trend</em> in inequality by contrasting the slopes
 of the <code>time</code> variable across the different
 <code>education</code> groups.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the slope of 'time' for each education level in the first group</span></span>
 <span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m1</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Effects</span></span>
@@ -508,7 +549,7 @@ of the <code>time</code> variable across the different
 time (Slope = -6.71), while it is stable for the ‘mid’ and ‘high’
 groups. This suggests the gap is widening. We can quantify this change
 in inequality directly.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the inequality in the *slopes* of time</span></span>
 <span><span class="co"># This tells us if the rate of change in QoL is unequal across groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
@@ -543,7 +584,7 @@ are smaller in Group 2 (Mean Difference = 2.88), suggesting a more
 uniform change over time.</p>
 <p>To test if the difference in slopes is statistically significant, we
 can perform a pairwise comparison of the slopes across groups:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the pairwise inequality in the *slopes* of time</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
 <span>  <span class="va">m</span>,</span>
