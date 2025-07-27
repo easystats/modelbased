@@ -180,13 +180,26 @@ estimate_contrasts(m2, contrast = "education", comparison = "inequality")
 
 As suspected, the absolute inequality in QoL due to education is larger in Group 1 (Mean Difference = 11.05) than in Group 2 (Mean Difference = 7.27). This demonstrates how these measures can be used to formally test for differences in inequality across populations.
 
-We can even test if the difference in absolute inequality between the two groups is statistically significant. To do so, we perform a *pairwise comparison* of the absolute inequalities across groups.
+It is also possible to compare the absolute inequalities across groups directly:
 
 ```{r}
 # create a new variable to distinguish groups
 qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
 # fit a model with the group variable
 m <- lm(QoL ~ time * education * grp, data = qol_cancer)
+
+# Estimate the absolute inequality for each group
+estimate_contrasts(
+  m,
+  contrast = "education",
+  by = "grp",
+  comparison = "inequality"
+)
+```
+
+We can even test if the difference in absolute inequality between the two groups is statistically significant. To do so, we perform a *pairwise comparison* of the absolute inequalities across groups, i.e. we simply replace `comparison = "inequality"` with `comparison = "inequality_pairwise"` in the `estimate_contrasts()` function:
+
+```{r}
 # Estimate the absolute inequality for each group, and compare them
 estimate_contrasts(
   m,
@@ -202,6 +215,14 @@ The same can be done for relative inequality:
 
 ```{r}
 # Estimate the relative inequality for each group
+estimate_contrasts(
+  m,
+  contrast = "education",
+  by = "grp",
+  comparison = "inequality_ratio"
+)
+
+# and compare if the difference in relative inequality is statistically significant
 estimate_contrasts(
   m,
   contrast = "education",
