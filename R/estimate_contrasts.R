@@ -222,14 +222,14 @@
 #' model <- lm(QoL ~ time * education * grp, data = qol_cancer)
 #'
 #' # "time" only has integer values and few values, so it's treated like a factor
-#' estimate_contrasts(m, "time", by = "education")
+#' estimate_contrasts(model, "time", by = "education")
 #'
 #' # we set `integer_as_numeric = 1` to treat integer predictors as numeric
-#' estimate_contrasts(m, "time", by = "education", integer_as_numeric = 1)
+#' estimate_contrasts(model, "time", by = "education", integer_as_numeric = 1)
 #'
 #' # pairwise comparisons for multiple groups
 #' estimate_contrasts(
-#'   m,
+#'   model,
 #'   "time",
 #'   by = c("education", "grp"),
 #'   integer_as_numeric = 1
@@ -239,7 +239,7 @@
 #' # we need the formula specification and define the grouping variable after
 #' # the vertical bar
 #' estimate_contrasts(
-#'   m,
+#'   model,
 #'   "time",
 #'   by = c("education", "grp"),
 #'   comparison = ~pairwise | grp,
