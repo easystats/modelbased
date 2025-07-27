@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -431,6 +431,28 @@ groups.</p>
 the two groups is 3.77, however, the p-value indicates that this
 difference is not statistically significant - the absolute inequalities
 in education are not significantly different between the two groups.</p>
+<p>The same can be done for relative inequality:</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Estimate the relative inequality for each group</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"education"</span>,</span>
+<span>  by <span class="op">=</span> <span class="st">"grp"</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"inequality_ratio_pairwise"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter         | Mean Ratio Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Group 1 - Group 2 |         0.05 (-0.05, 0.16) | 0.334</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: education</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>The mean difference in the relative inequality is 0.05, indicating
+that the QoL in Group 1 is, on average, 5% higher than in Group 2 when
+comparing education levels. The p-value suggests this difference is not
+statistically significant.</p>
 </div>
 <div class="section level3">
 <h3 id="tracking-inequality-over-time">Tracking Inequality Over Time<a class="anchor" aria-label="anchor" href="#tracking-inequality-over-time"></a>
@@ -440,7 +462,7 @@ in education are not significantly different between the two groups.</p>
 can examine the <em>trend</em> in inequality by contrasting the slopes
 of the <code>time</code> variable across the different
 <code>education</code> groups.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Estimate the slope of 'time' for each education level in the first group</span></span>
 <span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m1</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Effects</span></span>
@@ -465,44 +487,43 @@ of the <code>time</code> variable across the different
 <span><span class="co">#&gt; high      | 6.04 ( 0.19, 11.90) | 0.043</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Marginal effects estimated for time</span></span>
+<span><span class="co">#&gt; Type of slope was dY/dX</span></span>
+<span></span>
+<span><span class="co"># or integrated in the same call</span></span>
+<span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">m</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Estimated Marginal Effects</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; education | grp     |               Slope (CI) |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------</span></span>
+<span><span class="co">#&gt; low       | Group 1 |    -6.71 (-12.92, -0.50) |  0.034</span></span>
+<span><span class="co">#&gt; mid       | Group 1 |     0.40 ( -3.25,  4.06) |  0.830</span></span>
+<span><span class="co">#&gt; high      | Group 1 | 1.42e-10 ( -4.92,  4.92) | &gt; .999</span></span>
+<span><span class="co">#&gt; low       | Group 2 |     3.24 ( -2.98,  9.46) |  0.306</span></span>
+<span><span class="co">#&gt; mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362</span></span>
+<span><span class="co">#&gt; high      | Group 2 |     6.04 (  0.14, 11.94) |  0.045</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Marginal effects estimated for time</span></span>
 <span><span class="co">#&gt; Type of slope was dY/dX</span></span></code></pre></div>
 <p>In Group 1, the QoL for the ‘low’ education group is decreasing over
 time (Slope = -6.71), while it is stable for the ‘mid’ and ‘high’
 groups. This suggests the gap is widening. We can quantify this change
 in inequality directly.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Calculate the inequality in the *slopes* of time</span></span>
 <span><span class="co"># This tells us if the rate of change in QoL is unequal across groups</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
-<span>  <span class="va">m1</span>,</span>
+<span>  <span class="va">m</span>,</span>
 <span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"education"</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"inequality"</span>,</span>
 <span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter | Mean Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; ----------------------------------------</span></span>
-<span><span class="co">#&gt; time      |   4.74 (-0.09, 9.58) | 0.055</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Variable predicted: QoL</span></span>
-<span><span class="co">#&gt; Predictors contrasted: time</span></span>
-<span><span class="co">#&gt; p-values are uncorrected.</span></span>
-<span></span>
-<span><span class="co"># How does it compare to Group 2?</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
-<span>  <span class="va">m2</span>,</span>
-<span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
-<span>  by <span class="op">=</span> <span class="st">"education"</span>,</span>
-<span>  comparison <span class="op">=</span> <span class="st">"inequality"</span>,</span>
-<span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter | Mean Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; ----------------------------------------</span></span>
-<span><span class="co">#&gt; time      |   2.88 (-1.70, 7.47) | 0.217</span></span>
+<span><span class="co">#&gt; Parameter          | Mean Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------</span></span>
+<span><span class="co">#&gt; education: Group 1 |   4.74 (-0.05, 9.53) | 0.052</span></span>
+<span><span class="co">#&gt; education: Group 2 |   2.88 (-1.75, 7.51) | 0.222</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: time</span></span>
@@ -511,15 +532,37 @@ in inequality directly.</p>
 <p>In the above example, we set <code>integer_as_numeric = 1</code> to
 ensure that the time variable is treated as numeric, allowing us to
 calculate the slope differences correctly. By default, numeric variables
-with only a few integerish values are treated as “categorical”, or
-integer variables, which would not calculate the slope of the continuous
+with only a few integer values are treated as “categorical”, or integer
+variables, which would not calculate the slope of the continuous
 <code>time</code> variable.</p>
 </blockquote>
-<p>The mean difference in slopes is 4.74. This indicates that the rate
-of change in QoL differs, on average, by 4.74 points per unit of time
-between any two categories of the education groups. Inequalities are
-smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform
-change over time.</p>
+<p>The mean difference in slopes is 4.74 in Group 1. This indicates that
+the rate of change in QoL differs, on average, by 4.74 points per unit
+of time between any two categories of the education groups. Inequalities
+are smaller in Group 2 (Mean Difference = 2.88), suggesting a more
+uniform change over time.</p>
+<p>To test if the difference in slopes is statistically significant, we
+can perform a pairwise comparison of the slopes across groups:</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Calculate the pairwise inequality in the *slopes* of time</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m</span>,</span>
+<span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
+<span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
+<span>  comparison <span class="op">=</span> <span class="st">"inequality_pairwise"</span>,</span>
+<span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Parameter         | Mean Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------</span></span>
+<span><span class="co">#&gt; Group 1 - Group 2 |   1.86 (-4.82, 8.53) | 0.585</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: time</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>As we see, the difference in slopes is not statistically
+significant.</p>
 </div>
 </div>
 <div class="section level2">
@@ -541,13 +584,46 @@ or over time.</li>
 <p>This approach aligns statistical practice with the theoretical
 concept of group-based disparities, providing a clearer and more
 comprehensive understanding of how social categories shape outcomes.</p>
-<div class="section level3">
-<h3 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="formula-interface">Formula interface<a class="anchor" aria-label="anchor" href="#formula-interface"></a>
+</h2>
+<p>The <code>modelbased</code> package also allows you to compute these
+inequalities using a formula interface for the <code>comparison</code>
+argument. The following table summarizes the available options for
+computing inequalities using the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
+function with a formula interface:</p>
+<table class="table">
+<thead><tr class="header">
+<th align="left">String option</th>
+<th align="left">Formula</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td align="left"><code>"inequality"</code></td>
+<td align="left"><code>~inequality</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>"inequality_pairwise"</code></td>
+<td align="left"><code>inequality ~ pairwise</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>"inequality_ratio"</code></td>
+<td align="left"><code>ratio ~ inequality</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>"inequality_ratio_pairwise"</code></td>
+<td align="left"><code>ratio ~ inequality + pairwise</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
 <p>Mize, T. D., &amp; Han, B. (2025). Inequality and Total Effect
 Summary Measures for Nominal and Ordinal Variables. <em>Sociological
 Science, 12</em>, 115-157.</p>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

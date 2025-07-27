@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.9</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -243,8 +243,11 @@ marginal effect inequality measures, also known as <em>relative inequality</em>.
 This is useful to compare the relative effects of different predictors on
 the dependent variable. It provides a measure of how much more or less
 inequality one predictor has compared to another.
-<code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
-comparisons) between marginal effects inequality measures.</p></li>
+<code>comparison = "inequality_pairwise"</code> computes pairwise differences of
+absolute inequality measures, while <code>"inequality_ratio_pairwise"</code>
+computes pairwise differences of relative inequality measures (ratios).
+See an overview of applications in the related case study in the
+<a href="https://easystats.github.io/modelbased/articles/practical_inequalities.html">vignettes</a>.</p></li>
 <li><p>String equation: To identify parameters from the output, either specify
 the term name, or <code>"b1"</code>, <code>"b2"</code> etc. to indicate rows, e.g.:<code>"hp = drat"</code>,
 <code>"b1 = b2"</code>, or <code>"b1 + b2 + b3 = 0"</code>.</p></li>
@@ -483,11 +486,14 @@ to compare the relative effects of different predictors on the dependent
 variable. It provides a measure of how much more or less inequality one
 predictor has
 compared to another.</p></li>
-<li><p><code>comparison = "inequality_pairwise"</code> computes the difference (pairwise
-comparisons) between marginal effects inequality measures. Depending on the
-sign, this measure indicates which of the predictors has a stronger impact
-on the dependent variable in terms of inequalities.</p></li>
-</ul></div>
+<li><p><code>comparison = "inequality_pairwise"</code> computes pairwise differences of
+absolute inequality measures, while <code>"inequality_ratio_pairwise"</code> computes
+pairwise differences of relative inequality measures (ratios). Depending on
+the sign, this measure indicates which of the predictors has a stronger
+impact on the dependent variable in terms of inequalities.</p></li>
+</ul><p>Examples for analysing inequalities are shown in the related
+<a href="https://easystats.github.io/modelbased/articles/practical_inequalities.html">vignette</a>.</p>
+    </div>
     <div class="section level2">
     <h2 id="effect-size">Effect Size<a class="anchor" aria-label="anchor" href="#effect-size"></a></h2>
 
@@ -598,7 +604,9 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Basic usage</span></span></span>
+<span class="r-in"><span><span class="co"># Basic usage --------------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># --------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">Sepal.Width</span> <span class="op">~</span> <span class="va">Species</span>, data <span class="op">=</span> <span class="va">iris</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> We selected `contrast=c("Species")`.</span>
@@ -762,8 +770,116 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># contrasts of slopes ------------------------</span></span></span>
+<span class="r-in"><span><span class="co"># --------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">qol_cancer</span>, package <span class="op">=</span> <span class="st">"parameters"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">grp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">qol_cancer</span><span class="op">$</span><span class="va">ID</span> <span class="op">&lt;</span> <span class="fl">100</span>, <span class="st">"Group 1"</span>, <span class="st">"Group 2"</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">QoL</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">education</span> <span class="op">*</span> <span class="va">grp</span>, data <span class="op">=</span> <span class="va">qol_cancer</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># "time" only has integer values and few values, so it's treated like a factor</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | education | Difference |   SE |          95% CI | t(552) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ----------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      | 1      | low       |      -1.74 | 2.24 | [ -6.13,  2.66] |  -0.78 | 0.438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 1      | low       |      -3.47 | 4.47 | [-12.26,  5.32] |  -0.78 | 0.438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 2      | low       |      -1.74 | 2.24 | [ -6.13,  2.66] |  -0.78 | 0.438</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      | 1      | mid       |       1.06 | 1.32 | [ -1.54,  3.66] |   0.80 | 0.424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 1      | mid       |       2.12 | 2.65 | [ -3.08,  7.31] |   0.80 | 0.424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 2      | mid       |       1.06 | 1.32 | [ -1.54,  3.66] |   0.80 | 0.424</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      | 1      | high      |       3.02 | 1.95 | [ -0.81,  6.85] |   1.55 | 0.122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 1      | high      |       6.04 | 3.90 | [ -1.62, 13.71] |   1.55 | 0.122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3      | 2      | high      |       3.02 | 1.95 | [ -0.81,  6.85] |   1.55 | 0.122</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: time</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: grp</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># we set `integer_as_numeric = 1` to treat integer predictors as numeric</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span>, integer_as_numeric <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ---------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid    | low    |       2.79 | 2.60 | [-2.31,  7.90] |   1.07 | 0.283</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   | low    |       4.76 | 2.98 | [-1.09, 10.60] |   1.60 | 0.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high   | mid    |       1.96 | 2.36 | [-2.68,  6.60] |   0.83 | 0.406</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: time</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: time (2), grp</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># pairwise comparisons for multiple groups</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Level1        | Level2        | Difference |   SE |          95% CI | t(552) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> low, Group 2  | low, Group 1  |       9.95 | 4.48 | [  1.16, 18.75] |   2.22 | 0.027</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid, Group 1  | low, Group 1  |       7.11 | 3.67 | [ -0.09, 14.31] |   1.94 | 0.053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid, Group 2  | low, Group 1  |       8.43 | 3.69 | [  1.18, 15.68] |   2.28 | 0.023</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 1 | low, Group 1  |       6.71 | 4.05 | [ -1.24, 14.67] |   1.66 | 0.098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 2 | low, Group 1  |      12.75 | 4.36 | [  4.19, 21.32] |   2.92 | 0.004</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid, Group 1  | low, Group 2  |      -2.84 | 3.67 | [-10.05,  4.37] |  -0.77 | 0.439</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid, Group 2  | low, Group 2  |      -1.53 | 3.68 | [ -8.75,  5.70] |  -0.41 | 0.679</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 1 | low, Group 2  |      -3.24 | 4.04 | [-11.17,  4.69] |  -0.80 | 0.422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 2 | low, Group 2  |       2.80 | 4.37 | [ -5.77, 11.38] |   0.64 | 0.521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid, Group 2  | mid, Group 1  |       1.32 | 2.64 | [ -3.87,  6.50] |   0.50 | 0.619</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 1 | mid, Group 1  |      -0.40 | 3.12 | [ -6.53,  5.73] |  -0.13 | 0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 2 | mid, Group 1  |       5.64 | 3.53 | [ -1.30, 12.58] |   1.60 | 0.111</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 1 | mid, Group 2  |      -1.72 | 3.13 | [ -7.87,  4.44] |  -0.55 | 0.584</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 2 | mid, Group 2  |       4.33 | 3.54 | [ -2.63, 11.29] |   1.22 | 0.223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high, Group 2 | high, Group 1 |       6.04 | 3.91 | [ -1.64, 13.73] |   1.54 | 0.123</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: time</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: time (2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># if we want pairwise comparisons only for one factor, but group by another,</span></span></span>
+<span class="r-in"><span><span class="co"># we need the formula specification and define the grouping variable after</span></span></span>
+<span class="r-in"><span><span class="co"># the vertical bar</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  <span class="va">model</span>,</span></span>
+<span class="r-in"><span>  <span class="st">"time"</span>,</span></span>
+<span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  comparison <span class="op">=</span> <span class="op">~</span><span class="va">pairwise</span> <span class="op">|</span> <span class="va">grp</span>,</span></span>
+<span class="r-in"><span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Parameter  | grp     | Difference |   SE |         95% CI | t(552) |     p</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> --------------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid - low  | Group 1 |       7.11 | 3.67 | [-0.09, 14.31] |   1.94 | 0.053</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - low | Group 1 |       6.71 | 4.05 | [-1.24, 14.67] |   1.66 | 0.098</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - mid | Group 1 |      -0.40 | 3.12 | [-6.53,  5.73] |  -0.13 | 0.898</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> mid - low  | Group 2 |      -1.53 | 3.68 | [-8.75,  5.70] |  -0.41 | 0.679</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - low | Group 2 |       2.80 | 4.37 | [-5.77, 11.38] |   0.64 | 0.521</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> high - mid | Group 2 |       4.33 | 3.54 | [-2.63, 11.29] |   1.22 | 0.223</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: QoL</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors contrasted: time</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: time (2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># custom factor contrasts - contrasts the average effects of two levels</span></span></span>
 <span class="r-in"><span><span class="co"># against the remaining third level</span></span></span>
+<span class="r-in"><span><span class="co"># ---------------------------------------------------------------------</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">puppy_love</span>, package <span class="op">=</span> <span class="st">"modelbased"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">cond_tx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">cbind</a></span><span class="op">(</span><span class="st">"no treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span>, <span class="st">"treatment"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">happiness</span> <span class="op">~</span> <span class="va">puppy_love</span> <span class="op">*</span> <span class="va">dose</span>, data <span class="op">=</span> <span class="va">puppy_love</span><span class="op">)</span></span></span>
@@ -777,7 +893,8 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Marginal effects estimated for puppy_love</span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...)</span></span></span>
+<span class="r-in"><span><span class="co"># Other models (mixed, Bayesian, ...) --------</span></span></span>
+<span class="r-in"><span><span class="co"># --------------------------------------------</span></span></span>
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">iris</span></span></span>
 <span class="r-in"><span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length_factor</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">Petal.Length</span> <span class="op">&lt;</span> <span class="fl">4.2</span>, <span class="st">"A"</span>, <span class="st">"B"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
