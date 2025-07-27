@@ -49,7 +49,7 @@
 #'     the dependent variable. It provides a measure of how much more or less
 #'     inequality one predictor has compared to another.
 #'     `comparison = "inequality_pairwise"` computes pairwise differences of
-#'     absolute inequality measures, while `"inequality_pairwise_ratio"`
+#'     absolute inequality measures, while `"inequality_ratio_pairwise"`
 #'     computes pairwise differences of relative inequality measures (ratios).
 #'     See an overview of applications in the related case study in the
 #'     [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
@@ -132,7 +132,7 @@
 #'   predictor has
 #'   compared to another.
 #' - `comparison = "inequality_pairwise"` computes pairwise differences of
-#'   absolute inequality measures, while `"inequality_pairwise_ratio"` computes
+#'   absolute inequality measures, while `"inequality_ratio_pairwise"` computes
 #'   pairwise differences of relative inequality measures (ratios). Depending on
 #'   the sign, this measure indicates which of the predictors has a stronger
 #'   impact on the dependent variable in terms of inequalities.

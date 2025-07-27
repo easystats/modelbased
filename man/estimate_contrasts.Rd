@@ -138,7 +138,7 @@ This is useful to compare the relative effects of different predictors on
 the dependent variable. It provides a measure of how much more or less
 inequality one predictor has compared to another.
 \code{comparison = "inequality_pairwise"} computes pairwise differences of
-absolute inequality measures, while \code{"inequality_pairwise_ratio"}
+absolute inequality measures, while \code{"inequality_ratio_pairwise"}
 computes pairwise differences of relative inequality measures (ratios).
 See an overview of applications in the related case study in the
 \href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
@@ -377,7 +377,7 @@ variable. It provides a measure of how much more or less inequality one
 predictor has
 compared to another.
 \item \code{comparison = "inequality_pairwise"} computes pairwise differences of
-absolute inequality measures, while \code{"inequality_pairwise_ratio"} computes
+absolute inequality measures, while \code{"inequality_ratio_pairwise"} computes
 pairwise differences of relative inequality measures (ratios). Depending on
 the sign, this measure indicates which of the predictors has a stronger
 impact on the dependent variable in terms of inequalities.
