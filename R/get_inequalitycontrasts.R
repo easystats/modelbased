@@ -96,16 +96,15 @@ get_inequalitycontrasts <- function(
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      f1 <- stats::as.formula(paste(c("ratio ~ pairwise", my_args$by), collapse = " | "))
-      f2 <- stats::as.formula(paste(c("~I(mean(abs(x)))", my_args$by), collapse = " | "))
+      formulas <- .inequality_formula(comparison, my_args$by)
 
       out <- marginaleffects::avg_predictions(
         model = model,
         variables = c(my_args$contrast, my_args$by),
         newdata = datagrid,
-        hypothesis = f1
+        hypothesis = formulas$f1
       )
-      out <- marginaleffects::hypotheses(out, hypothesis = f2)
+      out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     } else {
       # ----------------------------------------------
       # absolute inequality measures -----------------
