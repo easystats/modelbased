@@ -33,13 +33,7 @@ get_inequalitycontrasts <- function(
   # -----------------------------------------------------------
 
   if (compute_slopes) {
-    # marginal effects inequalities for slopes. This does not yet support the
-    # "inequality_pairwise" option
-    if (comparison == "inequality_pairwise") {
-      insight::format_error(
-        "`comparison = \"inequality_pairwise\"` is not supported for contrasts of slopes."
-      )
-    }
+    # marginal effects inequalities for slopes.
     # we need a `by` argument, otherwise, pairwise comparisons of slopes for all
     # combinations of values of the `trend` variable would be calculated.
     if (is.null(my_args$by) || !length(my_args$by)) {
@@ -47,12 +41,20 @@ get_inequalitycontrasts <- function(
         "`by` argument must be specified for `comparison = \"inequality\"`."
       )
     }
-    # specify the pairwise contrasts for the hypothesis argument
-    hypothesis_formula <- switch(
-      comparison,
-      inequality = ~ pairwise,
-      inequality_ratio = ratio ~ pairwise
-    )
+    # currently, we only support one grouping variable
+    if (length(my_args$by) > 2) {
+      insight::format_error(
+        "`by` can only contain one or two variables for `comparison = \"inequality\"`."
+      )
+    }
+    # setup hypothesis formulas
+    if (length(my_args$by) > 1) {
+      group <- my_args$by[2]
+    } else {
+      group <- NULL
+    }
+    formulas <- .inequality_formula(comparison, group)
+
     # unlike for categorical predictors, we have to use avg_slopes() here, because
     # `avg_comparisons()` does not support defining the `variables` argument as
     # named list, which we need to specify the pairwise-contrasts. However, we
@@ -63,9 +65,9 @@ get_inequalitycontrasts <- function(
       variables = my_args$contrast,
       by = my_args$by,
       newdata = datagrid,
-      hypothesis = hypothesis_formula
+      hypothesis = formulas$f1
     )
-    out <- marginaleffects::hypotheses(out, hypothesis = ~ I(mean(abs(x))))
+    out <- marginaleffects::hypotheses(out, hypothesis = formulas$f2)
     # save some labels for printing
     attr(out, "trend") <- my_args$contrast
     attr(out, "compute_slopes") <- TRUE
@@ -94,13 +96,9 @@ get_inequalitycontrasts <- function(
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      if (is.null(my_args$by) || !length(my_args$by)) {
-        f1 <- ratio ~ pairwise
-        f2 <- ~I(mean(abs(x)))
-      } else {
-        f1 <- stats::as.formula(paste("ratio ~ pairwise |", my_args$by))
-        f2 <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
-      }
+      f1 <- stats::as.formula(paste(c("ratio ~ pairwise", my_args$by), collapse = " | "))
+      f2 <- stats::as.formula(paste(c("~I(mean(abs(x)))", my_args$by), collapse = " | "))
+
       out <- marginaleffects::avg_predictions(
         model = model,
         variables = c(my_args$contrast, my_args$by),
@@ -152,6 +150,23 @@ get_inequalitycontrasts <- function(
   attr(out, "hypothesis_by") <- my_args$by
   class(out) <- unique(c("marginaleffects_means", class(out)))
   format(out, model, ci, hypothesis = comparison, ...)
+}
+
+
+# setup hypothesis formula  ------------------------------------------
+# --------------------------------------------------------------------
+
+.inequality_formula <- function(comparison, group = NULL) {
+  # specify the pairwise contrasts for the hypothesis argument
+  f1 <- switch(
+    comparison,
+    inequality_pairwise = ,
+    inequality = stats::as.formula(paste(c("~ pairwise", group), collapse = " | ")),
+    inequality_ratio_pairwise = ,
+    inequality_ratio = stats::as.formula(paste(c("ratio ~ pairwise", group), collapse = " | ")),
+  )
+  f2 <- stats::as.formula(paste(c("~ I(mean(abs(x)))", group), collapse = " | "))
+  list(f1, f2)
 }
 
 
