@@ -51,6 +51,8 @@
 #'     `comparison = "inequality_pairwise"` computes pairwise differences of
 #'     absolute inequality measures, while `"inequality_pairwise_ratio"`
 #'     computes pairwise differences of relative inequality measures (ratios).
+#'     See an overview of applications in the related case study in the
+#'     [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -134,6 +136,9 @@
 #'   pairwise differences of relative inequality measures (ratios). Depending on
 #'   the sign, this measure indicates which of the predictors has a stronger
 #'   impact on the dependent variable in terms of inequalities.
+#'
+#' Examples for analysing inequalities are shown in the related
+#' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'
 #' @section Effect Size:
 #'
