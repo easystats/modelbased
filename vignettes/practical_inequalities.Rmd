@@ -313,8 +313,10 @@ The `modelbased` package also allows you to compute these inequalities using a f
 | String option | Formula |
 | :--- | :--- |
 | `"inequality"` | `~inequality` |
+| `"inequality_trend"` | `~inequality + trend` |
 | `"inequality_pairwise"` | `inequality ~ pairwise` |
 | `"inequality_ratio"` | `ratio ~ inequality` |
+| `"inequality_ratio_trend"` | `ratio ~ inequality + trend` |
 | `"inequality_ratio_pairwise"` | `ratio ~ inequality + pairwise` |
 
 ## References

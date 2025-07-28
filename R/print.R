@@ -83,6 +83,8 @@ print.estimate_contrasts <- function(x,
   colnames(x)[colnames(x) == "Mean_Ratio_Difference"] <- "Mean Ratio Difference"
   colnames(x)[colnames(x) == "Mean_Difference"] <- "Mean Difference"
   colnames(x)[colnames(x) == "Mean_Ratio"] <- "Mean Ratio"
+  colnames(x)[colnames(x) == "Mean_Ratio_Slope"] <- "Slope"
+  colnames(x)[colnames(x) == "Mean_Difference_Slope"] <- "Slope"
 
   # copy original
   out <- x

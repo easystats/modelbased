@@ -401,7 +401,8 @@ get_marginalcontrasts <- function(
     "pairwise", "reference", "sequential", "meandev", "meanotherdev",
     "revpairwise", "revreference", "revsequential", "poly", "helmert",
     "trt_vs_ctrl", "joint", "inequality", "inequality_pairwise",
-    "inequality_ratio", "inequality_ratio_pairwise"
+    "inequality_ratio", "inequality_ratio_pairwise", "inequality_trend",
+    "inequality_ratio_trend"
   )
 }
 

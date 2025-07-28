@@ -146,8 +146,10 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   if (.is_inequality_comparison(comparison)) {
     estimate_name <- switch(
       comparison,
+      inequality_ratio_trend = "Mean_Ratio_Slope",
       inequality_ratio_pairwise = "Mean_Ratio_Difference",
       inequality_ratio = "Mean_Ratio",
+      inequality_trend = "Mean_Difference_Slope",
       "Mean_Difference"
     )
     # for inequality analysis, we want to keep the stratification variable
