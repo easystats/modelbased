@@ -134,6 +134,15 @@
 
     
     
+<style type="text/css">
+.custom_note {
+  border-left: solid 5px hsl(220, 100%, 30%);
+  background-color: hsl(220, 100%, 95%);
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: 0.9em;
+}
+</style>
 <div class="section level2">
 <h2 id="introduction-why-summarize-effects">1. Introduction: Why Summarize Effects?<a class="anchor" aria-label="anchor" href="#introduction-why-summarize-effects"></a>
 </h2>
@@ -222,7 +231,7 @@ groups.</p>
 <span></span>
 <span><span class="co"># Plot the means</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
+<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-5-1.png" width="100%"></p>
 <p>The plot shows that individuals with higher education report a higher
 QoL, and these gaps appear to widen over time. Our inequality measures
 will quantify this “average gap.”</p>
@@ -376,7 +385,7 @@ two different treatment centers or demographic groups.</p>
 <span></span>
 <span><span class="co"># Show plots side-by-side</span></span>
 <span><span class="va">p1</span> <span class="op">+</span> <span class="va">p2</span></span></code></pre></div>
-<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-9-1.png" width="100%"></p>
+<p><img src="practical_inequalities_files/figure-html/unnamed-chunk-10-1.png" width="100%"></p>
 <p>The visual gap between education levels appears larger in Group 1.
 Let’s confirm this by calculating the absolute inequality for each
 group.</p>
@@ -578,14 +587,19 @@ in inequality directly.</p>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: time</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
-<blockquote>
-<p>In the above example, we set <code>integer_as_numeric = 1</code> to
+<div class="custom_note">
+<p>
+In the above example, we set <code>integer_as_numeric = 1</code> to
 ensure that the time variable is treated as numeric, allowing us to
 calculate the slope differences correctly. By default, numeric variables
 with only a few integer values are treated as “categorical”, or integer
-variables, which would not calculate the slope of the continuous
-<code>time</code> variable.</p>
-</blockquote>
+variables, which would rather calculate contrasts for each time point
+and not the slope of a continuous <code>time</code> variable. See also
+<a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html">documentation
+of <code>estimate_contrasts()</code></a> for more details, especially
+the <code>...</code> argument and the examples.
+</p>
+</div>
 <p>The mean difference in slopes is 4.74 in Group 1. This indicates that
 the rate of change in QoL differs, on average, by 4.74 points per unit
 of time between any two categories of the education groups. Inequalities
