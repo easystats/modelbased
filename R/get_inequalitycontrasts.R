@@ -87,12 +87,15 @@ get_inequalitycontrasts <- function(
       )
     }
 
+    # define the grouping variable for the inequality measures
+    group <- my_args$by[length(my_args$by)]
+
     if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      formulas <- .inequality_formula(comparison, my_args$by[length(my_args$by)])
+      formulas <- .inequality_formula(comparison, group)
 
       out <- marginaleffects::avg_predictions(
         model = model,
@@ -112,7 +115,7 @@ get_inequalitycontrasts <- function(
       if (is.null(my_args$by) || !length(my_args$by)) {
         f <- ~ I(mean(abs(x))) | term
       } else {
-        f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by[length(my_args$by)]))
+        f <- stats::as.formula(paste("~I(mean(abs(x))) |", group))
       }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
@@ -128,7 +131,6 @@ get_inequalitycontrasts <- function(
         ...
       )
     }
-    group <- my_args$by[length(my_args$by)]
   }
 
   # -----------------------------------------------------------------
