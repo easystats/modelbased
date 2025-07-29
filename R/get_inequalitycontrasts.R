@@ -117,6 +117,10 @@ get_inequalitycontrasts <- function(
       } else {
         f <- stats::as.formula(paste("~I(mean(abs(x))) |", group))
       }
+      # update "by" if necessary
+      if (is.null(my_args$by)) {
+        my_args$by <- TRUE
+      }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
       out <- marginaleffects::avg_comparisons(
@@ -125,7 +129,7 @@ get_inequalitycontrasts <- function(
           rep_len("pairwise", length(my_args$contrast)),
           my_args$contrast
         )),
-        by = ifelse(is.null(my_args$by), TRUE, my_args$by),
+        by = my_args$by,
         newdata = datagrid,
         hypothesis = f,
         ...
