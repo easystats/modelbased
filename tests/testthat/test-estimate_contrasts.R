@@ -1080,7 +1080,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
 
   m <- glm(long_bill ~ species * sex * island + bill_dep, data = penguins, family = "binomial")
   out <- suppressWarnings(estimate_contrasts(
-    m, "species", by = c("island", "sex"), comparison = "inequality")
+    m, "species", by = c("island", "sex"), comparison = "inequality"
   ))
   expect_equal(
     out$Mean_Difference,
