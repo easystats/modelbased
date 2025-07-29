@@ -1078,10 +1078,19 @@ test_that("estimate_contrast, marginal effects inequalities", {
     regex = "All variables specified"
   )
 
-  m <- glm(long_bill ~ species + island + sex + bill_dep, data = penguins, family = "binomial")
+  m <- glm(long_bill ~ species * sex * island + bill_dep, data = penguins, family = "binomial")
+  out <- suppressWarnings(estimate_contrasts(
+    m, "species", by = c("island", "sex"), comparison = "inequality")
+  ))
+  expect_equal(
+    out$Mean_Difference,
+    c(0.6537358, 0.6634438),
+    tolerance = 1e-4
+  )
   expect_error(
-    estimate_contrasts(m, "species", by = c("island", "sex"), comparison = "inequality"),
-    regex = "can only contain one variable"
+    estimate_contrasts(m, "species", by = c("island", "sex", "bill_dep"), comparison = "inequality"),
+    regex = "`by` can only contain",
+    fixed = TRUE
   )
 
   m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
