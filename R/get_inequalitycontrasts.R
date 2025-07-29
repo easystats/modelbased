@@ -28,6 +28,13 @@ get_inequalitycontrasts <- function(
     )
   }
 
+  # currently, we only support one grouping variable
+  if (!is.null(my_args$by) && length(my_args$by) > 2) {
+    insight::format_error(
+      "`by` can only contain one or two variables for `comparison = \"inequality\"`."
+    )
+  }
+
   # -----------------------------------------------------------
   # inequality comparisons for slopes -------------------------
   # -----------------------------------------------------------
@@ -39,12 +46,6 @@ get_inequalitycontrasts <- function(
     if (is.null(my_args$by) || !length(my_args$by)) {
       insight::format_error(
         "`by` argument must be specified for `comparison = \"inequality\"`."
-      )
-    }
-    # currently, we only support one grouping variable
-    if (length(my_args$by) > 2) {
-      insight::format_error(
-        "`by` can only contain one or two variables for `comparison = \"inequality\"`."
       )
     }
     # setup hypothesis formulas
@@ -85,19 +86,13 @@ get_inequalitycontrasts <- function(
         "All variables specified in `contrast` must be factors for `comparison = \"inequality\"`."
       )
     }
-    # sanity check - by can only be one variable
-    if (!is.null(my_args$by) && length(my_args$by) > 1) {
-      insight::format_error(
-        "`by` can only contain one variable for `comparison = \"inequality\"`."
-      )
-    }
 
     if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      formulas <- .inequality_formula(comparison, my_args$by)
+      formulas <- .inequality_formula(comparison, my_args$by[length(my_args$by)])
 
       out <- marginaleffects::avg_predictions(
         model = model,
@@ -117,7 +112,7 @@ get_inequalitycontrasts <- function(
       if (is.null(my_args$by) || !length(my_args$by)) {
         f <- ~ I(mean(abs(x))) | term
       } else {
-        f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
+        f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by[length(my_args$by)]))
       }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
@@ -133,7 +128,7 @@ get_inequalitycontrasts <- function(
         ...
       )
     }
-    group <- my_args$by
+    group <- my_args$by[length(my_args$by)]
   }
 
   # -----------------------------------------------------------------
