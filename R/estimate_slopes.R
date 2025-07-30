@@ -60,6 +60,16 @@
 #' slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 #' slopes
 #'
+#' # What is the *average* slope of Petal.Length? This can be calculated by
+#' # taking the average of the slopes across all Species, using `comparison`.
+#' # We pass a function to `comparison` that calculates the mean of the slopes.
+#' estimate_slopes(
+#'   model,
+#'   trend = "Petal.Length",
+#'   by = "Species",
+#'   comparison = ~I(mean(x))
+#' )
+#'
 #' \dontrun{
 #' # Plot it
 #' plot(slopes)
