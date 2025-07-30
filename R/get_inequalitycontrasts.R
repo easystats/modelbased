@@ -35,6 +35,16 @@ get_inequalitycontrasts <- function(
     )
   }
 
+  # define grouping variable for marginal effects inequalities. For slopes,
+  # we only use the grouping variable if we have at least two variables in `by`.
+  # If we have inequality comparisons for categorical focal terms, we use the
+  # last `by` variable
+  if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
+    group <- NULL
+  } else {
+    group <- my_args$by[length(my_args$by)]
+  }
+
   # -----------------------------------------------------------
   # inequality comparisons for slopes -------------------------
   # -----------------------------------------------------------
@@ -47,12 +57,6 @@ get_inequalitycontrasts <- function(
       insight::format_error(
         "`by` argument must be specified for `comparison = \"inequality\"`."
       )
-    }
-    # setup hypothesis formulas
-    if (length(my_args$by) > 1) {
-      group <- my_args$by[2]
-    } else {
-      group <- NULL
     }
     formulas <- .inequality_formula(comparison, group)
 
@@ -87,9 +91,6 @@ get_inequalitycontrasts <- function(
       )
     }
 
-    # define the grouping variable for the inequality measures
-    group <- my_args$by[length(my_args$by)]
-
     if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
@@ -112,11 +113,8 @@ get_inequalitycontrasts <- function(
       # setup formula for hypothesis argument. use "term" as grouping variable
       # when we don't have a "by" argument, else use the "by" argument as grouping
       # variable
-      if (is.null(my_args$by) || !length(my_args$by)) {
-        f <- ~ I(mean(abs(x))) | term
-      } else {
-        f <- stats::as.formula(paste("~I(mean(abs(x))) |", group))
-      }
+      formulas <- .inequality_formula(comparison, group, "term")
+
       # update "by" if necessary
       if (is.null(my_args$by)) {
         my_args$by <- TRUE
@@ -131,7 +129,7 @@ get_inequalitycontrasts <- function(
         )),
         by = my_args$by,
         newdata = datagrid,
-        hypothesis = f,
+        hypothesis = formulas$f2,
         ...
       )
     }
@@ -158,7 +156,12 @@ get_inequalitycontrasts <- function(
 # setup hypothesis formula  ------------------------------------------
 # --------------------------------------------------------------------
 
-.inequality_formula <- function(comparison, group = NULL) {
+.inequality_formula <- function(comparison, group = NULL, alternative = NULL) {
+  # for some special cases, "group" cannot be NULL, but must be an alternative
+  # string
+  if (is.null(group) && !is.null(alternative)) {
+    group <- alternative
+  }
   # specify the pairwise contrasts for the hypothesis argument
   f1 <- switch(
     comparison,
