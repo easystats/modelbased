@@ -35,10 +35,12 @@ get_inequalitycontrasts <- function(
     )
   }
 
-  # define grouping variable for marginal effects inequalities. For slopes,
-  # we only use the grouping variable if we have at least two variables in `by`.
-  # If we have inequality comparisons for categorical focal terms, we use the
-  # last `by` variable
+  # Define the grouping variable for marginal effects inequalities:
+  # - For slopes: The grouping variable is used only if there are at least two
+  #   variables in `by`. This ensures pairwise comparisons of slopes are calculated
+  #   across the specified groups.
+  # - For categorical focal terms: The grouping variable is always set to the last
+  #   variable in `by`, as it defines the categories for inequality comparisons.
   if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
     group <- NULL
   } else {
