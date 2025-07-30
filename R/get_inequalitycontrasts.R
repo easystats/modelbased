@@ -44,6 +44,12 @@ get_inequalitycontrasts <- function(
   if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
     group <- NULL
   } else {
+    # For inequality comparisons, we usually average over all categories of the
+    # focal predictors and only use one grouping variable. Sometimes, if we want
+    # to include a second variable, but don't want to include it for pairwise
+    # comparisons, we can use the `by` argument to specify the grouping variable.
+    # In such cases, the first `by` variable is also averaged over, and only the
+    # second `by` variable is used for grouping.
     group <- my_args$by[length(my_args$by)]
   }
 
@@ -117,7 +123,9 @@ get_inequalitycontrasts <- function(
       # variable
       formulas <- .inequality_formula(comparison, group, "term")
 
-      # update "by" if necessary
+      # update "by" if necessary - we don't use "ifelse()" here, because if
+      # my_args$by is a vector of length > 1, we want to keep it as is. `ifelse()`
+      # would vectorize and only return the first element.
       if (is.null(my_args$by)) {
         my_args$by <- TRUE
       }
