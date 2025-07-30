@@ -28,6 +28,31 @@ get_inequalitycontrasts <- function(
     )
   }
 
+  # `by` can contain one or two variables for inequality comparisons
+  if (!is.null(my_args$by) && length(my_args$by) > 2) {
+    insight::format_error(
+      "`by` can only contain one or two variables for `comparison = \"inequality\"`."
+    )
+  }
+
+  # Define the grouping variable for marginal effects inequalities:
+  # - For slopes: The grouping variable is used only if there are at least two
+  #   variables in `by`. This ensures pairwise comparisons of slopes are calculated
+  #   across the specified groups.
+  # - For categorical focal terms: The grouping variable is always set to the last
+  #   variable in `by`, as it defines the categories for inequality comparisons.
+  if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
+    group <- NULL
+  } else {
+    # For inequality comparisons, we usually average over all categories of the
+    # focal predictors and only use one grouping variable. Sometimes, if we want
+    # to include a second variable, but don't want to include it for pairwise
+    # comparisons, we can use the `by` argument to specify the grouping variable.
+    # In such cases, the first `by` variable is also averaged over, and only the
+    # second `by` variable is used for grouping.
+    group <- my_args$by[length(my_args$by)]
+  }
+
   # -----------------------------------------------------------
   # inequality comparisons for slopes -------------------------
   # -----------------------------------------------------------
@@ -40,18 +65,6 @@ get_inequalitycontrasts <- function(
       insight::format_error(
         "`by` argument must be specified for `comparison = \"inequality\"`."
       )
-    }
-    # currently, we only support one grouping variable
-    if (length(my_args$by) > 2) {
-      insight::format_error(
-        "`by` can only contain one or two variables for `comparison = \"inequality\"`."
-      )
-    }
-    # setup hypothesis formulas
-    if (length(my_args$by) > 1) {
-      group <- my_args$by[2]
-    } else {
-      group <- NULL
     }
     formulas <- .inequality_formula(comparison, group)
 
@@ -85,19 +98,13 @@ get_inequalitycontrasts <- function(
         "All variables specified in `contrast` must be factors for `comparison = \"inequality\"`."
       )
     }
-    # sanity check - by can only be one variable
-    if (!is.null(my_args$by) && length(my_args$by) > 1) {
-      insight::format_error(
-        "`by` can only contain one variable for `comparison = \"inequality\"`."
-      )
-    }
 
     if (comparison %in% c("inequality_ratio", "inequality_ratio_pairwise")) {
       # ----------------------------------------------
       # relative inequality measures -----------------
       # ----------------------------------------------
 
-      formulas <- .inequality_formula(comparison, my_args$by)
+      formulas <- .inequality_formula(comparison, group)
 
       out <- marginaleffects::avg_predictions(
         model = model,
@@ -114,10 +121,13 @@ get_inequalitycontrasts <- function(
       # setup formula for hypothesis argument. use "term" as grouping variable
       # when we don't have a "by" argument, else use the "by" argument as grouping
       # variable
-      if (is.null(my_args$by) || !length(my_args$by)) {
-        f <- ~ I(mean(abs(x))) | term
-      } else {
-        f <- stats::as.formula(paste("~I(mean(abs(x))) |", my_args$by))
+      formulas <- .inequality_formula(comparison, group, "term")
+
+      # update "by" if necessary - we don't use "ifelse()" here, because if
+      # my_args$by is a vector of length > 1, we want to keep it as is. `ifelse()`
+      # would vectorize and only return the first element.
+      if (is.null(my_args$by)) {
+        my_args$by <- TRUE
       }
       # for this special case, we need "avg_comparisons()", else we cannot specify
       # the "variables" argument as named list
@@ -127,13 +137,12 @@ get_inequalitycontrasts <- function(
           rep_len("pairwise", length(my_args$contrast)),
           my_args$contrast
         )),
-        by = ifelse(is.null(my_args$by), TRUE, my_args$by),
+        by = my_args$by,
         newdata = datagrid,
-        hypothesis = f,
+        hypothesis = formulas$f2,
         ...
       )
     }
-    group <- my_args$by
   }
 
   # -----------------------------------------------------------------
@@ -157,7 +166,12 @@ get_inequalitycontrasts <- function(
 # setup hypothesis formula  ------------------------------------------
 # --------------------------------------------------------------------
 
-.inequality_formula <- function(comparison, group = NULL) {
+.inequality_formula <- function(comparison, group = NULL, alternative = NULL) {
+  # for some special cases, "group" cannot be NULL, but must be an alternative
+  # string
+  if (is.null(group) && !is.null(alternative)) {
+    group <- alternative
+  }
   # specify the pairwise contrasts for the hypothesis argument
   f1 <- switch(
     comparison,
