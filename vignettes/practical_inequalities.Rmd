@@ -269,13 +269,13 @@ estimate_contrasts(
   contrast = "time",
   by = c("education", "grp"),
   comparison = "inequality",
-  integer_as_numeric = 1
+  integer_as_continuous = TRUE
 )
 ```
 
 <div class="custom_note">
   <p>
-    In the above example, we set `integer_as_numeric = 1` to ensure that the time variable is treated as numeric, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "categorical", or integer variables, which would rather calculate contrasts for each time point and not the slope of a continuous `time` variable. See also [documentation of `estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html) for more details, especially the `...` argument and the examples.
+    In the above example, we set `integer_as_continuous = TRUE` to ensure that the time variable is treated as continuous, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "discrete" (ordinal-alike), which would rather calculate contrasts for each time point and not the slope of a continuous `time` variable. See also [documentation of `estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html) for more details, especially the `...` argument and the examples.
   </p>
 </div>
 
@@ -290,7 +290,7 @@ estimate_contrasts(
   contrast = "time",
   by = c("education", "grp"),
   comparison = "inequality_pairwise",
-  integer_as_numeric = 1
+  integer_as_continuous = TRUE
 )
 ```
 

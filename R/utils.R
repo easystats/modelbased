@@ -112,28 +112,28 @@
 
 #' @keywords internal
 #' @noRd
-.is_likert <- function(x, integer_as_numeric = 5, verbose = TRUE, ...) {
+.is_likert <- function(x, integer_as_continuous = 5, verbose = TRUE, ...) {
   # check if argument is missing or not - message only shown when missing
-  missing_default <- missing(integer_as_numeric)
+  missing_default <- missing(integer_as_continuous)
 
   # check for global option
   if (!is.null(getOption("modelbased_integer"))) {
-    integer_as_numeric <- getOption("modelbased_integer")
+    integer_as_continuous <- getOption("modelbased_integer")
   }
 
   # no need to check if check is disabled
-  if (is.null(integer_as_numeric) || is.na(integer_as_numeric) || isTRUE(integer_as_numeric)) {
+  if (is.null(integer_as_continuous) || is.na(integer_as_continuous) || isTRUE(integer_as_continuous)) {
     return(FALSE)
   }
 
-  # integer-values, and no more than `integer_as_numeric` unique values?
-  is_likert <- all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
+  # integer-values, and no more than `integer_as_continuous` unique values?
+  is_likert <- all(.is_integer(x)) && insight::n_unique(x) <= integer_as_continuous
 
   # tell user, this handling might not be desired - but only if we have
   # more than 2 unique values, otherwise it's assumed to be a binary variable
   if (is_likert && verbose && missing_default && insight::n_unique(x) > 2) {
     insight::format_alert(
-      "Numeric variable appears to be ordinal or Likert-scale (integer values, no more than 5 unique values) and is treated as discrete variable. Set `integer_as_numeric = TRUE` to disable this check and always treat numeric variables as continuous."
+      "Numeric variable appears to be ordinal or Likert-scale (integer values, no more than 5 unique values) and is treated as discrete variable. Set `integer_as_continuous = TRUE` to disable this check and always treat numeric variables as continuous."
     )
   }
   is_likert

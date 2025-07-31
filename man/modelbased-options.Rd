@@ -19,9 +19,9 @@ calculate marginal means. Can be \code{"marginaleffects"} or \code{"emmeans"}.
 predictions refer to.
 \item \code{modelbased_integer}: \verb{options(modelbased_integer = <value>)} will set the
 minimum number of unique values in an integer predictor to treat that
-predictor as "discrete integer" or as numeric. If the integer has more than
-\code{modelbased_integer} unique values, it is treated as numeric. Set to \code{TRUE}
-to always treat integer predictors as numeric.
+predictor as a "discrete integer" or as continuous. If the integer has more than
+\code{modelbased_integer} unique values, it is treated as continuous. Set to \code{TRUE}
+to always treat integer predictors as continuous.
 }
 
 \strong{For printing}

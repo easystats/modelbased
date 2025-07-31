@@ -53,13 +53,13 @@ Additional arguments can be passed to these functions.
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
-which contrasts should be calculated, use argument \code{integer_as_numeric} to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument \code{integer_as_continuous}
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}. Set to \code{TRUE} to always treat integer predictors as numeric.
+\code{integer_as_continuous} unique values, it is treated as numeric. Defaults
+to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
@@ -537,15 +537,16 @@ model <- lm(QoL ~ time * education * grp, data = qol_cancer)
 # "time" only has integer values and few values, so it's treated like a factor
 estimate_contrasts(model, "time", by = "education")
 
-# we set `integer_as_numeric = 1` to treat integer predictors as numeric
-estimate_contrasts(model, "time", by = "education", integer_as_numeric = 1)
+# we set `integer_as_continuous = TRUE` to treat
+# integer predictors as continuous
+estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
 
 # pairwise comparisons for multiple groups
 estimate_contrasts(
   model,
   "time",
   by = c("education", "grp"),
-  integer_as_numeric = 1
+  integer_as_continuous = TRUE
 )
 
 # if we want pairwise comparisons only for one factor, but group by another,
@@ -556,7 +557,7 @@ estimate_contrasts(
   "time",
   by = c("education", "grp"),
   comparison = ~pairwise | grp,
-  integer_as_numeric = 1
+  integer_as_continuous = TRUE
 )
 
 # custom factor contrasts - contrasts the average effects of two levels

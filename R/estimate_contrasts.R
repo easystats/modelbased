@@ -224,15 +224,16 @@
 #' # "time" only has integer values and few values, so it's treated like a factor
 #' estimate_contrasts(model, "time", by = "education")
 #'
-#' # we set `integer_as_numeric = 1` to treat integer predictors as numeric
-#' estimate_contrasts(model, "time", by = "education", integer_as_numeric = 1)
+#' # we set `integer_as_continuous = TRUE` to treat
+#' # integer predictors as continuous
+#' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
 #'
 #' # pairwise comparisons for multiple groups
 #' estimate_contrasts(
 #'   model,
 #'   "time",
 #'   by = c("education", "grp"),
-#'   integer_as_numeric = 1
+#'   integer_as_continuous = TRUE
 #' )
 #'
 #' # if we want pairwise comparisons only for one factor, but group by another,
@@ -243,7 +244,7 @@
 #'   "time",
 #'   by = c("education", "grp"),
 #'   comparison = ~pairwise | grp,
-#'   integer_as_numeric = 1
+#'   integer_as_continuous = TRUE
 #' )
 #'
 #' # custom factor contrasts - contrasts the average effects of two levels
