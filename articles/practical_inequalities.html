@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -575,7 +575,7 @@ in inequality directly.</p>
 <span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"inequality"</span>,</span>
-<span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span>
+<span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -589,13 +589,13 @@ in inequality directly.</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
 <div class="custom_note">
 <p>
-In the above example, we set <code>integer_as_numeric = 1</code> to
-ensure that the time variable is treated as numeric, allowing us to
-calculate the slope differences correctly. By default, numeric variables
-with only a few integer values are treated as “categorical”, or integer
-variables, which would rather calculate contrasts for each time point
-and not the slope of a continuous <code>time</code> variable. See also
-<a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html">documentation
+In the above example, we set <code>integer_as_continuous = TRUE</code>
+to ensure that the time variable is treated as continuous, allowing us
+to calculate the slope differences correctly. By default, numeric
+variables with only a few integer values are treated as “discrete”
+(ordinal-alike), which would rather calculate contrasts for each time
+point and not the slope of a continuous <code>time</code> variable. See
+also <a href="https://easystats.github.io/modelbased/reference/estimate_contrasts.html">documentation
 of <code>estimate_contrasts()</code></a> for more details, especially
 the <code>...</code> argument and the examples.
 </p>
@@ -614,7 +614,7 @@ can perform a pairwise comparison of the slopes across groups:</p>
 <span>  contrast <span class="op">=</span> <span class="st">"time"</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span>
 <span>  comparison <span class="op">=</span> <span class="st">"inequality_pairwise"</span>,</span>
-<span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span>
+<span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Inequality Analysis</span></span>
 <span><span class="co">#&gt; </span></span>

@@ -27,7 +27,7 @@ various examples, tutorials and use cases."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -318,13 +318,13 @@ Additional arguments can be passed to these functions.</p></li>
 <code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
 <code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
 <li><p>Especially for <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code> with integer focal predictors, for
-which contrasts should be calculated, use argument <code>integer_as_numeric</code> to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument <code>integer_as_continuous</code>
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-<code>integer_as_numeric</code> unique values, it is treated as numeric. Defaults to
-<code>5</code>.</p></li>
+<code>integer_as_continuous</code> unique values, it is treated as numeric. Defaults
+to <code>5</code>. Set to <code>TRUE</code> to always treat integer predictors as continuous.</p></li>
 <li><p>For count regression models that use an offset term, use <code>offset = &lt;value&gt;</code>
 to fix the offset at a specific value. Or use <code>estimate = "average"</code>, to
 average predictions over the distribution of the offset (if appropriate).</p></li>

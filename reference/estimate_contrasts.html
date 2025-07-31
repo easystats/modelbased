@@ -11,7 +11,7 @@ and estimate_slopes()."><meta property="og:image" content="https://easystats.git
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -157,13 +157,13 @@ Additional arguments can be passed to these functions.</p></li>
 <code>describe_posterior()</code>, thus, arguments like, for example, <code>centrality</code>,
 <code>rope_range</code>, or <code>test</code> are passed to that function.</p></li>
 <li><p>Especially for <code>estimate_contrasts()</code> with integer focal predictors, for
-which contrasts should be calculated, use argument <code>integer_as_numeric</code> to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument <code>integer_as_continuous</code>
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-<code>integer_as_numeric</code> unique values, it is treated as numeric. Defaults to
-<code>5</code>.</p></li>
+<code>integer_as_continuous</code> unique values, it is treated as numeric. Defaults
+to <code>5</code>. Set to <code>TRUE</code> to always treat integer predictors as continuous.</p></li>
 <li><p>For count regression models that use an offset term, use <code>offset = &lt;value&gt;</code>
 to fix the offset at a specific value. Or use <code>estimate = "average"</code>, to
 average predictions over the distribution of the offset (if appropriate).</p></li>
@@ -780,6 +780,10 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># "time" only has integer values and few values, so it's treated like a factor</span></span></span>
 <span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Numeric variable appears to be ordinal or Likert-scale (integer values,</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   no more than 5 unique values) and is treated as discrete variable. Set</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   `integer_as_continuous = TRUE` to disable this check and always treat</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   numeric variables as continuous.</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | education | Difference |   SE |          95% CI | t(552) |     p</span>
@@ -800,8 +804,8 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">p-values are uncorrected.</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># we set `integer_as_numeric = 1` to treat integer predictors as numeric</span></span></span>
-<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span>, integer_as_numeric <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># we set `integer_as_continuous = TRUE` to treat integer as continuous</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_contrasts</span><span class="op">(</span><span class="va">model</span>, <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"education"</span>, integer_as_continuous <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Level1 | Level2 | Difference |   SE |         95% CI | t(552) |     p</span>
@@ -821,7 +825,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-in"><span>  <span class="va">model</span>,</span></span>
 <span class="r-in"><span>  <span class="st">"time"</span>,</span></span>
 <span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -857,7 +861,7 @@ Journal of Applied Econometrics, 34(1), 1–17. <a href="https://doi.org/10.1002
 <span class="r-in"><span>  <span class="st">"time"</span>,</span></span>
 <span class="r-in"><span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"education"</span>, <span class="st">"grp"</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>  comparison <span class="op">=</span> <span class="op">~</span><span class="va">pairwise</span> <span class="op">|</span> <span class="va">grp</span>,</span></span>
-<span class="r-in"><span>  integer_as_numeric <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span>  integer_as_continuous <span class="op">=</span> <span class="cn">TRUE</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Marginal Contrasts Analysis</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

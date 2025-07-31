@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.10</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.11</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -107,6 +107,11 @@ calculate marginal means. Can be <code>"marginaleffects"</code> or <code>"emmean
 <li><p><code>options(modelbased_estimate = &lt;string&gt;)</code> will set a default value for the
 <code>estimate</code> argument, which modulates the type of target population
 predictions refer to.</p></li>
+<li><p><code>modelbased_integer</code>: <code>options(modelbased_integer = &lt;value&gt;)</code> will set the
+minimum number of unique values in an integer predictor to treat that
+predictor as a "discrete integer" or as continuous. If the integer has more than
+<code>modelbased_integer</code> unique values, it is treated as continuous. Set to <code>TRUE</code>
+to always treat integer predictors as continuous.</p></li>
 </ul><p><strong>For printing</strong></p><ul><li><p><code>options(modelbased_select = &lt;string&gt;)</code> will set a default value for the
 <code>select</code> argument and can be used to define a custom default layout for
 printing.</p></li>
