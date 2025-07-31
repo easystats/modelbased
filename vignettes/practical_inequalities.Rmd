@@ -296,6 +296,10 @@ estimate_contrasts(
 
 As we see, the difference in average slopes (i.e. we have a pairwise comparison of absolute inequalities of *trends* or *slopes*) is not statistically significant.
 
+### Is the gap widening or narrowing?
+
+Inequalities are calculated by means of *absolute* differences. This means, while we can see whether the change is stronger or weaker across groups, we cannot directly see if the gap is widening or narrowing, because the absolute difference is always positive. To determine whether the gap is widening or narrowing, we can look at the slopes of the `education` variable across time using `estimate_slopes()`.
+
 ## 7. Conclusion
 
 The `modelbased` package offers a powerful and intuitive way to move beyond simple pairwise comparisons and summarize the holistic effect of categorical variables. By quantifying **absolute and relative inequalities**, researchers can:
