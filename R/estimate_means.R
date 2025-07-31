@@ -291,7 +291,7 @@
 #'   minimum number of unique values in an integer predictor to treat that
 #'   predictor as a "discrete integer" or as continuous. If the integer has more than
 #'   `modelbased_integer` unique values, it is treated as continuous. Set to `TRUE`
-#'   to always treat integer predictors as numeric.
+#'   to always treat integer predictors as continuous.
 #'
 #' @return A data frame of estimated marginal means.
 #'
