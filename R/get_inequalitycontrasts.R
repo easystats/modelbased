@@ -44,6 +44,12 @@ get_inequalitycontrasts <- function(
   if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
     group <- NULL
   } else {
+
+    ## TODO: allow formula interface for inequality comparisons? Like
+    ## `~ inequality | grp1 + grp2`? We could then use this interface to
+    ## allow grouping by two variables for inequality comparisons, instead
+    ## of only one (the last) variable.
+
     # For inequality comparisons, we usually average over all categories of the
     # focal predictors and only use one grouping variable. Sometimes, if we want
     # to include a second variable, but don't want to include it for pairwise
