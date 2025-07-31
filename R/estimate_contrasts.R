@@ -224,8 +224,7 @@
 #' # "time" only has integer values and few values, so it's treated like a factor
 #' estimate_contrasts(model, "time", by = "education")
 #'
-#' # we set `integer_as_continuous = TRUE` to treat
-#' # integer predictors as continuous
+#' # we set `integer_as_continuous = TRUE` to treat integer as continuous
 #' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
 #'
 #' # pairwise comparisons for multiple groups
