@@ -1196,6 +1196,10 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
   expect_silent(
     estimate_contrasts(m, "time", by = "education", integer_as_numeric = 2)
   )
+  # we also show no warning when user explicitly sets integer_as_numeric
+  expect_silent(
+    estimate_contrasts(m, "time", by = "education", integer_as_numeric = 10)
+  )
   expect_message(
     estimate_contrasts(m, "time", by = "education"),
     regex = "Numeric variable appears to be ordinal"
