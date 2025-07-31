@@ -959,7 +959,10 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 test_that("estimate_contrast, don't calculate slopes for integers", {
   data(mtcars)
   m <- lm(mpg ~ hp + gear, data = mtcars)
-  expect_silent(estimate_contrasts(m, "gear"))
+  expect_message(
+    estimate_contrasts(m, "gear"),
+    regex = "Numeric variable appears to be ordinal"
+  )
   out <- estimate_contrasts(m, "gear")
   expect_identical(dim(out), c(3L, 9L))
 
