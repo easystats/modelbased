@@ -1198,7 +1198,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
   )
   expect_message(
     estimate_contrasts(m, "time", by = "education"),
-    regex = "Numeric variable appears to be a Likert"
+    regex = "Numeric variable appears to be ordinal"
   )
 
   out <- estimate_contrasts(

@@ -113,6 +113,9 @@
 #' @keywords internal
 #' @noRd
 .is_likert <- function(x, integer_as_numeric = 5, verbose = TRUE, ...) {
+  # check if argument is missing or not - message only shown when missing
+  missing_default <- missing(integer_as_numeric)
+
   # check for global option
   if (!is.null(getOption("modelbased_integer"))) {
     integer_as_numeric <- getOption("modelbased_integer")
@@ -124,12 +127,12 @@
   }
 
   # integer-values, and no more than `integer_as_numeric` unique values?
-  is_likert <- all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
+  is_likert <- all(.is_integer(x)) && insight::n_unique(x) > 2 && insight::n_unique(x) <= integer_as_numeric
 
   # tell user, this handling might not be desired
-  if (is_likert && verbose) {
+  if (is_likert && verbose && missing_default) {
     insight::format_alert(
-      "Numeric variable appears to be a Likert scale (integer values, no more than 5 unique values) and is treated as such. Set `integer_as_numeric = TRUE` to disable this check and always treat numeric variables as continuous."
+      "Numeric variable appears to be ordinal or Likert-scale (integer values, no more than 5 unique values) and is treated as discrete variable. Set `integer_as_numeric = TRUE` to disable this check and always treat numeric variables as continuous."
     )
   }
   is_likert
