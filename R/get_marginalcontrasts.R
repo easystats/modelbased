@@ -80,7 +80,7 @@ get_marginalcontrasts <- function(
   # if first focal term is numeric, we contrast slopes, but slopes only for
   # numerics with many values, not for binary or likert-alike
   compute_slopes <- is.numeric(model_data[[first_focal]]) &&
-    !.is_likert(model_data[[first_focal]], ...) &&
+    !.is_likert(model_data[[first_focal]], verbose = verbose, ...) &&
     !first_focal %in% on_the_fly_factors
 
   # Second step: compute contrasts, for slopes or categorical -----------------

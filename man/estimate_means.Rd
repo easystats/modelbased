@@ -169,7 +169,7 @@ that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
 \code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}.
+\code{5}. Set to \code{TRUE} to always treat integer predictors as numeric.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
@@ -330,6 +330,11 @@ used by default to calculate marginal means. Can be \code{"marginalmeans"} or
 \code{"emmeans"}.
 \item \code{modelbased_estimate}: \verb{options(modelbased_estimate = <string>)} will
 set a default value for the \code{estimate} argument.
+\item \code{modelbased_integer}: \verb{options(modelbased_integer = <value>)} will set the
+minimum number of unique values in an integer predictor to treat that
+predictor as "discrete integer" or as numeric. If the integer has more than
+\code{modelbased_integer} unique values, it is treated as numeric. Set to \code{TRUE}
+to always treat integer predictors as numeric.
 }
 }
 

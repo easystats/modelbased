@@ -142,7 +142,7 @@
 #'   contrasts are calculated between values of the predictor, for the latter,
 #'   contrasts of slopes are calculated. If the integer has more than
 #'   `integer_as_numeric` unique values, it is treated as numeric. Defaults to
-#'   `5`.
+#'   `5`. Set to `TRUE` to always treat integer predictors as numeric.
 #' - For count regression models that use an offset term, use `offset = <value>`
 #'   to fix the offset at a specific value. Or use `estimate = "average"`, to
 #'   average predictions over the distribution of the offset (if appropriate).
@@ -286,6 +286,12 @@
 #'
 #' - `modelbased_estimate`: `options(modelbased_estimate = <string>)` will
 #'   set a default value for the `estimate` argument.
+#'
+#' - `modelbased_integer`: `options(modelbased_integer = <value>)` will set the
+#'   minimum number of unique values in an integer predictor to treat that
+#'   predictor as "discrete integer" or as numeric. If the integer has more than
+#'   `modelbased_integer` unique values, it is treated as numeric. Set to `TRUE`
+#'   to always treat integer predictors as numeric.
 #'
 #' @return A data frame of estimated marginal means.
 #'

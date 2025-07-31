@@ -1189,12 +1189,24 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
 
   m <- lm(QoL ~ time * education * grp, data = qol_cancer)
 
+  # test integer handling
+  expect_silent(
+    estimate_contrasts(m, "time", by = "education", integer_as_numeric = TRUE)
+  )
+  expect_silent(
+    estimate_contrasts(m, "time", by = "education", integer_as_numeric = 2)
+  )
+  expect_message(
+    estimate_contrasts(m, "time", by = "education"),
+    regex = "Numeric variable appears to be a Likert"
+  )
+
   out <- estimate_contrasts(
     m,
     "time",
     by = "education",
     comparison = ~inequality,
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Difference, 3.171296, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "education")
@@ -1204,7 +1216,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = "education",
     comparison = ~inequality,
-    integer_as_numeric = 1,
+    integer_as_numeric = TRUE,
     estimate = "average"
   )
   out2 <- marginaleffects::hypotheses(
@@ -1223,7 +1235,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = c("education", "grp"),
     comparison = ~inequality,
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Difference, c(4.742403, 2.883987), tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, c("education: Group 1", "education: Group 2"))
@@ -1234,7 +1246,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     by = c("education", "grp"),
     comparison = ~inequality,
     estimate = "average",
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   out2 <- marginaleffects::hypotheses(
     marginaleffects::avg_slopes(m, variables = "time", by = c("education", "grp"), hypothesis = ~pairwise | grp),
@@ -1252,7 +1264,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = c("education", "grp"),
     comparison = "inequality_pairwise",
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Difference, 1.858416, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "Group 1 - Group 2")
@@ -1262,7 +1274,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = "education",
     comparison = ratio ~ inequality,
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Ratio, 1.734764, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "education")
@@ -1272,7 +1284,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = c("education", "grp"),
     comparison = ratio ~ inequality,
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Ratio, c(0.0198939, 1.9717087), tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, c("education: Group 1", "education: Group 2"))
@@ -1282,7 +1294,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = c("education", "grp"),
     comparison = "inequality_ratio_pairwise",
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_equal(out$Mean_Ratio_Difference, -1.951815, tolerance = 1e-4, ignore_attr = TRUE)
 
@@ -1291,7 +1303,7 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     "time",
     by = c("education", "grp"),
     comparison = ~pairwise | grp,
-    integer_as_numeric = 1
+    integer_as_numeric = TRUE
   )
   expect_identical(dim(out), c(6L, 9L))
   expect_named(

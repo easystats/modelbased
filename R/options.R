@@ -13,6 +13,12 @@
 #'   `estimate` argument, which modulates the type of target population
 #'   predictions refer to.
 #'
+#' - `modelbased_integer`: `options(modelbased_integer = <value>)` will set the
+#'   minimum number of unique values in an integer predictor to treat that
+#'   predictor as "discrete integer" or as numeric. If the integer has more than
+#'   `modelbased_integer` unique values, it is treated as numeric. Set to `TRUE`
+#'   to always treat integer predictors as numeric.
+#'
 #' **For printing**
 #'
 #' - `options(modelbased_select = <string>)` will set a default value for the

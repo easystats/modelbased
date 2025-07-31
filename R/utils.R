@@ -112,9 +112,25 @@
 
 #' @keywords internal
 #' @noRd
-.is_likert <- function(x, integer_as_numeric = 5, ...) {
-  if (is.null(integer_as_numeric) || is.na(integer_as_numeric)) {
+.is_likert <- function(x, integer_as_numeric = 5, verbose = TRUE, ...) {
+  # check for global option
+  if (!is.null(getOption("modelbased_integer"))) {
+    integer_as_numeric <- getOption("modelbased_integer")
+  }
+
+  # no need to check if check is disabled
+  if (is.null(integer_as_numeric) || is.na(integer_as_numeric) || isTRUE(integer_as_numeric)) {
     return(FALSE)
   }
-  all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
+
+  # integer-values, and no more than `integer_as_numeric` unique values?
+  is_likert <- all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
+
+  # tell user, this handling might not be desired
+  if (is_likert && verbose) {
+    insight::format_alert(
+      "Numeric variable appears to be a Likert scale (integer values, no more than 5 unique values) and is treated as such. Set `integer_as_numeric = TRUE` to disable this check and always treat numeric variables as continuous."
+    )
+  }
+  is_likert
 }
