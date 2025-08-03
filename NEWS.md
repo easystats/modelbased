@@ -34,6 +34,10 @@
 
 * Improved documentation and improved informative messages.
 
+* Message about unreliable standard errors (for certain models, when predicting
+  random effects) was removed for now, because it is not sure if standard errors
+  were unreliable at all.
+
 ## Bug fixes
 
 * Fixed issue with `by` in `estimate_contrasts()` when `comparison` was
