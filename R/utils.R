@@ -72,12 +72,15 @@
       msg <- c(msg, insight::color_text(code_snippet, "green"), "\n")
     }
     message(msg)
-  } else if (length(out$SE) > 1 && isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
-    msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
-    if (!inherits(model, "glmmTMB")) {
-      msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
-    }
-    insight::format_alert(msg)
+
+    # disable message for now, see
+    # https://github.com/easystats/modelbased/issues/526
+    # } else if (length(out$SE) > 1 && isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
+    #   msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
+    #   if (!inherits(model, "glmmTMB")) {
+    #     msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
+    #   }
+    #   insight::format_alert(msg)
   }
 }
 
