@@ -173,11 +173,7 @@ test_that("estimate_contrasts - random effects, single by/contrast", {
     estimate_contrasts(model, contrast = "gear"),
     regex = "Could not calculate"
   )
-  expect_silent(
-    {
-      estim <- estimate_relation(model, by = "gear")
-    }
-  )
+  estim <- expect_silent(estimate_relation(model, by = "gear"))
   out <- estimate_contrasts(estim, contrast = "gear")
   expect_identical(dim(out), c(3L, 8L))
   expect_named(
