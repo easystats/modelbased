@@ -43,6 +43,10 @@
 * Fixed issue with `by` in `estimate_contrasts()` when `comparison` was
   `"inequality"`.
 
+* Some comparison options, like `"helmert"` or `"poly"`, could not be specified
+  as string-value, only as formula. This has been fixed, so they can now be
+  specified as string-value, too.
+
 # modelbased 0.12.0
 
 ## Changes
