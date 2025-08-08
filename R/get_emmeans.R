@@ -108,10 +108,7 @@ get_emmeans <- function(model,
 # =========================================================================
 
 #' @keywords internal
-.guess_emmeans_arguments <- function(model,
-                                     by = NULL,
-                                     verbose = TRUE,
-                                     ...) {
+.guess_emmeans_arguments <- function(model, by = NULL, verbose = TRUE, ...) {
   # Gather info
   model_data <- insight::get_data(model, verbose = FALSE)
   predictors <- intersect(
@@ -126,7 +123,11 @@ get_emmeans <- function(model,
       insight::format_error("Model contains no categorical factor. Please specify `by`.")
     }
     if (verbose) {
-      insight::format_alert(paste0("We selected `by = c(", toString(paste0('"', by, '"')), ")`."))
+      insight::format_alert(paste0(
+        "We selected `by = c(",
+        toString(paste0('"', by, '"')),
+        ")`."
+      ))
     }
   }
 
@@ -138,11 +139,7 @@ get_emmeans <- function(model,
 ## TODO: validate predict argument to make sure it only has valid options
 .get_emmeans_type_argument <- function(model, predict, type = "means", ...) {
   if (is.null(predict)) {
-    predict <- switch(type,
-      means = "response",
-      contrasts = "response",
-      "none"
-    )
+    predict <- switch(type, means = "response", contrasts = "response", "none")
   } else if (predict == "link") {
     predict <- "none"
   }
