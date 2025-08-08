@@ -45,16 +45,11 @@ get_inequalitycontrasts <- function(
     group <- NULL
   } else if (inherits(comparison, "formula")) {
     # if we have a formula like `~ inequality | grp1 + grp2`, we then use this
-    # interface to allow grouping by two variables for inequality comparisons
-    # instead of only one (the last) variable.
-    f <- insight::trim_ws(unlist(strsplit(
-      insight::safe_deparse(comparison),
-      "|",
-      fixed = TRUE
-    ))[[2]])
-    # update arguments
-    comparison <- "inequality"
-    group <- insight::trim_ws(unlist(strsplit(f, "+", fixed = TRUE)))
+    # interface to allow grouping by mor than one variable for inequality
+    # comparisons
+    out <- .process_inequality_formula(comparison)
+    comparison <- out$comparison
+    group <- out$group
   } else {
     # For inequality comparisons, we usually average over all categories of the
     # focal predictors and only use one grouping variable. Sometimes, if we want
@@ -201,6 +196,35 @@ get_inequalitycontrasts <- function(
 }
 
 
+# process special formula interface ----------------------------------
+# --------------------------------------------------------------------
+
+# if we have a formula like `~ inequality | grp1 + grp2`, we then use this
+# interface to allow grouping by two variables for inequality comparisons
+# instead of only one (the last) variable.
+.process_inequality_formula <- function(comparison) {
+  f <- unlist(strsplit(insight::safe_deparse(comparison), "|", fixed = TRUE))
+  # check parts left and right of the bar "|"
+  left_part <- insight::trim_ws(f[[1]])
+  right_part <- insight::trim_ws(f[[2]])
+  # update arguments
+  if (grepl("pairwise", left_part, fixed = TRUE)) {
+    if (grepl("ratio", left_part, fixed = TRUE)) {
+      comparison <- "inequality_ratio_pairwise"
+    } else {
+      comparison <- "inequality_pairwise"
+    }
+  } else if (grepl("ratio", left_part, fixed = TRUE)) {
+    comparison <- "inequality_ratio"
+  } else {
+    comparison <- "inequality"
+  }
+  group <- insight::trim_ws(unlist(strsplit(right_part, "+", fixed = TRUE)))
+
+  list(group = group, comparison = comparison)
+}
+
+
 # handle inequality hypothesis  --------------------------------------
 # --------------------------------------------------------------------
 
@@ -245,7 +269,7 @@ get_inequalitycontrasts <- function(
     # to include more than one grouping variable.
     if (inherits(comparison, "formula")) {
       f <- insight::safe_deparse(comparison)
-      if (startsWith(f, "~inequality")) {
+      if (any(startsWith(f, c("~inequality", "inequality")))) {
         return(TRUE)
       }
     }
