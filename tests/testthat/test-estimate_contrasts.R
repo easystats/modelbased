@@ -1318,3 +1318,19 @@ test_that("estimate_contrast, slopes, inequality pairwise", {
     c("Parameter", "grp", "Difference", "SE", "CI_low", "CI_high",  "t", "df", "p")
   )
 })
+
+
+test_that("estimate_contrast, comparison-options as strings", {
+  data(mtcars)
+  mtcars$cyl_helmert <- as.factor(mtcars$cyl)
+  contrasts(mtcars$cyl_helmert) <- matrix(
+    c(-0.5, 0.5, 0, -1/3, -1/3, 2/3),
+    ncol = 2,
+    dimnames = list(c("4", "6", "8"), c("6vs4", "8vs4&6"))
+  )
+  mod2 <- lm(mpg ~ cyl_helmert, data = mtcars)
+  out <- estimate_contrasts(mod2, contrast = "cyl_helmert", comparison = "helmert")
+  expect_equal(out$Difference, c(-6.92078, -16.20649), tolerance = 1e-4)
+  out <- estimate_contrasts(mod2, contrast = "cyl_helmert", comparison = "poly")
+  expect_equal(out$Difference, c(-8.17673, 0.92996), tolerance = 1e-4)
+})

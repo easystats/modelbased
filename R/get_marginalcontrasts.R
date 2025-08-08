@@ -329,7 +329,14 @@ get_marginalcontrasts <- function(
         comparison <- "reference"
         joint_test <- TRUE
       }
-      formula_lhs <- "difference"
+      # for some comparisons, we need an empty left-hand side. else, we default
+      # to "difference".
+      formula_lhs <- switch(
+        comparison,
+        poly = ,
+        helmert = "",
+        "difference"
+      )
       formula_rhs <- comparison
     }
     # we put "by" into the formula. user either provided "by", or we put the
