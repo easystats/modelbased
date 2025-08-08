@@ -220,6 +220,9 @@ get_inequalitycontrasts <- function(
 
 # check whether we have a valid inequality comparison
 .is_inequality_comparison <- function(comparison) {
+
+  ## TODO: check for formula interface for inequality comparisons with grouping
+
   !is.null(comparison) &&
     length(comparison) == 1 &&
     is.character(comparison) &&
