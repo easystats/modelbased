@@ -178,6 +178,10 @@ get_inequalitycontrasts <- function(
   if (is.null(group) && !is.null(alternative)) {
     group <- alternative
   }
+  # combine groups, when longer than one
+  if (is.character(group) && length(group) > 1) {
+    group <- paste(group, collapse = " + ")
+  }
   # specify the pairwise contrasts for the hypothesis argument
   f1 <- switch(
     comparison,
