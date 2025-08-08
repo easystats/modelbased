@@ -43,13 +43,19 @@ get_inequalitycontrasts <- function(
   #   variable in `by`, as it defines the categories for inequality comparisons.
   if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
     group <- NULL
+  } else if (inherits(comparison, "formula")) {
+    # if we have a formula like `~ inequality | grp1 + grp2`, we then use this
+    # interface to allow grouping by two variables for inequality comparisons
+    # instead of only one (the last) variable.
+    f <- insight::trim_ws(unlist(strsplit(
+      insight::safe_deparse(comparison),
+      "|",
+      fixed = TRUE
+    ))[[2]])
+    # update arguments
+    comparison <- "inequality"
+    group <- insight::trim_ws(unlist(strsplit(f, "+", fixed = TRUE)))
   } else {
-
-    ## TODO: allow formula interface for inequality comparisons? Like
-    ## `~ inequality | grp1 + grp2`? We could then use this interface to
-    ## allow grouping by two variables for inequality comparisons, instead
-    ## of only one (the last) variable.
-
     # For inequality comparisons, we usually average over all categories of the
     # focal predictors and only use one grouping variable. Sometimes, if we want
     # to include a second variable, but don't want to include it for pairwise
@@ -218,18 +224,33 @@ get_inequalitycontrasts <- function(
   comparison
 }
 
+
 # check whether we have a valid inequality comparison
 .is_inequality_comparison <- function(comparison) {
+  # "comparison" can be a string or a formula. If a string, we expect
+  # one of the following values:
+  inequality_comparisons <- c(
+    "inequality",
+    "inequality_pairwise",
+    "inequality_ratio",
+    "inequality_ratio_pairwise"
+  )
 
-  ## TODO: check for formula interface for inequality comparisons with grouping
-
-  !is.null(comparison) &&
-    length(comparison) == 1 &&
-    is.character(comparison) &&
-    comparison %in% c(
-      "inequality", "inequality_pairwise",
-      "inequality_ratio", "inequality_ratio_pairwise"
-    )
+  if (!is.null(comparison)) {
+    if (length(comparison) == 1 && is.character(comparison) && comparison %in% inequality_comparisons) {
+      return(TRUE)
+    }
+    # if we have a formula, we check whether it starts with "inequality". We
+    # still may have a formula like `~ inequality | grp1 + grp2`, which is valid
+    # to include more than one grouping variable.
+    if (inherits(comparison, "formula")) {
+      f <- insight::safe_deparse(comparison)
+      if (startsWith(f, "~inequality")) {
+        return(TRUE)
+      }
+    }
+  }
+  FALSE
 }
 
 
