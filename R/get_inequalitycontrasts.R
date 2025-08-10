@@ -39,25 +39,26 @@ get_inequalitycontrasts <- function(
   # - For slopes: The grouping variable is used only if there are at least two
   #   variables in `by`. This ensures pairwise comparisons of slopes are calculated
   #   across the specified groups.
-  # - For categorical focal terms: The grouping variable is always set to the last
-  #   variable in `by`, as it defines the categories for inequality comparisons.
+  # - For categorical focal terms: The grouping variable always equals to the
+  #   variables in `by`.
+  # - If we want to include some variables in `by` for stratification, and want
+  #   to average over other variables in `by`, we use the formula interface.
+  #   For example, `by = c("grp1", "gpr2")` and `comparison = ~ inequality | grp2`
+  #   would average over `grp1` and calculate pairwise comparisons for `grp2`.
   if (is.null(my_args$by) || (length(my_args$by) == 1 && compute_slopes)) {
     group <- NULL
   } else if (inherits(comparison, "formula")) {
-    # if we have a formula like `~ inequality | grp1 + grp2`, we then use this
-    # interface to allow grouping by mor than one variable for inequality
-    # comparisons
+    # groups in formula interface are used for grouping
     out <- .process_inequality_formula(comparison)
     comparison <- out$comparison
     group <- out$group
+  } else if (compute_slopes) {
+    # `by` is used for grouping, but first `by` element is ignored for slopes.
+    # we need the fist element in `by` for contrasting slopes at a predictor
+    group <- my_args$by[-1]
   } else {
-    # For inequality comparisons, we usually average over all categories of the
-    # focal predictors and only use one grouping variable. Sometimes, if we want
-    # to include a second variable, but don't want to include it for pairwise
-    # comparisons, we can use the `by` argument to specify the grouping variable.
-    # In such cases, the first `by` variable is also averaged over, and only the
-    # second `by` variable is used for grouping.
-    group <- my_args$by[length(my_args$by)]
+    # `by` is used for grouping
+    group <- my_args$by
   }
 
   # -----------------------------------------------------------
@@ -200,8 +201,8 @@ get_inequalitycontrasts <- function(
 # --------------------------------------------------------------------
 
 # if we have a formula like `~ inequality | grp1 + grp2`, we then use this
-# interface to allow grouping by two variables for inequality comparisons
-# instead of only one (the last) variable.
+# interface to allow to control grouping by user-defined variables for
+# inequality comparisons.
 .process_inequality_formula <- function(comparison) {
   f <- unlist(strsplit(insight::safe_deparse(comparison), "|", fixed = TRUE))
   # check parts left and right of the bar "|"
@@ -231,6 +232,15 @@ get_inequalitycontrasts <- function(
 # check whether we have a formula definition of inequality comparisons,
 # and convert it to a string
 .check_for_inequality_comparison <- function(comparison) {
+  # the default formulas are converted to a string:
+  # ~inequality -> "inequality"
+  # inequality ~ pairwise -> "inequality_pairwise"
+  # ratio ~ inequality -> "inequality_ratio"
+  # ratio ~ inequality + pairwise` -> "inequality_ratio_pairwise"
+  #
+  # we may have other formulas that control grouping and averaging, like
+  # `~ inequality | grp1 + grp2`. In this case, the formula is returned as is
+  # and processed later in ".process_inequality_formula()"
   if (inherits(comparison, "formula")) {
     # parse variables into a string
     out <- paste(all.vars(comparison), collapse = "_")
