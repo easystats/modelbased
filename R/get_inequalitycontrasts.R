@@ -199,6 +199,10 @@ get_inequalitycontrasts <- function(
 .process_inequality_formula <- function(comparison) {
   f <- unlist(strsplit(insight::safe_deparse(comparison), "|", fixed = TRUE))
   # check parts left and right of the bar "|"
+  if (length(f) != 2) {
+    insight::format_error("Formula must contain exactly one `|` character separating two parts, e.g. `~ inequality | group`.")
+  }
+  # check parts left and right of the bar "|"
   left_part <- insight::trim_ws(f[[1]])
   right_part <- insight::trim_ws(f[[2]])
   # update arguments
