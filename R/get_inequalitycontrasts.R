@@ -28,13 +28,6 @@ get_inequalitycontrasts <- function(
     )
   }
 
-  # `by` can contain one or two variables for inequality comparisons
-  if (!is.null(my_args$by) && length(my_args$by) > 2) {
-    insight::format_error(
-      "`by` can only contain one or two variables for `comparison = \"inequality\"`."
-    )
-  }
-
   # Define the grouping variable for marginal effects inequalities:
   # - For slopes: The grouping variable is used only if there are at least two
   #   variables in `by`. This ensures pairwise comparisons of slopes are calculated
