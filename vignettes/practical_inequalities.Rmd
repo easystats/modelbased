@@ -321,6 +321,8 @@ The `modelbased` package also allows you to compute these inequalities using a f
 | `"inequality_ratio"` | `ratio ~ inequality` |
 | `"inequality_ratio_pairwise"` | `ratio ~ inequality + pairwise` |
 
+Grouping variables are usually specified using the `by` argument. Additionally, these can also be specified in the formula interface, for example, `~inequality | group1` or `inequality ~ pairwise | group1 + group2`.
+
 ## References
 
 Mize, T. D., & Han, B. (2025). Inequality and Total Effect Summary Measures for Nominal and Ordinal Variables. *Sociological Science, 12*, 115-157.
