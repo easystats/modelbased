@@ -32,7 +32,12 @@ test_that("estimate_contrast, marginal effects inequalities", {
   )
 
   # multiple inequality comparisons with "average"
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality", estimate = "average")
+  out <- estimate_contrasts(
+    m,
+    c("species", "island"),
+    comparison = "inequality",
+    estimate = "average"
+  )
   expect_equal(out$Mean_Difference, c(0.23043, 0.6381), tolerance = 1e-4)
   expect_identical(out$Parameter, c("island", "species"))
 
@@ -41,7 +46,13 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out$Mean_Difference, c(0.299254, 0.558071), tolerance = 1e-4)
 
   # inequality comparisons with `by` and "average"
-  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality", estimate = "average")
+  out <- estimate_contrasts(
+    m,
+    "species",
+    by = "island",
+    comparison = "inequality",
+    estimate = "average"
+  )
   expect_equal(out$Mean_Difference, c(0.66259, 0.60411, 0.64052), tolerance = 1e-4)
   expect_named(out, c("island", "Mean_Difference", "SE", "CI_low", "CI_high", "z", "p"))
 
@@ -50,7 +61,12 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out$Mean_Difference, c(0.665814, 0.538415, 0.665679), tolerance = 1e-4)
 
   # pairwise inequality comparisons with "average"
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise", estimate = "average")
+  out <- estimate_contrasts(
+    m,
+    c("species", "island"),
+    comparison = "inequality_pairwise",
+    estimate = "average"
+  )
   expect_equal(out$Mean_Difference, -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
   expect_identical(out$Parameter, "island - species")
 
@@ -59,7 +75,13 @@ test_that("estimate_contrast, marginal effects inequalities", {
   expect_equal(out$Mean_Difference, -0.2588168, tolerance = 1e-4, ignore_attr = TRUE)
 
   # pairwise inequality comparisons with `by` and "average"
-  out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise", estimate = "average")
+  out <- estimate_contrasts(
+    m,
+    "species",
+    by = "island",
+    comparison = "inequality_pairwise",
+    estimate = "average"
+  )
   expect_equal(
     out$Mean_Difference,
     c(0.05848, 0.02207, -0.03641),
@@ -67,7 +89,10 @@ test_that("estimate_contrast, marginal effects inequalities", {
     ignore_attr = TRUE
   )
   expect_named(out, c("Parameter", "Mean_Difference", "SE", "CI_low", "CI_high", "z", "p"))
-  expect_identical(out$Parameter, c("Biscoe - Dream", "Biscoe - Torgersen", "Dream - Torgersen"))
+  expect_identical(
+    out$Parameter,
+    c("Biscoe - Dream", "Biscoe - Torgersen", "Dream - Torgersen")
+  )
 
   # pairwise inequality comparisons with `by`
   out <- estimate_contrasts(m, "species", by = "island", comparison = "inequality_pairwise")
@@ -87,17 +112,19 @@ test_that("estimate_contrast, marginal effects inequalities", {
   # check formula interface for grouping
   m <- glm(long_bill ~ species * sex * island + bill_dep, data = penguins, family = "binomial")
   out <- suppressWarnings(estimate_contrasts(
-    m, "species", by = c("island", "sex"), comparison = ~inequality | sex
+    m,
+    "species",
+    by = c("island", "sex"),
+    comparison = ~ inequality | sex
   ))
-  expect_equal(
-    out$Mean_Difference,
-    c(0.6537358, 0.6634438),
-    tolerance = 1e-4
-  )
+  expect_equal(out$Mean_Difference, c(0.6537358, 0.6634438), tolerance = 1e-4)
 
   # inequality with multiple grouping variables
   out <- suppressWarnings(estimate_contrasts(
-    m, "species", by = c("island", "sex"), comparison = "inequality"
+    m,
+    "species",
+    by = c("island", "sex"),
+    comparison = "inequality"
   ))
   expect_equal(
     out$Mean_Difference,
@@ -105,8 +132,24 @@ test_that("estimate_contrast, marginal effects inequalities", {
     tolerance = 1e-4
   )
 
+  # only one | allowed
+  expect_error(
+    estimate_contrasts(
+      m,
+      "species",
+      by = c("island", "sex"),
+      comparison = ~ inequality | sex | island
+    ),
+    regex = "Formula must contain"
+  )
+
   # `by` can be > 2
-  out <- suppressWarnings(estimate_contrasts(m, "species", by = c("island", "sex", "bill_dep"), comparison = "inequality"))
+  out <- suppressWarnings(estimate_contrasts(
+    m,
+    "species",
+    by = c("island", "sex", "bill_dep"),
+    comparison = "inequality"
+  ))
   expect_identical(dim(out), c(60L, 9L))
 
   # contrasting slopes
@@ -126,12 +169,7 @@ test_that("estimate_contrast, marginal effects inequalities", {
   # hypotheses(out, hypothesis = ~I(mean(abs(x))))
 
   # inequality with slopes
-  out <- estimate_contrasts(
-    m,
-    "bill_dep",
-    by = "island",
-    comparison = "inequality"
-  )
+  out <- estimate_contrasts(m, "bill_dep", by = "island", comparison = "inequality")
   expect_equal(out$Mean_Difference, 0.02443619, tolerance = 1e-4)
   expect_identical(out$Parameter, "island")
 
