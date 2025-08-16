@@ -541,9 +541,6 @@
 
 #' @keywords internal
 .visualization_recipe_residuals <- function(x, aes) {
-
-  browser()
-
   model <- attributes(x)$model
   residual_data <- residualize_over_grid(x, model)
 
