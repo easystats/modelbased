@@ -140,3 +140,37 @@ test_that("estimate_grouplevel - Bayesian, rstanarm", {
   expect_identical(dim(out), c(3L, 4L))
   expect_named(out, c("Group", "Level", "Parameter", "Coefficient"))
 })
+
+
+skip_if_not_installed("withr")
+
+withr::with_environment(
+  new.env(),
+  test_that("estimate_grouplevel, coxme", {
+    skip_on_cran()
+    skip_if_not_installed("coxme")
+    skip_if_not_installed("survival")
+
+    Surv <- survival::Surv
+    rats <- survival::rats
+    lung <- survival::lung
+
+    set.seed(1234)
+    rats$grp <- sample(letters[1:3], nrow(rats), replace = TRUE)
+
+    data(eortc, package = "coxme")
+    d <- coxme::eortc
+    d2 <<- rats
+
+    m1 <- coxme::coxme(Surv(y, uncens) ~ trt + (1 | center), data = d)
+    m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), lung)
+    m3 <- coxme::coxme(Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp), d2)
+
+    out <- estimate_grouplevel(m1)
+    expect_identical(dim(out), c(37L, 5L))
+    out <- estimate_grouplevel(m2)
+    expect_identical(dim(out), c(18L, 5L))
+    out <- estimate_grouplevel(m3)
+    expect_identical(dim(out), c(203L, 5L))
+  })
+)
