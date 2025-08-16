@@ -29,6 +29,8 @@
 * `estimate_expectation()` and `estimate_relation()` now support objects of
   class `htest`.
 
+* `estimate_grouplevel()` now supports models from package *coxme*.
+
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
 
