@@ -53,7 +53,6 @@ residualize_over_grid <- function(grid, model, ...) {
 #' @rdname residualize_over_grid
 #' @export
 residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
-
   old_d <- insight::get_predictors(model)
   fun_link <- insight::link_function(model)
   inv_fun <- insight::link_inverse(model)
@@ -72,12 +71,8 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
   best_match <- NULL
 
   for (p in colnames(old_d)) {
-    if (is.factor(old_d[[p]]) || is.logical(old_d[[p]]) || is.character(old_d[[p]])) {
-      grid[[p]] <- as.character(grid[[p]])
-      old_d[[p]] <- as.character(old_d[[p]])
-    } else {
-      grid[[p]] <- .validate_num(grid[[p]])
-    }
+    grid[[p]] <- .validate_num(grid[[p]])
+  }
 
     # if factor / logical / char in old data, find where it is equal
     # if numeric in old data, find where it is closest

@@ -556,9 +556,9 @@
     geom = "point",
     data = residual_data,
     aes = list(
-      y = y,
-      x = aes$x,
-      color = aes$color,
+      y = residual_data$Mean,
+      x = residual_data[[aes$x]],
+      color = residual_data[[aes$color]],
       alpha = aes$alpha
     ),
     height = 0,
