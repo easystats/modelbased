@@ -161,9 +161,10 @@ withr::with_environment(
     data(eortc, package = "coxme")
     d <<- coxme::eortc
     d2 <<- rats
+    d3 <<- lung
 
     m1 <- coxme::coxme(Surv(y, uncens) ~ trt + (1 | center), data = d)
-    m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), lung)
+    m2 <- coxme::coxme(Surv(time, status) ~ ph.ecog + age + (1 | inst), d3)
     m3 <- coxme::coxme(Surv(time, status) ~ rx + (1 + rx | litter) + (1 | grp), d2)
 
     out <- estimate_grouplevel(m1)
