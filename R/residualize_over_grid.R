@@ -71,12 +71,14 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
   best_match <- NULL
 
   for (p in colnames(old_d)) {
-    grid[[p]] <- .validate_num(grid[[p]])
+    if (is.numeric(old_d[[p]])) {
+      grid[[p]] <- .validate_num(grid[[p]])
+    }
+    # if factor / logical / char in old data, find where it is equal
+    # if numeric in old data, find where it is closest
+    best_match <- .closest(old_d[[p]], grid[[p]], best_match = best_match)
   }
 
-  # if factor / logical / char in old data, find where it is equal
-  # if numeric in old data, find where it is closest
-  best_match <- .closest(old_d[[p]], grid[[p]], best_match = best_match)
   idx <- apply(best_match, 2, which)
   idx <- sapply(idx, "[", 1)
 
