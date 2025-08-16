@@ -46,7 +46,6 @@
 #' @export
 residualize_over_grid <- function(grid, model, ...) {
   UseMethod("residualize_over_grid")
-
 }
 
 
