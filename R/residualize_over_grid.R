@@ -142,7 +142,7 @@ residualize_over_grid.estimate_means <- function(grid, model, ...) {
 
 .closest <- function(x, target, best_match) {
   if (is.numeric(x)) {
-    # AD <- outer(x, target, FUN = function(x, y) abs(x - y))
+    
     AD <- abs(outer(x, target, FUN = `-`))
     idx <- apply(AD, 1, function(x) x == min(x))
   } else {
