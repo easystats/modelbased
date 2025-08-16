@@ -277,7 +277,7 @@
 
   # Don't plot raw data if `predict` is not on the response scale
   if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
-    show_data <- FALSE
+    show_data <- show_residuals <- FALSE
   }
 
   # Don't plot raw data for transformed responses with no back-transformation
@@ -287,7 +287,7 @@
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
     if (!is.null(trans_fun) && all(trans_fun != "identity")) {
-      show_data <- FALSE
+      show_data <- show_residuals <- FALSE
     }
   }
 
@@ -552,8 +552,14 @@
     stroke <- 1
   }
 
+  if (aes$type == "pointrange" && !is.numeric(residual_data[[aes$x]])) {
+    geom <- "jitter"
+  } else {
+    geom <- "point"
+  }
+
   out <- list(
-    geom = "point",
+    geom = geom,
     data = residual_data,
     aes = list(
       y = "Mean",
