@@ -80,6 +80,10 @@ e.g. \code{options(modelbased_numeric_as_discrete = 10)}.}
 Defaults to \code{"tufte"}. For other options please see \code{\link[tinyplot:tinytheme]{tinyplot::tinytheme()}}.
 Use \code{NULL} if no theme should be applied.}
 
+\item{show_residuals}{Logical, if \code{TRUE}, display residuals of the model
+as a background to the model-based estimation. Residuals will be computed
+for the predictors in the data grid, using \code{\link[=residualize_over_grid]{residualize_over_grid()}}.}
+
 \item{point, line, pointrange, ribbon, facet, grid}{Additional
 aesthetics and parameters for the geoms (see customization example).}
 

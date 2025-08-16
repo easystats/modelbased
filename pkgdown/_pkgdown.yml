@@ -11,6 +11,7 @@ reference:
   - title: "Data grids and Visualisation"
     contents:
       - starts_with("visualisation_")
+      - residualize_over_grid
   - title: "Missing Data"
     contents:
       - starts_with("pool_")

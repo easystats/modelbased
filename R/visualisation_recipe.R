@@ -39,6 +39,9 @@
 #' predictor. Use `FALSE` to always use continuous color scales for numeric
 #' predictors. It is possible to set a global default value using `options()`,
 #' e.g. `options(modelbased_numeric_as_discrete = 10)`.
+#' @param show_residuals Logical, if `TRUE`, display residuals of the model
+#' as a background to the model-based estimation. Residuals will be computed
+#' for the predictors in the data grid, using [`residualize_over_grid()`].
 #' @param point,line,pointrange,ribbon,facet,grid Additional
 #' aesthetics and parameters for the geoms (see customization example).
 #' @param ... Arguments passed from `plot()` to `visualisation_recipe()`, or
