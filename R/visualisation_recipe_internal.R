@@ -556,14 +556,15 @@
     geom = "point",
     data = residual_data,
     aes = list(
-      y = residual_data$Mean,
-      x = residual_data[[aes$x]],
-      color = residual_data[[aes$color]],
+      y = "Mean",
+      x = aes$x,
+      color = aes$color,
       alpha = aes$alpha
     ),
     height = 0,
     shape = shape,
-    stroke = stroke
+    stroke = stroke,
+    show.legend = FALSE
   )
 
   # set default alpha, if not mapped by aes
