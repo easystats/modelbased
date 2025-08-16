@@ -84,16 +84,26 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(\emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
-\code{"average"}, it calculates the average based only on the data points that
-actually exist. This is in particular important for two or more focal
-predictors, because it doesn't generate a \emph{complete} grid of all theoretical
-combinations of predictor values. Consequently, the output may not include
-all the values.}
+e.g. \code{options(modelbased_estimate = "average")}.
+
+Note following limitations:
+\itemize{
+\item When you set \code{estimate} to \code{"average"}, it calculates the average based
+only on the data points that actually exist. This is in particular
+important for two or more focal predictors, because it doesn't generate a
+\emph{complete} grid of all theoretical combinations of predictor values.
+Consequently, the output may not include all the values.
+\item Filtering the output at values of continuous predictors, e.g.
+\code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
+returning an empty data frame because of what was described above. In such
+case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
+provide a data grid of predictor values at which to evaluate predictions.
+\item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
+}}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -153,13 +163,13 @@ Additional arguments can be passed to these functions.
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
-which contrasts should be calculated, use argument \code{integer_as_numeric} to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument \code{integer_as_continuous}
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}.
+\code{integer_as_continuous} unique values, it is treated as numeric. Defaults
+to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
@@ -320,6 +330,11 @@ used by default to calculate marginal means. Can be \code{"marginalmeans"} or
 \code{"emmeans"}.
 \item \code{modelbased_estimate}: \verb{options(modelbased_estimate = <string>)} will
 set a default value for the \code{estimate} argument.
+\item \code{modelbased_integer}: \verb{options(modelbased_integer = <value>)} will set the
+minimum number of unique values in an integer predictor to treat that
+predictor as a "discrete integer" or as continuous. If the integer has more than
+\code{modelbased_integer} unique values, it is treated as continuous. Set to \code{TRUE}
+to always treat integer predictors as continuous.
 }
 }
 

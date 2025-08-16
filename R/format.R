@@ -133,16 +133,25 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
     info <- insight::model_info(model, response = 1)
   }
   non_focal <- setdiff(colnames(model_data), attr(x, "focal_terms"))
-  is_contrast_analysis <- !is.null(list(...)$hypothesis)
-  is_inequality_analysis <- is_contrast_analysis && identical(list(...)$hypothesis, "inequality")
   predict_type <- attributes(x)$predict
+
+  # special attributes we get from "get_marginalcontrasts()"
+  comparison <- list(...)$hypothesis
+  is_contrast_analysis <- !is.null(comparison)
 
   # define all columns that should be removed
   remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
 
   # do we have contrasts? For contrasts, we want to keep p-values
-  if (is_inequality_analysis) {
-    estimate_name <- "Mean_Difference"
+  if (.is_inequality_comparison(comparison)) {
+    estimate_name <- switch(
+      comparison,
+      inequality_ratio_pairwise = "Mean_Ratio_Difference",
+      inequality_ratio = "Mean_Ratio",
+      "Mean_Difference"
+    )
+    # for inequality analysis, we want to keep the stratification variable
+    remove_columns <- setdiff(remove_columns, attributes(x)$hypothesis_by)
   } else if (is_contrast_analysis) {
     estimate_name <- "Difference"
   } else {
@@ -218,6 +227,15 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
 
+  # for slopes, sanity check - we may have duplicated "by" columns, e.g. when
+  # user requests grouping for by-terms by combining "by" and "comparison" with
+  # group-formula:
+  # estimate_contrasts(m, "time", by = c("education", "grp"), comparison = ~pairwise | grp)
+  # in this example, we would have "grp" and "grp.1"
+  if (inherits(x, "estimate_slopes")) {
+    x[paste0(by, ".1")] <- NULL
+  }
+
   # sanity check - method "get_marginalmeans()" calls "format.estimate_means()"
   # for printing, and that method doesn't pass "comparison" - thus, we have to
   # extract it from the attributes
@@ -254,16 +272,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # we prettify labels now. For special inequality contrasts, we also need no
   # cleaning, so we skip here, too
 
-  if (
-    !is.null(comparison) &&
-      !identical(comparison, "inequality") &&
-      !identical(comparison, "inequality_pairwise")
-  ) {
+  if (!is.null(comparison) && !.is_inequality_comparison(comparison)) {
     #  the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
-
     params <- as.data.frame(do.call(
       rbind,
       lapply(x$Parameter, .split_at_minus_outside_parentheses, separator = separator)
@@ -614,11 +627,57 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     params <- .safe(datawizard::data_rename(params, "group", "Class"), params)
   }
 
+  # extract information for potential inequality analysis
+  by_terms <- attributes(x)$hypothesis_by
+  comparison_hypothesis <- list(...)$hypothesis
+
+  # fix labels for inequality pairwise analysis
+  if (.is_inequality_comparison(comparison_hypothesis)) {
+    # fix for pairwise inequality labels - these are named like "(b1) - (b2)" etc.
+    # but we want the original labels instead of b1, b2 etc.
+    if(comparison_hypothesis %in% c("inequality_pairwise", "inequality_ratio_pairwise") && !is.null(by_terms)) {
+      # clean parameter names
+      parameter_names <- gsub(")", "", gsub("(", "", params$Parameter, fixed = TRUE), fixed = TRUE)
+      # extract data for by-variable
+      by_var <- model_data[[by_terms]]
+      # make sure we have a factor
+      if (is.character(by_var)) {
+        by_var <- factor(by_var, levels = unique(by_var))
+      }
+      # extract levels
+      by_levels <- levels(by_var)
+      # iterate over all parameter names and replace b1 to bx with the by-levels
+      parameter_names <- vapply(
+        parameter_names,
+        function(i) {
+          # replace b1 with first by-level, b2 with second by-level, etc.
+          for (j in seq_along(by_levels)) {
+            i <- sub(paste0("b", j), by_levels[j], i, fixed = TRUE)
+          }
+          i
+        },
+        character(1)
+      )
+      # finally, assign back to the Parameter column
+      params$Parameter <- parameter_names
+    }
+
+    # fix labels for inequality analysis for slopes
+    if (comparison_hypothesis %in% c("inequality", "inequality_ratio") && isTRUE(attributes(x)$compute_slopes)) {
+      # for slopes, we either have the trend variable, or only the grouping,
+      # but not the "inequality" variabe (the first in "by"). Update labels,
+      # so users know by which variables slopes are averaged and grouped
+      if (is.null(by_terms)) {
+        params$Parameter <- attributes(x)$by
+      } else {
+        colnames(params)[colnames(params) == by_terms] <- "Parameter"
+        params$Parameter <- paste0(attributes(x)$by[1], ": ", params$Parameter)
+      }
+    }
+  }
+
   # finally, make sure we have original data types
   params <- data.frame(datawizard::data_restoretype(params, model_data))
-
-  # fix for inequality-comparisons
-  colnames(params)[colnames(params) == "Mean_Difference"] <- "Mean Difference"
 
   # add posterior draws?
   if (!is.null(attributes(x)$posterior_draws)) {

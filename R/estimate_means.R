@@ -66,15 +66,23 @@
 #'   target population?" This approach entails more assumptions about the
 #'   likelihood of different combinations, but can be more apt to generalize.
 #'   This is also the option that should be used for **G-computation**
-#'   (_Chatton and Rohrer 2024_).
+#'   (causal inference, see _Chatton and Rohrer 2024_).
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
-#' e.g. `options(modelbased_estimate = "average")`. When you set `estimate` to
-#' `"average"`, it calculates the average based only on the data points that
-#' actually exist. This is in particular important for two or more focal
-#' predictors, because it doesn't generate a *complete* grid of all theoretical
-#' combinations of predictor values. Consequently, the output may not include
-#' all the values.
+#' e.g. `options(modelbased_estimate = "average")`.
+#'
+#' Note following limitations:
+#' - When you set `estimate` to `"average"`, it calculates the average based
+#'   only on the data points that actually exist. This is in particular
+#'   important for two or more focal predictors, because it doesn't generate a
+#'   *complete* grid of all theoretical combinations of predictor values.
+#'   Consequently, the output may not include all the values.
+#' - Filtering the output at values of continuous predictors, e.g.
+#'   `by = "x=1:5"`, in combination with `estimate = "average"` may result in
+#'   returning an empty data frame because of what was described above. In such
+#'   case, you can use `estimate = "typical"` or use the `newdata` argument to
+#'   provide a data grid of predictor values at which to evaluate predictions.
+#' - `estimate = "population"` is not available for `estimate_slopes()`.
 #' @param backend Whether to use `"marginaleffects"` (default) or `"emmeans"` as
 #' a backend. Results are usually very similar. The major difference will be
 #' found for mixed models, where `backend = "marginaleffects"` will also average
@@ -128,13 +136,13 @@
 #'   `describe_posterior()`, thus, arguments like, for example, `centrality`,
 #'   `rope_range`, or `test` are passed to that function.
 #' - Especially for `estimate_contrasts()` with integer focal predictors, for
-#'   which contrasts should be calculated, use argument `integer_as_numeric` to
-#'   set the maximum number of unique values in an integer predictor to treat
+#'   which contrasts should be calculated, use argument `integer_as_continuous`
+#'   to set the maximum number of unique values in an integer predictor to treat
 #'   that predictor as "discrete integer" or as numeric. For the first case,
 #'   contrasts are calculated between values of the predictor, for the latter,
 #'   contrasts of slopes are calculated. If the integer has more than
-#'   `integer_as_numeric` unique values, it is treated as numeric. Defaults to
-#'   `5`.
+#'   `integer_as_continuous` unique values, it is treated as numeric. Defaults
+#'   to `5`. Set to `TRUE` to always treat integer predictors as continuous.
 #' - For count regression models that use an offset term, use `offset = <value>`
 #'   to fix the offset at a specific value. Or use `estimate = "average"`, to
 #'   average predictions over the distribution of the offset (if appropriate).
@@ -278,6 +286,12 @@
 #'
 #' - `modelbased_estimate`: `options(modelbased_estimate = <string>)` will
 #'   set a default value for the `estimate` argument.
+#'
+#' - `modelbased_integer`: `options(modelbased_integer = <value>)` will set the
+#'   minimum number of unique values in an integer predictor to treat that
+#'   predictor as a "discrete integer" or as continuous. If the integer has more than
+#'   `modelbased_integer` unique values, it is treated as continuous. Set to `TRUE`
+#'   to always treat integer predictors as continuous.
 #'
 #' @return A data frame of estimated marginal means.
 #'

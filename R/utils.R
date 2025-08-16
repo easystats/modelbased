@@ -72,12 +72,15 @@
       msg <- c(msg, insight::color_text(code_snippet, "green"), "\n")
     }
     message(msg)
-  } else if (length(out$SE) > 1 && isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
-    msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
-    if (!inherits(model, "glmmTMB")) {
-      msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
-    }
-    insight::format_alert(msg)
+
+    # disable message for now, see
+    # https://github.com/easystats/modelbased/issues/526
+    # } else if (length(out$SE) > 1 && isTRUE(all(out$SE == out$SE[1])) && insight::is_mixed_model(model)) {
+    #   msg <- "Standard errors are probably not reliable. This can happen when random effects are involved. You may try `estimate_relation()` instead." # nolint
+    #   if (!inherits(model, "glmmTMB")) {
+    #     msg <- paste(msg, "You may also try package {.pkg glmmTMB} to produce valid standard errors.")
+    #   }
+    #   insight::format_alert(msg)
   }
 }
 
@@ -112,9 +115,29 @@
 
 #' @keywords internal
 #' @noRd
-.is_likert <- function(x, integer_as_numeric = 5, ...) {
-  if (is.null(integer_as_numeric) || is.na(integer_as_numeric)) {
+.is_likert <- function(x, integer_as_continuous = 5, verbose = TRUE, ...) {
+  # check if argument is missing or not - message only shown when missing
+  missing_default <- missing(integer_as_continuous)
+
+  # check for global option
+  if (!is.null(getOption("modelbased_integer"))) {
+    integer_as_continuous <- getOption("modelbased_integer")
+  }
+
+  # no need to check if check is disabled
+  if (is.null(integer_as_continuous) || is.na(integer_as_continuous) || isTRUE(integer_as_continuous)) {
     return(FALSE)
   }
-  all(.is_integer(x)) && insight::n_unique(x) <= integer_as_numeric
+
+  # integer-values, and no more than `integer_as_continuous` unique values?
+  is_likert <- all(.is_integer(x)) && insight::n_unique(x) <= integer_as_continuous
+
+  # tell user, this handling might not be desired - but only if we have
+  # more than 2 unique values, otherwise it's assumed to be a binary variable
+  if (is_likert && verbose && missing_default && insight::n_unique(x) > 2) {
+    insight::format_alert(
+      "Numeric variable appears to be ordinal or Likert-scale (integer values, no more than 5 unique values) and is treated as discrete variable. Set `integer_as_continuous = TRUE` to disable this check and always treat numeric variables as continuous."
+    )
+  }
+  is_likert
 }

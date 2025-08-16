@@ -49,8 +49,8 @@ get_marginalcontrasts(
   ci = 0.95,
   comparison = "pairwise",
   estimate = NULL,
-  p_adjust = "none",
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -74,8 +74,9 @@ get_marginaltrends(
   by = NULL,
   predict = NULL,
   ci = 0.95,
-  p_adjust = "none",
+  estimate = NULL,
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   verbose = TRUE,
   ...
@@ -143,14 +144,22 @@ section \emph{Comparison options} below.
 multiple hypotheses jointly (usually used for factorial designs),
 \code{comparison} can also be \code{"joint"}. In this case, use the \code{test} argument
 to specify which test should be conducted: \code{"F"} (default) or \code{"Chi2"}.
-\item String: Two special string options are \code{"inequality"} and
-\code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
+\item String: Special string options are \code{"inequality"}, \code{"inequality_ratio"},
+and \code{"inequality_pairwise"}. \code{comparison = "inequality"} computes the
 marginal effect inequality summary of categorical predictors' overall
 effects, respectively, the comprehensive effect of an independent
 variable across all outcome categories of a nominal or ordinal dependent
-variable (total marginal effect, see \emph{Mize and Han, 2025}).
-\code{comparison = "inequality_pairwise"} computes the difference (pairwise
-comparisons) between marginal effects inequality measures.
+variable (also called \emph{absolute inequality}, or total marginal effect,
+see \emph{Mize and Han, 2025}). \code{"inequality_ratio"} computes the ratio of
+marginal effect inequality measures, also known as \emph{relative inequality}.
+This is useful to compare the relative effects of different predictors on
+the dependent variable. It provides a measure of how much more or less
+inequality one predictor has compared to another.
+\code{comparison = "inequality_pairwise"} computes pairwise differences of
+absolute inequality measures, while \code{"inequality_ratio_pairwise"}
+computes pairwise differences of relative inequality measures (ratios).
+See an overview of applications in the related case study in the
+\href{https://easystats.github.io/modelbased/articles/practical_inequalities.html}{vignettes}.
 \item String equation: To identify parameters from the output, either specify
 the term name, or \code{"b1"}, \code{"b2"} etc. to indicate rows, e.g.:\code{"hp = drat"},
 \code{"b1 = b2"}, or \code{"b1 + b2 + b3 = 0"}.
@@ -200,13 +209,13 @@ Additional arguments can be passed to these functions.
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
-which contrasts should be calculated, use argument \code{integer_as_numeric} to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument \code{integer_as_continuous}
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}.
+\code{integer_as_continuous} unique values, it is treated as numeric. Defaults
+to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
@@ -250,16 +259,35 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(\emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}).
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
-e.g. \code{options(modelbased_estimate = "average")}. When you set \code{estimate} to
-\code{"average"}, it calculates the average based only on the data points that
-actually exist. This is in particular important for two or more focal
-predictors, because it doesn't generate a \emph{complete} grid of all theoretical
-combinations of predictor values. Consequently, the output may not include
-all the values.}
+e.g. \code{options(modelbased_estimate = "average")}.
+
+Note following limitations:
+\itemize{
+\item When you set \code{estimate} to \code{"average"}, it calculates the average based
+only on the data points that actually exist. This is in particular
+important for two or more focal predictors, because it doesn't generate a
+\emph{complete} grid of all theoretical combinations of predictor values.
+Consequently, the output may not include all the values.
+\item Filtering the output at values of continuous predictors, e.g.
+\code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
+returning an empty data frame because of what was described above. In such
+case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
+provide a data grid of predictor values at which to evaluate predictions.
+\item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
+}}
+
+\item{transform}{A function applied to predictions and confidence intervals
+to (back-) transform results, which can be useful in case the regression
+model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
+Bayesian models, this function is applied to individual draws from the
+posterior distribution, before computing summaries. Can also be \code{TRUE}, in
+which case \code{insight::get_transformation()} is called to determine the
+appropriate transformation-function. Note that no standard errors are returned
+when transformations are applied.}
 
 \item{p_adjust}{The p-values adjustment method for frequentist multiple
 comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
@@ -270,15 +298,6 @@ one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonfe
 \code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
 simultaneous confidence bands, also called sup-t confidence band (Montiel
 Olea & Plagborg-Møller, 2019).}
-
-\item{transform}{A function applied to predictions and confidence intervals
-to (back-) transform results, which can be useful in case the regression
-model has a transformed response variable (e.g., \code{lm(log(y) ~ x)}). For
-Bayesian models, this function is applied to individual draws from the
-posterior distribution, before computing summaries. Can also be \code{TRUE}, in
-which case \code{insight::get_transformation()} is called to determine the
-appropriate transformation-function. Note that no standard errors are returned
-when transformations are applied.}
 }
 \description{
 These functions are convenient wrappers around the \strong{emmeans} and the

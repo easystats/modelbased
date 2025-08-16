@@ -37,14 +37,22 @@
 #'     multiple hypotheses jointly (usually used for factorial designs),
 #'     `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'     to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
-#'   * String: Two special string options are `"inequality"` and
-#'     `"inequality_pairwise"`. `comparison = "inequality"` computes the
+#'   * String: Special string options are `"inequality"`, `"inequality_ratio"`,
+#'     and `"inequality_pairwise"`. `comparison = "inequality"` computes the
 #'     marginal effect inequality summary of categorical predictors' overall
 #'     effects, respectively, the comprehensive effect of an independent
 #'     variable across all outcome categories of a nominal or ordinal dependent
-#'     variable (total marginal effect, see _Mize and Han, 2025_).
-#'     `comparison = "inequality_pairwise"` computes the difference (pairwise
-#'     comparisons) between marginal effects inequality measures.
+#'     variable (also called *absolute inequality*, or total marginal effect,
+#'     see _Mize and Han, 2025_). `"inequality_ratio"` computes the ratio of
+#'     marginal effect inequality measures, also known as *relative inequality*.
+#'     This is useful to compare the relative effects of different predictors on
+#'     the dependent variable. It provides a measure of how much more or less
+#'     inequality one predictor has compared to another.
+#'     `comparison = "inequality_pairwise"` computes pairwise differences of
+#'     absolute inequality measures, while `"inequality_ratio_pairwise"`
+#'     computes pairwise differences of relative inequality measures (ratios).
+#'     See an overview of applications in the related case study in the
+#'     [vignettes](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'   * String equation: To identify parameters from the output, either specify
 #'     the term name, or `"b1"`, `"b2"` etc. to indicate rows, e.g.:`"hp = drat"`,
 #'     `"b1 = b2"`, or `"b1 + b2 + b3 = 0"`.
@@ -103,22 +111,34 @@
 #' - To test multiple hypotheses jointly (usually used for factorial designs),
 #'   `comparison` can also be `"joint"`. In this case, use the `test` argument
 #'   to specify which test should be conducted: `"F"` (default) or `"Chi2"`.
-#' - `comparison = "inequality"` computes the marginal effect inequality summary
-#'   of categorical predictors' overall effects, respectively, the comprehensive
-#'   effect of an independent variable across all outcome categories of a
-#'   nominal or ordinal dependent variable (total marginal effect, see _Mize and
-#'   Han, 2025_). The marginal effect inequality focuses on the heterogeneity of
-#'   the effects of a categorical *independent* variable. It helps understand
-#'   how the effect of the variable differs across its categories or levels.
-#'   When the *dependent* variable is categorical (e.g., logistic, ordinal or
-#'   multinomial regression), marginal effect inequality provides a holistic
-#'   view of how an independent variable affects a nominal or ordinal
-#'   *dependent* variable. It summarizes the overall impact (total marginal
+#' - `comparison = "inequality"` computes the *absolute inequality* of groups,
+#'   or in other words, the marginal effect inequality summary of categorical
+#'   predictors' overall effects, respectively, the comprehensive effect of an
+#'   independent variable across all outcome categories of a nominal or ordinal
+#'   dependent variable (total marginal effect, see _Mize and Han, 2025_). The
+#'   marginal effect inequality focuses on the heterogeneity of the effects of a
+#'   categorical *independent* variable. It helps understand how the effect of
+#'   the variable differs across its categories or levels. When the *dependent*
+#'   variable is categorical (e.g., logistic, ordinal or multinomial
+#'   regression), marginal effect inequality provides a holistic view of how an
+#'   independent variable affects a nominal or ordinal *dependent* variable. It
+#'   summarizes the overall impact (absolute inequality, or total marginal
 #'   effects) across all possible outcome categories.
-#' - `comparison = "inequality_pairwise"` computes the difference (pairwise
-#'   comparisons) between marginal effects inequality measures. Depending on the
-#'   sign, this measure indicates which of the predictors has a stronger impact
-#'   on the dependent variable in terms of inequalities.
+#' - `comparison = "inequality_ratio"` is comparable to
+#'   `comparison = "inequality"`, but instead of calculating the absolute
+#'   inequality, it computes the *relative inequality* of groups. This is useful
+#'   to compare the relative effects of different predictors on the dependent
+#'   variable. It provides a measure of how much more or less inequality one
+#'   predictor has
+#'   compared to another.
+#' - `comparison = "inequality_pairwise"` computes pairwise differences of
+#'   absolute inequality measures, while `"inequality_ratio_pairwise"` computes
+#'   pairwise differences of relative inequality measures (ratios). Depending on
+#'   the sign, this measure indicates which of the predictors has a stronger
+#'   impact on the dependent variable in terms of inequalities.
+#'
+#' Examples for analysing inequalities are shown in the related
+#' [vignette](https://easystats.github.io/modelbased/articles/practical_inequalities.html).
 #'
 #' @section Effect Size:
 #'
@@ -163,9 +183,11 @@
 #'   confidence bands: Theory, implementation, and an application to SVARs.
 #'   Journal of Applied Econometrics, 34(1), 1–17. \doi{10.1002/jae.2656}
 #'
-#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "rstanarm"), quietly = TRUE))
+#' @examplesIf all(insight::check_if_installed(c("lme4", "marginaleffects", "parameters", "rstanarm"), quietly = TRUE))
 #' \dontrun{
-#' # Basic usage
+#' # Basic usage --------------------------------
+#' # --------------------------------------------
+#'
 #' model <- lm(Sepal.Width ~ Species, data = iris)
 #' estimate_contrasts(model)
 #'
@@ -191,14 +213,50 @@
 #' estimated <- estimate_contrasts(lm(Sepal.Width ~ Species, data = iris))
 #' standardize(estimated)
 #'
+#' # contrasts of slopes ------------------------
+#' # --------------------------------------------
+#'
+#' data(qol_cancer, package = "parameters")
+#' qol_cancer$ID <- as.numeric(qol_cancer$ID)
+#' qol_cancer$grp <- as.factor(ifelse(qol_cancer$ID < 100, "Group 1", "Group 2"))
+#' model <- lm(QoL ~ time * education * grp, data = qol_cancer)
+#'
+#' # "time" only has integer values and few values, so it's treated like a factor
+#' estimate_contrasts(model, "time", by = "education")
+#'
+#' # we set `integer_as_continuous = TRUE` to treat integer as continuous
+#' estimate_contrasts(model, "time", by = "education", integer_as_continuous = 1)
+#'
+#' # pairwise comparisons for multiple groups
+#' estimate_contrasts(
+#'   model,
+#'   "time",
+#'   by = c("education", "grp"),
+#'   integer_as_continuous = TRUE
+#' )
+#'
+#' # if we want pairwise comparisons only for one factor, but group by another,
+#' # we need the formula specification and define the grouping variable after
+#' # the vertical bar
+#' estimate_contrasts(
+#'   model,
+#'   "time",
+#'   by = c("education", "grp"),
+#'   comparison = ~pairwise | grp,
+#'   integer_as_continuous = TRUE
+#' )
+#'
 #' # custom factor contrasts - contrasts the average effects of two levels
 #' # against the remaining third level
+#' # ---------------------------------------------------------------------
+#'
 #' data(puppy_love, package = "modelbased")
 #' cond_tx <- cbind("no treatment" = c(1, 0, 0), "treatment" = c(0, 0.5, 0.5))
 #' model <- lm(happiness ~ puppy_love * dose, data = puppy_love)
 #' estimate_slopes(model, "puppy_love", by = "dose", comparison = cond_tx)
 #'
-#' # Other models (mixed, Bayesian, ...)
+#' # Other models (mixed, Bayesian, ...) --------
+#' # --------------------------------------------
 #' data <- iris
 #' data$Petal.Length_factor <- ifelse(data$Petal.Length < 4.2, "A", "B")
 #'
@@ -258,6 +316,7 @@ estimate_contrasts.default <- function(
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+  comparison <- .check_for_inequality_comparison(comparison)
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -322,7 +381,7 @@ estimate_contrasts.default <- function(
   # Table formatting
   if (isTRUE(info$joint_test)) {
     suffix <- "Joint Test"
-  } else if (identical(comparison, "inequality") || identical(comparison, "inequality_pairwise")) {
+  } else if (.is_inequality_comparison(comparison)) {
     suffix <- "Inequality Analysis"
     type <- "inequality"
   } else {

@@ -959,7 +959,10 @@ test_that("estimate_contrast, filterin in `by` and `contrast`", {
 test_that("estimate_contrast, don't calculate slopes for integers", {
   data(mtcars)
   m <- lm(mpg ~ hp + gear, data = mtcars)
-  expect_silent(estimate_contrasts(m, "gear"))
+  expect_message(
+    estimate_contrasts(m, "gear"),
+    regex = "Numeric variable appears to be ordinal"
+  )
   out <- estimate_contrasts(m, "gear")
   expect_identical(dim(out), c(3L, 9L))
 
@@ -1015,33 +1018,33 @@ test_that("estimate_contrast, works with aov (when no statistic is extracted)", 
 })
 
 
-test_that("estimate_contrast, marginal effects inequalities", {
+test_that("estimate_contrast, slopes with different estimate options", {
   skip_if(getRversion() < "4.5.0")
   skip_if_not_installed("datawizard")
   data(penguins)
   penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
 
-  m <- glm(long_bill ~ species + island + bill_dep, data = penguins, family = "binomial")
+  m <- glm(long_bill ~ species + island * bill_dep, data = penguins, family = "binomial")
 
-  out <- estimate_contrasts(m, "species", comparison = "inequality")
-  expect_equal(out[["Mean Difference"]], 0.6381, tolerance = 1e-4)
-  expect_identical(attributes(out)$table_title, c("Marginal Inequality Analysis", "blue"))
+  out <- estimate_contrasts(m, "bill_dep", by = "island")
+  expect_equal(out$Difference, c(0.08507, -0.00071, -0.08578), tolerance = 1e-4)
 
-  expect_error(
-    estimate_contrasts(m, "species", comparison = "inequality_pairwise"),
-    regex = "Pairwise comparisons require"
+  out <- estimate_contrasts(m, "bill_dep", by = "island", estimate = "average")
+  expect_equal(out$Difference, c(-0.05295, -0.07655, -0.0236), tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, comparison-options as strings", {
+  data(mtcars)
+  mtcars$cyl_helmert <- as.factor(mtcars$cyl)
+  contrasts(mtcars$cyl_helmert) <- matrix(
+    c(-0.5, 0.5, 0, -1/3, -1/3, 2/3),
+    ncol = 2,
+    dimnames = list(c("4", "6", "8"), c("6vs4", "8vs4&6"))
   )
-
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality")
-  expect_equal(out[["Mean Difference"]], c(0.23043, 0.6381), tolerance = 1e-4)
-  expect_identical(out$Parameter, c("island", "species"))
-
-  out <- estimate_contrasts(m, c("species", "island"), comparison = "inequality_pairwise")
-  expect_equal(out[["Mean Difference"]], -0.4076682, tolerance = 1e-4, ignore_attr = TRUE)
-  expect_identical(out$Parameter, "island - species")
-
-  expect_error(
-    estimate_contrasts(m, c("species", "bill_dep"), comparison = "inequality"),
-    regex = "All variables specified"
-  )
+  mod2 <- lm(mpg ~ cyl_helmert, data = mtcars)
+  out <- estimate_contrasts(mod2, contrast = "cyl_helmert", comparison = "helmert")
+  expect_equal(out$Difference, c(-6.92078, -16.20649), tolerance = 1e-4)
+  out <- estimate_contrasts(mod2, contrast = "cyl_helmert", comparison = "poly")
+  expect_equal(out$Difference, c(-8.17673, 0.92996), tolerance = 1e-4)
 })

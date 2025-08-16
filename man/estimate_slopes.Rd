@@ -10,8 +10,9 @@ estimate_slopes(
   by = NULL,
   predict = NULL,
   ci = 0.95,
-  p_adjust = "none",
+  estimate = NULL,
   transform = NULL,
+  p_adjust = "none",
   keep_iterations = FALSE,
   backend = NULL,
   verbose = TRUE,
@@ -65,15 +66,54 @@ See also section \emph{Predictions on different scales}.}
 
 \item{ci}{Confidence Interval (CI) level. Default to \code{0.95} (\verb{95\%}).}
 
-\item{p_adjust}{The p-values adjustment method for frequentist multiple
-comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
-Johnson-Neyman intervals, i.e. in case of interactions with two numeric
-predictors (one specified in \code{trend}, one in \code{by}). In this case, the
-\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
-one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
-\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
-simultaneous confidence bands, also called sup-t confidence band (Montiel
-Olea & Plagborg-Møller, 2019).}
+\item{estimate}{The \code{estimate} argument determines how predictions are
+averaged ("marginalized") over variables not specified in \code{by} or \code{contrast}
+(non-focal predictors). It controls whether predictions represent a "typical"
+individual, an "average" individual from the sample, or an "average"
+individual from a broader population.
+\itemize{
+\item \code{"typical"} (Default): Calculates predictions for a balanced data grid
+representing all combinations of focal predictor levels (specified in \code{by}).
+For non-focal numeric predictors, it uses the mean; for non-focal
+categorical predictors, it marginalizes (averages) over the levels. This
+represents a "typical" observation based on the data grid and is useful for
+comparing groups. It answers: "What would the average outcome be for a
+'typical' observation?". This is the default approach when estimating
+marginal means using the \emph{emmeans} package.
+\item \code{"average"}: Calculates predictions for each observation in the sample and
+then averages these predictions within each group defined by the focal
+predictors. This reflects the sample's actual distribution of non-focal
+predictors, not a balanced grid. It answers: "What is the predicted value
+for an average observation in my data?"
+\item \code{"population"}: "Clones" each observation, creating copies with all
+possible combinations of focal predictor levels. It then averages the
+predictions across these "counterfactual" observations (non-observed
+permutations) within each group. This extrapolates to a hypothetical
+broader population, considering "what if" scenarios. It answers: "What is
+the predicted response for the 'average' observation in a broader possible
+target population?" This approach entails more assumptions about the
+likelihood of different combinations, but can be more apt to generalize.
+This is also the option that should be used for \strong{G-computation}
+(causal inference, see \emph{Chatton and Rohrer 2024}).
+}
+
+You can set a default option for the \code{estimate} argument via \code{options()},
+e.g. \code{options(modelbased_estimate = "average")}.
+
+Note following limitations:
+\itemize{
+\item When you set \code{estimate} to \code{"average"}, it calculates the average based
+only on the data points that actually exist. This is in particular
+important for two or more focal predictors, because it doesn't generate a
+\emph{complete} grid of all theoretical combinations of predictor values.
+Consequently, the output may not include all the values.
+\item Filtering the output at values of continuous predictors, e.g.
+\code{by = "x=1:5"}, in combination with \code{estimate = "average"} may result in
+returning an empty data frame because of what was described above. In such
+case, you can use \code{estimate = "typical"} or use the \code{newdata} argument to
+provide a data grid of predictor values at which to evaluate predictions.
+\item \code{estimate = "population"} is not available for \code{estimate_slopes()}.
+}}
 
 \item{transform}{A function applied to predictions and confidence intervals
 to (back-) transform results, which can be useful in case the regression
@@ -83,6 +123,16 @@ posterior distribution, before computing summaries. Can also be \code{TRUE}, in
 which case \code{insight::get_transformation()} is called to determine the
 appropriate transformation-function. Note that no standard errors are returned
 when transformations are applied.}
+
+\item{p_adjust}{The p-values adjustment method for frequentist multiple
+comparisons. For \code{estimate_slopes()}, multiple comparison only occurs for
+Johnson-Neyman intervals, i.e. in case of interactions with two numeric
+predictors (one specified in \code{trend}, one in \code{by}). In this case, the
+\code{"esarey"} or \code{"sup-t"} options are recommended, but \code{p_adjust} can also be
+one of \code{"none"} (default), \code{"hochberg"}, \code{"hommel"}, \code{"bonferroni"}, \code{"BH"},
+\code{"BY"}, \code{"fdr"}, \code{"tukey"}, \code{"sidak"}, or \code{"holm"}. \code{"sup-t"} computes
+simultaneous confidence bands, also called sup-t confidence band (Montiel
+Olea & Plagborg-Møller, 2019).}
 
 \item{keep_iterations}{If \code{TRUE}, will keep all iterations (draws) of
 bootstrapped or Bayesian models. They will be added as additional columns
@@ -133,13 +183,13 @@ Additional arguments can be passed to these functions.
 \code{describe_posterior()}, thus, arguments like, for example, \code{centrality},
 \code{rope_range}, or \code{test} are passed to that function.
 \item Especially for \code{estimate_contrasts()} with integer focal predictors, for
-which contrasts should be calculated, use argument \code{integer_as_numeric} to
-set the maximum number of unique values in an integer predictor to treat
+which contrasts should be calculated, use argument \code{integer_as_continuous}
+to set the maximum number of unique values in an integer predictor to treat
 that predictor as "discrete integer" or as numeric. For the first case,
 contrasts are calculated between values of the predictor, for the latter,
 contrasts of slopes are calculated. If the integer has more than
-\code{integer_as_numeric} unique values, it is treated as numeric. Defaults to
-\code{5}.
+\code{integer_as_continuous} unique values, it is treated as numeric. Defaults
+to \code{5}. Set to \code{TRUE} to always treat integer predictors as continuous.
 \item For count regression models that use an offset term, use \verb{offset = <value>}
 to fix the offset at a specific value. Or use \code{estimate = "average"}, to
 average predictions over the distribution of the offset (if appropriate).
@@ -258,7 +308,7 @@ for some examples.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -272,6 +322,16 @@ model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 # Compute the marginal effect of Petal.Length at each level of Species
 slopes <- estimate_slopes(model, trend = "Petal.Length", by = "Species")
 slopes
+
+# What is the *average* slope of Petal.Length? This can be calculated by
+# taking the average of the slopes across all Species, using `comparison`.
+# We pass a function to `comparison` that calculates the mean of the slopes.
+estimate_slopes(
+  model,
+  trend = "Petal.Length",
+  by = "Species",
+  comparison = ~I(mean(x))
+)
 
 \dontrun{
 # Plot it
@@ -306,6 +366,22 @@ estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 # average marginal effects of Petal.Length,
 # just for the trend within a certain range
 estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
+}
+\dontshow{\}) # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontrun{
+# marginal effects with different `estimate` options
+data(penguins)
+penguins$long_bill <- factor(datawizard::categorize(penguins$bill_len), labels = c("short", "long"))
+m <- glm(long_bill ~ sex + species + island * bill_dep, data = penguins, family = "binomial")
+
+# the emmeans default
+estimate_slopes(m, "bill_dep", by = "island")
+emmeans::emtrends(m, "island", var = "bill_dep", regrid = "response")
+
+# the marginaleffects default
+estimate_slopes(m, "bill_dep", by = "island", estimate = "average")
+marginaleffects::avg_slopes(m, variables = "bill_dep", by = "island")
 }
 \dontshow{\}) # examplesIf}
 }
