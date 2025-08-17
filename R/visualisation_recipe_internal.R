@@ -483,7 +483,9 @@
 
   # Add response to data if not there
   y <- insight::find_response(attributes(x)$model)
-  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  if (!y %in% names(rawdata)) {
+    rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  }
 
   # if we have less than 8 values for the legend, a continuous color scale
   # is used by default - we then must convert values into factors, when we
