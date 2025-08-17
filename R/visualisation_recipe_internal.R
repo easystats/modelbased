@@ -291,10 +291,9 @@
     }
   }
 
-
   # add raw data as first layer ----------------------------------
   if (show_data) {
-    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
+    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes, numeric_as_discrete)
     # Update with additional args
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
@@ -303,12 +302,21 @@
 
   # add residual data as next lowest layer
   if (show_residuals) {
-    layers[[paste0("l", l)]] <- .visualization_recipe_residuals(x, aes)
+    layers[[paste0("l", l)]] <- .visualization_recipe_residuals(x, aes, numeric_as_discrete)
     # Update with additional args
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
 
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals
+  if (show_data || show_residuals) {
+    if (!is.null(aes$color) && is.numeric(data[[aes$color]]) && insight::n_unique(data[[aes$color]]) < numeric_as_discrete) {
+      new_values <- insight::format_value(data[[aes$color]], protect_integers = TRUE)
+      data[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
+    }
+  }
 
   # intercept line for slopes ----------------------------------
   if (inherits(x, "estimate_slopes")) {
@@ -479,7 +487,7 @@
 
 
 #' @keywords internal
-.visualization_recipe_rawdata <- function(x, aes) {
+.visualization_recipe_rawdata <- function(x, aes, numeric_as_discrete = 8) {
   model <- attributes(x)$model
   rawdata <- insight::get_data(model, verbose = FALSE)
 
@@ -491,6 +499,11 @@
     geom <- "jitter"
   } else {
     geom <- "point"
+  }
+
+  if (!is.null(aes$color) && is.numeric(rawdata[[aes$color]]) && insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
+    rawdata[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
   }
 
   # Default changes for binomial models
@@ -540,7 +553,7 @@
 
 
 #' @keywords internal
-.visualization_recipe_residuals <- function(x, aes) {
+.visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
   model <- attributes(x)$model
   residual_data <- residualize_over_grid(x, model)
 
@@ -556,6 +569,11 @@
     geom <- "jitter"
   } else {
     geom <- "point"
+  }
+
+  if (!is.null(aes$color) && is.numeric(residual_data[[aes$color]]) && insight::n_unique(residual_data[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(residual_data[[aes$color]], protect_integers = TRUE)
+    residual_data[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
   }
 
   out <- list(
