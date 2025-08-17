@@ -308,16 +308,6 @@
     l <- l + 1
   }
 
-  # if we have less than 8 values for the legend, a continuous color scale
-  # is used by default - we then must convert values into factors, when we
-  # show data or residuals
-  if (show_data || show_residuals) {
-    if (!is.null(aes$color) && is.numeric(data[[aes$color]]) && insight::n_unique(data[[aes$color]]) < numeric_as_discrete) {
-      new_values <- insight::format_value(data[[aes$color]], protect_integers = TRUE)
-      data[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
-    }
-  }
-
   # intercept line for slopes ----------------------------------
   if (inherits(x, "estimate_slopes")) {
     layers[[paste0("l", l)]] <- insight::compact_list(list(
@@ -495,15 +485,57 @@
   y <- insight::find_response(attributes(x)$model)
   if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
 
-  if (aes$type == "pointrange" && !is.numeric(rawdata[[aes$x]])) {
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (!is.null(aes$color) && is.numeric(rawdata[[aes$color]]) && insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
+    rawdata[[aes$color]] <- factor(new_values, levels = as.character(sort(as.numeric(unique(new_values)))))
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = rawdata,
+    y = y
+  )
+}
+
+
+# residuals ----------------------------------------------------------------
+
+
+#' @keywords internal
+.visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
+  model <- attributes(x)$model
+  residual_data <- residualize_over_grid(x, model)
+
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (!is.null(aes$color) && is.numeric(residual_data[[aes$color]]) && insight::n_unique(residual_data[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(residual_data[[aes$color]], protect_integers = TRUE)
+    residual_data[[aes$color]] <- factor(new_values, levels = as.character(sort(as.numeric(unique(new_values)))))
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = residual_data,
+    y = "Mean"
+  )
+}
+
+
+# helpers -----------------------------------------------------------------
+
+.data_point_geom <- function(model, aes, data, y) {
+  if (aes$type == "pointrange" && !is.numeric(data[[aes$x]])) {
     geom <- "jitter"
   } else {
     geom <- "point"
-  }
-
-  if (!is.null(aes$color) && is.numeric(rawdata[[aes$color]]) && insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete) {
-    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
-    rawdata[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
   }
 
   # Default changes for binomial models
@@ -516,7 +548,7 @@
 
   out <- list(
     geom = geom,
-    data = rawdata,
+    data = data,
     aes = list(
       y = y,
       x = aes$x,
@@ -531,65 +563,12 @@
   # check if we have matching columns in the raw data - some functions,
   # likes slopes, have mapped these aes to other columns that are not part
   # of the raw data - we set them to NULL
-  if (!is.null(aes$color) && !aes$color %in% colnames(rawdata)) {
+  if (!is.null(aes$color) && !aes$color %in% colnames(data)) {
     out$aes$color <- NULL
   }
-  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
+  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(data)) {
     out$aes$alpha <- NULL
   }
-
-  # set default alpha, if not mapped by aes
-  if (is.null(aes$alpha)) {
-    out$alpha <- 1 / 3
-  } else {
-    out$alpha <- NULL
-  }
-
-  out
-}
-
-
-# residuals ----------------------------------------------------------------
-
-
-#' @keywords internal
-.visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
-  model <- attributes(x)$model
-  residual_data <- residualize_over_grid(x, model)
-
-  # Default changes for binomial models
-  shape <- 16
-  stroke <- 0
-  if (insight::model_info(model)$is_binomial) {
-    shape <- "|"
-    stroke <- 1
-  }
-
-  if (aes$type == "pointrange" && !is.numeric(residual_data[[aes$x]])) {
-    geom <- "jitter"
-  } else {
-    geom <- "point"
-  }
-
-  if (!is.null(aes$color) && is.numeric(residual_data[[aes$color]]) && insight::n_unique(residual_data[[aes$color]]) < numeric_as_discrete) {
-    new_values <- insight::format_value(residual_data[[aes$color]], protect_integers = TRUE)
-    residual_data[[aes$color]] <- factor(new_values, levels = sort(unique(new_values)))
-  }
-
-  out <- list(
-    geom = geom,
-    data = residual_data,
-    aes = list(
-      y = "Mean",
-      x = aes$x,
-      color = aes$color,
-      alpha = aes$alpha
-    ),
-    height = 0,
-    shape = shape,
-    stroke = stroke,
-    show.legend = FALSE
-  )
 
   # set default alpha, if not mapped by aes
   if (is.null(aes$alpha)) {
