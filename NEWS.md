@@ -31,6 +31,13 @@
 
 * `estimate_grouplevel()` now supports models from package *coxme*.
 
+* New function `residualize_over_grid()`, which residualizes a model
+  over a grid of predictors. This is useful to visualize the residuals of a
+  model over a grid of predictors.
+
+* `visualisation_recipe()` and `plot()` get a `show_residuals` argument,
+  to show the residuals of the model, related to the data grid, in the plot.
+
 * Documentation of the `display()` method for *modelbased* objects has been
   added.
 
