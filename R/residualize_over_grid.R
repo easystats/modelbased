@@ -73,7 +73,6 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
     if (is.numeric(old_d[[p]])) {
       grid[[p]] <- .validate_num(grid[[p]])
     }
-    # if factor / logical / char in old data, find where it is equal
     # if numeric in old data, find where it is closest
     best_match <- .closest(old_d[[p]], grid[[p]], best_match = best_match)
   }
@@ -142,7 +141,7 @@ residualize_over_grid.estimate_means <- function(grid, model, ...) {
 
 .closest <- function(x, target, best_match) {
   if (is.numeric(x)) {
-    
+
     AD <- abs(outer(x, target, FUN = `-`))
     idx <- apply(AD, 1, function(x) x == min(x))
   } else {
