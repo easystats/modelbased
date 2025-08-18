@@ -64,8 +64,14 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
   predicted <- grid[[predictor_name]]
   grid[[predictor_name]] <- NULL
 
+  # Identify columns in the grid that are held constant (only have one unique value).
+  # These are typically the non-focal predictors.
   is_fixed <- sapply(grid, function(x) length(unique(x))) == 1
+  # Remove these fixed columns, keeping only the predictors that are varying.
+  # `drop = FALSE` ensures the result is always a data frame.
   grid <- grid[, !is_fixed, drop = FALSE]
+  # Filter the original model's predictor data (`old_d`) to only include the
+  # columns that are present and varying in the cleaned-up `grid`.
   old_d <- old_d[, colnames(grid)[colnames(grid) %in% colnames(old_d)], drop = FALSE]
 
   if (!.is_grid(grid)) {
@@ -149,19 +155,38 @@ residualize_over_grid.estimate_predicted <- residualize_over_grid.estimate_means
 }
 
 
-.closest <- function(x, target, best_match) {
+#' Find the closest values in a target vector for each value in x
+#'
+#' @param x A vector of values from the original data.
+#' @param target A vector of values from the data grid.
+#' @param best_match A logical matrix from a previous call, used for progressive
+#' filtering.
+#' @return A logical matrix where `out[i, j]` is TRUE if `target[i]` is the best
+#' match for `x[j]`, considering all previous predictors as well.
+#' @keywords internal
+#' @noRd
+.closest <- function(x, target, best_match = NULL) {
+  # Check if the predictor from the original data is numeric.
   if (is.numeric(x)) {
-
+    # Calculate a matrix of absolute differences between each value in `x` and
+    # `target`.
     AD <- abs(outer(x, target, FUN = `-`))
+    # For each original data point (row in AD), find the grid point(s) with the
+    # minimum distance. The result `idx` is a logical matrix with
+    # `length(target)` rows and `length(x)` columns.
     idx <- apply(AD, 1, function(x) x == min(x))
   } else {
+    # For categorical data, find exact matches and transpose the result to match
+    # numeric case dimensions.
     idx <- t(outer(x, target, FUN = `==`))
   }
 
+  # If this is not the first predictor, combine the current matches with
+  # previous best matches. A grid point must be a match for ALL predictors to be
+  # considered.
   if (is.matrix(best_match)) {
     idx <- idx & best_match
   }
-
   idx
 }
 

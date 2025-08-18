@@ -88,31 +88,45 @@
     if (!is.null(att$coef_name) && length(att$coef_name)) {
       aes$y <- att$coef_name
     } else {
+      # Default y-axis for frequentist models
       aes$y <- "Coefficient"
     }
+    # Set a custom plot type, used later to apply specific geoms (pointrange, coord_flip)
     aes$type <- "grouplevel"
-    # setup facets
+
+    # --- Setup for faceting (creating multiple plot panels) ---
     facet_by <- NULL
+    # Check if there are multiple parameters (e.g., random intercept and random slope)
     if (insight::n_unique(data$Parameter) > 1) {
       facet_by <- c(facet_by, "Parameter")
     }
+    # Check if there are multiple grouping factors (e.g., (1|Subject) + (1|School))
     if (insight::n_unique(data$Group) > 1) {
       facet_by <- c(facet_by, "Group")
     }
+    # Check for multiple components (for complex distributional models)
     if (insight::n_unique(data$Component) > 1) {
       facet_by <- c(facet_by, "Component")
     }
+
+    # If any faceting is needed, create a new 'facet' column in the data
     if (!is.null(facet_by)) {
+      # Start with the group name (e.g., "Subject")
       data$facet <- data$Group
+      # Append the parameter name if needed (e.g., "Subject: Days")
       if ("Parameter" %in% facet_by) {
         data$facet <- paste0(data$facet, ": ", data$Parameter)
       }
+      # Append the component name if needed (e.g., "Subject: Days (sigma)")
       if ("Component" %in% facet_by) {
         data$facet <- paste0(data$facet, " (", gsub("_", " ", data$Component, fixed = TRUE), ")")
       }
+      # Tell the main plotting function to use this new column for faceting
       aes$facet <- "facet"
     }
+    # Find the columns for confidence intervals (ymin, ymax)
     aes <- .find_aes_ci(aes, data)
+    # Return the aesthetics and data, and exit the function
     return(list(aes = aes, data = data))
   }
 
@@ -339,7 +353,7 @@
         geom = "ribbon",
         data = data,
         aes = aes_list,
-        alpha = getOption("modelbased_ribbon_alpha", 1 / 3)
+        alpha = getOption("modelbased_ribbon_alpha", 1 / 4)
       )
       if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
       l <- l + 1
