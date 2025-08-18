@@ -40,4 +40,8 @@
 #' - `options(modelbased_numeric_as_discrete = <number>)` will set a default
 #'   value for the `modelbased_numeric_as_discrete` argument. Can also be
 #'   `FALSE`.
+#'
+#' - `options(modelbased_ribbon_alpha = <number>)` will set a default value for
+#'   the `alpha` argument of the `ribbon` geom. Should be a number between `0`
+#'   and `1`.
 NULL

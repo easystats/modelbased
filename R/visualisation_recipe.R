@@ -66,6 +66,10 @@
 #'   will set a default value for the `modelbased_numeric_as_discrete` argument.
 #'   Can also be `FALSE`.
 #'
+#' - `modelbased_ribbon_alpha`: `options(modelbased_ribbon_alpha = <number>)`
+#'   will set a default value for the `alpha` argument of the `ribbon` geom.
+#'   Should be a number between `0` and `1`.
+#'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
 #' library(ggplot2)
 #' library(see)
