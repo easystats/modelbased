@@ -161,6 +161,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 <span><span class="fu"><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe</a></span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  show_data <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  show_residuals <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  point <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  line <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  pointrange <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -230,6 +231,12 @@ e.g. <code>options(modelbased_numeric_as_discrete = 10)</code>.</p></dd>
 <dd><p>A character string specifying the theme to use for the plot.
 Defaults to <code>"tufte"</code>. For other options please see <code><a href="https://rdrr.io/pkg/tinyplot/man/tinytheme.html" class="external-link">tinyplot::tinytheme()</a></code>.
 Use <code>NULL</code> if no theme should be applied.</p></dd>
+
+
+<dt id="arg-show-residuals">show_residuals<a class="anchor" aria-label="anchor" href="#arg-show-residuals"></a></dt>
+<dd><p>Logical, if <code>TRUE</code>, display residuals of the model
+as a background to the model-based estimation. Residuals will be computed
+for the predictors in the data grid, using <code><a href="residualize_over_grid.html">residualize_over_grid()</a></code>.</p></dd>
 
 
 <dt id="arg-point-line-pointrange-ribbon-facet-grid">point, line, pointrange, ribbon, facet, grid<a class="anchor" aria-label="anchor" href="#arg-point-line-pointrange-ribbon-facet-grid"></a></dt>
