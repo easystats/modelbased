@@ -96,7 +96,7 @@ test_that("estimate_slopes, johnson-neyman p-adjust", {
     tolerance = 1e-2
   )
 
-  skip_if_not_installed("mvnorm")
+  skip_if_not_installed("mvtnorm")
   set.seed(123)
   out <- estimate_slopes(model, "Petal.Width", by = "Petal.Length", p_adjust = "sup-t")
   expect_equal(
