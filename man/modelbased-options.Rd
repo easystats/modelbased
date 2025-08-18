@@ -43,6 +43,9 @@ the \code{join_dots}.
 \item \verb{options(modelbased_numeric_as_discrete = <number>)} will set a default
 value for the \code{modelbased_numeric_as_discrete} argument. Can also be
 \code{FALSE}.
+\item \verb{options(modelbased_ribbon_alpha = <number>)} will set a default value for
+the \code{alpha} argument of the \code{ribbon} geom. Should be a number between \code{0}
+and \code{1}.
 }
 }
 

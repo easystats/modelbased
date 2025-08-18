@@ -95,7 +95,6 @@
     facet_by <- NULL
     if (insight::n_unique(data$Parameter) > 1) {
       facet_by <- c(facet_by, "Parameter")
-      # aes$color <- "Parameter"
     }
     if (insight::n_unique(data$Group) > 1) {
       facet_by <- c(facet_by, "Group")
@@ -313,7 +312,7 @@
     layers[[paste0("l", l)]] <- insight::compact_list(list(
       geom = "hline",
       yintercept = 0,
-      alpha = 1 / 2,
+      alpha = getOption("modelbased_slopes_alpha", 1 / 2),
       linetype = "dashed"
     ))
     l <- l + 1
@@ -340,7 +339,7 @@
         geom = "ribbon",
         data = data,
         aes = aes_list,
-        alpha = 1 / 3
+        alpha = getOption("modelbased_ribbon_alpha", 1 / 3)
       )
       if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
       l <- l + 1
@@ -526,7 +525,7 @@
     model = model,
     aes = aes,
     data = residual_data,
-    y = "Mean"
+    y = intersect(colnames(residual_data), c("Mean", "Predicted"))[1]
   )
 }
 
@@ -574,7 +573,7 @@
 
   # set default alpha, if not mapped by aes
   if (is.null(aes$alpha)) {
-    out$alpha <- 1 / 3
+    out$alpha <- getOption("modelbased_ribbon_alpha", 1 / 3)
   } else {
     out$alpha <- NULL
   }
