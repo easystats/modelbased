@@ -308,7 +308,9 @@
   if (show_data) {
     layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes, numeric_as_discrete)
     # Update with additional args
-    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    if (!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    }
     l <- l + 1
   }
 
@@ -317,7 +319,9 @@
   if (show_residuals) {
     layers[[paste0("l", l)]] <- .visualization_recipe_residuals(x, aes, numeric_as_discrete)
     # Update with additional args
-    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    if (!is.null(point)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    }
     l <- l + 1
   }
 
@@ -355,7 +359,9 @@
         aes = aes_list,
         alpha = getOption("modelbased_ribbon_alpha", 1 / 4)
       )
-      if (!is.null(ribbon)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+      if (!is.null(ribbon)) {
+        layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], ribbon)
+      }
       l <- l + 1
     }
   }
@@ -384,7 +390,9 @@
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
-    if (!is.null(line)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+    if (!is.null(line)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], line)
+    }
     l <- l + 1
   }
 
@@ -407,7 +415,9 @@
       layers[[paste0("l", l)]]$position <- "dodge"
       layers[[paste0("l", l)]]$width <- 0.2
     }
-    if (!is.null(pointrange)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    if (!is.null(pointrange)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], pointrange)
+    }
     l <- l + 1
   }
   if (aes$type == "grouplevel") {
@@ -423,7 +433,9 @@
       data = data,
       facets = aes$facet
     )
-    if (!is.null(facet)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    if (!is.null(facet)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    }
     l <- l + 1
   }
   if (!is.null(aes$grid)) {
@@ -433,7 +445,9 @@
       rows = aes$grid,
       scales = "free_x"
     )
-    if (!is.null(grid)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    if (!is.null(grid)) {
+      layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], facet)
+    }
     l <- l + 1
   }
 
