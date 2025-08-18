@@ -19,8 +19,9 @@ test_that("residualize_over_grid", {
   expect_identical(dim(out), c(150L, 3L))
   expect_equal(sum(out$Predicted), 875.7863, tolerance = 1e-2)
 
+  pr <- estimate_relation(model, by = c("Sepal.Width", "Species"))
   expect_error(
-    estimate_relation(model, by = c("Sepal.Width", "Species")),
+    out <- residualize_over_grid(pr, model),
     regex = "Grid for partial"
   )
 })
