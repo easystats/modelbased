@@ -21,7 +21,7 @@ test_that("residualize_over_grid", {
 
   pr <- estimate_relation(model, by = c("Sepal.Width", "Species"))
   expect_error(
-    out <- residualize_over_grid(pr, model),
+    residualize_over_grid(pr, model),
     regex = "Grid for partial"
   )
 })
