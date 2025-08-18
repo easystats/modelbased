@@ -17,11 +17,11 @@ calculate marginal means. Can be \code{"marginaleffects"} or \code{"emmeans"}.
 \item \verb{options(modelbased_estimate = <string>)} will set a default value for the
 \code{estimate} argument, which modulates the type of target population
 predictions refer to.
-\item \code{modelbased_integer}: \verb{options(modelbased_integer = <value>)} will set the
-minimum number of unique values in an integer predictor to treat that
-predictor as a "discrete integer" or as continuous. If the integer has more than
-\code{modelbased_integer} unique values, it is treated as continuous. Set to \code{TRUE}
-to always treat integer predictors as continuous.
+\item \verb{options(modelbased_integer = <value>)} will set the minimum number of
+unique values in an integer predictor to treat that predictor as a
+"discrete integer" or as continuous. If the integer has more than
+\code{modelbased_integer} unique values, it is treated as continuous. Set to
+\code{TRUE} to always treat integer predictors as continuous.
 }
 
 \strong{For printing}
