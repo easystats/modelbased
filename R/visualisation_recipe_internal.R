@@ -95,7 +95,6 @@
     facet_by <- NULL
     if (insight::n_unique(data$Parameter) > 1) {
       facet_by <- c(facet_by, "Parameter")
-      # aes$color <- "Parameter"
     }
     if (insight::n_unique(data$Group) > 1) {
       facet_by <- c(facet_by, "Group")
@@ -526,7 +525,7 @@
     model = model,
     aes = aes,
     data = residual_data,
-    y = "Mean"
+    y = intersect(colnames(residual_data), c("Mean", "Predicted"))[1]
   )
 }
 

@@ -49,6 +49,12 @@ residualize_over_grid <- function(grid, model, ...) {
 }
 
 
+#' @export
+residualize_over_grid.default <- function(grid, model, ...) {
+  insight::format_error("Unsupported class for `grid`. Please provide a data frame or an object of class `estimate_means` or `estimate_predicted`.")
+}
+
+
 #' @rdname residualize_over_grid
 #' @export
 residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
@@ -118,6 +124,10 @@ residualize_over_grid.estimate_means <- function(grid, model, ...) {
 
   residualize_over_grid(new_d, model, predictor_name = attributes(grid)$coef_name, ...)
 }
+
+
+#' @export
+residualize_over_grid.estimate_predicted <- residualize_over_grid.estimate_means
 
 
 # utilities --------------------------------------------------------------------
