@@ -82,6 +82,7 @@ Virginica
 Visualisation
 Visualising
 Wagenmakers
+Weisberg
 Wemrell
 Wiernik
 al
@@ -126,6 +127,7 @@ geoms
 ggplot
 github
 glmmTMB
+glms
 grano
 grey
 hochberg
@@ -156,6 +158,7 @@ natively
 nd
 nnet
 ol
+partialled
 patilindrajeets
 pscl
 pre
@@ -169,6 +172,7 @@ repec
 reproducibility
 rescaled
 rescales
+residualized
 rootSolve
 rstanarm
 salis

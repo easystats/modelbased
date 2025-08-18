@@ -246,6 +246,7 @@
 #' @keywords internal
 .visualization_recipe <- function(x,
                                   show_data = TRUE,
+                                  show_residuals = FALSE,
                                   point = NULL,
                                   line = NULL,
                                   pointrange = NULL,
@@ -276,7 +277,7 @@
 
   # Don't plot raw data if `predict` is not on the response scale
   if (!is.null(response_scale) && !response_scale %in% c("prediction", "response", "expectation", "invlink(link)")) {
-    show_data <- FALSE
+    show_data <- show_residuals <- FALSE
   }
 
   # Don't plot raw data for transformed responses with no back-transformation
@@ -286,19 +287,26 @@
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(attributes(x)$model))
     if (!is.null(trans_fun) && all(trans_fun != "identity")) {
-      show_data <- FALSE
+      show_data <- show_residuals <- FALSE
     }
   }
 
-
   # add raw data as first layer ----------------------------------
   if (show_data) {
-    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes)
+    layers[[paste0("l", l)]] <- .visualization_recipe_rawdata(x, aes, numeric_as_discrete)
     # Update with additional args
     if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
     l <- l + 1
   }
 
+
+  # add residual data as next lowest layer
+  if (show_residuals) {
+    layers[[paste0("l", l)]] <- .visualization_recipe_residuals(x, aes, numeric_as_discrete)
+    # Update with additional args
+    if (!is.null(point)) layers[[paste0("l", l)]] <- utils::modifyList(layers[[paste0("l", l)]], point)
+    l <- l + 1
+  }
 
   # intercept line for slopes ----------------------------------
   if (inherits(x, "estimate_slopes")) {
@@ -469,15 +477,64 @@
 
 
 #' @keywords internal
-.visualization_recipe_rawdata <- function(x, aes) {
+.visualization_recipe_rawdata <- function(x, aes, numeric_as_discrete = 8) {
   model <- attributes(x)$model
   rawdata <- insight::get_data(model, verbose = FALSE)
 
   # Add response to data if not there
   y <- insight::find_response(attributes(x)$model)
-  if (!y %in% names(rawdata)) rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  if (!y %in% names(rawdata)) {
+    rawdata[y] <- insight::get_response(attributes(x)$model, verbose = FALSE)
+  }
 
-  if (aes$type == "pointrange" && !is.numeric(rawdata[[aes$x]])) {
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (!is.null(aes$color) && is.numeric(rawdata[[aes$color]]) && insight::n_unique(rawdata[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(rawdata[[aes$color]], protect_integers = TRUE)
+    rawdata[[aes$color]] <- factor(new_values, levels = as.character(sort(as.numeric(unique(new_values)))))
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = rawdata,
+    y = y
+  )
+}
+
+
+# residuals ----------------------------------------------------------------
+
+
+#' @keywords internal
+.visualization_recipe_residuals <- function(x, aes, numeric_as_discrete = 8) {
+  model <- attributes(x)$model
+  residual_data <- residualize_over_grid(x, model)
+
+  # if we have less than 8 values for the legend, a continuous color scale
+  # is used by default - we then must convert values into factors, when we
+  # show data or residuals - but we must ensure that the levels are sorted
+  # according to the original data grid, thus we need "sort()"
+  if (!is.null(aes$color) && is.numeric(residual_data[[aes$color]]) && insight::n_unique(residual_data[[aes$color]]) < numeric_as_discrete) {
+    new_values <- insight::format_value(residual_data[[aes$color]], protect_integers = TRUE)
+    residual_data[[aes$color]] <- factor(new_values, levels = as.character(sort(as.numeric(unique(new_values)))))
+  }
+
+  .data_point_geom(
+    model = model,
+    aes = aes,
+    data = residual_data,
+    y = "Mean"
+  )
+}
+
+
+# helpers -----------------------------------------------------------------
+
+.data_point_geom <- function(model, aes, data, y) {
+  if (aes$type == "pointrange" && !is.numeric(data[[aes$x]])) {
     geom <- "jitter"
   } else {
     geom <- "point"
@@ -493,7 +550,7 @@
 
   out <- list(
     geom = geom,
-    data = rawdata,
+    data = data,
     aes = list(
       y = y,
       x = aes$x,
@@ -508,10 +565,10 @@
   # check if we have matching columns in the raw data - some functions,
   # likes slopes, have mapped these aes to other columns that are not part
   # of the raw data - we set them to NULL
-  if (!is.null(aes$color) && !aes$color %in% colnames(rawdata)) {
+  if (!is.null(aes$color) && !aes$color %in% colnames(data)) {
     out$aes$color <- NULL
   }
-  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(rawdata)) {
+  if (!is.null(aes$alpha) && !aes$alpha %in% colnames(data)) {
     out$aes$alpha <- NULL
   }
 
