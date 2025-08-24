@@ -281,7 +281,7 @@
 #'
 #' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a
 #'   default value for the `backend` argument and can be used to set the package
-#'   used by default to calculate marginal means. Can be `"marginalmeans"` or
+#'   used by default to calculate marginal means. Can be `"marginaleffects"` or
 #'   `"emmeans"`.
 #'
 #' - `modelbased_estimate`: `options(modelbased_estimate = <string>)` will

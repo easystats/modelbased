@@ -96,7 +96,7 @@ test_that("estimate_means() - lm", {
   # estim <- suppressMessages(estimate_means(model))
   # expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginalmeans")
+  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginaleffects")
   expect_identical(dim(estim), c(30L, 8L))
 
   # One continuous and one factor
@@ -159,7 +159,7 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginalmeans"))
+  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginaleffects"))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
   expect_equal(estim1$Mean, estim2$Mean[order(estim2$Sepal.Width)], tolerance = 1e-4)

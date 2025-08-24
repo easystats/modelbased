@@ -326,7 +326,7 @@ values stratified by class membership. To predict the class membership, use
 \itemize{
 \item \code{modelbased_backend}: \verb{options(modelbased_backend = <string>)} will set a
 default value for the \code{backend} argument and can be used to set the package
-used by default to calculate marginal means. Can be \code{"marginalmeans"} or
+used by default to calculate marginal means. Can be \code{"marginaleffects"} or
 \code{"emmeans"}.
 \item \code{modelbased_estimate}: \verb{options(modelbased_estimate = <string>)} will
 set a default value for the \code{estimate} argument.
