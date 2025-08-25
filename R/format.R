@@ -685,7 +685,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # add posterior draws?
   insight::check_if_installed("marginaleffects")
-  posterior_draws <- as.data.frame(marginaleffects::get_draws(x, shape = "PxD"))
+  posterior_draws <- suppressWarnings(as.data.frame(marginaleffects::get_draws(
+    x,
+    shape = "PxD"
+  )))
 
   if (nrow(posterior_draws) > 0) {
     # how many?
