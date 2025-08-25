@@ -76,6 +76,6 @@ test_that("estimate_means correct inverse link for stan-glm", {
   skip_if(is.null(m))
 
   out <- estimate_means(m, "wt = [sd]")
-  expect_equal(out$Probability, c(0.81144, 0.38844, 0.08599), tolerance = 1e-4)
+  expect_equal(out$Median, c(0.81144, 0.38844, 0.08599), tolerance = 1e-4)
   expect_equal(out$CI_low, c(0.54837, 0.2029, 0.01342), tolerance = 1e-4)
 })
