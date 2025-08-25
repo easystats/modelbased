@@ -66,7 +66,8 @@
 #'   target population?" This approach entails more assumptions about the
 #'   likelihood of different combinations, but can be more apt to generalize.
 #'   This is also the option that should be used for **G-computation**
-#'   (causal inference, see _Chatton and Rohrer 2024_).
+#'   (causal inference, see _Chatton and Rohrer 2024_). `"counterfactual"` is
+#'   an alias for `"population"`.
 #'
 #' You can set a default option for the `estimate` argument via `options()`,
 #' e.g. `options(modelbased_estimate = "average")`.
@@ -399,10 +400,7 @@ estimate_means <- function(model,
   }
 
   # validate input
-  estimate <- insight::validate_argument(
-    estimate,
-    c("typical", "population", "specific", "average")
-  )
+  estimate <- .validate_estimate_arg(estimate)
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------

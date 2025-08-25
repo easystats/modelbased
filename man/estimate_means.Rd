@@ -84,7 +84,8 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(causal inference, see \emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is
+an alias for \code{"population"}.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
