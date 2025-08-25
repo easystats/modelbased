@@ -24,6 +24,22 @@
 }
 
 
+# validate estimate argument and handle aliases
+.validate_estimate_arg <- function(estimate) {
+  # validate argument
+  estimate <- insight::validate_argument(
+    estimate,
+    c("typical", "population", "specific", "average", "counterfactual")
+  )
+  # handle aliases
+  if (estimate == "counterfactual") {
+    estimate <- "population"
+  }
+  # return resuöt
+  estimate
+}
+
+
 #' @keywords internal
 #' @noRd
 .check_standard_errors <- function(out,

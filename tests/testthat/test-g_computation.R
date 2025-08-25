@@ -4,6 +4,7 @@ skip_if_not_installed("nanoparquet")
 skip_on_os("mac")
 
 test_that("estimate_contrasts - ATT and ATU", {
+  skip_if_not_installed("Rdatasets")
   dat <- marginaleffects::get_dataset("lottery")
   dat <- subset(dat, win_big == 1 | win == 0)
   dat$win_big <- as.factor(dat$win_big)

@@ -46,10 +46,7 @@ get_marginalmeans <- function(model,
   }
 
   # validate input
-  estimate <- insight::validate_argument(
-    estimate,
-    c("typical", "population", "specific", "average")
-  )
+  estimate <- .validate_estimate_arg(estimate)
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
