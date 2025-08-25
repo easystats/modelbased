@@ -684,14 +684,14 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # add posterior draws?
-  if (.is_bayesian_marginaleffects(x)) {
+  insight::check_if_installed("marginaleffects")
+  posterior_draws <- as.data.frame(marginaleffects::get_draws(x, shape = "PxD"))
+
+  if (!is_null(posterior_draws)) {
     # how many?
     keep_iterations <- attributes(x)$keep_iterations
     # check if user wants to keep any posterior draws
     if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
-      # reshape draws
-      insight::check_if_installed("marginaleffects")
-      posterior_draws <- as.data.frame(marginaleffects::get_draws(x, shape = "PxD"))
       # keep all iterations when `TRUE`
       if (isTRUE(keep_iterations)) {
         keep_iterations <- ncol(posterior_draws)
