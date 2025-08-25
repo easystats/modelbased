@@ -687,7 +687,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   insight::check_if_installed("marginaleffects")
   posterior_draws <- as.data.frame(marginaleffects::get_draws(x, shape = "PxD"))
 
-  if (!is_null(posterior_draws)) {
+  if (nrow(posterior_draws) > 0) {
     # how many?
     keep_iterations <- attributes(x)$keep_iterations
     # check if user wants to keep any posterior draws
