@@ -162,10 +162,10 @@
 #'
 #' - Model-based **predictions** is the basis for all that follows. Indeed, the
 #'   first thing to understand is how models can be used to make predictions
-#'   (see [estimate_link()]). This corresponds to the predicted response (or
+#'   (see [estimate_relation()]). This corresponds to the predicted response (or
 #'   "outcome variable") given specific predictor values of the predictors
 #'   (i.e., given a specific data configuration). This is why the concept of
-#'   [`reference grid()`][insight::get_datagrid()] is so important for direct
+#'   the [reference grid][insight::get_datagrid()] is so important for direct
 #'   predictions.
 #'
 #' - **Marginal "means"**, obtained via [estimate_means()], are an extension of

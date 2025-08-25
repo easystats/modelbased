@@ -197,10 +197,10 @@ recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed, the
 first thing to understand is how models can be used to make predictions
-(see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
+(see \code{\link[=estimate_relation]{estimate_relation()}}). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors
 (i.e., given a specific data configuration). This is why the concept of
-\code{\link[insight:get_datagrid]{reference grid()}} is so important for direct
+the \link[insight:get_datagrid]{reference grid} is so important for direct
 predictions.
 \item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension of
 such predictions, allowing to "average" (collapse) some of the predictors,
