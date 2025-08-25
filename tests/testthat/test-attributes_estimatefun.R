@@ -93,8 +93,8 @@ test_that("attributes_means, slopes", {
   expect_named(
     attributes(estim),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "names", "class", "row.names", "trend", "p_adjust", "transform",
+      "coef_name", "slope", "ci", "model_info", "keep_iterations",
       "vcov", "table_title", "table_footer", "model", "response"
     )
   )

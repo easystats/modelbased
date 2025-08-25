@@ -90,6 +90,7 @@ Suggests:
     poorman,
     pscl,
     RcppEigen,
+    Rdatasets,
     report,
     rmarkdown,
     rstanarm,

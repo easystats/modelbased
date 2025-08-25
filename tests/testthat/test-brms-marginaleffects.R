@@ -19,12 +19,12 @@ withr::with_options(
     expect_named(
       out,
       c(
-        "mpg", "ROPE_CI", "Response", "Median", "CI_low", "CI_high",
+        "mpg", "ROPE_CI", "Response", "Probability", "CI_low", "CI_high",
         "pd", "ROPE_low", "ROPE_high", "ROPE_Percentage"
       )
     )
     expect_equal(
-      out$Median,
+      out$Probability,
       c(
         0.97802, 0.83323, 0.45822, 0.12396, 0.00039, 0.00522, 0.06985,
         0.32089, 0.62049, 0.92419, 0.01218, 0.07694, 0.201, 0.23148,
