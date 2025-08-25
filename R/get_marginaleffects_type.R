@@ -116,6 +116,13 @@
 }
 
 
+# check if marginaleffects objects has posterior draws and thus is Bayesian
+.is_bayesian_marginaleffects <- function(model) {
+  insight::check_if_installed("marginaleffects")
+  !is.null(suppressWarnings(marginaleffects::get_draws(model, "PxD")))
+}
+
+
 # return default type argument for model class, as defined in marginaleffecs
 # we can overwrite the default, e.g. using "inverse_link" as an option when
 # not provided by marginaleffects, in the ".default_type" data frame
