@@ -38,6 +38,10 @@
 #' - `modelbased_full_labels`: `options(modelbased_full_labels = FALSE)` will
 #'   remove redundant (duplicated) labels from rows.
 #'
+#' - `easystats_display_format`: `options(easystats_display_format = <value>)`
+#'   will set the default format for the `display()` methods. Can be one of
+#'   `"markdown"`, `"html"`, or `"tt"`.
+#'
 #' @note Use `print_html()` and `print_md()` to create tables in HTML or
 #' markdown format, respectively.
 #'

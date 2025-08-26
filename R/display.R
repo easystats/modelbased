@@ -9,7 +9,7 @@ display.estimate_contrasts <- function(object,
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
-  format <- insight::validate_argument(format, c("md", "markdown", "html", "tt"))
+  format <- .display_default_format(format)
 
   # set defaults
   if (is.null(select)) {
@@ -54,3 +54,8 @@ display.visualisation_matrix <- display.estimate_contrasts
 
 #' @export
 display.estimate_grouplevel <- display.estimate_contrasts
+
+.display_default_format <- function(format) {
+  format <- getOption("easystats_display_format", "markdown")
+  insight::validate_argument(format, c("markdown", "html", "md", "tt"))
+}

@@ -108,6 +108,9 @@ set a default value for the \code{include_grid} argument and can be used to
 include data grids in the output by default or not.
 \item \code{modelbased_full_labels}: \code{options(modelbased_full_labels = FALSE)} will
 remove redundant (duplicated) labels from rows.
+\item \code{easystats_display_format}: \verb{options(easystats_display_format = <value>)}
+will set the default format for the \code{display()} methods. Can be one of
+\code{"markdown"}, \code{"html"}, or \code{"tt"}.
 }
 }
 
