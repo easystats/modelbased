@@ -157,7 +157,12 @@
   }
 
   int <- paste0(pred, ":", mod)
-  model <- attributes(x)$model
+  if (inherits(x, c("marginaleffects_slopes", "slopes", "marginaleffects"))) {
+    insight::check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+    model <- marginaleffects::components(x, "model")
+  } else {
+    model <- attributes(x)$model
+  }
 
   # variance-covariance matrix, to adjust p-values
   varcov <- insight::get_varcov(model)
