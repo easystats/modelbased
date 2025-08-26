@@ -56,6 +56,6 @@ display.visualisation_matrix <- display.estimate_contrasts
 display.estimate_grouplevel <- display.estimate_contrasts
 
 .display_default_format <- function(format) {
-  format <- getOption("easystats_display_format", "markdown")
+  format <- getOption("easystats_display_format", format)
   insight::validate_argument(format, c("markdown", "html", "md", "tt"))
 }
