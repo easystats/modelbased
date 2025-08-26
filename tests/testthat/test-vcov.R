@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_if_not_installed("nanoparquet")
 skip_if_not_installed("sandwich")
 skip_on_os("mac")

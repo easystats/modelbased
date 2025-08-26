@@ -118,7 +118,7 @@
 
 # check if marginaleffects objects has posterior draws and thus is Bayesian
 .is_bayesian_marginaleffects <- function(model) {
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
   !is.null(suppressWarnings(marginaleffects::get_draws(model, "PxD")))
 }
 

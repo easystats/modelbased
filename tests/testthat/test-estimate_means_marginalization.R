@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 
 test_that("estimate_means() - estimate options", {
   data(efc, package = "modelbased")
