@@ -68,7 +68,7 @@ Suggests:
     gamm4,
     gganimate,
     ggplot2,
-    glmmTMB,
+    glmmTMB (>= 1.1.12),
     httr2,
     knitr,
     lme4,
