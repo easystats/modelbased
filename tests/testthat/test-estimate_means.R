@@ -431,9 +431,10 @@ test_that("estimate_means, full averaging", {
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "population")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
-  estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
-  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
-  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+  ## FIXME: need to wait for https://github.com/vincentarelbundock/marginaleffects/issues/1575
+  # estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
+  # estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
+  # expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
   expect_identical(dim(estim2), c(2L, 8L))
