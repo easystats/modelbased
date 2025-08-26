@@ -21,7 +21,7 @@ test_that("estimate_contrasts - vcov", {
   expect_equal(out1$std.error, out2$SE, tolerance = 1e-4)
 })
 
-test_that("estimate_contrasts - glmmTMB, vcov", {
+test_that("estimate_means - glmmTMB, vcov", {
   skip_if_not_installed("glmmTMB", minimum_version = "1.1.12")
   skip_if_not_installed("parameters")
 
