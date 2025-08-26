@@ -13,6 +13,9 @@
   by_vars <- intersect(cnames, my_args$by)
   contrast_vars <- setdiff(my_args$by, by_vars)
 
+  # save "marginaleffects" object attributes, for later
+  me_attribute <- attributes(means)$marginaleffects
+
   # if we have no grouping variable, joint test simplifies to an anova-table
   # tell user to use `anova()` then.
   if (!length(by_vars)) {
@@ -78,6 +81,7 @@
     colnames(result) <- c("Contrast", by_vars, "estimate", "Chi2", "p", "df")
   }
   class(result) <- unique(c(class(means), "marginal_jointtest", "data.frame"))
+  attr(result, "marginaleffects") <- me_attribute
 
   result
 }
