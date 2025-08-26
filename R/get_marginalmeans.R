@@ -40,11 +40,6 @@ get_marginalmeans <- function(model,
   comparison <- dots$hypothesis
   joint_test <- isTRUE(dots$.joint_test)
 
-  # set defaults
-  if (is.null(estimate)) {
-    estimate <- getOption("modelbased_estimate", "typical")
-  }
-
   # validate input
   estimate <- .validate_estimate_arg(estimate)
 

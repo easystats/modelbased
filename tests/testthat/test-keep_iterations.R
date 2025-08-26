@@ -109,8 +109,8 @@ test_that("estimate_slopes() - posterior draws", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "names", "class", "row.names", "trend", "p_adjust", "transform",
+      "coef_name", "slope", "ci", "model_info", "keep_iterations",
       "table_title", "table_footer", "model", "response"
     )
   )
@@ -128,8 +128,8 @@ test_that("estimate_slopes() - posterior draws", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "names", "class", "row.names", "trend", "p_adjust", "transform",
+      "coef_name", "slope", "ci", "model_info", "keep_iterations",
       "table_title", "table_footer", "model", "response"
     )
   )

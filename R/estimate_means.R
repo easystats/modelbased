@@ -392,9 +392,6 @@ estimate_means <- function(model,
   # --------------------------------------------------------------------------
 
   # set defaults
-  if (is.null(estimate)) {
-    estimate <- getOption("modelbased_estimate", "typical")
-  }
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }

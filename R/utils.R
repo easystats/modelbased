@@ -26,6 +26,10 @@
 
 # validate estimate argument and handle aliases
 .validate_estimate_arg <- function(estimate) {
+  # set default, if not provided
+  if (is.null(estimate)) {
+    estimate <- getOption("modelbased_estimate", "typical")
+  }
   # validate argument
   estimate <- insight::validate_argument(
     estimate,
@@ -35,7 +39,7 @@
   if (estimate == "counterfactual") {
     estimate <- "population"
   }
-  # return resuöt
+  # return result
   estimate
 }
 
