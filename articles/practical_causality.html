@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -516,15 +516,29 @@ treated (ATT), standard errors can be either over- or underestimated.
 More robust methods are therefore recommended, such as bootstrapping,
 using overlap or matching weights, or calculating robust standard errors
 (Huber-White sandwich estimators) <span class="citation">(Gabriel et al.
-2024; Kostouraki et al. 2024; Reifeis and Hudgens 2022)</span>. While
-robust standard errors can be easily computed for many models using the
-<code>vcov</code> argument within the <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>
-function, this option is not currently available for models built with
-the <em>glmmTMB</em> package. Consequently, for <em>glmmTMB</em> models,
-bootstrapping or applying matching or overlap weights is the preferred
-method for obtaining robust standard errors. A fully Bayesian approach,
-as demonstrated here, also provides a robust alternative.</p>
+2024; Kostouraki et al. 2024; Reifeis and Hudgens 2022)</span>.</p>
+<p>Robust standard errors can be easily computed for many models using
+the <code>vcov</code> argument within the
+<code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> function. Package <em>glmmTMB</em>
+supports robust standard errors via the <code>sandwich</code> package
+since version 1.1.12, however, currently only the <code>"HC0"</code>
+option (which is equivalent to the Huber-White estimator).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># complex model, with IPW *and* G-computation (double-robust) is accurate!</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, vcov <span class="op">=</span> <span class="st">"HC0"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 10.89 (7.37, 14.41) | &lt;0.001</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Variable predicted: QoL</span></span>
+<span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
+<span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
+<span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>A fully Bayesian approach, as demonstrated here, also provides a
+robust alternative.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Same model as m4, within a Bayesian framework, using the Stan and brms package</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/paul-buerkner/brms" class="external-link">brms</a></span><span class="op">)</span></span>
 <span><span class="va">m5</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://paulbuerkner.com/brms/reference/brm.html" class="external-link">brm</a></span><span class="op">(</span></span>
@@ -534,7 +548,7 @@ as demonstrated here, also provides a robust alternative.</p>
 <span>  seed <span class="op">=</span> <span class="fl">123</span>,</span>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>

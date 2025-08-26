@@ -15,7 +15,7 @@ estimate_contrasts() and estimate_slopes().'><meta property="og:image" content="
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.17</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.19</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -196,7 +196,8 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for <strong>G-computation</strong>
-(causal inference, see <em>Chatton and Rohrer 2024</em>).</p></li>
+(causal inference, see <em>Chatton and Rohrer 2024</em>). <code>"counterfactual"</code> is
+an alias for <code>"population"</code>.</p></li>
 </ul><p>You can set a default option for the <code>estimate</code> argument via <code><a href="https://rdrr.io/r/base/options.html" class="external-link">options()</a></code>,
 e.g. <code>options(modelbased_estimate = "average")</code>.</p>
 <p>Note following limitations:</p><ul><li><p>When you set <code>estimate</code> to <code>"average"</code>, it calculates the average based
@@ -303,10 +304,10 @@ argument), so reading its documentation (for instance <code><a href="https://rvl
 <code><a href="https://rvlenth.github.io/emmeans/reference/emtrends.html" class="external-link">emmeans::emtrends()</a></code> or this <a href="https://marginaleffects.com/" class="external-link">website</a>) is
 recommended to understand the idea behind these types of procedures.</p><ul><li><p>Model-based <strong>predictions</strong> is the basis for all that follows. Indeed, the
 first thing to understand is how models can be used to make predictions
-(see <code><a href="estimate_expectation.html">estimate_link()</a></code>). This corresponds to the predicted response (or
+(see <code><a href="estimate_expectation.html">estimate_relation()</a></code>). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors
 (i.e., given a specific data configuration). This is why the concept of
-<code><a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">reference grid()</a></code> is so important for direct
+the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">reference grid</a> is so important for direct
 predictions.</p></li>
 <li><p><strong>Marginal "means"</strong>, obtained via <code>estimate_means()</code>, are an extension of
 such predictions, allowing to "average" (collapse) some of the predictors,
@@ -424,7 +425,7 @@ values stratified by class membership. To predict the class membership, use
 
 <ul><li><p><code>modelbased_backend</code>: <code>options(modelbased_backend = &lt;string&gt;)</code> will set a
 default value for the <code>backend</code> argument and can be used to set the package
-used by default to calculate marginal means. Can be <code>"marginalmeans"</code> or
+used by default to calculate marginal means. Can be <code>"marginaleffects"</code> or
 <code>"emmeans"</code>.</p></li>
 <li><p><code>modelbased_estimate</code>: <code>options(modelbased_estimate = &lt;string&gt;)</code> will
 set a default value for the <code>estimate</code> argument.</p></li>
