@@ -559,7 +559,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # we need to remove some more columns
   remove_columns <- c(remove_columns, "rowid")
   # and modify the estimate name - if it's not a dpar
-  if (!is.null(attributes(x)$posterior_draws) && !is.null(estimate_name) && !tolower(estimate_name) %in% .brms_aux_elements()) { # nolint
+  if (
+    .is_bayesian_marginaleffects(x) &&
+      !is.null(estimate_name) &&
+      !tolower(estimate_name) %in% .brms_aux_elements()
+  ) {
     estimate_name <- coefficient_name
   }
   # rename the "term" and "hypothesis" column (which we get from contrasts)
@@ -680,13 +684,17 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # add posterior draws?
-  if (!is.null(attributes(x)$posterior_draws)) {
+  insight::check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  posterior_draws <- suppressWarnings(as.data.frame(marginaleffects::get_draws(
+    x,
+    shape = "PxD"
+  )))
+
+  if (nrow(posterior_draws) > 0) {
     # how many?
     keep_iterations <- attributes(x)$keep_iterations
     # check if user wants to keep any posterior draws
     if (isTRUE(keep_iterations) || is.numeric(keep_iterations)) {
-      # reshape draws
-      posterior_draws <- as.data.frame(attributes(x)$posterior_draws)
       # keep all iterations when `TRUE`
       if (isTRUE(keep_iterations)) {
         keep_iterations <- ncol(posterior_draws)

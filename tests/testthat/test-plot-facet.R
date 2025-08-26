@@ -3,7 +3,7 @@ skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_on_cran()
 
 test_that("plots facets", {

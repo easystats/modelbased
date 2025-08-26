@@ -23,9 +23,7 @@ get_marginaltrends <- function(model,
   dots <- list(...)
 
   # set defaults
-  if (is.null(estimate)) {
-    estimate <- "typical"
-  }
+  estimate <- .validate_estimate_arg(estimate)
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)

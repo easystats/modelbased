@@ -1,7 +1,7 @@
 Type: Package
 Package: modelbased
 Title: Estimation of Model-Based Predictions, Contrasts and Means
-Version: 0.12.0.17
+Version: 0.12.0.19
 Authors@R:
     c(person(given = "Dominique",
              family = "Makowski",
@@ -68,7 +68,7 @@ Suggests:
     gamm4,
     gganimate,
     ggplot2,
-    glmmTMB,
+    glmmTMB (>= 1.1.12),
     httr2,
     knitr,
     lme4,
@@ -90,6 +90,7 @@ Suggests:
     poorman,
     pscl,
     RcppEigen,
+    Rdatasets,
     report,
     rmarkdown,
     rstanarm,
@@ -114,4 +115,4 @@ Roxygen: list(markdown = TRUE)
 Config/Needs/check: stan-dev/cmdstanr
 Config/Needs/website: easystats/easystatstemplate
 LazyData: true
-Remotes: easystats/insight, easystats/parameters
+Remotes: easystats/insight, easystats/parameters, easystats/bayestestR, vincentarelbundock/marginaleffects

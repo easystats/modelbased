@@ -1,9 +1,10 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_if_not_installed("nanoparquet")
 skip_on_os("mac")
 
 test_that("estimate_contrasts - ATT and ATU", {
+  skip_if_not_installed("Rdatasets")
   dat <- marginaleffects::get_dataset("lottery")
   dat <- subset(dat, win_big == 1 | win == 0)
   dat$win_big <- as.factor(dat$win_big)

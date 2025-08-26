@@ -238,7 +238,16 @@ estimate_contrasts(
 
 ## An important note on variance estimators
 
-When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE), especially when we have observations with large or extreme weights. For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping, using overlap or matching weights, or calculating robust standard errors (Huber-White sandwich estimators) [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022]. While robust standard errors can be easily computed for many models using the `vcov` argument within the `estimate_contrasts()` function, this option is not currently available for models built with the *glmmTMB* package. Consequently, for *glmmTMB* models, bootstrapping or applying matching or overlap weights is the preferred method for obtaining robust standard errors. A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
+When performing statistical inference with inverse probability weighting (IPW), using standard variance estimators is discouraged. These estimators often fail to account for the variance introduced by the IPW itself, resulting in conservative standard errors for the average treatment effect (ATE), especially when we have observations with large or extreme weights. For the average treatment effect on the treated (ATT), standard errors can be either over- or underestimated. More robust methods are therefore recommended, such as bootstrapping, using overlap or matching weights, or calculating robust standard errors (Huber-White sandwich estimators) [@gabriel_inverse_2024; @kostouraki_variance_2024; @reifeis_variance_2022].
+
+Robust standard errors can be easily computed for many models using the `vcov` argument within the `estimate_contrasts()` function. Package *glmmTMB* supports robust standard errors via the `sandwich` package since version 1.1.12, however, currently only the `"HC0"` option (which is equivalent to the Huber-White estimator).
+
+```{r}
+# complex model, with IPW *and* G-computation (double-robust) is accurate!
+estimate_contrasts(m4, "treatment", vcov = "HC0", estimate = "population")
+```
+
+A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
 
 ```{r echo=FALSE}
 library(brms)

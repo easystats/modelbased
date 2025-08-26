@@ -84,7 +84,8 @@ the predicted response for the 'average' observation in a broader possible
 target population?" This approach entails more assumptions about the
 likelihood of different combinations, but can be more apt to generalize.
 This is also the option that should be used for \strong{G-computation}
-(causal inference, see \emph{Chatton and Rohrer 2024}).
+(causal inference, see \emph{Chatton and Rohrer 2024}). \code{"counterfactual"} is
+an alias for \code{"population"}.
 }
 
 You can set a default option for the \code{estimate} argument via \code{options()},
@@ -196,10 +197,10 @@ recommended to understand the idea behind these types of procedures.
 \itemize{
 \item Model-based \strong{predictions} is the basis for all that follows. Indeed, the
 first thing to understand is how models can be used to make predictions
-(see \code{\link[=estimate_link]{estimate_link()}}). This corresponds to the predicted response (or
+(see \code{\link[=estimate_relation]{estimate_relation()}}). This corresponds to the predicted response (or
 "outcome variable") given specific predictor values of the predictors
 (i.e., given a specific data configuration). This is why the concept of
-\code{\link[insight:get_datagrid]{reference grid()}} is so important for direct
+the \link[insight:get_datagrid]{reference grid} is so important for direct
 predictions.
 \item \strong{Marginal "means"}, obtained via \code{\link[=estimate_means]{estimate_means()}}, are an extension of
 such predictions, allowing to "average" (collapse) some of the predictors,
@@ -326,7 +327,7 @@ values stratified by class membership. To predict the class membership, use
 \itemize{
 \item \code{modelbased_backend}: \verb{options(modelbased_backend = <string>)} will set a
 default value for the \code{backend} argument and can be used to set the package
-used by default to calculate marginal means. Can be \code{"marginalmeans"} or
+used by default to calculate marginal means. Can be \code{"marginaleffects"} or
 \code{"emmeans"}.
 \item \code{modelbased_estimate}: \verb{options(modelbased_estimate = <string>)} will
 set a default value for the \code{estimate} argument.

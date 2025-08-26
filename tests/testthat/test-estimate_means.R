@@ -1,6 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 
 test_that("estimate_means() - lm", {
   data(mtcars)
@@ -96,7 +96,7 @@ test_that("estimate_means() - lm", {
   # estim <- suppressMessages(estimate_means(model))
   # expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginalmeans")
+  estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginaleffects")
   expect_identical(dim(estim), c(30L, 8L))
 
   # One continuous and one factor
@@ -159,7 +159,7 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low, estim2$CI_low, tolerance = 1e-3)
 
   estim1 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "emmeans"))
-  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginalmeans"))
+  estim2 <- suppressMessages(estimate_means(model, by = c("Species=c('versicolor', 'setosa')", "Sepal.Width=c(2, 4)"), backend = "marginaleffects"))
   expect_identical(dim(estim1), c(4L, 6L))
   expect_identical(dim(estim2), c(4L, 8L))
   expect_equal(estim1$Mean, estim2$Mean[order(estim2$Sepal.Width)], tolerance = 1e-4)
@@ -326,7 +326,7 @@ test_that("estimate_means() - glm", {
 
 
 test_that("get_marginaleffects, overall mean", {
-  skip_if_not_installed("marginaleffects")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
   skip_if_not_installed("emmeans")
 
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
@@ -431,9 +431,10 @@ test_that("estimate_means, full averaging", {
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "population")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
-  estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
-  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
-  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+  ## FIXME: need to wait for https://github.com/vincentarelbundock/marginaleffects/issues/1575
+  # estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
+  # estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
+  # expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
   expect_identical(dim(estim2), c(2L, 8L))

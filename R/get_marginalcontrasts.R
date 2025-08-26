@@ -29,9 +29,9 @@ get_marginalcontrasts <- function(
   if (is.null(contrast)) {
     contrast <- "auto"
   }
-  if (is.null(estimate)) {
-    estimate <- getOption("modelbased_estimate", "typical")
-  }
+
+  # validate arguments
+  estimate <- .validate_estimate_arg(estimate)
   comparison <- .check_for_inequality_comparison(comparison)
 
   # check whether contrasts should be made for numerics or categorical

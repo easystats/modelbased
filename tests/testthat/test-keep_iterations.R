@@ -1,5 +1,5 @@
 skip_on_cran()
-skip_if_not_installed("marginaleffects")
+skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
 skip_if_not_installed("emmeans")
 skip_if_not_installed("brms")
 skip_if_not_installed("curl")
@@ -109,8 +109,8 @@ test_that("estimate_slopes() - posterior draws", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "names", "class", "row.names", "trend", "p_adjust", "transform",
+      "coef_name", "slope", "ci", "model_info", "keep_iterations",
       "table_title", "table_footer", "model", "response"
     )
   )
@@ -128,8 +128,8 @@ test_that("estimate_slopes() - posterior draws", {
   expect_named(
     attributes(out),
     c(
-      "names", "class", "row.names", "trend", "comparison", "p_adjust",
-      "transform", "coef_name", "slope", "ci", "model_info", "keep_iterations",
+      "names", "class", "row.names", "trend", "p_adjust", "transform",
+      "coef_name", "slope", "ci", "model_info", "keep_iterations",
       "table_title", "table_footer", "model", "response"
     )
   )
