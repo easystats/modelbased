@@ -91,10 +91,11 @@ test_that("estimate_means() - lm", {
   expect_equal(estim1$CI_low[order(estim1$Sepal.Width)], estim2$CI_low, tolerance = 1e-3)
 
   # In formula modification
-  # FIXME: this got broken but it seems just to tedious to fix. Don't use in formula transforms.
-  # model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
-  # estim <- suppressMessages(estimate_means(model))
-  # expect_equal(dim(estim), c(3L, 5L))
+  model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
+  estim <- suppressMessages(estimate_means(model))
+  expect_equal(dim(estim), c(3L, 7L))
+  estim <- suppressMessages(estimate_means(model, backend = "emmeans"))
+  expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
   estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginaleffects")
   expect_identical(dim(estim), c(30L, 8L))
@@ -431,10 +432,14 @@ test_that("estimate_means, full averaging", {
   estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "population")
   expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
-  ## FIXME: need to wait for https://github.com/vincentarelbundock/marginaleffects/issues/1575
-  # estim1 <- marginaleffects::avg_predictions(m, newdata = "balanced", by = c("c161sex", "c172code"))
-  # estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
-  # expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
+  # See https://github.com/vincentarelbundock/marginaleffects/issues/1575
+  # marginaleffects has a new behavior for calculating averages for numerics
+  # in the data grid, this, `newdata = "balanced"` gives slightly different results
+  # we therefor calculate the data grid manually here
+  d <- insight::get_datagrid(m, by = c("c161sex", "c172code"), factors = "all")
+  estim1 <- marginaleffects::avg_predictions(m, newdata = d, by = c("c161sex", "c172code"))
+  estim2 <- estimate_means(m, by = c("c161sex", "c172code"), estimate = "typical")
+  expect_equal(estim1$estimate, estim2$Mean, tolerance = 1e-4)
 
   estim2 <- estimate_means(m, by = c("c161sex", "c172code='mid'"), estimate = "average")
   expect_identical(dim(estim2), c(2L, 8L))

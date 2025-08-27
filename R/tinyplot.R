@@ -106,6 +106,7 @@ tinyplot.estimate_means <- function(
   names(plot_args) <- elements
 
   ## TODO: legend labels?
+  ## TODO: show residuals?
 
   # x/y labels --------------------------------
   dots$xlab <- aes$labs$x

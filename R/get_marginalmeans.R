@@ -341,13 +341,13 @@ get_marginalmeans <- function(model,
 #   message, which is then passed to `insight::format_error()`.
 .marginaleffects_errors <- function(out, fun_args) {
   # what was requested?
-  if (!is.null(fun_args$hypothesis)) {
-    fun <- "marginal contrasts"
-  } else {
+  if (is.null(fun_args$hypothesis)) {
     fun <- "marginal means"
+  } else {
+    fun <- "marginal contrasts"
   }
   # clean original error message
-  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message))
+  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message, fixed = TRUE))
   # setup clear error message
   msg <- c(
     paste0("Sorry, calculating ", fun, " failed with following error:"),
@@ -508,6 +508,7 @@ get_marginalmeans <- function(model,
 .guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, verbose = TRUE, ...) {
   # Gather info and data from model
   model_data <- insight::get_data(model, verbose = FALSE)
+
   predictors <- intersect(
     colnames(model_data),
     insight::find_predictors(model, effects = "fixed", flatten = TRUE, ...)
@@ -518,9 +519,18 @@ get_marginalmeans <- function(model,
       # Find categorical predictors
       spec_value <- predictors[!vapply(model_data[predictors], is.numeric, logical(1))]
       if (!length(spec_value) || all(is.na(spec_value))) {
-        insight::format_error(paste0(
-          "Model contains no categorical predictor. Please specify `", spec_name, "`."
-        ))
+        # in-formula transformations, like `as.factor(x)`, need special handling
+        # because these predictors are no factors in the data. we get flags for
+        # such transformations when we request data from the model frame
+        model_frame <- insight::get_data(model, source = "mf", verbose = FALSE)
+        factors <- attributes(model_frame)$factors
+        # if still no factors found, throw error
+        if (is.null(factors)) {
+          insight::format_error(paste0(
+            "Model contains no categorical predictor. Please specify `", spec_name, "`."
+          ))
+        }
+        spec_value <- factors
       }
       if (verbose) {
         insight::format_alert(paste0(
