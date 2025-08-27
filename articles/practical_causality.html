@@ -239,7 +239,7 @@ mixed model to the data.</p>
 <span><span class="co"># convert to factors</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We first look at the simple effect of <code>treatment</code>, which
-is about <code>9.3</code>.</p>
+is about <code>10.7</code>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># simple pooled effect</span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
@@ -318,9 +318,9 @@ examples.</p>
 <h3 id="ate-calculated-from-ipw-in-simpler-models">ATE calculated from IPW in simpler models<a class="anchor" aria-label="anchor" href="#ate-calculated-from-ipw-in-simpler-models"></a>
 </h3>
 <p>Now we run the same model again, including the weights. We see that
-the treatment effect, after weighting, is about <code>9</code> points,
-i.e. the treatment on average results in a 9-point higher score for
-QoL.</p>
+the treatment effect, after weighting, is about <code>10.8</code>
+points, i.e. the treatment on average results in a (roughly) 11-point
+higher score for QoL.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
