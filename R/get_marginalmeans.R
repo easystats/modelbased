@@ -341,13 +341,13 @@ get_marginalmeans <- function(model,
 #   message, which is then passed to `insight::format_error()`.
 .marginaleffects_errors <- function(out, fun_args) {
   # what was requested?
-  if (!is.null(fun_args$hypothesis)) {
-    fun <- "marginal contrasts"
-  } else {
+  if (is.null(fun_args$hypothesis)) {
     fun <- "marginal means"
+  } else {
+    fun <- "marginal contrasts"
   }
   # clean original error message
-  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message))
+  out$message <- gsub("\\s+", " ", gsub("\n", "", out$message, fixed = TRUE))
   # setup clear error message
   msg <- c(
     paste0("Sorry, calculating ", fun, " failed with following error:"),
