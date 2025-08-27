@@ -120,7 +120,16 @@ get_emmeans <- function(model,
   if (!is.null(by) && length(by) == 1 && by == "auto") {
     by <- predictors[!sapply(model_data[predictors], is.numeric)]
     if (!length(by) || all(is.na(by))) {
-      insight::format_error("Model contains no categorical factor. Please specify `by`.")
+      # in-formula transformations, like `as.factor(x)`, need special handling
+      # because these predictors are no factors in the data. we get flags for
+      # such transformations when we request data from the model frame
+      model_frame <- insight::get_data(model, source = "mf", verbose = FALSE)
+      factors <- attributes(model_frame)$factors
+      # if still no factors found, throw error
+      if (is.null(factors)) {
+        insight::format_error("Model contains no categorical factor. Please specify `by`.")
+      }
+      by <- factors
     }
     if (verbose) {
       insight::format_alert(paste0(

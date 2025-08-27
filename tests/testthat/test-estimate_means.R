@@ -93,6 +93,8 @@ test_that("estimate_means() - lm", {
   # In formula modification
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
   estim <- suppressMessages(estimate_means(model))
+  expect_equal(dim(estim), c(3L, 7L))
+  estim <- suppressMessages(estimate_means(model, backend = "emmeans"))
   expect_equal(dim(estim), c(3L, 5L))
   model <- lm(mpg ~ wt * as.factor(gear), data = mtcars)
   estim <- estimate_means(model, by = c("wt", "gear"), backend = "marginaleffects")
