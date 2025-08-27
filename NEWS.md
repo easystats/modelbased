@@ -5,7 +5,7 @@
 * Methods for the *tinyplot* package were added.
 
 * `estimate_slopes()` now also gets the `estimate` argument, to specify how to
-  estimate over non-focal terms.
+  estimate / marginalize over non-focal terms.
 
 * Improvements to `estimate_contrasts()`:
 
@@ -47,6 +47,9 @@
   random effects) was removed for now, as it is uncertain whether the standard
   errors were unreliable.
 
+* Modified code base to address changes in the *marginaleffects* package from
+  version 0.29.0 onwards.
+
 ## Bug fixes
 
 * Fixed issue with `by` in `estimate_contrasts()` when `comparison` was
@@ -55,6 +58,10 @@
 * Some comparison options, like `"helmert"` or `"poly"`, could not be specified
   as string-value, only as formula. This has been fixed, so they can now be
   specified as string-value, too.
+
+* In-formula transformations of predictors in `by` could not be handled when
+  `by` was not specified. This has been fixed, and automatic detection of `by`
+  variables now also works with in-formula transformations.
 
 # modelbased 0.12.0
 
