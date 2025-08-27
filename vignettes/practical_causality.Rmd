@@ -83,7 +83,7 @@ d$QoL <- d$QoL + rnorm(
 d <- to_factor(d, c("treatment", "time"))
 ```
 
-We first look at the simple effect of `treatment`, which is about `9.3`.
+We first look at the simple effect of `treatment`, which is about `10.7`.
 
 ```{r}
 # simple pooled effect
@@ -141,7 +141,7 @@ d$overlap_weights <- ifelse(
 
 ## ATE calculated from IPW in simpler models
 
-Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `9` points, i.e. the treatment on average results in a 9-point higher score for QoL.
+Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `10.8` points, i.e. the treatment on average results in a (roughly) 11-point higher score for QoL.
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(
