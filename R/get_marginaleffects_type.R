@@ -1,10 +1,12 @@
 #' @keywords internal
-.get_marginaleffects_type_argument <- function(model,
-                                               predict = NULL,
-                                               comparison = NULL,
-                                               model_info = NULL,
-                                               verbose = TRUE,
-                                               ...) {
+.get_marginaleffects_type_argument <- function(
+  model,
+  predict = NULL,
+  comparison = NULL,
+  model_info = NULL,
+  verbose = TRUE,
+  ...
+) {
   dots <- list(...)
 
   # no transformation always returns link-scale
@@ -54,7 +56,9 @@
     # add modelbased-options to valid types
     valid_types <- unique(c("response", "link", valid_types))
     insight::format_error(paste0(
-      "The option provided in the `", error_arg, "` argument is not recognized.",
+      "The option provided in the `",
+      error_arg,
+      "` argument is not recognized.",
       " Valid options are: ",
       datawizard::text_concatenate(valid_types, enclose = "`"),
       "."
