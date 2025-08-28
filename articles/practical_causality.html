@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.21</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.22</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -412,6 +412,10 @@ contrasts derived from an IPW model with contrasts generated from the
 same model using g-computation. The results demonstrate the increased
 accuracy achieved by combining IPW with g-computation in such
 situations.</p>
+<p>While the contrasts based solely on IPW are slightly biased with an
+estimated difference of 5.99, the contrasts derived from the same model
+using g-computation are close to the effect we found before, with an
+estimated difference of 5.65.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># more complex model</span></span>
 <span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
@@ -453,14 +457,9 @@ situations.</p>
 how to calculate the average treatment effect on the treated (ATT), and
 average treatment effect on the untreated (ATU).</p>
 <p>The ATT measures how much the treatment changes the outcome for those
-who already received it. It can help to decide whether a program or
-treatment should be discontinued for the people currently benefiting
-from it. Likewise, the ATU estimates how much the treatment would change
-the outcome if it were given to those who didn’t already receive it. It
-helps us decide whether a program or treatment should be expanded to
-include those who haven’t yet benefited from it. It helps to assess the
-potential benefits of extending a program or treatment to a wider
-population.</p>
+who already received it. Likewise, the ATU estimates how much the
+treatment would change the outcome if it were given to those who didn’t
+already receive it.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/insight/" class="external-link">insight</a></span><span class="op">)</span></span>
 <span></span>
@@ -503,6 +502,18 @@ population.</p>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
 <span><span class="co">#&gt; Predictors averaged: time, education, hospital (0.95), age (0.22), phq4 (-0.076), ID</span></span>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span></code></pre></div>
+<p>It is helpful to calculate both ATT and ATU, as they can differ
+substantially, indicating a potential bias in the selection mechanism of
+receiving a treatment or not. In our example, since the ATU is larger
+than the ATT, this could mean that the treated individuals are possibly
+less responsive to the treatment or the untreated individuals are more
+likely not to choose the intervention.</p>
+<p>In ideal randomized trials, the Average Treatment Effect (ATE), the
+effect on the treated (ATT), and the effect on the untreated (ATU) are
+expected to be the same because randomization creates comparable groups.
+However, these values often differ in observational studies or trials
+with treatment non-compliance, as the groups may be systematically
+different due to factors like self-selection <span class="citation">(Dong, Kelcey, and Spybrook 2023)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="an-important-note-on-variance-estimators">An important note on variance estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-variance-estimators"></a>
@@ -606,6 +617,13 @@ in Methods and Practices in Psychological Science</em> 7 (1):
 Dickerman, Barbra A., and Miguel A. Hernán. 2020. <span>“Counterfactual
 Prediction Is Not Only for Causal Inference.”</span> <em>European
 Journal of Epidemiology</em> 35 (7): 615–17. <a href="https://doi.org/10.1007/s10654-020-00659-8" class="external-link">https://doi.org/10.1007/s10654-020-00659-8</a>.
+</div>
+<div id="ref-dong_identifying_2023" class="csl-entry">
+Dong, Nianbo, Benjamin Kelcey, and Jessaca Spybrook. 2023.
+<span>“Identifying and <span>Estimating</span> <span>Causal</span>
+<span>Moderation</span> for <span>Treated</span> and
+<span>Targeted</span> <span>Subgroups</span>.”</span> <em>Multivariate
+Behavioral Research</em> 58 (2): 221–40. <a href="https://doi.org/10.1080/00273171.2022.2046997" class="external-link">https://doi.org/10.1080/00273171.2022.2046997</a>.
 </div>
 <div id="ref-gabriel_inverse_2024" class="csl-entry">
 Gabriel, Erin E., Michael C. Sachs, Torben Martinussen, Ingeborg
