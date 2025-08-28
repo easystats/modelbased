@@ -195,7 +195,24 @@ explicitly defines the pre- and post-intervention dynamics:</p>
 <span>  <span class="fl">5</span> <span class="op">*</span> <span class="va">event</span> <span class="op">*</span> <span class="va">time</span> <span class="op">+</span>   <span class="co"># 4. Slope change (slope becomes 15 + 5 = 20)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="co"># Add some random noise</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">outcome</span>, <span class="va">time</span>, <span class="va">event</span><span class="op">)</span></span></code></pre></div>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">outcome</span>, <span class="va">time</span>, <span class="va">event</span><span class="op">)</span></span>
+<span><span class="co"># make event a factor for easier interpretation</span></span>
+<span><span class="va">dat</span><span class="op">$</span><span class="va">event</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">event</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Pre-Event"</span>, <span class="st">"Post-Event"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>First, let’s visualize the data to see the intervention’s effect. We
+can clearly see both the immediate jump at day 200 and the change in
+trend afterward.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://easystats.github.io/see/" class="external-link">see</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Visualize the simulated data</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">time</span>, y <span class="op">=</span> <span class="va">outcome</span>, colour <span class="op">=</span> <span class="va">event</span>, group <span class="op">=</span> <span class="va">event</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html" class="external-link">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Interrupted Time Series Analysis"</span>, x <span class="op">=</span> <span class="st">"Time (Days)"</span>, y <span class="op">=</span> <span class="st">"Outcome"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/theme_modern.html" class="external-link">theme_modern</a></span><span class="op">(</span>show.ticks <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/see/reference/scale_color_flat.html" class="external-link">scale_color_flat</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="practical_its_files/figure-html/unnamed-chunk-4-1.png" width="100%"></p>
 </div>
 <div class="section level2">
 <h2 id="modeling-the-time-series">Modeling the Time Series<a class="anchor" aria-label="anchor" href="#modeling-the-time-series"></a>
@@ -212,7 +229,7 @@ model. The key is to include the <code>time</code> variable, the
 <code>time:event</code>: Models the change in trend (slope) after
 the intervention.</li>
 </ul>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">outcome</span> <span class="op">~</span> <span class="va">time</span> <span class="op">*</span> <span class="va">event</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
@@ -227,33 +244,33 @@ quantify and test the intervention’s effects.</p>
 before and right after the intervention at <code>time = 200</code>. We
 can use <code><a href="../reference/estimate_means.html">estimate_means()</a></code> to get the predicted values at
 <code>time = 199</code> and <code>time = 200</code> for both the factual
-(<code>event = 1</code>) and counterfactual (<code>event = 0</code>)
-scenarios.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+(<code>event = Post-Event</code>) and counterfactual
+(<code>event = Pre-Event</code>) scenarios.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span><span class="va">mod</span>, by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time=c(199,200)"</span>, <span class="st">"event"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Means</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; time | event |                  Mean (CI)</span></span>
-<span><span class="co">#&gt; -----------------------------------------</span></span>
-<span><span class="co">#&gt; 199  |     0 | 3016.42 (2989.26, 3043.59)</span></span>
-<span><span class="co">#&gt; 200  |     0 | 3031.70 (3004.33, 3059.07)</span></span>
-<span><span class="co">#&gt; 199  |     1 | 4035.72 (4005.05, 4066.38)</span></span>
-<span><span class="co">#&gt; 200  |     1 | 4055.53 (4025.14, 4085.92)</span></span>
+<span><span class="co">#&gt; time | event      |                  Mean (CI)</span></span>
+<span><span class="co">#&gt; ----------------------------------------------</span></span>
+<span><span class="co">#&gt; 199  | Pre-Event  | 3016.42 (2989.26, 3043.59)</span></span>
+<span><span class="co">#&gt; 200  | Pre-Event  | 3031.70 (3004.33, 3059.07)</span></span>
+<span><span class="co">#&gt; 199  | Post-Event | 4035.72 (4005.05, 4066.38)</span></span>
+<span><span class="co">#&gt; 200  | Post-Event | 4055.53 (4025.14, 4085.92)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors modulated: time=c(199,200), event</span></span></code></pre></div>
 <p>To directly test if the immediate “jump” or “level change” at the
 moment of the intervention is statistically significant, we can use
 <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>. We ask for the difference between
-<code>event = 1</code> and <code>event = 0</code> specifically at
-<code>time = 200</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code>event = Post-Event</code> and <code>event = Pre-Event</code>
+specifically at <code>time = 200</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mod</span>, contrast <span class="op">=</span> <span class="st">"event"</span>, by <span class="op">=</span> <span class="st">"time=200"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 | time |           Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; -----------------------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      |  200 | 1023.83 (982.94, 1064.73) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1     | Level2    | time |           Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; Post-Event | Pre-Event |  200 | 1023.83 (982.94, 1064.73) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: event</span></span>
@@ -268,16 +285,16 @@ represents the immediate impact of the intervention.</p>
 <p>Next, we want to know if the intervention changed the long-term trend
 of the outcome. We can use <code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> to compute the
 slope of <code>time</code> for the pre-intervention period
-(<code>event = 0</code>) and the post-intervention period
-(<code>event = 1</code>).</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+(<code>event = Pre-Event</code>) and the post-intervention period
+(<code>event = Post-Event</code>).</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_slopes.html">estimate_slopes</a></span><span class="op">(</span><span class="va">mod</span>, trend <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"event"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Estimated Marginal Effects</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; event |           Slope (CI) |      p</span></span>
-<span><span class="co">#&gt; -------------------------------------</span></span>
-<span><span class="co">#&gt; 0     | 15.28 (15.04, 15.51) | &lt;0.001</span></span>
-<span><span class="co">#&gt; 1     | 19.82 (19.50, 20.13) | &lt;0.001</span></span>
+<span><span class="co">#&gt; event      |           Slope (CI) |      p</span></span>
+<span><span class="co">#&gt; ------------------------------------------</span></span>
+<span><span class="co">#&gt; Pre-Event  | 15.28 (15.04, 15.51) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Post-Event | 19.82 (19.50, 20.13) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Marginal effects estimated for time</span></span>
 <span><span class="co">#&gt; Type of slope was dY/dX</span></span></code></pre></div>
@@ -286,13 +303,13 @@ post-intervention slope was around 20. But is this difference
 statistically significant? We can again use
 <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>, this time contrasting the slopes of
 <code>time</code> across the levels of <code>event</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">mod</span>, contrast <span class="op">=</span> <span class="st">"time"</span>, by <span class="op">=</span> <span class="st">"event"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 4.54 (4.14, 4.94) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1     | Level2    |   Difference (CI) |      p</span></span>
+<span><span class="co">#&gt; ---------------------------------------------------</span></span>
+<span><span class="co">#&gt; Post-Event | Pre-Event | 4.54 (4.14, 4.94) | &lt;0.001</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: outcome</span></span>
 <span><span class="co">#&gt; Predictors contrasted: time</span></span>
