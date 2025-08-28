@@ -52,7 +52,7 @@ Both propensity score and g-computation methods offer distinct advantages and di
 
 ## Calculating inverse probability weights
 
-First, we create some toy data with a treatment effect that is roughly 9 points higher than the effect in the control group. The example data set has health related quality of life `QoL` as outcome, which was measured for 188 cancer patient at three time points (baseline, two follow-ups). The `treatment` variable is simulated and not part of the original data set. Since we have repeated measurements, we use the `glmmTMB` package to fit a linear mixed model to the data.
+First, we create some toy data with a treatment effect that is roughly 5 points higher than the effect in the control group. The example data set has health related quality of life `QoL` as outcome, which was measured for 188 cancer patient at three time points (baseline, two follow-ups). The `treatment` variable is simulated and not part of the original data set. Since we have repeated measurements, we use the `glmmTMB` package to fit a linear mixed model to the data.
 
 ```{r}
 # example
@@ -64,11 +64,12 @@ data(qol_cancer, package = "parameters")
 # sort and group data by patient ID, then assign each patient either to
 # the treatment or control condition, with higher educated patients having
 # a higher chance belonging to the treatment group
-set.seed(1234)
+set.seed(12345)
+
 d <- qol_cancer |>
   data_arrange("ID") |>
   data_group("ID") |>
-  data_modify(treatment = rbinom(1, 1, ifelse(education == "high", 0.7, 0.4))) |>
+  data_modify(treatment = rbinom(1, 1, ifelse(education == "high", 0.72, 0.3))) |>
   data_ungroup()
 
 # create a treatment effect that increased over time
@@ -83,7 +84,15 @@ d$QoL <- d$QoL + rnorm(
 d <- to_factor(d, c("treatment", "time"))
 ```
 
-We first look at the simple effect of `treatment`, which is about `10.7`.
+```{r echo=FALSE}
+tmp <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  data = d
+)
+```
+
+
+We first look at the simple effect of `treatment`, which is about `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)`.
 
 ```{r}
 # simple pooled effect
@@ -141,7 +150,15 @@ d$overlap_weights <- ifelse(
 
 ## ATE calculated from IPW in simpler models
 
-Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `10.8` points, i.e. the treatment on average results in a (roughly) 11-point higher score for QoL.
+```{r echo=FALSE}
+tmp <- glmmTMB::glmmTMB(
+  QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
+  weights = ipw,
+  data = d
+)
+```
+
+Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)` points, i.e. the treatment on average results in a QoL score that is `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)` points higher in comparison to the non-treated group.
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(
