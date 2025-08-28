@@ -206,7 +206,19 @@ model_parameters(m3, keep = "^treatment")
 estimate_contrasts(m3, "treatment", estimate = "population")
 ```
 
+```{r echo=FALSE}
+tmp <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
+  weights = ipw,
+  data = d
+)
+est1 <- estimate_contrasts(tmp, "treatment")
+est2 <- estimate_contrasts(tmp, "treatment", estimate = "population")
+```
+
 In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
+
+While the contrasts based solely on IPW are slightly biased with an estimated difference of `r round(est1$Difference, 2)`, the contrasts derived from the same model using g-computation are close to the effect we found before, with an estimated difference of `r round(est2$Difference, 2)`.
 
 ```{r}
 # more complex model
@@ -227,7 +239,7 @@ estimate_contrasts(m4, "treatment", estimate = "population")
 
 The last example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
-The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
+The ATT measures how much the treatment changes the outcome for those who already received it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it.
 
 ```{r}
 library(insight)
@@ -252,6 +264,10 @@ estimate_contrasts(
   estimate = "population"
 )
 ```
+
+It is helpful to calculate both ATT and ATU, as they can differ substantially, indicating a potential bias in the selection mechanism of receiving a treatment or not. In our example, since the ATU is larger than the ATT, this could mean that the treated individuals are possibly less responsive to the treatment or the untreated individuals are more likely not to choose the intervention.
+
+In ideal randomized trials, the Average Treatment Effect (ATE), the effect on the treated (ATT), and the effect on the untreated (ATU) are expected to be the same because randomization creates comparable groups. However, these values often differ in observational studies or trials with treatment non-compliance, as the groups may be systematically different due to factors like self-selection [@dong_identifying_2023].
 
 ## An important note on variance estimators
 
