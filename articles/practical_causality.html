@@ -204,7 +204,7 @@ Gabriel et al. 2024)</span>. Illustrative examples will follow.</p>
 <h3 id="calculating-inverse-probability-weights">Calculating inverse probability weights<a class="anchor" aria-label="anchor" href="#calculating-inverse-probability-weights"></a>
 </h3>
 <p>First, we create some toy data with a treatment effect that is
-roughly 9 points higher than the effect in the control group. The
+roughly 5 points higher than the effect in the control group. The
 example data set has health related quality of life <code>QoL</code> as
 outcome, which was measured for 188 cancer patient at three time points
 (baseline, two follow-ups). The <code>treatment</code> variable is
@@ -221,11 +221,12 @@ mixed model to the data.</p>
 <span><span class="co"># sort and group data by patient ID, then assign each patient either to</span></span>
 <span><span class="co"># the treatment or control condition, with higher educated patients having</span></span>
 <span><span class="co"># a higher chance belonging to the treatment group</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1234</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span>
+<span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="va">qol_cancer</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_arrange.html" class="external-link">data_arrange</a></span><span class="op">(</span><span class="st">"ID"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_group.html" class="external-link">data_group</a></span><span class="op">(</span><span class="st">"ID"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_modify.html" class="external-link">data_modify</a></span><span class="op">(</span>treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">education</span> <span class="op">==</span> <span class="st">"high"</span>, <span class="fl">0.7</span>, <span class="fl">0.4</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_modify.html" class="external-link">data_modify</a></span><span class="op">(</span>treatment <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html" class="external-link">rbinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">education</span> <span class="op">==</span> <span class="st">"high"</span>, <span class="fl">0.72</span>, <span class="fl">0.3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://easystats.github.io/datawizard/reference/data_group.html" class="external-link">data_ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># create a treatment effect that increased over time</span></span>
@@ -239,7 +240,7 @@ mixed model to the data.</p>
 <span><span class="co"># convert to factors</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://easystats.github.io/datawizard/reference/to_factor.html" class="external-link">to_factor</a></span><span class="op">(</span><span class="va">d</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"treatment"</span>, <span class="st">"time"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>We first look at the simple effect of <code>treatment</code>, which
-is about <code>10.7</code>.</p>
+is about 5.9.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># simple pooled effect</span></span>
 <span><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
@@ -252,9 +253,9 @@ is about <code>10.7</code>.</p>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m1</span>, keep <span class="op">=</span> <span class="st">"^treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter     | Coefficient |   SE |        95% CI |    z |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; treatment [1] |       10.68 | 1.86 | [7.04, 14.33] | 5.74 | &lt; .001</span></span></code></pre></div>
+<span><span class="co">#&gt; Parameter     | Coefficient |   SE |       95% CI |    z |     p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; treatment [1] |        5.90 | 1.95 | [2.08, 9.71] | 3.03 | 0.002</span></span></code></pre></div>
 <p>Next, inverse probability weights are calculated. This involves
 employing a regression model with the predictor of interest,
 <code>treatment</code>, as the outcome variable. This model estimates
@@ -318,9 +319,9 @@ examples.</p>
 <h3 id="ate-calculated-from-ipw-in-simpler-models">ATE calculated from IPW in simpler models<a class="anchor" aria-label="anchor" href="#ate-calculated-from-ipw-in-simpler-models"></a>
 </h3>
 <p>Now we run the same model again, including the weights. We see that
-the treatment effect, after weighting, is about <code>10.8</code>
-points, i.e. the treatment on average results in a (roughly) 11-point
-higher score for QoL.</p>
+the treatment effect, after weighting, is about 5.58 points, i.e. the
+treatment on average results in a QoL score that is 5.58 points higher
+in comparison to the non-treated group.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
 <span>  <span class="va">QoL</span> <span class="op">~</span> <span class="va">treatment</span> <span class="op">+</span> <span class="va">time</span> <span class="op">+</span> <span class="va">education</span> <span class="op">+</span> <span class="va">hospital</span> <span class="op">+</span> <span class="va">age</span> <span class="op">+</span> <span class="va">phq4</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">ID</span><span class="op">)</span>,</span>
@@ -330,9 +331,9 @@ higher score for QoL.</p>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m2</span>, keep <span class="op">=</span> <span class="st">"^treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter     | Coefficient |   SE |        95% CI |    z |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; treatment [1] |       10.76 | 1.86 | [7.11, 14.40] | 5.79 | &lt; .001</span></span></code></pre></div>
+<span><span class="co">#&gt; Parameter     | Coefficient |   SE |       95% CI |    z |     p</span></span>
+<span><span class="co">#&gt; ----------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; treatment [1] |        5.58 | 1.93 | [1.80, 9.35] | 2.90 | 0.004</span></span></code></pre></div>
 <p>Given the simplicity of the model, g-computation offers no
 significant advantage in calculating contrasts between
 <code>treatment</code> levels, as the results are equivalent to a
@@ -341,9 +342,9 @@ simpler approach.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.76 (7.11, 14.40) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.58 (1.80, 9.35) | 0.004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -377,7 +378,7 @@ particularly advantageous.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"treatment"</span><span class="op">)</span>,</span>
 <span>  estimate <span class="op">=</span> <span class="st">"population"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p><img src="practical_causality_files/figure-html/unnamed-chunk-7-1.png" width="90%" height="90%"></p>
+<p><img src="practical_causality_files/figure-html/unnamed-chunk-9-1.png" width="90%" height="90%"></p>
 <p>We now see that the coefficient table is no longer helpful, because
 the treatment effect cannot be isolated. If we want to know the ATE of
 <code>treatment</code>, we need to calculate contrasts for the levels of
@@ -387,19 +388,19 @@ our <code>treatment</code> predictor.</p>
 <span><span class="fu"><a href="https://easystats.github.io/parameters/reference/model_parameters.html" class="external-link">model_parameters</a></span><span class="op">(</span><span class="va">m3</span>, keep <span class="op">=</span> <span class="st">"^treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Fixed Effects</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Parameter                | Coefficient |   SE |         95% CI |    z |      p</span></span>
-<span><span class="co">#&gt; ------------------------------------------------------------------------------</span></span>
-<span><span class="co">#&gt; treatment [1]            |        3.62 | 2.08 | [-0.46,  7.69] | 1.74 | 0.082 </span></span>
-<span><span class="co">#&gt; treatment [1] × time [2] |        7.21 | 1.61 | [ 4.05, 10.37] | 4.47 | &lt; .001</span></span>
-<span><span class="co">#&gt; treatment [1] × time [3] |       14.22 | 1.61 | [11.06, 17.39] | 8.82 | &lt; .001</span></span>
+<span><span class="co">#&gt; Parameter                | Coefficient |   SE |         95% CI |     z |      p</span></span>
+<span><span class="co">#&gt; -------------------------------------------------------------------------------</span></span>
+<span><span class="co">#&gt; treatment [1]            |       -0.53 | 2.13 | [-4.71,  3.64] | -0.25 | 0.802 </span></span>
+<span><span class="co">#&gt; treatment [1] × time [2] |        4.59 | 1.60 | [ 1.45,  7.74] |  2.86 | 0.004 </span></span>
+<span><span class="co">#&gt; treatment [1] × time [3] |       13.91 | 1.61 | [10.76, 17.05] |  8.65 | &lt; .001</span></span>
 <span></span>
 <span><span class="co"># contrasts of treatment levels, using g-computation</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m3</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.76 (7.11, 14.41) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.63 (1.87, 9.40) | 0.003</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -423,9 +424,9 @@ situations.</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.28 (6.34, 14.23) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |    Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; --------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.99 (1.93, 10.04) | 0.004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -436,9 +437,9 @@ situations.</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.89 (7.28, 14.49) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.65 (1.86, 9.43) | 0.003</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -476,9 +477,9 @@ population.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 11.36 (7.61, 15.10) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.45 (1.56, 9.35) | 0.006</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -494,9 +495,9 @@ population.</p>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.49 (6.81, 14.16) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.74 (1.82, 9.66) | 0.004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -528,9 +529,9 @@ option (which is equivalent to the Huber-White estimator).</p>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, vcov <span class="op">=</span> <span class="st">"HC0"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |     Difference (CI) |      p</span></span>
-<span><span class="co">#&gt; ----------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.89 (7.37, 14.41) | &lt;0.001</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
+<span><span class="co">#&gt; -------------------------------------------</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.65 (1.76, 9.54) | 0.004</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -552,9 +553,9 @@ robust alternative.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |         Median (CI) |   pd</span></span>
+<span><span class="co">#&gt; Level1 | Level2 |       Median (CI) |     pd</span></span>
 <span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 10.98 (7.45, 14.63) | 100%</span></span>
+<span><span class="co">#&gt; 1      | 0      | 5.58 (1.81, 9.75) | 99.80%</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL, ipw</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
