@@ -30,6 +30,12 @@ if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
 if (getRversion() < "4.1.0") {
   knitr::opts_chunk$set(eval = FALSE)
 }
+
+# define constants in case package glmmTMB is not installed
+t_effect <- 5.9
+t_effect2 <- 5.58
+est_diff_1 <- 5.99
+est_diff_2 <- 5.65
 ```
 
 This vignette demonstrates how to perform causal inference with observational data using the `modelbased` package. While the examples below use the terms "treatment" and "control" groups, these labels are arbitrary and interchangeable. Causal inference can be applied to any scenario where observations are assigned to different conditions, regardless of whether a "treatment" in the medical sense is involved.
@@ -89,10 +95,11 @@ tmp <- glmmTMB::glmmTMB(
   QoL ~ treatment + time + education + hospital + age + phq4 + (1 | ID),
   data = d
 )
+t_effect <- round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)
 ```
 
 
-We first look at the simple effect of `treatment`, which is about `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)`.
+We first look at the simple effect of `treatment`, which is about `r t_effect`.
 
 ```{r}
 # simple pooled effect
@@ -156,9 +163,10 @@ tmp <- glmmTMB::glmmTMB(
   weights = ipw,
   data = d
 )
+t_effect2 <- round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)
 ```
 
-Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)` points, i.e. the treatment on average results in a QoL score that is `r round(as.vector(glmmTMB::fixef(tmp)$cond["treatment1"]), 2)` points higher in comparison to the non-treated group.
+Now we run the same model again, including the weights. We see that the treatment effect, after weighting, is about `r t_effect2` points, i.e. the treatment on average results in a QoL score that is `r t_effect2` points higher in comparison to the non-treated group.
 
 ```{r}
 m2 <- glmmTMB::glmmTMB(
@@ -206,7 +214,21 @@ model_parameters(m3, keep = "^treatment")
 estimate_contrasts(m3, "treatment", estimate = "population")
 ```
 
+```{r echo=FALSE}
+tmp <- glmmTMB::glmmTMB(
+  QoL ~ treatment * time + treatment * education + hospital + age + phq4 + (1 | ID),
+  weights = ipw,
+  data = d
+)
+est1 <- estimate_contrasts(tmp, "treatment")
+est2 <- estimate_contrasts(tmp, "treatment", estimate = "population")
+est_diff_1 <- round(est1$Difference, 2)
+est_diff_2 <- round(est2$Difference, 2)
+```
+
 In even more complex scenarios, g-computation remains a valuable tool for generating accurate estimates. This example compares "simple" contrasts derived from an IPW model with contrasts generated from the same model using g-computation. The results demonstrate the increased accuracy achieved by combining IPW with g-computation in such situations.
+
+While the contrasts based solely on IPW are slightly biased with an estimated difference of `r est_diff_1`, the contrasts derived from the same model using g-computation are close to the effect we found before, with an estimated difference of `r est_diff_2`.
 
 ```{r}
 # more complex model
@@ -227,7 +249,7 @@ estimate_contrasts(m4, "treatment", estimate = "population")
 
 The last example completes the "causal inference" topic by showing how to calculate the average treatment effect on the treated (ATT), and average treatment effect on the untreated (ATU).
 
-The ATT measures how much the treatment changes the outcome for those who already received it. It can help to decide whether a program or treatment should be discontinued for the people currently benefiting from it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it. It helps us decide whether a program or treatment should be expanded to include those who haven't yet benefited from it. It helps to assess the potential benefits of extending a program or treatment to a wider population.
+The ATT measures how much the treatment changes the outcome for those who already received it. Likewise, the ATU estimates how much the treatment would change the outcome if it were given to those who didn't already receive it.
 
 ```{r}
 library(insight)
@@ -252,6 +274,10 @@ estimate_contrasts(
   estimate = "population"
 )
 ```
+
+It is helpful to calculate both ATT and ATU, as they can differ substantially, indicating a potential bias in the selection mechanism of receiving a treatment or not. In our example, since the ATU is larger than the ATT, this could mean that the treated individuals are possibly less responsive to the treatment or the untreated individuals are more likely not to choose the intervention.
+
+In ideal randomized trials, the Average Treatment Effect (ATE), the effect on the treated (ATT), and the effect on the untreated (ATU) are expected to be the same because randomization creates comparable groups. However, these values often differ in observational studies or trials with treatment non-compliance, as the groups may be systematically different due to factors like self-selection [@dong_identifying_2023].
 
 ## An important note on variance estimators
 

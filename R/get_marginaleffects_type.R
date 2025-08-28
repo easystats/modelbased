@@ -1,10 +1,12 @@
 #' @keywords internal
-.get_marginaleffects_type_argument <- function(model,
-                                               predict = NULL,
-                                               comparison = NULL,
-                                               model_info = NULL,
-                                               verbose = TRUE,
-                                               ...) {
+.get_marginaleffects_type_argument <- function(
+  model,
+  predict = NULL,
+  comparison = NULL,
+  model_info = NULL,
+  verbose = TRUE,
+  ...
+) {
   dots <- list(...)
 
   # no transformation always returns link-scale
@@ -54,7 +56,9 @@
     # add modelbased-options to valid types
     valid_types <- unique(c("response", "link", valid_types))
     insight::format_error(paste0(
-      "The option provided in the `", error_arg, "` argument is not recognized.",
+      "The option provided in the `",
+      error_arg,
+      "` argument is not recognized.",
       " Valid options are: ",
       datawizard::text_concatenate(valid_types, enclose = "`"),
       "."
@@ -139,6 +143,8 @@
 
 # all valid "type" arguments for each model class.
 # Run "marginaleffects:::type_dictionary_build()" to update this list
+
+# fmt: skip
 .typedic <- data.frame(
   class = c(
     "bam", "bam", "bart", "bart", "betareg",
@@ -168,36 +174,37 @@
     "ordinal_weightit", "ordinal_weightit", "polr", "rendo.base",
     "rendo.base", "rlm", "selection", "selection", "selection", "speedlm",
     "speedglm", "speedglm", "stanreg", "stanreg", "survreg", "survreg",
-    "survreg", "svyglm", "svyglm", "svyolr", "tobit", "tobit1", "tobit1",
-    "tobit1", "zeroinfl", "zeroinfl", "zeroinfl", "zeroinfl"
-  ), type = c(
-    "response", "link", "ev", "ppd", "response", "link", "precision", "quantile",
-    "variance", "response", "link", "probs", "response", "link",
-    "response", "link", "prediction", "average", "probs", "class",
-    "prob", "cum.prob", "linear.predictor", "expected", "lp", "risk",
-    "survival", "survival", "expected", "lp", "risk", "survival",
-    "expected", "lp", "risk", "response", "location", "scale", "density",
-    "pr", "xb", "location", "cumprob", "scale", "density", "pr",
-    "xb", "survival", "response", "mean", "link", "lp", "linear",
-    "rmst", "hazard", "cumhaz", "invlink(link)", "response", "link",
-    "response", "prob", "count", "zero", "response", "response",
-    "response", "link", "invlink(link)", "response", "link", "response",
-    "link", "lp", "response", "link", "invlink(link)", "response",
-    "link", "response", "link", "response", "response", "link", "response",
-    "link", "conditional", "zprob", "zlink", "disp", "response",
-    "link", "response", "invlink(link)", "probs", "response", "lp",
-    "link", "response", "response", "response", "response", "response",
-    "fitted", "lp", "mean", "response", "latent", "link", "response",
-    "latent", "link", "response", "numeric", "prob", "class", "numeric",
-    "prob", "class", "probs", "latent", "probs", "response", "mean",
-    "E", "Ep", "p", "response", "link", "expected", "detection",
-    "latent_N", "invlink(link)", "response", "link", "lp", "probability",
-    "utility", "fitted", "mean", "lp", "probs", "response", "link",
-    "lp", "mean", "probs", "response", "link", "response", "response",
-    "link", "unconditional", "response", "response", "link", "response",
-    "link", "response", "link", "quantile", "response", "link", "probs",
-    "response", "expvalue", "linpred", "prob", "response", "prob",
-    "count", "zero"
+    "survreg", "svyglm", "svyglm", "svyolr", "tobit", "tobit", "tobit1",
+    "tobit1", "tobit1", "zeroinfl", "zeroinfl", "zeroinfl", "zeroinfl"
+  ),
+  type = c(
+    "response", "link", "ev", "ppd", "response", "link",
+    "precision", "quantile", "variance", "response", "link", "probs",
+    "response", "link", "response", "link", "prediction", "average",
+    "probs", "class", "prob", "cum.prob", "linear.predictor", "expected",
+    "lp", "risk", "survival", "survival", "expected", "lp", "risk",
+    "survival", "expected", "lp", "risk", "response", "location",
+    "scale", "density", "pr", "xb", "location", "cumprob", "scale",
+    "density", "pr", "xb", "survival", "response", "mean", "link",
+    "lp", "linear", "rmst", "hazard", "cumhaz", "invlink(link)",
+    "response", "link", "response", "prob", "count", "zero", "response",
+    "response", "response", "link", "invlink(link)", "response",
+    "link", "response", "link", "lp", "response", "link", "invlink(link)",
+    "response", "link", "response", "link", "response", "response",
+    "link", "response", "link", "conditional", "zprob", "zlink",
+    "disp", "response", "link", "response", "invlink(link)", "probs",
+    "response", "lp", "link", "response", "response", "response",
+    "response", "response", "fitted", "lp", "mean", "response", "latent",
+    "link", "response", "latent", "link", "response", "numeric",
+    "prob", "class", "numeric", "prob", "class", "probs", "latent",
+    "probs", "response", "mean", "E", "Ep", "p", "response", "link",
+    "expected", "detection", "latent_N", "invlink(link)", "response",
+    "link", "lp", "probability", "utility", "fitted", "mean", "lp",
+    "probs", "response", "link", "lp", "mean", "probs", "response",
+    "link", "response", "response", "link", "unconditional", "response",
+    "response", "link", "response", "link", "response", "link", "quantile",
+    "response", "link", "probs", "response", "link", "expvalue",
+    "linpred", "prob", "response", "prob", "count", "zero"
   ),
   stringsAsFactors = FALSE
 )
@@ -209,6 +216,8 @@
 # x <- marginaleffects:::type_dictionary_build()
 # x[!duplicated(x$class), ]
 # Finally, add "other" as first element to "class" and "response" to "type"
+
+# fmt: skip
 .default_type <- data.frame(
   class = c(
     "other",
