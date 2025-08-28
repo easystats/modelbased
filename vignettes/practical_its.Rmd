@@ -25,7 +25,7 @@ options(
   modelbased_select = "minimal"
 )
 
-pkgs <- c("datawizard", "marginaleffects")
+pkgs <- c("datawizard", "marginaleffects", "ggplot2", "see")
 
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
@@ -86,6 +86,23 @@ outcome <-
   rnorm(n, mean = 0, sd = 100) # Add some random noise
 
 dat <- data.frame(outcome, time, event)
+# make event a factor for easier interpretation
+dat$event <- factor(dat$event, labels = c("Pre-Event", "Post-Event"))
+```
+
+First, let's visualize the data to see the intervention's effect. We can clearly see both the immediate jump at day 200 and the change in trend afterward.
+
+```{r}
+library(ggplot2)
+library(see)
+
+# Visualize the simulated data
+ggplot(dat, aes(x = time, y = outcome, colour = event, group = event)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm") +
+  labs(title = "Interrupted Time Series Analysis", x = "Time (Days)", y = "Outcome") +
+  theme_modern(show.ticks = TRUE) +
+  scale_color_flat()
 ```
 
 # Modeling the Time Series
@@ -106,13 +123,13 @@ With our model fitted, we can now use `modelbased` to quantify and test the inte
 
 ## 1. The Interruption: Level Change
 
-First, let's examine what the model estimates for the outcome right before and right after the intervention at `time = 200`. We can use `estimate_means()` to get the predicted values at `time = 199` and `time = 200` for both the factual (`event = 1`) and counterfactual (`event = 0`) scenarios.
+First, let's examine what the model estimates for the outcome right before and right after the intervention at `time = 200`. We can use `estimate_means()` to get the predicted values at `time = 199` and `time = 200` for both the factual (`event = Post-Event`) and counterfactual (`event = Pre-Event`) scenarios.
 
 ```{r}
 estimate_means(mod, by = c("time=c(199,200)", "event"))
 ```
 
-To directly test if the immediate "jump" or "level change" at the moment of the intervention is statistically significant, we can use `estimate_contrasts()`. We ask for the difference between `event = 1` and `event = 0` specifically at `time = 200`.
+To directly test if the immediate "jump" or "level change" at the moment of the intervention is statistically significant, we can use `estimate_contrasts()`. We ask for the difference between `event = Post-Event` and `event = Pre-Event` specifically at `time = 200`.
 
 ```{r}
 estimate_contrasts(mod, contrast = "event", by = "time=200")
@@ -122,7 +139,7 @@ The output shows a large, statistically significant difference of about 1020. Th
 
 ## 2. The Change in Trend: Slope Change
 
-Next, we want to know if the intervention changed the long-term trend of the outcome. We can use `estimate_slopes()` to compute the slope of `time` for the pre-intervention period (`event = 0`) and the post-intervention period (`event = 1`).
+Next, we want to know if the intervention changed the long-term trend of the outcome. We can use `estimate_slopes()` to compute the slope of `time` for the pre-intervention period (`event = Pre-Event`) and the post-intervention period (`event = Post-Event`).
 
 ```{r}
 estimate_slopes(mod, trend = "time", by = "event")
