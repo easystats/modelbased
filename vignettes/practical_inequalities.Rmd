@@ -104,7 +104,11 @@ The plot shows that individuals with higher education report a higher QoL, and t
 
 For categorical predictors with only two levels, like low vs. high income groups or male vs. female sex, the absolute inequality is straightforward to compute: it's the difference between the estimated predictions for the two levels (simple pairwise comparison). However, for nominal or ordinal variables with multiple levels, we need to consider all pairwise differences.
 
-The advantages of the `modelbased` package become most apparent when working with predictors that have *more than two levels*. In this case, the **absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups. It answers the question: "On average, how many units does the outcome differ between any two education groups?"
+The advantages of the `modelbased` package become most apparent when working with predictors that have *more than two levels*. In this case, the **absolute inequality** is the average of all absolute differences between the predicted outcomes for each pair of groups.
+
+It answers the question:
+
+> "On average, how many units does the outcome differ between *any two* education groups?"
 
 ### Pairwise Contrasts
 
@@ -130,7 +134,13 @@ estimate_contrasts(m, contrast = "education", comparison = "inequality")
 
 ## 5. Relative Inequality
 
-**Relative inequality** (or the inequality ratio) is the average of the ratios of predicted outcomes between all pairs of groups. It answers the question: "On average, by what factor does the outcome differ between any two education groups?" This is particularly useful when the scale of the outcome is not intrinsically meaningful or when comparing effects across different outcomes.
+**Relative inequality** (or the inequality ratio) is the average of the ratios of predicted outcomes between all pairs of groups.
+
+It answers the question:
+
+> "On average, by what factor does the outcome differ between *any two* education groups?"
+
+This is particularly useful when the scale of the outcome is not intrinsically meaningful or when comparing effects across different outcomes.
 
 ### Pairwise Ratios
 
@@ -273,11 +283,9 @@ estimate_contrasts(
 )
 ```
 
-<div class="custom_note">
-  <p>
-    In the above example, we set `integer_as_continuous = TRUE` to ensure that the time variable is treated as continuous, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "discrete" (ordinal-alike), which would rather calculate contrasts for each time point and not the slope of a continuous `time` variable. See also [documentation of `estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html) for more details, especially the `...` argument and the examples.
-  </p>
-</div>
+::: custom_note
+<p>In the above example, we set `integer_as_continuous = TRUE` to ensure that the time variable is treated as continuous, allowing us to calculate the slope differences correctly. By default, numeric variables with only a few integer values are treated as "discrete" (ordinal-alike), which would rather calculate contrasts for each time point and not the slope of a continuous `time` variable. See also [documentation of `estimate_contrasts()`](https://easystats.github.io/modelbased/reference/estimate_contrasts.html) for more details, especially the `...` argument and the examples.</p>
+:::
 
 The mean difference in slopes is 4.74 in Group 1. This indicates that the rate of change in QoL differs, on average, by 4.74 points per unit of time between any two categories of the education groups. Inequalities are smaller in Group 2 (Mean Difference = 2.88), suggesting a more uniform change over time.
 
@@ -304,9 +312,9 @@ Inequalities are calculated by means of *absolute* differences. This means, whil
 
 The `modelbased` package offers a powerful and intuitive way to move beyond simple pairwise comparisons and summarize the holistic effect of categorical variables. By quantifying **absolute and relative inequalities**, researchers can:
 
-* Obtain a single, interpretable effect size for a nominal or ordinal predictor.
-* Formally test whether this overall effect is statistically significant.
-* Compare the magnitude of inequality across different groups, models, or over time.
+-   Obtain a single, interpretable effect size for a nominal or ordinal predictor.
+-   Formally test whether this overall effect is statistically significant.
+-   Compare the magnitude of inequality across different groups, models, or over time.
 
 This approach aligns statistical practice with the theoretical concept of group-based disparities, providing a clearer and more comprehensive understanding of how social categories shape outcomes.
 
@@ -314,11 +322,11 @@ This approach aligns statistical practice with the theoretical concept of group-
 
 The `modelbased` package also allows you to compute these inequalities using a formula interface for the `comparison` argument. The following table summarizes the available options for computing inequalities using the `estimate_contrasts()` function with a formula interface:
 
-| String option | Formula |
-| :--- | :--- |
-| `"inequality"` | `~inequality` |
-| `"inequality_pairwise"` | `inequality ~ pairwise` |
-| `"inequality_ratio"` | `ratio ~ inequality` |
+| String option                 | Formula                         |
+|:------------------------------|:--------------------------------|
+| `"inequality"`                | `~inequality`                   |
+| `"inequality_pairwise"`       | `inequality ~ pairwise`         |
+| `"inequality_ratio"`          | `ratio ~ inequality`            |
 | `"inequality_ratio_pairwise"` | `ratio ~ inequality + pairwise` |
 
 Grouping variables are usually specified using the `by` argument. Additionally, these can also be specified in the formula interface, for example, `~inequality | group1` or `inequality ~ pairwise | group1 + group2`.
