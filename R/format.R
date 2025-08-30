@@ -684,7 +684,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   params <- data.frame(datawizard::data_restoretype(params, model_data))
 
   # add posterior draws?
-  insight::check_if_installed("marginaleffects", minimum_version = "0.28.0.22")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
   posterior_draws <- suppressWarnings(as.data.frame(marginaleffects::get_draws(
     x,
     shape = "PxD"

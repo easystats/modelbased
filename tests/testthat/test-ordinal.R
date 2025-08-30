@@ -4,7 +4,7 @@ skip_if_offline()
 skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")
-skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_if_not_installed("httr2")
 skip_if_not_installed("MASS")
 

@@ -7,19 +7,21 @@
 #' get_marginaltrends(model, trend = "Petal.Length", by = "Petal.Length")
 #' get_marginaltrends(model, trend = "Petal.Length", by = c("Species", "Petal.Length"))
 #' @export
-get_marginaltrends <- function(model,
-                               trend = NULL,
-                               by = NULL,
-                               predict = NULL,
-                               ci = 0.95,
-                               estimate = NULL,
-                               transform = NULL,
-                               p_adjust = "none",
-                               keep_iterations = FALSE,
-                               verbose = TRUE,
-                               ...) {
+get_marginaltrends <- function(
+  model,
+  trend = NULL,
+  by = NULL,
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  p_adjust = "none",
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
   dots <- list(...)
 
   # set defaults
@@ -107,12 +109,7 @@ get_marginaltrends <- function(model,
 
   # setup arguments again
   fun_args <- insight::compact_list(c(
-    list(
-      model,
-      variables = myargs$trend,
-      by = myargs$by,
-      conf_level = ci
-    ),
+    list(model, variables = myargs$trend, by = myargs$by, conf_level = ci),
     dots
   ))
 
@@ -124,6 +121,7 @@ get_marginaltrends <- function(model,
     fun_args$newdata <- datagrid
   }
 
+  # fmt: skip
   # handle distributional parameters
   if (!is.null(predict) && inherits(model, "brmsfit") && predict %in% .brms_aux_elements(model)) {
     fun_args$dpar <- predict
