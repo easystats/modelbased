@@ -7,7 +7,12 @@ skip_if_not_installed("emmeans")
 skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 test_that("estimate_means - brms", {
-  model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
+  model <- brms::brm(
+    Sepal.Length ~ Species * Sepal.Width,
+    data = iris,
+    refresh = 0,
+    iter = 1000
+  )
   estim <- estimate_means(model, backend = "emmeans")
   expect_identical(dim(estim), c(3L, 5L))
 })
