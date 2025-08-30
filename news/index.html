@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.0.22</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,6 +90,35 @@
       <small>Source: <a href="https://github.com/easystats/modelbased/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.13.0" id="modelbased-0130">modelbased 0.13.0<a class="anchor" aria-label="anchor" href="#modelbased-0130"></a></h2>
+<div class="section level3">
+<h3 id="changes-0-13-0">Changes<a class="anchor" aria-label="anchor" href="#changes-0-13-0"></a></h3>
+<ul><li><p>Methods for the <em>tinyplot</em> package were added.</p></li>
+<li><p><code><a href="../reference/estimate_slopes.html">estimate_slopes()</a></code> now also gets the <code>estimate</code> argument, to specify how to estimate / marginalize over non-focal terms.</p></li>
+<li>
+<p>Improvements to <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code>:</p>
+<ul><li><p><code>comparison = "inequality"</code> now also works when contrasting slopes for a numeric predictor.</p></li>
+<li><p>New option <code>comparison = "inequality_ratio"</code> for <code>estimate_contrast()</code>, which computes the ratio of marginal effects inequality measures across groups.</p></li>
+<li><p>For contrasts, the message about the units of contrasts (“in %-points”) has been removed, because this was slightly misleading. The units were in %-points if multiplied by 100, but this multiplication was not done in the output.</p></li>
+<li><p><code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> for slopes now allows additional grouping of contrasts using the <code>by</code> argument together with the <code>comparison</code> argument by specifying the grouping variable in the formula, e.g. <code>contrast = c("x", "group")</code> and <code>~ pairwise | group</code>.</p></li>
+</ul></li>
+<li><p><code><a href="../reference/estimate_expectation.html">estimate_expectation()</a></code> and <code><a href="../reference/estimate_expectation.html">estimate_relation()</a></code> now support objects of class <code>htest</code>.</p></li>
+<li><p><code><a href="../reference/estimate_grouplevel.html">estimate_grouplevel()</a></code> now supports models from package <em>coxme</em>.</p></li>
+<li><p>New function <code><a href="../reference/residualize_over_grid.html">residualize_over_grid()</a></code>, which residualizes a model over a grid of predictors. This is useful to visualize the residuals of a model over a grid of predictors.</p></li>
+<li><p><code><a href="https://easystats.github.io/datawizard/reference/visualisation_recipe.html" class="external-link">visualisation_recipe()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> get a <code>show_residuals</code> argument, to show the residuals of the model, related to the data grid, in the plot.</p></li>
+<li><p>Documentation of the <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> method for <em>modelbased</em> objects has been added.</p></li>
+<li><p>Improved documentation and improved informative messages.</p></li>
+<li><p>Message about unreliable standard errors (for certain models, when predicting random effects) was removed for now, as it is uncertain whether the standard errors were unreliable.</p></li>
+<li><p>Modified code base to address changes in the <em>marginaleffects</em> package from version 0.29.0 onwards.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-0-13-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-13-0"></a></h3>
+<ul><li><p>Fixed issue with <code>by</code> in <code><a href="../reference/estimate_contrasts.html">estimate_contrasts()</a></code> when <code>comparison</code> was <code>"inequality"</code>.</p></li>
+<li><p>Some comparison options, like <code>"helmert"</code> or <code>"poly"</code>, could not be specified as string-value, only as formula. This has been fixed, so they can now be specified as string-value, too.</p></li>
+<li><p>In-formula transformations of predictors in <code>by</code> could not be handled when <code>by</code> was not specified. This has been fixed, and automatic detection of <code>by</code> variables now also works with in-formula transformations.</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.0" id="modelbased-0120">modelbased 0.12.0<a class="anchor" aria-label="anchor" href="#modelbased-0120"></a></h2><p class="text-muted">CRAN release: 2025-07-10</p>
 <div class="section level3">
