@@ -2,7 +2,7 @@ skip_on_os(c("mac", "solaris", "linux"))
 skip_if_not_installed("ggplot2")
 skip_if_not_installed("see")
 skip_if_not_installed("vdiffr")
-skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 skip_on_cran()
 
 test_that("plot slopes, correct y axis labels", {

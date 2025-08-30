@@ -1,7 +1,7 @@
 skip_on_cran()
 skip_if_not_installed("glmmTMB")
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 data <- glmmTMB::Salamanders
 model <- suppressWarnings(glmmTMB::glmmTMB(

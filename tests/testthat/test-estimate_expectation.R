@@ -1,4 +1,4 @@
-skip_if_not_installed("insight", minimum_version = "1.1.0")
+skip_if_not_installed("insight", minimum_version = "1.4.1")
 
 test_that("estimate_expectation", {
   skip_if_not_installed("lme4")
@@ -77,7 +77,7 @@ test_that("estimate_expectation - error", {
 
 
 test_that("estimate_relation and estimate specific", {
-  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
   data(efc, package = "modelbased")
   efc <- datawizard::to_factor(efc, c("c161sex", "c172code", "e16sex", "e42dep"))
   fit <- lm(neg_c_7 ~ c12hour + barthtot + c161sex + e42dep + c172code, data = efc)

@@ -15,7 +15,7 @@ get_marginalcontrasts <- function(
   ...
 ) {
   # check if available
-  insight::check_if_installed("marginaleffects", minimum_version = "0.25.0")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
 
   # temporarily overwrite settings that error on "too many" rows
   me_option <- getOption("marginaleffects_safe")

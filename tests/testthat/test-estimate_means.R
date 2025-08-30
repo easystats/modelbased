@@ -1,6 +1,6 @@
 skip_on_cran()
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 test_that("estimate_means() - lm", {
   data(mtcars)
@@ -327,7 +327,7 @@ test_that("estimate_means() - glm", {
 
 
 test_that("get_marginaleffects, overall mean", {
-  skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+  skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
   skip_if_not_installed("emmeans")
 
   model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)

@@ -19,7 +19,7 @@ get_marginaltrends <- function(model,
                                verbose = TRUE,
                                ...) {
   # check if available
-  insight::check_if_installed("marginaleffects")
+  insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
   dots <- list(...)
 
   # set defaults

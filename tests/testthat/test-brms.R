@@ -4,7 +4,7 @@ skip_if_not_installed("brms")
 skip_if_not_installed("BH")
 skip_if_not_installed("RcppEigen")
 skip_if_not_installed("emmeans")
-skip_if_not_installed("marginaleffects", minimum_version = "0.28.0.22")
+skip_if_not_installed("marginaleffects", minimum_version = "0.29.0")
 
 test_that("estimate_means - brms", {
   model <- brms::brm(Sepal.Length ~ Species * Sepal.Width, data = iris, refresh = 0, iter = 1000)
