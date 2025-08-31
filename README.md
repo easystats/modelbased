@@ -28,6 +28,26 @@ from a wide range of statistical models. In line with the **easystats**’
 user-friendliness to help researchers harness the full power of their
 models.
 
+*How to start?*
+
+The package’s approach simplifies estimation by focusing on three key
+questions:
+
+1.  Predictor of Interest: Which variable’s effect do you want to
+    analyze? This is specified with the `by`, `contrast`, or `trend`
+    arguments.
+
+2.  Evaluation Points: At which specific values should the predictor be
+    evaluated? This is also defined in the `by` argument. For a more
+    refined control over the evaluation points, see the [data
+    grids](https://easystats.github.io/insight/reference/get_datagrid.html)
+    vignette.
+
+3.  Target Population: What population should the inferences generalize
+    to? The `estimate` argument controls this by defining whether
+    predictions are for a typical individual, an average of the sample,
+    or an average of a broader population.
+
 ## Installation
 
 [![CRAN](https://www.r-pkg.org/badges/version/modelbased)](https://cran.r-project.org/package=modelbased)
