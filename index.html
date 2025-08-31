@@ -137,6 +137,13 @@
 <p><strong>modelbased</strong> is a package helping with model-based estimations, to easily compute marginal means, contrast analysis and model predictions.</p>
 <p>The two probably most popular R packages for extracting these quantities of interest are <strong>emmeans</strong> (Lenth, 2024) and <strong>marginaleffects</strong> (Arel-Bundock et al., 2024). These packages pack an enormously rich set of features and cover (almost) all imaginable needs for post-hoc analysis of statistical models. But their power and flexibility can be intimidating for users not familiar with the underlying statistical concepts.</p>
 <p><strong>modelbased</strong>, built on top of these two packages, aims to unleash this untapped potential by providing a unified interface to extract marginal means, marginal effects, contrasts, comparisons, and model predictions from a wide range of statistical models. In line with the <strong>easystats</strong>’ <em>raison d’être</em>, <strong>modelbased</strong> focuses on simplicity, flexibility, and user-friendliness to help researchers harness the full power of their models.</p>
+<p><em>How to start?</em></p>
+<p>The package’s approach simplifies estimation by focusing on three key questions:</p>
+<ol style="list-style-type: decimal">
+<li><p>Predictor of Interest: Which variable’s effect do you want to analyze? This is specified with the <code>by</code>, <code>contrast</code>, or <code>trend</code> arguments.</p></li>
+<li><p>Evaluation Points: At which specific values should the predictor be evaluated? This is also defined in the <code>by</code> argument. For a more refined control over the evaluation points, see the <a href="https://easystats.github.io/insight/reference/get_datagrid.html" class="external-link">data grids</a> vignette.</p></li>
+<li><p>Target Population: What population should the inferences generalize to? The <code>estimate</code> argument controls this by defining whether predictions are for a typical individual, an average of the sample, or an average of a broader population.</p></li>
+</ol>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
