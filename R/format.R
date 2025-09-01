@@ -1,5 +1,6 @@
 # Format ------------------------------------------------------------------
 
+#' @rdname print.estimate_contrasts
 #' @export
 format.estimate_contrasts <- function(x,
                                       format = NULL,

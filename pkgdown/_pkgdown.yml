@@ -17,6 +17,7 @@ reference:
       - starts_with("pool_")
   - title: "Miscellaenous"
     contents:
+      - as.data.frame.estimate_contrasts
       - print.estimate_contrasts
       - describe_nonlinear
       - get_emmeans
