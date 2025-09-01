@@ -10,7 +10,8 @@
   optional = FALSE,
   ...,
   stringsAsFactors = FALSE,
-  use_responsename = FALSE
+  use_responsename = FALSE,
+  preserve_names = FALSE
 )
 }
 \arguments{
@@ -21,6 +22,10 @@
 \item{use_responsename}{Logical, if \code{TRUE}, the response variable name is used
 as column name for the estimate column (if available). If \code{FALSE} (default),
 the column is named \code{"Coefficient"}.}
+
+\item{preserve_names}{Logical, if \code{TRUE}, the original column names are
+preserved. If \code{FALSE} (default), the estimate column is renamed to either the
+response name (if \code{use_responsename = TRUE}) or to \code{"Coefficient"}.}
 }
 \value{
 A data frame.

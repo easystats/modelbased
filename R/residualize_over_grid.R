@@ -117,7 +117,7 @@ residualize_over_grid.data.frame <- function(grid, model, predictor_name, ...) {
 
 #' @export
 residualize_over_grid.estimate_means <- function(grid, model, ...) {
-  new_d <- as.data.frame(grid)
+  new_d <- as.data.frame(grid, preserve_names = TRUE)
 
   relevant_columns <- unique(c(
     attributes(grid)$trend,
