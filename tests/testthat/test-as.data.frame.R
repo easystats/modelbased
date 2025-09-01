@@ -8,4 +8,6 @@ test_that("as.data.frame.estimate_contrasts()", {
   expect_named(out, c("Species", "Coefficient", "SE", "CI_low", "CI_high", "t", "df"))
   out <- as.data.frame(estim, use_responsename = TRUE)
   expect_named(out, c("Species", "Petal.Length", "SE", "CI_low", "CI_high", "t", "df"))
+  out <- as.data.frame(estim, preserve_names = TRUE)
+  expect_named(out, c("Species", "Mean", "SE", "CI_low", "CI_high", "t", "df"))
 })
