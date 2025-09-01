@@ -9,7 +9,7 @@ of tables."><meta property="og:image" content="https://easystats.github.io/model
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@ of tables."><meta property="og:image" content="https://easystats.github.io/model
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Printing modelbased-objects</h1>
-      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/main/R/print.R" class="external-link"><code>R/print.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/easystats/modelbased/blob/main/R/display.R" class="external-link"><code>R/display.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/main/R/format.R" class="external-link"><code>R/format.R</code></a>, <a href="https://github.com/easystats/modelbased/blob/main/R/print.R" class="external-link"><code>R/print.R</code></a></small>
       <div class="d-none name"><code>print.estimate_contrasts.Rd</code></div>
     </div>
 
@@ -107,6 +107,15 @@ of tables.</p>
 <span>  include_grid <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  full_labels <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  format <span class="op">=</span> <span class="st">"markdown"</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'estimate_contrasts'</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/format.html" class="external-link">format</a></span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  format <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  select <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_select"</span>, <span class="cn">NULL</span><span class="op">)</span>,</span>
+<span>  include_grid <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"modelbased_include_grid"</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
