@@ -2,15 +2,17 @@
 #'
 #' `as.data.frame()` method for **modelbased** objects. Can be used to return
 #' a "raw" data frame without attributes and with standardized column names.
+#' By default, the original column names are preserved, to avoid unexpected
+#' changes, but this can be changed with the `preserve_names` argument.
 #'
 #' @param x An object returned by the different `estimate_*()` functions.
 #' @param use_responsename Logical, if `TRUE`, the response variable name is used
 #' as column name for the estimate column (if available). If `FALSE` (default),
 #' the column is named `"Coefficient"`.
-#' @param preserve_names Logical, if `TRUE`, the original column names are
-#' preserved. If `FALSE` (default), the estimate column is renamed to either the
+#' @param preserve_names Logical, if `TRUE` (default), the original column names
+#' are preserved. If `FALSE`, the estimate column is renamed to either the
 #' response name (if `use_responsename = TRUE`) or to `"Coefficient"`.
-#' @param ... Arguments passed to `as.data.frame()`.
+#' @param ... Arguments passed to the `data.frame` method of `as.data.frame()`.
 #'
 #' @return A data frame.
 #'
@@ -23,7 +25,9 @@
 #'
 #' as.data.frame(out)
 #'
-#' as.data.frame(out, use_responsename = TRUE)
+#' as.data.frame(out, preserve_names = FALSE)
+#'
+#' as.data.frame(out, preserve_names = FALSE, use_responsename = TRUE)
 #' @export
 as.data.frame.estimate_contrasts <- function(
   x,
@@ -32,7 +36,7 @@ as.data.frame.estimate_contrasts <- function(
   ...,
   stringsAsFactors = FALSE,
   use_responsename = FALSE,
-  preserve_names = FALSE
+  preserve_names = TRUE
 ) {
   if (!preserve_names) {
     estimate_column <- intersect(colnames(x), .valid_coefficient_names())[1]
