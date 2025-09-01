@@ -1,11 +1,14 @@
 # Format ------------------------------------------------------------------
 
+#' @rdname print.estimate_contrasts
 #' @export
-format.estimate_contrasts <- function(x,
-                                      format = NULL,
-                                      select = getOption("modelbased_select", NULL),
-                                      include_grid = getOption("modelbased_include_grid", FALSE),
-                                      ...) {
+format.estimate_contrasts <- function(
+  x,
+  format = NULL,
+  select = getOption("modelbased_select", NULL),
+  include_grid = getOption("modelbased_include_grid", FALSE),
+  ...
+) {
   # for joint test, no select and include_grid options
   if (isTRUE(attributes(x)$joint_test)) {
     select <- NULL

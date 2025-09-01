@@ -3,7 +3,7 @@
 #' @keywords internal
 .find_aes <- function(x, model_info = NULL, numeric_as_discrete = 8) {
   # init basic aes
-  data <- as.data.frame(x)
+  data <- as.data.frame(x, preserve_names = TRUE)
   data$.group <- 1
 
   att <- attributes(x)

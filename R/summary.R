@@ -1,6 +1,6 @@
 #' @export
 summary.estimate_slopes <- function(object, verbose = TRUE, ...) {
-  out <- as.data.frame(object)
+  out <- as.data.frame(object, preserve_names = TRUE)
   by <- attributes(object)$by
 
   if (verbose && nrow(out) < 50) {

@@ -1,3 +1,9 @@
+# modelbased (devel)
+
+## Changes
+
+* Added an `as.data.frame()` method for *modelbased* objects.
+
 # modelbased 0.13.0
 
 ## Changes

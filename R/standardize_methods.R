@@ -7,7 +7,11 @@ standardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
-  x[names(data)] <- datawizard::standardize(as.data.frame(x)[names(data)], reference = data, ...)
+  x[names(data)] <- datawizard::standardize(
+    as.data.frame(x, preserve_names = TRUE)[names(data)],
+    reference = data,
+    ...
+  )
 
   # Standardize response
   if (include_response && insight::model_info(attributes(x)$model, response = 1)$is_linear) {
@@ -76,7 +80,11 @@ unstandardize.estimate_predicted <- function(x, include_response = TRUE, ...) {
   data[[attributes(x)$response]] <- NULL # Remove resp from data
 
   # Standardize predictors
-  x[names(data)] <- datawizard::unstandardize(as.data.frame(x)[names(data)], reference = data, ...)
+  x[names(data)] <- datawizard::unstandardize(
+    as.data.frame(x, preserve_names = TRUE)[names(data)],
+    reference = data,
+    ...
+  )
 
   # Standardize response
   if (include_response == TRUE && insight::model_info(model, response = 1)$is_linear) {
