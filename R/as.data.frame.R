@@ -4,6 +4,9 @@
 #' a "raw" data frame without attributes and with standardized column names.
 #'
 #' @param x An object returned by the different `estimate_*()` functions.
+#' @param use_responsename Logical, if `TRUE`, the response variable name is used
+#' as column name for the estimate column (if available). If `FALSE` (default),
+#' the column is named `"Coefficient"`.
 #' @param ... Arguments passed to `as.data.frame()`.
 #'
 #' @return A data frame.
@@ -26,15 +29,16 @@ as.data.frame.estimate_contrasts <- function(
   ...,
   stringsAsFactors = FALSE,
   use_responsename = FALSE
-)
-{
+) {
   estimate_column <- intersect(colnames(x), .valid_coefficient_names())[1]
   response <- attr(x, "response")
 
-  if (use_responsename && !is.null(response)) {
-    colnames(x)[colnames(x) == estimate_column] <- response
-  } else {
-    colnames(x)[colnames(x) == estimate_column] <- "Coefficient"
+  if (!is.na(estimate_column)) {
+    if (use_responsename && !is.null(response)) {
+      colnames(x)[colnames(x) == estimate_column] <- response
+    } else {
+      colnames(x)[colnames(x) == estimate_column] <- "Coefficient"
+    }
   }
 
   as.data.frame.data.frame(

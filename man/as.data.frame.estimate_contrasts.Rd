@@ -17,6 +17,10 @@
 \item{x}{An object returned by the different \verb{estimate_*()} functions.}
 
 \item{...}{Arguments passed to \code{as.data.frame()}.}
+
+\item{use_responsename}{Logical, if \code{TRUE}, the response variable name is used
+as column name for the estimate column (if available). If \code{FALSE} (default),
+the column is named \code{"Coefficient"}.}
 }
 \value{
 A data frame.

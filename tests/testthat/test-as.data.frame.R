@@ -5,13 +5,7 @@ test_that("as.data.frame.estimate_contrasts()", {
   model <- lm(Petal.Length ~ Species, data = iris)
   estim <- estimate_means(model, "Species")
   out <- as.data.frame(estim)
-  expect_named(
-    out,
-    c("Species", "Coefficient", "SE", "CI_low", "CI_high", "t", "df")
-  )
+  expect_named(out, c("Species", "Coefficient", "SE", "CI_low", "CI_high", "t", "df"))
   out <- as.data.frame(estim, use_responsename = TRUE)
-  expect_named(
-    out,
-    c("Species", "Petal.Length", "SE", "CI_low", "CI_high", "t", "df")
-  )
+  expect_named(out, c("Species", "Petal.Length", "SE", "CI_low", "CI_high", "t", "df"))
 })
