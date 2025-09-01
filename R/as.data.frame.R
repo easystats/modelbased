@@ -13,6 +13,7 @@
 #' are preserved. If `FALSE`, the estimate column is renamed to either the
 #' response name (if `use_responsename = TRUE`) or to `"Coefficient"`.
 #' @param ... Arguments passed to the `data.frame` method of `as.data.frame()`.
+#' @inheritParams base::as.data.frame
 #'
 #' @return A data frame.
 #'
