@@ -1,7 +1,7 @@
 #' Converting modelbased-objects into raw data frames
 #'
 #' `as.data.frame()` method for **modelbased** objects. Can be used to return
-#' a "raw" data frame without attributes and standardized column names.
+#' a "raw" data frame without attributes and with standardized column names.
 #'
 #' @param x An object returned by the different `estimate_*()` functions.
 #' @param ... Arguments passed to `as.data.frame()`.

@@ -23,7 +23,7 @@ A data frame.
 }
 \description{
 \code{as.data.frame()} method for \strong{modelbased} objects. Can be used to return
-a "raw" data frame without attributes and standardized column names.
+a "raw" data frame without attributes and with standardized column names.
 }
 \examples{
 \dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
