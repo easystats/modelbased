@@ -30,7 +30,12 @@ test_that("filtering for by and contrast works for different estimate options", 
   out <- estimate_contrasts(m, "c172code=c('low','mid')", by = "c161sex", estimate = "average")
   expect_identical(dim(out), c(2L, 10L))
   expect_identical(as.character(out$Level1), c("mid", "mid"))
-  out <- estimate_contrasts(m, "c172code=c('low','mid')", by = "c161sex", estimate = "population")
+  out <- estimate_contrasts(
+    m,
+    "c172code=c('low','mid')",
+    by = "c161sex",
+    estimate = "population"
+  )
   expect_identical(dim(out), c(2L, 8L))
   expect_identical(as.character(out$Comparison), c("mid - low", "mid - low"))
 })
