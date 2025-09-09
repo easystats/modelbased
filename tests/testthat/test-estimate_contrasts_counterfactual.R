@@ -24,6 +24,7 @@ test_that("estimate_contrast, counterfactual", {
     vcov = "HC3"
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  expect_named(out2, c("Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p"))
 
   out1 <- marginaleffects::avg_comparisons(
     mod,
@@ -43,4 +44,8 @@ test_that("estimate_contrast, counterfactual", {
   )
 
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  expect_named(
+    out2,
+    c("treat", "Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+  )
 })

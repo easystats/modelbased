@@ -48,7 +48,10 @@ get_counterfactualcontrasts <- function(
   # "varname = c('a','b')"), we need to apply this filtering to the data grid
   # and then remove the filtering information from the variable names. In this
   # particular case, we *need* the newdata-argument
-  if (any(grepl("=", my_args$contrast, fixed = TRUE)) || any(grepl("=", my_args$by, fixed = TRUE))) {
+  if (
+    any(grepl("=", my_args$contrast, fixed = TRUE)) ||
+      any(grepl("=", my_args$by, fixed = TRUE))
+  ) {
     my_args$contrast <- gsub("=.*", "\\1", my_args$contrast)
     my_args$by <- gsub("=.*", "\\1", my_args$by)
     dots$newdata <- counter_grid
@@ -98,5 +101,9 @@ get_counterfactualcontrasts <- function(
   )
 
   class(out) <- unique(c("marginaleffects_means", class(out)))
-  format(out, model, ci, hypothesis = my_args$comparison, ...)
+  out <- format(out, model, ci, hypothesis = my_args$comparison, ...)
+
+  # manual clean-up
+  out$Parameter <- NULL
+  out
 }
