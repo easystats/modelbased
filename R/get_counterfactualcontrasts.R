@@ -13,6 +13,7 @@ get_counterfactualcontrasts <- function(
   comparison,
   ci,
   p_adjust,
+  transform,
   verbose = TRUE,
   ...
 ) {
@@ -57,13 +58,21 @@ get_counterfactualcontrasts <- function(
     dots$newdata <- counter_grid
   }
 
-  # weights?
+  # weights and transformation?
   # ---------------------------
 
   # handle weights - argument is named "wts" in marginal effects
   if (!is.null(dots$weights)) {
     dots$wts <- dots$weights
     dots$weights <- NULL
+  }
+
+  # transform reponse?
+  if (isTRUE(transform)) {
+    transform <- insight::get_transformation(model, verbose = FALSE)$inverse
+  }
+  if (!is.null(transform)) {
+    dots$transform <- transform
   }
 
   # setup arguments
@@ -95,7 +104,9 @@ get_counterfactualcontrasts <- function(
         estimate = "population",
         p_adjust = p_adjust,
         contrast_filter = my_args$contrast_filter,
-        datagrid = counter_grid
+        datagrid = counter_grid,
+        transform = !is.null(transform),
+        vcov = .safe(stats::vcov(out))
       )
     )
   )

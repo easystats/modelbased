@@ -137,6 +137,7 @@ get_marginalcontrasts <- function(
       comparison = comparison,
       ci = ci,
       p_adjust = p_adjust,
+      transform = transform,
       verbose = verbose,
       ...
     )

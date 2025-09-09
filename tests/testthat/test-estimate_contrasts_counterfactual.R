@@ -52,4 +52,25 @@ test_that("estimate_contrast, counterfactual", {
     out2,
     c("treat", "Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p")
   )
+
+  # transformed response
+  mod <- lm(log1p(re78) ~ treat * (age + educ + race + re74), data = lalonde, weights = wts)
+
+  out1 <- marginaleffects::avg_comparisons(
+    mod,
+    variables = "treat",
+    wts = "wts",
+    vcov = "HC3",
+    transform = expm1
+  )
+
+  out2 <- estimate_contrasts(
+    mod,
+    contrast = "treat",
+    estimate = "population",
+    weights = "wts",
+    vcov = "HC3",
+    transform = TRUE
+  )
+  expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
 })
