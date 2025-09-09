@@ -25,6 +25,10 @@ test_that("estimate_contrast, counterfactual", {
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
   expect_named(out2, c("Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p"))
+  expect_identical(
+    attributes(out2)$table_title,
+    c("Counterfactual Contrasts Analysis (G-computation)", "blue")
+  )
 
   out1 <- marginaleffects::avg_comparisons(
     mod,
