@@ -3,7 +3,6 @@
 
 get_counterfactualcontrasts <- function(
   model,
-  model_data,
   model_info,
   predict,
   my_args,

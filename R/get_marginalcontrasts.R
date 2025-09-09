@@ -126,7 +126,6 @@ get_marginalcontrasts <- function(
     my_args$contrast <- contrast
     out <- get_counterfactualcontrasts(
       model = model,
-      model_data = model_data,
       model_info = model_info,
       my_args = my_args,
       predict = predict,
