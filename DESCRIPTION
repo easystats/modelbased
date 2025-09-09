@@ -75,6 +75,7 @@ Suggests:
     lmerTest,
     logspline,
     MASS,
+    MatchIt,
     Matrix,
     marginaleffects (>= 0.29.0),
     mice,
