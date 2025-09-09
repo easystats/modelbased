@@ -122,8 +122,13 @@ get_marginalcontrasts <- function(
       ...
     )
   } else if (identical(estimate, "population")) {
-    # counterfactual needs comparisons of differences, thus we call avg_comparisons
+    # we "overwrite" contrast with the original argument, because above in
+    # .get_marginaleffects_hypothesis_argument(), we removed `by` from `contrast`
+    # however, sometimes we want counterfactual contrasts of a predictor *and*
+    # stratify by the same predictor - removing `by` from `contrast` would mean
+    # that "contrast" is empty, which is not what we want here
     my_args$contrast <- contrast
+    # counterfactual needs comparisons of differences, thus we call avg_comparisons
     out <- get_counterfactualcontrasts(
       model = model,
       model_info = model_info,
