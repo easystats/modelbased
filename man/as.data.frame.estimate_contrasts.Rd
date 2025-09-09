@@ -51,7 +51,7 @@ By default, the original column names are preserved, to avoid unexpected
 changes, but this can be changed with the \code{preserve_names} argument.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Petal.Length ~ Species, data = iris)
 out <- estimate_means(model, "Species")
 

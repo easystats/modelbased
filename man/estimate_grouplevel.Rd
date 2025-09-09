@@ -69,7 +69,7 @@ the group estimate and the population estimate. This improves generalizability
 and prevents overfitting.
 }
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE)) && packageVersion("insight") > "1.1.0" && packageVersion("parameters") > "0.24.1") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("see", "lme4"), quietly = TRUE)) && packageVersion("insight") > "1.1.0" && packageVersion("parameters") > "0.24.1") withAutoprint(\{ # examplesIf}
 # lme4 model
 data(mtcars)
 model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)

@@ -70,7 +70,7 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    out <- .get_datagrid_means(model, my_args, estimate, dots)
+    out <- .get_datagrid_means(model, my_args$by, estimate, dots)
     # update objects
     datagrid <- out$datagrid
     datagrid_info <- out$datagrid_info
@@ -279,11 +279,11 @@ get_marginalmeans <- function(model,
 #   - `datagrid`: The created data grid.
 #   - `datagrid_info`: The attributes of the data grid.
 #   - `dots`: The `...` arguments, with arguments consumed by this function removed.
-.get_datagrid_means <- function(model, my_args, estimate, dots) {
+.get_datagrid_means <- function(model, by, estimate, dots) {
   dg_factors <- switch(estimate, specific = "reference", "all")
   dg_args <- list(
     model,
-    by = my_args$by,
+    by = by,
     factors = dg_factors,
     include_random = TRUE,
     verbose = FALSE

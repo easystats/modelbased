@@ -45,7 +45,7 @@ out. There is no back-transformation to the link-scale of predicted values
 before applying Rubin's rule.
 }
 \examples{
-\dontshow{if (require("mice") && requireNamespace("marginaleffects")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("mice") && requireNamespace("marginaleffects")) withAutoprint(\{ # examplesIf}
 # example for multiple imputed datasets
 data("nhanes2", package = "mice")
 imp <- mice::mice(nhanes2, printFlag = FALSE)

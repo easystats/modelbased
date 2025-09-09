@@ -121,6 +121,21 @@ get_marginalcontrasts <- function(
       verbose = verbose,
       ...
     )
+  } else if (identical(estimate, "population")) {
+    # counterfactual needs comparisons of differences, thus we call avg_comparisons
+    my_args$contrast <- contrast
+    out <- get_counterfactualcontrasts(
+      model = model,
+      model_data = model_data,
+      model_info = model_info,
+      my_args = my_args,
+      predict = predict,
+      comparison = comparison,
+      ci = ci,
+      p_adjust = p_adjust,
+      verbose = verbose,
+      ...
+    )
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(

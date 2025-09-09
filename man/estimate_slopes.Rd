@@ -309,7 +309,7 @@ for some examples.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans", "effectsize", "mgcv", "ggplot2", "see"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 library(ggplot2)
 # Get an idea of the data
 ggplot(iris, aes(x = Petal.Length, y = Sepal.Width)) +
@@ -369,7 +369,7 @@ estimate_slopes(model, trend = "Petal.Length", by = "Petal.Length=c(1, 3, 5)")
 estimate_slopes(model, trend = "Petal.Length=seq(2, 4, 0.01)")
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "emmeans"), quietly = TRUE)) && getRversion() >= "4.5.0") withAutoprint(\{ # examplesIf}
 \dontrun{
 # marginal effects with different `estimate` options
 data(penguins)
