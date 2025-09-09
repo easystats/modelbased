@@ -309,13 +309,13 @@ estimate_contrasts.default <- function(
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
-  # validate input
-  estimate <- .validate_estimate_arg(estimate)
-
   # set defaults
   if (is.null(backend)) {
     backend <- getOption("modelbased_backend", "marginaleffects")
   }
+
+  # validate input
+  estimate <- .validate_estimate_arg(estimate)
   comparison <- .check_for_inequality_comparison(comparison)
 
   if (backend == "emmeans") {
