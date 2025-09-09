@@ -1,6 +1,10 @@
 # special contrasts: counterfactual -----------------------------------------
-# ---------------------------------------------------------------------------
-
+#
+# For counterfactual contrasts, we use the "avg_comparisons()" function from the
+# marginaleffects package, because we cannot simply calculate *pairwise*
+# comparisons, but rather we need to calculate the difference between two sets of
+# counterfactual predictions, which is what avg_comparisons() does (via the
+# "comparison" argument).
 get_counterfactualcontrasts <- function(
   model,
   model_info,
@@ -27,8 +31,8 @@ get_counterfactualcontrasts <- function(
     ...
   )
 
-  # create a data grid -------------------------------------------
-  # ---------------------------------------------------------------------------
+  # create a data grid
+  # ----------------------------------------------------------------------
 
   out <- .get_datagrid_means(
     model,
@@ -39,6 +43,17 @@ get_counterfactualcontrasts <- function(
   counter_grid <- out$datagrid
   datagrid_info <- out$datagrid_info
 
+  # filtered values in contrast and by variables? If the user did not provide
+  # just the names of the variables, but also filtering information (e.g.,
+  # "varname = c('a','b')"), we need to apply this filtering to the data grid
+  # and then remove the filtering information from the variable names. In this
+  # particular case, we *need* the newdata-argument
+  if (any(grepl("=", my_args$contrast, fixed = TRUE)) || any(grepl("=", my_args$by, fixed = TRUE))) {
+    my_args$contrast <- gsub("=.*", "\\1", my_args$contrast)
+    my_args$by <- gsub("=.*", "\\1", my_args$by)
+    dots$newdata <- counter_grid
+  }
+
   # weights?
   # ---------------------------
 
@@ -47,6 +62,9 @@ get_counterfactualcontrasts <- function(
     dots$wts <- dots$weights
     dots$weights <- NULL
   }
+
+  # setup arguments
+  # -----------------------------------------------------------
 
   fun_args <- insight::compact_list(c(
     list(
