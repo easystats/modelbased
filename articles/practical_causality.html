@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -339,12 +339,17 @@ significant advantage in calculating contrasts between
 <code>treatment</code> levels, as the results are equivalent to a
 simpler approach.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m2</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m2</span>,</span>
+<span>  <span class="st">"treatment"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.58 (1.80, 9.35) | 0.004</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.58 (1.80, 9.35) | 0.004 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -376,7 +381,8 @@ particularly advantageous.</p>
 <span><span class="fu"><a href="../reference/estimate_means.html">estimate_means</a></span><span class="op">(</span></span>
 <span>  <span class="va">m3</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"time"</span>, <span class="st">"treatment"</span><span class="op">)</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="st">"population"</span></span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="practical_causality_files/figure-html/unnamed-chunk-9-1.png" width="90%" height="90%"></p>
 <p>We now see that the coefficient table is no longer helpful, because
@@ -395,12 +401,17 @@ our <code>treatment</code> predictor.</p>
 <span><span class="co">#&gt; treatment [1] × time [3] |       13.91 | 1.61 | [10.76, 17.05] |  8.65 | &lt; .001</span></span>
 <span></span>
 <span><span class="co"># contrasts of treatment levels, using g-computation</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m3</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m3</span>,</span>
+<span>  <span class="st">"treatment"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.63 (1.87, 9.40) | 0.003</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.60 (1.84, 9.37) | 0.004 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -415,7 +426,7 @@ situations.</p>
 <p>While the contrasts based solely on IPW are slightly biased with an
 estimated difference of 5.99, the contrasts derived from the same model
 using g-computation are close to the effect we found before, with an
-estimated difference of 5.65.</p>
+estimated difference of 5.64.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># more complex model</span></span>
 <span><span class="va">m4</span> <span class="op">&lt;-</span> <span class="fu">glmmTMB</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/glmmTMB/man/glmmTMB.html" class="external-link">glmmTMB</a></span><span class="op">(</span></span>
@@ -424,7 +435,7 @@ estimated difference of 5.65.</p>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># complex model, no g-computation</span></span>
+<span><span class="co"># complex model, simple contrasts, no g-computation</span></span>
 <span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Marginal Contrasts Analysis</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -438,12 +449,12 @@ estimated difference of 5.65.</p>
 <span><span class="co">#&gt; p-values are uncorrected.</span></span>
 <span></span>
 <span><span class="co"># complex model, with IPW *and* G-computation (double-robust) is accurate!</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span>, weights <span class="op">=</span> <span class="st">"ipw"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.65 (1.86, 9.43) | 0.003</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.64 (1.86, 9.42) | 0.003 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -472,13 +483,14 @@ already receive it.</p>
 <span>  <span class="va">m4</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
 <span>  newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">1</span><span class="op">)</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="st">"population"</span></span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.45 (1.56, 9.35) | 0.006</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.62 (1.84, 9.39) | 0.004 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -490,13 +502,14 @@ already receive it.</p>
 <span>  <span class="va">m4</span>,</span>
 <span>  <span class="st">"treatment"</span>,</span>
 <span>  newdata <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/subset.html" class="external-link">subset</a></span><span class="op">(</span><span class="va">model_data</span>, <span class="va">treatment</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span>,</span>
-<span>  estimate <span class="op">=</span> <span class="st">"population"</span></span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.74 (1.82, 9.66) | 0.004</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.67 (1.89, 9.45) | 0.003 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -513,7 +526,7 @@ effect on the treated (ATT), and the effect on the untreated (ATU) are
 expected to be the same because randomization creates comparable groups.
 However, these values often differ in observational studies or trials
 with treatment non-compliance, as the groups may be systematically
-different due to factors like self-selection <span class="citation">(Dong, Kelcey, and Spybrook 2023)</span>.</p>
+different due to factors like self-selection <span class="citation">(Dong et al. 2023)</span>.</p>
 </div>
 <div class="section level3">
 <h3 id="an-important-note-on-variance-estimators">An important note on variance estimators<a class="anchor" aria-label="anchor" href="#an-important-note-on-variance-estimators"></a>
@@ -537,12 +550,18 @@ since version 1.1.12, however, currently only the <code>"HC0"</code>
 option (which is equivalent to the Huber-White estimator).</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># complex model, with IPW *and* G-computation (double-robust) is accurate!</span></span>
-<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m4</span>, <span class="st">"treatment"</span>, vcov <span class="op">=</span> <span class="st">"HC0"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span></span>
+<span>  <span class="va">m4</span>,</span>
+<span>  <span class="st">"treatment"</span>,</span>
+<span>  vcov <span class="op">=</span> <span class="st">"HC0"</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  weights <span class="op">=</span> <span class="st">"ipw"</span></span>
+<span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |   Difference (CI) |     p</span></span>
-<span><span class="co">#&gt; -------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.65 (1.76, 9.54) | 0.004</span></span>
+<span><span class="co">#&gt; Difference (CI)   |     p | Comparison</span></span>
+<span><span class="co">#&gt; --------------------------------------</span></span>
+<span><span class="co">#&gt; 5.64 (1.76, 9.52) | 0.004 |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -561,12 +580,12 @@ robust alternative.</p>
 <span>  data <span class="op">=</span> <span class="va">d</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/estimate_contrasts.html">estimate_contrasts</a></span><span class="op">(</span><span class="va">m5</span>, <span class="st">"treatment"</span>, estimate <span class="op">=</span> <span class="st">"population"</span>, weights <span class="op">=</span> <span class="st">"ipw"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Counterfactual Contrasts Analysis (G-computation)</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Level1 | Level2 |       Median (CI) |     pd</span></span>
-<span><span class="co">#&gt; --------------------------------------------</span></span>
-<span><span class="co">#&gt; 1      | 0      | 5.58 (1.81, 9.75) | 99.80%</span></span>
+<span><span class="co">#&gt; Median (CI)       |     pd | Comparison</span></span>
+<span><span class="co">#&gt; ---------------------------------------</span></span>
+<span><span class="co">#&gt; 5.57 (1.79, 9.73) | 99.80% |      1 - 0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Variable predicted: QoL, ipw</span></span>
 <span><span class="co">#&gt; Predictors contrasted: treatment</span></span>
@@ -603,7 +622,7 @@ together. Therefore, we recommend their combined use.</p>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
+<div id="refs" class="references csl-bib-body hanging-indent">
 <div id="ref-chatton_causal_2024" class="csl-entry">
 Chatton, Arthur, and Julia M. Rohrer. 2024. <span>“The
 <span>Causal</span> <span>Cookbook</span>: <span>Recipes</span> for
@@ -626,25 +645,23 @@ Dong, Nianbo, Benjamin Kelcey, and Jessaca Spybrook. 2023.
 Behavioral Research</em> 58 (2): 221–40. <a href="https://doi.org/10.1080/00273171.2022.2046997" class="external-link">https://doi.org/10.1080/00273171.2022.2046997</a>.
 </div>
 <div id="ref-gabriel_inverse_2024" class="csl-entry">
-Gabriel, Erin E., Michael C. Sachs, Torben Martinussen, Ingeborg
-Waernbaum, Els Goetghebeur, Stijn Vansteelandt, and Arvid Sjölander.
-2024. <span>“Inverse Probability of Treatment Weighting with Generalized
+Gabriel, Erin E., Michael C. Sachs, Torben Martinussen, et al. 2024.
+<span>“Inverse Probability of Treatment Weighting with Generalized
 Linear Outcome Models for Doubly Robust Estimation.”</span>
 <em>Statistics in Medicine</em> 43 (3): 534–47. <a href="https://doi.org/10.1002/sim.9969" class="external-link">https://doi.org/10.1002/sim.9969</a>.
 </div>
 <div id="ref-ho_matchit_2005" class="csl-entry">
 Ho, Daniel, Kosuke Imai, Gary King, Elizabeth Stuart, and Noah Greifer.
-2005. <span>“<span>MatchIt</span>: <span>Nonparametric</span>
+2005. <em><span>MatchIt</span>: <span>Nonparametric</span>
 <span>Preprocessing</span> for <span>Parametric</span>
-<span>Causal</span> <span>Inference</span>.”</span> <a href="https://doi.org/10.32614/CRAN.package.MatchIt" class="external-link">https://doi.org/10.32614/CRAN.package.MatchIt</a>.
+<span>Causal</span> <span>Inference</span></em>. <a href="https://doi.org/10.32614/CRAN.package.MatchIt" class="external-link">https://doi.org/10.32614/CRAN.package.MatchIt</a>.
 </div>
 <div id="ref-kostouraki_variance_2024" class="csl-entry">
-Kostouraki, Andriana, David Hajage, Bernard Rachet, Elizabeth J.
-Williamson, Guillaume Chauvet, Aurélien Belot, and Clémence Leyrat.
-2024. <span>“On Variance Estimation of the Inverse
-Probability‐of‐treatment Weighting Estimator: <span>A</span> Tutorial
-for Different Types of Propensity Score Weights.”</span> <em>Statistics
-in Medicine</em> 43 (13): 2672–94. <a href="https://doi.org/10.1002/sim.10078" class="external-link">https://doi.org/10.1002/sim.10078</a>.
+Kostouraki, Andriana, David Hajage, Bernard Rachet, et al. 2024.
+<span>“On Variance Estimation of the Inverse Probability‐of‐treatment
+Weighting Estimator: <span>A</span> Tutorial for Different Types of
+Propensity Score Weights.”</span> <em>Statistics in Medicine</em> 43
+(13): 2672–94. <a href="https://doi.org/10.1002/sim.10078" class="external-link">https://doi.org/10.1002/sim.10078</a>.
 </div>
 <div id="ref-li_weighting_2013" class="csl-entry">
 Li, Liang, and Tom Greene. 2013. <span>“A <span>Weighting</span>
