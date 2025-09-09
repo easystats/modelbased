@@ -16,7 +16,7 @@ get_inequalitycontrasts <- function(
   if (!is.null(dots$newdata)) {
     datagrid <- dots$newdata
   } else if (identical(estimate, "typical")) {
-    datagrid <- .get_datagrid_means(model, my_args, estimate, dots = dots)$datagrid
+    datagrid <- .get_datagrid_means(model, my_args$by, estimate, dots = dots)$datagrid
   } else {
     datagrid <- NULL
   }

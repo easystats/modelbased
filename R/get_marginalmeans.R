@@ -21,15 +21,17 @@
 #' get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 #' }
 #' @export
-get_marginalmeans <- function(model,
-                              by = "auto",
-                              predict = NULL,
-                              ci = 0.95,
-                              estimate = NULL,
-                              transform = NULL,
-                              keep_iterations = FALSE,
-                              verbose = TRUE,
-                              ...) {
+get_marginalmeans <- function(
+  model,
+  by = "auto",
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  keep_iterations = FALSE,
+  verbose = TRUE,
+  ...
+) {
   # check if available
   insight::check_if_installed("marginaleffects", minimum_version = "0.29.0")
 
@@ -70,7 +72,7 @@ get_marginalmeans <- function(model,
     datagrid <- datagrid_info <- NULL
   } else {
     # setup arguments to create the data grid
-    out <- .get_datagrid_means(model, my_args, estimate, dots)
+    out <- .get_datagrid_means(model, my_args$by, estimate, dots)
     # update objects
     datagrid <- out$datagrid
     datagrid_info <- out$datagrid_info
@@ -81,6 +83,7 @@ get_marginalmeans <- function(model,
   # --------------------------------------------------------------------------
 
   # remove user-arguments from "..." that will be used when calling marginaleffects
+  # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
     "offset", ".joint_test"
@@ -109,7 +112,9 @@ get_marginalmeans <- function(model,
   if (estimate == "population") {
     # sanity check
     if (is.null(datagrid)) {
-      insight::format_error("Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set.") # nolint
+      insight::format_error(
+        "Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set."
+      )
     }
     fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
@@ -279,19 +284,17 @@ get_marginalmeans <- function(model,
 #   - `datagrid`: The created data grid.
 #   - `datagrid_info`: The attributes of the data grid.
 #   - `dots`: The `...` arguments, with arguments consumed by this function removed.
-.get_datagrid_means <- function(model, my_args, estimate, dots) {
+.get_datagrid_means <- function(model, by, estimate, dots) {
   dg_factors <- switch(estimate, specific = "reference", "all")
-  dg_args <- list(
-    model,
-    by = my_args$by,
-    factors = dg_factors,
-    include_random = TRUE,
-    verbose = FALSE
-  )
+  dg_args <- list(model, by = by, factors = dg_factors, include_random = TRUE, verbose = FALSE)
   # did user request weights? These are not supported for data-grid
   # marginalization types
-  if (estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))) {
-    insight::format_warning("Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts.") # nolint
+  if (
+    estimate %in% c("specific", "typical") && (!is.null(dots$weights) || !is.null(dots$wts))
+  ) {
+    insight::format_warning(
+      "Using weights is not possible when `estimate` is set to \"typical\" or \"specific\". Use `estimate = \"average\"` to include weights for marginal means or contrasts."
+    )
     dots[c("weights", "wts")] <- NULL
   }
 
@@ -356,11 +359,17 @@ get_marginalmeans <- function(model,
   # handle exceptions ------------------------------------------------------
   # we get this error when we should use counterfactuals
   if (grepl("not found in column names", out$message, fixed = TRUE)) {
-    msg <- c(msg, "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\".") # nolint
+    msg <- c(
+      msg,
+      "\nIt seems that not all required levels of the focal terms are available in the provided data. If you want predictions extrapolated to a hypothetical target population, try setting `estimate=\"population\"."
+    )
   }
   # we get this error for models with complex random effects structures in glmmTMB,
   # or when the data grid is too large
-  if (grepl("map factor length must equal", out$message, fixed = TRUE) || grepl("cannot allocate", out$message, fixed = TRUE)) {
+  if (
+    grepl("map factor length must equal", out$message, fixed = TRUE) ||
+      grepl("cannot allocate", out$message, fixed = TRUE)
+  ) {
     msg <- c(
       msg,
       paste0(
@@ -370,8 +379,16 @@ get_marginalmeans <- function(model,
         toString(paste0("\"", fun_args$by, "\"")),
         "))` instead. For contrasts or pairwise comparisons, save the output of `estimate_relation()` and pass it to `estimate_contrasts()`, e.g.\n" # nolint
       ),
-      paste0("out <- estimate_relation(model, by = c(", toString(paste0("\"", fun_args$by, "\"")), "))"),
-      paste0("estimate_contrasts(out, contrast = c(", toString(paste0("\"", fun_args$by, "\"")), "))")
+      paste0(
+        "out <- estimate_relation(model, by = c(",
+        toString(paste0("\"", fun_args$by, "\"")),
+        "))"
+      ),
+      paste0(
+        "estimate_contrasts(out, contrast = c(",
+        toString(paste0("\"", fun_args$by, "\"")),
+        "))"
+      )
     )
   }
   msg
@@ -401,7 +418,9 @@ get_marginalmeans <- function(model,
   # filter "by" rows when we have "average" marginalization, because we don't
   # pass data grid in such situations - but we still created the data grid based
   # on the `by` variables, for internal use, for example filtering at this point
-  if (identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))) {
+  if (
+    identical(estimate, "average") && all(datagrid_info$at_specs$varname %in% colnames(means))
+  ) {
     # sanity check - are all filter values from the data grid in the marginaleffects
     # object? For `estimate_average()`, predictions are based on the data, not
     # the theoretical data grid. When users request filtering by numeric predictors,
@@ -492,7 +511,9 @@ get_marginalmeans <- function(model,
 
 # these are the names of attributes that can be flexibly added via
 # `info` argument in `.add_attributes()`
+# fmt: skip
 .info_elements <- function() {
+  # fmt: skip
   c(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
@@ -505,7 +526,13 @@ get_marginalmeans <- function(model,
 # Guess -------------------------------------------------------------------
 
 #' @keywords internal
-.guess_marginaleffects_arguments <- function(model, by = NULL, contrast = NULL, verbose = TRUE, ...) {
+.guess_marginaleffects_arguments <- function(
+  model,
+  by = NULL,
+  contrast = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Gather info and data from model
   model_data <- insight::get_data(model, verbose = FALSE)
 
@@ -527,14 +554,20 @@ get_marginalmeans <- function(model,
         # if still no factors found, throw error
         if (is.null(factors)) {
           insight::format_error(paste0(
-            "Model contains no categorical predictor. Please specify `", spec_name, "`."
+            "Model contains no categorical predictor. Please specify `",
+            spec_name,
+            "`."
           ))
         }
         spec_value <- factors
       }
       if (verbose) {
         insight::format_alert(paste0(
-          "We selected `", spec_name, "=c(", toString(paste0('"', spec_value, '"')), ")`."
+          "We selected `",
+          spec_name,
+          "=c(",
+          toString(paste0('"', spec_value, '"')),
+          ")`."
         ))
       }
     }
@@ -556,7 +589,8 @@ get_marginalmeans <- function(model,
     msg <- NULL
     if (is.null(offset)) {
       # if no offset argument was specified, tell user what this means
-      msg <- switch(estimate,
+      msg <- switch(
+        estimate,
         specific = ,
         typical = "Model contains an offset-term, which is set to its mean value. If you want to average predictions over the distribution of the offset (if appropriate), use `estimate = \"average\"`. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1`.",
         "Model contains an offset-term and you average predictions over the distribution of that offset. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
@@ -571,9 +605,14 @@ get_marginalmeans <- function(model,
       }
     } else {
       # if offset was specified, and estimate averages over predictions, tell this
-      msg <- switch(estimate,
+      msg <- switch(
+        estimate,
         average = ,
-        population = paste0("For `estimate = \"", estimate, "\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`.")
+        population = paste0(
+          "For `estimate = \"",
+          estimate,
+          "\"`, predictions are averaged over the distribution of the offset and the `offset` argument is ignored. If you want to fix the offset to a specific value, for instance `1`, use `offset = 1` and set `estimate = \"typical\"`."
+        )
       )
     }
     if (!is.null(msg)) {

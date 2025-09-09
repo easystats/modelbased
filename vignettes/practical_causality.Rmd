@@ -180,7 +180,12 @@ model_parameters(m2, keep = "^treatment")
 Given the simplicity of the model, g-computation offers no significant advantage in calculating contrasts between `treatment` levels, as the results are equivalent to a simpler approach.
 
 ```{r}
-estimate_contrasts(m2, "treatment", estimate = "population")
+estimate_contrasts(
+  m2,
+  "treatment",
+  estimate = "population",
+  weights = "ipw"
+)
 ```
 
 ## ATE calculated from IPW and g-computation in more complex models
@@ -200,7 +205,8 @@ m3 <- glmmTMB::glmmTMB(
 estimate_means(
   m3,
   c("time", "treatment"),
-  estimate = "population"
+  estimate = "population",
+  weights = "ipw"
 ) |> plot()
 ```
 
@@ -211,7 +217,12 @@ We now see that the coefficient table is no longer helpful, because the treatmen
 model_parameters(m3, keep = "^treatment")
 
 # contrasts of treatment levels, using g-computation
-estimate_contrasts(m3, "treatment", estimate = "population")
+estimate_contrasts(
+  m3,
+  "treatment",
+  estimate = "population",
+  weights = "ipw"
+)
 ```
 
 ```{r echo=FALSE}
@@ -221,7 +232,12 @@ tmp <- glmmTMB::glmmTMB(
   data = d
 )
 est1 <- estimate_contrasts(tmp, "treatment")
-est2 <- estimate_contrasts(tmp, "treatment", estimate = "population")
+est2 <- estimate_contrasts(
+  tmp,
+  "treatment",
+  estimate = "population",
+  weights = "ipw"
+)
 est_diff_1 <- round(est1$Difference, 2)
 est_diff_2 <- round(est2$Difference, 2)
 ```
@@ -238,11 +254,11 @@ m4 <- glmmTMB::glmmTMB(
   data = d
 )
 
-# complex model, no g-computation
+# complex model, simple contrasts, no g-computation
 estimate_contrasts(m4, "treatment")
 
 # complex model, with IPW *and* G-computation (double-robust) is accurate!
-estimate_contrasts(m4, "treatment", estimate = "population")
+estimate_contrasts(m4, "treatment", estimate = "population", weights = "ipw")
 ```
 
 ## Average treatment effect on the treated and untreated
@@ -263,7 +279,8 @@ estimate_contrasts(
   m4,
   "treatment",
   newdata = subset(model_data, treatment == 1),
-  estimate = "population"
+  estimate = "population",
+  weights = "ipw"
 )
 
 # the ATU - apply g-computation only to the subset of the conrol
@@ -271,7 +288,8 @@ estimate_contrasts(
   m4,
   "treatment",
   newdata = subset(model_data, treatment == 0),
-  estimate = "population"
+  estimate = "population",
+  weights = "ipw"
 )
 ```
 
@@ -287,7 +305,13 @@ Robust standard errors can be easily computed for many models using the `vcov` a
 
 ```{r}
 # complex model, with IPW *and* G-computation (double-robust) is accurate!
-estimate_contrasts(m4, "treatment", vcov = "HC0", estimate = "population")
+estimate_contrasts(
+  m4,
+  "treatment",
+  vcov = "HC0",
+  estimate = "population",
+  weights = "ipw"
+)
 ```
 
 A fully Bayesian approach, as demonstrated here, also provides a robust alternative.
@@ -314,7 +338,7 @@ m5 <- brm(
 )
 ```
 ```{r}
-estimate_contrasts(m5, "treatment", estimate = "population")
+estimate_contrasts(m5, "treatment", estimate = "population", weights = "ipw")
 ```
 
 # Conclusion

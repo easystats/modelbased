@@ -33,7 +33,7 @@ proportion, relative to the total size) trend (the linear regression
 coefficient) and linearity (the R2 of the linear regression).
 }
 \examples{
-\dontshow{if (insight::check_if_installed("performance", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("performance", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Create data
 data <- data.frame(x = rnorm(200))
 data$y <- data$x^2 + rnorm(200, 0, 0.5)

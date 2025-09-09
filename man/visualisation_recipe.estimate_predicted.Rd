@@ -140,7 +140,7 @@ Should be a number between \code{0} and \code{1}.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 # ==============================================
 # tinyplot
 # ==============================================
@@ -160,7 +160,7 @@ em <- estimate_means(m, c("e16sex", "c172code"))
 tinyplot::plt(em)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0") withAutoprint(\{ # examplesIf}
 library(ggplot2)
 library(see)
 # ==============================================
@@ -245,7 +245,7 @@ x <- estimate_means(glm(vs ~ cyl, data = data, family = "binomial"), by = c("cyl
 plot(x)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 # ==============================================
 # estimate_slopes
 # ==============================================
@@ -273,7 +273,7 @@ x <- estimate_slopes(model, trend = "Sepal.Width", by = c("Sepal.Width", "Specie
 plot(visualisation_recipe(x))
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("ggplot2", "marginaleffects", "see", "lme4"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 # ==============================================
 # estimate_grouplevel
 # ==============================================

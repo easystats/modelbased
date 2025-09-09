@@ -4,6 +4,11 @@
 
 * Added an `as.data.frame()` method for *modelbased* objects.
 
+## Bug fixes
+
+* Counterfactual contrasts (i.e., `estimate_contrasts()` with `estimate = "population"`)
+  did not accurately compute differences between counterfactual predictions.
+
 # modelbased 0.13.0
 
 ## Changes

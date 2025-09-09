@@ -291,7 +291,7 @@ class membership.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("see", "glmmTMB", "rstanarm"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("see", "glmmTMB", "rstanarm"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 library(modelbased)
 
 # Linear Models

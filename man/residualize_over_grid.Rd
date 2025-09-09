@@ -43,7 +43,7 @@ partialled out.
 }
 
 \examples{
-\dontshow{if (requireNamespace("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (requireNamespace("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 set.seed(1234)
 x1 <- rnorm(200)
 x2 <- rnorm(200)

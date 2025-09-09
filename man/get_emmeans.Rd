@@ -310,7 +310,7 @@ The \code{get_emmeans()}, \code{get_emcontrasts()} and \code{get_emtrends()} fun
 wrappers around \code{emmeans::emmeans()} and \code{emmeans::emtrends()}.
 }
 \examples{
-\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 # Basic usage
 model <- lm(Sepal.Width ~ Species, data = iris)
 get_emcontrasts(model)
@@ -328,7 +328,7 @@ get_emcontrasts(model, contrast = c("Species", "Petal.Width=c(1, 2)"))
 get_emcontrasts(model, by = "Petal.Width", length = 4)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (require("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (require("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'by' is set to "Species"
@@ -349,7 +349,7 @@ get_emmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_emmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("emmeans", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 \dontrun{
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
@@ -363,7 +363,7 @@ model <- lm(Petal.Length ~ poly(Sepal.Width, 4), data = iris)
 get_emtrends(model)
 get_emtrends(model, by = "Sepal.Width")
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Length ~ Species + Petal.Width, data = iris)
 
 # By default, 'by' is set to "Species"
@@ -384,7 +384,7 @@ get_marginalmeans(model, by = c("Species", "Petal.Length"), length = 2)
 get_marginalmeans(model, by = c("Species", "Petal.Length = c(1, 3, 5)"), length = 2)
 }
 \dontshow{\}) # examplesIf}
-\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (insight::check_if_installed("marginaleffects", quietly = TRUE)) withAutoprint(\{ # examplesIf}
 model <- lm(Sepal.Width ~ Species * Petal.Length, data = iris)
 
 get_marginaltrends(model, trend = "Petal.Length", by = "Species")

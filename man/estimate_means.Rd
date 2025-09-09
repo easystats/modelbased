@@ -340,7 +340,7 @@ to always treat integer predictors as continuous.
 }
 
 \examples{
-\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (all(insight::check_if_installed(c("marginaleffects", "see", "lme4"), quietly = TRUE))) withAutoprint(\{ # examplesIf}
 library(modelbased)
 
 # Frequentist models

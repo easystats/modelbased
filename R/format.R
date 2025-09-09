@@ -229,6 +229,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   contrast_filter <- attributes(x)$contrast_filter
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
+  estimate <- attributes(x)$estimate
 
   # for slopes, sanity check - we may have duplicated "by" columns, e.g. when
   # user requests grouping for by-terms by combining "by" and "comparison" with
@@ -248,13 +249,15 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
-  for (i in focal_terms) {
-    if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
-      # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\._]")[[1]][1]
-      by[startsWith(by, i)] <- i
-    }
-    if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
-      contrast[startsWith(contrast, i)] <- i
+  if (!identical(estimate, "population")) {
+    for (i in focal_terms) {
+      if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
+        # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\._]")[[1]][1]
+        by[startsWith(by, i)] <- i
+      }
+      if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
+        contrast[startsWith(contrast, i)] <- i
+      }
     }
   }
 
@@ -304,10 +307,13 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     # for contrasts, we also filter variables with one unique value, but we
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
-    # value in the data grid, anyway. so we need to keep them
-    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
-      vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
-    contrast <- contrast[keep_contrasts]
+    # value in the data grid, anyway. so we need to keep them. We only need
+    # to do this if we have no counerfactual comparisons
+    if (!identical(estimate, "population")) {
+      keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
+        vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+      contrast <- contrast[keep_contrasts]
+    }
 
     # set to NULL, if all by-values have been removed here
     if (!length(by)) {
