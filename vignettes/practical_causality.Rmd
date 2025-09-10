@@ -36,6 +36,9 @@ t_effect <- 5.9
 t_effect2 <- 5.58
 est_diff_1 <- 5.99
 est_diff_2 <- 5.65
+est_diff <- 4.72
+est_p <- 0.04
+
 ```
 
 This vignette demonstrates how to perform causal inference with observational data using the `modelbased` package. While the examples below use the terms "treatment" and "control" groups, these labels are arbitrary and interchangeable. Causal inference can be applied to any scenario where observations are assigned to different conditions, regardless of whether a "treatment" in the medical sense is involved.
@@ -224,6 +227,52 @@ estimate_contrasts(
   weights = "ipw"
 )
 ```
+
+## Analysing Difference in ATE
+
+The coefficient table above shows the ATE at each time point, not the overall ATE that we calculated with `estimate_contrasts()`. However, we can do the same using `estimate_contrasts()` and the `by` argument. As we can see, results are fairly similar.
+
+```{r}
+# contrasts of treatment levels, using g-computation
+estimate_contrasts(
+  m3,
+  "treatment",
+  by = "time",
+  estimate = "population",
+  weights = "ipw"
+)
+```
+
+But is the _change_ in the ATE between two time points statistically significant? In other words, is the ATE increasing (or decreasing) significantly over time? We can calculate _interaction contrasts_ (described in detail [in this vignette](https://easystats.github.io/modelbased/articles/introduction_comparisons_1.html#does-difference-between-two-levels-of-episode-in-the-control-group-differ-from-difference-of-same-two-levels-in-the-treatment-group)) to check this!
+
+```{r echo=FALSE}
+tmp <- estimate_contrasts(
+  m3,
+  "treatment",
+  by = "time",
+  estimate = "population",
+  weights = "ipw",
+  comparison = "b2 = b1"
+)
+
+est_diff <- round(tmp$Difference, 2)
+est_p <- round(tmp$p, 3)
+```
+
+```{r}
+estimate_contrasts(
+  m3,
+  "treatment",
+  by = "time",
+  estimate = "population",
+  weights = "ipw",
+  comparison = "b2 = b1"
+)
+```
+
+`r ifelse(est_p < 0.05, "Yes", "No")`, the the ATE `r ifelse(est_p < 0.05, "changed", "did not change")` statistically significant between the first and the second time point!
+
+## Even more complex scenarios!
 
 ```{r echo=FALSE}
 tmp <- glmmTMB::glmmTMB(

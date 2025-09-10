@@ -125,7 +125,7 @@
 
   # for special hypothesis testing, like "(b1 - b2) = (b4 - b3)", we want to
   # add information about the parameter names
-  if (.is_custom_comparison(comparison)) {
+  if (.is_custom_comparison(comparison) && !identical(marginalization, "population")) {
     # extract all "b" strings, so we have a vector of all "b" used in the comparison
     parameter_names <- .extract_custom_comparison(comparison)
 

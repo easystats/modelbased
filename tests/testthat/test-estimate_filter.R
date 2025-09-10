@@ -36,8 +36,20 @@ test_that("filtering for by and contrast works for different estimate options", 
     by = "c161sex",
     estimate = "population"
   )
-  expect_identical(dim(out), c(2L, 8L))
-  expect_identical(as.character(out$Comparison), c("mid - low", "mid - low"))
+  out2 <- marginaleffects::avg_comparisons(
+    m,
+    variables = "c172code",
+    by = "c161sex",
+    newdata = insight::get_datagrid(m, c("c172code=c('low','mid')", "c161sex"))
+  )
+  expect_identical(dim(out), c(2L, 10L))
+  expect_identical(as.character(out$Level1), c("mid", "mid"))
+  expect_identical(as.character(out$Level2), c("low", "low"))
+  expect_named(
+    out,
+    c("Level1", "Level2", "c161sex", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
+  expect_equal(out$Difference, out2$estimate, tolerance = 1e-4)
 })
 
 

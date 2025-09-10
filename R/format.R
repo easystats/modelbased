@@ -222,7 +222,13 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 
 
 #' @export
-format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, comparison = NULL, ...) {
+format.marginaleffects_contrasts <- function(
+  x,
+  model = NULL,
+  p_adjust = NULL,
+  comparison = NULL,
+  ...
+) {
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
@@ -262,7 +268,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # check type of contrast
-  is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
+  is_ratio_comparison <- inherits(comparison, "formula") &&
+    identical(deparse(comparison[[2]]), "ratio")
 
   # Column name for coefficient - fix needed for contrasting slopes and ratios
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
@@ -279,7 +286,24 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # cleaning, so we skip here, too
 
   if (!is.null(comparison) && !.is_inequality_comparison(comparison)) {
-    #  the goal here is to create tidy columns with the comparisons.
+    # for counterfactual contrasts, we have "simpler" structures, thus, we
+    # can just convert the "Comparison" column into the two level columns
+    if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
+      # split term at minus sign
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Comparison, .split_at_minus_outside_parentheses, separator = separator)
+      ))
+      # simply rename columns for the the two levels
+      colnames(params) <- c("Level1", "Level2")
+      # remove old comparison column, replace with "Level1" and "Level2" column
+      x$Comparison <- NULL
+      x <- cbind(params, x)
+      # remove redundant Parameter column and that's it!
+      x$Parameter <- NULL
+      return(x)
+    }
+    # the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
@@ -361,7 +385,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # appear as a single level in the data. thus, we use a sequence of "~"
       # characters, which are unlikely to appear in the data
       for (i in seq_along(all_levels)) {
-        replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
+        replace_levels <- c(
+          replace_levels,
+          paste0("#", paste(rep_len("~", i), collapse = ""), "#")
+        )
       }
       for (i in seq_along(all_num_levels)) {
         replace_num_levels <- c(
@@ -400,7 +427,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # finally, replace all tokens with original comparison levels again
       params[] <- lapply(params, function(comparison_pair) {
         for (j in seq_along(all_levels)) {
-          comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
+          comparison_pair <- sub(
+            replace_levels[j],
+            all_levels[j],
+            comparison_pair,
+            fixed = TRUE
+          )
         }
         for (j in seq_along(all_num_levels)) {
           comparison_pair <- sub(
@@ -498,6 +530,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   # remove () for single columns
   if ("Parameter" %in% colnames(x)) {
     x$Parameter <- gsub("(", "", gsub(")", "", x$Parameter, fixed = TRUE), fixed = TRUE)
+  }
+
+  # remove for counterfactual contrasts
+  if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
+    x$Parameter <- NULL
   }
 
   x

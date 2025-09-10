@@ -64,12 +64,12 @@ get_marginalcontrasts <- function(
   }
 
   # sanity check: `contrast` and `by` cannot be the same
-  cleaned_by <- gsub("=.*", "\\1", my_args$by)
-  cleaned_contrast <- gsub("=.*", "\\1", my_args$contrast)
   if (
-    length(cleaned_by) &&
-      length(cleaned_contrast) &&
-      (all(cleaned_by %in% cleaned_contrast) || all(cleaned_contrast %in% cleaned_by))
+    length(my_args$cleaned_by) &&
+      length(my_args$cleaned_contrast) &&
+      (all(my_args$cleaned_by %in% my_args$cleaned_contrast) ||
+        all(my_args$cleaned_contrast %in% my_args$cleaned_by)) &&
+      !identical(estimate, "population")
   ) {
     insight::format_error(
       "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
@@ -105,7 +105,9 @@ get_marginalcontrasts <- function(
   } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
-      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+      insight::format_error(
+        "Please specify the `by` argument to calculate contrasts of slopes."
+      )
     }
     # call slopes with hypothesis argument
     out <- estimate_slopes(
@@ -118,26 +120,6 @@ get_marginalcontrasts <- function(
       backend = "marginaleffects",
       transform = transform,
       keep_iterations = keep_iterations,
-      verbose = verbose,
-      ...
-    )
-  } else if (identical(estimate, "population")) {
-    # we "overwrite" contrast with the original argument, because above in
-    # .get_marginaleffects_hypothesis_argument(), we removed `by` from `contrast`
-    # however, sometimes we want counterfactual contrasts of a predictor *and*
-    # stratify by the same predictor - removing `by` from `contrast` would mean
-    # that "contrast" is empty, which is not what we want here
-    my_args$contrast <- contrast
-    # counterfactual needs comparisons of differences, thus we call avg_comparisons
-    out <- get_counterfactualcontrasts(
-      model = model,
-      model_info = model_info,
-      my_args = my_args,
-      predict = predict,
-      comparison = comparison,
-      ci = ci,
-      p_adjust = p_adjust,
-      transform = transform,
       verbose = verbose,
       ...
     )
@@ -155,6 +137,7 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
+      original_my_args = my_args,
       ...
     )
   }
@@ -387,7 +370,9 @@ get_marginalcontrasts <- function(
     }
   }
   # remove "by" from "contrast"
-  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+  if (estimate != "population") {
+    my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+  }
 
   # for `estimate = "average"`, we cannot create a data grid, thus we need to
   # filter manually. However, for all other `estimate` options, we can simply
@@ -402,7 +387,7 @@ get_marginalcontrasts <- function(
     }
   }
 
-  c(
+  out <- c(
     # the "my_args" argument, containing "by" and "contrast"
     my_args,
     list(
@@ -414,9 +399,22 @@ get_marginalcontrasts <- function(
       by_filter = insight::compact_list(by_filter),
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
-      joint_test = joint_test
+      joint_test = joint_test,
+      # cleaned `by` and `contrast`, without filtering information
+      cleaned_by = gsub("=.*", "\\1", my_args$by),
+      cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
     )
   )
+
+  # clean empty values
+  if (!length(out$cleaned_by)) {
+    out$cleaned_by <- NULL
+  }
+  if (!length(out$cleaned_contrast)) {
+    out$cleaned_contrast <- NULL
+  }
+
+  out
 }
 
 
@@ -457,35 +455,42 @@ get_marginalcontrasts <- function(
 }
 
 
-.reorder_custom_hypothesis <- function(comparison, datagrid, focal) {
-  # create a data frame with the same sorting as the data grid, but only
-  # for the focal terms terms
-  datagrid <- data.frame(expand.grid(lapply(datagrid[focal], unique)))
-  # this is the row-order we use in modelbased
-  datagrid$.rowid <- 1:nrow(datagrid)
-  # this is the row-order in marginaleffects
-  datagrid <- datawizard::data_arrange(
-    datagrid,
-    colnames(datagrid)[1:(length(datagrid) - 1)]
-  )
-  # we need to extract all b's and the former parameter numbers
-  b <- .extract_custom_comparison(comparison)
-  old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
-  # these are the new numbers of the b-values
-  new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
-  new_b <- paste0("b", new_b_numbers)
-  # we need to replace all occurences of "b" in comparison with "new_b".
-  # however, to avoid overwriting already replaced values with "gsub()", we
-  # first replace with a non-existing pattern "new_b_letters", which we will
-  # replace with "new_b" in a second step
-  new_b_letters <- paste0("b", letters[new_b_numbers])
-  # first, numbers to letters
-  for (i in seq_along(b)) {
-    comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
-  }
-  # next, letters to new numbers
-  for (i in seq_along(b)) {
-    comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
+.reorder_custom_hypothesis <- function(
+  comparison,
+  datagrid,
+  focal,
+  counterfactual_contrasts = FALSE
+) {
+  if (!counterfactual_contrasts) {
+    # create a data frame with the same sorting as the data grid, but only
+    # for the focal terms terms
+    datagrid <- data.frame(expand.grid(lapply(datagrid[focal], unique)))
+    # this is the row-order we use in modelbased
+    datagrid$.rowid <- 1:nrow(datagrid)
+    # this is the row-order in marginaleffects
+    datagrid <- datawizard::data_arrange(
+      datagrid,
+      colnames(datagrid)[1:(length(datagrid) - 1)]
+    )
+    # we need to extract all b's and the former parameter numbers
+    b <- .extract_custom_comparison(comparison)
+    old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
+    # these are the new numbers of the b-values
+    new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
+    new_b <- paste0("b", new_b_numbers)
+    # we need to replace all occurences of "b" in comparison with "new_b".
+    # however, to avoid overwriting already replaced values with "gsub()", we
+    # first replace with a non-existing pattern "new_b_letters", which we will
+    # replace with "new_b" in a second step
+    new_b_letters <- paste0("b", letters[new_b_numbers])
+    # first, numbers to letters
+    for (i in seq_along(b)) {
+      comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
+    }
+    # next, letters to new numbers
+    for (i in seq_along(b)) {
+      comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
+    }
   }
   comparison
 }

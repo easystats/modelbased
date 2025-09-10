@@ -24,7 +24,10 @@ test_that("estimate_contrast, counterfactual", {
     vcov = "HC3"
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
-  expect_named(out2, c("Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p"))
+  expect_named(
+    out2,
+    c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+  )
   expect_identical(
     attributes(out2)$table_title,
     c("Counterfactual Contrasts Analysis (G-computation)", "blue")
@@ -50,7 +53,7 @@ test_that("estimate_contrast, counterfactual", {
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
   expect_named(
     out2,
-    c("treat", "Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("Level1", "Level2", "treat", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
 
   # transformed response
@@ -73,4 +76,144 @@ test_that("estimate_contrast, counterfactual", {
     transform = TRUE
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+})
+
+
+test_that("estimate_contrast, counterfactual, custom hypothesis", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("datawizard")
+  data(qol_cancer, package = "parameters")
+
+  # sort and group data by patient ID, then assign each patient either to
+  # the treatment or control condition, with higher educated patients having
+  # a higher chance belonging to the treatment group
+  set.seed(12345)
+
+  d <- datawizard::data_arrange(qol_cancer, "ID")
+  d <- datawizard::data_group(d, "ID")
+  d <- datawizard::data_modify(
+    d,
+    treatment = rbinom(1, 1, ifelse(education == "high", 0.72, 0.3))
+  )
+  d <- datawizard::data_ungroup(d)
+
+  # create a treatment effect that increased over time
+  # with more improvements for higher educated patients
+  d$QoL <- d$QoL +
+    rnorm(nrow(d), (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0), sd = 2)
+
+  # convert to factors
+  d <- datawizard::to_factor(d, c("treatment", "time"))
+
+  m_ipw <- glm(
+    treatment ~ time + hospital + phq4 + education + age,
+    data = d,
+    family = binomial()
+  )
+
+  # add predictions, i.e. the probability of belonging to treatment
+  # or control for each patient in the sample (propensity score)
+  d$propensity_score <- predict(m_ipw, newdata = d, type = "response")
+
+  # calculating the IPW
+  d$ipw <- ifelse(
+    d$treatment == 1,
+    1 / d$propensity_score, # IPW for treatment group
+    1 / (1 - d$propensity_score) # IPW for control group
+  )
+
+  model <- glmmTMB::glmmTMB(
+    QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
+    weights = ipw,
+    data = d
+  )
+
+  out <- estimate_contrasts(
+    model,
+    "treatment",
+    by = "time",
+    estimate = "population",
+    weights = "ipw",
+    comparison = "b2 = b1"
+  )
+
+  expect_identical(dim(out), c(1L, 7L))
+  expect_identical(out$Parameter, "b2=b1")
+  expect_equal(out$Difference, 4.591834, tolerance = 1e-3)
+})
+
+
+test_that("estimate_contrast, counterfactual, snapshots, Level-columns", {
+  skip_if_not_installed("parameters")
+  skip_if_not_installed("glmmTMB")
+  skip_if_not_installed("datawizard")
+  data(qol_cancer, package = "parameters")
+
+  # sort and group data by patient ID, then assign each patient either to
+  # the treatment or control condition, with higher educated patients having
+  # a higher chance belonging to the treatment group
+  set.seed(12345)
+
+  d <- datawizard::data_arrange(qol_cancer, "ID")
+  d <- datawizard::data_group(d, "ID")
+  d <- datawizard::data_modify(
+    d,
+    treatment = rbinom(1, 1, ifelse(education == "high", 0.72, 0.3))
+  )
+  d <- datawizard::data_ungroup(d)
+
+  # create a treatment effect that increased over time
+  # with more improvements for higher educated patients
+  d$QoL <- d$QoL +
+    rnorm(nrow(d), (d$treatment * d$time * 5) + ifelse(d$education == "high", 5, 0), sd = 2)
+
+  # convert to factors
+  d <- datawizard::to_factor(d, c("treatment", "time"))
+  levels(d$time) <- c("pre", "post", "end")
+  levels(d$treatment) <- c("control", "tx")
+
+  m_ipw <- glm(
+    treatment ~ time + hospital + phq4 + education + age,
+    data = d,
+    family = binomial()
+  )
+
+  # add predictions, i.e. the probability of belonging to treatment
+  # or control for each patient in the sample (propensity score)
+  d$propensity_score <- predict(m_ipw, newdata = d, type = "response")
+
+  # calculating the IPW
+  d$ipw <- ifelse(
+    d$treatment == 1,
+    1 / d$propensity_score, # IPW for treatment group
+    1 / (1 - d$propensity_score) # IPW for control group
+  )
+
+  model <- glmmTMB::glmmTMB(
+    QoL ~ treatment * time + education + hospital + age + phq4 + (1 | ID),
+    weights = ipw,
+    data = d
+  )
+
+  out <- estimate_contrasts(model, "treatment", estimate = "population", weights = "ipw")
+  expect_snapshot(print(out, table_width = Inf))
+
+  out <- estimate_contrasts(
+    model,
+    "treatment",
+    by = "time",
+    estimate = "population",
+    weights = "ipw"
+  )
+  expect_snapshot(print(out, table_width = Inf))
+
+  out <- estimate_contrasts(
+    model,
+    "time",
+    by = "treatment",
+    estimate = "population",
+    weights = "ipw"
+  )
+  expect_snapshot(print(out, table_width = Inf))
 })
