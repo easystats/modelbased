@@ -110,7 +110,7 @@ get_marginalmeans <- function(
 
   # handle variables/by/newdata
   # ---------------------------
-
+browser()
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
     # sanity check
@@ -183,7 +183,7 @@ get_marginalmeans <- function(
 
   # no default hypothesis test for counterfactual contrasts, since we call
   # "avg_comparisons()", where we don't want to set the default hypothesis
-  if (counterfactual_contrasts && identical(deparse(comparison), "difference ~ pairwise")) {
+  if (counterfactual_contrasts && startsWith(deparse(comparison), "difference ~ pairwise")) {
     dots$hypothesis <- fun_args$hypothesis <- NULL
   }
 
