@@ -7,7 +7,8 @@
 ## Bug fixes
 
 * Counterfactual contrasts (i.e., `estimate_contrasts()` with `estimate = "population"`)
-  did not accurately compute differences between counterfactual predictions.
+  did not accurately compute differences between counterfactual predictions when
+  weights were specified.
 
 # modelbased 0.13.0
 
