@@ -500,6 +500,11 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
     x$Parameter <- gsub("(", "", gsub(")", "", x$Parameter, fixed = TRUE), fixed = TRUE)
   }
 
+  # remove for counterfactual contrasts
+  if (identical(estimate, "population")) {
+    x$Parameter <- NULL
+  }
+
   x
 }
 
