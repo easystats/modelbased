@@ -41,10 +41,10 @@ get_marginalmeans <- function(
   dots <- list(...)
   comparison <- dots$hypothesis
   joint_test <- isTRUE(dots$.joint_test)
-  contrast_analysis <- !is.null(comparison)
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
+  counterfactual_contrasts <- !is.null(comparison) && identical(estimate, "population")
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
@@ -74,7 +74,7 @@ get_marginalmeans <- function(
   } else {
     # for counterfactual *contrasts* (not predictions), we need to
     # include contrast variables in the data grid
-    if (identical(estimate, "population") && contrast_analysis) {
+    if (counterfactual_contrasts) {
       by_vars <- c(my_args$contrast, my_args$by)
     } else {
       by_vars <- my_args$by
@@ -127,7 +127,7 @@ get_marginalmeans <- function(
     # for counterfactual contrasts, we need to pass the contrast variables
     # and the by-variables to "variables" and "by" argument. for predictions,
     # just variables
-    if (contrast_analysis) {
+    if (counterfactual_contrasts) {
       fun_args$variables <- my_args$cleaned_contrast
       fun_args$by <- my_args$cleaned_by
       # if we have filtering information in `by` or `contrast`, we need to
@@ -207,7 +207,7 @@ get_marginalmeans <- function(
   # just need to add "hypothesis" argument
   means <- .call_marginaleffects(
     fun_args,
-    type = ifelse(contrast_analysis, "counterfactual", "means")
+    type = ifelse(counterfactual_contrasts, "counterfactual", "means")
   )
   vcov_means <- .safe(stats::vcov(means))
 
@@ -279,12 +279,14 @@ get_marginalmeans <- function(
 .call_marginaleffects <- function(fun_args, type = "means") {
   out <- switch(
     type,
-    means = tryCatch(
-      suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
-      error = function(e) e
-    ),
+    # this is a special case for *counterfactual* contrasts
     counterfactual = tryCatch(
       suppressWarnings(do.call(marginaleffects::avg_comparisons, fun_args)),
+      error = function(e) e
+    ),
+    # the default: marginal means or contrasts
+    tryCatch(
+      suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
       error = function(e) e
     )
   )
