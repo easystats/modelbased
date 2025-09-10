@@ -24,7 +24,7 @@ test_that("estimate_contrast, counterfactual", {
     vcov = "HC3"
   )
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
-  expect_named(out2, c("Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p"))
+  expect_named(out2, c("Comparison", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p"))
   expect_identical(
     attributes(out2)$table_title,
     c("Counterfactual Contrasts Analysis (G-computation)", "blue")
@@ -50,7 +50,7 @@ test_that("estimate_contrast, counterfactual", {
   expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
   expect_named(
     out2,
-    c("treat", "Comparison", "Difference", "SE", "CI_low", "CI_high", "z", "p")
+    c("treat", "Comparison", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
 
   # transformed response
