@@ -36,6 +36,9 @@ t_effect <- 5.9
 t_effect2 <- 5.58
 est_diff_1 <- 5.99
 est_diff_2 <- 5.65
+est_diff <- 4.72
+est_p <- 0.04
+
 ```
 
 This vignette demonstrates how to perform causal inference with observational data using the `modelbased` package. While the examples below use the terms "treatment" and "control" groups, these labels are arbitrary and interchangeable. Causal inference can be applied to any scenario where observations are assigned to different conditions, regardless of whether a "treatment" in the medical sense is involved.
