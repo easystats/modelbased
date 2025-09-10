@@ -64,12 +64,12 @@ get_marginalcontrasts <- function(
   }
 
   # sanity check: `contrast` and `by` cannot be the same
-  cleaned_by <- gsub("=.*", "\\1", my_args$by)
-  cleaned_contrast <- gsub("=.*", "\\1", my_args$contrast)
   if (
-    length(cleaned_by) &&
-      length(cleaned_contrast) &&
-      (all(cleaned_by %in% cleaned_contrast) || all(cleaned_contrast %in% cleaned_by))
+    length(my_args$cleaned_by) &&
+      length(my_args$cleaned_contrast) &&
+      (all(my_args$cleaned_by %in% my_args$cleaned_contrast) ||
+        all(my_args$cleaned_contrast %in% my_args$cleaned_by)) &&
+      !identical(estimate, "population")
   ) {
     insight::format_error(
       "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
@@ -155,6 +155,7 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
+      original_my_args = my_args,
       ...
     )
   }
@@ -404,7 +405,7 @@ get_marginalcontrasts <- function(
     }
   }
 
-  c(
+  out <- c(
     # the "my_args" argument, containing "by" and "contrast"
     my_args,
     list(
@@ -422,6 +423,16 @@ get_marginalcontrasts <- function(
       cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
     )
   )
+
+  # clean empty values
+  if (!length(out$cleaned_by)) {
+    out$cleaned_by <- NULL
+  }
+  if (!length(out$cleaned_contrast)) {
+    out$cleaned_contrast <- NULL
+  }
+
+  out
 }
 
 

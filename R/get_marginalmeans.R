@@ -40,6 +40,8 @@ get_marginalmeans <- function(
 
   dots <- list(...)
   comparison <- dots$hypothesis
+  # we need the original arguments for counterfactual contrasts
+  original_my_args <- dots$original_my_args
   joint_test <- isTRUE(dots$.joint_test)
 
   # validate input
@@ -72,15 +74,8 @@ get_marginalmeans <- function(
   if (is.null(by)) {
     datagrid <- datagrid_info <- NULL
   } else {
-    # for counterfactual *contrasts* (not predictions), we need to
-    # include contrast variables in the data grid
-    if (counterfactual_contrasts) {
-      by_vars <- c(my_args$contrast, my_args$by)
-    } else {
-      by_vars <- my_args$by
-    }
     # setup arguments to create the data grid
-    out <- .get_datagrid_means(model, by_vars, estimate, dots)
+    out <- .get_datagrid_means(model, my_args$by, estimate, dots)
     # update objects
     datagrid <- out$datagrid
     datagrid_info <- out$datagrid_info
@@ -94,7 +89,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test"
+    "offset", ".joint_test", "original_my_args"
   )] <- NULL
 
   # model df - can be passed via `...`
@@ -128,11 +123,14 @@ get_marginalmeans <- function(
     # and the by-variables to "variables" and "by" argument. for predictions,
     # just variables
     if (counterfactual_contrasts) {
-      fun_args$variables <- my_args$cleaned_contrast
-      fun_args$by <- my_args$cleaned_by
+      fun_args$variables <- original_my_args$cleaned_contrast
+      fun_args$by <- original_my_args$cleaned_by
       # if we have filtering information in `by` or `contrast`, we need to
       # add the data grid as `newdata` argument
-      if (my_args$by != my_args$cleaned_by || my_args$contrast != my_args$cleaned_contrast) {
+      if (
+        !identical(original_my_args$by, original_my_args$cleaned_by) ||
+          !identical(original_my_args$contrast, original_my_args$cleaned_contrast)
+      ) {
         fun_args$newdata <- datagrid
       }
     } else {
@@ -181,6 +179,12 @@ get_marginalmeans <- function(
       datagrid,
       focal = datagrid_info$at_specs$varname
     )
+  }
+
+  # no default hypothesis test for counterfactual contrasts, since we call
+  # "avg_comparisons()", where we don't want to set the default hypothesis
+  if (counterfactual_contrasts && identical(deparse(comparison), "difference ~ pairwise")) {
+    dots$hypothesis <- fun_args$hypothesis <- NULL
   }
 
   # cleanup
