@@ -196,12 +196,7 @@ test_that("estimate_contrast, counterfactual, snapshots, Level-columns", {
     data = d
   )
 
-  out <- estimate_contrasts(
-    model,
-    "treatment",
-    estimate = "population",
-    weights = "ipw"
-  )
+  out <- estimate_contrasts(model, "treatment", estimate = "population", weights = "ipw")
   expect_snapshot(print(out, table_width = Inf))
 
   out <- estimate_contrasts(
