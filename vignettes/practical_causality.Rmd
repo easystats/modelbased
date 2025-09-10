@@ -227,7 +227,7 @@ estimate_contrasts(
 
 ## Analysing Difference in ATE
 
-The coefficient table above shows the ATE at each time point, not the overall ATE we computed with `estimate_contrasts()`. However, we can do the same using `estimate_contrasts()` and the `by` argument. As we can see, results are fairly similar.
+The coefficient table above shows the ATE at each time point, not the overall ATE that we calculated with `estimate_contrasts()`. However, we can do the same using `estimate_contrasts()` and the `by` argument. As we can see, results are fairly similar.
 
 ```{r}
 # contrasts of treatment levels, using g-computation
