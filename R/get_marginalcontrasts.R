@@ -105,7 +105,9 @@ get_marginalcontrasts <- function(
   } else if (compute_slopes) {
     # sanity check - contrast for slopes only makes sense when we have a "by" argument
     if (is.null(my_args$by)) {
-      insight::format_error("Please specify the `by` argument to calculate contrasts of slopes.") # nolint
+      insight::format_error(
+        "Please specify the `by` argument to calculate contrasts of slopes."
+      )
     }
     # call slopes with hypothesis argument
     out <- estimate_slopes(
@@ -466,7 +468,10 @@ get_marginalcontrasts <- function(
     # this is the row-order we use in modelbased
     datagrid$.rowid <- 1:nrow(datagrid)
     # this is the row-order in marginaleffects
-    datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+    datagrid <- datawizard::data_arrange(
+      datagrid,
+      colnames(datagrid)[1:(length(datagrid) - 1)]
+    )
     # we need to extract all b's and the former parameter numbers
     b <- .extract_custom_comparison(comparison)
     old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
