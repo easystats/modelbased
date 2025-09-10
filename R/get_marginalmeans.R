@@ -110,7 +110,7 @@ get_marginalmeans <- function(
 
   # handle variables/by/newdata
   # ---------------------------
-browser()
+
   # counterfactual predictions - we need the "variables" argument
   if (estimate == "population") {
     # sanity check
