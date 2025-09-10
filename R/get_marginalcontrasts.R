@@ -418,7 +418,7 @@ get_marginalcontrasts <- function(
       # in case we have a joint/omnibus test
       joint_test = joint_test,
       # cleaned `by` and `contrast`, without filtering information
-      cleaned_by = gsub("=.*", "\\1", my_args$by)
+      cleaned_by = gsub("=.*", "\\1", my_args$by),
       cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
     )
   )
