@@ -177,7 +177,8 @@ get_marginalmeans <- function(
     dots$hypothesis <- .reorder_custom_hypothesis(
       comparison,
       datagrid,
-      focal = datagrid_info$at_specs$varname
+      focal = datagrid_info$at_specs$varname,
+      counterfactual_contrasts
     )
   }
 

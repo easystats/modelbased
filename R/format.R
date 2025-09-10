@@ -222,7 +222,13 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
 
 
 #' @export
-format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, comparison = NULL, ...) {
+format.marginaleffects_contrasts <- function(
+  x,
+  model = NULL,
+  p_adjust = NULL,
+  comparison = NULL,
+  ...
+) {
   predict <- attributes(x)$predict
   by <- attributes(x)$by
   contrast <- attributes(x)$contrast
@@ -262,7 +268,8 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # check type of contrast
-  is_ratio_comparison <- inherits(comparison, "formula") && identical(deparse(comparison[[2]]), "ratio")
+  is_ratio_comparison <- inherits(comparison, "formula") &&
+    identical(deparse(comparison[[2]]), "ratio")
 
   # Column name for coefficient - fix needed for contrasting slopes and ratios
   colnames(x)[colnames(x) == "Slope"] <- "Difference"
@@ -361,7 +368,10 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # appear as a single level in the data. thus, we use a sequence of "~"
       # characters, which are unlikely to appear in the data
       for (i in seq_along(all_levels)) {
-        replace_levels <- c(replace_levels, paste0("#", paste(rep_len("~", i), collapse = ""), "#"))
+        replace_levels <- c(
+          replace_levels,
+          paste0("#", paste(rep_len("~", i), collapse = ""), "#")
+        )
       }
       for (i in seq_along(all_num_levels)) {
         replace_num_levels <- c(
@@ -400,7 +410,12 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
       # finally, replace all tokens with original comparison levels again
       params[] <- lapply(params, function(comparison_pair) {
         for (j in seq_along(all_levels)) {
-          comparison_pair <- sub(replace_levels[j], all_levels[j], comparison_pair, fixed = TRUE)
+          comparison_pair <- sub(
+            replace_levels[j],
+            all_levels[j],
+            comparison_pair,
+            fixed = TRUE
+          )
         }
         for (j in seq_along(all_num_levels)) {
           comparison_pair <- sub(
@@ -501,7 +516,7 @@ format.marginaleffects_contrasts <- function(x, model = NULL, p_adjust = NULL, c
   }
 
   # remove for counterfactual contrasts
-  if (identical(estimate, "population")) {
+  if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
     x$Parameter <- NULL
   }
 
