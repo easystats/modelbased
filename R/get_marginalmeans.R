@@ -41,6 +41,7 @@ get_marginalmeans <- function(
   dots <- list(...)
   comparison <- dots$hypothesis
   joint_test <- isTRUE(dots$.joint_test)
+  contrast_analysis <- !is.null(comparison)
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
@@ -71,8 +72,15 @@ get_marginalmeans <- function(
   if (is.null(by)) {
     datagrid <- datagrid_info <- NULL
   } else {
+    # for counterfactual *contrasts* (not predictions), we need to
+    # include contrast variables in the data grid
+    if (identical(estimate, "population") && contrast_analysis) {
+      by_vars <- c(my_args$contrast, my_args$by)
+    } else {
+      by_vars <- my_args$by
+    }
     # setup arguments to create the data grid
-    out <- .get_datagrid_means(model, my_args$by, estimate, dots)
+    out <- .get_datagrid_means(model, by_vars, estimate, dots)
     # update objects
     datagrid <- out$datagrid
     datagrid_info <- out$datagrid_info
@@ -116,7 +124,20 @@ get_marginalmeans <- function(
         "Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set."
       )
     }
-    fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
+    # for counterfactual contrasts, we need to pass the contrast variables
+    # and the by-variables to "variables" and "by" argument. for predictions,
+    # just variables
+    if (contrast_analysis) {
+      fun_args$variables <- my_args$cleaned_contrast
+      fun_args$by <- my_args$cleaned_by
+      # if we have filtering information in `by` or `contrast`, we need to
+      # add the data grid as `newdata` argument
+      if (my_args$by != my_args$cleaned_by || my_args$contrast != my_args$cleaned_contrast) {
+        fun_args$newdata <- datagrid
+      }
+    } else {
+      fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
+    }
   } else {
     # all other "marginalizations"
     # we don't want a datagrid for "average" option
@@ -184,7 +205,10 @@ get_marginalmeans <- function(
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- .call_marginaleffects(fun_args)
+  means <- .call_marginaleffects(
+    fun_args,
+    type = ifelse(contrast_analysis, "counterfactual", "means")
+  )
   vcov_means <- .safe(stats::vcov(means))
 
   # intermediate step: joint tests --------------------------------------------
@@ -253,9 +277,16 @@ get_marginalmeans <- function(
 # call marginaleffects and process potential errors ---------------------------
 
 .call_marginaleffects <- function(fun_args, type = "means") {
-  out <- tryCatch(
-    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
-    error = function(e) e
+  out <- switch(
+    type,
+    means = tryCatch(
+      suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+      error = function(e) e
+    ),
+    counterfactual = tryCatch(
+      suppressWarnings(do.call(marginaleffects::avg_comparisons, fun_args)),
+      error = function(e) e
+    )
   )
 
   # display informative error

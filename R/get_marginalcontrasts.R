@@ -121,26 +121,26 @@ get_marginalcontrasts <- function(
       verbose = verbose,
       ...
     )
-  } else if (identical(estimate, "population")) {
-    # we "overwrite" contrast with the original argument, because above in
-    # .get_marginaleffects_hypothesis_argument(), we removed `by` from `contrast`
-    # however, sometimes we want counterfactual contrasts of a predictor *and*
-    # stratify by the same predictor - removing `by` from `contrast` would mean
-    # that "contrast" is empty, which is not what we want here
-    my_args$contrast <- contrast
-    # counterfactual needs comparisons of differences, thus we call avg_comparisons
-    out <- get_counterfactualcontrasts(
-      model = model,
-      model_info = model_info,
-      my_args = my_args,
-      predict = predict,
-      comparison = comparison,
-      ci = ci,
-      p_adjust = p_adjust,
-      transform = transform,
-      verbose = verbose,
-      ...
-    )
+  # } else if (identical(estimate, "population")) {
+  #   # we "overwrite" contrast with the original argument, because above in
+  #   # .get_marginaleffects_hypothesis_argument(), we removed `by` from `contrast`
+  #   # however, sometimes we want counterfactual contrasts of a predictor *and*
+  #   # stratify by the same predictor - removing `by` from `contrast` would mean
+  #   # that "contrast" is empty, which is not what we want here
+  #   my_args$contrast <- contrast
+  #   # counterfactual needs comparisons of differences, thus we call avg_comparisons
+  #   out <- get_counterfactualcontrasts(
+  #     model = model,
+  #     model_info = model_info,
+  #     my_args = my_args,
+  #     predict = predict,
+  #     comparison = comparison,
+  #     ci = ci,
+  #     p_adjust = p_adjust,
+  #     transform = transform,
+  #     verbose = verbose,
+  #     ...
+  #   )
   } else {
     # for contrasts of categorical predictors, we call avg_predictions
     out <- estimate_means(
@@ -387,7 +387,9 @@ get_marginalcontrasts <- function(
     }
   }
   # remove "by" from "contrast"
-  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+  if (estimate != "population") {
+    my_args$contrast <- setdiff(my_args$contrast, my_args$by)
+  }
 
   # for `estimate = "average"`, we cannot create a data grid, thus we need to
   # filter manually. However, for all other `estimate` options, we can simply
@@ -414,7 +416,10 @@ get_marginalcontrasts <- function(
       by_filter = insight::compact_list(by_filter),
       contrast_filter = insight::compact_list(contrast_filter),
       # in case we have a joint/omnibus test
-      joint_test = joint_test
+      joint_test = joint_test,
+      # cleaned `by` and `contrast`, without filtering information
+      cleaned_by = gsub("=.*", "\\1", my_args$by)
+      cleaned_contrast = gsub("=.*", "\\1", my_args$contrast)
     )
   )
 }
