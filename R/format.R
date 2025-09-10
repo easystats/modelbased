@@ -286,7 +286,24 @@ format.marginaleffects_contrasts <- function(
   # cleaning, so we skip here, too
 
   if (!is.null(comparison) && !.is_inequality_comparison(comparison)) {
-    #  the goal here is to create tidy columns with the comparisons.
+    # for counterfactual contrasts, we have "simpler" structures, thus, we
+    # can just convert the "Comparison" column into the two level columns
+    if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
+      # split term at minus sign
+      params <- as.data.frame(do.call(
+        rbind,
+        lapply(x$Comparison, .split_at_minus_outside_parentheses, separator = separator)
+      ))
+      # simply rename columns for the the two levels
+      colnames(params) <- c("Level1", "Level2")
+      # remove old comparison column, replace with "Level1" and "Level2" column
+      x$Comparison <- NULL
+      x <- cbind(params, x)
+      # remove redundant Parameter column and that's it!
+      x$Parameter <- NULL
+      return(x)
+    }
+    # the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
     # a separate column. This is what we do here...
