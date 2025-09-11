@@ -53,7 +53,7 @@ test_that("estimate_contrast, counterfactual", {
   expect_equal(out1$estimate[2], out2$Difference, tolerance = 1e-2)
   expect_named(
     out2,
-    c("Level1", "Level2", "treat", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
+    c("Level1", "Level2", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
   )
 
   # transformed response
