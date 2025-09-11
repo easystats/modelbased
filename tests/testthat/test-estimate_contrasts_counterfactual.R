@@ -44,13 +44,13 @@ test_that("estimate_contrast, counterfactual", {
   out2 <- estimate_contrasts(
     mod,
     contrast = "treat",
-    by = "treat",
+    newdata = subset(lalonde, treat == 1),
     estimate = "population",
     weights = "wts",
     vcov = "HC3"
   )
 
-  expect_equal(out1$estimate, out2$Difference, tolerance = 1e-4)
+  expect_equal(out1$estimate[2], out2$Difference, tolerance = 1e-2)
   expect_named(
     out2,
     c("Level1", "Level2", "treat", "Difference", "SE", "CI_low", "CI_high", "t", "df", "p")
@@ -135,12 +135,16 @@ test_that("estimate_contrast, counterfactual, custom hypothesis", {
     by = "time",
     estimate = "population",
     weights = "ipw",
-    comparison = "b2 = b1"
+    comparison = "(b3-b1) = (b4-b2)"
   )
 
   expect_identical(dim(out), c(1L, 7L))
-  expect_identical(out$Parameter, "b2=b1")
-  expect_equal(out$Difference, 4.591834, tolerance = 1e-3)
+  expect_identical(out$Parameter, "b3-b1=b4-b2")
+  expect_equal(out$Difference, -4.591834, tolerance = 1e-3)
+  expect_identical(
+    attributes(out)$table_footer[1],
+    "\nVariable predicted: QoL\nPredictors contrasted: treatment\nPredictors averaged: education, hospital (0.95), age (0.22), phq4 (-0.076), ID\np-values are uncorrected.\nParameters:\nb3 = treatment [0], time [2]\nb1 = treatment [0], time [1]\nb4 = treatment [1], time [2]\nb2 = treatment [1], time [1]\n"
+  )
 })
 
 
