@@ -255,18 +255,9 @@ get_marginalmeans <- function(
 # call marginaleffects and process potential errors ---------------------------
 
 .call_marginaleffects <- function(fun_args, type = "means") {
-  out <- switch(
-    type,
-    # this is a special case for *counterfactual* contrasts
-    counterfactual = tryCatch(
-      suppressWarnings(do.call(marginaleffects::avg_comparisons, fun_args)),
-      error = function(e) e
-    ),
-    # the default: marginal means or contrasts
-    tryCatch(
-      suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
-      error = function(e) e
-    )
+  out <- tryCatch(
+    suppressWarnings(do.call(marginaleffects::avg_predictions, fun_args)),
+    error = function(e) e
   )
 
   # display informative error

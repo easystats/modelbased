@@ -452,11 +452,7 @@ get_marginalcontrasts <- function(
 }
 
 
-.reorder_custom_hypothesis <- function(
-  comparison,
-  datagrid,
-  focal
-) {
+.reorder_custom_hypothesis <- function(comparison, datagrid, focal) {
   # create a data frame with the same sorting as the data grid, but only
   # for the focal terms terms
   datagrid <- data.frame(expand.grid(lapply(datagrid[focal], unique)))
