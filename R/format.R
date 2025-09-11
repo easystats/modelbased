@@ -235,7 +235,6 @@ format.marginaleffects_contrasts <- function(
   contrast_filter <- attributes(x)$contrast_filter
   focal_terms <- attributes(x)$focal_terms
   dgrid <- attributes(x)$datagrid
-  estimate <- attributes(x)$estimate
 
   # for slopes, sanity check - we may have duplicated "by" columns, e.g. when
   # user requests grouping for by-terms by combining "by" and "comparison" with

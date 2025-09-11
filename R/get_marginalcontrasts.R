@@ -136,7 +136,6 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
-      original_my_args = my_args,
       ...
     )
   }

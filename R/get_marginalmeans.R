@@ -40,8 +40,6 @@ get_marginalmeans <- function(
 
   dots <- list(...)
   comparison <- dots$hypothesis
-  # we need the original arguments for counterfactual contrasts
-  original_my_args <- dots$original_my_args
   joint_test <- isTRUE(dots$.joint_test)
 
   # validate input
@@ -88,7 +86,7 @@ get_marginalmeans <- function(
   # fmt: skip
   dots[c(
     "by", "conf_level", "type", "digits", "bias_correction", "sigma",
-    "offset", ".joint_test", "original_my_args"
+    "offset", ".joint_test"
   )] <- NULL
 
   # model df - can be passed via `...`
