@@ -46,7 +46,6 @@ get_marginalmeans <- function(
 
   # validate input
   estimate <- .validate_estimate_arg(estimate)
-  counterfactual_contrasts <- !is.null(comparison) && identical(estimate, "population")
 
   # model details
   model_info <- insight::model_info(model, response = 1, verbose = FALSE)
@@ -119,23 +118,7 @@ get_marginalmeans <- function(
         "Could not create data grid based on variables selected in `by`. Please check if all `by` variables are present in the data set."
       )
     }
-    # for counterfactual contrasts, we need to pass the contrast variables
-    # and the by-variables to "variables" and "by" argument. for predictions,
-    # just variables
-    if (counterfactual_contrasts) {
-      fun_args$variables <- original_my_args$cleaned_contrast
-      fun_args$by <- original_my_args$cleaned_by
-      # if we have filtering information in `by` or `contrast`, we need to
-      # add the data grid as `newdata` argument
-      if (
-        !identical(original_my_args$by, original_my_args$cleaned_by) ||
-          !identical(original_my_args$contrast, original_my_args$cleaned_contrast)
-      ) {
-        fun_args$newdata <- datagrid
-      }
-    } else {
-      fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
-    }
+    fun_args$variables <- lapply(datagrid, unique)[datagrid_info$at_specs$varname]
   } else {
     # all other "marginalizations"
     # we don't want a datagrid for "average" option
@@ -177,15 +160,8 @@ get_marginalmeans <- function(
     dots$hypothesis <- .reorder_custom_hypothesis(
       comparison,
       datagrid,
-      focal = datagrid_info$at_specs$varname,
-      counterfactual_contrasts
+      focal = datagrid_info$at_specs$varname
     )
-  }
-
-  # no default hypothesis test for counterfactual contrasts, since we call
-  # "avg_comparisons()", where we don't want to set the default hypothesis
-  if (counterfactual_contrasts && startsWith(deparse(comparison), "difference ~ pairwise")) {
-    dots$hypothesis <- fun_args$hypothesis <- NULL
   }
 
   # cleanup
@@ -210,10 +186,7 @@ get_marginalmeans <- function(
 
   # we can use this function for contrasts as well,
   # just need to add "hypothesis" argument
-  means <- .call_marginaleffects(
-    fun_args,
-    type = ifelse(counterfactual_contrasts, "counterfactual", "means")
-  )
+  means <- .call_marginaleffects(fun_args)
   vcov_means <- .safe(stats::vcov(means))
 
   # intermediate step: joint tests --------------------------------------------

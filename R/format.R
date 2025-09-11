@@ -255,15 +255,13 @@ format.marginaleffects_contrasts <- function(
 
   # clean "by" and contrast variable names, for the special cases. for example,
   # if we have `by = "name [fivenum]"`, we just want "name"
-  if (!identical(estimate, "population")) {
-    for (i in focal_terms) {
-      if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
-        # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\._]")[[1]][1]
-        by[startsWith(by, i)] <- i
-      }
-      if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
-        contrast[startsWith(contrast, i)] <- i
-      }
+  for (i in focal_terms) {
+    if (!is.null(by) && any(startsWith(by, i)) && !any(by %in% i)) {
+      # this line could be replaced by strsplit(by, "[^0-9A-Za-z\\._]")[[1]][1]
+      by[startsWith(by, i)] <- i
+    }
+    if (!is.null(contrast) && any(startsWith(contrast, i)) && !any(contrast %in% i)) {
+      contrast[startsWith(contrast, i)] <- i
     }
   }
 
@@ -286,23 +284,6 @@ format.marginaleffects_contrasts <- function(
   # cleaning, so we skip here, too
 
   if (!is.null(comparison) && !.is_inequality_comparison(comparison)) {
-    # for counterfactual contrasts, we have "simpler" structures, thus, we
-    # can just convert the "Comparison" column into the two level columns
-    if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
-      # split term at minus sign
-      params <- as.data.frame(do.call(
-        rbind,
-        lapply(x$Comparison, .split_at_minus_outside_parentheses, separator = separator)
-      ))
-      # simply rename columns for the the two levels
-      colnames(params) <- c("Level1", "Level2")
-      # remove old comparison column, replace with "Level1" and "Level2" column
-      x$Comparison <- NULL
-      x <- cbind(params, x)
-      # remove redundant Parameter column and that's it!
-      x$Parameter <- NULL
-      return(x)
-    }
     # the goal here is to create tidy columns with the comparisons.
     # marginaleffects returns a single column that contains all levels that
     # are contrasted. We want to have the contrasted levels per predictor in
@@ -333,11 +314,9 @@ format.marginaleffects_contrasts <- function(
     # they are set to their mean value - meaning, they only have one unique
     # value in the data grid, anyway. so we need to keep them. We only need
     # to do this if we have no counerfactual comparisons
-    if (!identical(estimate, "population")) {
-      keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
-        vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
-      contrast <- contrast[keep_contrasts]
-    }
+    keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
+      vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
+    contrast <- contrast[keep_contrasts]
 
     # set to NULL, if all by-values have been removed here
     if (!length(by)) {
@@ -530,11 +509,6 @@ format.marginaleffects_contrasts <- function(
   # remove () for single columns
   if ("Parameter" %in% colnames(x)) {
     x$Parameter <- gsub("(", "", gsub(")", "", x$Parameter, fixed = TRUE), fixed = TRUE)
-  }
-
-  # remove for counterfactual contrasts
-  if (identical(estimate, "population") && !.is_custom_comparison(comparison)) {
-    x$Parameter <- NULL
   }
 
   x
