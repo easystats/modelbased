@@ -68,8 +68,7 @@ get_marginalcontrasts <- function(
     length(my_args$cleaned_by) &&
       length(my_args$cleaned_contrast) &&
       (all(my_args$cleaned_by %in% my_args$cleaned_contrast) ||
-        all(my_args$cleaned_contrast %in% my_args$cleaned_by)) &&
-      !identical(estimate, "population")
+        all(my_args$cleaned_contrast %in% my_args$cleaned_by))
   ) {
     insight::format_error(
       "You cannot specifiy the same variables in `contrast` and `by`. Either omit `by`, or choose a different variable for `contrast` or `by`." # nolint
@@ -137,7 +136,6 @@ get_marginalcontrasts <- function(
       keep_iterations = keep_iterations,
       verbose = verbose,
       .joint_test = my_args$joint_test,
-      original_my_args = my_args,
       ...
     )
   }
@@ -370,9 +368,7 @@ get_marginalcontrasts <- function(
     }
   }
   # remove "by" from "contrast"
-  if (estimate != "population") {
-    my_args$contrast <- setdiff(my_args$contrast, my_args$by)
-  }
+  my_args$contrast <- setdiff(my_args$contrast, my_args$by)
 
   # for `estimate = "average"`, we cannot create a data grid, thus we need to
   # filter manually. However, for all other `estimate` options, we can simply
@@ -455,42 +451,32 @@ get_marginalcontrasts <- function(
 }
 
 
-.reorder_custom_hypothesis <- function(
-  comparison,
-  datagrid,
-  focal,
-  counterfactual_contrasts = FALSE
-) {
-  if (!counterfactual_contrasts) {
-    # create a data frame with the same sorting as the data grid, but only
-    # for the focal terms terms
-    datagrid <- data.frame(expand.grid(lapply(datagrid[focal], unique)))
-    # this is the row-order we use in modelbased
-    datagrid$.rowid <- 1:nrow(datagrid)
-    # this is the row-order in marginaleffects
-    datagrid <- datawizard::data_arrange(
-      datagrid,
-      colnames(datagrid)[1:(length(datagrid) - 1)]
-    )
-    # we need to extract all b's and the former parameter numbers
-    b <- .extract_custom_comparison(comparison)
-    old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
-    # these are the new numbers of the b-values
-    new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
-    new_b <- paste0("b", new_b_numbers)
-    # we need to replace all occurences of "b" in comparison with "new_b".
-    # however, to avoid overwriting already replaced values with "gsub()", we
-    # first replace with a non-existing pattern "new_b_letters", which we will
-    # replace with "new_b" in a second step
-    new_b_letters <- paste0("b", letters[new_b_numbers])
-    # first, numbers to letters
-    for (i in seq_along(b)) {
-      comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
-    }
-    # next, letters to new numbers
-    for (i in seq_along(b)) {
-      comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
-    }
+.reorder_custom_hypothesis <- function(comparison, datagrid, focal) {
+  # create a data frame with the same sorting as the data grid, but only
+  # for the focal terms terms
+  datagrid <- data.frame(expand.grid(lapply(datagrid[focal], unique)))
+  # this is the row-order we use in modelbased
+  datagrid$.rowid <- 1:nrow(datagrid)
+  # this is the row-order in marginaleffects
+  datagrid <- datawizard::data_arrange(datagrid, colnames(datagrid)[1:(length(datagrid) - 1)])
+  # we need to extract all b's and the former parameter numbers
+  b <- .extract_custom_comparison(comparison)
+  old_b_numbers <- as.numeric(gsub("b", "", b, fixed = TRUE))
+  # these are the new numbers of the b-values
+  new_b_numbers <- match(old_b_numbers, datagrid$.rowid)
+  new_b <- paste0("b", new_b_numbers)
+  # we need to replace all occurences of "b" in comparison with "new_b".
+  # however, to avoid overwriting already replaced values with "gsub()", we
+  # first replace with a non-existing pattern "new_b_letters", which we will
+  # replace with "new_b" in a second step
+  new_b_letters <- paste0("b", letters[new_b_numbers])
+  # first, numbers to letters
+  for (i in seq_along(b)) {
+    comparison <- gsub(b[i], new_b_letters[i], comparison, fixed = TRUE)
+  }
+  # next, letters to new numbers
+  for (i in seq_along(b)) {
+    comparison <- gsub(new_b_letters[i], new_b[i], comparison, fixed = TRUE)
   }
   comparison
 }

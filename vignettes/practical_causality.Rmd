@@ -252,7 +252,7 @@ tmp <- estimate_contrasts(
   by = "time",
   estimate = "population",
   weights = "ipw",
-  comparison = "b2 = b1"
+  comparison = "(b3-b1) = (b4-b2)"
 )
 
 est_diff <- round(tmp$Difference, 2)
@@ -266,7 +266,7 @@ estimate_contrasts(
   by = "time",
   estimate = "population",
   weights = "ipw",
-  comparison = "b2 = b1"
+  comparison = "(b3-b1) = (b4-b2)"
 )
 ```
 
