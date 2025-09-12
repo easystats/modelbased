@@ -311,8 +311,7 @@ format.marginaleffects_contrasts <- function(
     # for contrasts, we also filter variables with one unique value, but we
     # keep numeric variables. When these are hold constant in the data grid,
     # they are set to their mean value - meaning, they only have one unique
-    # value in the data grid, anyway. so we need to keep them. We only need
-    # to do this if we have no counerfactual comparisons
+    # value in the data grid, anyway. so we need to keep them.
     keep_contrasts <- lengths(lapply(dgrid[contrast], unique)) > 1 |
       vapply(dgrid[contrast], is.numeric, logical(1)) # nolint
     contrast <- contrast[keep_contrasts]
