@@ -1,7 +1,5 @@
 #' @rdname visualisation_recipe.estimate_predicted
-#' @param theme A character string specifying the theme to use for the plot.
-#' Defaults to `"tufte"`. For other options please see [`tinyplot::tinytheme()`].
-#' Use `NULL` if no theme should be applied.
+#' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
 #' # ==============================================
@@ -27,7 +25,6 @@ tinyplot.estimate_means <- function(
   x,
   show_data = FALSE,
   numeric_as_discrete = NULL,
-  theme = "tufte",
   ...
 ) {
   insight::check_if_installed("tinyplot")
@@ -48,9 +45,8 @@ tinyplot.estimate_means <- function(
   data <- aes$data
   aes <- aes$aes
 
-  # save additional arguments, once for theming and once for the plot
+  # save additional arguments, will pass via do.call to tinyplot
   dots <- list(...)
-  theme_dots <- dots
 
   # preparation of settings / arguments ----------------------------------
 
@@ -119,12 +115,6 @@ tinyplot.estimate_means <- function(
     dots
   ))
 
-  # default theme
-  if (!is.null(theme)) {
-    theme_dots[c(elements, "facet", "xlab", "ylab", "flip")] <- NULL
-    do.call(tinyplot::tinytheme, c(list(theme = theme), theme_dots))
-  }
-
   # add data points if requested --------------------------------
 
   if (show_data) {
@@ -154,6 +144,7 @@ tinyplot.estimate_means <- function(
       )
     }
   }
+  browser()
 
   # plot it!
   do.call(tinyplot::tinyplot, plot_args)
