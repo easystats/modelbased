@@ -542,7 +542,10 @@ format.marginaleffects_contrasts <- function(
 
 
 # fmt: skip
-equivalence_columns <- c("statistic.noninf", "statistic.nonsup", "p.value.noninf", "p.value.nonsup")
+equivalence_columns <- c(
+  "statistic.noninf", "statistic.nonsup", "p.value.noninf", "p.value.nonsup",
+  "p_Nonsuperiority", "p_Noninferiority"
+)
 
 
 # This function renames columns to have a consistent naming scheme,
@@ -591,17 +594,17 @@ equivalence_columns <- c("statistic.noninf", "statistic.nonsup", "p.value.noninf
   # rename the "term" and "hypothesis" column (which we get from contrasts)
   colnames(params)[colnames(params) == "term"] <- "Parameter"
   colnames(params)[colnames(params) == "hypothesis"] <- "Parameter"
-  colnames(params)[colnames(params) == "p.value.equiv"] <- "p_equivalence"
 
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
 
+  # fmt: skip
   # relocate columns - this is the standardized column order for all outputs
   relocate_columns <- intersect(
     unique(c(
       coefficient_name, "Coefficient", "Slope", "Predicted", "Median", "Mean",
       "MAP", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error", "pd",
-      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p", "p_equivalence"
+      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p", "p_Equivalence"
     )),
     colnames(params)
   )

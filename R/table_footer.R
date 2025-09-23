@@ -176,6 +176,7 @@
 
 .table_footer_slopes <- function(x, model = NULL, info = NULL) {
   model_info <- info$model_info
+  rope <- info$equivalence
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
     model_info <- insight::model_info(model, response = 1)
@@ -193,5 +194,14 @@
       table_footer <- paste0(table_footer, "\nSlopes are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
     }
   }
+  # ROPE?
+  if (!is.null(rope)) {
+    table_footer <- paste0(
+      table_footer,
+      "\n",
+      paste0("ROPE: ", insight::format_ci(rope[1], rope[2], ci = NULL))
+    )
+  }
+
   table_footer
 }
