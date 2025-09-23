@@ -10,6 +10,7 @@
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
+  rope <- info$equivalence
 
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
@@ -151,6 +152,15 @@
         paste0("Parameters:\n", paste(unlist(hypothesis_labels), collapse = "\n"))
       )
     }
+  }
+
+  # ROPE?
+  if (!is.null(rope)) {
+    table_footer <- paste0(
+      table_footer,
+      "\n",
+      paste0("ROPE: ", insight::format_ci(rope[1], rope[2], ci = NULL))
+    )
   }
 
   if (all(table_footer == "")) {
