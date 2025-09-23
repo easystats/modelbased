@@ -278,6 +278,15 @@
 #' values stratified by class membership. To predict the class membership, use
 #' [`estimate_link()`].
 #'
+#' @section Equivalence tests:
+#'
+#' Using the `"marginaleffects"` backend, you can perform equivalence tests by
+#' specifying the `equivalence` argument. It takes a numeric vector of length
+#' two, defining the lower and upper bounds of the region of equivalence (ROPE).
+#' The output then includes an additional column `p_Equivalence`. A high p-value
+#' (non-significant result) means we reject the assumption of practical
+#' equivalence (i.e., a minimal important difference can be assumed).
+#'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
 #' - `modelbased_backend`: `options(modelbased_backend = <string>)` will set a
@@ -290,9 +299,9 @@
 #'
 #' - `modelbased_integer`: `options(modelbased_integer = <value>)` will set the
 #'   minimum number of unique values in an integer predictor to treat that
-#'   predictor as a "discrete integer" or as continuous. If the integer has more than
-#'   `modelbased_integer` unique values, it is treated as continuous. Set to `TRUE`
-#'   to always treat integer predictors as continuous.
+#'   predictor as a "discrete integer" or as continuous. If the integer has more
+#'   than `modelbased_integer` unique values, it is treated as continuous. Set
+#'   to `TRUE` to always treat integer predictors as continuous.
 #'
 #' @return A data frame of estimated marginal means.
 #'
