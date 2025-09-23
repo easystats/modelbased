@@ -285,7 +285,9 @@
 #' two, defining the lower and upper bounds of the region of equivalence (ROPE).
 #' The output then includes an additional column `p_Equivalence`. A high p-value
 #' (non-significant result) means we reject the assumption of practical
-#' equivalence (i.e., a minimal important difference can be assumed).
+#' equivalence (i.e., a minimal important difference can be assumed, or that
+#' the estimate of the predicted value, slope or contrast is likely outside the
+#' ROPE).
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'

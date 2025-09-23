@@ -10,6 +10,7 @@ skip_if_not_installed("MASS")
 
 test_that("estimate_relation prints ordinal models correctly", {
   m <- suppressWarnings(insight::download_model("brms_categorical_2_num"))
+  skip_if(is.null(m))
   out <- suppressWarnings(estimate_relation(m))
   expect_snapshot(print(out, zap_small = TRUE), variant = "windows")
   out <- suppressWarnings(estimate_means(m, by = "Sepal.Width"))
