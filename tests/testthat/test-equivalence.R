@@ -16,6 +16,7 @@ test_that("estimate_means() - equivalence test", {
   expect_named(out, c("gear", "Proportion", "SE", "CI_low", "CI_high", "z", "p_Equivalence"))
   expect_equal(out$p_Equivalence, c(0.26701, 0.50868, 0.39303), tolerance = 1e-4)
   expect_identical(attributes(out)$equivalence, c(0.3, 0.5))
+  expect_identical(capture.output(print(out))[13], "ROPE: [0.30, 0.50]")
 
   mod <- glmmTMB::glmmTMB(mpg ~ wt + (1 | cyl), data = mtcars, family = glmmTMB::beta_family())
   out <- estimate_slopes(mod, "wt", equivalence = c(-0.2, 0.2))
