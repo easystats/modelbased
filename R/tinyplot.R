@@ -105,6 +105,12 @@ tinyplot.estimate_means <- function(
   })
   names(plot_args) <- elements
 
+  # dodging -------------------------------
+
+  if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
+    dots$dodge <- 0.1
+  }
+
   ## TODO: legend labels?
   ## TODO: show residuals?
 

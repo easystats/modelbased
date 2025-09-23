@@ -10,6 +10,7 @@
   transform <- info$transform
   model_info <- info$model_info
   marginalization <- info$estimate
+  rope <- info$equivalence
 
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
@@ -153,6 +154,15 @@
     }
   }
 
+  # ROPE?
+  if (!is.null(rope)) {
+    table_footer <- paste0(
+      table_footer,
+      "\n",
+      paste0("ROPE: ", insight::format_ci(rope[1], rope[2], ci = NULL))
+    )
+  }
+
   if (all(table_footer == "")) {
     return(NULL)
   }
@@ -163,9 +173,9 @@
 
 # Table footer slopes =========================================================
 
-
 .table_footer_slopes <- function(x, model = NULL, info = NULL) {
   model_info <- info$model_info
+  rope <- info$equivalence
   # make sure we definitely have model information
   if (is.null(model_info) && !is.null(model)) {
     model_info <- insight::model_info(model, response = 1)
@@ -180,8 +190,22 @@
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))
     if (!is.null(trans_fun) && all(trans_fun != "identity")) {
-      table_footer <- paste0(table_footer, "\nSlopes are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
+      table_footer <- paste0(
+        table_footer,
+        "\nSlopes are on the ",
+        trans_fun,
+        "-scale (consider `transform=TRUE`)."
+      )
     }
   }
+  # ROPE?
+  if (!is.null(rope)) {
+    table_footer <- paste0(
+      table_footer,
+      "\n",
+      paste0("ROPE: ", insight::format_ci(rope[1], rope[2], ci = NULL))
+    )
+  }
+
   table_footer
 }
