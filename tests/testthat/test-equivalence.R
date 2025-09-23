@@ -20,7 +20,8 @@ test_that("estimate_means() - equivalence test", {
 
   mod <- glmmTMB::glmmTMB(mpg ~ wt + (1 | cyl), data = mtcars, family = glmmTMB::beta_family())
   out <- estimate_slopes(mod, "wt", equivalence = c(-0.2, 0.2))
-  expect_named(out, c("gear", "Proportion", "SE", "CI_low", "CI_high", "z", "p_Equivalence"))
+  expect_named(out, c("Slope", "SE", "CI_low", "CI_high", "z", "p", "p_Equivalence"))
   expect_equal(out$p_Equivalence, 0.9872101, tolerance = 1e-4)
   expect_identical(attributes(out)$equivalence, c(-0.2, 0.2))
+  expect_identical(capture.output(print(out))[9], "ROPE: [-0.20, 0.20]")
 })
