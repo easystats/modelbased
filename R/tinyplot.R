@@ -111,7 +111,6 @@ tinyplot.estimate_means <- function(
     dots$dodge <- 0.1
   }
 
-
   ## TODO: legend labels?
   ## TODO: show residuals?
 

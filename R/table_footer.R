@@ -173,7 +173,6 @@
 
 # Table footer slopes =========================================================
 
-
 .table_footer_slopes <- function(x, model = NULL, info = NULL) {
   model_info <- info$model_info
   rope <- info$equivalence
@@ -191,7 +190,12 @@
     # add information about response transformation
     trans_fun <- .safe(insight::find_transformation(model))
     if (!is.null(trans_fun) && all(trans_fun != "identity")) {
-      table_footer <- paste0(table_footer, "\nSlopes are on the ", trans_fun, "-scale (consider `transform=TRUE`).")
+      table_footer <- paste0(
+        table_footer,
+        "\nSlopes are on the ",
+        trans_fun,
+        "-scale (consider `transform=TRUE`)."
+      )
     }
   }
   # ROPE?
