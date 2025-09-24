@@ -166,7 +166,7 @@ tinyplot.estimate_means <- function(
   }
 
   # plot it!
-  do.call(tinyplot::tinyplot, plot_args)
+  suppressWarnings(do.call(tinyplot::tinyplot, plot_args))
 }
 
 #' @exportS3Method tinyplot::tinyplot
