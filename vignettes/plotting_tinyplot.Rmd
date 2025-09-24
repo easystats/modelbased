@@ -1,8 +1,8 @@
 ---
-title: "Plotting estimated marginal means"
+title: "Plotting estimated marginal means with tinyplot"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Plotting estimated marginal means}
+  %\VignetteIndexEntry{Plotting estimated marginal means with tinyplot}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 bibliography: bibliography.bib
@@ -34,11 +34,7 @@ if (getRversion() < "4.1.0") {
 }
 ```
 
-This vignette provides a quick overview with different examples that show how to plot estimated marginal means.
-
-In summary, you can use the `length` and `range` arguments in `estimate_means()` (which are passed to [`insight::get_datagrid()`](https://easystats.github.io/insight/reference/get_datagrid.html)), as well as directly specifying meaningful values in the `by` argument, which are also used to create a data grid, to control the plot-appearance. See also the [vignette on data grids](https://easystats.github.io/modelbased/articles/visualisation_matrix.html).
-
-Although the **modelbased** package does not focus on publication-ready plots, the default plots can already be used directly. Furthermore, a few modifications are already applies, like a percentage-scale for logistic regression models, or using variable labels for _labelled data_.
+This vignette provides a quick overview with different examples that show how to plot estimated marginal means, like [in this vignette](https://easystats.github.io/modelbased/articles/plotting.html), however, here we use the [`{tinyplot}`](https://grantmcdermott.com/tinyplot/) package instead of `{ggplot2}` to create the plots.
 
 ## One predictor - categorical
 
@@ -50,7 +46,7 @@ data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 
 m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
-estimate_means(m, "c172code") |> plot()
+estimate_means(m, "c172code") |> plt()
 ```
 
 ## One predictor - numeric
@@ -58,7 +54,7 @@ estimate_means(m, "c172code") |> plot()
 For numeric predictors, the range of predictions at different values of the focal predictor are plotted, the uncertainty is displayed as confidence band.
 
 ```{r}
-estimate_means(m, "barthtot") |> plot()
+estimate_means(m, "barthtot") |> plt()
 ```
 
 ## Two predictors - categorical
@@ -67,7 +63,7 @@ For two categorical predictors, the first focal predictors is plotted along the 
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
-estimate_means(m, c("e16sex", "c172code")) |> plot()
+estimate_means(m, c("e16sex", "c172code")) |> plt()
 ```
 
 ## Two predictors - numeric * categorical
@@ -76,25 +72,17 @@ For two predictors, where the first is numeric and the second categorical, range
 
 ```{r}
 m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
-estimate_means(m, c("barthtot", "c172code")) |> plot()
+estimate_means(m, c("barthtot", "c172code")) |> plt()
 ```
 
-In general, plots can be further modified using functions from the **ggplot2** package. Thereby, other themes, color scales, faceting and so on, can be applies.
+In general, plots can be further modified using functions or arguments from the **tinyplot** package. Thereby, other themes, color scales, faceting and so on, can be applies.
 
 ```{r}
-library(ggplot2)
 estimate_means(m, c("barthtot", "c172code")) |>
-  plot() +
-  see::theme_modern(show.ticks = TRUE)
+  plt(facet = ~c172code)
 
 estimate_means(m, c("barthtot", "c172code")) |>
-  plot() +
-  facet_grid(~c172code)
-
-estimate_means(m, c("barthtot", "c172code")) |>
-  plot() +
-  scale_color_brewer(palette = "Dark2") +
-  scale_fill_brewer(palette = "Dark2")
+  plt(palette = "okabe")
 ```
 
 ## Two predictors - categorical * numeric
@@ -107,19 +95,19 @@ I.e., by default, arguments `range = "range"` and `length = 10` in `insight::get
 
 ```{r}
 # by default, `range = "range"` and `length = 10`
-estimate_means(m, c("c172code", "barthtot")) |> plot()
+estimate_means(m, c("c172code", "barthtot")) |> plt()
 ```
 
 That means that the `length` argument can be used to control how many values (lines) for the numeric predictors are chosen.
 
 ```{r}
-estimate_means(m, c("c172code", "barthtot"), length = 20) |> plot()
+estimate_means(m, c("c172code", "barthtot"), length = 20) |> plt()
 ```
 
 Another option would be to use `range = "grid"`, in which case the mean and +/- one standard deviation around the mean are chosen as representative values for numeric predictors.
 
 ```{r}
-estimate_means(m, c("c172code", "barthtot"), range = "grid") |> plot()
+estimate_means(m, c("c172code", "barthtot"), range = "grid") |> plt()
 ```
 
 It is also possible to specify representative values, at which the estimated marginal means of the outcome should be plotted. Again, consult the documentation at `?ìnsight::get_datagrid` for further details.
@@ -131,9 +119,9 @@ estimate_means(
     "c172code = c('low level of education', 'high level of education')",
     "barthtot = c(30, 50, 80)"
   )
-) |> plot()
+) |> plt()
 
-estimate_means(m, c("c172code", "barthtot = [fivenum]")) |> plot()
+estimate_means(m, c("c172code", "barthtot = [fivenum]")) |> plt()
 ```
 
 ## Three numeric predictors
@@ -142,15 +130,15 @@ The default plot-setting for three numeric predictors can be rather confusing.
 
 ```{r}
 m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
-estimate_means(m, c("c12hour", "barthtot", "c160age")) |> plot()
+estimate_means(m, c("c12hour", "barthtot", "c160age")) |> plt()
 ```
 
 Instead, it is recommended to use `length`, create a "reference grid", or again specify meaningful values directly in the `by` argument.
 
 ```{r}
-estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |> plot()
+estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |> plt()
 
-estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plot()
+estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plt()
 ```
 
 ## Three categorical predictors
@@ -159,7 +147,7 @@ Multiple categorical predictors are usually less problematic, since discrete col
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
-estimate_means(m, c("e16sex", "c172code", "e42dep")) |> plot()
+estimate_means(m, c("e16sex", "c172code", "e42dep")) |> plt()
 ```
 
 ## Smooth plots
@@ -168,13 +156,13 @@ Remember that by default a range of ten values is chosen for numeric focal predi
 
 ```{r}
 m <- lm(neg_c_7 ~ e16sex * c12hour + e16sex * I(c12hour^2), data = efc)
-estimate_means(m, c("c12hour", "e16sex")) |> plot()
+estimate_means(m, c("c12hour", "e16sex")) |> plt()
 ```
 
 In this case, simply increase the number of representative values by setting `length` to a higher number.
 
 ```{r}
-estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plot()
+estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plt()
 ```
 
 ```{r echo=FALSE}

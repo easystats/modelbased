@@ -108,7 +108,7 @@ tinyplot.estimate_means <- function(
   # dodging -------------------------------
 
   if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
-    dots$dodge <- 0.1
+    dots$dodge <- 0.07
   }
 
   ## TODO: legend labels?
