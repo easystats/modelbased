@@ -75,7 +75,7 @@ m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
 estimate_means(m, c("barthtot", "c172code")) |> plt()
 ```
 
-In general, plots can be further modified using functions or arguments from the **tinyplot** package. Thereby, other themes, color scales, faceting and so on, can be applies.
+In general, plots can be further modified using functions or arguments from the **tinyplot** package. Thereby, other themes, color scales, faceting and so on, can be applied.
 
 ```{r}
 estimate_means(m, c("barthtot", "c172code")) |>
@@ -110,7 +110,7 @@ Another option would be to use `range = "grid"`, in which case the mean and +/- 
 estimate_means(m, c("c172code", "barthtot"), range = "grid") |> plt()
 ```
 
-It is also possible to specify representative values, at which the estimated marginal means of the outcome should be plotted. Again, consult the documentation at `?ìnsight::get_datagrid` for further details.
+It is also possible to specify representative values, at which the estimated marginal means of the outcome should be plotted. Again, consult the documentation at `?insight::get_datagrid` for further details.
 
 ```{r}
 estimate_means(

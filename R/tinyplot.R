@@ -107,8 +107,12 @@ tinyplot.estimate_means <- function(
 
   # dodging -------------------------------
 
+  # Set dodge value for grouped point or pointrange plots.
+  # The value 0.07 was chosen to reduce overlap in this context; adjust via
+  # option if needed.
+  dodge_value <- getOption("modelbased_tinyplot_dodge", 0.07)
   if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
-    dots$dodge <- 0.07
+    dots$dodge <- dodge_value
   }
 
   ## TODO: legend labels?

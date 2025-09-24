@@ -136,6 +136,9 @@ Can also be \code{FALSE}.
 \item \code{modelbased_ribbon_alpha}: \verb{options(modelbased_ribbon_alpha = <number>)}
 will set a default value for the \code{alpha} argument of the \code{ribbon} geom.
 Should be a number between \code{0} and \code{1}.
+\item \code{modelbased_tinyplot_dodge}: \verb{options(modelbased_tinyplot_dodge = <number>)}
+will set a default value for the \code{dodge} argument (spacing between geoms)
+when using \code{tinyplot::plt()}. Should be a number between \code{0} and \code{1}.
 }
 }
 
