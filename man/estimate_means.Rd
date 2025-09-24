@@ -319,7 +319,8 @@ averaging across random effects groups is then more accurate.
 For finite mixture models (currently, only the \code{\link[brms:mixture]{brms::mixture()}} family
 from package \emph{brms} is supported), use \code{predict = "link"} to return predicted
 values stratified by class membership. To predict the class membership, use
-\code{\link[=estimate_link]{estimate_link()}}.
+\code{predict = "classification"}. See also
+\href{https://easystats.github.io/modelbased/articles/practical_growthmixture.html}{this vignette}.
 }
 
 \section{Equivalence tests (smallest effect size of interest)}{
@@ -330,7 +331,7 @@ specifying the \code{equivalence} argument. It takes a numeric vector of length
 two, defining the lower and upper bounds of the region of equivalence (ROPE).
 The output then includes an additional column \code{p_Equivalence}. A high p-value
 (non-significant result) means we reject the assumption of practical
-equivalence (i.e., a minimal important difference can be assumed, or that
+equivalence (and that a minimal important difference can be assumed, or that
 the estimate of the predicted value, slope or contrast is likely outside the
 ROPE).
 }
@@ -388,6 +389,10 @@ estimate_means(
   model,
   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
+
+# equivalence test: the null-hypothesis is that the estimate is outside
+# the equivalence bounds [-4.5, 4.5]
+estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
 
 # Methods that can be applied to it:
 means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))

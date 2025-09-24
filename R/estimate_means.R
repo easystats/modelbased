@@ -276,7 +276,8 @@
 #' For finite mixture models (currently, only the [`brms::mixture()`] family
 #' from package *brms* is supported), use `predict = "link"` to return predicted
 #' values stratified by class membership. To predict the class membership, use
-#' [`estimate_link()`].
+#' `predict = "classification"`. See also
+#' [this vignette](https://easystats.github.io/modelbased/articles/practical_growthmixture.html).
 #'
 #' @section Equivalence tests (smallest effect size of interest):
 #'
@@ -285,7 +286,7 @@
 #' two, defining the lower and upper bounds of the region of equivalence (ROPE).
 #' The output then includes an additional column `p_Equivalence`. A high p-value
 #' (non-significant result) means we reject the assumption of practical
-#' equivalence (i.e., a minimal important difference can be assumed, or that
+#' equivalence (and that a minimal important difference can be assumed, or that
 #' the estimate of the predicted value, slope or contrast is likely outside the
 #' ROPE).
 #'
@@ -355,6 +356,10 @@
 #'   model,
 #'   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 #' )
+#'
+#' # equivalence test: the null-hypothesis is that the estimate is outside
+#' # the equivalence bounds [-4.5, 4.5]
+#' estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
 #'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))
