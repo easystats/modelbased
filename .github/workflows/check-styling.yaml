@@ -1,9 +1,0 @@
-on:
-  pull_request:
-    branches: [main, master]
-
-name: check-styling
-
-jobs:
-  check-styling:
-    uses: easystats/workflows/.github/workflows/check-styling.yaml@main
