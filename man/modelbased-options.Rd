@@ -34,6 +34,9 @@ printing.
 by default or not.
 \item \code{options(modelbased_full_labels = FALSE)} will remove redundant
 (duplicated) labels from rows.
+\item \verb{options(easystats_display_format = <value>)} will set the default format
+for the \code{display()} methods. Can be one of \code{"markdown"}, \code{"html"}, or
+\code{"tt"}. See \code{\link[=display.estimate_contrasts]{display.estimate_contrasts()}} for details.
 }
 
 \strong{For plotting}
@@ -46,9 +49,9 @@ value for the \code{modelbased_numeric_as_discrete} argument. Can also be
 \item \verb{options(modelbased_ribbon_alpha = <number>)} will set a default value for
 the \code{alpha} argument of the \code{ribbon} geom. Should be a number between \code{0}
 and \code{1}.
-\item \verb{options(easystats_display_format = <value>)} will set the default format
-for the \code{display()} methods. Can be one of \code{"markdown"}, \code{"html"}, or
-\code{"tt"}. See \code{\link[=display.estimate_contrasts]{display.estimate_contrasts()}} for details.
+\item \verb{options(modelbased_tinyplot_dodge = <number>)} will set a default value
+for the \code{dodge} argument (spacing between geoms) when using
+\code{tinyplot::plt()}. Should be a number between \code{0} and \code{1}.
 }
 }
 

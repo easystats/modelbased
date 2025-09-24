@@ -70,6 +70,10 @@
 #'   will set a default value for the `alpha` argument of the `ribbon` geom.
 #'   Should be a number between `0` and `1`.
 #'
+#' - `modelbased_tinyplot_dodge`: `options(modelbased_tinyplot_dodge = <number>)`
+#'   will set a default value for the `dodge` argument (spacing between geoms)
+#'   when using `tinyplot::plt()`. Should be a number between `0` and `1`.
+#'
 #' @examplesIf all(insight::check_if_installed(c("marginaleffects", "see", "ggplot2"), quietly = TRUE)) && getRversion() >= "4.1.0"
 #' library(ggplot2)
 #' library(see)

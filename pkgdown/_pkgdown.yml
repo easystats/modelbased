@@ -69,6 +69,8 @@ navbar:
         - text: "Visualization"
         - text: "Plotting estimated marginal means"
           href: articles/plotting.html
+        - text: "Plotting estimated marginal means with tinyplot"
+          href: articles/plotting_tinyplot.html
         - text: "Visualize effects and interactions"
           href: articles/estimate_relation.html
         - text: "The modelisation approach"
