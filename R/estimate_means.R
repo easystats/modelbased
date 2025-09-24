@@ -278,7 +278,7 @@
 #' values stratified by class membership. To predict the class membership, use
 #' [`estimate_link()`].
 #'
-#' @section Equivalence tests:
+#' @section Equivalence tests (smallest effect size of interest):
 #'
 #' Using the `"marginaleffects"` backend, you can perform equivalence tests by
 #' specifying the `equivalence` argument. It takes a numeric vector of length
