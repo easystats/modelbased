@@ -37,7 +37,7 @@ for publication-ready figures, we recommend re-creating the figures using the
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,6 +64,7 @@ for publication-ready figures, we recommend re-creating the figures using the
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Visualization</h6></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting estimated marginal means</a></li>
+    <li><a class="dropdown-item" href="../articles/plotting_tinyplot.html">Plotting estimated marginal means with tinyplot</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul></li>
@@ -277,6 +278,9 @@ Can also be <code>FALSE</code>.</p></li>
 <li><p><code>modelbased_ribbon_alpha</code>: <code>options(modelbased_ribbon_alpha = &lt;number&gt;)</code>
 will set a default value for the <code>alpha</code> argument of the <code>ribbon</code> geom.
 Should be a number between <code>0</code> and <code>1</code>.</p></li>
+<li><p><code>modelbased_tinyplot_dodge</code>: <code>options(modelbased_tinyplot_dodge = &lt;number&gt;)</code>
+will set a default value for the <code>dodge</code> argument (spacing between geoms)
+when using <code><a href="https://rdrr.io/pkg/tinyplot/man/tinyplot.html" class="external-link">tinyplot::plt()</a></code>. Should be a number between <code>0</code> and <code>1</code>.</p></li>
 </ul></div>
 
     <div class="section level2">

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">modelbased</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.13.0.8</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
     <li><hr class="dropdown-divider"></li>
     <li><h6 class="dropdown-header" data-toc-skip>Visualization</h6></li>
     <li><a class="dropdown-item" href="../articles/plotting.html">Plotting estimated marginal means</a></li>
+    <li><a class="dropdown-item" href="../articles/plotting_tinyplot.html">Plotting estimated marginal means with tinyplot</a></li>
     <li><a class="dropdown-item" href="../articles/estimate_relation.html">Visualize effects and interactions</a></li>
     <li><a class="dropdown-item" href="../articles/modelisation_approach.html">The modelisation approach</a></li>
   </ul></li>
@@ -120,6 +121,9 @@ printing.</p></li>
 by default or not.</p></li>
 <li><p><code>options(modelbased_full_labels = FALSE)</code> will remove redundant
 (duplicated) labels from rows.</p></li>
+<li><p><code>options(easystats_display_format = &lt;value&gt;)</code> will set the default format
+for the <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> methods. Can be one of <code>"markdown"</code>, <code>"html"</code>, or
+<code>"tt"</code>. See <code><a href="print.estimate_contrasts.html">display.estimate_contrasts()</a></code> for details.</p></li>
 </ul><p><strong>For plotting</strong></p><ul><li><p><code>options(modelbased_join_dots = &lt;logical&gt;)</code> will set a default value for
 the <code>join_dots</code>.</p></li>
 <li><p><code>options(modelbased_numeric_as_discrete = &lt;number&gt;)</code> will set a default
@@ -128,9 +132,9 @@ value for the <code>modelbased_numeric_as_discrete</code> argument. Can also be
 <li><p><code>options(modelbased_ribbon_alpha = &lt;number&gt;)</code> will set a default value for
 the <code>alpha</code> argument of the <code>ribbon</code> geom. Should be a number between <code>0</code>
 and <code>1</code>.</p></li>
-<li><p><code>options(easystats_display_format = &lt;value&gt;)</code> will set the default format
-for the <code><a href="https://easystats.github.io/insight/reference/display.html" class="external-link">display()</a></code> methods. Can be one of <code>"markdown"</code>, <code>"html"</code>, or
-<code>"tt"</code>. See <code><a href="print.estimate_contrasts.html">display.estimate_contrasts()</a></code> for details.</p></li>
+<li><p><code>options(modelbased_tinyplot_dodge = &lt;number&gt;)</code> will set a default value
+for the <code>dodge</code> argument (spacing between geoms) when using
+<code><a href="https://rdrr.io/pkg/tinyplot/man/tinyplot.html" class="external-link">tinyplot::plt()</a></code>. Should be a number between <code>0</code> and <code>1</code>.</p></li>
 </ul></div>
 
   </main></div>
