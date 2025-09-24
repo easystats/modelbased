@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("marginaleffects", "ggplot2", "see", "tinyplot")
+pkgs <- c("marginaleffects", "tinyplot")
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
