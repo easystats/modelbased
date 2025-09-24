@@ -42,6 +42,8 @@ The simplest case is possibly plotting one categorical predictor. Predicted valu
 
 ```{r}
 library(modelbased)
+library(tinyplot)
+
 data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 
