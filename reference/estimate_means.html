@@ -417,7 +417,8 @@ averaging across random effects groups is then more accurate.</p>
 <p>For finite mixture models (currently, only the <code><a href="https://paulbuerkner.com/brms/reference/mixture.html" class="external-link">brms::mixture()</a></code> family
 from package <em>brms</em> is supported), use <code>predict = "link"</code> to return predicted
 values stratified by class membership. To predict the class membership, use
-<code><a href="estimate_expectation.html">estimate_link()</a></code>.</p>
+<code>predict = "classification"</code>. See also
+<a href="https://easystats.github.io/modelbased/articles/practical_growthmixture.html">this vignette</a>.</p>
     </div>
     <div class="section level2">
     <h2 id="equivalence-tests-smallest-effect-size-of-interest-">Equivalence tests (smallest effect size of interest)<a class="anchor" aria-label="anchor" href="#equivalence-tests-smallest-effect-size-of-interest-"></a></h2>
@@ -429,7 +430,7 @@ specifying the <code>equivalence</code> argument. It takes a numeric vector of l
 two, defining the lower and upper bounds of the region of equivalence (ROPE).
 The output then includes an additional column <code>p_Equivalence</code>. A high p-value
 (non-significant result) means we reject the assumption of practical
-equivalence (i.e., a minimal important difference can be assumed, or that
+equivalence (and that a minimal important difference can be assumed, or that
 the estimate of the predicted value, slope or contrast is likely outside the
 ROPE).</p>
     </div>
@@ -620,6 +621,23 @@ marginaleffects. Andrew Heiss. <a href="https://doi.org/10.59350/xwnfm-x1827" cl
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Sepal.Width = c(2, 4), Species = c('versicolor', 'setosa')</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># equivalence test: the null-hypothesis is that the estimate is outside</span></span></span>
+<span class="r-in"><span><span class="co"># the equivalence bounds [-4.5, 4.5]</span></span></span>
+<span class="r-in"><span><span class="fu">estimate_means</span><span class="op">(</span><span class="va">model</span>, by <span class="op">=</span> <span class="st">"Species"</span>, equivalence <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4.5</span>, <span class="fl">4.5</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">Estimated Marginal Means</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Species    | Mean |   SE |       95% CI | t(144) | p (Equivalence)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> ------------------------------------------------------------------</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> setosa     | 1.43 | 0.08 | [1.28, 1.58] |  18.70 |          &lt; .001</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> versicolor | 4.50 | 0.07 | [4.35, 4.65] |  60.64 |           0.506</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> virginica  | 5.61 | 0.06 | [5.50, 5.72] |  99.61 |          &gt; .999</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Variable predicted: Petal.Length</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors modulated: Species</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">Predictors averaged: Sepal.Width (3.1)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #BBBB00;">ROPE: [-4.50, 4.50]</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Methods that can be applied to it:</span></span></span>
