@@ -281,14 +281,28 @@
 #'
 #' @section Equivalence tests (smallest effect size of interest):
 #'
-#' Using the `"marginaleffects"` backend, you can perform equivalence tests by
-#' specifying the `equivalence` argument. It takes a numeric vector of length
-#' two, defining the lower and upper bounds of the region of equivalence (ROPE).
-#' The output then includes an additional column `p_Equivalence`. A high p-value
-#' (non-significant result) means we reject the assumption of practical
-#' equivalence (and that a minimal important difference can be assumed, or that
-#' the estimate of the predicted value, slope or contrast is likely outside the
-#' ROPE).
+#' There are two ways of performing equivalence tests with **modelbased**.
+#'
+#' - Using the *marginaleffects* machinery
+#'
+#'   The first is by specifying the `equivalence` argument. It takes a numeric
+#'   vector of length two, defining the lower and upper bounds of the region of
+#'   equivalence (ROPE). The output then includes an additional column
+#'   `p_Equivalence`. A high p-value (non-significant result) means we reject the
+#'   assumption of practical equivalence (and that a minimal important difference
+#'   can be assumed, or that the estimate of the predicted value, slope or
+#'   contrast is likely outside the ROPE).
+#'
+#' - Using the `equivalence_test()` function
+#'
+#'   The second option is to use the `equivalence_test()` function from the
+#'   **parameters** package on the output of `estimate_means()`, `estimate_slopes()`
+#'   or `estimate_contrasts()`. This method is preferable, because it uses the
+#'   classical approach of checking whether the (narrow) confidence interval is
+#'   covered by the ROPE and it calculates accurate p-values and the second
+#'   generation p-values (SGPV). Furthermore, the rule decisions of accepting,
+#'   rejecting, or undecided regarding the null hypothesis of the equivalence
+#'   test are also provided.
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'

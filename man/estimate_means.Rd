@@ -326,14 +326,28 @@ values stratified by class membership. To predict the class membership, use
 \section{Equivalence tests (smallest effect size of interest)}{
 
 
-Using the \code{"marginaleffects"} backend, you can perform equivalence tests by
-specifying the \code{equivalence} argument. It takes a numeric vector of length
-two, defining the lower and upper bounds of the region of equivalence (ROPE).
-The output then includes an additional column \code{p_Equivalence}. A high p-value
-(non-significant result) means we reject the assumption of practical
-equivalence (and that a minimal important difference can be assumed, or that
-the estimate of the predicted value, slope or contrast is likely outside the
-ROPE).
+There are two ways of performing equivalence tests with \strong{modelbased}.
+\itemize{
+\item Using the \emph{marginaleffects} machinery
+
+The first is by specifying the \code{equivalence} argument. It takes a numeric
+vector of length two, defining the lower and upper bounds of the region of
+equivalence (ROPE). The output then includes an additional column
+\code{p_Equivalence}. A high p-value (non-significant result) means we reject the
+assumption of practical equivalence (and that a minimal important difference
+can be assumed, or that the estimate of the predicted value, slope or
+contrast is likely outside the ROPE).
+\item Using the \code{equivalence_test()} function
+
+The second option is to use the \code{equivalence_test()} function from the
+\strong{parameters} package on the output of \code{estimate_means()}, \code{estimate_slopes()}
+or \code{estimate_contrasts()}. This method is preferable, because it uses the
+classical approach of checking whether the (narrow) confidence interval is
+covered by the ROPE and it calculates accurate p-values and the second
+generation p-values (SGPV). Furthermore, the rule decisions of accepting,
+rejecting, or undecided regarding the null hypothesis of the equivalence
+test are also provided.
+}
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{
