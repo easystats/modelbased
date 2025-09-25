@@ -302,7 +302,9 @@
 #'   covered by the ROPE and it calculates accurate p-values and the second
 #'   generation p-values (SGPV). Furthermore, the rule decisions of accepting,
 #'   rejecting, or undecided regarding the null hypothesis of the equivalence
-#'   test are also provided.
+#'   test are also provided. Thus, resulting p-values may differ from those
+#'   p-values returned when using the `equivalence` argument.
+#'
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
