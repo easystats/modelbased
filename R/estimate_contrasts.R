@@ -412,7 +412,11 @@ estimate_contrasts.default <- function(
   attr(out, "ci") <- ci
   attr(out, "p_adjust") <- p_adjust
   attr(out, "backend") <- backend
-  attr(out, "call") <- match.call()
+
+  # we want to store the generic, not the ".default" method, in the call
+  cl <- match.call()
+  cl[[1L]] <- quote(estimate_contrasts)
+  attr(out, "call") <- cl
 
   # add attributes from workhorse function
   attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])
