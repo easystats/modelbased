@@ -470,6 +470,7 @@ estimate_means <- function(model,
   attr(means, "ci") <- ci
   attr(means, "backend") <- backend
   attr(means, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(means))
+  attr(means, "call") <- match.call()
 
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])

@@ -186,6 +186,7 @@ estimate_slopes <- function(model,
   attr(trends, "model") <- model
   attr(trends, "response") <- insight::find_response(model)
   attr(trends, "ci") <- ci
+  attr(trends, "call") <- match.call()
 
   # add attributes from workhorse function
   attributes(trends) <- utils::modifyList(attributes(trends), info[.info_elements()])
