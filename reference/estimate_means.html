@@ -435,16 +435,20 @@ assumption of practical equivalence (and that a minimal important difference
 can be assumed, or that the estimate of the predicted value, slope or
 contrast is likely outside the ROPE).</p></li>
 <li><p>Using the <code>equivalence_test()</code> function</p>
-<p>The second option is to use the <code>equivalence_test()</code> function from the
-<strong>parameters</strong> package on the output of <code>estimate_means()</code>, <code><a href="estimate_slopes.html">estimate_slopes()</a></code>
-or <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code>. This method is preferable, because it uses the
-classical approach of checking whether the (narrow) confidence interval is
-covered by the ROPE and it calculates accurate p-values and the second
-generation p-values (SGPV). Furthermore, the rule decisions of accepting,
+<p>The second option is to use the <code><a href="https://easystats.github.io/parameters/reference/equivalence_test.lm.html" class="external-link">parameters::equivalence_test.lm()</a></code>
+function from the <strong>parameters</strong> package on the output of
+<code>estimate_means()</code>, <code><a href="estimate_slopes.html">estimate_slopes()</a></code> or <code><a href="estimate_contrasts.html">estimate_contrasts()</a></code>. This
+method is more flexible and implements different "rules" to calculate
+practical equivalence. Furthermore, the rule decisions of accepting,
 rejecting, or undecided regarding the null hypothesis of the equivalence
 test are also provided. Thus, resulting p-values may differ from those
 p-values returned when using the <code>equivalence</code> argument.</p></li>
-</ul></div>
+</ul><p>The output from <code>equivalence_test()</code> returns a column <code>SGPV</code>, the "second
+generation p-value", which is equivalent to the <code>p (Equivalence)</code> column when
+using the <code>equivalence</code> argument. It is basically representiv the ROPE coverage
+from the confidence interval of the estimate (i.e. the proportion of the
+confidence intervals that lies within the region of practical equivalence).</p>
+    </div>
     <div class="section level2">
     <h2 id="global-options-to-customize-estimation-of-marginal-means">Global Options to Customize Estimation of Marginal Means<a class="anchor" aria-label="anchor" href="#global-options-to-customize-estimation-of-marginal-means"></a></h2>
 
