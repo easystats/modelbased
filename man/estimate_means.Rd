@@ -339,16 +339,21 @@ can be assumed, or that the estimate of the predicted value, slope or
 contrast is likely outside the ROPE).
 \item Using the \code{equivalence_test()} function
 
-The second option is to use the \code{equivalence_test()} function from the
-\strong{parameters} package on the output of \code{estimate_means()}, \code{estimate_slopes()}
-or \code{estimate_contrasts()}. This method is preferable, because it uses the
-classical approach of checking whether the (narrow) confidence interval is
-covered by the ROPE and it calculates accurate p-values and the second
-generation p-values (SGPV). Furthermore, the rule decisions of accepting,
+The second option is to use the \code{\link[parameters:equivalence_test.lm]{parameters::equivalence_test.lm()}}
+function from the \strong{parameters} package on the output of
+\code{estimate_means()}, \code{estimate_slopes()} or \code{estimate_contrasts()}. This
+method is more flexible and implements different "rules" to calculate
+practical equivalence. Furthermore, the rule decisions of accepting,
 rejecting, or undecided regarding the null hypothesis of the equivalence
 test are also provided. Thus, resulting p-values may differ from those
 p-values returned when using the \code{equivalence} argument.
 }
+
+The output from \code{equivalence_test()} returns a column \code{SGPV}, the "second
+generation p-value", which is equivalent to the \code{p (Equivalence)} column when
+using the \code{equivalence} argument. It is basically representiv the ROPE coverage
+from the confidence interval of the estimate (i.e. the proportion of the
+confidence intervals that lies within the region of practical equivalence).
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{

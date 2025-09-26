@@ -295,16 +295,20 @@
 #'
 #' - Using the `equivalence_test()` function
 #'
-#'   The second option is to use the `equivalence_test()` function from the
-#'   **parameters** package on the output of `estimate_means()`, `estimate_slopes()`
-#'   or `estimate_contrasts()`. This method is preferable, because it uses the
-#'   classical approach of checking whether the (narrow) confidence interval is
-#'   covered by the ROPE and it calculates accurate p-values and the second
-#'   generation p-values (SGPV). Furthermore, the rule decisions of accepting,
+#'   The second option is to use the [`parameters::equivalence_test.lm()`]
+#'   function from the **parameters** package on the output of
+#'   `estimate_means()`, `estimate_slopes()` or `estimate_contrasts()`. This
+#'   method is more flexible and implements different "rules" to calculate
+#'   practical equivalence. Furthermore, the rule decisions of accepting,
 #'   rejecting, or undecided regarding the null hypothesis of the equivalence
 #'   test are also provided. Thus, resulting p-values may differ from those
 #'   p-values returned when using the `equivalence` argument.
 #'
+#' The output from `equivalence_test()` returns a column `SGPV`, the "second
+#' generation p-value", which is equivalent to the `p (Equivalence)` column when
+#' using the `equivalence` argument. It is basically representiv the ROPE coverage
+#' from the confidence interval of the estimate (i.e. the proportion of the
+#' confidence intervals that lies within the region of practical equivalence).
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
