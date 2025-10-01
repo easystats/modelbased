@@ -41,8 +41,8 @@ Depends:
 Imports:
     bayestestR (>= 0.17.0),
     datawizard (>= 1.2.0),
-    insight (>= 1.4.1),
-    parameters (>= 0.28.1),
+    insight (>= 1.4.2),
+    parameters (>= 0.28.2),
     graphics,
     stats,
     tools,
