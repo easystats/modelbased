@@ -86,8 +86,7 @@ estimate_grouplevel.default <- function(model,
     ...
   )
 
-  if(type %in% c("random", "total")) {
-
+  if (type %in% c("random", "total")) {
     # get cleaned parameter names with additional information
     clean_parameters <- attributes(params)$clean_parameters
 
