@@ -322,8 +322,6 @@ estimate_grouplevel.stanreg <- function(model,
 }
 
 
-
-
 # Experimental ------------------------------------------------------------
 
 # Quick tests:
