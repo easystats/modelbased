@@ -371,7 +371,8 @@ estimate_grouplevel.stanreg <- function(
       Parameter = "(Intercept)",
       Coefficient = intercepts$Mean,
       CI_low = intercepts$CI_low,
-      CI_high = intercepts$CI_high
+      CI_high = intercepts$CI_high,
+      stringsAsFactors = FALSE
     )
 
     if (g %in% names(randomslopes)) {
@@ -383,7 +384,8 @@ estimate_grouplevel.stanreg <- function(
           Parameter = s,
           Coefficient = slopes$Slope,
           CI_low = slopes$CI_low,
-          CI_high = slopes$CI_high
+          CI_high = slopes$CI_high,
+          stringsAsFactors = FALSE
         )
       }
     }
