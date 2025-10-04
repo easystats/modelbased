@@ -6,28 +6,30 @@
 #' which can be useful to add the random effects to the original data.
 #'
 #' @param model A mixed model with random effects.
-#' @param type `"random"` or `"total"`.
-#'   - If `"random"` (default), the
-#'   coefficients correspond to the conditional estimates of  the random effects
-#'   (as they are returned by `lme4::ranef()`). They typically correspond to the
-#'   deviation of each individual group from their fixed effect (assuming the
-#'   random effect is also included as a fixed effect). As such, a coefficient
-#'   close to 0 means that the participants' effect is the same as the
-#'   population-level effect (in other words, it is "in the norm").
+#' @param type String, describing the type of estimates that should be returned.
+#'   Can be `"random"`, `"total"`, or `"marginal"` (experimental).
+#'   - If `"random"` (default), the coefficients correspond to the conditional
+#'   estimates of  the random effects (as they are returned by `lme4::ranef()`).
+#'   They typically correspond to the deviation of each individual group from
+#'   their fixed effect (assuming the random effect is also included as a fixed
+#'   effect). As such, a coefficient close to 0 means that the participants'
+#'   effect is the same as the population-level effect (in other words, it is
+#'   "in the norm").
 #'   - If `"total"`, it will return the sum of the random effect and its
 #'   corresponding fixed effects, which internally relies on the `coef()` method
 #'   (see `?coef.merMod`). Note that `type = "total"` yet does not return
 #'   uncertainty indices (such as SE and CI) for models from *lme4* or
 #'   *glmmTMB*, as the necessary information to compute them is not yet
 #'   available. However, for Bayesian models, it is possible to compute them.
-#'   - If `"marginal"` (experimental), it returns marginal group-levels estimates.
-#'   The random intercepts are computed using marginal means (see [estimate_means()]),
-#'   and the random slopes using marginal effects (see [estimate_slopes()]).
-#'   This method does not directly extract the parameters estimated by the model,
-#'   but recomputes them using model predictions. While this is more computationally
-#'   intensive, one of the benefits include interpretability: the random intercepts
-#'   correspond to the "mean" value of the outcome for each group, and the random slopes
-#'   correspond to the direct "effect" of the predictor for each group.
+#'   - If `"marginal"` (experimental), it returns marginal group-levels
+#'   estimates. The random intercepts are computed using marginal means (see
+#'   [estimate_means()]), and the random slopes using marginal effects (see
+#'   [estimate_slopes()]). This method does not directly extract the parameters
+#'   estimated by the model, but recomputes them using model predictions. While
+#'   this is more computationally intensive, one of the benefits include
+#'   interpretability: the random intercepts correspond to the "mean" value of
+#'   the outcome for each group, and the random slopes correspond to the direct
+#'   "effect" of the predictor for each group.
 #' @param dispersion,test,diagnostic Arguments passed to
 #'    [parameters::model_parameters()] for Bayesian models. By default, it won't
 #'    return significance or diagnostic indices (as it is not typically very
@@ -335,6 +337,8 @@ estimate_grouplevel.stanreg <- function(model,
 # cor.test(m1$Coefficient, m3$Coefficient)  # r = 1
 # cor.test(m2$Coefficient, m3$Coefficient)  # r = 1
 .grouplevel_marginal <- function(model) {
+  insight::check_if_installed("lme4")
+
   out <- list()
 
   # Analyze random effect structure
@@ -352,7 +356,9 @@ estimate_grouplevel.stanreg <- function(model,
     pred <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     s <- s[s %in% pred]
 
-    if (length(s) > 0) randomslopes[[g]] <- s
+    if (length(s) > 0) {
+      randomslopes[[g]] <- s
+    }
   }
 
   # TODO: check if it fixes are needed for cases where random intercept is suppressed (e.g., (0 + x | g) )
