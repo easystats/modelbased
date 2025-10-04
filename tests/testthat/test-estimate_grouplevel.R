@@ -206,7 +206,10 @@ test_that("estimate_grouplevel type='marginal'", {
     gl3[gl3$Parameter == "(Intercept)", "Coefficient"]
   )
   expect_gt(r$estimate, 0.99)
-  r <- cor.test(gl1[gl1$Parameter == "hp", "Coefficient"], gl3[gl3$Parameter == "hp", "Coefficient"])
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
   expect_gt(r$estimate, 0.99)
 
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
