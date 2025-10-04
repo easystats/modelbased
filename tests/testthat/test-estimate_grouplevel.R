@@ -175,3 +175,64 @@ withr::with_environment(
     expect_identical(dim(out), c(203L, 5L))
   })
 )
+
+test_that("estimate_grouplevel type='marginal'", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(mtcars)
+
+  model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
+  m3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(m3, "estimate_grouplevel")
+  expect_equal(dim(m3), c(6, 6))
+  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
+  m3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(m3, "estimate_grouplevel")
+  expect_equal(dim(m3), c(12, 6))
+  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+  m3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(m3, "estimate_grouplevel")
+  expect_equal(dim(m3), c(15, 6))
+  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+})
+
+test_that("estimate_grouplevel type='marginal' correlations", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(mtcars)
+
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+  m1 <- estimate_grouplevel(model, type = "random")
+  m2 <- estimate_grouplevel(model, type = "total")
+  m3 <- estimate_grouplevel(model, type = "marginal")
+
+  # merge m1 and m3 to compare
+  m1_intercept <- m1[m1$Parameter == "(Intercept)", ]
+  m3_intercept <- m3[m3$Parameter == "(Intercept)", ]
+  merged_intercepts <- merge(m1_intercept, m3_intercept, by = c("Group", "Level"))
+  expect_gt(cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y), 0.89)
+
+  m1_hp <- m1[m1$Parameter == "hp", ]
+  m3_hp <- m3[m3$Parameter == "hp", ]
+  merged_hp <- merge(m1_hp, m3_hp, by = c("Group", "Level"))
+  expect_gt(cor(merged_hp$Coefficient.x, merged_hp$Coefficient.y), 0.99)
+
+  # merge m2 and m3 to compare
+  m2_intercept <- m2[m2$Parameter == "(Intercept)", ]
+  m3_intercept <- m3[m3$Parameter == "(Intercept)", ]
+  m2_intercept$Level <- as.character(m2_intercept$Level)
+  m3_intercept$Level <- as.character(m3_intercept$Level)
+  merged_intercepts <- merge(m2_intercept, m3_intercept, by = c("Group", "Level"))
+  expect_gt(cor(merged_intercepts$Coefficient.x, merged_intercepts$Coefficient.y), 0.89)
+
+  m2_hp <- m2[m2$Parameter == "hp", ]
+  m3_hp <- m3[m3$Parameter == "hp", ]
+  m2_hp$Level <- as.character(m2_hp$Level)
+  m3_hp$Level <- as.character(m3_hp$Level)
+  merged_hp <- merge(m2_hp, m3_hp, by = c("Group", "Level"))
+  expect_gt(cor(merged_hp$Coefficient.x, merged_hp$Coefficient.y), 0.99)
+})
