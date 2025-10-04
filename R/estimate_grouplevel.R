@@ -335,7 +335,6 @@ estimate_grouplevel.stanreg <- function(model,
 # cor.test(m1$Coefficient, m3$Coefficient)  # r = 1
 # cor.test(m2$Coefficient, m3$Coefficient)  # r = 1
 .grouplevel_marginal <- function(model) {
-
   out <- list()
 
   # Analyze random effect structure
