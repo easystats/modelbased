@@ -50,7 +50,7 @@ The random intercepts are computed using marginal means (see \code{\link[=estima
 and the random slopes using marginal effects (see \code{\link[=estimate_slopes]{estimate_slopes()}}).
 This method does not directly extract the parameters estimated by the model,
 but recomputes them using model predictions. While this is more computationally
-intensive, one of the benefit include interpretability: the random intercepts
+intensive, one of the benefits include interpretability: the random intercepts
 correspond to the "mean" value of the outcome for each group, and the random slopes
 correspond to the direct "effect" of the predictor for each group.
 }}
