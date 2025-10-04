@@ -363,8 +363,8 @@ estimate_grouplevel.stanreg <- function(model,
     out[[g]] <- data.frame(Group = g, Level = intercepts[[g]], Parameter = "(Intercept)",
                            Coefficient = intercepts$Mean, CI_low = intercepts$CI_low, CI_high = intercepts$CI_high)
 
-    if(g %in% names(randomslopes)) {
-      for(s in randomslopes[[g]]) {
+    if (g %in% names(randomslopes)) {
+      for (s in randomslopes[[g]]) {
         slopes <- estimate_slopes(model, by = g, trend = s, include_random = TRUE)
         out[[paste(g, s, sep = "_")]] <- data.frame(
           Group = g,
