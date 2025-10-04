@@ -103,8 +103,8 @@ estimate_grouplevel.default <- function(model,
 
     # Remove columns with only NaNs (as these are probably those of fixed effects)
     random[vapply(random, function(x) all(is.na(x)), TRUE)] <- NULL
-
-  } else if(type == "marginal") {  # EXPERIMENTAL
+  } else if (type == "marginal") {
+    # EXPERIMENTAL
     random <- .grouplevel_marginal(model)
   }
 
