@@ -23,7 +23,7 @@
 #'   - If `"marginal"` (experimental), it returns marginal group-levels estimates.
 #'   The random intercepts are computed using marginal means (see [estimate_means()]),
 #'   and the random slopes using marginal effects (see [estimate_slopes()]).
-#'   This method does not directly extracts the parameters estimated by the model,
+#'   This method does not directly extract the parameters estimated by the model,
 #'   but recomputes them using model predictions. While this is more computationally
 #'   intensive, one of the benefit include interpretability: the random intercepts
 #'   correspond to the "mean" value of the outcome for each group, and the random slopes
