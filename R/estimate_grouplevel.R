@@ -70,9 +70,7 @@ estimate_grouplevel <- function(model, ...) {
 
 #' @rdname estimate_grouplevel
 #' @export
-estimate_grouplevel.default <- function(model,
-                                        type = "random",
-                                        ...) {
+estimate_grouplevel.default <- function(model, type = "random", ...) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total", "marginal"))
 
@@ -123,12 +121,14 @@ estimate_grouplevel.default <- function(model,
 
 #' @rdname estimate_grouplevel
 #' @export
-estimate_grouplevel.brmsfit <- function(model,
-                                        type = "random",
-                                        dispersion = TRUE,
-                                        test = NULL,
-                                        diagnostic = NULL,
-                                        ...) {
+estimate_grouplevel.brmsfit <- function(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -152,7 +152,8 @@ estimate_grouplevel.brmsfit <- function(model,
 
   # match parameters
   if (!is.null(clean_parameters)) {
-    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE]
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
   }
 
   # Re-add info
@@ -179,19 +180,17 @@ estimate_grouplevel.brmsfit <- function(model,
     # Filter out non-random effects
     random <- random[startsWith(random$Parameter, "r_"), ]
     # Remove Group from Level
-    random$Level <- sapply(
-      1:nrow(random),
-      function(i) gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i])
-    )
+    random$Level <- sapply(seq_len(nrow(random)), function(i) {
+      gsub(paste0("^", random$Group[i], "\\."), "", random$Level[i])
+    })
     # Find the group name (what follows "r_" and before the first "[" or "__")
     random$Group <- gsub("^r_(.*?)(\\[.*|__.*)", "\\1", random$Name)
     # Keep Parameter what's in between [ and ]
     random$Parameter <- gsub("^r_.*?\\[(.*?)\\].*", "\\1", random$Name)
     # Remove Level from it
-    random$Parameter <- sapply(
-      1:nrow(random),
-      function(i) gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i])
-    )
+    random$Parameter <- sapply(seq_len(nrow(random)), function(i) {
+      gsub(paste0("^", random$Level[i], "\\,"), "", random$Parameter[i])
+    })
     # remove temporary name column
     random$Name <- NULL
   }
@@ -205,12 +204,14 @@ estimate_grouplevel.brmsfit <- function(model,
 
 
 #' @export
-estimate_grouplevel.stanreg <- function(model,
-                                        type = "random",
-                                        dispersion = TRUE,
-                                        test = NULL,
-                                        diagnostic = NULL,
-                                        ...) {
+estimate_grouplevel.stanreg <- function(
+  model,
+  type = "random",
+  dispersion = TRUE,
+  test = NULL,
+  diagnostic = NULL,
+  ...
+) {
   # validate argument
   type <- insight::validate_argument(type, c("random", "total"))
 
@@ -238,14 +239,10 @@ estimate_grouplevel.stanreg <- function(model,
   ## insight::clean_parameter())
   if (!is.null(clean_parameters)) {
     # fix for rstanarm, which contains a sigma columns
-    clean_parameters <- clean_parameters[
-      clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), ,
-      drop = FALSE # nolint
-    ]
-    clean_parameters <- clean_parameters[
-      clean_parameters$Parameter %in% params$Parameter, ,
-      drop = FALSE
-    ]
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Component != "sigma" & !startsWith(clean_parameters$Parameter, "Sigma["), , drop = FALSE] # nolint
+    # fmt: skip
+    clean_parameters <- clean_parameters[clean_parameters$Parameter %in% params$Parameter, , drop = FALSE] # nolint
 
     params$Parameter <- insight::trim_ws(sub(":.*", "", clean_parameters$Group))
     params$Group <- insight::trim_ws(sub("^[^:]*:", "", clean_parameters$Group))
@@ -318,7 +315,9 @@ estimate_grouplevel.stanreg <- function(model,
       ),
     ]
   } else {
-    random <- random[order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter), ] # nolint
+    random <- random[
+      order(random$Group, datawizard::coerce_to_numeric(random$Level), random$Parameter),
+    ]
   }
   random
 }
