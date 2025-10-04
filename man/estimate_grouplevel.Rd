@@ -30,19 +30,30 @@ reshape_grouplevel(x, ...)
 
 \item{...}{Other arguments passed to \code{\link[parameters:model_parameters]{parameters::model_parameters()}}.}
 
-\item{type}{\code{"random"} or \code{"total"}. If \code{"random"} (default), the
+\item{type}{\code{"random"} or \code{"total"}.
+\itemize{
+\item If \code{"random"} (default), the
 coefficients correspond to the conditional estimates of  the random effects
 (as they are returned by \code{lme4::ranef()}). They typically correspond to the
 deviation of each individual group from their fixed effect (assuming the
 random effect is also included as a fixed effect). As such, a coefficient
 close to 0 means that the participants' effect is the same as the
-population-level effect (in other words, it is "in the norm"). If
-\code{"total"}, it will return the sum of the random effect and its
+population-level effect (in other words, it is "in the norm").
+\item If \code{"total"}, it will return the sum of the random effect and its
 corresponding fixed effects, which internally relies on the \code{coef()} method
 (see \code{?coef.merMod}). Note that \code{type = "total"} yet does not return
 uncertainty indices (such as SE and CI) for models from \emph{lme4} or
 \emph{glmmTMB}, as the necessary information to compute them is not yet
-available. However, for Bayesian models, it is possible to compute them.}
+available. However, for Bayesian models, it is possible to compute them.
+\item If \code{"marginal"} (experimental), it returns marginal group-levels estimates.
+The random intercepts are computed using marginal means (see \code{\link[=estimate_means]{estimate_means()}}),
+and the random slopes using marginal effects (see \code{\link[=estimate_slopes]{estimate_slopes()}}).
+This method does not directly extracts the parameters estimated by the model,
+but recomputes them using model predictions. While this is more computationally
+intensive, one of the benefit include interpretability: the random intercepts
+correspond to the "mean" value of the outcome for each group, and the random slopes
+correspond to the direct "effect" of the predictor for each group.
+}}
 
 \item{dispersion, test, diagnostic}{Arguments passed to
 \code{\link[parameters:model_parameters]{parameters::model_parameters()}} for Bayesian models. By default, it won't
