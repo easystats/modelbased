@@ -185,19 +185,28 @@ test_that("estimate_grouplevel type='marginal'", {
   m3 <- estimate_grouplevel(model, type = "marginal")
   expect_s3_class(m3, "estimate_grouplevel")
   expect_equal(dim(m3), c(6, 6))
-  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+  expect_equal(
+    colnames(m3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
 
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
   m3 <- estimate_grouplevel(model, type = "marginal")
   expect_s3_class(m3, "estimate_grouplevel")
   expect_equal(dim(m3), c(12, 6))
-  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+  expect_equal(
+    colnames(m3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
 
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
   m3 <- estimate_grouplevel(model, type = "marginal")
   expect_s3_class(m3, "estimate_grouplevel")
   expect_equal(dim(m3), c(15, 6))
-  expect_equal(colnames(m3), c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high"))
+  expect_equal(
+    colnames(m3),
+    c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
+  )
 })
 
 test_that("estimate_grouplevel type='marginal' correlations", {
