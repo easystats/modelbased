@@ -352,7 +352,7 @@ estimate_grouplevel.stanreg <- function(model,
     pred <- insight::find_predictors(model, effects = "all", flatten = TRUE)
     s <- s[s %in% pred]
 
-    if(length(s) > 0) randomslopes[[g]] <- s
+    if (length(s) > 0) randomslopes[[g]] <- s
   }
 
   # TODO: check if it fixes are needed for cases where random intercept is suppressed (e.g., (0 + x | g) )
