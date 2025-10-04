@@ -2,6 +2,9 @@
 
 ## Changes
 
+* The `type` argument in `estimate_grouplevel()` gains a `"marginal"` option,
+  to return marginal group-levels estimates.
+
 * Added an `as.data.frame()` method for *modelbased* objects.
 
 * Better formatting of the output for equivalence-tests, when the `equivalence`
