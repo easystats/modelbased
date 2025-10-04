@@ -344,7 +344,7 @@ estimate_grouplevel.stanreg <- function(model,
   # So we need to find it manually by callin ranef()
   randomslopes <- list()
   p <- lme4::ranef(model)
-  for(g in names(p)) {
+  for (g in names(p)) {
     s <- names(p[[g]])[names(p[[g]]) != "(Intercept)"]
 
     # Only pick non-factor random slopes for now
