@@ -182,31 +182,44 @@ test_that("estimate_grouplevel type='marginal'", {
   data(mtcars)
 
   model <- lme4::lmer(mpg ~ hp + (1 | carb), data = mtcars)
-  m3 <- estimate_grouplevel(model, type = "marginal")
-  expect_s3_class(m3, "estimate_grouplevel")
-  expect_equal(dim(m3), c(6, 6))
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_equal(dim(gl3), c(6, 6))
   expect_equal(
-    colnames(m3),
+    colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
   )
+  expect_gt(as.numeric(cor.test(gl1$Coefficient, gl3$Coefficient)$estimate), 0.99)
 
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
-  m3 <- estimate_grouplevel(model, type = "marginal")
-  expect_s3_class(m3, "estimate_grouplevel")
-  expect_equal(dim(m3), c(12, 6))
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_equal(dim(gl3), c(12, 6))
   expect_equal(
-    colnames(m3),
+    colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
   )
+  r <- cor.test(gl1[gl1$Parameter == "(Intercept)", "Coefficient"], gl3[gl3$Parameter == "(Intercept)", "Coefficient"])
+  expect_gt(r$estimate, 0.99)
+  r <- cor.test(gl1[gl1$Parameter == "hp", "Coefficient"], gl3[gl3$Parameter == "hp", "Coefficient"])
+  expect_gt(r$estimate, 0.99)
 
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
-  m3 <- estimate_grouplevel(model, type = "marginal")
-  expect_s3_class(m3, "estimate_grouplevel")
-  expect_equal(dim(m3), c(15, 6))
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_s3_class(gl3, "estimate_grouplevel")
+  expect_equal(dim(gl3), c(15, 6))
   expect_equal(
-    colnames(m3),
+    colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
   )
+  r <- cor.test(gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"], gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"])
+  expect_gt(r$estimate, 0.99)
+  r <- cor.test(gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"], gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"])
+  r <- cor.test(gl1[gl1$Parameter == "hp", "Coefficient"], gl3[gl3$Parameter == "hp", "Coefficient"])
+  expect_gt(r$estimate, 0.99)
 })
 
 test_that("estimate_grouplevel type='marginal' correlations", {
