@@ -317,7 +317,6 @@ estimate_contrasts.default <- function(
   # validate input
   estimate <- .validate_estimate_arg(estimate)
   comparison <- .check_for_inequality_comparison(comparison)
-  
   # Validate es_type usage
   call_args <- match.call()
   if ("es_type" %in% names(call_args)) {
