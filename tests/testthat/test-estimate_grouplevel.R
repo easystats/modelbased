@@ -221,10 +221,19 @@ test_that("estimate_grouplevel type='marginal'", {
     colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
   )
-  r <- cor.test(gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"], gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"])
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"]
+  )
   expect_gt(r$estimate, 0.99)
-  r <- cor.test(gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"], gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"])
-  r <- cor.test(gl1[gl1$Parameter == "hp", "Coefficient"], gl3[gl3$Parameter == "hp", "Coefficient"])
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"]
+  )
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
   expect_gt(r$estimate, 0.99)
 })
 
