@@ -83,6 +83,12 @@ test_that("estimate_contrasts - es_type only with effectsize='boot'", {
     "can only be used when"
   )
   
+  # Should error when es_type is used with effectsize = NULL
+  expect_error(
+    estimate_contrasts(model, es_type = "hedges.g", backend = "emmeans"),
+    "can only be used when"
+  )
+  
   # Should work when es_type is used with effectsize = "boot"
   set.seed(100)
   result <- estimate_contrasts(model, effectsize = "boot", es_type = "hedges.g", backend = "emmeans")

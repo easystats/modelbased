@@ -320,8 +320,12 @@ estimate_contrasts.default <- function(
   
   # Validate es_type usage
   call_args <- match.call()
-  if ("es_type" %in% names(call_args) && !is.null(effectsize) && effectsize != "boot") {
-    insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
+  if ("es_type" %in% names(call_args)) {
+    if (is.null(effectsize)) {
+      insight::format_error("`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`.")
+    } else if (effectsize != "boot") {
+      insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
+    }
   }
 
   if (backend == "emmeans") {
