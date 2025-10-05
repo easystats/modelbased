@@ -240,6 +240,21 @@ test_that("estimate_grouplevel type='marginal'", {
     gl3[gl3$Parameter == "hp", "Coefficient"]
   )
   expect_gt(r$estimate, 0.99)
+
+  # works when grouping variables are factors
+  data(mtcars)
+  mtcars$carb <- as.factor(mtcars$carb)
+  mtcars$gear <- as.factor(mtcars$gear)
+
+  model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+
+  r <- cor.test(
+    gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "carb", "Coefficient"],
+    gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "carb", "Coefficient"]
+  )
+  expect_equal(r$estimate, 0.6626235, tolerance = 1e-4, ignore_attr = TRUE)
 })
 
 test_that("estimate_grouplevel type='marginal' correlations", {
