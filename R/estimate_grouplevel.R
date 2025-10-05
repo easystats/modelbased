@@ -364,7 +364,7 @@ estimate_grouplevel.stanreg <- function(
 
   # Extract coefs
   for (g in randomgroups) {
-    intercepts <- estimate_means(model, by = g, include_random = TRUE)
+    intercepts <- estimate_means(model, by = g, include_random = TRUE, estimate = "average")
     out[[g]] <- data.frame(
       Group = g,
       Level = intercepts[[g]],
