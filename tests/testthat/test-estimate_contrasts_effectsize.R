@@ -69,7 +69,12 @@ test_that("estimate_contrasts - random effects", {
 test_that("estimate_contrasts - es_type only with effectsize='boot'", {
   # Should error when es_type is used with effectsize != "boot"
   expect_error(
-    estimate_contrasts(model, effectsize = "emmeans", es_type = "hedges.g", backend = "emmeans"),
+    estimate_contrasts(
+      model,
+      effectsize = "emmeans",
+      es_type = "hedges.g",
+      backend = "emmeans"
+    ),
     "can only be used when"
   )
   
