@@ -10,54 +10,64 @@ data(iris)
 model <- lm(Sepal.Width ~ Species, data = iris)
 
 test_that("estimate_contrasts - emmeans backend", {
-  expect_snapshot(estimate_contrasts(model, backend = "emmeans"),
+  expect_snapshot(estimate_contrasts(model, backend = "emmeans"), variant = "windows")
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "none", backend = "emmeans"),
     variant = "windows"
   )
-  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "emmeans"),
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans"),
     variant = "windows"
   )
-  expect_snapshot(estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans"),
-    variant = "windows"
-  )
-  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "emmeans"),
-    variant = "windows"
-  )
-  set.seed(100)
-  expect_snapshot(estimate_contrasts(model, effectsize = "boot", backend = "emmeans"),
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "marginal", backend = "emmeans"),
     variant = "windows"
   )
   set.seed(100)
-  expect_snapshot(estimate_contrasts(model,
-    effectsize = "boot",
-    es_type = "akp.robust.d",
-    backend = "emmeans"
-  ), variant = "windows")
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "boot", backend = "emmeans"),
+    variant = "windows"
+  )
   set.seed(100)
-  expect_snapshot(estimate_contrasts(
-    model,
-    effectsize = "boot",
-    es_type = "hedges.g",
-    backend = "emmeans"
-  ), variant = "windows")
+  expect_snapshot(
+    estimate_contrasts(
+      model,
+      effectsize = "boot",
+      es_type = "akp.robust.d",
+      backend = "emmeans"
+    ),
+    variant = "windows"
+  )
+  set.seed(100)
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "boot", es_type = "hedges.g", backend = "emmeans"),
+    variant = "windows"
+  )
 })
 
 test_that("estimate_contrasts - marginaleffects backend", {
   expect_snapshot(estimate_contrasts(model, backend = "marginaleffects"), variant = "windows")
-  expect_snapshot(estimate_contrasts(model, effectsize = "none", backend = "marginaleffects"),
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "none", backend = "marginaleffects"),
     variant = "windows"
   )
   expect_error(
     estimate_contrasts(model, effectsize = "emmeans", backend = "marginaleffects"),
     "only possible with"
   )
-  expect_snapshot(estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"),
+  expect_snapshot(
+    estimate_contrasts(model, effectsize = "marginal", backend = "marginaleffects"),
     variant = "windows"
   )
 })
 
 test_that("estimate_contrasts - random effects", {
   sleepstudy <- lme4::sleepstudy
-  sleepstudy$Days_factor <- cut(sleepstudy$Days, breaks = 3, labels = c("Low", "Medium", "High"))
+  sleepstudy$Days_factor <- cut(
+    sleepstudy$Days,
+    breaks = 3,
+    labels = c("Low", "Medium", "High")
+  )
   model_random_effects <- lme4::lmer(Reaction ~ Days_factor + (1 | Subject), data = sleepstudy)
 
   expect_error(
@@ -77,31 +87,47 @@ test_that("estimate_contrasts - es_type only with effectsize='boot'", {
     ),
     "can only be used when"
   )
+
   expect_error(
-    estimate_contrasts(model, effectsize = "marginal", es_type = "hedges.g", backend = "emmeans"),
+    estimate_contrasts(
+      model,
+      effectsize = "marginal",
+      es_type = "hedges.g",
+      backend = "emmeans"
+    ),
     "can only be used when"
   )
-  
+
   expect_error(
-    estimate_contrasts(model, effectsize = "marginal", es_type = "hedges.g", backend = "marginaleffects"),
+    estimate_contrasts(
+      model,
+      effectsize = "marginal",
+      es_type = "hedges.g",
+      backend = "marginaleffects"
+    ),
     "can only be used when"
   )
-  
+
   # Should error when es_type is used with effectsize = NULL
   expect_error(
     estimate_contrasts(model, es_type = "hedges.g", backend = "emmeans"),
     "can only be used when"
   )
-  
+
   # Should work when es_type is used with effectsize = "boot"
   set.seed(100)
-  result <- estimate_contrasts(model, effectsize = "boot", es_type = "hedges.g", backend = "emmeans")
+  result <- estimate_contrasts(
+    model,
+    effectsize = "boot",
+    es_type = "hedges.g",
+    backend = "emmeans"
+  )
   expect_s3_class(result, "estimate_contrasts")
-  
+
   # Should work when es_type is NOT specified (using default)
   result_emmeans <- estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans")
   expect_s3_class(result_emmeans, "estimate_contrasts")
-  
+
   result_marginal <- estimate_contrasts(model, effectsize = "marginal", backend = "emmeans")
   expect_s3_class(result_marginal, "estimate_contrasts")
 })

@@ -321,7 +321,9 @@ estimate_contrasts.default <- function(
   call_args <- match.call()
   if ("es_type" %in% names(call_args)) {
     if (is.null(effectsize)) {
-      insight::format_error("`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`.")
+      insight::format_error(
+        "`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`."
+      )
     } else if (effectsize != "boot") {
       insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
     }
