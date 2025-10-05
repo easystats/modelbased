@@ -65,3 +65,33 @@ test_that("estimate_contrasts - random effects", {
     "We strongly recommend not using"
   )
 })
+
+test_that("estimate_contrasts - es_type only with effectsize='boot'", {
+  # Should error when es_type is used with effectsize != "boot"
+  expect_error(
+    estimate_contrasts(model, effectsize = "emmeans", es_type = "hedges.g", backend = "emmeans"),
+    "can only be used when"
+  )
+  
+  expect_error(
+    estimate_contrasts(model, effectsize = "marginal", es_type = "hedges.g", backend = "emmeans"),
+    "can only be used when"
+  )
+  
+  expect_error(
+    estimate_contrasts(model, effectsize = "marginal", es_type = "hedges.g", backend = "marginaleffects"),
+    "can only be used when"
+  )
+  
+  # Should work when es_type is used with effectsize = "boot"
+  set.seed(100)
+  result <- estimate_contrasts(model, effectsize = "boot", es_type = "hedges.g", backend = "emmeans")
+  expect_s3_class(result, "estimate_contrasts")
+  
+  # Should work when es_type is NOT specified (using default)
+  result_emmeans <- estimate_contrasts(model, effectsize = "emmeans", backend = "emmeans")
+  expect_s3_class(result_emmeans, "estimate_contrasts")
+  
+  result_marginal <- estimate_contrasts(model, effectsize = "marginal", backend = "emmeans")
+  expect_s3_class(result_marginal, "estimate_contrasts")
+})
