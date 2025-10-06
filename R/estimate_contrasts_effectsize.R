@@ -12,6 +12,10 @@
     insight::format_error("`effectsize = \"emmeans\"` only possible with `backend = \"emmeans\"`")
   }
 
+  if (!is.null(bootES_type) && effectsize != "boot") {
+    insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
+  }
+
   # Check if the model includes any random effects. Effect size calculations in
   # the current implementation are not designed for, or may not be appropriate
   # for, models with random effects. Random effects complicate the calculation
@@ -58,6 +62,10 @@
       contrasts_results <- cbind(contrasts_results, marginal_d = d_adj)
     },
     boot = {
+      # set default
+      if (is.null(bootES_type)) {
+        bootES_type <- "cohens.d"
+      }
       insight::check_if_installed("bootES")
       dat <- insight::get_data(model)
       resp <- insight::find_response(model)

@@ -71,8 +71,9 @@
 #' size will be computed.
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
-#' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See`
-#' effect.type` argument of [bootES::bootES] for details.
+#' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
+#' argument of [`bootES::bootES()`] for details. If not specified, defaults to
+#' `"cohens.d"`.
 #' @param iterations The number of bootstrap resamples to perform.
 #' @inheritParams estimate_means
 #'
@@ -301,7 +302,7 @@ estimate_contrasts.default <- function(
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
-  es_type = "cohens.d",
+  es_type = NULL,
   backend = NULL,
   verbose = TRUE,
   ...
@@ -318,15 +319,10 @@ estimate_contrasts.default <- function(
   estimate <- .validate_estimate_arg(estimate)
   comparison <- .check_for_inequality_comparison(comparison)
   # Validate es_type usage
-  call_args <- match.call()
-  if ("es_type" %in% names(call_args)) {
-    if (is.null(effectsize)) {
-      insight::format_error(
-        "`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`."
-      )
-    } else if (effectsize != "boot") {
-      insight::format_error("`es_type` can only be used when `effectsize = \"boot\"`.")
-    }
+  if (is.null(effectsize) && !is.null(es_type)) {
+    insight::format_error(
+      "`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`."
+    )
   }
 
   if (backend == "emmeans") {
