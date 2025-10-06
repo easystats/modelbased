@@ -361,8 +361,6 @@ estimate_grouplevel.stanreg <- function(
     }
   }
 
-  # TODO: check if it fixes are needed for cases where random intercept is suppressed (e.g., (0 + x | g) )
-
   # Extract coefs
   for (g in randomgroups) {
     intercepts <- estimate_means(model, by = g, include_random = TRUE, estimate = "average")

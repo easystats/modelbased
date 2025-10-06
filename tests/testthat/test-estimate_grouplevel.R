@@ -199,6 +199,7 @@ test_that("estimate_grouplevel type='marginal'", {
     ignore_attr = TRUE
   )
 
+  # include random slope
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb), data = mtcars)
   gl1 <- estimate_grouplevel(model, type = "random")
   gl3 <- estimate_grouplevel(model, type = "marginal")
@@ -219,6 +220,7 @@ test_that("estimate_grouplevel type='marginal'", {
   )
   expect_gt(r$estimate, 0.99)
 
+  # check with cross classified design
   model <- lme4::lmer(mpg ~ hp + (1 + hp | carb) + (1 | gear), data = mtcars)
   gl1 <- estimate_grouplevel(model, type = "random")
   gl3 <- estimate_grouplevel(model, type = "marginal")
@@ -237,6 +239,17 @@ test_that("estimate_grouplevel type='marginal'", {
     gl1[gl1$Parameter == "(Intercept)" & gl1$Group == "gear", "Coefficient"],
     gl3[gl3$Parameter == "(Intercept)" & gl3$Group == "gear", "Coefficient"]
   )
+  r <- cor.test(
+    gl1[gl1$Parameter == "hp", "Coefficient"],
+    gl3[gl3$Parameter == "hp", "Coefficient"]
+  )
+  expect_gt(r$estimate, 0.99)
+
+  # check with suppressed intercept
+  model <- lme4::lmer(mpg ~ hp + (0 + hp | carb), data = mtcars)
+  gl1 <- estimate_grouplevel(model, type = "random")
+  gl3 <- estimate_grouplevel(model, type = "marginal")
+  expect_identical(dim(gl3), c(12L, 6L))
   r <- cor.test(
     gl1[gl1$Parameter == "hp", "Coefficient"],
     gl3[gl3$Parameter == "hp", "Coefficient"]
