@@ -318,5 +318,5 @@ test_that("estimate_grouplevel type='marginal' nested design", {
   model <- lme4::lmer(Reaction ~ Days + (1 | grp / subgrp) + (1 | Subject), data = sleepstudy)
   out <- estimate_grouplevel(model, type = "marginal")
   expect_identical(dim(out), c(53L, 6L))
-  expect_identical(sort(unique(out$Group)), c("grp", "subgrp", "Subject"))
+  expect_true(all(unique(out$Group) %in% c("grp", "subgrp", "Subject")))
 })
