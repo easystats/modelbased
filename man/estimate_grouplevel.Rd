@@ -54,7 +54,9 @@ estimated by the model, but recomputes them using model predictions. While
 this is more computationally intensive, one of the benefits include
 interpretability: the random intercepts correspond to the "mean" value of
 the outcome for each group, and the random slopes correspond to the direct
-"effect" of the predictor for each group.
+average "effect" of the predictor for each random group. Note that in this
+case, the group-level estimates are not technically "intercepts" or model
+parameters, but marginal average levels and effects.
 }}
 
 \item{dispersion, test, diagnostic}{Arguments passed to
