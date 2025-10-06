@@ -306,7 +306,7 @@
 #'
 #' The output from `equivalence_test()` returns a column `SGPV`, the "second
 #' generation p-value", which is equivalent to the `p (Equivalence)` column when
-#' using the `equivalence` argument. It is basically representiv the ROPE coverage
+#' using the `equivalence` argument. It is basically representative of the ROPE coverage
 #' from the confidence interval of the estimate (i.e. the proportion of the
 #' confidence intervals that lies within the region of practical equivalence).
 #'
@@ -414,16 +414,18 @@
 #' estimate_means(model, by = "Sepal.Width", length = 3)
 #' }
 #' @export
-estimate_means <- function(model,
-                           by = "auto",
-                           predict = NULL,
-                           ci = 0.95,
-                           estimate = NULL,
-                           transform = NULL,
-                           keep_iterations = FALSE,
-                           backend = NULL,
-                           verbose = TRUE,
-                           ...) {
+estimate_means <- function(
+  model,
+  by = "auto",
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  keep_iterations = FALSE,
+  backend = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -469,12 +471,16 @@ estimate_means <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(means, "table_title") <- c(switch(estimate,
-    specific = "Model-based Predictions",
-    typical = "Estimated Marginal Means",
-    average = "Average Predictions",
-    population = "Average Counterfactual Predictions"
-  ), "blue")
+  attr(means, "table_title") <- c(
+    switch(
+      estimate,
+      specific = "Model-based Predictions",
+      typical = "Estimated Marginal Means",
+      average = "Average Predictions",
+      population = "Average Counterfactual Predictions"
+    ),
+    "blue"
+  )
 
   attr(means, "table_footer") <- .table_footer(
     means,
