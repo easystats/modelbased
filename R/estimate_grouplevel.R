@@ -342,24 +342,21 @@ estimate_grouplevel.stanreg <- function(
 
   # Analyze random effect structure
   randomgroups <- insight::find_random(model)$random
-
-  # formulas for random effects
-  f_random <- insight::find_formula(model)$random
+  # randomslopes <- insight::find_random_slopes(model)
+  # TODO: currently insight::find_random_slopes() doesn't tell us to which random factor does the slope belong to
+  # So we need to find it manually by callin ranef()
   randomslopes <- list()
-  # iterate random effects
-  for (s in f_random) {
-    # extract slope and group
-    p_slope <- gsub("(.*)\\|(.*)", "\\1", insight::safe_deparse(s))
-    p_group <- gsub("(.*)\\|(.*)", "\\2", insight::safe_deparse(s))
-    # clean
-    re <- all.vars(s)
-    # extract slopes
-    slopes <- insight::trim_ws(re[sapply(re, grepl, p_slope, fixed = TRUE)])
-    # if slopes exist, add them to list
-    if (length(slopes) > 0) {
-      # make sure we use related group name as element name
-      gr <- insight::trim_ws(re[sapply(re, grepl, p_group, fixed = TRUE)])
-      randomslopes[[gr]] <- slopes
+  p <- lme4::ranef(model)
+  for (g in names(p)) {
+    s <- names(p[[g]])[names(p[[g]]) != "(Intercept)"]
+
+    # Only pick non-factor random slopes for now
+    # TODO: correctly deal with the case when the random slope is a factor
+    pred <- insight::find_predictors(model, effects = "all", flatten = TRUE)
+    s <- s[s %in% pred]
+
+    if (length(s) > 0) {
+      randomslopes[[g]] <- s
     }
   }
 
