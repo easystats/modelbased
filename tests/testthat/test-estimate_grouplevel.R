@@ -176,6 +176,8 @@ withr::with_environment(
   })
 )
 
+skip_if_not_installed("marginaleffects")
+
 test_that("estimate_grouplevel type='marginal'", {
   skip_on_cran()
   skip_if_not_installed("lme4")
@@ -201,7 +203,7 @@ test_that("estimate_grouplevel type='marginal'", {
   gl1 <- estimate_grouplevel(model, type = "random")
   gl3 <- estimate_grouplevel(model, type = "marginal")
   expect_s3_class(gl3, "estimate_grouplevel")
-  expect_equal(dim(gl3), c(12, 6))
+  expect_identical(dim(gl3), c(12L, 6L))
   expect_equal(
     colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
@@ -221,7 +223,7 @@ test_that("estimate_grouplevel type='marginal'", {
   gl1 <- estimate_grouplevel(model, type = "random")
   gl3 <- estimate_grouplevel(model, type = "marginal")
   expect_s3_class(gl3, "estimate_grouplevel")
-  expect_equal(dim(gl3), c(15, 6))
+  expect_identical(dim(gl3), c(15L, 6L))
   expect_equal(
     colnames(gl3),
     c("Group", "Level", "Parameter", "Coefficient", "CI_low", "CI_high")
@@ -287,4 +289,25 @@ test_that("estimate_grouplevel type='marginal' correlations", {
   m3_hp$Level <- as.character(m3_hp$Level)
   merged_hp <- merge(m2_hp, m3_hp, by = c("Group", "Level"))
   expect_gt(cor(merged_hp$Coefficient.x, merged_hp$Coefficient.y), 0.99)
+})
+
+test_that("estimate_grouplevel type='marginal' nested design", {
+  skip_on_cran()
+  skip_if_not_installed("lme4")
+  data(sleepstudy, package = "lme4")
+  set.seed(12345)
+  sleepstudy$grp <- sample(1:5, size = 180, replace = TRUE)
+  sleepstudy$subgrp <- NA
+  for (i in 1:5) {
+    filter_group <- sleepstudy$grp == i
+    sleepstudy$subgrp[filter_group] <-
+      sample(1:30, size = sum(filter_group), replace = TRUE)
+  }
+  model <- lme4::lmer(
+    Reaction ~ Days + (1 | grp / subgrp) + (1  | Subject),
+    data = sleepstudy
+  )
+  out <- estimate_grouplevel(model, type = "marginal")
+  expect_identical(dim(out), c(53L, 6L))
+  expect_identical(unique(out$Group), c("grp", "subgrp", "Subject"))
 })

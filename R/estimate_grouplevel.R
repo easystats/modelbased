@@ -341,7 +341,7 @@ estimate_grouplevel.stanreg <- function(
   out <- list()
 
   # Analyze random effect structure
-  randomgroups <- insight::find_random(model)$random
+  randomgroups <- insight::find_random(model, split_nested = TRUE)$random
   # randomslopes <- insight::find_random_slopes(model)
   # TODO: currently insight::find_random_slopes() doesn't tell us to which random factor does the slope belong to
   # So we need to find it manually by callin ranef()
