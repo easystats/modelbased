@@ -11,7 +11,10 @@
   argument was used. Related docs were added. It is also possible to use
   `parameters::equivalence_test()` on *modelbased* objects.
 
-* Functions calls are now saved as `call` attribute in *modelbased* objects.
+* Function calls are now saved as `call` attribute in *modelbased* objects.
+
+* More informative warnings and error messages were added to `estimate_contrasts()`
+  when computing effect sizes.
 
 # modelbased 0.13.0
 
