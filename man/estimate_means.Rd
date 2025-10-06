@@ -351,10 +351,9 @@ p-values returned when using the \code{equivalence} argument.
 
 The output from \code{equivalence_test()} returns a column \code{SGPV}, the "second
 generation p-value", which is equivalent to the \code{p (Equivalence)} column when
-using the \code{equivalence} argument. It is basically representative the ROPE
-coverage from the confidence interval of the estimate (i.e. the proportion of
-the confidence intervals that lies within the region of practical
-equivalence).
+using the \code{equivalence} argument. It is basically representative of the ROPE coverage
+from the confidence interval of the estimate (i.e. the proportion of the
+confidence intervals that lies within the region of practical equivalence).
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{

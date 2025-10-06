@@ -20,7 +20,7 @@ estimate_contrasts(model, ...)
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
-  es_type = "cohens.d",
+  es_type = NULL,
   backend = NULL,
   verbose = TRUE,
   ...
@@ -244,7 +244,9 @@ size will be computed.}
 
 \item{es_type}{Specifies the type of effect-size measure to estimate when
 using \code{effectsize = "boot"}. One of \code{"unstandardized"}, \code{"cohens.d"},
-\code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See\code{ effect.type} argument of \link[bootES:bootES]{bootES::bootES} for details.}
+\code{"hedges.g"}, \code{"cohens.d.sigma"}, \code{"r"}, or \code{"akp.robust.d"}. See \code{effect.type}
+argument of \code{\link[bootES:bootES]{bootES::bootES()}} for details. If not specified, defaults to
+\code{"cohens.d"}.}
 
 \item{backend}{Whether to use \code{"marginaleffects"} (default) or \code{"emmeans"} as
 a backend. Results are usually very similar. The major difference will be
