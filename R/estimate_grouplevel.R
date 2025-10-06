@@ -340,6 +340,9 @@ estimate_grouplevel.stanreg <- function(
 
   out <- list()
 
+  # TODO: currently only takes random effects for main component into account
+  # we could also look for random effects in zero-inflated, dispersion, etc.
+
   # Analyze random effect structure
   randomgroups <- insight::find_random(model, split_nested = TRUE)$random
   # extract random slopes and their related grouping variable
