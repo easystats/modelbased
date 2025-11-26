@@ -117,7 +117,7 @@ visualisation_recipe(
 
   A character string specifying the theme to use for the plot. Defaults
   to `"tufte"`. For other options please see
-  [`tinyplot::tinytheme()`](https://rdrr.io/pkg/tinyplot/man/tinytheme.html).
+  [`tinyplot::tinytheme()`](https://grantmcdermott.com/tinyplot/man/tinytheme.html).
   Use `NULL` if no theme should be applied.
 
 - show_residuals:
@@ -178,7 +178,7 @@ defaults using [`options()`](https://rdrr.io/r/base/options.html):
 - `modelbased_tinyplot_dodge`:
   `options(modelbased_tinyplot_dodge = <number>)` will set a default
   value for the `dodge` argument (spacing between geoms) when using
-  [`tinyplot::plt()`](https://rdrr.io/pkg/tinyplot/man/tinyplot.html).
+  [`tinyplot::plt()`](https://grantmcdermott.com/tinyplot/man/tinyplot.html).
   Should be a number between `0` and `1`.
 
 ## Examples
