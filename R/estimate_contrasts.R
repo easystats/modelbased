@@ -71,8 +71,9 @@
 #' size will be computed.
 #' @param es_type Specifies the type of effect-size measure to estimate when
 #' using `effectsize = "boot"`. One of `"unstandardized"`, `"cohens.d"`,
-#' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See`
-#' effect.type` argument of [bootES::bootES] for details.
+#' `"hedges.g"`, `"cohens.d.sigma"`, `"r"`, or `"akp.robust.d"`. See `effect.type`
+#' argument of [`bootES::bootES()`] for details. If not specified, defaults to
+#' `"cohens.d"`.
 #' @param iterations The number of bootstrap resamples to perform.
 #' @inheritParams estimate_means
 #'
@@ -301,7 +302,7 @@ estimate_contrasts.default <- function(
   keep_iterations = FALSE,
   effectsize = NULL,
   iterations = 200,
-  es_type = "cohens.d",
+  es_type = NULL,
   backend = NULL,
   verbose = TRUE,
   ...
@@ -317,6 +318,12 @@ estimate_contrasts.default <- function(
   # validate input
   estimate <- .validate_estimate_arg(estimate)
   comparison <- .check_for_inequality_comparison(comparison)
+  # Validate es_type usage
+  if (is.null(effectsize) && !is.null(es_type)) {
+    insight::format_error(
+      "`es_type` can only be used when `effectsize` is specified. Currently `effectsize = NULL`."
+    )
+  }
 
   if (backend == "emmeans") {
     # Emmeans ----------------------------------------------------------------
@@ -412,6 +419,11 @@ estimate_contrasts.default <- function(
   attr(out, "ci") <- ci
   attr(out, "p_adjust") <- p_adjust
   attr(out, "backend") <- backend
+
+  # we want to store the generic, not the ".default" method, in the call
+  cl <- match.call()
+  cl[[1L]] <- quote(estimate_contrasts)
+  attr(out, "call") <- cl
 
   # add attributes from workhorse function
   attributes(out) <- utils::modifyList(attributes(out), info[.info_elements()])

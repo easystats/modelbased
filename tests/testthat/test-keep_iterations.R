@@ -10,15 +10,17 @@ test_that("estimate_means() - posterior draws", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_means(m, by = "wt", keep_iterations = 5)
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
       "model_info", "keep_iterations", "joint_test", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "table_footer", "model", "response", "ci", "backend", "coef_name", "call"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -33,15 +35,17 @@ test_that("estimate_means() - posterior draws", {
   expect_identical(dim(out), c(10L, 4009L))
 
   out <- estimate_means(m, by = "wt")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "at", "by", "focal_terms", "adjusted_for",
       "predict", "estimate", "transform", "datagrid", "preserve_range",
       "model_info", "keep_iterations", "joint_test", "table_title",
-      "table_footer", "model", "response", "ci", "backend", "coef_name"
+      "table_footer", "model", "response", "ci", "backend", "coef_name", "call"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -57,16 +61,18 @@ test_that("estimate_contrasts() - posterior draws", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_contrasts(m, "wt=c(3,4,5)", keep_iterations = 5)
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
       "keep_iterations", "joint_test"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -81,16 +87,18 @@ test_that("estimate_contrasts() - posterior draws", {
   expect_identical(dim(out), c(3L, 4010L))
 
   out <- estimate_contrasts(m, "wt=c(3,4,5)")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "row.names", "class", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "focal_terms",
+      "model", "response", "ci", "p_adjust", "backend", "call", "focal_terms",
       "adjusted_for", "predict", "comparison", "contrast", "estimate",
       "transform", "datagrid", "preserve_range", "coef_name", "model_info",
       "keep_iterations", "joint_test"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -106,14 +114,16 @@ test_that("estimate_slopes() - posterior draws", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_slopes(m, "wt", keep_iterations = 5)
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "trend", "p_adjust", "transform",
       "coef_name", "slope", "ci", "model_info", "keep_iterations",
-      "table_title", "table_footer", "model", "response"
+      "table_title", "table_footer", "model", "response", "call"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -125,14 +135,16 @@ test_that("estimate_slopes() - posterior draws", {
   expect_identical(dim(out), c(1L, 13L))
 
   out <- estimate_slopes(m, "wt")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "trend", "p_adjust", "transform",
       "coef_name", "slope", "ci", "model_info", "keep_iterations",
-      "table_title", "table_footer", "model", "response"
+      "table_title", "table_footer", "model", "response", "call"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -148,14 +160,16 @@ test_that("estimate_means() - posterior draws, emmeans", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_means(m, by = "wt", keep_iterations = 5, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "at", "by",
+      "model", "response", "ci", "backend", "coef_name", "call", "at", "by",
       "focal_terms", "predict", "transform", "keep_iterations"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -166,11 +180,12 @@ test_that("estimate_means() - posterior draws, emmeans", {
   expect_identical(dim(out), c(10L, 10L))
 
   out <- estimate_means(m, by = "wt", keep_iterations = TRUE, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "backend", "coef_name", "at", "by",
+      "model", "response", "ci", "backend", "coef_name", "call", "at", "by",
       "focal_terms", "predict", "transform", "keep_iterations"
     )
   )
@@ -182,15 +197,17 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_contrasts(m, by = "wt=c(3,4,5)", keep_iterations = 5, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "at", "by",
+      "model", "response", "ci", "p_adjust", "backend", "call", "at", "by",
       "predict", "comparison", "contrast", "transform", "keep_iterations",
       "joint_test"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -201,11 +218,12 @@ test_that("estimate_contrasts() - posterior draws, emmeans", {
   expect_identical(dim(out), c(3L, 12L))
 
   out <- estimate_contrasts(m, by = "wt=c(3,4,5)", keep_iterations = TRUE, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "p_adjust", "backend", "at", "by",
+      "model", "response", "ci", "p_adjust", "backend", "call", "at", "by",
       "predict", "comparison", "contrast", "transform", "keep_iterations",
       "joint_test"
     )
@@ -218,14 +236,16 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_slopes(m, "wt", keep_iterations = 5, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "trend", "transform", "coef_name",
+      "model", "response", "ci", "call", "trend", "transform", "coef_name",
       "keep_iterations"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(
@@ -236,11 +256,12 @@ test_that("estimate_slopes() - posterior draws, emmeans", {
   expect_identical(dim(out), c(1L, 10L))
 
   out <- estimate_slopes(m, "wt", keep_iterations = TRUE, backend = "emmeans")
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
       "names", "class", "row.names", "table_title", "table_footer",
-      "model", "response", "ci", "trend", "transform", "coef_name",
+      "model", "response", "ci", "call", "trend", "transform", "coef_name",
       "keep_iterations"
     )
   )
@@ -252,6 +273,7 @@ test_that("estimate_slopes() - posterior draws, get_predicted", {
   m <- insight::download_model("brms_1")
   skip_if(is.null(m))
   out <- estimate_relation(m, by = "wt", keep_iterations = 5)
+  # fmt: skip
   expect_named(
     attributes(out),
     c(
@@ -261,6 +283,7 @@ test_that("estimate_slopes() - posterior draws, get_predicted", {
       "adjusted_for", "at_specs", "at", "by", "reference", "data"
     )
   )
+  # fmt: skip
   expect_named(
     out,
     c(

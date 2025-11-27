@@ -319,7 +319,41 @@ averaging across random effects groups is then more accurate.
 For finite mixture models (currently, only the \code{\link[brms:mixture]{brms::mixture()}} family
 from package \emph{brms} is supported), use \code{predict = "link"} to return predicted
 values stratified by class membership. To predict the class membership, use
-\code{\link[=estimate_link]{estimate_link()}}.
+\code{predict = "classification"}. See also
+\href{https://easystats.github.io/modelbased/articles/practical_growthmixture.html}{this vignette}.
+}
+
+\section{Equivalence tests (smallest effect size of interest)}{
+
+
+There are two ways of performing equivalence tests with \strong{modelbased}.
+\itemize{
+\item Using the \emph{marginaleffects} machinery
+
+The first is by specifying the \code{equivalence} argument. It takes a numeric
+vector of length two, defining the lower and upper bounds of the region of
+equivalence (ROPE). The output then includes an additional column
+\code{p_Equivalence}. A high p-value (non-significant result) means we reject the
+assumption of practical equivalence (and that a minimal important difference
+can be assumed, or that the estimate of the predicted value, slope or
+contrast is likely outside the ROPE).
+\item Using the \code{equivalence_test()} function
+
+The second option is to use the \code{\link[parameters:equivalence_test.lm]{parameters::equivalence_test.lm()}}
+function from the \strong{parameters} package on the output of
+\code{estimate_means()}, \code{estimate_slopes()} or \code{estimate_contrasts()}. This
+method is more flexible and implements different "rules" to calculate
+practical equivalence. Furthermore, the rule decisions of accepting,
+rejecting, or undecided regarding the null hypothesis of the equivalence
+test are also provided. Thus, resulting p-values may differ from those
+p-values returned when using the \code{equivalence} argument.
+}
+
+The output from \code{equivalence_test()} returns a column \code{SGPV}, the "second
+generation p-value", which is equivalent to the \code{p (Equivalence)} column when
+using the \code{equivalence} argument. It is basically representative of the ROPE coverage
+from the confidence interval of the estimate (i.e. the proportion of the
+confidence intervals that lies within the region of practical equivalence).
 }
 
 \section{Global Options to Customize Estimation of Marginal Means}{
@@ -333,9 +367,9 @@ used by default to calculate marginal means. Can be \code{"marginaleffects"} or
 set a default value for the \code{estimate} argument.
 \item \code{modelbased_integer}: \verb{options(modelbased_integer = <value>)} will set the
 minimum number of unique values in an integer predictor to treat that
-predictor as a "discrete integer" or as continuous. If the integer has more than
-\code{modelbased_integer} unique values, it is treated as continuous. Set to \code{TRUE}
-to always treat integer predictors as continuous.
+predictor as a "discrete integer" or as continuous. If the integer has more
+than \code{modelbased_integer} unique values, it is treated as continuous. Set
+to \code{TRUE} to always treat integer predictors as continuous.
 }
 }
 
@@ -375,6 +409,10 @@ estimate_means(
   model,
   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 )
+
+# equivalence test: the null-hypothesis is that the estimate is outside
+# the equivalence bounds [-4.5, 4.5]
+estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
 
 # Methods that can be applied to it:
 means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))

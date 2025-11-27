@@ -143,7 +143,7 @@ format.marginaleffects_means <- function(x, model, ci = 0.95, ...) {
   is_contrast_analysis <- !is.null(comparison)
 
   # define all columns that should be removed
-  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal)
+  remove_columns <- c("s.value", "S", "CI", "rowid_dedup", non_focal, equivalence_columns)
 
   # do we have contrasts? For contrasts, we want to keep p-values
   if (.is_inequality_comparison(comparison)) {
@@ -190,7 +190,7 @@ format.marginaleffects_slopes <- function(x, model, ci = 0.95, ...) {
   }
   model_data <- insight::get_data(model, verbose = FALSE)
   # define all columns that should be removed
-  remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup")
+  remove_columns <- c("Predicted", "s.value", "S", "CI", "rowid_dedup", equivalence_columns)
   # for contrasting slope, we need to keep the "Parameter" column
   # however, for estimating trends/slope, the "Parameter" column is usually
   # redundant. Since we cannot check for class-attributes, we simply check if
@@ -541,6 +541,13 @@ format.marginaleffects_contrasts <- function(
 }
 
 
+# fmt: skip
+equivalence_columns <- c(
+  "statistic.noninf", "statistic.nonsup", "p.value.noninf", "p.value.nonsup",
+  "p_Nonsuperiority", "p_Noninferiority"
+)
+
+
 # This function renames columns to have a consistent naming scheme,
 # and relocates columns to get a standardized column order across all
 # outputs from {marginaleffects}
@@ -591,12 +598,13 @@ format.marginaleffects_contrasts <- function(
   # add back ci? these are missing when contrasts are computed
   params <- .add_contrasts_ci(is_contrast_analysis, params)
 
+  # fmt: skip
   # relocate columns - this is the standardized column order for all outputs
   relocate_columns <- intersect(
     unique(c(
       coefficient_name, "Coefficient", "Slope", "Predicted", "Median", "Mean",
       "MAP", "SE", "CI_low", "CI_high", "Statistic", "df", "df_error", "pd",
-      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p"
+      "ps", "ROPE_low", "ROPE_high", "ROPE_Percentage", "p", "p_Equivalence"
     )),
     colnames(params)
   )

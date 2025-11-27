@@ -276,7 +276,39 @@
 #' For finite mixture models (currently, only the [`brms::mixture()`] family
 #' from package *brms* is supported), use `predict = "link"` to return predicted
 #' values stratified by class membership. To predict the class membership, use
-#' [`estimate_link()`].
+#' `predict = "classification"`. See also
+#' [this vignette](https://easystats.github.io/modelbased/articles/practical_growthmixture.html).
+#'
+#' @section Equivalence tests (smallest effect size of interest):
+#'
+#' There are two ways of performing equivalence tests with **modelbased**.
+#'
+#' - Using the *marginaleffects* machinery
+#'
+#'   The first is by specifying the `equivalence` argument. It takes a numeric
+#'   vector of length two, defining the lower and upper bounds of the region of
+#'   equivalence (ROPE). The output then includes an additional column
+#'   `p_Equivalence`. A high p-value (non-significant result) means we reject the
+#'   assumption of practical equivalence (and that a minimal important difference
+#'   can be assumed, or that the estimate of the predicted value, slope or
+#'   contrast is likely outside the ROPE).
+#'
+#' - Using the `equivalence_test()` function
+#'
+#'   The second option is to use the [`parameters::equivalence_test.lm()`]
+#'   function from the **parameters** package on the output of
+#'   `estimate_means()`, `estimate_slopes()` or `estimate_contrasts()`. This
+#'   method is more flexible and implements different "rules" to calculate
+#'   practical equivalence. Furthermore, the rule decisions of accepting,
+#'   rejecting, or undecided regarding the null hypothesis of the equivalence
+#'   test are also provided. Thus, resulting p-values may differ from those
+#'   p-values returned when using the `equivalence` argument.
+#'
+#' The output from `equivalence_test()` returns a column `SGPV`, the "second
+#' generation p-value", which is equivalent to the `p (Equivalence)` column when
+#' using the `equivalence` argument. It is basically representative of the ROPE coverage
+#' from the confidence interval of the estimate (i.e. the proportion of the
+#' confidence intervals that lies within the region of practical equivalence).
 #'
 #' @section Global Options to Customize Estimation of Marginal Means:
 #'
@@ -290,9 +322,9 @@
 #'
 #' - `modelbased_integer`: `options(modelbased_integer = <value>)` will set the
 #'   minimum number of unique values in an integer predictor to treat that
-#'   predictor as a "discrete integer" or as continuous. If the integer has more than
-#'   `modelbased_integer` unique values, it is treated as continuous. Set to `TRUE`
-#'   to always treat integer predictors as continuous.
+#'   predictor as a "discrete integer" or as continuous. If the integer has more
+#'   than `modelbased_integer` unique values, it is treated as continuous. Set
+#'   to `TRUE` to always treat integer predictors as continuous.
 #'
 #' @return A data frame of estimated marginal means.
 #'
@@ -345,6 +377,10 @@
 #'   by = list(Sepal.Width = c(2, 4), Species = c("versicolor", "setosa"))
 #' )
 #'
+#' # equivalence test: the null-hypothesis is that the estimate is outside
+#' # the equivalence bounds [-4.5, 4.5]
+#' estimate_means(model, by = "Species", equivalence = c(-4.5, 4.5))
+#'
 #' # Methods that can be applied to it:
 #' means <- estimate_means(model, by = c("Species", "Sepal.Width = 0"))
 #'
@@ -378,16 +414,18 @@
 #' estimate_means(model, by = "Sepal.Width", length = 3)
 #' }
 #' @export
-estimate_means <- function(model,
-                           by = "auto",
-                           predict = NULL,
-                           ci = 0.95,
-                           estimate = NULL,
-                           transform = NULL,
-                           keep_iterations = FALSE,
-                           backend = NULL,
-                           verbose = TRUE,
-                           ...) {
+estimate_means <- function(
+  model,
+  by = "auto",
+  predict = NULL,
+  ci = 0.95,
+  estimate = NULL,
+  transform = NULL,
+  keep_iterations = FALSE,
+  backend = NULL,
+  verbose = TRUE,
+  ...
+) {
   # Process argument ---------------------------------------------------------
   # --------------------------------------------------------------------------
 
@@ -433,12 +471,16 @@ estimate_means <- function(model,
   info <- attributes(estimated)
 
   # Table formatting
-  attr(means, "table_title") <- c(switch(estimate,
-    specific = "Model-based Predictions",
-    typical = "Estimated Marginal Means",
-    average = "Average Predictions",
-    population = "Average Counterfactual Predictions"
-  ), "blue")
+  attr(means, "table_title") <- c(
+    switch(
+      estimate,
+      specific = "Model-based Predictions",
+      typical = "Estimated Marginal Means",
+      average = "Average Predictions",
+      population = "Average Counterfactual Predictions"
+    ),
+    "blue"
+  )
 
   attr(means, "table_footer") <- .table_footer(
     means,
@@ -454,6 +496,7 @@ estimate_means <- function(model,
   attr(means, "ci") <- ci
   attr(means, "backend") <- backend
   attr(means, "coef_name") <- intersect(.valid_coefficient_names(model), colnames(means))
+  attr(means, "call") <- match.call()
 
   # add attributes from workhorse function
   attributes(means) <- utils::modifyList(attributes(means), info[.info_elements()])

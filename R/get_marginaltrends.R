@@ -178,7 +178,8 @@ get_marginaltrends <- function(
         ci = ci,
         transform = !is.null(transform),
         keep_iterations = keep_iterations,
-        vcov = vcov_slopes
+        vcov = vcov_slopes,
+        equivalence = dots$equivalence
       )
     )
   )

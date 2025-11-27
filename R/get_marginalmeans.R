@@ -240,7 +240,8 @@ get_marginalmeans <- function(
         transform = !is.null(transform),
         keep_iterations = keep_iterations,
         joint_test = joint_test,
-        vcov = vcov_means
+        vcov = vcov_means,
+        equivalence = dots$equivalence
       )
     )
   )
@@ -518,7 +519,7 @@ get_marginalmeans <- function(
     "at", "by", "focal_terms", "adjusted_for", "predict", "trend", "comparison",
     "contrast", "estimate", "p_adjust", "transform", "datagrid", "preserve_range",
     "coef_name", "slope", "ci", "model_info", "contrast_filter",
-    "keep_iterations", "joint_test", "vcov"
+    "keep_iterations", "joint_test", "vcov", "equivalence"
   )
 }
 
