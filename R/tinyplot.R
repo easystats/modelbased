@@ -2,6 +2,9 @@
 #' @param type The type of `tinyplot`` visualization. It is recommended that
 #' users leave as `NULL` (the default), in which case the plot type will be
 #' determined automatically by the underlying `modelbased` object.
+#' @param dodge Dodge value for grouped plots. If `NULL` (the default), then
+#' the dodging behavior is determined by the number of groups and
+#' `getOption("modelbased_tinyplot_dodge")`.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -9,29 +12,41 @@
 #' # tinyplot
 #' # ==============================================
 #' \donttest{
+#' library(tinyplot)
 #' data(efc, package = "modelbased")
 #' efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 #' m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
 #'
 #' em <- estimate_means(m, "c172code")
-#' tinyplot::plt(em)
+#' plt(em)
 #' 
 #' # pass additional tinyplot arguments for customization, e.g.
-#' tinyplot::plt(em, theme = "classic")
-#' tinyplot::plt(em, theme = "classic", flip = TRUE)
+#' plt(em, theme = "classic")
+#' plt(em, theme = "classic", flip = TRUE)
 #' # etc.
+#' 
+#' # Aside: use tinyplot::tinytheme() to set a persistent theme
+#' tinytheme("classic")
 #'
+#' # continuous variable example
 #' em <- estimate_means(m, "barthtot")
-#' tinyplot::plt(em)
+#' plt(em)
 #'
 #' m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 #' em <- estimate_means(m, c("e16sex", "c172code"))
-#' tinyplot::plt(em, theme = "classic", dodge = TRUE)
+#' plt(em)
+#' 
+#' # Use plt_add (alias tinyplot_add) to add layers
+#' plt_add(type = "l", lty = 2)
+#' 
+#' # Reset to default theme
+#' tinytheme()
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(
   x,
   type = NULL,
+  dodge = NULL,
   show_data = FALSE,
   numeric_as_discrete = NULL,
   ...
@@ -118,8 +133,9 @@ tinyplot.estimate_means <- function(
   # Set dodge value for grouped point or pointrange plots.
   # The value 0.07 was chosen to reduce overlap in this context; adjust via
   # option if needed.
-  dodge_value <- getOption("modelbased_tinyplot_dodge", 0.07)
-  if (!is.null(aes$color) && aes$type %in% c("pointrange", "point")) {
+
+  dodge_value <- if (!is.null(dodge)) dodge else getOption("modelbased_tinyplot_dodge", 0.07)
+  if (!is.null(aes$color) && aes$type %in% c("pointrange", "point", "l", "errorbar", "ribbon")) {
     dots$dodge <- dodge_value
   }
 
