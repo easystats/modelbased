@@ -32,11 +32,12 @@
 #' em <- estimate_means(m, "barthtot")
 #' plt(em)
 #'
+#' # grouped example
 #' m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 #' em <- estimate_means(m, c("e16sex", "c172code"))
 #' plt(em)
 #' 
-#' # Use plt_add (alias tinyplot_add) to add layers
+#' # use plt_add (alias tinyplot_add) to add layers
 #' plt_add(type = "l", lty = 2)
 #' 
 #' # Reset to default theme
@@ -139,12 +140,34 @@ tinyplot.estimate_means <- function(
     dots$dodge <- dodge_value
   }
 
-  ## TODO: legend labels?
   ## TODO: show residuals?
 
   # x/y labels --------------------------------
   dots$xlab <- aes$labs$x
   dots$ylab <- aes$labs$y
+
+  # legend labels --------------------------------
+  # we also need to account for custom legend options passed through dots
+  if (is.null(dots$legend)) {
+    dots$legend = list(title = aes$labs$colour)
+  } else if (inherits(dots$legend, "list")) {
+    if (!("title" %in% names(dots$legend))) {
+      dots$legend = utils::modifyList(
+        dots$legend,
+        list(title = aes$labs$colour),
+        keep.null = TRUE
+      )
+    }
+  } else {
+    dots$legend = tryCatch(
+      utils::modifyList(
+        as.list(dots$legend),
+        list(title = aes$labs$colour),
+        keep.null = TRUE
+      ),
+      error = function(e) dots$legend
+    )
+  }
 
   # add aesthetics to the plot description
   plot_args <- insight::compact_list(c(
