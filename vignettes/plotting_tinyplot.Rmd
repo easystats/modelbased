@@ -25,7 +25,7 @@ knitr::opts_chunk$set(
 options(modelbased_join_dots = FALSE)
 options(modelbased_select = "minimal")
 
-pkgs <- c("marginaleffects", "tinyplot")
+pkgs <- c("marginaleffects", "tinyplot", "scales")
 if (!all(insight::check_if_installed(pkgs, quietly = TRUE))) {
   knitr::opts_chunk$set(eval = FALSE)
 }
@@ -43,12 +43,28 @@ The simplest case is possibly plotting one categorical predictor. Predicted valu
 ```{r}
 library(modelbased)
 library(tinyplot)
+tinytheme("classic", palette.qualitative = "Tableau 10")
 
 data(efc, package = "modelbased")
 efc <- datawizard::to_factor(efc, c("e16sex", "c172code", "e42dep"))
 
 m <- lm(neg_c_7 ~ e16sex + c172code + barthtot, data = efc)
 estimate_means(m, "c172code") |> plt()
+```
+
+In general, plots can be further modified using functions or arguments from the **tinyplot** package.
+
+```{r}
+estimate_means(m, "c172code") |>
+  plt(type = "errorbar", flip = TRUE)
+plt_add(type = "l", lty = 2)
+```
+
+**Pro-tip:** You can pass a labeling function to wrap long axis labels. Here we use one from the `scales` package.
+
+```{r}
+estimate_means(m, "c172code") |>
+  plt(xaxl = scales::label_wrap(20), flip = TRUE)
 ```
 
 ## One predictor - numeric
@@ -68,6 +84,13 @@ m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 estimate_means(m, c("e16sex", "c172code")) |> plt()
 ```
 
+Again, you can layer on top of this plot using standard **tinyplot** functions and arguments.
+
+```{r}
+estimate_means(m, c("e16sex", "c172code")) |> plt()
+plt_add(type = "l", lty = 2)
+```
+
 ## Two predictors - numeric * categorical
 
 For two predictors, where the first is numeric and the second categorical, range of predictions including confidence bands are shown, with the different levels of the second (categorical) predictor mapped to colors again.
@@ -77,14 +100,14 @@ m <- lm(neg_c_7 ~ barthtot * c172code + e42dep, data = efc)
 estimate_means(m, c("barthtot", "c172code")) |> plt()
 ```
 
-In general, plots can be further modified using functions or arguments from the **tinyplot** package. Thereby, other themes, color scales, faceting and so on, can be applied.
+One potentially useful customization for these numeric * categorical cases is mapping predictive groups by facets (in addition to, or instead of colors). Below we make an additional tweak by wrapping the facet names, since these are rather long.
 
 ```{r}
 estimate_means(m, c("barthtot", "c172code")) |>
-  plt(facet = ~c172code)
-
-estimate_means(m, c("barthtot", "c172code")) |>
-  plt(palette = "okabe")
+  within({
+    c172code = gsub(" of education$", "\nof education", c172code)
+  }) |> 
+  plt(facet = "by", legend = FALSE)
 ```
 
 ## Two predictors - categorical * numeric
@@ -122,8 +145,15 @@ estimate_means(
     "barthtot = c(30, 50, 80)"
   )
 ) |> plt()
-
 estimate_means(m, c("c172code", "barthtot = [fivenum]")) |> plt()
+```
+
+One aesthetic issue in the preceding plots is the fact that the middle x-axis category is missing (hidden) due to space limitations. Again, this is a common problem when we have several discrete categories and long label strings. One option is to increase the horizontal spacing by moving the legend (e.g., `legend = bottom!`). But a more sure-fire way to ensure that all tick labels are printed is by using a labelling function that wraps the
+text and/or flipping the plot.
+
+```{r}
+estimate_means(m, c("c172code", "barthtot = [fivenum]")) |>
+  plt(xaxl = scales::label_wrap(20), flip = TRUE)
 ```
 
 ## Three numeric predictors
@@ -135,12 +165,19 @@ m <- lm(neg_c_7 ~ c12hour * barthtot * c160age, data = efc)
 estimate_means(m, c("c12hour", "barthtot", "c160age")) |> plt()
 ```
 
-Instead, it is recommended to use `length`, create a "reference grid", or again specify meaningful values directly in the `by` argument.
+Instead, it is recommended to use `length`, create a "reference grid", or again specify meaningful values directly in the `by` argument. Note that this will have the ancillary effect of generating facets by the third variable (here: "cs160age", i.e. carer age).
 
 ```{r}
-estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |> plt()
-
-estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |> plt()
+estimate_means(m, c("c12hour", "barthtot", "c160age"), length = 2) |>
+  plt(
+    main = "Effect of care on elder outcomes",
+    sub = "Facets denote representative carer ages"
+  )
+estimate_means(m, c("c12hour", "barthtot", "c160age"), range = "grid") |>
+  plt(
+    main = "Effect of care on elder outcomes",
+    sub = "Facets denote representative carer ages (mean +/- 1 SD)"
+  )
 ```
 
 ## Three categorical predictors
@@ -152,11 +189,19 @@ m <- lm(neg_c_7 ~ e16sex * c172code * e42dep, data = efc)
 estimate_means(m, c("e16sex", "c172code", "e42dep")) |> plt()
 ```
 
+Again, though we can improve the final aesthetic with a few tweaks.
+
+```{r}
+estimate_means(m, c("e16sex", "c172code", "e42dep")) |>
+  plt(dodge = 0.02, theme = "clean2")
+```
+
 ## Smooth plots
 
 Remember that by default a range of ten values is chosen for numeric focal predictors. While this mostly works well for plotting linear relationships, plots may look less smooth for certain models that involve quadratic or cubic terms, or splines, or for instance if you have GAMs.
 
 ```{r}
+tinytheme("classic", palette.qualitative = "Tableau 10")
 m <- lm(neg_c_7 ~ e16sex * c12hour + e16sex * I(c12hour^2), data = efc)
 estimate_means(m, c("c12hour", "e16sex")) |> plt()
 ```
@@ -165,6 +210,11 @@ In this case, simply increase the number of representative values by setting `le
 
 ```{r}
 estimate_means(m, c("c12hour", "e16sex"), length = 200) |> plt()
+```
+
+```{r}
+# reset theme
+tinytheme()
 ```
 
 ```{r echo=FALSE}

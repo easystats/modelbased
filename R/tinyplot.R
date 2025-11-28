@@ -147,6 +147,7 @@ tinyplot.estimate_means <- function(
   dots$ylab <- aes$labs$y
 
   # legend labels --------------------------------
+  
   # we also need to account for custom legend options passed through dots
   if (is.null(dots$legend)) {
     dots$legend = list(title = aes$labs$colour)
@@ -158,7 +159,7 @@ tinyplot.estimate_means <- function(
         keep.null = TRUE
       )
     }
-  } else {
+  } else if (!isFALSE(dots$legend)) {
     dots$legend = tryCatch(
       utils::modifyList(
         as.list(dots$legend),
