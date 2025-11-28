@@ -1,4 +1,7 @@
 #' @rdname visualisation_recipe.estimate_predicted
+#' @param type The type of `tinyplot`` visualization. It is recommended that
+#' users leave as `NULL` (the default), in which case the plot type will be
+#' determined automatically by the underlying `modelbased` object.
 #' @param ... Other arguments passed to \code{\link[tinyplot]{tinyplot}}.
 #'
 #' @examplesIf all(insight::check_if_installed(c("tinyplot", "marginaleffects"), quietly = TRUE))
@@ -12,17 +15,23 @@
 #'
 #' em <- estimate_means(m, "c172code")
 #' tinyplot::plt(em)
+#' 
+#' # pass additional tinyplot arguments for customization, e.g.
+#' tinyplot::plt(em, theme = "classic")
+#' tinyplot::plt(em, theme = "classic", flip = TRUE)
+#' # etc.
 #'
 #' em <- estimate_means(m, "barthtot")
 #' tinyplot::plt(em)
 #'
 #' m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 #' em <- estimate_means(m, c("e16sex", "c172code"))
-#' tinyplot::plt(em)
+#' tinyplot::plt(em, theme = "classic", dodge = TRUE)
 #' }
 #' @exportS3Method tinyplot::tinyplot
 tinyplot.estimate_means <- function(
   x,
+  type = NULL,
   show_data = FALSE,
   numeric_as_discrete = NULL,
   ...
@@ -68,6 +77,9 @@ tinyplot.estimate_means <- function(
       show_data <- FALSE
     }
   }
+
+  # type placeholder
+  if (!is.null(type)) aes$type <- type
 
   # handle non-standard plot types -------------------------------
 
@@ -154,7 +166,6 @@ tinyplot.estimate_means <- function(
       )
     }
   }
-  browser()
 
   # plot it!
   suppressWarnings(do.call(tinyplot::tinyplot, plot_args))
