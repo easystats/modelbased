@@ -1,5 +1,5 @@
 #' @rdname visualisation_recipe.estimate_predicted
-#' @param type The type of `tinyplot`` visualization. It is recommended that
+#' @param type The type of `tinyplot` visualization. It is recommended that
 #' users leave as `NULL` (the default), in which case the plot type will be
 #' determined automatically by the underlying `modelbased` object.
 #' @param dodge Dodge value for grouped plots. If `NULL` (the default), then
@@ -19,12 +19,12 @@
 #'
 #' em <- estimate_means(m, "c172code")
 #' plt(em)
-#' 
+#'
 #' # pass additional tinyplot arguments for customization, e.g.
 #' plt(em, theme = "classic")
 #' plt(em, theme = "classic", flip = TRUE)
 #' # etc.
-#' 
+#'
 #' # Aside: use tinyplot::tinytheme() to set a persistent theme
 #' tinytheme("classic")
 #'
@@ -36,10 +36,10 @@
 #' m <- lm(neg_c_7 ~ e16sex * c172code + e42dep, data = efc)
 #' em <- estimate_means(m, c("e16sex", "c172code"))
 #' plt(em)
-#' 
+#'
 #' # use plt_add (alias tinyplot_add) to add layers
 #' plt_add(type = "l", lty = 2)
-#' 
+#'
 #' # Reset to default theme
 #' tinytheme()
 #' }
@@ -95,7 +95,9 @@ tinyplot.estimate_means <- function(
   }
 
   # type placeholder
-  if (!is.null(type)) aes$type <- type
+  if (!is.null(type)) {
+    aes$type <- type
+  }
 
   # handle non-standard plot types -------------------------------
 
@@ -135,8 +137,15 @@ tinyplot.estimate_means <- function(
   # The value 0.07 was chosen to reduce overlap in this context; adjust via
   # option if needed.
 
-  dodge_value <- if (!is.null(dodge)) dodge else getOption("modelbased_tinyplot_dodge", 0.07)
-  if (!is.null(aes$color) && aes$type %in% c("pointrange", "point", "l", "errorbar", "ribbon")) {
+  dodge_value <- if (!is.null(dodge)) {
+    dodge
+  } else {
+    getOption("modelbased_tinyplot_dodge", 0.07)
+  }
+  if (
+    !is.null(aes$color) &&
+      aes$type %in% c("pointrange", "point", "l", "errorbar", "ribbon")
+  ) {
     dots$dodge <- dodge_value
   }
 
@@ -147,7 +156,7 @@ tinyplot.estimate_means <- function(
   dots$ylab <- aes$labs$y
 
   # legend labels --------------------------------
-  
+
   # we also need to account for custom legend options passed through dots
   if (is.null(dots$legend)) {
     dots$legend = list(title = aes$labs$colour)

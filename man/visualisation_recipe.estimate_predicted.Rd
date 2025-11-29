@@ -63,7 +63,9 @@
 \item{...}{Arguments passed from \code{plot()} to \code{visualisation_recipe()}, or
 to \code{tinyplot()} if you use that method.}
 
-\item{type}{The type of \verb{tinyplot`` visualization. It is recommended that users leave as }NULL\verb{(the default), in which case the plot type will be determined automatically by the underlying}modelbased` object.}
+\item{type}{The type of \code{tinyplot} visualization. It is recommended that
+users leave as \code{NULL} (the default), in which case the plot type will be
+determined automatically by the underlying \code{modelbased} object.}
 
 \item{dodge}{Dodge value for grouped plots. If \code{NULL} (the default), then
 the dodging behavior is determined by the number of groups and
