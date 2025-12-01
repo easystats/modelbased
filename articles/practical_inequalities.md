@@ -444,9 +444,9 @@ estimate_slopes(m2, trend = "time", by = "education")
 #> 
 #> education |          Slope (CI) |     p
 #> ---------------------------------------
-#> low       | 3.24 (-2.94,  9.42) | 0.303
-#> mid       | 1.72 (-1.95,  5.39) | 0.358
-#> high      | 6.04 ( 0.18, 11.91) | 0.043
+#> low       | 3.24 (-2.93,  9.41) | 0.302
+#> mid       | 1.72 (-1.95,  5.38) | 0.358
+#> high      | 6.04 ( 0.19, 11.90) | 0.043
 #> 
 #> Marginal effects estimated for time
 #> Type of slope was dY/dX
@@ -457,12 +457,12 @@ estimate_slopes(m, trend = "time", by = c("education", "grp"))
 #> 
 #> education | grp     |               Slope (CI) |      p
 #> -------------------------------------------------------
-#> low       | Group 1 |    -6.71 (-12.93, -0.50) |  0.034
-#> mid       | Group 1 |     0.40 ( -3.26,  4.06) |  0.830
-#> high      | Group 1 | 7.11e-11 ( -4.89,  4.89) | > .999
+#> low       | Group 1 |    -6.71 (-12.92, -0.50) |  0.034
+#> mid       | Group 1 |     0.40 ( -3.25,  4.06) |  0.830
+#> high      | Group 1 | 1.42e-10 ( -4.92,  4.92) | > .999
 #> low       | Group 2 |     3.24 ( -2.98,  9.46) |  0.306
 #> mid       | Group 2 |     1.72 ( -1.98,  5.41) |  0.362
-#> high      | Group 2 |     6.04 (  0.17, 11.92) |  0.044
+#> high      | Group 2 |     6.04 (  0.14, 11.94) |  0.045
 #> 
 #> Marginal effects estimated for time
 #> Type of slope was dY/dX
@@ -488,8 +488,8 @@ estimate_contrasts(
 #> 
 #> Parameter          | Mean Difference (CI) |     p
 #> -------------------------------------------------
-#> education: Group 1 |   4.74 (-0.05, 9.54) | 0.053
-#> education: Group 2 |   2.88 (-1.73, 7.50) | 0.221
+#> education: Group 1 |   4.74 (-0.05, 9.53) | 0.052
+#> education: Group 2 |   2.88 (-1.75, 7.51) | 0.222
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
@@ -529,7 +529,7 @@ estimate_contrasts(
 #> 
 #> Parameter         | Mean Difference (CI) |     p
 #> ------------------------------------------------
-#> Group 1 - Group 2 |   1.86 (-4.79, 8.51) | 0.584
+#> Group 1 - Group 2 |   1.86 (-4.82, 8.53) | 0.585
 #> 
 #> Variable predicted: QoL
 #> Predictors contrasted: time
